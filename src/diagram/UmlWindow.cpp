@@ -131,109 +131,109 @@ void set_template_project(QString s)
 UmlWindow * UmlWindow::the;
 QString projectNewText()
 {
-    return QObject::TR("To create a <i>new project</i>.<br><br>"
+    return QObject::tr("To create a <i>new project</i>.<br><br>"
                        "This will ask you to indicate where to create a new directory having the name of the project "
                        "where all the project files will be placed.");
 }
 QString projectNewFromTemplateText()
 {
-    return QObject::TR("To create a <i>new project</i> from an already existing one.<br><br>"
+    return QObject::tr("To create a <i>new project</i> from an already existing one.<br><br>"
                        "This will ask you to indicate where to create a new directory having the name of the project "
                        "where all the project files will be placed.");
 }
 QString projectOpenText()
 {
-    return QObject::TR("To open a <i>project</i>.<br><br>"
+    return QObject::tr("To open a <i>project</i>.<br><br>"
                        "You can also select the <b>Open command</b> from the Project menu.");
 }
 QString projectSaveText()
 {
-    return QObject::TR("To save the project.<br><br>"
+    return QObject::tr("To save the project.<br><br>"
                        "You can also select the Save command from the Project menu.");
 }
 QString projectSaveAsText()
 {
-    return QObject::TR("To save all in a new project.");
+    return QObject::tr("To save all in a new project.");
 }
 QString diagramPrintText()
 {
-    return QObject::TR("To print the current diagram.");
+    return QObject::tr("To print the current diagram.");
 }
 QString cppText()
 {
-    return QObject::TR("To manage or not C++ and to set or not the C++ definition/declaration "
+    return QObject::tr("To manage or not C++ and to set or not the C++ definition/declaration "
                        "to the default value when a class/operation/attribute/relation/artefact is created");
 }
 QString javaText()
 {
-    return QObject::TR("To manage or not Java and to set or not the Java definition "
+    return QObject::tr("To manage or not Java and to set or not the Java definition "
                        "to the default value when a class/operation/attribute/relation/artefact is created");
 }
 QString phpText()
 {
-    return QObject::TR("To manage or not Php and to set or not the Php definition "
+    return QObject::tr("To manage or not Php and to set or not the Php definition "
                        "to the default value when a class/operation/attribute/relation/artefact is created");
 }
 QString pythonText()
 {
-    return QObject::TR("To manage or not Python and to set or not the Python definition "
+    return QObject::tr("To manage or not Python and to set or not the Python definition "
                        "to the default value when a class/operation/attribute/relation/artefact is created");
 }
 QString idlText()
 {
-    return QObject::TR("To manage or not IDL and to set or not the IDL definition/declaration "
+    return QObject::tr("To manage or not IDL and to set or not the IDL definition/declaration "
                        "to the default value when a class/operation/attribute/relation/artefact is created");
 }
 QString verboseText()
 {
-    return QObject::TR("To ask or not for a verbose code generation");
+    return QObject::tr("To ask or not for a verbose code generation");
 }
 QString preserve_bodiesText()
 {
-    return QObject::TR("To preserve or not the operations's body");
+    return QObject::tr("To preserve or not the operations's body");
 }
 QString add_operation_profileText()
 {
-    return QObject::TR("To write the operation profile at the beginning of the temporary file when you edit an operation's body");
+    return QObject::tr("To write the operation profile at the beginning of the temporary file when you edit an operation's body");
 }
 QString viewBrowserStereotypeText()
 {
-    return QObject::TR("To show or hide the <i>stereotypes</i> "
+    return QObject::tr("To show or hide the <i>stereotypes</i> "
                        "in the <b>Browser</b>.");
 }
 QString browserUpText()
 {
-    return QObject::TR("To select the <i>browser</i> current item's parent.");
+    return QObject::tr("To select the <i>browser</i> current item's parent.");
 }
 QString browserSearchText()
 {
-    return QObject::TR("To search an item in the <i>browser</i>.");
+    return QObject::tr("To search an item in the <i>browser</i>.");
 }
 QString whatsThisText()
 {
-    return QObject::TR("To get information about items.");
+    return QObject::tr("To get information about items.");
 }
 
 QString fontSizeMenuText()
 {
-    return QObject::TR("To set the point size of the base font used in the "
+    return QObject::tr("To set the point size of the base font used in the "
                        "<i>browser</i> and the diagrams.");
 }
 QString formatMenuText()
 {
-    return QObject::TR("To set the default format of the diagrams.");
+    return QObject::tr("To set the default format of the diagrams.");
 }
 static QString prevText()
 {
-    return QObject::TR("To select the previously selected element in the <i>browser</i>.");
+    return QObject::tr("To select the previously selected element in the <i>browser</i>.");
 }
 static QString nextText()
 {
-    return QObject::TR("To select the next selected element in the <i>browser</i>.");
+    return QObject::tr("To select the next selected element in the <i>browser</i>.");
 }
 static QString completionText()
 {
-    return QObject::TR("To ask or not for an auto completion (non case sensitive) in choice list (<i>combo box</i>)");
+    return QObject::tr("To ask or not for an auto completion (non case sensitive) in choice list (<i>combo box</i>)");
 }
 
 QToolButton *
@@ -340,27 +340,27 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     whatsThisButton->setWhatsThis(whatsThisText());
 
     this->setMenuBar(new QMenuBar(this));
-    projectMenu = new QMenu(TR("&Project"),this);
+    projectMenu = new QMenu(tr("&Project"),this);
     menuBar()->addMenu(projectMenu);
     connect(projectMenu, SIGNAL(aboutToShow()),
             this, SLOT(projectMenuAboutToShow()));
-    windowsMenu = new QMenu(TR("&Windows"),this);
+    windowsMenu = new QMenu(tr("&Windows"),this);
     //windowsMenu->setCheckable(TRUE);
     connect(windowsMenu, SIGNAL(aboutToShow()),
             this, SLOT(windowsMenuAboutToShow()));
     menuBar()->addMenu(windowsMenu);
 
-    toolMenu = new QMenu(TR("&Tools"),this);
+    toolMenu = new QMenu(tr("&Tools"),this);
     connect(toolMenu, SIGNAL(aboutToShow()), this, SLOT(toolMenuAboutToShow()));
     menuBar()->addMenu(toolMenu);
 
-    langMenu = new QMenu(TR("&Languages"),this);
+    langMenu = new QMenu(tr("&Languages"),this);
     menuBar()->addMenu(langMenu);
     //langMenu->setCheckable(TRUE);
     connect(langMenu, SIGNAL(aboutToShow()),
             this, SLOT(langMenuAboutToShow()));
 
-    use_cpp_id = new QAction(TR("C++ management and default declaration/definition"),this);
+    use_cpp_id = new QAction(tr("C++ management and default declaration/definition"),this);
     use_cpp_id->setCheckable(true);
     connect(use_cpp_id,SIGNAL(triggered()), this, SLOT(use_cpp()));
     langMenu->addAction(use_cpp_id);
@@ -369,7 +369,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     use_cpp_id->setEnabled(false);
 
 
-    use_java_id = new QAction(TR("Java management and default definition"), this);
+    use_java_id = new QAction(tr("Java management and default definition"), this);
     use_java_id->setCheckable(true);
     connect(use_java_id, SIGNAL(triggered()), this,SLOT(use_java()));
     langMenu->addAction(use_java_id);
@@ -378,7 +378,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     use_java_id->setEnabled(false);
 
     use_php_id =
-            new QAction(TR("Php management and default definition"), this);
+            new QAction(tr("Php management and default definition"), this);
     use_php_id->setCheckable(true);
     connect(use_php_id, SIGNAL(triggered()), this,SLOT(use_php()));
     langMenu->addAction(use_php_id);
@@ -387,7 +387,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     use_php_id->setEnabled(false);
 
     use_python_id =
-            new QAction(TR("Python management and default definition"), this);
+            new QAction(tr("Python management and default definition"), this);
     use_python_id->setCheckable(true);
     connect(use_python_id, SIGNAL(triggered()),this, SLOT(use_python()));
     langMenu->addAction(use_python_id);
@@ -396,7 +396,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     use_python_id->setEnabled(false);
 
     use_idl_id =
-            new QAction(TR("Idl management and default declaration"), this);
+            new QAction(tr("Idl management and default declaration"), this);
     use_idl_id->setCheckable(true);
     connect(use_idl_id, SIGNAL(triggered()),this, SLOT(use_idl()));
     langMenu->addAction(use_idl_id);
@@ -407,7 +407,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     langMenu->addSeparator();
 
     verbose_gen_id =
-            new QAction(TR("Verbose code generation"), this);
+            new QAction(tr("Verbose code generation"), this);
     verbose_gen_id->setCheckable(true);
     connect(verbose_gen_id, SIGNAL(triggered()),this, SLOT(verbose()));
     langMenu->addAction(verbose_gen_id);
@@ -415,7 +415,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     verbose_gen_id->setEnabled(false);
 
     preserve_bodies_id =
-            new QAction(TR("Preserve operations's body"), this);
+            new QAction(tr("Preserve operations's body"), this);
     preserve_bodies_id->setCheckable(true);
     connect(preserve_bodies_id, SIGNAL(triggered()),this, SLOT(preserve()));
     langMenu->addAction(preserve_bodies_id);
@@ -423,21 +423,21 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     preserve_bodies_id->setEnabled(false);
 
     add_operation_profile_id =
-            new QAction(TR("Add operation profile on body edition"), this);
+            new QAction(tr("Add operation profile on body edition"), this);
     add_operation_profile_id->setCheckable(true);
     connect(add_operation_profile_id, SIGNAL(triggered()),this, SLOT(addoperationprofile()));
     langMenu->addAction(add_operation_profile_id);
     add_operation_profile_id->setWhatsThis(add_operation_profileText());
     add_operation_profile_id->setEnabled(false);
 
-    miscMenu = new QMenu(TR("&Miscellaneous"),this);
+    miscMenu = new QMenu(tr("&Miscellaneous"),this);
     menuBar()->addMenu( miscMenu);
     //miscMenu->setCheckable(TRUE);
     connect(miscMenu, SIGNAL(aboutToShow()),
             this, SLOT(miscMenuAboutToShow()));
 
     show_browser_stereotypes_id =
-            new QAction(TR("Show s&tereotypes in browser"), this);
+            new QAction(tr("Show s&tereotypes in browser"), this);
     show_browser_stereotypes_id->setCheckable(true);
     connect(show_browser_stereotypes_id, SIGNAL(triggered()),this,SLOT(show_stereotypes()));
     show_browser_stereotypes_id->setChecked(TRUE);
@@ -446,7 +446,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     miscMenu->addAction(show_browser_stereotypes_id);
 
     completion_id =
-            new QAction(TR("Completion in dialog"), this);
+            new QAction(tr("Completion in dialog"), this);
     completion_id->setCheckable(true);
     connect(completion_id,SIGNAL(triggered()),this,SLOT(do_completion()));
     completion_id->setChecked( TRUE);
@@ -454,7 +454,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     miscMenu->addAction(completion_id);
 
 
-    QMenu * pmstyle = new QMenu(TR("Style"),this);
+    QMenu * pmstyle = new QMenu(tr("Style"),this);
     bool used = FALSE;
 #ifndef QT_NO_STYLE_MOTIF
     QAction *action;
@@ -483,7 +483,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
 
     style = '?';
 
-    fontSizeMenu = new QMenu(TR("Font size"),this);
+    fontSizeMenu = new QMenu(tr("Font size"),this);
     //fontSizeMenu->setCheckable(TRUE);
     connect(fontSizeMenu, SIGNAL(aboutToShow()),
             this, SLOT(fontSizeMenuAboutToShow()));
@@ -502,8 +502,8 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     miscMenu->addMenu(fontSizeMenu);
     fontSizeMenu->setWhatsThis(fontSizeMenuText());
 
-    formatMenu = new QMenu(TR("Diagram default format"),this);
-    formatLandscapeMenu = new QMenu(TR("Landscape formats"),this);
+    formatMenu = new QMenu(tr("Diagram default format"),this);
+    formatLandscapeMenu = new QMenu(tr("Landscape formats"),this);
     connect(formatMenu, SIGNAL(aboutToShow()),
             this, SLOT(formatMenuAboutToShow()));
     init_format_menu(formatMenu, formatLandscapeMenu);
@@ -514,45 +514,45 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     miscMenu->addSeparator();
 
     shortcut_id =
-            new QAction(TR("Edit shortcuts"), this);
+            new QAction(tr("Edit shortcuts"), this);
     miscMenu->addAction(shortcut_id);
     connect(shortcut_id, SIGNAL(triggered()), this, SLOT(edit_shortcuts()));
     menuBar()->addSeparator();
 
     action =
-            new QAction(TR("Set environment"), this);
+            new QAction(tr("Set environment"), this);
     miscMenu->addAction(action);
     connect(action, SIGNAL(triggered()),this, SLOT(edit_env()));
 
     img_root_dir_id =
-            new QAction(TR("Set images root dir"), this);
+            new QAction(tr("Set images root dir"), this);
     miscMenu->addAction(img_root_dir_id);
     connect(img_root_dir_id, SIGNAL(triggered()),this, SLOT(edit_image_root_dir()));
 
-    QMenu * help = new QMenu(TR("&Help"),this);
+    QMenu * help = new QMenu(tr("&Help"),this);
     menuBar()->addMenu(help);
 
     action =
-            new QAction(TR("&About"), help);
+            new QAction(tr("&About"), help);
     connect(action, SIGNAL(triggered()), this,SLOT(about()));
     action->setShortcut(::Qt::Key_F2);
     help->addAction(action);
 
     action =
-            new QAction(TR("About&Qt"), help);
+            new QAction(tr("About&Qt"), help);
     connect(action, SIGNAL(triggered()), this,SLOT(aboutQt()));
     help->addAction(action);
 
     help->addSeparator();
 
     action =
-            new QAction(TR("&Help"), this);
+            new QAction(tr("&Help"), this);
     connect(action, SIGNAL(triggered()), this,SLOT(help()));
     action->setShortcut(::Qt::Key_F1);
     help->addAction(action);
 
     action =
-            new QAction(TR("What's This"), this);
+            new QAction(tr("What's This"), this);
     connect(action, SIGNAL(triggered()), this,SLOT(whats_this()));
     action->setShortcut(::Qt::SHIFT + ::Qt::Key_F1);
     help->addAction(action);
@@ -660,7 +660,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     settings.endGroup();
 
     clear_select_historic();
-    statusBar()->showMessage(TR("Ready"), 20000);
+    statusBar()->showMessage(tr("Ready"), 20000);
 }
 UmlWindow::~UmlWindow()
 {
@@ -783,27 +783,27 @@ void UmlWindow::projectMenuAboutToShow()
             QMenu * ed; // = new QMenu(this);
 
             projectMenu->addSeparator();
-            ed = projectMenu->addMenu(TR("Edit"));
+            ed = projectMenu->addMenu(tr("Edit"));
             //projectMenu->addAction(TR("Edit"), ed);
 
-            id = ed->addAction(TR("Edit generation settings"), this, SLOT(edit_gen_settings()));
+            id = ed->addAction(tr("Edit generation settings"), this, SLOT(edit_gen_settings()));
             id->setWhatsThis( QObject::tr("to set how an Uml type is compiled in C++ etc...,"
                                           "to set the default parameter passing, to set the default code"
                                           "produced for an attribute etc..., and to set the root directories"));
 
             id->setEnabled( writable);
 
-            id = ed->addAction(TR("Edit default stereotypes"), this, SLOT(edit_stereotypes()));
+            id = ed->addAction(tr("Edit default stereotypes"), this, SLOT(edit_stereotypes()));
             id->setWhatsThis( QObject::tr("to set the default stereotypes list"));
             id->setEnabled( writable);
 
             ed->addSeparator();
 
-            id = ed->addAction(TR("Edit class settings"), this, SLOT(edit_class_settings()));
+            id = ed->addAction(tr("Edit class settings"), this, SLOT(edit_class_settings()));
             id->setWhatsThis( QObject::tr("to set the sub classes settings"));
             id->setEnabled( writable);
 
-            id = ed->addAction(TR("Edit drawing settings"), this, SLOT(edit_drawing_settings()));
+            id = ed->addAction(tr("Edit drawing settings"), this, SLOT(edit_drawing_settings()));
             id->setWhatsThis( QObject::tr("to set how the sub <i>diagrams</i>'s items must be drawn"));
             id->setEnabled( writable);
         }
@@ -816,7 +816,7 @@ void UmlWindow::projectMenuAboutToShow()
         {
             id = projectMenu->addAction(historic.at(i), this, SLOT(historicActivated()));
             //projectMenu->setItemParameter(id, i);
-            id->setWhatsThis(TR("to open this project.<br><br>The historic is saved in <i>settings.ini</i>"));
+            id->setWhatsThis(tr("to open this project.<br><br>The historic is saved in <i>settings.ini</i>"));
         }
     }
     else
@@ -831,7 +831,7 @@ void UmlWindow::historicActivated()
 
     if (!idExists)
     {
-        statusBar()->showMessage(TR("Loading aborted as supplied project id is out of history array bounds"), 2000);
+        statusBar()->showMessage(tr("Loading aborted as supplied project id is out of history array bounds"), 2000);
         return;
     }
 
@@ -839,7 +839,7 @@ void UmlWindow::historicActivated()
     bool projectSuccessfullyClosed = browser->get_project() == 0;
 
     if (!projectSuccessfullyClosed) {
-        statusBar()->showMessage(TR("Loading aborted as currently opened project unloading failed"), 2000);
+        statusBar()->showMessage(tr("Loading aborted as currently opened project unloading failed"), 2000);
         return;
     }
 
@@ -879,26 +879,26 @@ void UmlWindow::toolMenuAboutToShow()
     bool lang_except_idl = cpp || java || php || python;
 
     toolMenu->clear();
-    toolMenu->addAction(TR("Show &Trace Window"), this, SLOT(show_trace()));
+    toolMenu->addAction(tr("Show &Trace Window"), this, SLOT(show_trace()));
 
     if (browser->get_project() != 0) {
         if (lang_except_idl | idl) {
             toolMenu->addSeparator();
 
             if (cpp)
-                toolMenu->addAction(TR("Generate C++"), this, SLOT(cpp_generate()), ::Qt::CTRL +::Qt::Key_G);
+                toolMenu->addAction(tr("Generate C++"), this, SLOT(cpp_generate()), ::Qt::CTRL +::Qt::Key_G);
 
             if (java)
-                toolMenu->addAction(TR("Generate Java"), this, SLOT(java_generate()), ::Qt::CTRL +::Qt::Key_J);
+                toolMenu->addAction(tr("Generate Java"), this, SLOT(java_generate()), ::Qt::CTRL +::Qt::Key_J);
 
             if (php)
-                toolMenu->addAction(TR("Generate Php"), this, SLOT(php_generate()), ::Qt::CTRL +::Qt::Key_H);
+                toolMenu->addAction(tr("Generate Php"), this, SLOT(php_generate()), ::Qt::CTRL +::Qt::Key_H);
 
             if (python)
-                toolMenu->addAction(TR("Generate Python"), this, SLOT(python_generate()), ::Qt::CTRL +::Qt::Key_Y);
+                toolMenu->addAction(tr("Generate Python"), this, SLOT(python_generate()), ::Qt::CTRL +::Qt::Key_Y);
 
             if (idl)
-                toolMenu->addAction(TR("Generate Idl"), this, SLOT(idl_generate()), ::Qt::CTRL +::Qt::Key_I);
+                toolMenu->addAction(tr("Generate Idl"), this, SLOT(idl_generate()), ::Qt::CTRL +::Qt::Key_I);
         }
 
         if (!BrowserNode::edition_active()) {
@@ -906,44 +906,44 @@ void UmlWindow::toolMenuAboutToShow()
                 toolMenu->addSeparator();
 
                 if (cpp) {
-                    toolMenu->addAction(TR("Reverse C++"), this, SLOT(cpp_reverse()));
-                    toolMenu->addAction(TR("Roundtrip C++"), this, SLOT(cpp_roundtrip()));
+                    toolMenu->addAction(tr("Reverse C++"), this, SLOT(cpp_reverse()));
+                    toolMenu->addAction(tr("Roundtrip C++"), this, SLOT(cpp_roundtrip()));
                 }
 
                 if (java) {
-                    toolMenu->addAction(TR("Reverse Java"), this, SLOT(java_reverse()));
-                    toolMenu->addAction(TR("Roundtrip Java"), this, SLOT(java_roundtrip()));
+                    toolMenu->addAction(tr("Reverse Java"), this, SLOT(java_reverse()));
+                    toolMenu->addAction(tr("Roundtrip Java"), this, SLOT(java_roundtrip()));
                 }
 
                 if (php)
-                    toolMenu->addAction(TR("Reverse Php"), this, SLOT(php_reverse()));
+                    toolMenu->addAction(tr("Reverse Php"), this, SLOT(php_reverse()));
 
 
                 if (java) {
                     toolMenu->addSeparator();
-                    toolMenu->addAction(TR("Java Catalog"), this, SLOT(java_catalog()));
+                    toolMenu->addAction(tr("Java Catalog"), this, SLOT(java_catalog()));
                 }
 
                 if (preserve_bodies()) {
                     toolMenu->addSeparator();
 
                     if (cpp)
-                        toolMenu->addAction(TR("Roundtrip C++ bodies"), this, SLOT(cpp_roundtripbody()));
+                        toolMenu->addAction(tr("Roundtrip C++ bodies"), this, SLOT(cpp_roundtripbody()));
 
                     if (java)
-                        toolMenu->addAction(TR("Roundtrip Java bodies"), this, SLOT(java_roundtripbody()));
+                        toolMenu->addAction(tr("Roundtrip Java bodies"), this, SLOT(java_roundtripbody()));
 
                     if (php)
-                        toolMenu->addAction(TR("Roundtrip Php bodies"), this, SLOT(php_roundtripbody()));
+                        toolMenu->addAction(tr("Roundtrip Php bodies"), this, SLOT(php_roundtripbody()));
 
                     if (python)
-                        toolMenu->addAction(TR("Roundtrip Python bodies"), this, SLOT(python_roundtripbody()));
+                        toolMenu->addAction(tr("Roundtrip Python bodies"), this, SLOT(python_roundtripbody()));
                 }
             }
 
             if (BrowserClass::find("UmlBaseItem") != 0) {
                 toolMenu->addSeparator();
-                toolMenu->addAction(TR("Plug-out upgrade"), this, SLOT(plug_out_upgrade()));
+                toolMenu->addAction(tr("Plug-out upgrade"), this, SLOT(plug_out_upgrade()));
             }
 
             Tool::menu_insert(toolMenu, UmlProject, this, SLOT(run_tool()));
@@ -951,8 +951,8 @@ void UmlWindow::toolMenuAboutToShow()
 
         if (browser->get_project()->is_writable()) {
             toolMenu->addSeparator();
-            toolMenu->addAction(TR("Tools settings"), this, SLOT(tool_settings()));
-            toolMenu->addAction(TR("Import settings"), this, SLOT(import_tool_settings()));
+            toolMenu->addAction(tr("Tools settings"), this, SLOT(tool_settings()));
+            toolMenu->addAction(tr("Import settings"), this, SLOT(import_tool_settings()));
         }
     }
 }
@@ -1051,7 +1051,7 @@ void UmlWindow::newProject()
                 Tool::defaults();
                 browser->get_project()->BrowserPackage::save_all(FALSE);
 
-                msg_warning(TR("New project"),
+                msg_warning(tr("New project"),
                             QObject::tr("Do not forget to set the target languages list\n"
                                         "through the 'Languages' menu\n"
                                         "\n"
@@ -1059,7 +1059,7 @@ void UmlWindow::newProject()
                                         "will help you, use it !"));
             }
             else
-                msg_critical(TR("New project"), QObject::tr("Cannot create directory ") + f);
+                msg_critical(tr("New project"), QObject::tr("Cannot create directory ") + f);
         }
     }
 }
@@ -1091,7 +1091,7 @@ void UmlWindow::load()
             }
 
             else
-                statusBar()->showMessage(TR("Loading aborted"), 2000);
+                statusBar()->showMessage(tr("Loading aborted"), 2000);
         }
     }
     if(BrowserNode::marked_nodes().count()!=0)
@@ -1373,11 +1373,11 @@ bool UmlWindow::can_close()
             break;
 
         case QMessageBox::No:
-            statusBar()->showMessage(TR("Close aborted"), 2000);
+            statusBar()->showMessage(tr("Close aborted"), 2000);
             return true;
         case QMessageBox::Cancel:
         {
-            statusBar()->showMessage(TR("Close aborted"), 2000);
+            statusBar()->showMessage(tr("Close aborted"), 2000);
             return false;
         }
         }
@@ -1730,9 +1730,9 @@ void UmlWindow::print()
 
             MenuFactory::createTitle(m, QObject::tr("Choose"));
             m.addSeparator();
-            MenuFactory::addItem(m, TR("Print on 1 page"), 1);
-            MenuFactory::addItem(m, TR("Print on 4 pages"), 2);
-            MenuFactory::addItem(m, TR("Print on 9 pages"), 3);
+            MenuFactory::addItem(m, tr("Print on 1 page"), 1);
+            MenuFactory::addItem(m, tr("Print on 4 pages"), 2);
+            MenuFactory::addItem(m, tr("Print on 9 pages"), 3);
 
             QAction* retAction = m.exec(QCursor::pos());
             if(retAction)
@@ -2388,10 +2388,10 @@ void UmlWindow::windowsMenuAboutToShow()
 
     windowsMenu->clear();
 
-    QAction* cascadeId = windowsMenu->addAction(TR("&Cascade"), ws, SLOT(cascadeSubWindows()));
-    QAction*  tileId = windowsMenu->addAction(TR("&Tile"), ws, SLOT(tileSubWindows()));
-    QAction*  preferredId = windowsMenu->addAction(TR("&Preferred geometry"), this, SLOT(preferred_geometry()));
-    QAction*  closeAllId = windowsMenu->addAction(TR("C&lose all"), this, SLOT(close_all_windows()));
+    QAction* cascadeId = windowsMenu->addAction(tr("&Cascade"), ws, SLOT(cascadeSubWindows()));
+    QAction*  tileId = windowsMenu->addAction(tr("&Tile"), ws, SLOT(tileSubWindows()));
+    QAction*  preferredId = windowsMenu->addAction(tr("&Preferred geometry"), this, SLOT(preferred_geometry()));
+    QAction*  closeAllId = windowsMenu->addAction(tr("C&lose all"), this, SLOT(close_all_windows()));
 
     QList<QMdiSubWindow *>  windows = ws->subWindowList();
 

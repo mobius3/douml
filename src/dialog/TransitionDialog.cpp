@@ -56,15 +56,15 @@ TransitionDialog::TransitionDialog(TransitionData * r)
     r->browser_node->edit_start();
 
     if (r->browser_node->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
-    setWindowTitle(TR("Transition dialog"));
+    setWindowTitle(tr("Transition dialog"));
     visit = !hasOkButton();
 
     BrowserNode * bn = rel->browser_node;
@@ -79,11 +79,11 @@ TransitionDialog::TransitionDialog(TransitionData * r)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(rel->get_stereotype()));
@@ -103,18 +103,18 @@ TransitionDialog::TransitionDialog(TransitionData * r)
         internal_cb = 0;
     else {
         grid->addWidget(new QLabel(grid));
-        grid->addWidget(internal_cb = new QCheckBox(TR("internal"), grid));
+        grid->addWidget(internal_cb = new QCheckBox(tr("internal"), grid));
         internal_cb->setChecked(r->internal());
     }
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
 
     if (! visit)
     {
         SmallPushButton* sButton;
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(sButton);
     }
@@ -147,7 +147,7 @@ TransitionDialog::TransitionDialog(TransitionData * r)
     grid->setSpacing(5);
 
     grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     //
 
@@ -202,11 +202,11 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
     grid->setSpacing(5);
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("trigger : "), vtab));
+    vtab->addWidget(new QLabel(tr("trigger : "), vtab));
 
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, sl_trigger);
         vtab->addWidget(sButton);
     }
@@ -226,11 +226,11 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
         d.edtrigger->setReadOnly(TRUE);
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("guard\nconstraint : "), vtab));
+    vtab->addWidget(new QLabel(tr("guard\nconstraint : "), vtab));
 
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, sl_guard);
         vtab->addWidget(sButton);
     }
@@ -243,11 +243,11 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
         d.edguard->setReadOnly(TRUE);
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("activity\nexpression : "), vtab));
+    vtab->addWidget(new QLabel(tr("activity\nexpression : "), vtab));
 
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, sl_expr);
         vtab->addWidget(sButton);
     }
@@ -316,7 +316,7 @@ void TransitionDialog::accept()
         ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlTransition,
                 bn->allow_spaces(),
                 bn->allow_empty()))
-        msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
+        msg_critical(tr("Error"), s + tr("\n\nillegal name or already used"));
     else {
         bn->set_name(s);
 

@@ -61,15 +61,15 @@ ActivityDialog::ActivityDialog(ActivityData * d)
     d->browser_node->edit_start();
 
     if (d->browser_node->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
-    setWindowTitle(TR("Activity dialog"));
+    setWindowTitle(tr("Activity dialog"));
     visit = !hasOkButton();
 
     BrowserNode * bn = activity->browser_node;
@@ -83,11 +83,11 @@ ActivityDialog::ActivityDialog(ActivityData * d)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(activity->get_stereotype()));
@@ -104,7 +104,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
     edstereotype->setSizePolicy(sp);
 
     SmallPushButton* sButton;
-    connect(sButton = new SmallPushButton(TR("specification :"), grid), SIGNAL(clicked()),
+    connect(sButton = new SmallPushButton(tr("specification :"), grid), SIGNAL(clicked()),
             this, SLOT(menu_specification()));
     grid->addWidget(sButton);
     grid->addWidget(edspecification = new QComboBox(grid));
@@ -132,21 +132,21 @@ ActivityDialog::ActivityDialog(ActivityData * d)
     grid->addWidget(bg =
             new BButtonGroup(3, Qt::Horizontal, QString(), grid));
 
-    bg->addWidget(readonly_cb = new QCheckBox(TR("read only"), bg));
+    bg->addWidget(readonly_cb = new QCheckBox(tr("read only"), bg));
 
     if (activity->read_only)
         readonly_cb->setChecked(TRUE);
 
     readonly_cb->setDisabled(visit);
 
-    bg->addWidget(singlexec_cb = new QCheckBox(TR("single execution"), bg));
+    bg->addWidget(singlexec_cb = new QCheckBox(tr("single execution"), bg));
 
     if (activity->single_execution)
         singlexec_cb->setChecked(TRUE);
 
     singlexec_cb->setDisabled(visit);
 
-    bg->addWidget(active_cb = new QCheckBox(TR("active"), bg));
+    bg->addWidget(active_cb = new QCheckBox(tr("active"), bg));
 
     if (activity->is_active)
         active_cb->setChecked(TRUE);
@@ -155,11 +155,11 @@ ActivityDialog::ActivityDialog(ActivityData * d)
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
 
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
     vtab->addWidget(sButton);
     }
@@ -170,10 +170,10 @@ ActivityDialog::ActivityDialog(ActivityData * d)
     //comment->setFont(font);
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("constraint :"), vtab));
+    vtab->addWidget(new QLabel(tr("constraint :"), vtab));
 
     if (! visit) {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_constraint()));
         vtab->addWidget(sButton);
     }
@@ -204,7 +204,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
     grid->setSpacing(5);
 
     grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     //
 
@@ -224,13 +224,13 @@ void ActivityDialog::menu_specification()
 {
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     int index = list.indexOf(edspecification->currentText().trimmed());
 
     if (index != -1)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -238,7 +238,7 @@ void ActivityDialog::menu_specification()
         bn = BrowserView::selected_item();
 
         if ((bn != 0) && (bn->get_type() == UmlOperation) && !bn->deletedp())
-            MenuFactory::addItem(m, TR("Choose operation selected in browser"), 1);
+            MenuFactory::addItem(m, tr("Choose operation selected in browser"), 1);
         else
             bn = 0;
     }
@@ -308,14 +308,14 @@ void ActivityDialog::init_tab(CondDialog & d, InfoData & cd,
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("Pre\ncondition : "), grid));
+    grid->addWidget(new QLabel(tr("Pre\ncondition : "), grid));
     grid->addWidget(d.edpre = new MultiLineEdit(grid));
     d.edpre->setText(cd.first);
 
     if (visit)
         d.edpre->setReadOnly(TRUE);
 
-    grid->addWidget(new QLabel(TR("Post\ncondition : "), grid));
+    grid->addWidget(new QLabel(tr("Post\ncondition : "), grid));
     grid->addWidget(d.edpost = new MultiLineEdit(grid));
     d.edpost->setText(cd.second);
 
@@ -364,7 +364,7 @@ void ActivityDialog::accept()
             ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlActivity,
                                                              bn->allow_spaces(),
                                                              bn->allow_empty()))
-        msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
+        msg_critical(tr("Error"), s + tr("\n\nillegal name or already used"));
     else {
         bn->set_name(s);
 

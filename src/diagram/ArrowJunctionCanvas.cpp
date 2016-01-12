@@ -209,12 +209,12 @@ void ArrowJunctionCanvas::menu(const QPoint &)
 
 QString ArrowJunctionCanvas::may_start(UmlCode &) const
 {
-    return TR("illegal");
+    return tr("illegal");
 }
 
 QString ArrowJunctionCanvas::may_connect(UmlCode &, const DiagramItem *) const
 {
-    return TR("illegal");
+    return tr("illegal");
 }
 
 bool ArrowJunctionCanvas::alignable() const

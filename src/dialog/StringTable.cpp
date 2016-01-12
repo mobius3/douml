@@ -94,16 +94,16 @@ void StringTable::button_pressed(const QModelIndex &modelindex)
         QMenu m;
 
         s.sprintf("%d", index + 1);
-        MenuFactory::addItem(m,TR("row %1").arg(s).toLatin1().constData(), -1);
+        MenuFactory::addItem(m,tr("row %1").arg(s).toLatin1().constData(), -1);
         m.addSeparator();
-        MenuFactory::addItem(m,TR("Insert row before").toLatin1().constData(), 0);
-        MenuFactory::addItem(m,TR("Insert row after").toLatin1().constData(), 1);
+        MenuFactory::addItem(m,tr("Insert row before").toLatin1().constData(), 0);
+        MenuFactory::addItem(m,tr("Insert row after").toLatin1().constData(), 1);
         m.addSeparator();
-        MenuFactory::addItem(m,TR("Delete row").toLatin1().constData(), 2);
+        MenuFactory::addItem(m,tr("Delete row").toLatin1().constData(), 2);
         m.addSeparator();
-        MenuFactory::addItem(m,TR("Copy row").toLatin1().constData(), 3);
-        MenuFactory::addItem(m,TR("Cut row").toLatin1().constData(), 4);
-        MenuFactory::addItem(m,TR("Paste row").toLatin1().constData(), 5);
+        MenuFactory::addItem(m,tr("Copy row").toLatin1().constData(), 3);
+        MenuFactory::addItem(m,tr("Cut row").toLatin1().constData(), 4);
+        MenuFactory::addItem(m,tr("Paste row").toLatin1().constData(), 5);
         m.addSeparator();
 
         QMenu mv;
@@ -113,7 +113,7 @@ void StringTable::button_pressed(const QModelIndex &modelindex)
             if (rank != index)
                 MenuFactory::addItem(mv, QString::number(rank + 1).toLatin1().constData(), 10 + rank);
 
-        mv.setTitle(TR("Move row"));
+        mv.setTitle(tr("Move row"));
         //MenuFactory::addItem(m,TR("Move row"), &mv);
         m.addMenu(&mv);
 

@@ -603,16 +603,16 @@ void PseudoStateCanvas::menu(const QPoint &)
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 13);
-    MenuFactory::addItem(m, TR("Go down"), 14);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 13);
+    MenuFactory::addItem(m, tr("Go down"), 14);
     m.addSeparator();
 
     switch (browser_node->get_type()) {
     case ForkPS:
     case JoinPS:
-        MenuFactory::addItem(m, (horiz) ? TR("draw vertically") : TR("draw horizontally"), 2);
+        MenuFactory::addItem(m, (horiz) ? tr("draw vertically") : tr("draw horizontally"), 2);
         m.addSeparator();
         break;
 
@@ -622,12 +622,12 @@ void PseudoStateCanvas::menu(const QPoint &)
 
     /*MenuFactory::addItem(m, "Edit drawing settings", 2);
     m.addSeparator();*/
-    MenuFactory::addItem(m, TR("Edit pseudo state"), 3);
+    MenuFactory::addItem(m, tr("Edit pseudo state"), 3);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Select in browser"), 4);
+    MenuFactory::addItem(m, tr("Select in browser"), 4);
 
     if (linked())
-        MenuFactory::addItem(m, TR("Select linked items"), 5);
+        MenuFactory::addItem(m, tr("Select linked items"), 5);
 
     m.addSeparator();
     /*if (browser_node->is_writable())
@@ -635,15 +635,15 @@ void PseudoStateCanvas::menu(const QPoint &)
     (BrowserNode *) the_canvas()->browser_diagram())
         MenuFactory::addItem(m, TR("Set associated diagram"),6);
     m.addSeparator();*/
-    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        MenuFactory::addItem(m, TR("Delete from model"), 8);
+        MenuFactory::addItem(m, tr("Delete from model"), 8);
 
     m.addSeparator();
 
     if (Tool::menu_insert(&toolm, browser_node->get_type(), 20))
-        MenuFactory::insertItem(m, TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -749,7 +749,7 @@ QString PseudoStateCanvas::may_start(UmlCode & l) const
         return ((BrowserPseudoState *) browser_node)->may_start();
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 
@@ -773,10 +773,10 @@ QString PseudoStateCanvas::may_connect(UmlCode & l, const DiagramItem * dest) co
     case EntryPointPS:
         return (l == UmlTransition)
                ? ((BrowserPseudoState *) browser_node)->may_connect(dest->get_bn())
-               : TR("illegal");
+               : tr("illegal");
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 

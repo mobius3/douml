@@ -122,29 +122,29 @@ void CodLinkCanvas::menu(const QPoint &)
     QMenu m;
     QMenu geo;
 
-    MenuFactory::createTitle(m, TR("Link"));
+    MenuFactory::createTitle(m, tr("Link"));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("add messages to ") + from->get_full_name(), 1);
-    MenuFactory::addItem(m, TR("add messages to ") + to->get_full_name(), 2);
+    MenuFactory::addItem(m, tr("add messages to ") + from->get_full_name(), 1);
+    MenuFactory::addItem(m, tr("add messages to ") + to->get_full_name(), 2);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit its messages"), 3);
-    MenuFactory::addItem(m, TR("Edit all the messages"), 4);
+    MenuFactory::addItem(m, tr("Edit its messages"), 3);
+    MenuFactory::addItem(m, tr("Edit all the messages"), 4);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Select linked items"), 7);
+    MenuFactory::addItem(m, tr("Select linked items"), 7);
     m.addSeparator();
 
     if (!new_dirs) {
-        MenuFactory::addItem(m, TR("Edit drawing settings"), 5);
+        MenuFactory::addItem(m, tr("Edit drawing settings"), 5);
         m.addSeparator();
     }
 
     if (get_start() != get_end()) {
         init_geometry_menu(geo, 10);
-        MenuFactory::insertItem(m, TR("Geometry (Ctrl+l)"), &geo);
+        MenuFactory::insertItem(m, tr("Geometry (Ctrl+l)"), &geo);
         m.addSeparator();
     }
 
-    MenuFactory::addItem(m, TR("Remove from diagram"), 6);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 6);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)

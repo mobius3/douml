@@ -58,15 +58,15 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
     d->browser_node->edit_start();
 
     if (d->browser_node->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
-    setWindowTitle(TR("Activity Partition dialog"));
+    setWindowTitle(tr("Activity Partition dialog"));
 
     bool visit = !hasOkButton();
 
@@ -79,11 +79,11 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(data->get_stereotype()));
@@ -100,7 +100,7 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
     edstereotype->setSizePolicy(sp);
 
     SmallPushButton *sButton;
-    connect(sButton = new SmallPushButton(TR("represents :"), grid), SIGNAL(clicked()),
+    connect(sButton = new SmallPushButton(tr("represents :"), grid), SIGNAL(clicked()),
             this, SLOT(menu_represents()));
     grid->addWidget(sButton);
     grid->addWidget(edrepresents = new QComboBox(grid));
@@ -126,14 +126,14 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
     grid->addWidget(new QLabel(grid));
     grid->addWidget(htab = new HHBox(grid));
     htab->addWidget(new QLabel("  ", htab));
-    htab->addWidget(dimension_cb = new QCheckBox(TR("is dimension"), htab));
+    htab->addWidget(dimension_cb = new QCheckBox(tr("is dimension"), htab));
 
     if (data->is_dimension)
         dimension_cb->setChecked(TRUE);
 
     dimension_cb->setDisabled(visit);
     htab->addWidget(new QLabel("", htab));
-    htab->addWidget(external_cb = new QCheckBox(TR("is external"), htab));
+    htab->addWidget(external_cb = new QCheckBox(tr("is external"), htab));
 
     if (data->is_external)
         external_cb->setChecked(TRUE);
@@ -143,11 +143,11 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
 
     if (! visit)
     {
-        connect(sButton =  new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton =  new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(sButton);
     }
@@ -172,7 +172,7 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
     grid->setSpacing(5);
 
    grid->addWidget( kvtable = new KeyValuesTable(bn, grid, visit));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     //
 
@@ -250,21 +250,21 @@ void ActivityPartitionDialog::menu_represents()
 
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     if (represented != 0)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = BrowserView::selected_item();
 
     if ((bn != 0) && allowed(bn))
-        MenuFactory::addItem(m, TR("Choose element selected in browser"), 1);
+        MenuFactory::addItem(m, tr("Choose element selected in browser"), 1);
 
     const QList<BrowserNode *> & l = BrowserNode::marked_nodes();
 
     if ((l.count() == 1) && allowed(l.first()))
-        MenuFactory::addItem(m, TR("Choose element marked in browser"), 2);
+        MenuFactory::addItem(m, tr("Choose element marked in browser"), 2);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -305,7 +305,7 @@ void ActivityPartitionDialog::accept()
                 ((BrowserNode *) bn->parent())->wrong_child_name(s, bn->get_type(),
                                                                  bn->allow_spaces(),
                                                                  bn->allow_empty())) {
-            msg_critical(TR("Error"), edname->text() + TR("\n\nillegal name or already used"));
+            msg_critical(tr("Error"), edname->text() + tr("\n\nillegal name or already used"));
             return;
         }
         else

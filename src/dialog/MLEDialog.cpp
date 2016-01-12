@@ -54,9 +54,9 @@ MLEDialog::MLEDialog(QString t, bool buttons) : QDialog(0/*, "Uml", TRUE, 0*/)
 
     if (buttons) {
         hbox->addWidget(new QLabel(hbox));
-        hbox->addWidget(ok = new QPushButton(TR("OK"), hbox));
+        hbox->addWidget(ok = new QPushButton(tr("OK"), hbox));
         hbox->addWidget(new QLabel(hbox));
-        hbox->addWidget(cancel = new QPushButton(TR("Cancel"), hbox));
+        hbox->addWidget(cancel = new QPushButton(tr("Cancel"), hbox));
         hbox->addWidget(new QLabel(hbox));
 
         connect(ok, SIGNAL(clicked()), this, SLOT(accept()));

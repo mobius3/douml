@@ -55,7 +55,7 @@ QSize TraceDialog::previous_size;
 TraceDialog::TraceDialog() : QDialog(0/*, "", FALSE, Qt::WDestructiveClose*/)
 {
     setAttribute(Qt::WA_DeleteOnClose);
-    setWindowTitle(TR("Trace"));
+    setWindowTitle(tr("Trace"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
 
@@ -66,9 +66,9 @@ TraceDialog::TraceDialog() : QDialog(0/*, "", FALSE, Qt::WDestructiveClose*/)
     QHBoxLayout * hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * cl = new QPushButton(TR("Clear"), this);
-    QPushButton * save = new QPushButton(TR("Save"), this);
-    QPushButton * close = new QPushButton(TR("Close"), this);
+    QPushButton * cl = new QPushButton(tr("Clear"), this);
+    QPushButton * save = new QPushButton(tr("Save"), this);
+    QPushButton * close = new QPushButton(tr("Close"), this);
     QSize bs(cl->sizeHint());
 
     close->setDefault(TRUE);

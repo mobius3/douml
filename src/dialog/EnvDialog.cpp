@@ -100,7 +100,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
         htab->addWidget(ed_id);
         if (BrowserView::get_project() != 0) {
                 ed_id->setEnabled(FALSE);
-                htab->addWidget(new QLabel(TR("   The identifier can't be modified while a project is load"), this));
+                htab->addWidget(new QLabel(tr("   The identifier can't be modified while a project is load"), this));
         }
         //
 
@@ -109,7 +109,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
                                       "chapter corresponding to the kind of the element selected in the browser")
                                    ),3,1);
 
-        grid->addWidget(new QLabel(TR("Manual path")),4,0);
+        grid->addWidget(new QLabel(tr("Manual path")),4,0);
         htab = new QHBoxLayout();
         grid->addLayout(htab,4,1);
         ed_doc = new QLineEdit();
@@ -118,15 +118,15 @@ EnvDialog::EnvDialog(bool conv, bool noid)
                 ed_doc->setText(manual_dir());
 
         htab->addWidget(new QLabel(" "));
-        button = new QPushButton(TR("Browse"));
+        button = new QPushButton(tr("Browse"));
         htab->addWidget(button);
         connect(button, SIGNAL(clicked()), this, SLOT(doc_browse()));
 
         //
 
         grid->addWidget(new QLabel(),5,0);
-        grid->addWidget(new QLabel(TR("\nOptional, to indicate a web navigator program. If it is not defined the reference manual will be shown with an internal simple viewer")),5,1);
-        grid->addWidget(new QLabel(TR("Navigator")),6,0);
+        grid->addWidget(new QLabel(tr("\nOptional, to indicate a web navigator program. If it is not defined the reference manual will be shown with an internal simple viewer")),5,1);
+        grid->addWidget(new QLabel(tr("Navigator")),6,0);
         htab = new QHBoxLayout();
         grid->addLayout(htab,6,1);
         ed_navigator = new QLineEdit();
@@ -136,12 +136,12 @@ EnvDialog::EnvDialog(bool conv, bool noid)
                 ed_navigator->setText(navigator_path());
 
         htab->addWidget(new QLabel(" "));
-        button = new QPushButton(TR("Browse"));
+        button = new QPushButton(tr("Browse"));
         htab->addWidget(button);
         connect(button, SIGNAL(clicked()), this, SLOT(navigator_browse()));
 
         grid->addWidget(new QLabel(),7,0);
-        grid->addWidget(new QLabel(TR("\nOptional, to indicate a template project. This allows to create new projects getting all the template project settings")),7,1);
+        grid->addWidget(new QLabel(tr("\nOptional, to indicate a template project. This allows to create new projects getting all the template project settings")),7,1);
         grid->addWidget(new QLabel("Template project"),8,0);
         htab = new QHBoxLayout();
         grid->addLayout(htab,8,1);
@@ -152,15 +152,15 @@ EnvDialog::EnvDialog(bool conv, bool noid)
         ed_template = new QLineEdit(s);
         htab->addWidget(ed_template);
         htab->addWidget(new QLabel(" "));
-        button = new QPushButton(TR("Browse"));
+        button = new QPushButton(tr("Browse"));
         htab->addWidget(button);
         connect(button, SIGNAL(clicked()), this, SLOT(template_browse()));
 
         //
 
         grid->addWidget(new QLabel(),9,0);
-        grid->addWidget(new QLabel(TR("\nOptional, to indicate a text editor (it must creates an own window). Else Bouml will use an internal editor")),9,1);
-        grid->addWidget(new QLabel(TR("Editor path ") ),10,0);
+        grid->addWidget(new QLabel(tr("\nOptional, to indicate a text editor (it must creates an own window). Else Bouml will use an internal editor")),9,1);
+        grid->addWidget(new QLabel(tr("Editor path ") ),10,0);
         htab = new QHBoxLayout();
         grid->addLayout(htab,10,1);
         if (conv)
@@ -171,21 +171,21 @@ EnvDialog::EnvDialog(bool conv, bool noid)
         ed_editor = new QLineEdit(s);
         htab->addWidget(ed_editor);
         htab->addWidget(new QLabel(" "));
-        button = new QPushButton(TR("Browse"));
+        button = new QPushButton(tr("Browse"));
         htab->addWidget(button);
         connect(button, SIGNAL(clicked()), this, SLOT(editor_browse()));
 
         //
 
         grid->addWidget(new QLabel(),11,0);
-        grid->addWidget(new QLabel(TR("\nOptional, to choose a language for menus and dialogs (default is English). You may have to select a corresponding character set")),11,1);
-        grid->addWidget(new QLabel(TR("Translation file path ")),12,0);
+        grid->addWidget(new QLabel(tr("\nOptional, to choose a language for menus and dialogs (default is English). You may have to select a corresponding character set")),11,1);
+        grid->addWidget(new QLabel(tr("Translation file path ")),12,0);
         htab = new QHBoxLayout();
         grid->addLayout(htab,12,1);
         ed_lang = new QLineEdit(current_lang());
         htab->addWidget(ed_lang);
         htab->addWidget(new QLabel(" "));
-        button = new QPushButton(TR("Browse"));
+        button = new QPushButton(tr("Browse"));
         htab->addWidget(button);
         connect(button, SIGNAL(clicked()), this, SLOT(lang_browse()));
 
@@ -195,9 +195,9 @@ EnvDialog::EnvDialog(bool conv, bool noid)
 
 
 
-        grid->addWidget(new QLabel(TR("\nOptional, to indicate a character set in case you use non ISO_8859-1/latin1 characters. For instance KOI8-R or KOI8-RU for Cyrillic")),13,1);
+        grid->addWidget(new QLabel(tr("\nOptional, to indicate a character set in case you use non ISO_8859-1/latin1 characters. For instance KOI8-R or KOI8-RU for Cyrillic")),13,1);
 
-        grid->addWidget(new QLabel(TR("Character set ")),14,0);
+        grid->addWidget(new QLabel(tr("Character set ")),14,0);
         cb_charset = new QComboBox(FALSE);
         grid->addWidget(cb_charset,14,1);
         cb_charset->setAutoCompletion(completion());
@@ -232,9 +232,9 @@ EnvDialog::EnvDialog(bool conv, bool noid)
                 cb_charset->setCurrentIndex(i);
 
         grid->addWidget(new QLabel(),15,0);
-        grid->addWidget(new QLabel(TR("\nIn case you have a multiple screens configuration the best for you is to ask Bouml to place by default the dialogs in one of these\n"
+        grid->addWidget(new QLabel(tr("\nIn case you have a multiple screens configuration the best for you is to ask Bouml to place by default the dialogs in one of these\n"
                                       "screens giving the area, else the dialogs will be shown on the center of the virtual screen.")),15,1);
-        grid->addWidget(new QLabel(TR("Default screen ")),16,0);
+        grid->addWidget(new QLabel(tr("Default screen ")),16,0);
 
         QString x0, y0, x1, y1;
         int top, left, bottom, right;
@@ -261,16 +261,16 @@ EnvDialog::EnvDialog(bool conv, bool noid)
         }
         htab = new QHBoxLayout();
         grid->addLayout(htab,16,1);
-        htab->addWidget(new QLabel(TR("left: ")));
+        htab->addWidget(new QLabel(tr("left: ")));
         ed_xmin = new QLineEdit(x0);
         htab->addWidget(ed_xmin);
-        htab->addWidget(new QLabel(TR("      top: ")));
+        htab->addWidget(new QLabel(tr("      top: ")));
         ed_ymin = new QLineEdit(y0);
         htab->addWidget(ed_ymin);
-        htab->addWidget(new QLabel(TR("      right: ")));
+        htab->addWidget(new QLabel(tr("      right: ")));
         ed_xmax = new QLineEdit(x1);
         htab->addWidget(ed_xmax);
-        htab->addWidget(new QLabel(TR("      bottom: ")));
+        htab->addWidget(new QLabel(tr("      bottom: ")));
         ed_ymax = new QLineEdit(y1);
         htab->addWidget(ed_ymax);
 
@@ -281,13 +281,13 @@ EnvDialog::EnvDialog(bool conv, bool noid)
         grid->addLayout(htab,17,1);
         htab->addWidget(new QLabel());
 
-        button = new QPushButton(TR("OK"));
+        button = new QPushButton(tr("OK"));
         htab->addWidget(button);
         connect(button, SIGNAL(clicked()), this, SLOT(accept()));
         htab->addWidget(new QLabel());
 
         if (! conv) {
-                button = new QPushButton(TR("Cancel"));
+                button = new QPushButton(tr("Cancel"));
                 htab->addWidget(button);
                 connect(button, SIGNAL(clicked()), this, SLOT(reject()));
                 htab->addWidget(new QLabel());
@@ -392,7 +392,7 @@ void EnvDialog::reject()
 void EnvDialog::doc_browse()
 {
         QString s =
-                        QFileDialog::getExistingDirectory(this,TR("documentation directory"),ed_doc->text(),  0);
+                        QFileDialog::getExistingDirectory(this,tr("documentation directory"),ed_doc->text(),  0);
 
         if (! s.isNull())
                 ed_doc->setText(s);

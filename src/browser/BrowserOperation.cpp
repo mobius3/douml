@@ -954,7 +954,7 @@ uint BrowserOperation::TypeID()
 
 QString BrowserOperation::get_stype() const
 {
-    return QObject::TR("operation");
+    return QObject::tr("operation");
 }
 
 int BrowserOperation::get_identifier() const

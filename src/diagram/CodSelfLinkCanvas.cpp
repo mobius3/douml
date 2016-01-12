@@ -270,16 +270,16 @@ void CodSelfLinkCanvas::menu(const QPoint &)
 {
     QMenu m;
 
-    MenuFactory::createTitle(m, TR("Self link"));
+    MenuFactory::createTitle(m, tr("Self link"));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Add messages"), 1);
+    MenuFactory::addItem(m, tr("Add messages"), 1);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit its messages"), 2);
-    MenuFactory::addItem(m, TR("Edit all the messages"), 3);
+    MenuFactory::addItem(m, tr("Edit its messages"), 2);
+    MenuFactory::addItem(m, tr("Edit all the messages"), 3);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 4);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 4);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 5);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 5);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -335,12 +335,12 @@ void CodSelfLinkCanvas::menu(const QPoint &)
 
 QString CodSelfLinkCanvas::may_start(UmlCode & l) const
 {
-    return (l == UmlAnchor) ? QString() : TR("illegal");
+    return (l == UmlAnchor) ? QString() : tr("illegal");
 }
 
 QString CodSelfLinkCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 {
-    return (l == UmlAnchor) ? dest->may_start(l) : TR("illegal");
+    return (l == UmlAnchor) ? dest->may_start(l) : tr("illegal");
 }
 
 bool CodSelfLinkCanvas::copyable() const

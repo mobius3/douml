@@ -63,12 +63,12 @@ RelTable::RelTable(QWidget * parent, ClassInstanceData * inst, bool visit)
     setSelectionMode(QTableWidget::SingleSelection);
     //setSortingEnabled(true);
 
-    setHorizontalHeaderLabel(0, TR("Class Inst."));
-    setHorizontalHeaderLabel(1, TR("Role"));
-    setHorizontalHeaderLabel(2, TR("kind"));
-    setHorizontalHeaderLabel(3, TR("Role"));
-    setHorizontalHeaderLabel(4, TR("Class Inst."));
-    setHorizontalHeaderLabel(5, TR("Delete"));
+    setHorizontalHeaderLabel(0, tr("Class Inst."));
+    setHorizontalHeaderLabel(1, tr("Role"));
+    setHorizontalHeaderLabel(2, tr("kind"));
+    setHorizontalHeaderLabel(3, tr("Role"));
+    setHorizontalHeaderLabel(4, tr("Class Inst."));
+    setHorizontalHeaderLabel(5, tr("Delete"));
 
     QString role = inst->get_browser_node()->get_name() + QString(":") +
             inst->get_class()->get_name();
@@ -120,7 +120,7 @@ void RelTable::init_row(const SlotRel & sr, int row, QString a, bool visit)
 void RelTable::button_pressed(int row, int col, int, const QPoint &)
 {
     if (col == 5)
-        setText(row, col, text(row, col).isEmpty() ? TR("   Yes") : QString());
+        setText(row, col, text(row, col).isEmpty() ? tr("   Yes") : QString());
 }
 
 //
@@ -131,19 +131,19 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
     : TabDialog(0, "class instance dialog", FALSE, Qt::WA_DeleteOnClose),
       inst(i), atbl(0), rtbl(0)
 {
-    setWindowTitle(TR("Class instance dialog"));
+    setWindowTitle(tr("Class instance dialog"));
 
     BrowserNode * bn = inst->get_browser_node();
 
     bn->edit_start();
 
     if (bn->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
     visit = !hasOkButton();
@@ -156,13 +156,13 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
 
     if (visit)
         edname->setReadOnly(TRUE);
 
-    grid->addWidget(new QLabel(TR("stereotype :"), grid));
+    grid->addWidget(new QLabel(tr("stereotype :"), grid));
     grid->addWidget(edstereotype = new QComboBox( grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(bn->get_stereotype()));
@@ -173,7 +173,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
     }
 
     SmallPushButton  * b;
-    grid->addWidget(b = new SmallPushButton(TR("class :"), grid));
+    grid->addWidget(b = new SmallPushButton(tr("class :"), grid));
 
     connect(b, SIGNAL(clicked()), this, SLOT(menu_class()));
 
@@ -203,10 +203,10 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
 
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
 
     if (! visit) {
-        connect(b =new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(b =new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(b);
     }
@@ -234,17 +234,17 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
     atbl->setSelectionMode(QTableWidget::NoSelection);	// single does not work
     atbl->verticalHeader()->setSectionsMovable(true);
     atbl->verticalHeader()->setSectionsMovable(true);
-    atbl->setHorizontalHeaderLabel(0, TR(" Attribute "));
-    atbl->setHorizontalHeaderLabel(1, TR(" Class "));
-    atbl->setHorizontalHeaderLabel(2, TR(" Value "));
+    atbl->setHorizontalHeaderLabel(0, tr(" Attribute "));
+    atbl->setHorizontalHeaderLabel(1, tr(" Class "));
+    atbl->setHorizontalHeaderLabel(2, tr(" Value "));
 
-    addTab(atbl, TR("Attributes"));
+    addTab(atbl, tr("Attributes"));
 
     // relation tab
 
     if (! inst->relations.isEmpty()) {
         rtbl = new RelTable(this, inst, visit);
-        addTab(rtbl, TR("Relations"));
+        addTab(rtbl, tr("Relations"));
     }
 
     // USER : list key - value
@@ -254,7 +254,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
     grid->setSpacing(5);
 
     grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     type_changed(edtype->currentIndex());
 
@@ -306,13 +306,13 @@ void ClassInstanceDialog::menu_class()
 {
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     int index = list.indexOf(edtype->currentText().trimmed());
 
     if (index != -1)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -320,12 +320,12 @@ void ClassInstanceDialog::menu_class()
         bn = BrowserView::selected_item();
 
         if ((bn != 0) && (bn->get_type() == UmlClass) && !bn->deletedp())
-            MenuFactory::addItem(m, TR("Choose class selected in browser"), 1);
+            MenuFactory::addItem(m, tr("Choose class selected in browser"), 1);
         else
             bn = 0;
 
         if (cl_container != 0)
-            MenuFactory::addItem(m, TR("Create class and choose it"), 2);
+            MenuFactory::addItem(m, tr("Create class and choose it"), 2);
     }
 
     if ((index != -1) || (bn != 0) || (cl_container != 0)) {
@@ -438,7 +438,7 @@ void ClassInstanceDialog::accept()
         QList<SlotRel> rels = inst->get_relations(); // copy !
         QList<SlotRel>::Iterator it;
         int row = 0;
-        QString yes = TR("Yes");
+        QString yes = tr("Yes");
 
         for (row = 0, it = rels.begin(); it != rels.end(); ++it, row += 1) {
             if (rtbl->text(row, 5).trimmed() == yes) {

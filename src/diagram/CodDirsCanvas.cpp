@@ -355,13 +355,13 @@ void CodDirsCanvas::menu(const QPoint &)
 QString CodDirsCanvas::may_start(UmlCode &) const
 {
     // cannot be called
-    return TR("illegal");
+    return tr("illegal");
 }
 
 QString CodDirsCanvas::may_connect(UmlCode &, const DiagramItem *) const
 {
     // cannot be called
-    return TR("illegal");
+    return tr("illegal");
 }
 
 bool CodDirsCanvas::copyable() const

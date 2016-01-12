@@ -568,7 +568,7 @@ void BrowserClass::InstallParentsMenuItems(QMenu& inhopersubm)
     {
         int currentId = first_inherited_function_index + sensible_amount_of_visible_entries + (it - parents.begin());
 
-        MenuFactory::addItem(inhopersubm,QObject::TR("Implement whole ") + *it, currentId, QString("to implement whole "));
+        MenuFactory::addItem(inhopersubm,QObject::tr("Implement whole ") + *it, currentId, QString("to implement whole "));
         //inhopersubm.setWhatsThis(currentId, QString("to implement whole ") + *it);
     }
     if(!parents.isEmpty())
@@ -608,16 +608,16 @@ void BrowserClass::menu()
                 const char * stereotype = def->get_stereotype();
 
                 if (!strcmp(stereotype, "enum") || !strcmp(stereotype, "enum_pattern"))
-                    MenuFactory::addItem(m, QObject::TR("Add item"), add_item_index,
-                                         QObject::TR("to add an <i>item</i> to the <i>enum</i>"));
+                    MenuFactory::addItem(m, QObject::tr("Add item"), add_item_index,
+                                         QObject::tr("to add an <i>item</i> to the <i>enum</i>"));
 
                 if (strcmp(stereotype, "typedef") && strcmp(stereotype, "enum_pattern"))
                 {
-                    MenuFactory::addItem(m, QObject::TR("Add attribute"), add_attribute_index,
-                                         QObject::TR("to add an <i>attribute</i> to the ") + what);
+                    MenuFactory::addItem(m, QObject::tr("Add attribute"), add_attribute_index,
+                                         QObject::tr("to add an <i>attribute</i> to the ") + what);
 
-                    MenuFactory::addItem(m, QObject::TR("Add operation"), add_operation_index,
-                                         QObject::TR("to add an <i>operation</i> to the ") + what);
+                    MenuFactory::addItem(m, QObject::tr("Add operation"), add_operation_index,
+                                         QObject::tr("to add an <i>operation</i> to the ") + what);
 
                     bool isUnion = strcmp(stereotype, "union");
                     if (!inheritedOperations.isEmpty() && isUnion)
@@ -626,11 +626,11 @@ void BrowserClass::menu()
                         InstallParentsMenuItems(inhopersubm);
 
                         if (inheritedOperations.count() > sensible_amount_of_visible_entries)
-                            MenuFactory::addItem(m, QObject::TR("Add inherited operation"), too_much_inherited_functions_index,
-                                                 QObject::TR("to redefine an inherited <i>operation</i> in the <i>class</i>"));
+                            MenuFactory::addItem(m, QObject::tr("Add inherited operation"), too_much_inherited_functions_index,
+                                                 QObject::tr("to redefine an inherited <i>operation</i> in the <i>class</i>"));
                         else
                         {
-                            MenuFactory::createTitle(inhopersubm,  QObject::TR("Choose operation to add it"));
+                            MenuFactory::createTitle(inhopersubm,  QObject::tr("Choose operation to add it"));
                             inhopersubm.addSeparator();
 
                             index = first_inherited_function_index;
@@ -653,8 +653,8 @@ void BrowserClass::menu()
                             }
 
 
-                            MenuFactory::insertItem(m, QObject::TR("Add inherited operation"), &inhopersubm,
-                                                    QObject::TR("to redefine an inherited <i>operation</i> in the <i>class</i>"));
+                            MenuFactory::insertItem(m, QObject::tr("Add inherited operation"), &inhopersubm,
+                                                    QObject::tr("to redefine an inherited <i>operation</i> in the <i>class</i>"));
 
                         }
                     }
@@ -663,23 +663,23 @@ void BrowserClass::menu()
                             strcmp(stereotype, "enum") &&
                             strcmp(stereotype, "enum_pattern"))
                     {
-                        MenuFactory::addItem(m, QObject::TR("Add nested class"), add_nested_class_index,
-                                             QObject::TR("to add an <i>nested class</i> to the <i>class</i>"));
+                        MenuFactory::addItem(m, QObject::tr("Add nested class"), add_nested_class_index,
+                                             QObject::tr("to add an <i>nested class</i> to the <i>class</i>"));
                     }
 
-                    MenuFactory::addItem(m, QObject::TR("Add extra member"), add_extra_member_index,
-                                         QObject::TR("to add an <i>extra member</i> to the <i>class</i>"));
+                    MenuFactory::addItem(m, QObject::tr("Add extra member"), add_extra_member_index,
+                                         QObject::tr("to add an <i>extra member</i> to the <i>class</i>"));
                 }
 
                 m.addSeparator();
-                MenuFactory::addItem(m, QObject::TR("Edit"), edit_index,
-                                     QObject::TR("to edit the ") + what + ","
+                MenuFactory::addItem(m, QObject::tr("Edit"), edit_index,
+                                     QObject::tr("to edit the ") + what + ","
                                                                           "a double click with the left mouse button does the same thing");
-                MenuFactory::addItem(m, QObject::TR("Duplicate"), duplicate_index,
-                                     QObject::TR("to duplicate the ") + what);
+                MenuFactory::addItem(m, QObject::tr("Duplicate"), duplicate_index,
+                                     QObject::tr("to duplicate the ") + what);
                 m.addSeparator();
-                MenuFactory::addItem(m, QObject::TR("Delete"), delete_index,
-                                     QObject::TR("to delete the ") + what + "."
+                MenuFactory::addItem(m, QObject::tr("Delete"), delete_index,
+                                     QObject::tr("to delete the ") + what + "."
                                                                             "Note that you can undelete it after");
 
                 if (!isstereotype &&
@@ -703,8 +703,8 @@ void BrowserClass::menu()
                         {
                             // no artifact having the same name, propose to create it
                             m.addSeparator();
-                            MenuFactory::addItem(m, QObject::TR("Create source artifact"), 5,
-                                                 QObject::TR("to add a <i>&lt;&lt;source&gt;&gt; artifact</i> in the <i>deployment view</i> associated to "
+                            MenuFactory::addItem(m, QObject::tr("Create source artifact"), 5,
+                                                 QObject::tr("to add a <i>&lt;&lt;source&gt;&gt; artifact</i> in the <i>deployment view</i> associated to "
                                                              "the <i>class view</i>, this artifact will contain the generated code of the class"));
                         }
                     }
@@ -713,11 +713,11 @@ void BrowserClass::menu()
         }
         else
         {
-            MenuFactory::addItem(m, QObject::TR("Edit"), edit_index,
-                                 QObject::TR("to edit the ") + what + ", "
+            MenuFactory::addItem(m, QObject::tr("Edit"), edit_index,
+                                 QObject::tr("to edit the ") + what + ", "
                                                                       "a double click with the left mouse button does the same thing");
-            MenuFactory::addItem(m, QObject::TR("Duplicate"), duplicate_index,
-                                 QObject::TR("to duplicate the ") + what);
+            MenuFactory::addItem(m, QObject::tr("Duplicate"), duplicate_index,
+                                 QObject::tr("to duplicate the ") + what);
         }
 
         bool have_sep = FALSE;
@@ -728,8 +728,8 @@ void BrowserClass::menu()
         {
             m.addSeparator();
             have_sep = TRUE;
-            MenuFactory::addItem(m, QObject::TR("Select associated artifact"), select_artifact_index,
-                                 QObject::TR("to select the associated <i>&lt;&lt;source&gt;&gt; artifact</i>"));
+            MenuFactory::addItem(m, QObject::tr("Select associated artifact"), select_artifact_index,
+                                 QObject::tr("to select the associated <i>&lt;&lt;source&gt;&gt; artifact</i>"));
         }
 
         if (!isstereotype &&
@@ -741,14 +741,14 @@ void BrowserClass::menu()
 
             if (associated_components.first() == associated_components.last())
                 // only one component
-                MenuFactory::addItem(m, QObject::TR("Select associated component"), select_component_index,
-                                     QObject::TR("to select the <i>component</i> providing the <i>class</i>"));
+                MenuFactory::addItem(m, QObject::tr("Select associated component"), select_component_index,
+                                     QObject::tr("to select the <i>component</i> providing the <i>class</i>"));
             else
             {
-                MenuFactory::createTitle(compsubm,  QObject::TR("Choose component"));
+                MenuFactory::createTitle(compsubm,  QObject::tr("Choose component"));
                 compsubm.addSeparator();
-                MenuFactory::insertItem(m, QObject::TR("Select an associated component"), &compsubm,
-                                        QObject::TR("to select a <i>component</i> providing the <i>class</i>"));
+                MenuFactory::insertItem(m, QObject::tr("Select an associated component"), &compsubm,
+                                        QObject::tr("to select a <i>component</i> providing the <i>class</i>"));
 
                 index = select_component_index;
 
@@ -762,9 +762,9 @@ void BrowserClass::menu()
         }
 
         m.addSeparator();
-        MenuFactory::addItem(m, QObject::TR("Referenced by"), see_references_index,
-                             QObject::TR("to know who reference the ") + what);
-        mark_menu(m,  QObject::TR("the class").toLatin1().constData(), 90);
+        MenuFactory::addItem(m, QObject::tr("Referenced by"), see_references_index,
+                             QObject::tr("to know who reference the ") + what);
+        mark_menu(m,  QObject::tr("the class").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if (!isstereotype && !ismetaclass)
@@ -778,7 +778,7 @@ void BrowserClass::menu()
             if (! nestedp() && (cpp || java || php || python || idl))
             {
                 m.addSeparator();
-                MenuFactory::insertItem(m, QObject::TR("Generate"), &gensubm);
+                MenuFactory::insertItem(m, QObject::tr("Generate"), &gensubm);
 
                 if (cpp)
                 {
@@ -808,7 +808,7 @@ void BrowserClass::menu()
                 if (roundtripm.actions().count() != 0)
                 {
 
-                    MenuFactory::insertItem(m, QObject::TR("Roundtrip"), &roundtripm);
+                    MenuFactory::insertItem(m, QObject::tr("Roundtrip"), &roundtripm);
 
                 }
             }
@@ -819,7 +819,7 @@ void BrowserClass::menu()
         {
             m.addSeparator();
 
-            MenuFactory::insertItem(m, QObject::TR("Tool"), &toolm);
+            MenuFactory::insertItem(m, QObject::tr("Tool"), &toolm);
 
             m.addMenu(&toolm);
 
@@ -827,8 +827,8 @@ void BrowserClass::menu()
     }
     else if (!is_read_only && (edition_number == 0))
     {
-        MenuFactory::addItem(m, QObject::TR("Undelete"), undelete_index,
-                             QObject::TR("undelete the ") + what + ". "
+        MenuFactory::addItem(m, QObject::tr("Undelete"), undelete_index,
+                             QObject::tr("undelete the ") + what + ". "
                                                                    "Do not undelete its <i>attributes</i>, <i>operations</i> and <i>relations</i>");
 
         BrowserNode * child;
@@ -837,8 +837,8 @@ void BrowserClass::menu()
         {
             if (((BrowserNode *) child)->deletedp())
             {
-                MenuFactory::addItem(m, QObject::TR("Undelete recursively"), undelete_recursive_index,
-                                     QObject::TR("undelete the ") + what + " and its "
+                MenuFactory::addItem(m, QObject::tr("Undelete recursively"), undelete_recursive_index,
+                                     QObject::tr("undelete the ") + what + " and its "
                                                                            "nested <i>classes</i>, <i>attributes</i>, <i>operations</i> and "
                                                                            "<i>relations</i> (except if the class at the other side is also deleted)");
                 break;
@@ -1103,7 +1103,7 @@ void BrowserClass::exec_menu_choice(int rank,
     case duplicate_index: {
         QString name = get_name();
 
-        if (((BrowserNode *) parent())->enter_child_name(name, QObject::TR("enter class's name : "),
+        if (((BrowserNode *) parent())->enter_child_name(name, QObject::tr("enter class's name : "),
                                                          UmlClass, FALSE, FALSE))
 
         {
@@ -1369,8 +1369,8 @@ BrowserNode * BrowserClass::add_attribute(BrowserAttribute * attr,
     QString name;
     if(attr && sameName)
         name = attr->get_name();
-    if (enter_child_name(name, (enum_item) ? QObject::TR("enter item's name : ")
-                         : QObject::TR("enter attribute's name : "),
+    if (enter_child_name(name, (enum_item) ? QObject::tr("enter item's name : ")
+                         : QObject::tr("enter attribute's name : "),
                          UmlAttribute, FALSE, FALSE)) {
         bool newone = (attr == nullptr);
 
@@ -1453,7 +1453,7 @@ BrowserNode * BrowserClass::add_operation(BrowserOperation * oper, bool sameName
     if(oper && sameName)
         name = oper->get_name();
 
-    if (enter_child_name(name, QObject::TR("enter operation's name : "),
+    if (enter_child_name(name, QObject::tr("enter operation's name : "),
                          UmlOperation, FALSE, FALSE))
     {
         oper = (oper == 0) ? BrowserOperation::new_one(name, this)
@@ -1521,25 +1521,25 @@ QString BrowserClass::may_start(UmlCode l) const
         case UmlGeneralisation:
         case UmlRealize:
             if (is_read_only && !root_permission())
-                return QObject::TR("read only");
+                return QObject::tr("read only");
             else {
                 BrowserNodeList inh;
                 children(inh, UmlGeneralisation, UmlRealize);
                 return (inh.count() <= 1)
                         ? QString()
-                        : QObject::TR("typedef can't generalize / realize several times");
+                        : QObject::tr("typedef can't generalize / realize several times");
             }
 
         case UmlDependency:
             if (is_read_only && !root_permission())
-                return QObject::TR("read only");
+                return QObject::tr("read only");
 
             // no break
         case UmlAnchor:
             return QString();
 
         default:
-            return QObject::TR("a typedef can't have relation");
+            return QObject::tr("a typedef can't have relation");
         }
     }
 
@@ -1547,7 +1547,7 @@ QString BrowserClass::may_start(UmlCode l) const
     case UmlGeneralisation:
     case UmlRealize:
         if (!strcmp(stereotype, "union"))
-            return QObject::TR("an union can't generalize / realize");
+            return QObject::tr("an union can't generalize / realize");
 
         // no break;
     case UmlAssociation:
@@ -1557,7 +1557,7 @@ QString BrowserClass::may_start(UmlCode l) const
     case UmlDirectionalAggregation:
     case UmlDirectionalAggregationByValue:
     case UmlDependency:
-        return (!is_read_only || root_permission()) ? QString() : QObject::TR("read only");
+        return (!is_read_only || root_permission()) ? QString() : QObject::tr("read only");
 
     default:
         return 0;
@@ -1574,10 +1574,10 @@ QString BrowserClass::may_connect(UmlCode l, BrowserClass * other)
     case UmlAssociation:
     case UmlAggregation:
     case UmlAggregationByValue:
-        return (!other->is_read_only || root_permission()) ? QString() : QObject::TR("read only");
+        return (!other->is_read_only || root_permission()) ? QString() : QObject::tr("read only");
 
     default:
-        return (l != UmlAnchor) ? QString() : QObject::TR("can't have anchor between classes");
+        return (l != UmlAnchor) ? QString() : QObject::tr("can't have anchor between classes");
     }
 }
 
@@ -1632,7 +1632,7 @@ UmlCode BrowserClass::get_type() const
 
 QString BrowserClass::get_stype() const
 {
-    return QObject::TR("class");
+    return QObject::tr("class");
 }
 
 int BrowserClass::get_identifier() const
@@ -2300,7 +2300,7 @@ BrowserClass * BrowserClass::get_class(BrowserNode * future_parent,
     QString name;
     BrowserNodeList nodes;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter class's name : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter class's name : "),
                                          UmlClass, instances(nodes), &old,
                                          FALSE, FALSE))
         return 0;
@@ -2328,8 +2328,8 @@ BrowserClass * BrowserClass::add_class(bool stereotypep,
 {
     if (name.isEmpty()) {
         if (!future_parent->enter_child_name(name,
-                                             (stereotypep) ? QObject::TR("enter stereotype's name : ")
-                                             : QObject::TR("enter class's name : "),
+                                             (stereotypep) ? QObject::tr("enter stereotype's name : ")
+                                             : QObject::tr("enter class's name : "),
                                              UmlClass, FALSE, FALSE))
             return 0;
 
@@ -2337,7 +2337,7 @@ BrowserClass * BrowserClass::add_class(bool stereotypep,
         if (stereotypep &&
                 (!(err = ProfiledStereotypes::canAddStereotype((BrowserClassView *) future_parent,
                                                                name)).isEmpty())) {
-            msg_critical(QObject::TR("Error"), name + " " + err);
+            msg_critical(QObject::tr("Error"), name + " " + err);
 
 
             return 0;
@@ -2401,10 +2401,10 @@ QString BrowserClass::check_inherit(const BrowserNode * new_parent) const
     if ((!strcmp(parent_stereotype, "stereotype"))
             ? strcmp(def->get_stereotype(), "stereotype")
             : !strcmp(def->get_stereotype(), "stereotype"))
-        return QObject::TR("one of the two classes is not a stereotype");
+        return QObject::tr("one of the two classes is not a stereotype");
 
     return (!strcmp(parent_stereotype, "union"))
-            ? QObject::TR("an union can't generalize / realize")
+            ? QObject::tr("an union can't generalize / realize")
             : BrowserNode::check_inherit(new_parent);
 }
 

@@ -58,17 +58,17 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
     ex->browser_node->edit_start();
 
     if (ex->browser_node->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
     bool visit = !hasOkButton();
 
-    setWindowTitle(TR("Extra Class Member dialog"));
+    setWindowTitle(tr("Extra Class Member dialog"));
 
     GridBox * grid;
 
@@ -78,7 +78,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("name :"), grid));
+    grid->addWidget(new QLabel(tr("name :"), grid));
     grid->addWidget(edname = new LineEdit(ex->name(), grid));
     edname->setReadOnly(visit);
 
@@ -89,7 +89,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
     font.setFixedPitch(TRUE);
 
-    grid->addWidget(new QLabel(TR("stereotype :"), grid));
+    grid->addWidget(new QLabel(tr("stereotype :"), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(ex->get_stereotype()));
@@ -106,12 +106,12 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
 
     SmallPushButton *b;
     if (! visit)
     {
-        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(b = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(b);
     }
@@ -140,11 +140,11 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
         inline_cb->setChecked(TRUE);
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("C++ \ndeclaration :"), vtab));
+    vtab->addWidget(new QLabel(tr("C++ \ndeclaration :"), vtab));
 
     if (! visit)
     {
-        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(b = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_cpp_decl()));
         vtab->addWidget(b);
     }
@@ -155,11 +155,11 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
     edcpp_decl->setFont(font);
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("C++ \ndefinition :"), vtab));
+    vtab->addWidget(new QLabel(tr("C++ \ndefinition :"), vtab));
 
     if (! visit)
     {
-        connect(b= new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(b= new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_cpp_def()));
         vtab->addWidget(b);
     }
@@ -184,7 +184,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
     vtab->addWidget(new QLabel("Java :", vtab));
     if (! visit)
     {
-        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(b = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_java_decl()));
         vtab->addWidget(b);
     }
@@ -210,7 +210,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
     if (! visit)
     {
-        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(b = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_php_decl()));
         vtab->addWidget(b);
     }
@@ -236,7 +236,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
     if (! visit)
     {
-        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(b = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_python_decl()));
         vtab->addWidget(b);
     }
@@ -262,7 +262,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
     if (! visit)
     {
-        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(b = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_idl_decl()));
         vtab->addWidget(b);
     }
@@ -284,7 +284,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
     grid->setSpacing(5);
 
     grid->addWidget(kvtable = new KeyValuesTable(ex->get_browser_node(), grid, visit));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     open_dialog(this);
 }

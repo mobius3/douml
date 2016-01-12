@@ -79,74 +79,74 @@ ComponentDiagramWindow::ComponentDiagramWindow(const QString & s, BrowserCompone
     add_edit_button(toolbar);
 
     select =
-        ToolBarFactory::createToolButton(*selectButton, TR("Select"), QString(),
+        ToolBarFactory::createToolButton(*selectButton, tr("Select"), QString(),
                         this, SLOT(hit_select()), toolbar, "select");
     select->setCheckable(TRUE);
     select->setChecked(TRUE);
     current_button = UmlSelect;
 
     addPackage
-        = ToolBarFactory::createToolButton(*packageButton, TR("Add Package"), QString(),
+        = ToolBarFactory::createToolButton(*packageButton, tr("Add Package"), QString(),
                           this, SLOT(hit_package()), toolbar, "add package");
     addPackage->setCheckable(TRUE);
     addPackage->setWhatsThis(addpackageText());
 
     addFragment
-        = ToolBarFactory::createToolButton(*fragmentButton, TR("Add Fragment"), QString(),
+        = ToolBarFactory::createToolButton(*fragmentButton, tr("Add Fragment"), QString(),
                           this, SLOT(hit_fragment()), toolbar, "add fragment");
     addFragment->setCheckable(TRUE);
     addFragment->setWhatsThis(addfragmentText());
 
     addComponent =
-        ToolBarFactory::createToolButton(*componentButton, TR("Add Component"), QString(),
+        ToolBarFactory::createToolButton(*componentButton, tr("Add Component"), QString(),
                         this, SLOT(hit_component()), toolbar, "add component");
     addComponent->setCheckable(TRUE);
     addComponent->setWhatsThis(addcomponentText());
 
     inherit =
-        ToolBarFactory::createToolButton(*generalisationButton, TR("Inheritance"), QString(),
+        ToolBarFactory::createToolButton(*generalisationButton, tr("Inheritance"), QString(),
                         this, SLOT(hit_inherit()), toolbar, "inheritance");
     inherit->setCheckable(TRUE);
     inherit->setWhatsThis(inheritText());
 
     dependency =
-        ToolBarFactory::createToolButton(*dependencyButton, TR("Dependency"), QString(),
+        ToolBarFactory::createToolButton(*dependencyButton, tr("Dependency"), QString(),
                         this, SLOT(hit_dependency()), toolbar, "dependency");
     dependency->setCheckable(TRUE);
     dependency->setWhatsThis(dependencyText());
 
     required =
-        ToolBarFactory::createToolButton(*requiredButton, TR("Required interface"), QString(),
+        ToolBarFactory::createToolButton(*requiredButton, tr("Required interface"), QString(),
                         this, SLOT(hit_required()), toolbar, "required interface");
     required->setCheckable(TRUE);
     required->setWhatsThis(requiredText());
 
     provided =
-        ToolBarFactory::createToolButton(*providedButton, TR("Provided interface"), QString(),
+        ToolBarFactory::createToolButton(*providedButton, tr("Provided interface"), QString(),
                         this, SLOT(hit_provided()), toolbar, "provided interface");
     provided->setCheckable(TRUE);
     provided->setWhatsThis(providedText());
 
     note =
-        ToolBarFactory::createToolButton(*noteButton, TR("Note"), QString(),
+        ToolBarFactory::createToolButton(*noteButton, tr("Note"), QString(),
                         this, SLOT(hit_note()), toolbar, "note");
     note->setCheckable(TRUE);
     note->setWhatsThis(noteText());
 
     anchor =
-        ToolBarFactory::createToolButton(*anchorButton, TR("Anchor"), QString(),
+        ToolBarFactory::createToolButton(*anchorButton, tr("Anchor"), QString(),
                         this, SLOT(hit_anchor()), toolbar, "anchor");
     anchor->setCheckable(TRUE);
     anchor->setWhatsThis(anchorText());
 
     text =
-        ToolBarFactory::createToolButton(*textButton, TR("Text"), QString(),
+        ToolBarFactory::createToolButton(*textButton, tr("Text"), QString(),
                         this, SLOT(hit_text()), toolbar, "text");
     text->setCheckable(TRUE);
     text->setWhatsThis(textText());
 
     image =
-        ToolBarFactory::createToolButton(*imageButton, TR("Image"), QString(),
+        ToolBarFactory::createToolButton(*imageButton, tr("Image"), QString(),
                         this, SLOT(hit_image()), toolbar, "image");
     image->setCheckable(TRUE);
     image->setWhatsThis(imageText());

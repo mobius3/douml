@@ -282,22 +282,22 @@ void BrowserClassInstance::menu()
     if (!deletedp()) {
         if (!is_edited) {
             MenuFactory::addItem(m, QObject::tr("Edit"), 0,
-                                 QObject::TR("to edit the <i>class instance</i>, \
+                                 QObject::tr("to edit the <i>class instance</i>, \
                                              a double click with the left mouse button does the same thing"));
                                              MenuFactory::addItem(m, QObject::tr("Duplicate"), 4,
-                                                                  QObject::TR("to duplicate the <i>class instance</i>"));
+                                                                  QObject::tr("to duplicate the <i>class instance</i>"));
 
                                  if (!is_read_only && (edition_number == 0)) {
                                      m.addSeparator();
                                      MenuFactory::addItem(m, QObject::tr("Delete"), 1,
-                                     QObject::TR("to delete the <i>class instance</i>. \
+                                     QObject::tr("to delete the <i>class instance</i>. \
                                      Note that you can undelete it after"));
                                  }
         }
 
         m.addSeparator();
         MenuFactory::addItem(m, QObject::tr("Referenced by"), 3,
-                             QObject::TR("to know who reference the <i>class instance</i> \
+                             QObject::tr("to know who reference the <i>class instance</i> \
                                          through a relation"));
                                          mark_menu(m, QObject::tr("the class instance").toLatin1().constData(), 90);
                              ProfiledStereotypes::menu(m, this, 99990);
@@ -412,7 +412,7 @@ UmlCode BrowserClassInstance::get_type() const
 
 QString BrowserClassInstance::get_stype() const
 {
-    return QObject::TR("class instance");
+    return QObject::tr("class instance");
 }
 
 int BrowserClassInstance::get_identifier() const
@@ -431,7 +431,7 @@ BrowserClassInstance * BrowserClassInstance::get_classinstance(BrowserNode * fut
     QString name;
     BrowserNodeList nodes;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter class instance's name (may be empty) : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter class instance's name (may be empty) : "),
                                          UmlClassInstance, instances(nodes),
                                          &old, TRUE, TRUE))
         return 0;
@@ -471,7 +471,7 @@ BrowserClassInstance * BrowserClassInstance::get_classinstance(BrowserClass * cl
     nodes.sort_it();
 
     // use cl here but any element is good for
-    return (! cl->enter_child_name(dummy, QObject::TR("choose existing instance : "),
+    return (! cl->enter_child_name(dummy, QObject::tr("choose existing instance : "),
                                    UmlClassInstance, nodes, &old,
                                    TRUE, TRUE, TRUE))
             ? 0 : ((BrowserClassInstance *) old);
@@ -481,7 +481,7 @@ BrowserClassInstance * BrowserClassInstance::add_classinstance(BrowserNode * fut
 {
     QString name;
 
-    if (! future_parent->enter_child_name(name, QObject::TR("enter class instance's name (may be empty) : "),
+    if (! future_parent->enter_child_name(name, QObject::tr("enter class instance's name (may be empty) : "),
                                           UmlClassInstance, TRUE, TRUE))
         return 0;
 

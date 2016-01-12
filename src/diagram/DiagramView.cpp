@@ -1099,7 +1099,7 @@ void DiagramView::multiple_selection_menu(bool in_model, bool out_model,
 
     for (it = selected.begin(); it != selected.end(); ++it) {
         if (QCanvasItemToDiagramItem(*it)->linked()) {
-            MenuFactory::addItem(m, TR("Select linked items"), 1);
+            MenuFactory::addItem(m, tr("Select linked items"), 1);
             m.addSeparator();
             break;
         }
@@ -1124,34 +1124,34 @@ void DiagramView::multiple_selection_menu(bool in_model, bool out_model,
         al.addAction(QIcon(vcenter), QObject::tr("align center verticaly"))->setData(9);
         al.addAction(QIcon(hcenter), QObject::tr("align center horizontaly"))->setData(10);
 
-        MenuFactory::insertItem(m, TR("Align"), &al);
+        MenuFactory::insertItem(m, tr("Align"), &al);
     }
 
     if (n_resize > 1) {
-        MenuFactory::addItem(sz, TR("same width"), 14);
-        MenuFactory::addItem(sz, TR("same height"), 15);
-        MenuFactory::addItem(sz, TR("same width and height"), 16);
+        MenuFactory::addItem(sz, tr("same width"), 14);
+        MenuFactory::addItem(sz, tr("same height"), 15);
+        MenuFactory::addItem(sz, tr("same width and height"), 16);
 
-        MenuFactory::insertItem(m, TR("Size"), &sz);
+        MenuFactory::insertItem(m, tr("Size"), &sz);
         m.addSeparator();
     }
     else if (alignable)
         m.addSeparator();
 
-    MenuFactory::addItem(m, TR("Copy selected (Ctrl+c)"), 11);
+    MenuFactory::addItem(m, tr("Copy selected (Ctrl+c)"), 11);
 
     if (out_model) {
-        MenuFactory::addItem(m, TR("Cut selected (Ctrl+x, remove from diagram)"), 12);
-        MenuFactory::addItem(m, TR("Remove selected from view (Suppr)"), 2);
+        MenuFactory::addItem(m, tr("Cut selected (Ctrl+x, remove from diagram)"), 12);
+        MenuFactory::addItem(m, tr("Remove selected from view (Suppr)"), 2);
     }
 
     if (in_model)
-        MenuFactory::addItem(m, TR("Delete selected (Ctrl+d)"), 3);
+        MenuFactory::addItem(m, tr("Delete selected (Ctrl+d)"), 3);
 
     if (l_drawing_settings.count() > 1) {
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Edit drawing settings"), 13);
-        MenuFactory::addItem(m, TR("Same drawing settings"), 17);
+        MenuFactory::addItem(m, tr("Edit drawing settings"), 13);
+        MenuFactory::addItem(m, tr("Same drawing settings"), 17);
     }
 
     history_protected = TRUE;
@@ -1925,63 +1925,63 @@ int DiagramView::default_menu(QMenu & m, int f)
     QList<QGraphicsItem*> l;
 
     if (wr) {
-        MenuFactory::addItem(m, TR("Edit drawing settings"), EDIT_DRAWING_SETTING_CMD);
+        MenuFactory::addItem(m, tr("Edit drawing settings"), EDIT_DRAWING_SETTING_CMD);
         m.addSeparator();
     }
 
-    MenuFactory::addItem(m, TR("Select diagram in browser"), 1);
+    MenuFactory::addItem(m, tr("Select diagram in browser"), 1);
 
     if (wr)
-        MenuFactory::addItem(m, TR("Select all (Ctrl+a)"), 2);
+        MenuFactory::addItem(m, tr("Select all (Ctrl+a)"), 2);
 
     if (find_browser_element(canvas(), l))
-        MenuFactory::addItem(m, TR("Find selected browser element"), 19);
+        MenuFactory::addItem(m, tr("Find selected browser element"), 19);
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Copy optimal picture part"), 13);
-    MenuFactory::addItem(m, TR("Copy visible picture part"), 3);
-    MenuFactory::addItem(m, TR("Save optimal picture part (png)"), 14);
-    MenuFactory::addItem(m, TR("Save visible picture part (png)"), 10);
-    MenuFactory::addItem(m, TR("Save optimal picture part (svg)"), 15);
-    MenuFactory::addItem(m, TR("Save visible picture part (svg)"), 16);
+    MenuFactory::addItem(m, tr("Copy optimal picture part"), 13);
+    MenuFactory::addItem(m, tr("Copy visible picture part"), 3);
+    MenuFactory::addItem(m, tr("Save optimal picture part (png)"), 14);
+    MenuFactory::addItem(m, tr("Save visible picture part (png)"), 10);
+    MenuFactory::addItem(m, tr("Save optimal picture part (svg)"), 15);
+    MenuFactory::addItem(m, tr("Save visible picture part (svg)"), 16);
 
     if (wr && !clipboard.isEmpty() &&
             (copied_from == window()->browser_diagram()->get_type()))
-        MenuFactory::addItem(m, TR("Paste copied items (Ctrl+v)"), 9);
+        MenuFactory::addItem(m, tr("Paste copied items (Ctrl+v)"), 9);
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Optimal scale"), 7);
-    MenuFactory::addItem(m, TR("Optimal window size"), 8);
+    MenuFactory::addItem(m, tr("Optimal scale"), 7);
+    MenuFactory::addItem(m, tr("Optimal window size"), 8);
 
     if (wr) {
-        MenuFactory::addItem(m, TR("Set preferred size and scale"), 4);
-        MenuFactory::addItem(m, TR("Set preferred scale (size unset)"), 17);
+        MenuFactory::addItem(m, tr("Set preferred size and scale"), 4);
+        MenuFactory::addItem(m, tr("Set preferred scale (size unset)"), 17);
 
         if (preferred_zoom != 0) {
             if (preferred_size.width() != 0) {
-                MenuFactory::addItem(m, TR("Restore preferred size and scale"), 5);
-                MenuFactory::addItem(m, TR("Unset preferred size and scale"), 18);
+                MenuFactory::addItem(m, tr("Restore preferred size and scale"), 5);
+                MenuFactory::addItem(m, tr("Unset preferred size and scale"), 18);
             }
             else {
-                MenuFactory::addItem(m, TR("Restore preferred scale"), 5);
-                MenuFactory::addItem(m, TR("Unset preferred scale"), 18);
+                MenuFactory::addItem(m, tr("Restore preferred scale"), 5);
+                MenuFactory::addItem(m, tr("Unset preferred scale"), 18);
             }
         }
 
         init_format_menu(formatm, formatlandscapem, f);
-        MenuFactory::insertItem(m, TR("Format"), &formatm);
+        MenuFactory::insertItem(m, tr("Format"), &formatm);
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Undo all changes"), RELOAD_CMD);
+        MenuFactory::addItem(m, tr("Undo all changes"), RELOAD_CMD);
 
         if (available_undo())
-            MenuFactory::addItem(m, TR("Undo (Ctrl+z or Ctrl+u)"), 11);
+            MenuFactory::addItem(m, tr("Undo (Ctrl+z or Ctrl+u)"), 11);
 
         if (available_redo())
-            MenuFactory::addItem(m, TR("Redo (Ctrl+y or Ctrl+r)"), 12);
+            MenuFactory::addItem(m, tr("Redo (Ctrl+y or Ctrl+r)"), 12);
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Close"), 20);
+    MenuFactory::addItem(m, tr("Close"), 20);
 
     QAction *retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -2131,7 +2131,7 @@ void DiagramView::init_format_menu(QMenu & m, QMenu & lm,
     foreach (QAction* act, m.actions()) {
         act->setCheckable(true);
     }
-    MenuFactory::insertItem(m, TR("Landscape formats"), &lm);
+    MenuFactory::insertItem(m, tr("Landscape formats"), &lm);
 
     for (; i <= IsoA5Landscape; i += 1)
         MenuFactory::addItem(lm, QString("Iso ") + stringify((CanvasFormat) i), f + i);

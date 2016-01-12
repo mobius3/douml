@@ -218,53 +218,53 @@ void BrowserUseCase::menu()
 
     if (!deletedp()) {
         if (!is_read_only && (edition_number == 0)) {
-            MenuFactory::addItem(m,  QObject::TR("New use case diagram"), 0,
-                                 QObject::TR("to add a <i>use case diagram</i>"));
-            MenuFactory::addItem(m,  QObject::TR("New sequence diagram"), 1,
-                                 QObject::TR("to add a <i>sequence diagram</i>"));
-            MenuFactory::addItem(m,  QObject::TR("New communication diagram"), 2,
-                                 QObject::TR("to add a <i>communication diagram</i>"));
-            MenuFactory::addItem(m,  QObject::TR("New class diagram"), 11,
-                                 QObject::TR("to add a <i>class diagram</i>"));
-            MenuFactory::addItem(m,  QObject::TR("New object diagram"), 13,
-                                 QObject::TR("to add a <i>object diagram</i>"));
+            MenuFactory::addItem(m,  QObject::tr("New use case diagram"), 0,
+                                 QObject::tr("to add a <i>use case diagram</i>"));
+            MenuFactory::addItem(m,  QObject::tr("New sequence diagram"), 1,
+                                 QObject::tr("to add a <i>sequence diagram</i>"));
+            MenuFactory::addItem(m,  QObject::tr("New communication diagram"), 2,
+                                 QObject::tr("to add a <i>communication diagram</i>"));
+            MenuFactory::addItem(m,  QObject::tr("New class diagram"), 11,
+                                 QObject::tr("to add a <i>class diagram</i>"));
+            MenuFactory::addItem(m,  QObject::tr("New object diagram"), 13,
+                                 QObject::tr("to add a <i>object diagram</i>"));
             m.addSeparator();
-            MenuFactory::addItem(m,  QObject::TR("New use case"), 3,
-                                 QObject::TR("to add a <i>use case</i>"));
-            MenuFactory::addItem(m,  QObject::TR("New actor"), 4,
-                                 QObject::TR("to add an <i>actor</i>"));
-            MenuFactory::addItem(m,  QObject::TR("New class"), 5,
-                                 QObject::TR("to add a <i>class</i>"));
-            MenuFactory::addItem(m,  QObject::TR("New class instance"), 14,
-                                 QObject::TR("to add a <i>class instance</i>"));
-            MenuFactory::addItem(m,  QObject::TR("New state machine"), 15,
-                                 QObject::TR("to add a <i>state machine</i>"));
-            MenuFactory::addItem(m,  QObject::TR("New activity"), 16,
-                                 QObject::TR("to add an <i>activity</i>"));
+            MenuFactory::addItem(m,  QObject::tr("New use case"), 3,
+                                 QObject::tr("to add a <i>use case</i>"));
+            MenuFactory::addItem(m,  QObject::tr("New actor"), 4,
+                                 QObject::tr("to add an <i>actor</i>"));
+            MenuFactory::addItem(m,  QObject::tr("New class"), 5,
+                                 QObject::tr("to add a <i>class</i>"));
+            MenuFactory::addItem(m,  QObject::tr("New class instance"), 14,
+                                 QObject::tr("to add a <i>class instance</i>"));
+            MenuFactory::addItem(m,  QObject::tr("New state machine"), 15,
+                                 QObject::tr("to add a <i>state machine</i>"));
+            MenuFactory::addItem(m,  QObject::tr("New activity"), 16,
+                                 QObject::tr("to add an <i>activity</i>"));
             m.addSeparator();
         }
 
         if (!is_edited) {
-            MenuFactory::addItem(m,  QObject::TR("Edit"), 6,
-                                 QObject::TR("to edit the <i>use case</i>"));
+            MenuFactory::addItem(m,  QObject::tr("Edit"), 6,
+                                 QObject::tr("to edit the <i>use case</i>"));
 
             if (!is_read_only) {
                 m.addSeparator();
-                MenuFactory::addItem(m,  QObject::TR("Edit drawing settings"), 7,
-                                     QObject::TR("to set how the sub <i>diagrams</i>'s items must be drawn"));
+                MenuFactory::addItem(m,  QObject::tr("Edit drawing settings"), 7,
+                                     QObject::tr("to set how the sub <i>diagrams</i>'s items must be drawn"));
 
                 if (edition_number == 0) {
                     m.addSeparator();
-                    MenuFactory::addItem(m,  QObject::TR("Delete"), 8,
-                                         QObject::TR("to delete the <i>use case and its sub items</i>. \
+                    MenuFactory::addItem(m,  QObject::tr("Delete"), 8,
+                                         QObject::tr("to delete the <i>use case and its sub items</i>. \
                                                      Note that you can undelete them after"));
                 }
             }
         }
 
         m.addSeparator();
-        MenuFactory::addItem(m,  QObject::TR("Referenced by"), 12,
-                             QObject::TR("to know who reference the <i>use case</i> \
+        MenuFactory::addItem(m,  QObject::tr("Referenced by"), 12,
+                             QObject::tr("to know who reference the <i>use case</i> \
                                          through a relation"));
                                          mark_menu(m,  QObject::tr("the use case").toLatin1().constData(), 90);
                              ProfiledStereotypes::menu(m, this, 99990);
@@ -272,16 +272,16 @@ void BrowserUseCase::menu()
                 if ((edition_number == 0) &&
                     Tool::menu_insert(&toolm, get_type(), 100)) {
             m.addSeparator();
-            toolm.setTitle(QObject::TR("Tool"));
+            toolm.setTitle(QObject::tr("Tool"));
             m.addMenu( &toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        MenuFactory::addItem(m,  QObject::TR("Undelete"), 9,
-                             QObject::TR("undelete the <i>use case</i>. \
+        MenuFactory::addItem(m,  QObject::tr("Undelete"), 9,
+                             QObject::tr("undelete the <i>use case</i>. \
                                          Do not undelete its sub items"));
-                                         MenuFactory::addItem(m,  QObject::TR("Undelete recursively"), 10,
-                                                              QObject::TR("undelete the <i>use case</i> and its sub items"));
+                                         MenuFactory::addItem(m,  QObject::tr("Undelete recursively"), 10,
+                                                              QObject::tr("undelete the <i>use case</i> and its sub items"));
     }
 
     QAction* retAction = m.exec(QCursor::pos());
@@ -373,21 +373,21 @@ void BrowserUseCase::exec_menu_choice(int rank)
             statediagram_settings.complete(st, FALSE);
             activitydiagram_settings.complete(st, FALSE);
 
-            co[0].set(QObject::TR("note color"), &note_color);
-            co[1].set(QObject::TR("use case color"), &usecase_color);
-            co[2].set(QObject::TR("package color"), &package_color);
-            co[3].set(QObject::TR("fragment color"), &fragment_color);
-            co[4].set(QObject::TR("subject color"), &subject_color);
-            co[5].set(QObject::TR("duration color"), &duration_color);
-            co[6].set(QObject::TR("continuation color"), &continuation_color);
-            co[7].set(QObject::TR("state color"), &state_color);
-            co[8].set(QObject::TR("state action color"), &stateaction_color);
-            co[9].set(QObject::TR("activity color"), &activity_color);
-            co[10].set(QObject::TR("activity region color"), &activityregion_color);
-            co[11].set(QObject::TR("activity partition color"), &activitypartition_color);
-            co[12].set(QObject::TR("activity action color"), &activityaction_color);
-            co[13].set(QObject::TR("parameter and pin color"), &parameterpin_color);
-            co[14].set(QObject::TR("class color"), &class_color);
+            co[0].set(QObject::tr("note color"), &note_color);
+            co[1].set(QObject::tr("use case color"), &usecase_color);
+            co[2].set(QObject::tr("package color"), &package_color);
+            co[3].set(QObject::tr("fragment color"), &fragment_color);
+            co[4].set(QObject::tr("subject color"), &subject_color);
+            co[5].set(QObject::tr("duration color"), &duration_color);
+            co[6].set(QObject::tr("continuation color"), &continuation_color);
+            co[7].set(QObject::tr("state color"), &state_color);
+            co[8].set(QObject::tr("state action color"), &stateaction_color);
+            co[9].set(QObject::tr("activity color"), &activity_color);
+            co[10].set(QObject::tr("activity region color"), &activityregion_color);
+            co[11].set(QObject::tr("activity partition color"), &activitypartition_color);
+            co[12].set(QObject::tr("activity action color"), &activityaction_color);
+            co[13].set(QObject::tr("parameter and pin color"), &parameterpin_color);
+            co[14].set(QObject::tr("class color"), &class_color);
 
             SettingsDialog dialog(&st, &co, FALSE);
 
@@ -571,7 +571,7 @@ BrowserUseCase * BrowserUseCase::add_use_case(BrowserNode * future_parent)
 {
     QString name;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter use case's name : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter use case's name : "),
                                          UmlUseCase, TRUE, FALSE))
         return 0;
 
@@ -587,7 +587,7 @@ BrowserNode * BrowserUseCase::get_use_case(BrowserNode * future_parent)
     QString name;
     BrowserNodeList nodes;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter use case's name : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter use case's name : "),
                                          UmlUseCase, instances(nodes),
                                          &old, TRUE, FALSE))
         return 0;
@@ -625,7 +625,7 @@ UmlCode BrowserUseCase::get_type() const
 
 QString BrowserUseCase::get_stype() const
 {
-    return QObject::TR("use case");
+    return QObject::tr("use case");
 }
 
 int BrowserUseCase::get_identifier() const
@@ -1037,7 +1037,7 @@ void BrowserUseCase::DropAfterEvent(QDropEvent * e, BrowserNode * after)
                 // have choice
                 QMenu m(0);
 
-                MenuFactory::createTitle(m, QObject::TR("move ") + bn->get_name());
+                MenuFactory::createTitle(m, QObject::tr("move ") + bn->get_name());
                 m.addSeparator();
                 MenuFactory::addItem(m, QObject::tr("In %1").arg(QString(get_name())), 1);
                 MenuFactory::addItem(m, QObject::tr("After %1").arg(QString(get_name())), 2);
@@ -1077,7 +1077,7 @@ void BrowserUseCase::DropAfterEvent(QDropEvent * e, BrowserNode * after)
         else if (after == 0)
             ((BrowserNode *) parent())->DropAfterEvent(e, this);
         else {
-            msg_critical(QObject::TR("Error"), QObject::TR("Forbidden"));
+            msg_critical(QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }

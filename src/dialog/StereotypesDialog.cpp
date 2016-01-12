@@ -87,10 +87,10 @@ QSize StereotypesDialog::previous_size;
 StereotypesDialog::StereotypesDialog()
     : TabDialog(0, "Default stereotypes dialog", TRUE)
 {
-    setWindowTitle(TR("Default stereotypes dialog"));
+    setWindowTitle(tr("Default stereotypes dialog"));
 
-    setOkButton(TR("OK"));
-    setCancelButton(TR("Cancel"));
+    setOkButton(tr("OK"));
+    setCancelButton(tr("Cancel"));
 
     const QString space(" ");
     GridBox * grid;
@@ -101,15 +101,15 @@ StereotypesDialog::StereotypesDialog()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("package\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("package\nstereotypes : "), grid));
     package_list = new LineEdit("",grid);
     grid->addWidget(package_list);
     package_list->setTheText(BrowserPackage::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("relations\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("relations\nstereotypes : "), grid));
     packagetable = new MyTable(1, 1, grid);
     grid->addWidget(packagetable);
-    packagetable->setHorizontalHeaderLabels(QStringList()<<TR("Stereotypes"));
+    packagetable->setHorizontalHeaderLabels(QStringList()<<tr("Stereotypes"));
 
     packagetable->setVerticalHeaderLabel(0, QIcon(*dependencyButton), "");
     packagetable->setText(0, 0, BrowserPackage::relation_default_stereotypes.join(space));
@@ -124,22 +124,22 @@ StereotypesDialog::StereotypesDialog()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("class\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("class\nstereotypes : "), grid));
     class_list = new LineEdit(grid);
     grid->addWidget(class_list);
     class_list->setTheText(BrowserClass::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("attribute\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("attribute\nstereotypes : "), grid));
     attribute_list = new LineEdit(grid);
     grid->addWidget(attribute_list);
     attribute_list->setTheText(BrowserAttribute::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("operation\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("operation\nstereotypes : "), grid));
     operation_list = new LineEdit(grid);
     grid->addWidget(operation_list);
     operation_list->setTheText(BrowserOperation::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("relations\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("relations\nstereotypes : "), grid));
     classtable = new MyTable(9, 1, grid);
     grid->addWidget(classtable);
     classtable->setHorizontalHeaderLabel(0, QObject::tr("Stereotypes"));
@@ -171,12 +171,12 @@ StereotypesDialog::StereotypesDialog()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("use case\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("use case\nstereotypes : "), grid));
     usecase_list = new LineEdit(grid);
     grid->addWidget(usecase_list);
     usecase_list->setTheText(BrowserUseCase::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("relations\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("relations\nstereotypes : "), grid));
     usecasetable = new MyTable(3, 1, grid);
     grid->addWidget(usecasetable);
 
@@ -200,12 +200,12 @@ StereotypesDialog::StereotypesDialog()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("artifact\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("artifact\nstereotypes : "), grid));
     artifact_list = new LineEdit(grid);
     grid->addWidget(artifact_list);
     artifact_list->setTheText(BrowserArtifact::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("relations\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("relations\nstereotypes : "), grid));
     artifacttable = new MyTable(1, 1, grid);
     grid->addWidget(artifacttable);
     artifacttable->setHorizontalHeaderLabel(0, QObject::tr("Stereotypes"));
@@ -222,19 +222,19 @@ StereotypesDialog::StereotypesDialog()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("class view\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("class view\nstereotypes : "), grid));
     grid->addWidget(classview_list = new LineEdit(grid));
     classview_list->setTheText(BrowserClassView::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("use case view\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("use case view\nstereotypes : "), grid));
     grid->addWidget(usecaseview_list = new LineEdit(grid));
     usecaseview_list->setTheText(BrowserUseCaseView::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("component view\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("component view\nstereotypes : "), grid));
     grid->addWidget(componentview_list = new LineEdit(grid));
     componentview_list->setTheText(BrowserComponentView::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("deployment view\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("deployment view\nstereotypes : "), grid));
     grid->addWidget(deploymentview_list = new LineEdit(grid));
     deploymentview_list->setTheText(BrowserDeploymentView::its_default_stereotypes.join(space));
 
@@ -246,39 +246,39 @@ StereotypesDialog::StereotypesDialog()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("class diagram\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("class diagram\nstereotypes : "), grid));
     grid->addWidget(classdiagram_list = new LineEdit(grid));
     classdiagram_list->setTheText(BrowserClassDiagram::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("object diagram\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("object diagram\nstereotypes : "), grid));
     grid->addWidget(objectdiagram_list = new LineEdit(grid));
     objectdiagram_list->setTheText(BrowserObjectDiagram::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("communication diagram\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("communication diagram\nstereotypes : "), grid));
     grid->addWidget(coldiagram_list = new LineEdit(grid));
     coldiagram_list->setTheText(BrowserColDiagram::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("sequence diagram\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("sequence diagram\nstereotypes : "), grid));
     grid->addWidget(seqdiagram_list = new LineEdit(grid));
     seqdiagram_list->setTheText(BrowserSeqDiagram::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("use case diagram\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("use case diagram\nstereotypes : "), grid));
     grid->addWidget(usecasediagram_list = new LineEdit(grid));
     usecasediagram_list->setTheText(BrowserUseCaseDiagram::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("state diagram\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("state diagram\nstereotypes : "), grid));
     grid->addWidget(statediagram_list = new LineEdit(grid));
     statediagram_list->setTheText(BrowserStateDiagram::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("activity diagram\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("activity diagram\nstereotypes : "), grid));
     grid->addWidget(activitydiagram_list = new LineEdit(grid));
     activitydiagram_list->setTheText(BrowserActivityDiagram::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("component diagram\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("component diagram\nstereotypes : "), grid));
     grid->addWidget(componentdiagram_list = new LineEdit(grid));
     componentdiagram_list->setTheText(BrowserComponentDiagram::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("deployment diagram\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("deployment diagram\nstereotypes : "), grid));
     grid->addWidget(deploymentdiagram_list = new LineEdit(grid));
     deploymentdiagram_list->setTheText(BrowserDeploymentDiagram::its_default_stereotypes.join(space));
 
@@ -290,53 +290,53 @@ StereotypesDialog::StereotypesDialog()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("activity\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("activity\nstereotypes : "), grid));
     grid->addWidget(activity_list = new LineEdit(grid));
     activity_list->setTheText(BrowserActivity::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("interruptible activity\nregion stereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("interruptible activity\nregion stereotypes : "), grid));
     grid->addWidget(interruptibleactivityregion_list = new LineEdit(grid));
     interruptibleactivityregion_list->setTheText(BrowserInterruptibleActivityRegion::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("expansion region\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("expansion region\nstereotypes : "), grid));
     grid->addWidget(expansionregion_list = new LineEdit(grid));
 
     expansionregion_list->setTheText(BrowserExpansionRegion::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("partition\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("partition\nstereotypes : "), grid));
     grid->addWidget(activitypartition_list = new LineEdit(grid));
     activitypartition_list->setTheText(BrowserActivityPartition::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("parameter\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("parameter\nstereotypes : "), grid));
     grid->addWidget(parameter_list = new LineEdit(grid));
     parameter_list->setTheText(BrowserParameter::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("parameter set\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("parameter set\nstereotypes : "), grid));
     grid->addWidget(parameterset_list = new LineEdit(grid));
     parameterset_list->setTheText(BrowserParameterSet::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("activity control node\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("activity control node\nstereotypes : "), grid));
     grid->addWidget(activitynode_list = new LineEdit(grid));
     activitynode_list->setTheText(BrowserActivityNode::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("activity action\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("activity action\nstereotypes : "), grid));
     grid->addWidget(activityaction_list = new LineEdit(grid));
     activityaction_list->setTheText(BrowserActivityAction::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("activity object node\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("activity object node\nstereotypes : "), grid));
     grid->addWidget(activityobject_list = new LineEdit(grid));
     activityobject_list->setTheText(BrowserActivityObject::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("pin\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("pin\nstereotypes : "), grid));
     grid->addWidget(pin_list = new LineEdit(grid));
     pin_list->setTheText(BrowserPin::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("expansion node\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("expansion node\nstereotypes : "), grid));
     grid->addWidget(expansionnode_list = new LineEdit(grid));
 
     expansionnode_list->setTheText(BrowserExpansionNode::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("flow\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("flow\nstereotypes : "), grid));
     grid->addWidget(flow_list = new LineEdit(grid));
     flow_list->setTheText(BrowserFlow::its_default_stereotypes.join(space));
 
@@ -348,27 +348,27 @@ StereotypesDialog::StereotypesDialog()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("state\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("state\nstereotypes : "), grid));
     grid->addWidget(state_list = new LineEdit(grid));
     state_list->setTheText(BrowserState::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("pseudostate\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("pseudostate\nstereotypes : "), grid));
     grid->addWidget(pseudostate_list = new LineEdit(grid));
     pseudostate_list->setTheText(BrowserPseudoState::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("state action\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("state action\nstereotypes : "), grid));
     grid->addWidget(stateaction_list = new LineEdit(grid));
     stateaction_list->setTheText(BrowserStateAction::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("component\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("component\nstereotypes : "), grid));
     grid->addWidget(component_list = new LineEdit(grid));
     component_list->setTheText(BrowserComponent::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("node\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("node\nstereotypes : "), grid));
     grid->addWidget(node_list = new LineEdit(grid));
     node_list->setTheText(BrowserDeploymentNode::its_default_stereotypes.join(space));
 
-    grid->addWidget(new QLabel(TR("message\nstereotypes : "), grid));
+    grid->addWidget(new QLabel(tr("message\nstereotypes : "), grid));
     grid->addWidget(msg_list = new LineEdit(grid));
     msg_list->setTheText(BrowserSeqDiagram::message_default_stereotypes.join(space));
 

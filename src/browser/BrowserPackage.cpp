@@ -532,10 +532,10 @@ QString BrowserPackage::check_inherit(const BrowserNode * new_parent) const
         if ((ch->get_type() == UmlInherit) &&
                 ((((SimpleRelationData *) ch->get_data())->get_end_node())
                  == new_parent))
-            return QObject::TR("already exist");
+            return QObject::tr("already exist");
     }
 
-    return (new_parent != this) ? QString() : QObject::TR("circular inheritance");
+    return (new_parent != this) ? QString() : QObject::tr("circular inheritance");
 }
 
 static int phase_renumerotation = -1;
@@ -558,12 +558,12 @@ void BrowserPackage::menu()
     if (!deletedp()) {
         if (!is_read_only && (edition_number == 0)) {
             QAction* action;
-            action = m.addAction(QObject::TR("New package"));
-            action->setWhatsThis(QObject::TR("to add a new sub <i>package</i>"));
+            action = m.addAction(QObject::tr("New package"));
+            action->setWhatsThis(QObject::tr("to add a new sub <i>package</i>"));
             action->setData(0);
 
-            action = m.addAction(QObject::TR("New use case view"));
-            action->setWhatsThis(QObject::TR("to add a new <i>use case view</i>"));
+            action = m.addAction(QObject::tr("New use case view"));
+            action->setWhatsThis(QObject::tr("to add a new <i>use case view</i>"));
             action->setData(1);
 
             if (isprofile)
@@ -660,7 +660,7 @@ void BrowserPackage::menu()
         MenuFactory::addItem(m, ("Referenced by"), 13,
                              ("to know who reference the <i>package</i> \
                               through a relation"));
-                              mark_menu(m, QString(QObject::TR("the package")).toLatin1().constData(), 90);
+                              mark_menu(m, QString(QObject::tr("the package")).toLatin1().constData(), 90);
                              ProfiledStereotypes::menu(m, this, 99990);
 
 
@@ -673,7 +673,7 @@ void BrowserPackage::menu()
 
             if (cpp || java || php || python || idl) {
                 m.addSeparator();
-                genm.setTitle(QObject::TR("Generate"));
+                genm.setTitle(QObject::tr("Generate"));
                 m.addMenu(&genm);
 
                 if (cpp)
@@ -694,7 +694,7 @@ void BrowserPackage::menu()
 
             if (edition_number == 0) {
                 if (!is_read_only && (cpp || java || php || python)) {
-                    revm.setTitle(QObject::TR("Reverse"));
+                    revm.setTitle(QObject::tr("Reverse"));
                     m.addMenu(&revm);
 
                     if (cpp)
@@ -712,7 +712,7 @@ void BrowserPackage::menu()
 
 
                     if (java || cpp) {
-                        roundtripm.setTitle(QObject::TR("Roundtrip"));
+                        roundtripm.setTitle(QObject::tr("Roundtrip"));
                         m.addMenu(&roundtripm);
 
                         if (cpp) MenuFactory::addItem(roundtripm,"C++", 38);
@@ -722,7 +722,7 @@ void BrowserPackage::menu()
 
                     if (preserve_bodies()) {
 
-                        roundtripbodym.setTitle(QObject::TR("Roundtrip body"));
+                        roundtripbodym.setTitle(QObject::tr("Roundtrip body"));
                         m.addMenu( &roundtripbodym);
 
                         if (cpp)
@@ -745,7 +745,7 @@ void BrowserPackage::menu()
                               (this == BrowserView::get_project()) ? UmlProject : UmlPackage,
                               100)) {
             m.addSeparator();
-            toolm.setTitle(QObject::TR("Tool"));
+            toolm.setTitle(QObject::tr("Tool"));
             m.addMenu(&toolm);
         }
     }
@@ -887,8 +887,8 @@ void BrowserPackage::exec_menu_choice(int rank)
 
     case 10:
         if (!strcmp(get_data()->get_stereotype(), "profile")) {
-            bool propag = (msg_warning(QObject::TR("Question"),
-                                       QObject::TR("Propagate the removal of the profile ?"),
+            bool propag = (msg_warning(QObject::tr("Question"),
+                                       QObject::tr("Propagate the removal of the profile ?"),
                                        1, 2)
                            == 1);
             ProfiledStereotypes::deleted(this, propag);
@@ -1235,24 +1235,24 @@ void BrowserPackage::edit_drawing_settings()
         statediagram_settings.complete(st, FALSE);
         activitydiagram_settings.complete(st, FALSE);
 
-        co[0].set (QObject::TR("class color"), &class_color);
-        co[1].set (QObject::TR("note color"), &note_color);
-        co[2].set (QObject::TR("package color"), &package_color);
-        co[3].set (QObject::TR("fragment color"), &fragment_color);
-        co[4].set (QObject::TR("subject color"), &subject_color);
-        co[5].set (QObject::TR("use case color"), &usecase_color);
-        co[6].set (QObject::TR("duration color"), &duration_color);
-        co[7].set (QObject::TR("continuation color"), &continuation_color);
-        co[8].set (QObject::TR("component color"), &component_color);
-        co[9].set (QObject::TR("artifact color"), &artifact_color);
-        co[10].set (QObject::TR("node color"), &deploymentnode_color);
-        co[11].set (QObject::TR("state color"), &state_color);
-        co[12].set (QObject::TR("state action color"), &stateaction_color);
-        co[13].set (QObject::TR("activity color"), &activity_color);
-        co[14].set (QObject::TR("activity region color"), &activityregion_color);
-        co[15].set (QObject::TR("activity partition color"), &activitypartition_color);
-        co[16].set (QObject::TR("activity action color"), &activityaction_color);
-        co[17].set (QObject::TR("parameter and pin color"), &parameterpin_color);
+        co[0].set (QObject::tr("class color"), &class_color);
+        co[1].set (QObject::tr("note color"), &note_color);
+        co[2].set (QObject::tr("package color"), &package_color);
+        co[3].set (QObject::tr("fragment color"), &fragment_color);
+        co[4].set (QObject::tr("subject color"), &subject_color);
+        co[5].set (QObject::tr("use case color"), &usecase_color);
+        co[6].set (QObject::tr("duration color"), &duration_color);
+        co[7].set (QObject::tr("continuation color"), &continuation_color);
+        co[8].set (QObject::tr("component color"), &component_color);
+        co[9].set (QObject::tr("artifact color"), &artifact_color);
+        co[10].set (QObject::tr("node color"), &deploymentnode_color);
+        co[11].set (QObject::tr("state color"), &state_color);
+        co[12].set (QObject::tr("state action color"), &stateaction_color);
+        co[13].set (QObject::tr("activity color"), &activity_color);
+        co[14].set (QObject::tr("activity region color"), &activityregion_color);
+        co[15].set (QObject::tr("activity partition color"), &activitypartition_color);
+        co[16].set (QObject::tr("activity action color"), &activityaction_color);
+        co[17].set (QObject::tr("parameter and pin color"), &parameterpin_color);
 
         SettingsDialog dialog(&st, &co, this == BrowserView::get_project());
 
@@ -1296,7 +1296,7 @@ BrowserPackage * BrowserPackage::get_package()
     BrowserNode * old;
     QString dummy;
     BrowserNodeList nodes;
-    BrowserView::get_project()->enter_child_name(dummy, QObject::TR("choose existing package : "),
+    BrowserView::get_project()->enter_child_name(dummy, QObject::tr("choose existing package : "),
                                                  UmlPackage, instances(nodes), &old,
                                                  FALSE, TRUE, TRUE);
     return ((BrowserPackage *) old);
@@ -1306,8 +1306,8 @@ void BrowserPackage::add_package(bool profile)
 {
     QString name;
     if (enter_child_name(name,
-                         (profile) ? QObject::TR("enter profile's name : ")
-                         : QObject::TR("enter package's name : "),
+                         (profile) ? QObject::tr("enter profile's name : ")
+                         : QObject::tr("enter package's name : "),
                          UmlPackage, TRUE, FALSE)) {
         BrowserPackage * p = new BrowserPackage(name, this);
 
@@ -1318,7 +1318,7 @@ void BrowserPackage::add_package(bool profile)
 
         if ((owner != -1) &&
                 (msg_warning("Douml",
-                             QObject::TR("Do you want to be the owner of this new package ?\n"
+                             QObject::tr("Do you want to be the owner of this new package ?\n"
                                          "(other users can't modify it while you are the owner)"),
                              QMessageBox::Yes, QMessageBox::No)
                  == QMessageBox::Yes))
@@ -1347,7 +1347,7 @@ BrowserPackage * BrowserPackage::import_project(QString fn, bool aslib, int id)
     QString bname = my_baseName(fi);
     if (wrong_child_name(bname, UmlPackage, TRUE, FALSE)) {
         if (manual)
-            msg_critical(QObject::TR("Error"), QObject::TR("illegal name or already used"));
+            msg_critical(QObject::tr("Error"), QObject::tr("illegal name or already used"));
 
         return 0;
     }
@@ -1402,7 +1402,7 @@ void BrowserPackage::update_lib()
 
     if (must_be_saved()) {
         if (msg_warning("Douml",
-                        QObject::TR("The project is modified and need to be saved first.\n"
+                        QObject::tr("The project is modified and need to be saved first.\n"
                                     "If you don't want to save your modifications reload\n"
                                     "the project then ask again for the update\n"
                                     "\n"
@@ -1428,7 +1428,7 @@ void BrowserPackage::update_lib()
         if (!fi.exists())
             files.remove(it.key()); // update it
         else if (!fi.isWritable()) {
-            msg_critical (QObject::TR("Error"), QObject::TR("file '%1' is read only, update aborted").arg(it.key()));
+            msg_critical (QObject::tr("Error"), QObject::tr("file '%1' is read only, update aborted").arg(it.key()));
             files.clear();
             return;
         }
@@ -1442,7 +1442,7 @@ void BrowserPackage::update_lib()
     QFileInfo fi(fn);
 
     if (my_baseName(fi) != name) {
-        msg_critical (QObject::TR("Error"), QObject::TR("you didn't select project '%1'").arg(name));
+        msg_critical (QObject::tr("Error"), QObject::tr("you didn't select project '%1'").arg(name));
         return;
     }
 
@@ -1499,7 +1499,7 @@ UmlCode BrowserPackage::get_type() const
 
 QString BrowserPackage::get_stype() const
 {
-    return QObject::TR("package");
+    return QObject::tr("package");
 }
 
 int BrowserPackage::get_identifier() const
@@ -1772,7 +1772,7 @@ QString BrowserPackage::may_connect(UmlCode & l, const BrowserNode * dest) const
             return check_inherit(dest);
 
         default:
-            return QObject::TR("illegal");
+            return QObject::tr("illegal");
         }
 
     case UmlActivity:
@@ -1790,11 +1790,11 @@ QString BrowserPackage::may_connect(UmlCode & l, const BrowserNode * dest) const
             return 0;
 
         default:
-            return QObject::TR("illegal");
+            return QObject::tr("illegal");
         }
 
     default:
-        return QObject::TR("illegal");
+        return QObject::tr("illegal");
     }
 }
 
@@ -2147,13 +2147,13 @@ void BrowserPackage::DropAfterEvent(QDropEvent * e, BrowserNode * after)
                 // have choice
                 QMenu m(0);
 
-                MenuFactory::createTitle(m, QObject::TR("move ") + bn->get_name());
+                MenuFactory::createTitle(m, QObject::tr("move ") + bn->get_name());
                 m.addSeparator();
 
                 if (!is_read_only)
-                    MenuFactory::addItem(m, QObject::TR("In ") + QString(get_name()), 1);
+                    MenuFactory::addItem(m, QObject::tr("In ") + QString(get_name()), 1);
 
-                MenuFactory::addItem(m, QObject::TR("After ") + QString(get_name()), 2);
+                MenuFactory::addItem(m, QObject::tr("After ") + QString(get_name()), 2);
 
                 QAction *retAction = m.exec(QCursor::pos());
                 if(retAction)
@@ -2204,7 +2204,7 @@ void BrowserPackage::DropAfterEvent(QDropEvent * e, BrowserNode * after)
         else if ((parent() != 0) && (after == 0))
             ((BrowserNode *) parent())->DropAfterEvent(e, this);
         else {
-            msg_critical (QObject::TR("Error"), QObject::TR("Forbidden"));
+            msg_critical (QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }
@@ -2448,7 +2448,7 @@ void BrowserPackage::save_all(bool modified_only)
                 QFile fp(d.absoluteFilePath(fn));
 
                 while (!fp.open(QIODevice::WriteOnly))
-                    (void) msg_critical(QObject::TR("Error"), QObject::TR("Cannot create file\n") + fn,
+                    (void) msg_critical(QObject::tr("Error"), QObject::tr("Cannot create file\n") + fn,
                                         QMessageBox::Retry);
 
                 if (prj)
@@ -2614,8 +2614,8 @@ void BrowserPackage::save_all(bool modified_only)
                     // all done
                     break;
                 }
-                (void) msg_critical(QObject::TR("Error"),
-                                    QObject::TR("Error while writting in\n%1\nmay be your disk is full").arg(fn),
+                (void) msg_critical(QObject::tr("Error"),
+                                    QObject::tr("Error while writting in\n%1\nmay be your disk is full").arg(fn),
                                     QMessageBox::Retry);
             }
         }
@@ -2852,9 +2852,9 @@ unsigned BrowserPackage::load(bool recursive, int id)
 
         do {
             if ((nread = fp.read(s + offset, sz - offset)) == -1) {
-                msg_critical(QObject::TR("Error"),
+                msg_critical(QObject::tr("Error"),
                              BrowserView::get_dir().absoluteFilePath(fn)
-                             + QObject::TR("cannot be read"));
+                             + QObject::tr("cannot be read"));
                 delete [] s;
                 throw 0;
             }
@@ -2878,7 +2878,7 @@ unsigned BrowserPackage::load(bool recursive, int id)
 
             if (read_file_format() > api_format(true)) {
                 msg_critical("Error",
-                             QObject::TR("Your version of DOUML is too old to read this project"));
+                             QObject::tr("Your version of DOUML is too old to read this project"));
                 throw 0;
             }
 
@@ -2887,8 +2887,8 @@ unsigned BrowserPackage::load(bool recursive, int id)
                 result = read_file_format();
 
                 if (read_file_format() <= 21) {
-                    msg_critical(QObject::TR("Error"),
-                                 QObject::TR(
+                    msg_critical(QObject::tr("Error"),
+                                 QObject::tr(
                                      "Sorry, the imported project has a too old format.\n"
                                      "To change its format : load this project and save it."));
                     throw 0;
@@ -3154,7 +3154,7 @@ bool BrowserPackage::load_version(QString fn)
             char * s = read_file(fn);
 
             if (s == 0) {
-                msg_critical (QObject::TR("Error"), QObject::TR("can't read project file"));
+                msg_critical (QObject::tr("Error"), QObject::tr("can't read project file"));
                 return FALSE;
             }
 
@@ -3169,8 +3169,8 @@ bool BrowserPackage::load_version(QString fn)
                 set_read_file_format(read_unsigned(st));
 
                 if (read_file_format() > api_format(true)) {
-                    msg_critical (QObject::TR("Error"),
-                                  QObject::TR("Your version of DOUML is too old to read this project"));
+                    msg_critical (QObject::tr("Error"),
+                                  QObject::tr("Your version of DOUML is too old to read this project"));
                     throw 0;
                 }
             }
@@ -3186,7 +3186,7 @@ bool BrowserPackage::load_version(QString fn)
         }
     }
 
-    msg_critical (QObject::TR("Error"), QObject::TR("can't find project file"));
+    msg_critical (QObject::tr("Error"), QObject::tr("can't find project file"));
     return FALSE;
 }
 

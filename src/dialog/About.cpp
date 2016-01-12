@@ -42,7 +42,7 @@
 
 AboutDialog::AboutDialog() : QDialog(0/*, "About DoUML", TRUE*/)
 {
-    setWindowTitle(TR("About DoUML"));
+    setWindowTitle(tr("About DoUML"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     QHBoxLayout * hbox;
@@ -155,7 +155,7 @@ AboutDialog::AboutDialog() : QDialog(0/*, "About DoUML", TRUE*/)
     hbox = new QHBoxLayout(this);
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * ok = new QPushButton(TR("&OK"), this);
+    QPushButton * ok = new QPushButton(tr("&OK"), this);
 
     ok->setDefault(TRUE);
 

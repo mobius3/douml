@@ -60,19 +60,19 @@
 
 static QString zoomText()
 {
-    return QObject::TR("Enter a new scale value or use the arrows to change the <i>scale</i>");
+    return QObject::tr("Enter a new scale value or use the arrows to change the <i>scale</i>");
 }
 static QString fitzoomText()
 {
-    return QObject::TR("Click this button to compute the <i>fit scale</i> allowing to try to show all the diagram");
+    return QObject::tr("Click this button to compute the <i>fit scale</i> allowing to try to show all the diagram");
 }
 static QString optwinsizeText()
 {
-    return QObject::TR("Click this button to compute the smallest window size allowing to show all the diagram");
+    return QObject::tr("Click this button to compute the smallest window size allowing to show all the diagram");
 }
 static QString editText()
 {
-    return QObject::TR("Click this button to call the diagram menu like on a right mouse click"
+    return QObject::tr("Click this button to call the diagram menu like on a right mouse click"
               " done out of any element");
 }
 
@@ -127,7 +127,7 @@ void DiagramWindow::add_edit_button(QToolBar * toolbar)
       //                     this, SLOT(call_menu()), toolbar, "edit");
     edit = new QToolButton(toolbar);
     edit->setIcon(QIcon(*editButton));
-    edit->setText(TR("edit"));
+    edit->setText(tr("edit"));
     edit->setObjectName("edit");
     connect(edit, SIGNAL(clicked()), this, SLOT(call_menu()));
     edit->setWhatsThis(editText());

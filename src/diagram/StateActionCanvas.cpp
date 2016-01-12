@@ -522,30 +522,30 @@ void StateActionCanvas::menu(const QPoint &)
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 13);
-    MenuFactory::addItem(m, TR("Go down"), 14);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 13);
+    MenuFactory::addItem(m, tr("Go down"), 14);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 2);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit state action"), 3);
+    MenuFactory::addItem(m, tr("Edit state action"), 3);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Select in browser"), 4);
+    MenuFactory::addItem(m, tr("Select in browser"), 4);
 
     if (linked())
-        MenuFactory::addItem(m, TR("Select linked items"), 5);
+        MenuFactory::addItem(m, tr("Select linked items"), 5);
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        MenuFactory::addItem(m, TR("Delete from model"), 8);
+        MenuFactory::addItem(m, tr("Delete from model"), 8);
 
     m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlStateAction, 20))
-        MenuFactory::insertItem(m, TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -642,10 +642,10 @@ void StateActionCanvas::edit_drawing_settings()
         StateSpecVector st(2);
         ColorSpecVector co(1);
 
-        st[0].set(TR("drawing language"), &language);
-        st[1].set(TR("show stereotype \nproperties"), &show_stereotype_properties);
+        st[0].set(tr("drawing language"), &language);
+        st[1].set(tr("show stereotype \nproperties"), &show_stereotype_properties);
 
-        co[0].set(TR("state action color"), &itscolor);
+        co[0].set(tr("state action color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -672,10 +672,10 @@ void StateActionCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         DrawingLanguage language;
         UmlColor itscolor;
 
-        st[0].set(TR("drawing language"), &language);
-        st[1].set(TR("show stereotype \nproperties"), &show_stereotype_properties);
+        st[0].set(tr("drawing language"), &language);
+        st[1].set(tr("show stereotype \nproperties"), &show_stereotype_properties);
 
-        co[0].set(TR("state action color"), &itscolor);
+        co[0].set(tr("state action color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE, TRUE);
 
@@ -733,7 +733,7 @@ QString StateActionCanvas::may_start(UmlCode & l) const
         return 0;
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 
@@ -755,10 +755,10 @@ QString StateActionCanvas::may_connect(UmlCode & l, const DiagramItem * dest) co
     case ChoicePS:
     case ForkPS:
     case JoinPS:
-        return (l == UmlTransition) ? QString() : TR("illegal");
+        return (l == UmlTransition) ? QString() : tr("illegal");
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 

@@ -60,15 +60,15 @@ StateDialog::StateDialog(StateData * d)
     d->browser_node->edit_start();
 
     if (d->browser_node->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
-    setWindowTitle(TR("State dialog"));
+    setWindowTitle(tr("State dialog"));
     visit = !hasOkButton();
 
     BrowserNode * bn = state->browser_node;
@@ -83,11 +83,11 @@ StateDialog::StateDialog(StateData * d)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox( grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(state->get_stereotype()));
@@ -103,7 +103,7 @@ StateDialog::StateDialog(StateData * d)
     sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
     SmallPushButton* sButton;
-    connect(sButton = new SmallPushButton(TR("specification :"), grid), SIGNAL(clicked()),
+    connect(sButton = new SmallPushButton(tr("specification :"), grid), SIGNAL(clicked()),
             this, SLOT(menu_specification()));
     grid->addWidget(sButton);
     grid->addWidget(edspecification = new QComboBox(grid));
@@ -130,7 +130,7 @@ StateDialog::StateDialog(StateData * d)
     case UmlState:
     case UmlRegion:
         if ((state->get_reference() != 0) || (bn->firstChild() == 0)) {
-            connect(sButton = new SmallPushButton(TR("reference :"), grid), SIGNAL(clicked()),
+            connect(sButton = new SmallPushButton(tr("reference :"), grid), SIGNAL(clicked()),
                     this, SLOT(menu_reference()));
             grid->addWidget(sButton);
             grid->addWidget(edreference = new QComboBox(grid));
@@ -184,7 +184,7 @@ StateDialog::StateDialog(StateData * d)
 
     grid->addWidget(bg = new BButtonGroup(1, Qt::Horizontal, QString(), grid));
 
-    bg->addWidget( active_cb = new QCheckBox(TR("active"), bg));
+    bg->addWidget( active_cb = new QCheckBox(tr("active"), bg));
 
     if (state->is_active)
         active_cb->setChecked(TRUE);
@@ -193,10 +193,10 @@ StateDialog::StateDialog(StateData * d)
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(sButton);
     }
@@ -228,7 +228,7 @@ StateDialog::StateDialog(StateData * d)
     grid->setSpacing(5);
 
     grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     //
 
@@ -294,13 +294,13 @@ void StateDialog::menu_specification()
 {
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     int index = speclist.indexOf(edspecification->currentText());
 
     if (index != -1)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -308,7 +308,7 @@ void StateDialog::menu_specification()
         bn = BrowserView::selected_item();
 
         if ((bn != 0) && (bn->get_type() == UmlOperation) && !bn->deletedp())
-            MenuFactory::addItem(m, TR("Choose operation selected in browser"), 1);
+            MenuFactory::addItem(m, tr("Choose operation selected in browser"), 1);
         else
             bn = 0;
     }
@@ -356,13 +356,13 @@ void StateDialog::menu_reference()
 {
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     int index = reflist.indexOf(edreference->currentText());
 
     if (index != -1)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -373,7 +373,7 @@ void StateDialog::menu_reference()
                 (bn->get_type() == UmlState) &&
                 !bn->deletedp() &&
                 ((BrowserState *)state->browser_node)->can_reference((BrowserState *) bn))
-            MenuFactory::addItem(m, TR("Choose state selected in browser"), 1);
+            MenuFactory::addItem(m, tr("Choose state selected in browser"), 1);
         else
             bn = 0;
     }
@@ -430,12 +430,12 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
     grid->setSpacing(5);
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("Entry\nbehavior : "), vtab));
+    vtab->addWidget(new QLabel(tr("Entry\nbehavior : "), vtab));
 
     SmallPushButton* sButton;
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_enbeh);
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()), this, sl_enbeh);
         vtab->addWidget(sButton);
     }
     grid->addWidget(d.edentry = new MultiLineEdit(grid));
@@ -453,11 +453,11 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
         d.edentry->setReadOnly(TRUE);
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("Exit\nbehavior : "), vtab));
+    vtab->addWidget(new QLabel(tr("Exit\nbehavior : "), vtab));
 
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_exbeh);
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()), this, sl_exbeh);
         vtab->addWidget(sButton);
     }
     grid->addWidget(d.edexit = new MultiLineEdit(grid));
@@ -468,11 +468,11 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
         d.edexit->setReadOnly(TRUE);
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("Do\nbehavior : "), vtab));
+    vtab->addWidget(new QLabel(tr("Do\nbehavior : "), vtab));
 
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_beh);
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()), this, sl_beh);
         vtab->addWidget(sButton);
     }
     grid->addWidget(d.edactivity = new MultiLineEdit(grid));
@@ -538,7 +538,7 @@ void StateDialog::accept()
             ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlState,
                                                              bn->allow_spaces(),
                                                              bn->allow_empty()))
-        msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
+        msg_critical(tr("Error"), s + tr("\n\nillegal name or already used"));
     else {
         bn->set_name(s);
 

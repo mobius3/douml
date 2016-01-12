@@ -55,15 +55,15 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
     nd->browser_node->edit_start();
 
     if (nd->browser_node->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
-    setWindowTitle(TR("Expansion Region dialog"));
+    setWindowTitle(tr("Expansion Region dialog"));
 
     bool visit = !hasOkButton();
 
@@ -76,11 +76,11 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(data->get_stereotype()));
@@ -98,7 +98,7 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
 
     HHBox * htab;
 
-    grid->addWidget(new QLabel(TR("mode :"), grid));
+    grid->addWidget(new QLabel(tr("mode :"), grid));
     grid->addWidget(htab = new HHBox(grid));
     htab->addWidget(edmode = new QComboBox(htab));
 
@@ -118,7 +118,7 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
     }
 
     htab->addWidget(new QLabel("  ", htab));
-    htab->addWidget(must_isolate_cb = new QCheckBox(TR("must isolate"), htab));
+    htab->addWidget(must_isolate_cb = new QCheckBox(tr("must isolate"), htab));
 
     if (data->must_isolate)
         must_isolate_cb->setChecked(TRUE);
@@ -128,12 +128,12 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
 
     SmallPushButton* b;
     if (! visit)
     {
-        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(b = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(b);
     }
@@ -158,7 +158,7 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
     grid->setSpacing(5);
 
     grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     //
 
@@ -195,7 +195,7 @@ void ExpansionRegionDialog::change_tabs(QWidget * w)
 void ExpansionRegionDialog::edit_description()
 {
     edit(comment->text(),
-         (edname == 0) ? QString(TR("description"))
+         (edname == 0) ? QString(tr("description"))
          : edname->text().trimmed() + "_description",
          data, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
@@ -219,7 +219,7 @@ void ExpansionRegionDialog::accept()
             ((BrowserNode *) bn->parent())->wrong_child_name(s, bn->get_type(),
                     bn->allow_spaces(),
                     bn->allow_empty())) {
-            msg_critical(TR("Error"), edname->text() + TR("\n\nillegal name or already used"));
+            msg_critical(tr("Error"), edname->text() + tr("\n\nillegal name or already used"));
             return;
         }
         else

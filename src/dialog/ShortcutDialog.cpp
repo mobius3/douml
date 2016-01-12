@@ -56,9 +56,9 @@ QSize ShortcutDialog::previous_size;
 
 ShortcutDialog::ShortcutDialog() : TabDialog(0, 0, TRUE)
 {
-    setOkButton(TR("OK"));
-    setCancelButton(TR("Cancel"));
-    setWindowTitle(TR("Shortcut dialog"));
+    setOkButton(tr("OK"));
+    setCancelButton(tr("Cancel"));
+    setWindowTitle(tr("Shortcut dialog"));
 
     // count number of entries
 
@@ -83,7 +83,7 @@ ShortcutDialog::ShortcutDialog() : TabDialog(0, 0, TRUE)
     //vtab->setSpacing(5);
     vtab->setMargin(5);
 
-    vtab->addWidget((new QLabel(TR("Here are the shortcuts to do a command (menu entry)"), vtab)));
+    vtab->addWidget((new QLabel(tr("Here are the shortcuts to do a command (menu entry)"), vtab)));
 
 #ifdef __APPLE__
     (new QLabel(TR("Note : sometimes the key 'Alt' is named 'Option'"), vtab))
@@ -101,7 +101,7 @@ ShortcutDialog::ShortcutDialog() : TabDialog(0, 0, TRUE)
     //vtab->setMargin(5);
 
     QLabel *label;
-    vtab->addWidget((label = new QLabel(TR("Here are the shortcuts to call a tool (plug-out)"), vtab)));
+    vtab->addWidget((label = new QLabel(tr("Here are the shortcuts to call a tool (plug-out)"), vtab)));
     label->setAlignment(::Qt::AlignHCenter);
 
 #ifdef __APPLE__
@@ -154,19 +154,19 @@ ShortcutTable::ShortcutTable(QWidget * parent, bool tool, int n)
     verticalHeader()->setSectionsMovable(true);
     setSelectionMode(NoSelection);	// single does not work
     QStringList headerLabels;
-    headerLabels.append(TR("Shift"));
+    headerLabels.append(tr("Shift"));
 #ifdef __APPLE__
 #include "../xpm/pomme_xpm.xpm"
     QPixmap pomme_xpm((const char **) pomme);
     QIcon ic(pomme_xpm);
     headerLabels.append(ic, "");
 #else
-    headerLabels.append(TR("Ctrl"));
+    headerLabels.append(tr("Ctrl"));
 #endif
-    headerLabels.append(TR("Alt"));
+    headerLabels.append(tr("Alt"));
     headerLabels.append( QObject::tr("Key"));
     headerLabels.append((tool) ? QObject::tr("tool display") : QObject::tr("command"));
-    headerLabels.append(TR("do"));
+    headerLabels.append(tr("do"));
     setHorizontalHeaderLabels(headerLabels);
 
     QStringList tools = Tool::all_display();
@@ -250,14 +250,14 @@ void ShortcutTable::button_pressed(const QModelIndex &index)
         QMenu m;
         MenuFactory::addItem(m, QObject::tr("shortcut ") + QString(s), -1);
         m.addSeparator();
-        MenuFactory::addItem(m,TR("Insert shortcut before"), 0);
-        MenuFactory::addItem(m,TR("Insert shortcut after"), 1);
+        MenuFactory::addItem(m,tr("Insert shortcut before"), 0);
+        MenuFactory::addItem(m,tr("Insert shortcut after"), 1);
         m.addSeparator();
-        MenuFactory::addItem(m,TR("Delete shortcut"), 2);
+        MenuFactory::addItem(m,tr("Delete shortcut"), 2);
         m.addSeparator();
-        MenuFactory::addItem(m,TR("Copy shortcut"), 3);
-        MenuFactory::addItem(m,TR("Cut shortcut"), 4);
-        MenuFactory::addItem(m,TR("Paste shortcut"), 5);
+        MenuFactory::addItem(m,tr("Copy shortcut"), 3);
+        MenuFactory::addItem(m,tr("Cut shortcut"), 4);
+        MenuFactory::addItem(m,tr("Paste shortcut"), 5);
         m.addSeparator();
         QAction *retAction = m.exec(QCursor::pos());
         if(retAction)
@@ -461,7 +461,7 @@ bool ShortcutTable::check(QStringList & bindings)
             if (bindings.indexOf(s) == -1)
                 bindings.append(s);
             else {
-                msg_warning(TR("Shortcut"), tr("Several use of the shortcut '%1'").arg(s));
+                msg_warning(tr("Shortcut"), tr("Several use of the shortcut '%1'").arg(s));
                 return FALSE;
             }
         }

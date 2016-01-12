@@ -140,7 +140,7 @@ BrowserSeqDiagram * BrowserSeqDiagram::add_sequence_diagram(BrowserNode * future
 {
     QString name;
 
-    if (future_parent->enter_child_name(name, QObject::TR("enter sequence diagram's name : "),
+    if (future_parent->enter_child_name(name, QObject::tr("enter sequence diagram's name : "),
                                         UmlSeqDiagram, TRUE, FALSE))
         return new BrowserSeqDiagram(name, future_parent);
     else
@@ -234,23 +234,23 @@ void BrowserSeqDiagram::menu()
 
     if (!deletedp()) {
         MenuFactory::addItem(m, QObject::tr("Show"), 0,
-                             QObject::TR("to show and edit the <i>sequence diagram</i>"));
+                             QObject::tr("to show and edit the <i>sequence diagram</i>"));
 
         if (!is_edited) {
             MenuFactory::addItem(m, QObject::tr("Edit"), 1,
-                                 QObject::TR("to edit the <i>sequence diagram</i>"));
+                                 QObject::tr("to edit the <i>sequence diagram</i>"));
 
             if (!is_read_only) {
                 MenuFactory::addItem(m, QObject::tr("Edit drawing settings"), 2,
-                                     QObject::TR("to set how the <i>sequence diagram</i>'s items must be drawn"));
+                                     QObject::tr("to set how the <i>sequence diagram</i>'s items must be drawn"));
                 m.addSeparator();
                 MenuFactory::addItem(m, QObject::tr("Duplicate"), 3,
-                                     QObject::TR("to duplicate the <i>sequence diagram</i>"));
+                                     QObject::tr("to duplicate the <i>sequence diagram</i>"));
 
                 if (edition_number == 0) {
                     m.addSeparator();
                     MenuFactory::addItem(m, QObject::tr("Delete"), 4,
-                                         QObject::TR("to delete the <i>sequence diagram</i>. \
+                                         QObject::tr("to delete the <i>sequence diagram</i>. \
                                                      Note that you can undelete it after"));
                 }
             }
@@ -268,7 +268,7 @@ void BrowserSeqDiagram::menu()
     }
     else if (!is_read_only && (edition_number == 0))
         MenuFactory::addItem(m, QObject::tr("Undelete"), 5,
-                             QObject::TR("to undelete the <i>sequence diagram</i>"));
+                             QObject::tr("to undelete the <i>sequence diagram</i>"));
 
     QAction *resultAction = m.exec(QCursor::pos());
     if(resultAction)
@@ -283,7 +283,7 @@ void BrowserSeqDiagram::exec_menu_choice(int rank)
         break;
 
     case 1:
-        edit(QObject::TR("Sequence diagram").toLatin1().constData(), its_default_stereotypes);
+        edit(QObject::tr("Sequence diagram").toLatin1().constData(), its_default_stereotypes);
         return;
 
     case 2:
@@ -293,7 +293,7 @@ void BrowserSeqDiagram::exec_menu_choice(int rank)
     case 3: {
         QString name;
 
-        if (((BrowserNode *)parent())->enter_child_name(name, QObject::TR("enter sequence diagram's name : "),
+        if (((BrowserNode *)parent())->enter_child_name(name, QObject::tr("enter sequence diagram's name : "),
                                                         UmlSeqDiagram, TRUE, FALSE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
         else
@@ -379,11 +379,11 @@ void BrowserSeqDiagram::edit_settings()
 
         settings.complete(st, TRUE);
 
-        co[0].set(QObject::TR("note color"), &note_color);
-        co[1].set(QObject::TR("class instance \ncolor"), &class_instance_color);
-        co[2].set(QObject::TR("duration color"), &duration_color);
-        co[3].set(QObject::TR("continuation color"), &continuation_color);
-        co[4].set(QObject::TR("fragment color"), &fragment_color);
+        co[0].set(QObject::tr("note color"), &note_color);
+        co[1].set(QObject::tr("class instance \ncolor"), &class_instance_color);
+        co[2].set(QObject::tr("duration color"), &duration_color);
+        co[3].set(QObject::tr("continuation color"), &continuation_color);
+        co[4].set(QObject::tr("fragment color"), &fragment_color);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -422,7 +422,7 @@ UmlCode BrowserSeqDiagram::get_type() const
 
 QString BrowserSeqDiagram::get_stype() const
 {
-    return QObject::TR("Sequence diagram");
+    return QObject::tr("Sequence diagram");
 }
 
 int BrowserSeqDiagram::get_identifier() const

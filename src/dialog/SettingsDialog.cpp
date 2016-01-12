@@ -71,15 +71,15 @@ ComboStates::ComboStates(QWidget * parent, Uml3States v,
     : QComboBox(parent)
 {
     this->setEditable(false);
-    addItem(TR(stringify((Uml3States) 0)));
-    addItem(TR(stringify((Uml3States) 1)));
+    addItem(tr(stringify((Uml3States) 0)));
+    addItem(tr(stringify((Uml3States) 1)));
 
     // the last value MUST be default
     if (!nodefault)
-        addItem(TR(stringify((Uml3States) 2)));
+        addItem(tr(stringify((Uml3States) 2)));
 
     if (unchanged) {
-        addItem(TR("<unchanged>"));
+        addItem(tr("<unchanged>"));
         setCurrentIndex(count() - 1);
     }
     else
@@ -93,14 +93,14 @@ ComboStates::ComboStates(QWidget * parent, ClassDrawingMode v,
     int i;
     this->setEditable(false);
     for (i = 0; i != (int) DefaultClassDrawingMode; i += 1)
-        addItem(TR(stringify((ClassDrawingMode) i)));
+        addItem(tr(stringify((ClassDrawingMode) i)));
 
     // the last value MUST be default
     if (!nodefault)
-        addItem(TR(stringify((ClassDrawingMode) i)));
+        addItem(tr(stringify((ClassDrawingMode) i)));
 
     if (unchanged) {
-        addItem(TR("<unchanged>"));
+        addItem(tr("<unchanged>"));
         setCurrentIndex(count() - 1);
     }
     else
@@ -118,10 +118,10 @@ ComboStates::ComboStates(QWidget * parent, DrawingLanguage v,
 
     // the last value MUST be default
     if (!nodefault)
-        addItem(TR(stringify((DrawingLanguage) i)));
+        addItem(tr(stringify((DrawingLanguage) i)));
 
     if (unchanged) {
-        addItem(TR("<unchanged>"));
+        addItem(tr("<unchanged>"));
         setCurrentIndex(count() - 1);
     }
     else
@@ -142,14 +142,14 @@ ComboStates::ComboStates(QWidget * parent, ShowContextMode v,
     int i;
     this->setEditable(false);
     for (i = 0; i != (int) DefaultShowContextMode; i += 1)
-        addItem(_2space(TR(stringify((ShowContextMode) i))));
+        addItem(_2space(tr(stringify((ShowContextMode) i))));
 
     // the last value MUST be default
     if (!nodefault)
-        addItem(_2space(TR(stringify((ShowContextMode) i))));
+        addItem(_2space(tr(stringify((ShowContextMode) i))));
 
     if (unchanged) {
-        addItem(TR("<unchanged>"));
+        addItem(tr("<unchanged>"));
         setCurrentIndex(count() - 1);
     }
     else
@@ -170,13 +170,13 @@ ComboStates::ComboStates(QWidget * parent, char v,
         addItem(s);
     }
 
-    addItem(TR("unlimited"));
+    addItem(tr("unlimited"));
 
     if (!nodefault)
-        addItem(TR("default"));
+        addItem(tr("default"));
 
     if (unchanged) {
-        addItem(TR("<unchanged>"));
+        addItem(tr("<unchanged>"));
         setCurrentIndex(count() - 1);
     }
     else {
@@ -357,10 +357,10 @@ ComboColor::ComboColor(QWidget * parent, UmlColor v,
     }
 
     if (!nodefault)
-        addItem(TR(stringify(UmlDefaultColor)));
+        addItem(tr(stringify(UmlDefaultColor)));
 
     if (unchanged) {
-        addItem(TR("<unchanged>"));
+        addItem(tr("<unchanged>"));
         setCurrentIndex(count() - 1);
     }
     else
@@ -513,11 +513,11 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
         if (previous_active_tab == lbl)
             first_visible_page = gridBox;
     }
-    setHelpButton(TR("Apply"));
+    setHelpButton(tr("Apply"));
     // use help rather than apply because when the OK button is clicked,
     // the applyButtonPressed() signal is emitted
-    setOkButton(TR("OK"));
-    setCancelButton(TR("Cancel"));
+    setOkButton(tr("OK"));
+    setCancelButton(tr("Cancel"));
 
     connect(this, SIGNAL(helpButtonPressed()),
             this, SLOT(apply()));

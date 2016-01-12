@@ -52,7 +52,7 @@ QSize ConstraintDialog::previous_size;
 ConstraintDialog::ConstraintDialog(ConstraintCanvas * c)
     : QDialog(0/*, "ConstraintVisibilityDialog", TRUE, 0*/), constraint(c)
 {
-    setWindowTitle(TR("Constraints visibility dialog"));
+    setWindowTitle(tr("Constraints visibility dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
 
@@ -66,13 +66,13 @@ ConstraintDialog::ConstraintDialog(ConstraintCanvas * c)
 
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
-    cb_visible = new QCheckBox(TR("Specify visible elements rather than hidden ones"), this);
+    cb_visible = new QCheckBox(tr("Specify visible elements rather than hidden ones"), this);
     cb_visible->setChecked(constraint->indicate_visible);
     hbox->addWidget(cb_visible);
 
-    QPushButton * showall = new QPushButton(TR("Show all"), this);
-    QPushButton * hideall = new QPushButton(TR("Hide all"), this);
-    QPushButton * hideinherited = new QPushButton(TR("Hide inherited"), this);
+    QPushButton * showall = new QPushButton(tr("Show all"), this);
+    QPushButton * hideall = new QPushButton(tr("Hide all"), this);
+    QPushButton * hideinherited = new QPushButton(tr("Hide inherited"), this);
     QSize bs = hideinherited->sizeHint();
 
     showall->setFixedSize(bs);
@@ -96,8 +96,8 @@ ConstraintDialog::ConstraintDialog(ConstraintCanvas * c)
     vbox->addLayout(hbox);
 
     hbox->setMargin(5);
-    QPushButton * ok = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * ok = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
 
     ok->setDefault(TRUE);
     bs = cancel->sizeHint();
@@ -168,10 +168,10 @@ ConstraintTable::ConstraintTable(QWidget * parent, ConstraintCanvas * c)
     //setSortingEnabled(true);
     verticalHeader()->setSectionsMovable(false);
     QStringList headerLabels;
-    headerLabels<<TR("visible")
+    headerLabels<<tr("visible")
                <<" "
-              <<TR("element")
-             <<TR("constraint");
+              <<tr("element")
+             <<tr("constraint");
     /*
     horizontalHeader()->setLabel(0, TR("visible"));
     horizontalHeader()->setLabel(1, " ");
@@ -184,7 +184,7 @@ ConstraintTable::ConstraintTable(QWidget * parent, ConstraintCanvas * c)
     bool v = c->indicate_visible;
     QList<BrowserNode *> & hv = c->hidden_visible;
     BrowserNodeList & elts = c->elements;
-    QString yes = TR("  yes");
+    QString yes = tr("  yes");
 
     elts.sort();
 
@@ -224,7 +224,7 @@ ConstraintTable::ConstraintTable(QWidget * parent, ConstraintCanvas * c)
 void ConstraintTable::button_pressed(int row, int col, int, const QPoint &)
 {
     if (col == 0&&item(row, col))
-        item(row, col)->setText( (item(row, col)->text().isEmpty()) ? TR("  yes") : QString());
+        item(row, col)->setText( (item(row, col)->text().isEmpty()) ? tr("  yes") : QString());
 }
 
 void ConstraintTable::show_all()
@@ -233,7 +233,7 @@ void ConstraintTable::show_all()
 
     for (row = 0; row != rowCount(); row += 1)
         if(item(row, 0))
-        item(row, 0)->setText( TR("  yes"));
+        item(row, 0)->setText( tr("  yes"));
 }
 
 void ConstraintTable::hide_all()
@@ -249,7 +249,7 @@ void ConstraintTable::hide_inherited(ConstraintCanvas * c)
 {
     BrowserNode * cl = c->cl->get_bn();
     BrowserNodeList & elts = c->elements;
-    QString yes = TR("  yes");
+    QString yes = tr("  yes");
     QString empty;
 
     int row = 0;

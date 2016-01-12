@@ -257,16 +257,16 @@ QString BrowserActivityAction::may_connect(UmlCode & l, const BrowserNode * dest
         BrowserNode * container = dest->get_container(UmlActivity);
 
         if (container == 0)
-            return QObject::TR("illegal");
+            return QObject::tr("illegal");
 
         if (get_container(UmlActivity) != container)
-            return QObject::TR("not in the same activity");
+            return QObject::tr("not in the same activity");
 
         const BrowserActivityElement * elt =
                 dynamic_cast<const BrowserActivityElement *>(dest);
 
         return (elt == 0)
-                ? QObject::TR("illegal")
+                ? QObject::tr("illegal")
                 : elt->connexion_from(TRUE);
     }
 
@@ -283,11 +283,11 @@ QString BrowserActivityAction::may_connect(UmlCode & l, const BrowserNode * dest
             return 0;
 
         default:
-            return QObject::TR("illegal");
+            return QObject::tr("illegal");
         }
 
     default:
-        return QObject::TR("illegal");
+        return QObject::tr("illegal");
     }
 }
 
@@ -305,7 +305,7 @@ BrowserActivityAction::add_activityaction(BrowserNode * future_parent,
 
     if (s != 0)
         name = s;
-    else if (!future_parent->enter_child_name(name, QObject::TR("enter activity action's \nname (may be empty) : "),
+    else if (!future_parent->enter_child_name(name, QObject::tr("enter activity action's \nname (may be empty) : "),
                                               UmlActivityAction, TRUE, TRUE))
         return 0;
 
@@ -332,7 +332,7 @@ BrowserActivityAction * BrowserActivityAction::get_activityaction(BrowserNode * 
     BrowserNode * old = 0;
     QString name;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter activity action's \nname (may be empty) : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter activity action's \nname (may be empty) : "),
                                          UmlActivityAction, l, &old, TRUE, TRUE))
         return 0;
 
@@ -354,7 +354,7 @@ BrowserActivityAction::add_call_behavior(BrowserNode * future_parent,
 {
     QString name;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter activity action's \nname (may be empty) : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter activity action's \nname (may be empty) : "),
                                          UmlActivityAction, TRUE, TRUE))
         return 0;
 
@@ -376,7 +376,7 @@ BrowserActivityAction::add_call_operation(BrowserNode * future_parent,
 {
     QString name;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter activity action's \nname (may be empty) : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter activity action's \nname (may be empty) : "),
                                          UmlActivityAction, TRUE, TRUE))
         return 0;
 
@@ -399,7 +399,7 @@ BrowserActivityAction::add_read_variable_value(BrowserNode * future_parent,
 {
     QString name;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter activity action's \nname (may be empty) : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter activity action's \nname (may be empty) : "),
                                          UmlActivityAction, TRUE, TRUE))
         return 0;
 
@@ -422,7 +422,7 @@ BrowserActivityAction::add_clear_variable_value(BrowserNode * future_parent,
 {
     QString name;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter activity action's \nname (may be empty) : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter activity action's \nname (may be empty) : "),
                                          UmlActivityAction, TRUE, TRUE))
         return 0;
 
@@ -445,7 +445,7 @@ BrowserActivityAction::add_write_variable_value(BrowserNode * future_parent,
 {
     QString name;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter activity action's \nname (may be empty) : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter activity action's \nname (may be empty) : "),
                                          UmlActivityAction, TRUE, TRUE))
         return 0;
 
@@ -468,7 +468,7 @@ BrowserActivityAction::add_add_variable_value(BrowserNode * future_parent,
 {
     QString name;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter activity action's \nname (may be empty) : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter activity action's \nname (may be empty) : "),
                                          UmlActivityAction, TRUE, TRUE))
         return 0;
 
@@ -491,7 +491,7 @@ BrowserActivityAction::add_remove_variable_value(BrowserNode * future_parent,
 {
     QString name;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter activity action's \nname (may be empty) : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter activity action's \nname (may be empty) : "),
                                          UmlActivityAction, TRUE, TRUE))
         return 0;
 
@@ -526,10 +526,10 @@ void BrowserActivityAction::menu()
         if (!is_read_only) {
             if (def->may_add_pin())
                 MenuFactory::addItem(m, QObject::tr("New pin"), 0,
-                                     QObject::TR("to add a <i>pin</i>"));
+                                     QObject::tr("to add a <i>pin</i>"));
 
             MenuFactory::addItem(m, QObject::tr("New parameter set"), 7,
-                                 QObject::TR("to add a <i>Parameter Set</i>"));
+                                 QObject::tr("to add a <i>Parameter Set</i>"));
             m.addSeparator();
         }
 
@@ -580,7 +580,7 @@ void BrowserActivityAction::menu()
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
                 MenuFactory::addItem(m, QObject::tr("Undelete recursively"), 6,
-                                     QObject::TR("to undelete the <i>%1</i> and its <i>pins</i> and \
+                                     QObject::tr("to undelete the <i>%1</i> and its <i>pins</i> and \
                                                  <i>flows</i> or <i>dependencies</i> (except if the element at the other side is also deleted)").arg(kind));
                                                  break;
             }
@@ -614,7 +614,7 @@ void BrowserActivityAction::exec_menu_choice(int rank,
     case 2: {
         QString name;
 
-        if (((BrowserNode *) parent())->enter_child_name(name, QObject::TR("enter activity action's \nname (may be empty) : "),
+        if (((BrowserNode *) parent())->enter_child_name(name, QObject::tr("enter activity action's \nname (may be empty) : "),
                                                          get_type(), TRUE, TRUE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
     }
@@ -738,7 +738,7 @@ QString BrowserActivityAction::get_stype() const
     while ((index = s.indexOf("_")) != -1)
         s.replace(index, 1, " ");
 
-    return s;//QObject::TR(s);
+    return s;//QObject::tr(s);
 }
 
 int BrowserActivityAction::get_identifier() const
@@ -1028,7 +1028,7 @@ void BrowserActivityAction::DropAfterEvent(QDropEvent * e, BrowserNode * after)
         if (may_contains(bn, FALSE))
             move(bn, after);
         else {
-            msg_critical(QObject::tr("Error"), QObject::TR("Forbidden"));
+            msg_critical(QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }

@@ -160,7 +160,7 @@ BrowserExpansionRegion::add_expansionregion(BrowserNode * future_parent)
 {
     QString name;
 
-    return (!future_parent->enter_child_name(name, QObject::TR("enter expansion region's \nname (may be empty) : "),
+    return (!future_parent->enter_child_name(name, QObject::tr("enter expansion region's \nname (may be empty) : "),
             UmlExpansionRegion, TRUE, TRUE))
 
            ? 0
@@ -193,7 +193,7 @@ BrowserExpansionRegion::get_expansionregion(BrowserNode * parent)
     BrowserNode * old;
     QString name;
 
-    if (!parent->enter_child_name(name, QObject::TR("enter expansion region's \nname (may be empty) : "),
+    if (!parent->enter_child_name(name, QObject::tr("enter expansion region's \nname (may be empty) : "),
                                   UmlExpansionRegion, l, &old,
                                   TRUE, TRUE))
         return 0;
@@ -213,56 +213,56 @@ void BrowserExpansionRegion::menu()
 
     if (!deletedp()) {
         if (!is_read_only) {
-            MenuFactory::addItem(m, QObject::TR("New expansion node"), 0,
-                           QObject::TR("to add an <i>expansion node</i> to the <i>expansion region</i>"));
-            MenuFactory::addItem(m, QObject::TR("New nested expansion region"), 1,
-                           QObject::TR("to add a nested <i>expansion region</i>"));
-            MenuFactory::addItem(m, QObject::TR("New interruptible activity region"), 2,
-                           QObject::TR("to add an <i>interruptible activity region</i>"));
-            MenuFactory::addItem(m, QObject::TR("Add activity action"), 6,
-                           QObject::TR("to add an <i>activity action</i> to the <i>region</i>"));
-            MenuFactory::addItem(m, QObject::TR("Add object node"), 7,
-                           QObject::TR("to add an <i>activity object node</i> to the <i>region</i>"));
+            MenuFactory::addItem(m, QObject::tr("New expansion node"), 0,
+                           QObject::tr("to add an <i>expansion node</i> to the <i>expansion region</i>"));
+            MenuFactory::addItem(m, QObject::tr("New nested expansion region"), 1,
+                           QObject::tr("to add a nested <i>expansion region</i>"));
+            MenuFactory::addItem(m, QObject::tr("New interruptible activity region"), 2,
+                           QObject::tr("to add an <i>interruptible activity region</i>"));
+            MenuFactory::addItem(m, QObject::tr("Add activity action"), 6,
+                           QObject::tr("to add an <i>activity action</i> to the <i>region</i>"));
+            MenuFactory::addItem(m, QObject::tr("Add object node"), 7,
+                           QObject::tr("to add an <i>activity object node</i> to the <i>region</i>"));
             m.addSeparator();
         }
 
-        MenuFactory::addItem(m, QObject::TR("Edit"), 4,
-                       QObject::TR("to edit the <i>expansion region</i>, \
+        MenuFactory::addItem(m, QObject::tr("Edit"), 4,
+                       QObject::tr("to edit the <i>expansion region</i>, \
 a double click with the left mouse button does the same thing"));
 
         if (!is_read_only) {
-            MenuFactory::addItem(m, QObject::TR("Duplicate"), 5,
-                           QObject::TR("to copy the <i>expansion region</i> in a new one"));
+            MenuFactory::addItem(m, QObject::tr("Duplicate"), 5,
+                           QObject::tr("to copy the <i>expansion region</i> in a new one"));
             m.addSeparator();
 
             if (edition_number == 0)
-                MenuFactory::addItem(m, QObject::TR("Delete"), 8,
-                               QObject::TR("to delete the <i>expansion region</i>. \
+                MenuFactory::addItem(m, QObject::tr("Delete"), 8,
+                               QObject::tr("to delete the <i>expansion region</i>. \
 Note that you can undelete it after"));
         }
 
-        MenuFactory::addItem(m, QObject::TR("Referenced by"), 3,
-                       QObject::TR("to know who reference the <i>region</i>"));
+        MenuFactory::addItem(m, QObject::tr("Referenced by"), 3,
+                       QObject::tr("to know who reference the <i>region</i>"));
         mark_menu(m, QObject::tr("the expansion region").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
             Tool::menu_insert(&toolm, get_type(), 100)) {
             m.addSeparator();
-            toolm.setTitle(QObject::TR("Tool"));
+            toolm.setTitle(QObject::tr("Tool"));
             m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        MenuFactory::addItem(m, QObject::TR("Undelete"), 10,
-                       QObject::TR("to undelete the <i>expansion region</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 10,
+                       QObject::tr("to undelete the <i>expansion region</i>"));
 
         BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
-                MenuFactory::addItem(m, QObject::TR("Undelete recursively"), 11,
-                               QObject::TR("undelete the expansion region and its children"));
+                MenuFactory::addItem(m, QObject::tr("Undelete recursively"), 11,
+                               QObject::tr("undelete the expansion region and its children"));
                 break;
             }
         }
@@ -299,7 +299,7 @@ void BrowserExpansionRegion::exec_menu_choice(int rank)
     case 5: {
         QString name;
 
-        if (((BrowserNode *) parent())->enter_child_name(name, QObject::TR("enter expansion region's \nname (may be empty) : "),
+        if (((BrowserNode *) parent())->enter_child_name(name, QObject::tr("enter expansion region's \nname (may be empty) : "),
                 UmlExpansionRegion, TRUE, TRUE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
     }
@@ -419,7 +419,7 @@ BrowserExpansionRegion::add_expansionnode()
 {
     QString name;
 
-    if (enter_child_name(name, QObject::TR("enter expansion node's \nname (may be empty) : "),
+    if (enter_child_name(name, QObject::tr("enter expansion node's \nname (may be empty) : "),
                          UmlExpansionNode, TRUE, TRUE)) {
         BrowserExpansionNode * node = new BrowserExpansionNode(name, this);
 
@@ -459,7 +459,7 @@ UmlCode BrowserExpansionRegion::get_type() const
 
 QString BrowserExpansionRegion::get_stype() const
 {
-    return QObject::TR("expansion region");
+    return QObject::tr("expansion region");
 }
 
 int BrowserExpansionRegion::get_identifier() const
@@ -714,10 +714,10 @@ void BrowserExpansionRegion::DropAfterEvent(QDropEvent * e, BrowserNode * after)
                 // have choice
                 QMenu m(0);
 
-                MenuFactory::createTitle(m, QObject::TR("move ") + bn->get_name());
+                MenuFactory::createTitle(m, QObject::tr("move ") + bn->get_name());
                 m.addSeparator();
-                MenuFactory::addItem(m, QObject::TR("In ") + QString(get_name()), 1);
-                MenuFactory::addItem(m,QObject::TR("After ") + QString(get_name()), 2);
+                MenuFactory::addItem(m, QObject::tr("In ") + QString(get_name()), 1);
+                MenuFactory::addItem(m,QObject::tr("After ") + QString(get_name()), 2);
 
                 QAction *retAction = m.exec(QCursor::pos());
                 if(retAction)
@@ -738,7 +738,7 @@ void BrowserExpansionRegion::DropAfterEvent(QDropEvent * e, BrowserNode * after)
             move(bn, after);
         }
         else {
-            msg_critical(QObject::TR("Error"), QObject::TR("Forbidden"));
+            msg_critical(QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }

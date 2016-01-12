@@ -473,16 +473,16 @@ void ActivityNodeCanvas::menu(const QPoint &)
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 13);
-    MenuFactory::addItem(m, TR("Go down"), 14);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 13);
+    MenuFactory::addItem(m, tr("Go down"), 14);
     m.addSeparator();
 
     switch (browser_node->get_type()) {
     case ForkAN:
     case JoinAN:
-        MenuFactory::addItem(m, (horiz) ? TR("draw vertically") : TR("draw horizontally"), 2);
+        MenuFactory::addItem(m, (horiz) ? tr("draw vertically") : tr("draw horizontally"), 2);
         m.addSeparator();
         break;
 
@@ -492,12 +492,12 @@ void ActivityNodeCanvas::menu(const QPoint &)
 
     /*MenuFactory::addItem(m, "Edit drawing settings", 2);
     m.addSeparator();*/
-    MenuFactory::addItem(m, TR("Edit activity node"), 3);
+    MenuFactory::addItem(m, tr("Edit activity node"), 3);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Select in browser"), 4);
+    MenuFactory::addItem(m, tr("Select in browser"), 4);
 
     if (linked())
-        MenuFactory::addItem(m, TR("Select linked items"), 5);
+        MenuFactory::addItem(m, tr("Select linked items"), 5);
 
     m.addSeparator();
     /*if (browser_node->is_writable())
@@ -505,15 +505,15 @@ void ActivityNodeCanvas::menu(const QPoint &)
     (BrowserNode *) the_canvas()->browser_diagram())
         MenuFactory::addItem(m, "Set associated diagram",6);
     m.addSeparator();*/
-    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        MenuFactory::addItem(m, TR("Delete from model"), 8);
+        MenuFactory::addItem(m, tr("Delete from model"), 8);
 
     m.addSeparator();
 
     if (Tool::menu_insert(&toolm, browser_node->get_type(), 20))
-        MenuFactory::insertItem(m, TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
     QAction *retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -616,7 +616,7 @@ QString ActivityNodeCanvas::may_start(UmlCode & l) const
         return ((BrowserActivityNode *) browser_node)->may_start();
 
     case UmlDependOn:
-        return TR("illegal");
+        return tr("illegal");
 
     default: // anchor
         return 0;
@@ -628,7 +628,7 @@ QString ActivityNodeCanvas::may_connect(UmlCode & l, const DiagramItem * dest) c
     if (l == UmlAnchor)
         return dest->may_start(l);
     else if (dest->get_bn() == 0)
-        return TR("illegal");
+        return tr("illegal");
     else
         return ((BrowserActivityNode *) browser_node)->may_connect(dest->get_bn());
 }

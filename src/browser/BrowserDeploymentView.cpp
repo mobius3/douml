@@ -121,7 +121,7 @@ BrowserDeploymentView * BrowserDeploymentView::add_deployment_view(BrowserNode *
 {
     QString name;
 
-    if (future_parent->enter_child_name(name, QObject::TR("enter deployment view's name : "),
+    if (future_parent->enter_child_name(name, QObject::tr("enter deployment view's name : "),
                                         UmlDeploymentView, TRUE, FALSE))
         return new BrowserDeploymentView(name, future_parent);
     else
@@ -197,30 +197,30 @@ void BrowserDeploymentView::menu()
 
     if (!deletedp()) {
         if (!is_read_only && (edition_number == 0)) {
-            MenuFactory::addItem(m, QObject::TR("New deployment diagram"), 0,
-                           QObject::TR("to add a <i>deployment diagram</i>"));
-            MenuFactory::addItem(m, QObject::TR("New node"), 1,
-                           QObject::TR("to add a <i>node</i>"));
-            MenuFactory::addItem(m, QObject::TR("New artifact"), 2,
-                           QObject::TR("to add an <i>artifact</i>"));
+            MenuFactory::addItem(m, QObject::tr("New deployment diagram"), 0,
+                           QObject::tr("to add a <i>deployment diagram</i>"));
+            MenuFactory::addItem(m, QObject::tr("New node"), 1,
+                           QObject::tr("to add a <i>node</i>"));
+            MenuFactory::addItem(m, QObject::tr("New artifact"), 2,
+                           QObject::tr("to add an <i>artifact</i>"));
             m.addSeparator();
         }
 
         if (!is_edited) {
-            MenuFactory::addItem(m, QObject::TR("Edit"), 3,
-                           QObject::TR("to edit the <i>deployment view</i>"));
+            MenuFactory::addItem(m, QObject::tr("Edit"), 3,
+                           QObject::tr("to edit the <i>deployment view</i>"));
 
             if (!is_read_only) {
                 m.addSeparator();
                 //MenuFactory::addItem(m, "Edit node settings", 4),
                 //		   "to set the sub node's settings");
-                MenuFactory::addItem(m, QObject::TR("Edit drawing settings"), 5,
-                               QObject::TR("to set how the sub <i>deployment diagrams</i>'s items must be drawn"));
+                MenuFactory::addItem(m, QObject::tr("Edit drawing settings"), 5,
+                               QObject::tr("to set how the sub <i>deployment diagrams</i>'s items must be drawn"));
 
                 if (edition_number == 0) {
                     m.addSeparator();
-                    MenuFactory::addItem(m, QObject::TR("Delete"), 6,
-                                   QObject::TR("to delete the <i>deployment view</i> and its sub items. \
+                    MenuFactory::addItem(m, QObject::tr("Delete"), 6,
+                                   QObject::tr("to delete the <i>deployment view</i> and its sub items. \
 Note that you can undelete them after"));
                 }
             }
@@ -237,7 +237,7 @@ Note that you can undelete them after"));
 
         if (cpp || java || php || python || idl) {
             m.addSeparator();
-            MenuFactory::insertItem(m ,QObject::TR("Generate"), &subm);
+            MenuFactory::insertItem(m ,QObject::tr("Generate"), &subm);
 
             if (cpp) {
                 MenuFactory::addItem(subm,"C++", 10);
@@ -263,12 +263,12 @@ Note that you can undelete them after"));
                 MenuFactory::addItem(subm, "Idl", 13);
 
             if (roundtripm.actions().count() != 0)
-                MenuFactory::insertItem(m, QObject::TR("Roundtrip"), &roundtripm);
+                MenuFactory::insertItem(m, QObject::tr("Roundtrip"), &roundtripm);
         }
 
         if (edition_number == 0) {
             if (preserve_bodies() && (cpp || java || php || python)) {
-                MenuFactory::insertItem(m, QObject::TR("Roundtrip body"), &roundtripbodym);
+                MenuFactory::insertItem(m, QObject::tr("Roundtrip body"), &roundtripbodym);
 
                 if (cpp)
                     MenuFactory::addItem(roundtripbodym, "C++", 30);
@@ -285,16 +285,16 @@ Note that you can undelete them after"));
 
             if (Tool::menu_insert(&toolm, get_type(), 100)) {
                 m.addSeparator();
-                MenuFactory::insertItem(m ,QObject::TR("Tool"), &toolm);
+                MenuFactory::insertItem(m ,QObject::tr("Tool"), &toolm);
             }
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        MenuFactory::addItem(m, QObject::TR("Undelete"), 7,
-                       QObject::TR("undelete the <i>deployment view</i>. \
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 7,
+                       QObject::tr("undelete the <i>deployment view</i>. \
 Do not undelete its sub items"));
-        MenuFactory::addItem(m, QObject::TR("Undelete recursively"), 8,
-                       QObject::TR("undelete the <i>deployment view</i> and its sub items"));
+        MenuFactory::addItem(m, QObject::tr("Undelete recursively"), 8,
+                       QObject::tr("undelete the <i>deployment view</i> and its sub items"));
     }
 
     QAction *resultAction = m.exec(QCursor::pos());
@@ -332,7 +332,7 @@ void BrowserDeploymentView::exec_menu_choice(int rank)
     break;
 
     case 3:
-        edit(QObject::TR("Deployment view").toLatin1().constData(), its_default_stereotypes);
+        edit(QObject::tr("Deployment view").toLatin1().constData(), its_default_stereotypes);
         return;
 
     case 4:
@@ -347,12 +347,12 @@ void BrowserDeploymentView::exec_menu_choice(int rank)
 
             deploymentdiagram_settings.complete(st, FALSE);
 
-            co[0].set(QObject::TR("node color"), &deploymentnode_color);
-            co[1].set(QObject::TR("artifact color"), &artifact_color);
-            co[2].set(QObject::TR("component color"), &component_color);
-            co[3].set(QObject::TR("note color"), &note_color);
-            co[4].set(QObject::TR("package color"), &package_color);
-            co[5].set(QObject::TR("fragment color"), &fragment_color);
+            co[0].set(QObject::tr("node color"), &deploymentnode_color);
+            co[1].set(QObject::tr("artifact color"), &artifact_color);
+            co[2].set(QObject::tr("component color"), &component_color);
+            co[3].set(QObject::tr("note color"), &note_color);
+            co[4].set(QObject::tr("package color"), &package_color);
+            co[5].set(QObject::tr("fragment color"), &fragment_color);
 
             SettingsDialog dialog(&st, &co, FALSE);
 
@@ -546,7 +546,7 @@ void BrowserDeploymentView::apply_shortcut(QString s)
 void BrowserDeploymentView::open(bool)
 {
     if (!is_edited)
-        edit(QObject::TR("Deployment view").toLatin1().constData(), its_default_stereotypes);
+        edit(QObject::tr("Deployment view").toLatin1().constData(), its_default_stereotypes);
 }
 
 UmlCode BrowserDeploymentView::get_type() const
@@ -556,7 +556,7 @@ UmlCode BrowserDeploymentView::get_type() const
 
 QString BrowserDeploymentView::get_stype() const
 {
-    return QObject::TR("deployment view");
+    return QObject::tr("deployment view");
 }
 
 int BrowserDeploymentView::get_identifier() const
@@ -768,7 +768,7 @@ void BrowserDeploymentView::DropAfterEvent(QDropEvent * e, BrowserNode * after)
             }
         }
         else {
-            msg_critical(QObject::TR("Error"), QObject::TR("Forbidden"));
+            msg_critical(QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }

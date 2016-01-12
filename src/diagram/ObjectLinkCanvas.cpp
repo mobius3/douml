@@ -312,7 +312,7 @@ void ObjectLinkCanvas::open()
                 ((OdClassInstCanvas *) first->begin)
                 ->is_duplicated(first, (OdClassInstCanvas *) last->end)) {
             // already drawn
-            msg_warning("Douml", TR("Relation already drawn"));
+            msg_warning("Douml", tr("Relation already drawn"));
             set_relation(0);
         }
         first->modified();	// to update role label
@@ -377,7 +377,7 @@ void ObjectLinkCanvas::remove(bool from_model)
                     }
 
                     if (a && !a->end->isSelected() && !a->end->get_bn()->deletedp()) {
-                        msg_warning("Douml", TR("<i>Draw all relations</i> forced to <i>no</i>"));
+                        msg_warning("Douml", tr("<i>Draw all relations</i> forced to <i>no</i>"));
                         the_canvas()->dont_draw_all_relations();
                     }
                 }
@@ -440,32 +440,32 @@ void ObjectLinkCanvas::menu(const QPoint & lpos)
     QMenu geo(0);
     //QPopupMenu toolm(0);
 
-    MenuFactory::createTitle(m, TR("Object link"));
+    MenuFactory::createTitle(m, tr("Object link"));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit"), 0);
+    MenuFactory::addItem(m, tr("Edit"), 0);
     m.addSeparator();
 
     if (data != 0)
-        MenuFactory::addItem(m, TR("Select relation in browser"), 2);
+        MenuFactory::addItem(m, tr("Select relation in browser"), 2);
 
     if (plabel || pstereotype || first->role_b || last->role_a) {
-        MenuFactory::addItem(m, TR("Select labels"), 3);
-        MenuFactory::addItem(m, TR("Labels default position"), 4);
+        MenuFactory::addItem(m, tr("Select labels"), 3);
+        MenuFactory::addItem(m, tr("Labels default position"), 4);
 
         if (plabel && (label == 0))
-            MenuFactory::addItem(m, TR("Attach relation's name to this segment"), 5);
+            MenuFactory::addItem(m, tr("Attach relation's name to this segment"), 5);
 
         if (pstereotype && (stereotype == 0))
-            MenuFactory::addItem(m, TR("Attach relation's stereotype to this segment"), 6);
+            MenuFactory::addItem(m, tr("Attach relation's stereotype to this segment"), 6);
     }
 
     if (get_start() != get_end()) {
         init_geometry_menu(geo, 10);
-        MenuFactory::insertItem(m, TR("Geometry (Ctrl+l)"), &geo);
+        MenuFactory::insertItem(m, tr("Geometry (Ctrl+l)"), &geo);
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 7);
 
     BooL in_model = FALSE;
     BooL out_model = FALSE;
@@ -473,7 +473,7 @@ void ObjectLinkCanvas::menu(const QPoint & lpos)
     delete_available(in_model, out_model);
 
     if (in_model)
-        MenuFactory::addItem(m, TR("Delete from model"), 8);
+        MenuFactory::addItem(m, tr("Delete from model"), 8);
 
     m.addSeparator();
     /*

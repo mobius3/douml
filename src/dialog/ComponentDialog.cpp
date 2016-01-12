@@ -54,15 +54,15 @@ ComponentDialog::ComponentDialog(SimpleData * nd)
     nd->get_browser_node()->edit_start();
 
     if (nd->get_browser_node()->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
-    setWindowTitle(TR("component dialog"));
+    setWindowTitle(tr("component dialog"));
 
     BrowserComponent * bn = (BrowserComponent *) nd->get_browser_node();
 
@@ -76,12 +76,12 @@ ComponentDialog::ComponentDialog(SimpleData * nd)
     init_l_tab(pr_page, pr_stereotypefilter, &ComponentDialog::pr_stereotypeFilterActivated,
                SLOT(pr_stereotypeFilterActivated(const QString &)),
                SLOT(provide_cls()), SLOT(unprovide_cls()),
-               lb_pr_available, lb_pr, prs, TR("Provided classes"));
+               lb_pr_available, lb_pr, prs, tr("Provided classes"));
     rzs = bn->get_realizing_classes();
     init_l_tab(rz_page, rz_stereotypefilter, &ComponentDialog::rz_stereotypeFilterActivated,
                SLOT(rz_stereotypeFilterActivated(const QString &)),
                SLOT(realize_cls()), SLOT(unrealize_cls()),
-               lb_rz_available, lb_rz, rzs, TR("Realizing classes"));
+               lb_rz_available, lb_rz, rzs, tr("Realizing classes"));
 
     // USER : list key - value
 
@@ -91,7 +91,7 @@ ComponentDialog::ComponentDialog(SimpleData * nd)
 
     grid->addWidget(kvtable = new KeyValuesTable((BrowserComponent *) data->get_browser_node(),
                                  grid, !hasOkButton()));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     //
 
@@ -137,11 +137,11 @@ void ComponentDialog::init_uml_tab()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(true);
     edstereotype->addItem(toUnicode(data->get_stereotype()));
@@ -158,12 +158,12 @@ void ComponentDialog::init_uml_tab()
     edstereotype->setSizePolicy(sp);
 
     grid->addWidget(vbox = new VVBox(grid));
-    vbox->addWidget(new QLabel(TR("description :"), vbox));
+    vbox->addWidget(new QLabel(tr("description :"), vbox));
 
     if (! visit)
     {
         SmallPushButton* sButton;
-        connect(sButton = new SmallPushButton(TR("Editor"), vbox), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vbox), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vbox->addWidget(sButton);
     }
@@ -200,7 +200,7 @@ void ComponentDialog::init_l_tab(VVBox *& page, QComboBox *& stereotypefilter,
     if (!visit) {
         page->addWidget(hbox = new HHBox(page));
         hbox->setMargin(5);
-        hbox->addWidget(new QLabel(TR("Stereotype filtering  "), hbox));
+        hbox->addWidget(new QLabel(tr("Stereotype filtering  "), hbox));
         hbox->addWidget(stereotypefilter = new QComboBox(hbox));
         stereotypefilter->setEditable(true);
         stereotypefilter->setAutoCompletion(completion());
@@ -217,7 +217,7 @@ void ComponentDialog::init_l_tab(VVBox *& page, QComboBox *& stereotypefilter,
         page->addWidget(hbox = new HHBox(page));
         hbox->addWidget(vbox = new VVBox(hbox));
         vbox->setMargin(5);
-        (label = new QLabel(TR("Available classes"), vbox))->setAlignment(Qt::AlignCenter);
+        (label = new QLabel(tr("Available classes"), vbox))->setAlignment(Qt::AlignCenter);
         vbox->addWidget(label);
         vbox->addWidget(lb_available = new QListWidget(vbox));
         lb_available->setSelectionMode(QListWidget::MultiSelection);
@@ -462,7 +462,7 @@ void ComponentDialog::accept()
         ((BrowserNode *) bn->parent())->wrong_child_name(s, bn->get_type(),
                 bn->allow_spaces(),
                 bn->allow_empty()))
-        msg_critical(TR("Error"), edname->text() + TR("\n\nillegal name or already used"));
+        msg_critical(tr("Error"), edname->text() + tr("\n\nillegal name or already used"));
     else {
         bn->set_name(s);
         bn->set_comment(comment->text());

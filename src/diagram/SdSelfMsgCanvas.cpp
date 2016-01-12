@@ -241,39 +241,39 @@ void SdSelfMsgCanvas::menu(const QPoint &)
 {
     QMenu m(0);
 
-    MenuFactory::createTitle(m, TR("Message"));
+    MenuFactory::createTitle(m, tr("Message"));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 13);
-    MenuFactory::addItem(m, TR("Go down"), 14);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 13);
+    MenuFactory::addItem(m, tr("Go down"), 14);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit"), 2);
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 3);
+    MenuFactory::addItem(m, tr("Edit"), 2);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 3);
     m.addSeparator();
 
     if (msg != 0)
-        MenuFactory::addItem(m, TR("Select operation in browser"), 8);
+        MenuFactory::addItem(m, tr("Select operation in browser"), 8);
 
-    MenuFactory::addItem(m, TR("Select linked items"), 4);
+    MenuFactory::addItem(m, tr("Select linked items"), 4);
 
     if (label || stereotype) {
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Select stereotype and label"), 5);
-        MenuFactory::addItem(m, TR("Default stereotype and label position"), 6);
+        MenuFactory::addItem(m, tr("Select stereotype and label"), 5);
+        MenuFactory::addItem(m, tr("Default stereotype and label position"), 6);
     }
 
     if (((BrowserSeqDiagram *) the_canvas()->browser_diagram())
             ->is_overlapping_bars()) {
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Go to new overlapping bar"), 9);
+        MenuFactory::addItem(m, tr("Go to new overlapping bar"), 9);
 
         if (dest->isOverlappingDuration())
-            MenuFactory::addItem(m, TR("Go to parent bar"), 10);
+            MenuFactory::addItem(m, tr("Go to parent bar"), 10);
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 7);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -394,9 +394,9 @@ void SdSelfMsgCanvas::edit_drawing_settings()
     for (;;) {
         StateSpecVector st(3);
 
-        st[0].set(TR("operation drawing language"), &drawing_language);
-        st[1].set(TR("show full operation definition"), &show_full_oper);
-        st[2].set(TR("show context mode"), &show_context_mode);
+        st[0].set(tr("operation drawing language"), &drawing_language);
+        st[1].set(tr("show full operation definition"), &show_full_oper);
+        st[2].set(tr("show context mode"), &show_context_mode);
 
         SettingsDialog dialog(&st, 0, FALSE);
 
@@ -423,9 +423,9 @@ void SdSelfMsgCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         Uml3States show_full_oper;
         ShowContextMode show_context_mode;
 
-        st[0].set(TR("operation drawing language"), &drawing_language);
-        st[1].set(TR("show full operation definition"), &show_full_oper);
-        st[2].set(TR("show context mode"), &show_context_mode);
+        st[0].set(tr("operation drawing language"), &drawing_language);
+        st[1].set(tr("show full operation definition"), &show_full_oper);
+        st[2].set(tr("show context mode"), &show_context_mode);
 
         SettingsDialog dialog(&st, 0, FALSE, TRUE);
 

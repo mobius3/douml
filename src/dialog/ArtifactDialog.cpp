@@ -65,15 +65,15 @@ ArtifactDialog::ArtifactDialog(ArtifactData * nd)
     //nd->browser_node->edit_start();
 
     if (nd->browser_node->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
-    setWindowTitle(TR("artifact dialog"));
+    setWindowTitle(tr("artifact dialog"));
 
     init_uml_tab();
     init_cpp_tab();
@@ -92,7 +92,7 @@ ArtifactDialog::ArtifactDialog(ArtifactData * nd)
 
     grid->addWidget(kvtable = new KeyValuesTable((BrowserArtifact *) data->get_browser_node(),
                                                  grid, !hasOkButton()));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     //
 
@@ -141,11 +141,11 @@ void ArtifactDialog::init_uml_tab()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(true);
     edstereotype->addItem(toUnicode(data->get_stereotype()));
@@ -166,14 +166,14 @@ void ArtifactDialog::init_uml_tab()
                 this, SLOT(edStereotypeActivated(const QString &)));
 
     grid->addWidget(vbox = new VVBox(grid));
-    vbox->addWidget(new QLabel(TR("description :"), vbox));
+    vbox->addWidget(new QLabel(tr("description :"), vbox));
 
     if (! visit) {
         SmallPushButton* sButton;
-        connect(sButton = new SmallPushButton(TR("Editor"), vbox), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vbox), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vbox->addWidget(sButton);
-        connect(sButton = new SmallPushButton(TR("Default"), vbox), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Default"), vbox), SIGNAL(clicked()),
                 this, SLOT(default_description()));
         vbox->addWidget(sButton);
     }
@@ -211,7 +211,7 @@ void ArtifactDialog::init_cpp_tab()
 
     vbox->addWidget(hbox = new HHBox(vbox));
     hbox->setMargin(5);
-    hbox->addWidget( lbl1 = new QLabel(TR("Header file \ndefinition : "), hbox));
+    hbox->addWidget( lbl1 = new QLabel(tr("Header file \ndefinition : "), hbox));
     hbox->addWidget(edcpp_h_content = new MultiLineEdit(hbox));
     edcpp_h_content->setText(data->cpp_h);
     QFont font = comment->font();
@@ -228,19 +228,19 @@ void ArtifactDialog::init_cpp_tab()
         connect(edcpp_h_content, SIGNAL(textChanged()), this, SLOT(cpp_update_h()));
 
         vbox->addWidget(hbox = new HHBox(vbox));
-        hbox->addWidget(edit = new SmallPushButton(TR("Editor"), hbox));
+        hbox->addWidget(edit = new SmallPushButton(tr("Editor"), hbox));
         connect(edit, SIGNAL(clicked()), this, SLOT(cpp_edit_h()));
-        connect(tempB = new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
+        connect(tempB = new QPushButton(tr("Default definition"), hbox), SIGNAL(clicked()),
                 this, SLOT(cpp_default_h()));
         hbox->addWidget(tempB);
-        connect(tempB = new QPushButton(TR("Not generated in C++"), hbox), SIGNAL(clicked()),
+        connect(tempB = new QPushButton(tr("Not generated in C++"), hbox), SIGNAL(clicked()),
                 this, SLOT(cpp_unmapped_h()));
         hbox->addWidget(tempB);
     }
 
     hbox = new HHBox(cpp_h_content_page, "result");
     hbox->setMargin(5);
-    hbox->addWidget(lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox));
+    hbox->addWidget(lbl2 = new QLabel(tr("Result after\nsubstitution : "), hbox));
     hbox->addWidget(showcpp_h_content = new MultiLineEdit(hbox));
     showcpp_h_content->setReadOnly(TRUE);
     showcpp_h_content->setFont(font);
@@ -250,7 +250,7 @@ void ArtifactDialog::init_cpp_tab()
     else
         same_width(lbl1, lbl2, edit);
 
-    addTab(cpp_h_content_page, TR("C++ header"));
+    addTab(cpp_h_content_page, tr("C++ header"));
 
     if (!GenerationSettings::cpp_get_default_defs())
         removePage(cpp_h_content_page);
@@ -264,7 +264,7 @@ void ArtifactDialog::init_cpp_tab()
 
     vbox->addWidget(hbox = new HHBox(vbox));
     hbox->setMargin(5);
-    hbox->addWidget(lbl1 = new QLabel(TR("Source file \ndefinition : "), hbox));
+    hbox->addWidget(lbl1 = new QLabel(tr("Source file \ndefinition : "), hbox));
     hbox->addWidget(edcpp_src_content = new MultiLineEdit(hbox));
     edcpp_src_content->setText(data->cpp_src);
     edcpp_src_content->setFont(font);
@@ -275,19 +275,19 @@ void ArtifactDialog::init_cpp_tab()
         connect(edcpp_src_content, SIGNAL(textChanged()), this, SLOT(cpp_update_src()));
 
         vbox->addWidget(hbox = new HHBox(vbox));
-        hbox->addWidget(edit = new SmallPushButton(TR("Editor"), hbox));
+        hbox->addWidget(edit = new SmallPushButton(tr("Editor"), hbox));
         connect(edit, SIGNAL(clicked()), this, SLOT(cpp_edit_src()));
-        connect(tempB =  new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
+        connect(tempB =  new QPushButton(tr("Default definition"), hbox), SIGNAL(clicked()),
                 this, SLOT(cpp_default_src()));
          hbox->addWidget(tempB);
-        connect(tempB = new QPushButton(TR("Not generated in C++"), hbox), SIGNAL(clicked()),
+        connect(tempB = new QPushButton(tr("Not generated in C++"), hbox), SIGNAL(clicked()),
                 this, SLOT(cpp_unmapped_src()));
          hbox->addWidget(tempB);
     }
 
     hbox = new HHBox(cpp_src_content_page, "result");
     hbox->setMargin(5);
-    hbox->addWidget(lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox));
+    hbox->addWidget(lbl2 = new QLabel(tr("Result after\nsubstitution : "), hbox));
     hbox->addWidget(showcpp_src_content = new MultiLineEdit(hbox));
     showcpp_src_content->setReadOnly(TRUE);
     showcpp_src_content->setFont(font);
@@ -297,7 +297,7 @@ void ArtifactDialog::init_cpp_tab()
     else
         same_width(lbl1, lbl2, edit);
 
-    addTab(cpp_src_content_page, TR("C++ source"));
+    addTab(cpp_src_content_page, tr("C++ source"));
 
     if (!GenerationSettings::cpp_get_default_defs())
         removePage(cpp_src_content_page);
@@ -319,7 +319,7 @@ void ArtifactDialog::init_java_tab()
 
     vbox->addWidget(hbox = new HHBox(vbox));
     hbox->setMargin(5);
-    hbox->addWidget(lbl1 = new QLabel(TR("File \ndefinition : "), hbox));
+    hbox->addWidget(lbl1 = new QLabel(tr("File \ndefinition : "), hbox));
     hbox->addWidget(edjava_content = new MultiLineEdit(hbox));
     edjava_content->setText(data->java_src);
     QFont font = comment->font();
@@ -336,20 +336,20 @@ void ArtifactDialog::init_java_tab()
         connect(edjava_content, SIGNAL(textChanged()), this, SLOT(java_update_src()));
 
         vbox->addWidget(hbox = new HHBox(vbox));
-        hbox->addWidget(edit = new SmallPushButton(TR("Editor"), hbox));
+        hbox->addWidget(edit = new SmallPushButton(tr("Editor"), hbox));
         connect(edit, SIGNAL(clicked()), this, SLOT(java_edit()));
         QPushButton * tempB = 0;
-        connect(tempB = new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
+        connect(tempB = new QPushButton(tr("Default definition"), hbox), SIGNAL(clicked()),
                 this, SLOT(java_default_src()));
         hbox->addWidget(tempB);
-        connect(tempB = new QPushButton(TR("Not generated in Java"), hbox), SIGNAL(clicked()),
+        connect(tempB = new QPushButton(tr("Not generated in Java"), hbox), SIGNAL(clicked()),
                 this, SLOT(java_unmapped_src()));
         hbox->addWidget(tempB);
     }
 
     hbox = new HHBox(java_content_page, "result");
     hbox->setMargin(5);
-    hbox->addWidget(lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox));
+    hbox->addWidget(lbl2 = new QLabel(tr("Result after\nsubstitution : "), hbox));
     hbox->addWidget(showjava_content = new MultiLineEdit(hbox));
     showjava_content->setReadOnly(TRUE);
     showjava_content->setFont(font);
@@ -359,7 +359,7 @@ void ArtifactDialog::init_java_tab()
     else
         same_width(lbl1, lbl2, edit);
 
-    addTab(java_content_page, TR("Java source"));
+    addTab(java_content_page, tr("Java source"));
 
     if (!GenerationSettings::java_get_default_defs())
         removePage(java_content_page);
@@ -381,7 +381,7 @@ void ArtifactDialog::init_php_tab()
 
     vbox->addWidget(hbox = new HHBox(vbox));
     hbox->setMargin(5);
-    hbox->addWidget(lbl1 = new QLabel(TR("File \ndefinition : "), hbox));
+    hbox->addWidget(lbl1 = new QLabel(tr("File \ndefinition : "), hbox));
     hbox->addWidget(edphp_content = new MultiLineEdit(hbox));
     edphp_content->setText(data->php_src);
     QFont font = comment->font();
@@ -398,20 +398,20 @@ void ArtifactDialog::init_php_tab()
         connect(edphp_content, SIGNAL(textChanged()), this, SLOT(php_update_src()));
 
         vbox->addWidget(hbox = new HHBox(vbox));
-        hbox->addWidget(edit = new SmallPushButton(TR("Editor"), hbox));
+        hbox->addWidget(edit = new SmallPushButton(tr("Editor"), hbox));
         connect(edit, SIGNAL(clicked()), this, SLOT(php_edit()));
         QPushButton * tempB = 0;
-        connect(tempB = new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
+        connect(tempB = new QPushButton(tr("Default definition"), hbox), SIGNAL(clicked()),
                 this, SLOT(php_default_src()));
         hbox->addWidget(tempB);
-        connect(tempB = new QPushButton(TR("Not generated in Php"), hbox), SIGNAL(clicked()),
+        connect(tempB = new QPushButton(tr("Not generated in Php"), hbox), SIGNAL(clicked()),
                 this, SLOT(php_unmapped_src()));
         hbox->addWidget(tempB);
     }
 
     hbox = new HHBox(php_content_page, "result");
     hbox->setMargin(5);
-    hbox->addWidget(lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox));
+    hbox->addWidget(lbl2 = new QLabel(tr("Result after\nsubstitution : "), hbox));
     hbox->addWidget(showphp_content = new MultiLineEdit(hbox));
     showphp_content->setReadOnly(TRUE);
     showphp_content->setFont(font);
@@ -421,7 +421,7 @@ void ArtifactDialog::init_php_tab()
     else
         same_width(lbl1, lbl2, edit);
 
-    addTab(php_content_page, TR("Php source"));
+    addTab(php_content_page, tr("Php source"));
 
     if (!GenerationSettings::php_get_default_defs())
         removePage(php_content_page);
@@ -443,7 +443,7 @@ void ArtifactDialog::init_python_tab()
 
     vbox->addWidget(hbox = new HHBox(vbox));
     hbox->setMargin(5);
-    hbox->addWidget(lbl1 = new QLabel(TR("File \ndefinition : "), hbox));
+    hbox->addWidget(lbl1 = new QLabel(tr("File \ndefinition : "), hbox));
     hbox->addWidget(edpython_content = new MultiLineEdit(hbox));
     edpython_content->setText(data->python_src);
     QFont font = comment->font();
@@ -460,20 +460,20 @@ void ArtifactDialog::init_python_tab()
         connect(edpython_content, SIGNAL(textChanged()), this, SLOT(python_update_src()));
 
         vbox->addWidget(hbox = new HHBox(vbox));
-        hbox->addWidget(edit = new SmallPushButton(TR("Editor"), hbox));
+        hbox->addWidget(edit = new SmallPushButton(tr("Editor"), hbox));
         connect(edit, SIGNAL(clicked()), this, SLOT(python_edit()));
         QPushButton * tempB = 0;
-        connect(tempB = new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
+        connect(tempB = new QPushButton(tr("Default definition"), hbox), SIGNAL(clicked()),
                 this, SLOT(python_default_src()));
         hbox->addWidget(tempB);
-        connect(tempB = new QPushButton(TR("Not generated in Python"), hbox), SIGNAL(clicked()),
+        connect(tempB = new QPushButton(tr("Not generated in Python"), hbox), SIGNAL(clicked()),
                 this, SLOT(python_unmapped_src()));
         hbox->addWidget(tempB);
     }
 
     hbox = new HHBox(python_content_page, "result");
     hbox->setMargin(5);
-    hbox->addWidget(lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox));
+    hbox->addWidget(lbl2 = new QLabel(tr("Result after\nsubstitution : "), hbox));
     hbox->addWidget(showpython_content = new MultiLineEdit(hbox));
     showpython_content->setReadOnly(TRUE);
     showpython_content->setFont(font);
@@ -483,7 +483,7 @@ void ArtifactDialog::init_python_tab()
     else
         same_width(lbl1, lbl2, edit);
 
-    addTab(python_content_page, TR("Python source"));
+    addTab(python_content_page, tr("Python source"));
 
     if (!GenerationSettings::python_get_default_defs())
         removePage(python_content_page);
@@ -505,7 +505,7 @@ void ArtifactDialog::init_idl_tab()
 
     vbox->addWidget(hbox = new HHBox(vbox));
     hbox->setMargin(5);
-    hbox->addWidget(lbl1 = new QLabel(TR("File \ndefinition : "), hbox));
+    hbox->addWidget(lbl1 = new QLabel(tr("File \ndefinition : "), hbox));
     hbox->addWidget(edidl_content = new MultiLineEdit(hbox));
     edidl_content->setText(data->idl_src);
     QFont font = comment->font();
@@ -522,20 +522,20 @@ void ArtifactDialog::init_idl_tab()
         connect(edidl_content, SIGNAL(textChanged()), this, SLOT(idl_update_src()));
 
         vbox->addWidget(hbox = new HHBox(vbox));
-        hbox->addWidget(edit = new SmallPushButton(TR("Editor"), hbox));
+        hbox->addWidget(edit = new SmallPushButton(tr("Editor"), hbox));
         connect(edit, SIGNAL(clicked()), this, SLOT(idl_edit()));
         QPushButton * tempB = 0;
-        connect(tempB = new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
+        connect(tempB = new QPushButton(tr("Default definition"), hbox), SIGNAL(clicked()),
                 this, SLOT(idl_default_src()));
         hbox->addWidget(tempB);
-        connect(tempB = new QPushButton(TR("Not generated in Idl"), hbox), SIGNAL(clicked()),
+        connect(tempB = new QPushButton(tr("Not generated in Idl"), hbox), SIGNAL(clicked()),
                 this, SLOT(idl_unmapped_src()));
         hbox->addWidget(tempB);
     }
 
     hbox = new HHBox(idl_content_page, "result");
     hbox->setMargin(5);
-    hbox->addWidget(lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox));
+    hbox->addWidget(lbl2 = new QLabel(tr("Result after\nsubstitution : "), hbox));
     hbox->addWidget(showidl_content = new MultiLineEdit(hbox));
     showidl_content->setReadOnly(TRUE);
     showidl_content->setFont(font);
@@ -545,7 +545,7 @@ void ArtifactDialog::init_idl_tab()
     else
         same_width(lbl1, lbl2, edit);
 
-    addTab(idl_content_page, TR("Idl source"));
+    addTab(idl_content_page, tr("Idl source"));
 
     if (!GenerationSettings::idl_get_default_defs())
         removePage(idl_content_page);
@@ -569,7 +569,7 @@ void ArtifactDialog::init_assoc_classes_tab()
         cl_assoc_page->addWidget(hbox = new HHBox(cl_assoc_page));
         hbox->addWidget(vbox = new VVBox(hbox));
         vbox->setMargin(5);
-        (lable = new QLabel(TR("Classes without artifact"), vbox))->setAlignment(Qt::AlignCenter);
+        (lable = new QLabel(tr("Classes without artifact"), vbox))->setAlignment(Qt::AlignCenter);
         vbox->addWidget(lable);
         vbox->addWidget(lb_cl_available = new QListWidget (vbox));
         lb_cl_available->setSelectionMode(QListWidget ::MultiSelection);
@@ -610,7 +610,7 @@ void ArtifactDialog::init_assoc_classes_tab()
         vbox = cl_assoc_page;
 
     vbox->setMargin(5);
-    (lable = new QLabel(TR("Associated classes"), vbox))->setAlignment(Qt::AlignCenter);
+    (lable = new QLabel(tr("Associated classes"), vbox))->setAlignment(Qt::AlignCenter);
     vbox->addWidget(lable);
     vbox->addWidget(lb_cl_associated = new QListWidget (vbox));
     lb_cl_associated->setSelectionMode((visit) ? QListWidget ::NoSelection
@@ -646,17 +646,17 @@ void ArtifactDialog::init_assoc_classes_tab()
         hbox->setMargin(5);
         (lable = new QLabel("", hbox))->setScaledContents(TRUE);
         hbox->addWidget(lable);
-        hbox->addWidget(button = new QPushButton(TR("go up"), hbox));
+        hbox->addWidget(button = new QPushButton(tr("go up"), hbox));
         connect(button, SIGNAL(clicked()), this, SLOT(move_cls_up()));
         (lable = new QLabel("", hbox))->setScaledContents(TRUE);
         hbox->addWidget(lable);
-        hbox->addWidget(button = new QPushButton(TR("go down"), hbox));
+        hbox->addWidget(button = new QPushButton(tr("go down"), hbox));
         connect(button, SIGNAL(clicked()), this, SLOT(move_cls_down()));
         (lable = new QLabel("", hbox))->setScaledContents(TRUE);
         hbox->addWidget(lable);
     }
 
-    addTab(cl_assoc_page, TR("Associated classes"));
+    addTab(cl_assoc_page, tr("Associated classes"));
 }
 
 void ArtifactDialog::init_assoc_artifacts_tab()
@@ -672,7 +672,7 @@ void ArtifactDialog::init_assoc_artifacts_tab()
     if (!visit) {
         art_assoc_page->addWidget(hbox = new HHBox(art_assoc_page));
         hbox->setMargin(5);
-        hbox->addWidget(new QLabel(TR("Stereotype filtering  "), hbox));
+        hbox->addWidget(new QLabel(tr("Stereotype filtering  "), hbox));
         hbox->addWidget(stereotypefilter = new QComboBox( hbox));
         stereotypefilter->setEditable(true);
         stereotypefilter->setAutoCompletion(completion());
@@ -689,7 +689,7 @@ void ArtifactDialog::init_assoc_artifacts_tab()
         art_assoc_page->addWidget(hbox = new HHBox(art_assoc_page));
         hbox->addWidget(vbox = new VVBox(hbox));
         vbox->setMargin(5);
-        (label = new QLabel(TR("Unassociated artifacts"), vbox))->setAlignment(Qt::AlignCenter);
+        (label = new QLabel(tr("Unassociated artifacts"), vbox))->setAlignment(Qt::AlignCenter);
         vbox->addWidget(label);
         vbox->addWidget(lb_art_available = new QListWidget (vbox));
         lb_art_available->setSelectionMode(QListWidget ::MultiSelection);
@@ -714,14 +714,14 @@ void ArtifactDialog::init_assoc_artifacts_tab()
         vbox = art_assoc_page;
 
     vbox->setMargin(5);
-    (label = new QLabel(TR("Associated artifacts"), vbox))->setAlignment(Qt::AlignCenter);
+    (label = new QLabel(tr("Associated artifacts"), vbox))->setAlignment(Qt::AlignCenter);
     vbox->addWidget(label);
     vbox->addWidget(lb_art_associated = new QListWidget (vbox));
     lb_art_associated->setSelectionMode((visit) ? QListWidget ::NoSelection
                                                 : QListWidget ::MultiSelection);
     lb_art_initialized = FALSE;
 
-    addTab(art_assoc_page, TR("Associated artifacts"));
+    addTab(art_assoc_page, tr("Associated artifacts"));
 }
 
 void ArtifactDialog::default_description()
@@ -1955,7 +1955,7 @@ void ArtifactDialog::accept()
             ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlArtifact,
                                                              bn->allow_spaces(),
                                                              bn->allow_empty()))
-        msg_critical(TR("Error"), edname->text() + TR("\n\nillegal name or already used"));
+        msg_critical(tr("Error"), edname->text() + tr("\n\nillegal name or already used"));
     else {
         bn->set_name(s);
         bn->set_comment(comment->text());

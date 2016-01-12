@@ -133,23 +133,23 @@ void IconCanvas::menu(const QPoint &)
 {
     QMenu m(0);
 
-    MenuFactory::createTitle(m, browser_node->get_name() + TR("\nshort cut"));
+    MenuFactory::createTitle(m, browser_node->get_name() + tr("\nshort cut"));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 6);
-    MenuFactory::addItem(m, TR("Go down"), 7);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 6);
+    MenuFactory::addItem(m, tr("Go down"), 7);
     m.addSeparator();
 
     if (! browser_node->deletedp()) {
-        MenuFactory::addItem(m, TR("Open"), 2);
+        MenuFactory::addItem(m, tr("Open"), 2);
         m.addSeparator();
     }
 
-    MenuFactory::addItem(m, TR("Select diagram in browser"), 3);
-    MenuFactory::addItem(m, TR("Select linked items"), 4);
+    MenuFactory::addItem(m, tr("Select diagram in browser"), 3);
+    MenuFactory::addItem(m, tr("Select linked items"), 4);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 5);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 5);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -242,12 +242,12 @@ void IconCanvas::apply_shortcut(QString s)
 
 QString IconCanvas::may_start(UmlCode & l) const
 {
-    return (l == UmlAnchor) ? QString() : TR("illegal");
+    return (l == UmlAnchor) ? QString() : tr("illegal");
 }
 
 QString IconCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 {
-    return (l == UmlAnchor) ? dest->may_start(l) : TR("illegal");
+    return (l == UmlAnchor) ? dest->may_start(l) : tr("illegal");
 }
 
 bool IconCanvas::alignable() const

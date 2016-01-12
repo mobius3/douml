@@ -107,11 +107,11 @@ void ColDiagramView::menu(const QPoint &)
 {
     QMenu m(0);
 
-    MenuFactory::createTitle(m, TR("Communication diagram menu"));
+    MenuFactory::createTitle(m, tr("Communication diagram menu"));
 
     if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Edit all the messages"), 29);
+        MenuFactory::addItem(m, tr("Edit all the messages"), 29);
     }
 
     switch (default_menu(m, 30)) {

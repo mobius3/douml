@@ -230,40 +230,40 @@ void CodClassInstCanvas::menu(const QPoint &)
 
     MenuFactory::createTitle(m, full_name());
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 13);
-    MenuFactory::addItem(m, TR("Go down"), 14);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 13);
+    MenuFactory::addItem(m, tr("Go down"), 14);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 2);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit"), 3);
+    MenuFactory::addItem(m, tr("Edit"), 3);
     m.addSeparator();
 
     if (modelized)
-        MenuFactory::addItem(m, TR("Select in browser"), 4);
+        MenuFactory::addItem(m, tr("Select in browser"), 4);
 
-    MenuFactory::addItem(m, TR("Select class in browser"), 5);
+    MenuFactory::addItem(m, tr("Select class in browser"), 5);
 
     if (linked())
-        MenuFactory::addItem(m, TR("Select linked items"), 6);
+        MenuFactory::addItem(m, tr("Select linked items"), 6);
 
     m.addSeparator();
 
     if (modelized)
-        MenuFactory::addItem(m, TR("Exit from model"), 9);
+        MenuFactory::addItem(m, tr("Exit from model"), 9);
     else {
         if (container(UmlClass)->is_writable())
-            MenuFactory::addItem(m, TR("Insert in model"), 10);
+            MenuFactory::addItem(m, tr("Insert in model"), 10);
 
-        MenuFactory::addItem(m, TR("Replace it"), 11);
+        MenuFactory::addItem(m, tr("Replace it"), 11);
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 7);
 
     if (modelized && browser_node->is_writable())
-        MenuFactory::addItem(m, TR("Delete from model"), 8);
+        MenuFactory::addItem(m, tr("Delete from model"), 8);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -412,13 +412,13 @@ void CodClassInstCanvas::edit_drawing_settings()
         StateSpecVector st((browser_node->get_type() != UmlClass) ? 3 : 2);
         ColorSpecVector co(1);
 
-        st[0].set(TR("write name:type \nhorizontally"), &write_horizontally);
-        st[1].set(TR("show class context"), &show_context_mode);
+        st[0].set(tr("write name:type \nhorizontally"), &write_horizontally);
+        st[1].set(tr("show class context"), &show_context_mode);
 
         if (browser_node->get_type() != UmlClass)
-            st[2].set(TR("show stereotypes \nproperties"), &show_stereotype_properties);
+            st[2].set(tr("show stereotypes \nproperties"), &show_stereotype_properties);
 
-        co[0].set(TR("class instance color"), &itscolor);
+        co[0].set(tr("class instance color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -448,9 +448,9 @@ void CodClassInstCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         ShowContextMode show_context_mode;
         UmlColor itscolor;
 
-        st[0].set(TR("write name:type \nhorizontally"), &write_horizontally);
-        st[1].set(TR("show class context"), &show_context_mode);
-        co[0].set(TR("class instance color"), &itscolor);
+        st[0].set(tr("write name:type \nhorizontally"), &write_horizontally);
+        st[1].set(tr("show class context"), &show_context_mode);
+        co[0].set(tr("class instance color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE, TRUE);
 

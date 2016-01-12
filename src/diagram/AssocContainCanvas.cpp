@@ -84,31 +84,31 @@ void AssocContainCanvas::menu(const QPoint &)
     AssocContainCanvas * plabel = (AssocContainCanvas *) aplabel;
     AssocContainCanvas * pstereotype = (AssocContainCanvas *) apstereotype;
 
-    MenuFactory::createTitle(m, TR("Association"));
+    MenuFactory::createTitle(m, tr("Association"));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit"), 1);
+    MenuFactory::addItem(m, tr("Edit"), 1);
 
     if (pstereotype || plabel) {
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Select stereotype and label"), 2);
-        MenuFactory::addItem(m, TR("Default stereotype and label position"), 3);
+        MenuFactory::addItem(m, tr("Select stereotype and label"), 2);
+        MenuFactory::addItem(m, tr("Default stereotype and label position"), 3);
 
         if (plabel && (label == 0))
-            MenuFactory::addItem(m, TR("Attach label to this segment"), 4);
+            MenuFactory::addItem(m, tr("Attach label to this segment"), 4);
 
         if (pstereotype && (stereotype == 0))
-            MenuFactory::addItem(m, TR("Attach stereotype to this segment"), 5);
+            MenuFactory::addItem(m, tr("Attach stereotype to this segment"), 5);
     }
 
     if (get_start() != get_end()) {
         m.addSeparator();
         init_geometry_menu(geo, 10);
-        MenuFactory::insertItem(m, TR("Geometry (Ctrl+l)"), &geo);
+        MenuFactory::insertItem(m, tr("Geometry (Ctrl+l)"), &geo);
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 6);
-    MenuFactory::addItem(m, TR("Delete from model"), 7);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 6);
+    MenuFactory::addItem(m, tr("Delete from model"), 7);
 
     QAction *retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -206,7 +206,7 @@ void AssocContainCanvas::remove(bool from_model)
                 }
 
                 if (a && !a->end->isSelected() && !a->end->get_bn()->deletedp()) {
-                    msg_warning("Douml", TR("<i>Draw all relations</i> forced to <i>no</i>"));
+                    msg_warning("Douml", tr("<i>Draw all relations</i> forced to <i>no</i>"));
                     the_canvas()->dont_draw_all_relations();
                 }
             }

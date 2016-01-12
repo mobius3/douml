@@ -570,38 +570,38 @@ void ArtifactCanvas::menu(const QPoint &)
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 15);
-    MenuFactory::addItem(m, TR("Go down"), 16);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 15);
+    MenuFactory::addItem(m, tr("Go down"), 16);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Add related elements"), 17);
+    MenuFactory::addItem(m, tr("Add related elements"), 17);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 2);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit artifact"), 3);
+    MenuFactory::addItem(m, tr("Edit artifact"), 3);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Select in browser"), 4);
+    MenuFactory::addItem(m, tr("Select in browser"), 4);
 
     if (linked())
-        MenuFactory::addItem(m, TR("Select linked items"), 5);
+        MenuFactory::addItem(m, tr("Select linked items"), 5);
 
     m.addSeparator();
 
     if (browser_node->is_writable()) {
         if (browser_node->get_associated() !=
                 (BrowserNode *) the_canvas()->browser_diagram())
-            MenuFactory::addItem(m, TR("Set associated diagram"), 6);
+            MenuFactory::addItem(m, tr("Set associated diagram"), 6);
 
         if (browser_node->get_associated())
-            MenuFactory::addItem(m, TR("Remove diagram association"), 12);
+            MenuFactory::addItem(m, tr("Remove diagram association"), 12);
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        MenuFactory::addItem(m, TR("Delete from model"), 8);
+        MenuFactory::addItem(m, tr("Delete from model"), 8);
 
     m.addSeparator();
 
@@ -612,10 +612,10 @@ void ArtifactCanvas::menu(const QPoint &)
     bool idl = GenerationSettings::idl_get_default_defs();
 
     if (cpp || java || php || python || idl)
-        MenuFactory::insertItem(m, TR("Generate"), &gensubm);
+        MenuFactory::insertItem(m, tr("Generate"), &gensubm);
 
     if (Tool::menu_insert(&toolm, UmlArtifact, 20))
-        MenuFactory::insertItem(m, TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
     if (cpp)
         MenuFactory::addItem(gensubm, "C++", 9);
@@ -716,7 +716,7 @@ void ArtifactCanvas::menu(const QPoint &)
 
         case 17:
             ((UmlCanvas *) canvas())->get_view()
-                    ->add_related_elements(this, TR("artifact"), TRUE, FALSE);
+                    ->add_related_elements(this, tr("artifact"), TRUE, FALSE);
             return;
 
         default:
@@ -750,7 +750,7 @@ void ArtifactCanvas::apply_shortcut(QString s)
     }
     else if (s == "Add related elements") {
         ((UmlCanvas *) canvas())->get_view()
-                ->add_related_elements(this, TR("artifact"), TRUE, FALSE);
+                ->add_related_elements(this, tr("artifact"), TRUE, FALSE);
         return;
     }
     else {
@@ -768,7 +768,7 @@ void ArtifactCanvas::edit_drawing_settings()
         StateSpecVector st;
         ColorSpecVector co(1);
 
-        co[0].set(TR("artifact color"), &itscolor);
+        co[0].set(tr("artifact color"), &itscolor);
 
         SettingsDialog dialog(0, &co, FALSE);
 
@@ -793,7 +793,7 @@ void ArtifactCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         ColorSpecVector co(1);
         UmlColor itscolor;
 
-        co[0].set(TR("artifact color"), &itscolor);
+        co[0].set(tr("artifact color"), &itscolor);
 
         SettingsDialog dialog(0, &co, FALSE, TRUE);
 
@@ -824,25 +824,25 @@ QString ArtifactCanvas::may_start(UmlCode & l) const
     switch (l) {
     case UmlContain:
         if (!browser_node->is_writable())
-            return TR("read only");
+            return tr("read only");
         else if (strcmp(browser_node->get_stereotype(), "source") == 0)
-            return TR("illegal for a source artifact");
+            return tr("illegal for a source artifact");
         else
             return 0;
 
     case UmlDependency:
         l = UmlDependOn;
-        return (browser_node->is_writable()) ? QString() : TR("read only");
+        return (browser_node->is_writable()) ? QString() : tr("read only");
 
     case UmlGeneralisation:
         l = UmlInherit;
-        return (browser_node->is_writable()) ? QString() : TR("read only");
+        return (browser_node->is_writable()) ? QString() : tr("read only");
 
     case UmlAnchor:
         return 0;
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 
@@ -856,22 +856,22 @@ QString ArtifactCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
         switch (l) {
         case UmlContain:
         case UmlDependOn:
-            return (dest == this) ? TR("illegal") : QString();
+            return (dest == this) ? tr("illegal") : QString();
 
         case UmlInherit:
             return browser_node->check_inherit(dest->get_bn());;
 
         default:
-            return TR("illegal");
+            return tr("illegal");
         }
 
     case UmlPackage:
     case UmlComponent:
     case UmlDeploymentNode:
-        return (l == UmlDependOn) ? QString() : TR("illegal");
+        return (l == UmlDependOn) ? QString() : tr("illegal");
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 

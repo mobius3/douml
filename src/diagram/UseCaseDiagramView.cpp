@@ -127,7 +127,7 @@ void UseCaseDiagramView::menu(const QPoint & p)
         get_drawn(items, drawn);
 
         if (marked_not_yet_drawn(drawn))
-            MenuFactory::addItem(m,  TR("Add marked elements"), 28);
+            MenuFactory::addItem(m,  tr("Add marked elements"), 28);
 
         switch (default_menu(m, 30)) {
         case EDIT_DRAWING_SETTING_CMD:

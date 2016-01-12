@@ -52,7 +52,7 @@ ObjectLinkDialog::ObjectLinkDialog(BrowserClassInstance * a, BrowserClassInstanc
     : QDialog(0/*, "object link dialog", TRUE*/),
       rels(l), nforward(nfirstdir), clia(a), clib(b), choozen(0), reverse(FALSE)
 {
-    setWindowTitle(TR("Object link dialog"));
+    setWindowTitle(tr("Object link dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     QHBoxLayout * hbox;
@@ -61,7 +61,7 @@ ObjectLinkDialog::ObjectLinkDialog(BrowserClassInstance * a, BrowserClassInstanc
     vbox->addLayout(hbox);
     hbox->setMargin(5);
 
-    hbox->addWidget(new QLabel(TR("\n"
+    hbox->addWidget(new QLabel(tr("\n"
                                   "To set the association, select a cell or the first column with a single click, then press 'OK'\n"
                                   "To unset the association press 'Unset' then press 'OK'\n"),
                                this));
@@ -76,10 +76,10 @@ ObjectLinkDialog::ObjectLinkDialog(BrowserClassInstance * a, BrowserClassInstanc
     QPushButton * newrel =
         (((ClassInstanceData *) clia->get_data())->get_class()->is_writable() ||
          ((ClassInstanceData *) clib->get_data())->get_class()->is_writable())
-        ? new QPushButton(TR("&New"), this) : 0;
-    QPushButton * unset = new QPushButton(TR("&Unset"), this);
-    QPushButton * accept = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+        ? new QPushButton(tr("&New"), this) : 0;
+    QPushButton * unset = new QPushButton(tr("&Unset"), this);
+    QPushButton * accept = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     if (newrel != 0) {
@@ -141,11 +141,11 @@ void ObjectLinkDialog::init(RelationData * current)
     table->setSelectionMode(QTableWidget::SingleSelection);
     //table->setSortingEnabled(true);
 
-    table->setHorizontalHeaderLabel(0, TR("Class Inst."));
-    table->setHorizontalHeaderLabel(1, TR("Role"));
-    table->setHorizontalHeaderLabel(2, TR("kind"));
-    table->setHorizontalHeaderLabel(3, TR("Role"));
-    table->setHorizontalHeaderLabel(4, TR("Class Inst."));
+    table->setHorizontalHeaderLabel(0, tr("Class Inst."));
+    table->setHorizontalHeaderLabel(1, tr("Role"));
+    table->setHorizontalHeaderLabel(2, tr("kind"));
+    table->setHorizontalHeaderLabel(3, tr("Role"));
+    table->setHorizontalHeaderLabel(4, tr("Class Inst."));
 
     ra = clia->get_name() + QString(":") +
          ((ClassInstanceData *) clia->get_data())->get_class()->get_name();

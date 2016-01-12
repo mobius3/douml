@@ -59,7 +59,7 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
                                  bool fo)
     : QDialog(0/*, "add msg dialog", TRUE*/), in(i), view(v), forward(fo)
 {
-    setWindowTitle(TR("Add message dialog"));
+    setWindowTitle(tr("Add message dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     QHBoxLayout * hbox;
@@ -69,14 +69,14 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(10);
-    QLabel * label1 = new QLabel(TR("Add message to %1") + to->get_full_name(), this);
+    QLabel * label1 = new QLabel(tr("Add message to %1") + to->get_full_name(), this);
     label1->setAlignment(Qt::AlignCenter);
     hbox->addWidget(label1);
 
     GridBox * grid = new GridBox(2, this);
 
     vbox->addWidget(grid);
-    grid->addWidget(new QLabel(TR("rank : "), grid));
+    grid->addWidget(new QLabel(tr("rank : "), grid));
     grid->addWidget(cbrank = new QComboBox(grid));
 
     ColMsgList all_in;
@@ -122,7 +122,7 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
     // the operations
 
     SmallPushButton * b;
-    grid->addWidget(b = new SmallPushButton(TR("message :"), grid));
+    grid->addWidget(b = new SmallPushButton(tr("message :"), grid));
 
     connect(b, SIGNAL(clicked()), this, SLOT(menu_op()));
 
@@ -151,8 +151,8 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * ok = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * ok = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     ok->setDefault(TRUE);
@@ -181,13 +181,13 @@ void CodAddMsgDialog::menu_op()
 {
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     int index = list.indexOf(edoper->currentText().trimmed());
 
     if (index != -1)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = BrowserView::selected_item();
 
@@ -195,12 +195,12 @@ void CodAddMsgDialog::menu_op()
         (bn->get_type() == UmlOperation) &&
         !bn->deletedp() &&
         (opers.indexOf((OperationData *) bn->get_data()) != -1))
-        MenuFactory::addItem(m, TR("Choose operation selected in browser"), 1);
+        MenuFactory::addItem(m, tr("Choose operation selected in browser"), 1);
     else
         bn = 0;
 
     if (cl != 0)
-        MenuFactory::addItem(m, TR("Create operation and choose it"), 2);
+        MenuFactory::addItem(m, tr("Create operation and choose it"), 2);
 
     if ((index != -1) || (bn != 0) || (cl != 0)) {
         QAction* retAction = m.exec(QCursor::pos());

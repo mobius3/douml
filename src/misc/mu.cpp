@@ -84,15 +84,15 @@ int user_id()
 
             if (! dir.mkdir(fn)) {
                 if (!dir.exists(fn)) {
-                    msg_critical (QObject::TR("User Own Identifier"),
-                                 QObject::TR("Can't create directory '%1',\nthe project is open in read-only mode").arg(dir.absoluteFilePath(fn)));
+                    msg_critical (QObject::tr("User Own Identifier"),
+                                 QObject::tr("Can't create directory '%1',\nthe project is open in read-only mode").arg(dir.absoluteFilePath(fn)));
 
                     force_read_only(TRUE);
                 }
                 else {
                     int retCode = QMessageBox::Ok;
-                   retCode = msg_critical (QObject::TR("User Own Identifier"),
-                                               QObject::TR("It seems that you are already editing the project %1.\n\n"
+                   retCode = msg_critical (QObject::tr("User Own Identifier"),
+                                               QObject::tr("It seems that you are already editing the project %1.\n\n"
                                                   "If you're SURE that this is not the case and\n"
                                                   "another user does not have an identifier equal\n"
                                                   "to yours you can gain ownership of the lock.").arg(dir.absoluteFilePath(fn))

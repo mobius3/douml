@@ -56,15 +56,15 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
     bn->edit_start();
 
     if (bn->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
-    setWindowTitle(TR("Use Case dialog"));
+    setWindowTitle(tr("Use Case dialog"));
 
     bool visit = !hasOkButton();
 
@@ -74,11 +74,11 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox( grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(uc->get_stereotype()));
@@ -94,7 +94,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
     sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
-    grid->addWidget(new QLabel(TR("extension \npoints : "), grid));
+    grid->addWidget(new QLabel(tr("extension \npoints : "), grid));
     grid->addWidget(extension_points = new MultiLineEdit(grid));
     extension_points->setReadOnly(visit);
     extension_points->setText(uc->get_extension_points());
@@ -108,12 +108,12 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
 
             SmallPushButton *sButton;
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(sButton);
     }
@@ -132,7 +132,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
     grid->setSpacing(5);
 
     grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     open_dialog(this);
 }
@@ -179,7 +179,7 @@ void UseCaseDialog::accept()
         ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlUseCase,
                 bn->allow_spaces(),
                 bn->allow_empty())) {
-        msg_critical(TR("Error"), edname->text() + TR("\n\nillegal name or already used"));
+        msg_critical(tr("Error"), edname->text() + tr("\n\nillegal name or already used"));
         return;
     }
     else

@@ -85,92 +85,92 @@ DeploymentDiagramWindow::DeploymentDiagramWindow(const QString & s, BrowserDeplo
     add_edit_button(toolbar);
 
     select =
-        ToolBarFactory::createToolButton(*selectButton, TR("Select"), QString(),
+        ToolBarFactory::createToolButton(*selectButton, tr("Select"), QString(),
                         this, SLOT(hit_select()), toolbar, "select");
     select->setCheckable(TRUE);
     select->setChecked(TRUE);
     current_button = UmlSelect;
 
     addPackage
-        = ToolBarFactory::createToolButton(*packageButton, TR("Add Package"), QString(),
+        = ToolBarFactory::createToolButton(*packageButton, tr("Add Package"), QString(),
                           this, SLOT(hit_package()), toolbar, "add package");
     addPackage->setCheckable(TRUE);
     addPackage->setWhatsThis(addpackageText());
 
     addFragment
-        = ToolBarFactory::createToolButton(*fragmentButton, TR("Add Fragment"), QString(),
+        = ToolBarFactory::createToolButton(*fragmentButton, tr("Add Fragment"), QString(),
                           this, SLOT(hit_fragment()), toolbar, "add fragment");
     addFragment->setCheckable(TRUE);
     addFragment->setWhatsThis(addfragmentText());
 
     addDeploymentNode =
-        ToolBarFactory::createToolButton(*deploymentNodeButton, TR("Add Deployment Node"), QString(),
+        ToolBarFactory::createToolButton(*deploymentNodeButton, tr("Add Deployment Node"), QString(),
                         this, SLOT(hit_deploymentnode()), toolbar, "add deployment node");
     addDeploymentNode->setCheckable(TRUE);
     addDeploymentNode->setWhatsThis(adddeploymentnodeText());
 
     addArtifact =
-        ToolBarFactory::createToolButton(*artifactButton, TR("Add Artifact"), QString(),
+        ToolBarFactory::createToolButton(*artifactButton, tr("Add Artifact"), QString(),
                         this, SLOT(hit_artifact()), toolbar, "add artifact");
     addArtifact->setCheckable(TRUE);
     addArtifact->setWhatsThis(addartifactText());
 
     addComponent =
-        ToolBarFactory::createToolButton(*componentButton, TR("Add Component"), QString(),
+        ToolBarFactory::createToolButton(*componentButton, tr("Add Component"), QString(),
                         this, SLOT(hit_component()), toolbar, "add component");
     addComponent->setCheckable(TRUE);
     addComponent->setWhatsThis(addcomponentText());
 
     hub =
-        ToolBarFactory::createToolButton(*hubButton, TR("Network connexion/ending"), QString(),
+        ToolBarFactory::createToolButton(*hubButton, tr("Network connexion/ending"), QString(),
                         this, SLOT(hit_hub()), toolbar, "network connexion/ending");
     hub->setCheckable(TRUE);
     hub->setWhatsThis(hubText());
 
     network =
-        ToolBarFactory::createToolButton(*associationButton, TR("Network"), QString(),
+        ToolBarFactory::createToolButton(*associationButton, tr("Network"), QString(),
                         this, SLOT(hit_network()), toolbar, "network");
     network->setCheckable(TRUE);
     network->setWhatsThis(networkText());
 
     inherit =
-        ToolBarFactory::createToolButton(*generalisationButton, TR("Inheritance"), QString(),
+        ToolBarFactory::createToolButton(*generalisationButton, tr("Inheritance"), QString(),
                         this, SLOT(hit_inherit()), toolbar, "inheritance");
     inherit->setCheckable(TRUE);
     inherit->setWhatsThis(inheritText());
 
     association =
-        ToolBarFactory::createToolButton(*directionalAssociationButton, TR("Association"), QString(),
+        ToolBarFactory::createToolButton(*directionalAssociationButton, tr("Association"), QString(),
                         this, SLOT(hit_association()), toolbar, "association");
     association->setCheckable(TRUE);
     association->setWhatsThis(associationText());
 
     dependency =
-        ToolBarFactory::createToolButton(*dependencyButton, TR("Dependency"), QString(),
+        ToolBarFactory::createToolButton(*dependencyButton, tr("Dependency"), QString(),
                         this, SLOT(hit_dependency()), toolbar, "dependency");
     dependency->setCheckable(TRUE);
     dependency->setWhatsThis(dependencyText());
 
     note =
-        ToolBarFactory::createToolButton(*noteButton, TR("Note"), QString(),
+        ToolBarFactory::createToolButton(*noteButton, tr("Note"), QString(),
                         this, SLOT(hit_note()), toolbar, "note");
     note->setCheckable(TRUE);
     note->setWhatsThis(noteText());
 
     anchor =
-        ToolBarFactory::createToolButton(*anchorButton, TR("Anchor"), QString(),
+        ToolBarFactory::createToolButton(*anchorButton, tr("Anchor"), QString(),
                         this, SLOT(hit_anchor()), toolbar, "anchor");
     anchor->setCheckable(TRUE);
     anchor->setWhatsThis(anchorText());
 
     text =
-        ToolBarFactory::createToolButton(*textButton, TR("Text"), QString(),
+        ToolBarFactory::createToolButton(*textButton, tr("Text"), QString(),
                         this, SLOT(hit_text()), toolbar, "text");
     text->setCheckable(TRUE);
     text->setWhatsThis(textText());
 
     image =
-        ToolBarFactory::createToolButton(*imageButton, TR("Image"), QString(),
+        ToolBarFactory::createToolButton(*imageButton, tr("Image"), QString(),
                         this, SLOT(hit_image()), toolbar, "image");
     image->setCheckable(TRUE);
     image->setWhatsThis(imageText());

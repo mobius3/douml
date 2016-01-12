@@ -152,7 +152,7 @@ void FlowCanvas::remove(bool from_model)
                 }
 
                 if (a && !a->end->isSelected() && !a->end->get_bn()->deletedp()) {
-                    msg_warning("Douml", TR("<i>Draw all relations</i> forced to <i>no</i>"));
+                    msg_warning("Douml", tr("<i>Draw all relations</i> forced to <i>no</i>"));
                     the_canvas()->dont_draw_all_relations();
                 }
             }
@@ -242,40 +242,40 @@ void FlowCanvas::menu(const QPoint &)
 
         MenuFactory::createTitle(m, data->definition(FALSE, TRUE));
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Edit"), 0);
+        MenuFactory::addItem(m, tr("Edit"), 0);
         m.addSeparator();
 
-        MenuFactory::addItem(m, TR("Select in browser"), 2);
+        MenuFactory::addItem(m, tr("Select in browser"), 2);
 
         if (plabel || pstereotype) {
             m.addSeparator();
-            MenuFactory::addItem(m, TR("Edit drawing settings"), 1);
-            MenuFactory::addItem(m, TR("Select labels"), 3);
-            MenuFactory::addItem(m, TR("Labels default position"), 4);
+            MenuFactory::addItem(m, tr("Edit drawing settings"), 1);
+            MenuFactory::addItem(m, tr("Select labels"), 3);
+            MenuFactory::addItem(m, tr("Labels default position"), 4);
 
             if (plabel && (label == 0))
-                MenuFactory::addItem(m, TR("Attach flow label to this segment"), 5);
+                MenuFactory::addItem(m, tr("Attach flow label to this segment"), 5);
 
             if (pstereotype && (stereotype == 0))
-                MenuFactory::addItem(m, TR("Attach stereotype to this segment"), 6);
+                MenuFactory::addItem(m, tr("Attach stereotype to this segment"), 6);
         }
 
         if (get_start() != get_end()) {
             m.addSeparator();
             init_geometry_menu(geo, 10);
-            MenuFactory::insertItem(m, TR("Geometry (Ctrl+l)"), &geo);
+            MenuFactory::insertItem(m, tr("Geometry (Ctrl+l)"), &geo);
         }
 
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Remove from diagram"), 7);
+        MenuFactory::addItem(m, tr("Remove from diagram"), 7);
 
         if (data->get_start()->is_writable())
-            MenuFactory::addItem(m, TR("Delete from model"), 8);
+            MenuFactory::addItem(m, tr("Delete from model"), 8);
 
         m.addSeparator();
 
         if (Tool::menu_insert(&toolm, itstype, 20))
-            MenuFactory::insertItem(m, TR("Tool"), &toolm);
+            MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
         QAction* retAction = m.exec(QCursor::pos());
         if(retAction)
@@ -397,12 +397,12 @@ void FlowCanvas::edit_drawing_settings()
     for (;;) {
         StateSpecVector st(1);
 
-        st[0].set(TR("write horizontally"), &write_horizontally);
+        st[0].set(tr("write horizontally"), &write_horizontally);
         settings.complete(st, TRUE);
 
         SettingsDialog dialog(&st, 0, FALSE);
 
-        dialog.setWindowTitle(TR("Flow Drawing Settings dialog"));
+        dialog.setWindowTitle(tr("Flow Drawing Settings dialog"));
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
@@ -431,12 +431,12 @@ void FlowCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         Uml3States write_horizontally;
         ActivityDrawingSettings settings;
 
-        st[0].set(TR("write horizontally"), &write_horizontally);
+        st[0].set(tr("write horizontally"), &write_horizontally);
         settings.complete(st, TRUE);
 
         SettingsDialog dialog(&st, 0, FALSE, TRUE);
 
-        dialog.setWindowTitle(TR("Flow Drawing Settings dialog"));
+        dialog.setWindowTitle(tr("Flow Drawing Settings dialog"));
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
@@ -770,7 +770,7 @@ void FlowCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
 
     if ((difrom != 0) && (dito != 0)) {
         if (difrom->has_relation(UmlFlow, def))
-            msg_information("Douml", TR("flow already drawn"));
+            msg_information("Douml", tr("flow already drawn"));
         else {
             FlowCanvas * tr =
                 new FlowCanvas(canvas, difrom, dito, from, 0, -1.0, -1.0, def);

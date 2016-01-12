@@ -140,122 +140,122 @@ StateDiagramWindow::StateDiagramWindow(const QString & s, BrowserStateDiagram * 
     add_edit_button(toolbar);
 
     select =
-        ToolBarFactory::createToolButton(*selectButton, TR("Select"), QString(),
+        ToolBarFactory::createToolButton(*selectButton, tr("Select"), QString(),
                         this, SLOT(hit_select()), toolbar, "select");
     select->setCheckable(TRUE);
     select->setChecked(TRUE);
     current_button = UmlSelect;
 
     addPackage
-        = ToolBarFactory::createToolButton(*packageButton, TR("Add Package"), QString(),
+        = ToolBarFactory::createToolButton(*packageButton, tr("Add Package"), QString(),
                           this, SLOT(hit_package()), toolbar, "add package");
     addPackage->setCheckable(TRUE);
     addPackage->setWhatsThis(addpackageText());
 
     addFragment
-        = ToolBarFactory::createToolButton(*fragmentButton, TR("Add Fragment"), QString(),
+        = ToolBarFactory::createToolButton(*fragmentButton, tr("Add Fragment"), QString(),
                           this, SLOT(hit_fragment()), toolbar, "add fragment");
     addFragment->setCheckable(TRUE);
     addFragment->setWhatsThis( addfragmentText());
 
     addState =
-        ToolBarFactory::createToolButton(*stateButton, TR("Add State"), QString(),
+        ToolBarFactory::createToolButton(*stateButton, tr("Add State"), QString(),
                         this, SLOT(hit_state()), toolbar, "add state");
     addState->setCheckable(TRUE);
     addState->setWhatsThis( addstateText());
 
     addRegion =
-        ToolBarFactory::createToolButton(*regionButton, TR("Add Region"), QString(),
+        ToolBarFactory::createToolButton(*regionButton, tr("Add Region"), QString(),
                         this, SLOT(hit_region()), toolbar, "add region");
     addRegion->setCheckable(TRUE);
     addRegion->setWhatsThis( addregionText());
 
     addInitial =
-        ToolBarFactory::createToolButton(*initialButton, TR("Add Initial pseudo state"), QString(),
+        ToolBarFactory::createToolButton(*initialButton, tr("Add Initial pseudo state"), QString(),
                         this, SLOT(hit_initial()), toolbar, "add initial");
     addInitial->setCheckable(TRUE);
     addInitial->setWhatsThis( addinitialText());
 
     addEntryPoint =
-        ToolBarFactory::createToolButton(*entrypointButton, TR("Add Entry Point"), QString(),
+        ToolBarFactory::createToolButton(*entrypointButton, tr("Add Entry Point"), QString(),
                         this, SLOT(hit_entryPoint()), toolbar, "add entry point");
     addEntryPoint->setCheckable(TRUE);
     addEntryPoint->setWhatsThis( addentrypointText());
 
     addFinal =
-        ToolBarFactory::createToolButton(*finalButton, TR("Add Final state"), QString(),
+        ToolBarFactory::createToolButton(*finalButton, tr("Add Final state"), QString(),
                         this, SLOT(hit_final()), toolbar, "add final");
     addFinal->setCheckable(TRUE);
     addFinal->setWhatsThis( addfinalText());
 
     addExitPoint =
-        ToolBarFactory::createToolButton(*exitpointButton, TR("Add Exit Point"), QString(),
+        ToolBarFactory::createToolButton(*exitpointButton, tr("Add Exit Point"), QString(),
                         this, SLOT(hit_exitPoint()), toolbar, "add exit point");
     addExitPoint->setCheckable(TRUE);
     addExitPoint->setWhatsThis( addexitpointText());
 
     addTerminate =
-        ToolBarFactory::createToolButton(*terminateButton, TR("Add Terminate node"), QString(),
+        ToolBarFactory::createToolButton(*terminateButton, tr("Add Terminate node"), QString(),
                         this, SLOT(hit_terminate()), toolbar, "add terminate");
     addTerminate->setCheckable(TRUE);
     addTerminate->setWhatsThis( addterminateText());
 
     addDeepHistory =
-        ToolBarFactory::createToolButton(*deephistoryButton, TR("Add Deep History"), QString(),
+        ToolBarFactory::createToolButton(*deephistoryButton, tr("Add Deep History"), QString(),
                         this, SLOT(hit_deepHistory()), toolbar, "add deep history");
     addDeepHistory->setCheckable(TRUE);
     addDeepHistory->setWhatsThis( adddeephistoryText());
 
     addShallowHistory =
-        ToolBarFactory::createToolButton(*shallowhistoryButton, TR("Add Shallow History"), QString(),
+        ToolBarFactory::createToolButton(*shallowhistoryButton, tr("Add Shallow History"), QString(),
                         this, SLOT(hit_shallowHistory()), toolbar, "add shallow history");
     addShallowHistory->setCheckable(TRUE);
     addShallowHistory->setWhatsThis( addshallowhistoryText());
 
     addJunction =
-        ToolBarFactory::createToolButton(*junctionButton, TR("Add Junction"), QString(),
+        ToolBarFactory::createToolButton(*junctionButton, tr("Add Junction"), QString(),
                         this, SLOT(hit_junction()), toolbar, "add junction");
     addJunction->setCheckable(TRUE);
     addJunction->setWhatsThis( addjunctionText());
 
     addChoice =
-        ToolBarFactory::createToolButton(*choiceButton, TR("Add Choice"), QString(),
+        ToolBarFactory::createToolButton(*choiceButton, tr("Add Choice"), QString(),
                         this, SLOT(hit_choice()), toolbar, "add choice");
     addChoice->setCheckable(TRUE);
     addChoice->setWhatsThis( addchoiceText());
 
     addFork =
-        ToolBarFactory::createToolButton(*forkButton, TR("Add Fork"), QString(),
+        ToolBarFactory::createToolButton(*forkButton, tr("Add Fork"), QString(),
                         this, SLOT(hit_fork()), toolbar, "add fork");
     addFork->setCheckable(TRUE);
     addFork->setWhatsThis( addforkText());
 
     addJoin =
-        ToolBarFactory::createToolButton(*joinButton, TR("Add Join"), QString(),
+        ToolBarFactory::createToolButton(*joinButton, tr("Add Join"), QString(),
                         this, SLOT(hit_join()), toolbar, "add join");
     addJoin->setCheckable(TRUE);
     addJoin->setWhatsThis( addjoinText());
 
     addAction =
-        ToolBarFactory::createToolButton(*actionButton, TR("Add Action"), QString(),
+        ToolBarFactory::createToolButton(*actionButton, tr("Add Action"), QString(),
                         this, SLOT(hit_action()), toolbar, "add action");
     addAction->setCheckable(TRUE);
     addAction->setWhatsThis( addactionText());
 
     addSignalIn =
-        ToolBarFactory::createToolButton(*signalinButton, TR("Add receive signal action"), QString(),
+        ToolBarFactory::createToolButton(*signalinButton, tr("Add receive signal action"), QString(),
                         this, SLOT(hit_signalin()), toolbar, "add receive signal action");
     addSignalIn->setCheckable(TRUE);
     addSignalIn->setWhatsThis( addsignalinText());
 
     addSignalOut =
-        ToolBarFactory::createToolButton(*signaloutButton, TR("Add send signal action"), QString(),
+        ToolBarFactory::createToolButton(*signaloutButton, tr("Add send signal action"), QString(),
                         this, SLOT(hit_signalout()), toolbar, "add send signal action");
     addSignalOut->setCheckable(TRUE);
     addSignalOut->setWhatsThis( addsignaloutText());
 
     addTransition =
-        ToolBarFactory::createToolButton(*directionalAssociationButton, TR("Add Transition"), QString(),
+        ToolBarFactory::createToolButton(*directionalAssociationButton, tr("Add Transition"), QString(),
                         this, SLOT(hit_transition()), toolbar, "add transition");
     addTransition->setCheckable(TRUE);
     addTransition->setWhatsThis( addtransitionText());
@@ -269,25 +269,25 @@ StateDiagramWindow::StateDiagramWindow(const QString & s, BrowserStateDiagram * 
     */
 
     note =
-        ToolBarFactory::createToolButton(*noteButton, TR("Note"), QString(),
+        ToolBarFactory::createToolButton(*noteButton, tr("Note"), QString(),
                         this, SLOT(hit_note()), toolbar, "note");
     note->setCheckable(TRUE);
     note->setWhatsThis( noteText());
 
     anchor =
-        ToolBarFactory::createToolButton(*anchorButton, TR("Anchor"), QString(),
+        ToolBarFactory::createToolButton(*anchorButton, tr("Anchor"), QString(),
                         this, SLOT(hit_anchor()), toolbar, "anchor");
     anchor->setCheckable(TRUE);
     anchor->setWhatsThis( anchorText());
 
     text =
-        ToolBarFactory::createToolButton(*textButton, TR("Text"), QString(),
+        ToolBarFactory::createToolButton(*textButton, tr("Text"), QString(),
                         this, SLOT(hit_text()), toolbar, "text");
     text->setCheckable(TRUE);
     text->setWhatsThis( textText());
 
     image =
-        ToolBarFactory::createToolButton(*imageButton, TR("Image"), QString(),
+        ToolBarFactory::createToolButton(*imageButton, tr("Image"), QString(),
                         this, SLOT(hit_image()), toolbar, "image");
     image->setCheckable(TRUE);
     image->setWhatsThis( imageText());

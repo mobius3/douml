@@ -323,7 +323,7 @@ void BrowserActivityObject::menu()
                                          if ((edition_number == 0) &&
                                              Tool::menu_insert(&toolm, get_type(), 100)) {
                                              m.addSeparator();
-                                             toolm.setTitle(QObject::TR("Tool"));
+                                             toolm.setTitle(QObject::tr("Tool"));
                                              m.addMenu(&toolm);
                                          }
     }
@@ -671,7 +671,7 @@ void BrowserActivityObject::DropAfterEvent(QDropEvent * e, BrowserNode * after)
         if (may_contains(bn, FALSE))
             move(bn, after);
         else {
-            msg_critical( QObject::TR("Error"), QObject::tr("Forbidden"));
+            msg_critical( QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }

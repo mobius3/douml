@@ -69,7 +69,7 @@ void StateDiagramView::menu(const QPoint &)
 {
     QMenu m(0);
 
-    MenuFactory::createTitle(m, TR("State diagram menu"));
+    MenuFactory::createTitle(m, tr("State diagram menu"));
 
     switch (default_menu(m, 30)) {
     case EDIT_DRAWING_SETTING_CMD:
@@ -119,7 +119,7 @@ void StateDiagramView::mousePressEvent(QMouseEvent * e)
 
             if (b != 0) {
                 if (the_canvas()->already_drawn(b)) {
-                    msg_information("Douml", TR("already drawn"));
+                    msg_information("Douml", tr("already drawn"));
                     history_protected = FALSE;
                     return;
                 }
@@ -318,9 +318,9 @@ void StateDiagramView::dropEvent(QDropEvent * e)
 
     if ((bn = UmlDrag::decode(e, UmlState, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Douml", TR("already drawn"));
+            msg_information("Douml", tr("already drawn"));
         else if (BrowserState::get_machine(bn) != mach)
-            msg_information("Douml", TR("illegal"));
+            msg_information("Douml", tr("illegal"));
         else {
             history_save();
 
@@ -352,9 +352,9 @@ void StateDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlPseudoState, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Douml", TR("already drawn"));
+            msg_information("Douml", tr("already drawn"));
         else if (BrowserState::get_machine(bn) != mach)
-            msg_information("Douml", TR("illegal"));
+            msg_information("Douml", tr("illegal"));
         else {
             history_save();
 
@@ -373,9 +373,9 @@ void StateDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlStateAction, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Douml", TR("already drawn"));
+            msg_information("Douml", tr("already drawn"));
         else if (BrowserState::get_machine(bn) != mach)
-            msg_information("Douml", TR("illegal"));
+            msg_information("Douml", tr("illegal"));
         else {
             history_save();
 

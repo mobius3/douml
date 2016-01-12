@@ -56,15 +56,15 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
     nd->get_browser_node()->edit_start();
 
     if (nd->get_browser_node()->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
-    setWindowTitle(TR("class view dialog"));
+    setWindowTitle(tr("class view dialog"));
 
     bool visit = !hasOkButton();
 
@@ -77,11 +77,11 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
     grid->setMargin(1);
     grid->setSpacing(1);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox( grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(data->get_stereotype()));
@@ -101,7 +101,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
 
     if (visit) {
         if ((bcv != 0) && !bcv->deletedp()) {
-            grid->addWidget(new QLabel(TR("deployment\nview : "), grid));
+            grid->addWidget(new QLabel(tr("deployment\nview : "), grid));
             grid->addWidget(deploymentview = new QComboBox( grid));
 
             BrowserNode * bcv = bn->get_associated();
@@ -119,7 +119,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
             QStringList deploymentview_names;
 
             deploymentviews.full_names(deploymentview_names);
-            grid->addWidget(new QLabel(TR("deployment\nview : "), grid));
+            grid->addWidget(new QLabel(tr("deployment\nview : "), grid));
             grid->addWidget(deploymentview = new QComboBox(grid));
             deploymentview->addItem("");
             deploymentview->addItems(deploymentview_names);
@@ -144,12 +144,12 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
 
     VVBox * vtab = new VVBox(grid);
     grid->addWidget(vtab);
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
 
     SmallPushButton *sButton;
     if (!visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(sButton);
     }
@@ -175,7 +175,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
 
     kvtable = new KeyValuesTable(bn, grid, visit);
     grid->addWidget(kvtable);
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     //
 
@@ -232,7 +232,7 @@ void ClassViewDialog::accept()
         ((BrowserNode *) bn->parent())->wrong_child_name(s, bn->get_type(),
                 bn->allow_spaces(),
                 bn->allow_empty()))
-        msg_critical(TR("Error"), edname->text() + TR("\n\nillegal name or already used"));
+        msg_critical(tr("Error"), edname->text() + tr("\n\nillegal name or already used"));
     else {
         bn->set_name(s);
 

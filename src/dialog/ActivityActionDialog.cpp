@@ -85,15 +85,15 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
     a->browser_node->edit_start();
 
     if (a->browser_node->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
-    setWindowTitle(TR("Activity Action dialog"));
+    setWindowTitle(tr("Activity Action dialog"));
     visit = !hasOkButton();
 
     current_type = act->get_action_kind();
@@ -109,11 +109,11 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
     grid = mkgrid(this);
     umltab = grid;
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(action->get_name(), grid));
     edname->setReadOnly(visit);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(action->get_stereotype()));
@@ -129,7 +129,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
     sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
-    grid->addWidget(new QLabel(TR("kind : "), grid));
+    grid->addWidget(new QLabel(tr("kind : "), grid));
     grid->addWidget(edtype = new QComboBox(grid));
 
     if (visit) {
@@ -151,12 +151,12 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
 
     SmallPushButton* sButton;
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
 
     vtab->addWidget(sButton);
@@ -166,10 +166,10 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
     comment->setText(action->get_comment());
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("constraint :"), vtab));
+    vtab->addWidget(new QLabel(tr("constraint :"), vtab));
 
     if (! visit) {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_constraint()));
         vtab->addWidget(sButton);
     }
@@ -242,7 +242,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
     grid = mkgrid(this);
 
     grid->addWidget(kvtable = new KeyValuesTable(action, grid, visit));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     //
 
@@ -387,7 +387,7 @@ void ActivityActionDialog::accept()
             ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlActivityAction,
                                                              bn->allow_spaces(),
                                                              bn->allow_empty()))
-        msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
+        msg_critical(tr("Error"), s + tr("\n\nillegal name or already used"));
     else {
         act->undepend();
         bn->set_name(s);
@@ -622,11 +622,11 @@ void OpaqueDialog::init(TabDialog * t, ActivityActionData * act,
     VVBox * vtab;
     ocl_grid->addWidget(vtab = new VVBox(ocl_grid));
 
-    vtab->addWidget(new QLabel(TR("Behavior : "), vtab));
+    vtab->addWidget(new QLabel(tr("Behavior : "), vtab));
     SmallPushButton* sButton;
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_ocl()));
         vtab->addWidget(sButton);
     }
@@ -653,11 +653,11 @@ void OpaqueDialog::init(TabDialog * t, ActivityActionData * act,
     cpp_grid = mkgrid(t);
 
     cpp_grid->addWidget(vtab = new VVBox(cpp_grid));
-    vtab->addWidget(new QLabel(TR("Behavior : "), vtab));
+    vtab->addWidget(new QLabel(tr("Behavior : "), vtab));
 
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_cpp()));
         vtab->addWidget(sButton);
     }
@@ -684,11 +684,11 @@ void OpaqueDialog::init(TabDialog * t, ActivityActionData * act,
     java_grid = mkgrid(t);
 
     java_grid->addWidget(vtab = new VVBox(java_grid));
-    vtab->addWidget(new QLabel(TR("Behavior : "), vtab));
+    vtab->addWidget(new QLabel(tr("Behavior : "), vtab));
 
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_java()));
         vtab->addWidget(sButton);
     }
@@ -853,17 +853,17 @@ void ValueSpecificationDialog::init(TabDialog * t, ActivityActionData * act,
 
     // ocl
 
-    ocl_grid = mkgrid(t, TR("value - Ocl"));
+    ocl_grid = mkgrid(t, tr("value - Ocl"));
 
     VVBox * vtab;
     ocl_grid->addWidget(vtab = new VVBox(ocl_grid));
 
-    vtab->addWidget(new QLabel(TR("Value : "), vtab));
+    vtab->addWidget(new QLabel(tr("Value : "), vtab));
 
     SmallPushButton* sButton;
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_ocl()));
         vtab->addWidget(sButton);
     }
@@ -880,21 +880,21 @@ void ValueSpecificationDialog::init(TabDialog * t, ActivityActionData * act,
         ocl_val->setText(d->uml_value);
     }
 
-    t->addTab(ocl_grid, TR("value - Ocl"));
+    t->addTab(ocl_grid, tr("value - Ocl"));
 
     if (d == 0)
         t->removePage(ocl_grid);
 
     // cpp
 
-    cpp_grid = mkgrid(t, TR("value - C++"));
+    cpp_grid = mkgrid(t, tr("value - C++"));
 
     cpp_grid->addWidget(vtab = new VVBox(cpp_grid));
-    vtab->addWidget(new QLabel(TR("Value : "), vtab));
+    vtab->addWidget(new QLabel(tr("Value : "), vtab));
 
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_cpp()));
         vtab->addWidget(sButton);
     }
@@ -911,21 +911,21 @@ void ValueSpecificationDialog::init(TabDialog * t, ActivityActionData * act,
         cpp_val->setText(d->cpp_value);
     }
 
-    t->addTab(cpp_grid, TR("value - C++"));
+    t->addTab(cpp_grid, tr("value - C++"));
 
     if ((d == 0) || !GenerationSettings::cpp_get_default_defs())
         t->removePage(cpp_grid);
 
     // java
 
-    java_grid = mkgrid(t, TR("value - Java"));
+    java_grid = mkgrid(t, tr("value - Java"));
 
     java_grid->addWidget(vtab = new VVBox(java_grid));
-    vtab->addWidget(new QLabel(TR("Value : "), vtab));
+    vtab->addWidget(new QLabel(tr("Value : "), vtab));
 
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_java()));
         vtab->addWidget(sButton);
     }
@@ -942,7 +942,7 @@ void ValueSpecificationDialog::init(TabDialog * t, ActivityActionData * act,
         java_val->setText(d->java_value);
     }
 
-    t->addTab(java_grid, TR("value - Java"));
+    t->addTab(java_grid, tr("value - Java"));
 
     if ((d == 0) || !GenerationSettings::java_get_default_defs())
         t->removePage(java_grid);
@@ -1080,12 +1080,12 @@ void AccessVariableValueDialog::init(TabDialog * t, ActivityActionData * act,
     // ocl
 
     if (ocl_grid == 0)
-        ocl_grid = mkgrid(t, TR("variable - Ocl"));
+        ocl_grid = mkgrid(t, tr("variable - Ocl"));
 
-    ocl_grid->addWidget(new QLabel(TR("class : "), ocl_grid));
+    ocl_grid->addWidget(new QLabel(tr("class : "), ocl_grid));
     ocl_grid->addWidget(class_co = new QComboBox(ocl_grid));
     SmallPushButton* sButton;
-    connect(sButton = new SmallPushButton(TR("variable :"), ocl_grid), SIGNAL(clicked()),
+    connect(sButton = new SmallPushButton(tr("variable :"), ocl_grid), SIGNAL(clicked()),
             this, SLOT(menu_var()));
     ocl_grid->addWidget(sButton);
     ocl_grid->addWidget(var_co = new QComboBox(ocl_grid));
@@ -1117,7 +1117,7 @@ void AccessVariableValueDialog::init(TabDialog * t, ActivityActionData * act,
 
     // note : must add then remove rather than doing nothing
     // else some sub widget will be wrong placed
-    t->addTab(ocl_grid, TR("variable - Ocl"));
+    t->addTab(ocl_grid, tr("variable - Ocl"));
 
     if (d == 0)
         t->removePage(ocl_grid);
@@ -1184,13 +1184,13 @@ void AccessVariableValueDialog::menu_var()
 {
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     int index = var_names.indexOf(var_co->currentText());
 
     if (index != -1)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = 0;
     BrowserClass * cl = 0;
@@ -1208,7 +1208,7 @@ void AccessVariableValueDialog::menu_var()
             case UmlDirectionalAggregationByValue:
             case UmlAttribute:
                 if (!bn->deletedp()) {
-                    MenuFactory::addItem(m, TR("Choose variable selected in browser"), 1);
+                    MenuFactory::addItem(m, tr("Choose variable selected in browser"), 1);
                     break;
                 }
 
@@ -1226,7 +1226,7 @@ void AccessVariableValueDialog::menu_var()
             if (!cl->is_writable())
                 cl = 0;
             else
-                MenuFactory::addItem(m, TR("Create attribute and choose it"), 2);
+                MenuFactory::addItem(m, tr("Create attribute and choose it"), 2);
         }
     }
 
@@ -1284,7 +1284,7 @@ void ChangeVariableValueDialog::init(TabDialog * t, ActivityActionData * act,
                                      QString flg_name, BrowserNodeList & cl,
                                      QStringList & clstr, bool visit)
 {
-    ocl_grid = mkgrid(t, TR("variable - Ocl"));
+    ocl_grid = mkgrid(t, tr("variable - Ocl"));
 
     ocl_grid->addWidget(new QLabel("", ocl_grid));
     BButtonGroup * grp;
@@ -1311,7 +1311,7 @@ void AddVariableValueDialog::init(TabDialog * t, ActivityActionData * act,
                                   AddVariableValueAction * d, BrowserNodeList & cl,
                                   QStringList & clstr, bool visit)
 {
-    ChangeVariableValueDialog::init(t, act, d, TR("replace all"), cl, clstr, visit);
+    ChangeVariableValueDialog::init(t, act, d, tr("replace all"), cl, clstr, visit);
 }
 
 // remove variable value
@@ -1320,7 +1320,7 @@ void RemoveVariableValueDialog::init(TabDialog * t, ActivityActionData * act,
                                      RemoveVariableValueAction * d, BrowserNodeList & cl,
                                      QStringList & clstr, bool visit)
 {
-    ChangeVariableValueDialog::init(t, act, d, TR("remove duplicates"), cl, clstr, visit);
+    ChangeVariableValueDialog::init(t, act, d, tr("remove duplicates"), cl, clstr, visit);
 }
 
 // call operation
@@ -1336,19 +1336,19 @@ void CallOperationDialog::init(TabDialog * t, ActivityActionData * act,
 
     // ocl
 
-    ocl_grid = mkgrid(t, TR("operation - Ocl"));
+    ocl_grid = mkgrid(t, tr("operation - Ocl"));
 
     ocl_grid->addWidget(new QLabel("", ocl_grid));
     BButtonGroup * grp;
     ocl_grid->addWidget(grp = new BButtonGroup(2, Qt::Horizontal, QString(), ocl_grid));
 
-    grp->addWidget(synchronous_cb = new QCheckBox(TR("synchronous"), grp));
+    grp->addWidget(synchronous_cb = new QCheckBox(tr("synchronous"), grp));
     synchronous_cb->setDisabled(visit);
 
-    ocl_grid->addWidget(new QLabel(TR("class : "), ocl_grid));
+    ocl_grid->addWidget(new QLabel(tr("class : "), ocl_grid));
     ocl_grid->addWidget(class_co = new QComboBox(ocl_grid));
     SmallPushButton* sButton;
-    connect(sButton = new SmallPushButton(TR("operation :"), ocl_grid), SIGNAL(clicked()),
+    connect(sButton = new SmallPushButton(tr("operation :"), ocl_grid), SIGNAL(clicked()),
             this, SLOT(menu_oper()));
     ocl_grid->addWidget(sButton);
     ocl_grid->addWidget(oper_co = new QComboBox(ocl_grid));
@@ -1382,7 +1382,7 @@ void CallOperationDialog::init(TabDialog * t, ActivityActionData * act,
 
     // note : must add then remove rather than doing nothing
     // else some sub widget will be wrong placed
-    t->addTab(ocl_grid, TR("operation - Ocl"));
+    t->addTab(ocl_grid, tr("operation - Ocl"));
 
     if (d == 0)
         t->removePage(ocl_grid);
@@ -1456,13 +1456,13 @@ void CallOperationDialog::menu_oper()
 {
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     int index = oper_names.indexOf(oper_co->currentText());
 
     if (index != -1)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = 0;
     BrowserClass * cl = 0;
@@ -1471,7 +1471,7 @@ void CallOperationDialog::menu_oper()
         bn = BrowserView::selected_item();
 
         if ((bn != 0) && (bn->get_type() == UmlOperation) && !bn->deletedp())
-            MenuFactory::addItem(m, TR("Choose operation selected in browser"), 1);
+            MenuFactory::addItem(m, tr("Choose operation selected in browser"), 1);
         else
             bn = 0;
 
@@ -1483,7 +1483,7 @@ void CallOperationDialog::menu_oper()
             if (!cl->is_writable())
                 cl = 0;
             else
-                MenuFactory::addItem(m, TR("Create operation and choose it"), 2);
+                MenuFactory::addItem(m, tr("Create operation and choose it"), 2);
         }
     }
 
@@ -1647,16 +1647,16 @@ void CallBehaviorDialog::init(TabDialog * t, ActivityActionData * act,
 
     // ocl
 
-    ocl_grid = mkgrid(t, TR("behavior - Ocl"));
+    ocl_grid = mkgrid(t, tr("behavior - Ocl"));
 
     ocl_grid->addWidget(new QLabel("", ocl_grid));
     BButtonGroup * grp;
     ocl_grid->addWidget(grp = new BButtonGroup(2, Qt::Horizontal, QString(), ocl_grid));
 
-    grp->addWidget(synchronous_cb = new QCheckBox(TR("synchronous"), grp));
+    grp->addWidget(synchronous_cb = new QCheckBox(tr("synchronous"), grp));
     synchronous_cb->setDisabled(visit);
     SmallPushButton* sButton;
-    connect(sButton = new SmallPushButton(TR("behavior :"), ocl_grid), SIGNAL(clicked()),
+    connect(sButton = new SmallPushButton(tr("behavior :"), ocl_grid), SIGNAL(clicked()),
             this, SLOT(menu_beh()));
     ocl_grid->addWidget(sButton);
     ocl_grid->addWidget(behavior_co = new QComboBox(ocl_grid));
@@ -1672,7 +1672,7 @@ void CallBehaviorDialog::init(TabDialog * t, ActivityActionData * act,
 
     // note : must add then remove rather than doing nothing
     // else some sub widget will be wrong placed
-    t->addTab(ocl_grid, TR("behavior - Ocl"));
+    t->addTab(ocl_grid, tr("behavior - Ocl"));
 
     if (d == 0)
         t->removePage(ocl_grid);
@@ -2010,16 +2010,16 @@ void ReduceDialog::init(TabDialog * t, ActivityActionData * act,
 
     // ocl
 
-    ocl_grid = mkgrid(t, TR("reducer - Ocl"));
+    ocl_grid = mkgrid(t, tr("reducer - Ocl"));
 
     ocl_grid->addWidget(new QLabel("", ocl_grid));
     BButtonGroup * grp;
     ocl_grid->addWidget(grp = new BButtonGroup(2, Qt::Horizontal, QString(), ocl_grid));
 
-    grp->addWidget(is_ordered_cb = new QCheckBox(TR("ordered"), grp));
+    grp->addWidget(is_ordered_cb = new QCheckBox(tr("ordered"), grp));
     is_ordered_cb->setDisabled(visit);
     SmallPushButton* sButton;
-    connect(sButton = new SmallPushButton(TR("reducer :"), ocl_grid), SIGNAL(clicked()),
+    connect(sButton = new SmallPushButton(tr("reducer :"), ocl_grid), SIGNAL(clicked()),
             this, SLOT(menu_beh()));
     ocl_grid->addWidget(sButton);
     ocl_grid->addWidget(behavior_co = new QComboBox(ocl_grid));
@@ -2035,7 +2035,7 @@ void ReduceDialog::init(TabDialog * t, ActivityActionData * act,
 
     // note : must add then remove rather than doing nothing
     // else some sub widget will be wrong placed
-    t->addTab(ocl_grid, TR("reducer - Ocl"));
+    t->addTab(ocl_grid, tr("reducer - Ocl"));
 
     if (d == 0)
         t->removePage(ocl_grid);

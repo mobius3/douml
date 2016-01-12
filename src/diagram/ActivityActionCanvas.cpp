@@ -853,37 +853,37 @@ void ActivityActionCanvas::menu(const QPoint &)
     m.addSeparator();
 
     if (browser_node->is_writable() && data->may_add_pin()) {
-        MenuFactory::addItem(m, TR("Add pin"), 7);
+        MenuFactory::addItem(m, tr("Add pin"), 7);
         m.addSeparator();
     }
 
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 13);
-    MenuFactory::addItem(m, TR("Go down"), 14);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 13);
+    MenuFactory::addItem(m, tr("Go down"), 14);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 2);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit activity action"), 3);
+    MenuFactory::addItem(m, tr("Edit activity action"), 3);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Select in browser"), 4);
+    MenuFactory::addItem(m, tr("Select in browser"), 4);
 
     const char * what;
     BrowserNode * who = data->get_action()->referenced(what);
     BrowserNode * diag = 0;
 
     if (who != 0)
-        MenuFactory::addItem(m, TR("Select %1 in browser", what), 10);
+        MenuFactory::addItem(m, tr("Select %1 in browser", what), 10);
 
     if (linked())
-        MenuFactory::addItem(m, TR("Select linked items"), 5);
+        MenuFactory::addItem(m, tr("Select linked items"), 5);
 
     m.addSeparator();
 
     if (browser_node->is_writable()) {
         if (browser_node->get_associated() !=
             (BrowserNode *) the_canvas()->browser_diagram())
-            MenuFactory::addItem(m, TR("Set associated diagram"), 6);
+            MenuFactory::addItem(m, tr("Set associated diagram"), 6);
 
         if (data->get_action_kind() == UmlCallBehaviorAction) {
             BasicData * d = data->get_action()->depend_on();
@@ -893,24 +893,24 @@ void ActivityActionCanvas::menu(const QPoint &)
 
                 if ((diag != 0) &&
                     (diag != (BrowserNode *) the_canvas()->browser_diagram()))
-                    MenuFactory::addItem(m, TR("Set associated diagram from behavior"), 11);
+                    MenuFactory::addItem(m, tr("Set associated diagram from behavior"), 11);
             }
         }
 
         if (browser_node->get_associated())
-            MenuFactory::addItem(m, TR("Remove diagram association"), 12);
+            MenuFactory::addItem(m, tr("Remove diagram association"), 12);
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 8);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 8);
 
     if (browser_node->is_writable())
-        MenuFactory::addItem(m, TR("Delete from model"), 9);
+        MenuFactory::addItem(m, tr("Delete from model"), 9);
 
     m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlActivityAction, 20))
-        MenuFactory::insertItem(m, TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
     int index;
 
@@ -1031,10 +1031,10 @@ void ActivityActionCanvas::edit_drawing_settings()
         StateSpecVector st(1);
         ColorSpecVector co(1);
 
-        st[0].set(TR("show opaque definition"), &show_opaque_action_definition);
+        st[0].set(tr("show opaque definition"), &show_opaque_action_definition);
         settings.complete(st, TRUE);
 
-        co[0].set(TR("action color"), &itscolor);
+        co[0].set(tr("action color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -1062,10 +1062,10 @@ void ActivityActionCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         UmlColor itscolor;
         ActivityDrawingSettings settings;
 
-        st[0].set(TR("show opaque definition"), &show_opaque_action_definition);
+        st[0].set(tr("show opaque definition"), &show_opaque_action_definition);
         settings.complete(st, TRUE);
 
-        co[0].set(TR("action color"), &itscolor);
+        co[0].set(tr("action color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE, TRUE);
 
@@ -1126,7 +1126,7 @@ QString ActivityActionCanvas::may_connect(UmlCode & l, const DiagramItem * dest)
     if (l == UmlAnchor)
         return dest->may_start(l);
     else if (dest->get_bn() == 0)
-        return TR("illegal");
+        return tr("illegal");
     else
         return ((BrowserActivityAction *) browser_node)->may_connect(l, dest->get_bn());
 }

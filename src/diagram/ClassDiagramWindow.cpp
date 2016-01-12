@@ -46,12 +46,12 @@
 #include "toolbarfactory.h"
 QString addclassText()
 {
-    return  QObject::TR("Click this button to add a <i>class</i> in the diagram. <br><br>"
+    return  QObject::tr("Click this button to add a <i>class</i> in the diagram. <br><br>"
               "You can also drop the class from the <b>browser</b>.");
 }
 QString addpackageText()
 {
-    return  QObject::TR("Click this button to add a <i>package</i> in the diagram. <br><br>"
+    return  QObject::tr("Click this button to add a <i>package</i> in the diagram. <br><br>"
               "You can also drop the package from the <b>browser</b>.");
 }
 extern QString addfragmentText();
@@ -60,32 +60,32 @@ extern QString noteText();
 extern QString anchorText();
 QString dependencyText()
 {
-    return  QObject::TR("Click this button to create a <i>dependency</i>");
+    return  QObject::tr("Click this button to create a <i>dependency</i>");
 }
 extern QString associationText();
 QString directionalassociationextensionText()
 {
-    return  QObject::TR("Click this button to create an <i>unidirectional association</i> or an <i>extension</i>");
+    return  QObject::tr("Click this button to create an <i>unidirectional association</i> or an <i>extension</i>");
 }
 QString aggregationText()
 {
-    return  QObject::TR("Click this button to create an <i>aggregation</i>");
+    return  QObject::tr("Click this button to create an <i>aggregation</i>");
 }
 QString aggregationbyvalueText()
 {
-    return  QObject::TR("Click this button to create a <i>composition</i>");
+    return  QObject::tr("Click this button to create a <i>composition</i>");
 }
 QString directionalaggregationText()
 {
-    return  QObject::TR("Click this button to create a <i>directional aggregation</i>");
+    return  QObject::tr("Click this button to create a <i>directional aggregation</i>");
 }
 QString directionalaggregationbyvalueText()
 {
-    return  QObject::TR("Click this button to create a <i>directional composition</i>");
+    return  QObject::tr("Click this button to create a <i>directional composition</i>");
 }
 QString realizeText()
 {
-    return  QObject::TR("Click this button to create a <i>realization</i>");
+    return  QObject::tr("Click this button to create a <i>realization</i>");
 }
 extern QString textText();
 extern QString imageText();
@@ -103,104 +103,104 @@ ClassDiagramWindow::ClassDiagramWindow(const QString & s, BrowserClassDiagram * 
     add_edit_button(toolbar);
 
     select =
-        ToolBarFactory::createToolButton(*selectButton,  QObject::TR("Select"), QString(),
+        ToolBarFactory::createToolButton(*selectButton,  QObject::tr("Select"), QString(),
                         this, SLOT(hit_select()), toolbar, "select");
     select->setCheckable(TRUE);
     select->setChecked(TRUE);
     current_button = UmlSelect;
     b->set_diagram_window(this);
     addClass
-        = ToolBarFactory::createToolButton(*classButton,  QObject::TR("Add Class"), QString(),
+        = ToolBarFactory::createToolButton(*classButton,  QObject::tr("Add Class"), QString(),
                           this, SLOT(hit_class()), toolbar, "add class");
     addClass->setCheckable(TRUE);
     addClass->setWhatsThis( addclassText());
 
     addPackage
-        = ToolBarFactory::createToolButton(*packageButton,  QObject::TR("Add Package"), QString(),
+        = ToolBarFactory::createToolButton(*packageButton,  QObject::tr("Add Package"), QString(),
                           this, SLOT(hit_package()), toolbar, "add package");
     addPackage->setCheckable(TRUE);
     addPackage->setWhatsThis( addpackageText());
 
     addFragment
-        = ToolBarFactory::createToolButton(*fragmentButton,  QObject::TR("Add Fragment"), QString(),
+        = ToolBarFactory::createToolButton(*fragmentButton,  QObject::tr("Add Fragment"), QString(),
                           this, SLOT(hit_fragment()), toolbar, "add fragment");
     addFragment->setCheckable(TRUE);
     addFragment->setWhatsThis(addfragmentText());
 
     inherit =
-        ToolBarFactory::createToolButton(*generalisationButton,  QObject::TR("Generalisation"), QString(),
+        ToolBarFactory::createToolButton(*generalisationButton,  QObject::tr("Generalisation"), QString(),
                         this, SLOT(hit_inherit()), toolbar, "generalisation");
     inherit->setCheckable(TRUE);
     inherit->setWhatsThis( inheritText());
 
     realize =
-        ToolBarFactory::createToolButton(*realizeButton,  QObject::TR("Realize"), QString(),
+        ToolBarFactory::createToolButton(*realizeButton,  QObject::tr("Realize"), QString(),
                         this, SLOT(hit_realize()), toolbar, "realize");
     realize->setCheckable(TRUE);
     realize->setWhatsThis( realizeText());
 
     dependency =
-        ToolBarFactory::createToolButton(*dependencyButton,  QObject::TR("Dependency"), QString(),
+        ToolBarFactory::createToolButton(*dependencyButton,  QObject::tr("Dependency"), QString(),
                         this, SLOT(hit_dependency()), toolbar, "dependency");
     dependency->setCheckable(TRUE);
     dependency->setWhatsThis( dependencyText());
 
     association =
-        ToolBarFactory::createToolButton(*associationButton,  QObject::TR("Association"), QString(),
+        ToolBarFactory::createToolButton(*associationButton,  QObject::tr("Association"), QString(),
                         this, SLOT(hit_association()), toolbar, "association");
     association->setCheckable(TRUE);
     association->setWhatsThis( associationText());
 
     directionalassociation =
-        ToolBarFactory::createToolButton(*directionalAssociationExtensionButton,  QObject::TR("Directional Association / Extension"), QString(),
+        ToolBarFactory::createToolButton(*directionalAssociationExtensionButton,  QObject::tr("Directional Association / Extension"), QString(),
                         this, SLOT(hit_directionalassociation()), toolbar, "directional association");
     directionalassociation->setCheckable(TRUE);
     directionalassociation->setWhatsThis( directionalassociationextensionText());
 
     aggregation =
-        ToolBarFactory::createToolButton(*aggregationButton,  QObject::TR("Aggregation"), QString(),
+        ToolBarFactory::createToolButton(*aggregationButton,  QObject::tr("Aggregation"), QString(),
                         this, SLOT(hit_aggregation()), toolbar, "aggregation");
     aggregation->setCheckable(TRUE);
     aggregation->setWhatsThis( aggregationText());
 
     aggregationbyvalue =
-        ToolBarFactory::createToolButton(*aggregationByValueButton,  QObject::TR("Composition"), QString(),
+        ToolBarFactory::createToolButton(*aggregationByValueButton,  QObject::tr("Composition"), QString(),
                         this, SLOT(hit_aggregationbyvalue()), toolbar, "composition");
     aggregationbyvalue->setCheckable(TRUE);
     aggregationbyvalue->setWhatsThis( aggregationbyvalueText());
 
     directionalaggregation =
-        ToolBarFactory::createToolButton(*directionalAggregationButton,  QObject::TR("Directional Aggregation"), QString(),
+        ToolBarFactory::createToolButton(*directionalAggregationButton,  QObject::tr("Directional Aggregation"), QString(),
                         this, SLOT(hit_directionalaggregation()), toolbar, "directional aggregation");
     directionalaggregation->setCheckable(TRUE);
     directionalaggregation->setWhatsThis( directionalaggregationText());
 
     directionalaggregationbyvalue =
-        ToolBarFactory::createToolButton(*directionalAggregationByValueButton,  QObject::TR("Directional Composition"), QString(),
+        ToolBarFactory::createToolButton(*directionalAggregationByValueButton,  QObject::tr("Directional Composition"), QString(),
                         this, SLOT(hit_directionalaggregationbyvalue()), toolbar, "directional composition");
     directionalaggregationbyvalue->setCheckable(TRUE);
     directionalaggregationbyvalue->setWhatsThis( directionalaggregationbyvalueText());
 
     note =
-        ToolBarFactory::createToolButton(*noteButton,  QObject::TR("Note"), QString(),
+        ToolBarFactory::createToolButton(*noteButton,  QObject::tr("Note"), QString(),
                         this, SLOT(hit_note()), toolbar, "note");
     note->setCheckable(TRUE);
     note->setWhatsThis( noteText());
 
     anchor =
-        ToolBarFactory::createToolButton(*anchorButton,  QObject::TR("Anchor / Class association"), QString(),
+        ToolBarFactory::createToolButton(*anchorButton,  QObject::tr("Anchor / Class association"), QString(),
                         this, SLOT(hit_anchor()), toolbar, "anchor");
     anchor->setCheckable(TRUE);
     anchor->setWhatsThis( anchorText());
 
     text =
-        ToolBarFactory::createToolButton(*textButton,  QObject::TR("Text"), QString(),
+        ToolBarFactory::createToolButton(*textButton,  QObject::tr("Text"), QString(),
                         this, SLOT(hit_text()), toolbar, "text");
     text->setCheckable(TRUE);
     text->setWhatsThis( textText());
 
     image =
-        ToolBarFactory::createToolButton(*imageButton,  QObject::TR("Image"), QString(),
+        ToolBarFactory::createToolButton(*imageButton,  QObject::tr("Image"), QString(),
                         this, SLOT(hit_image()), toolbar, "image");
     image->setCheckable(TRUE);
     image->setWhatsThis( imageText());

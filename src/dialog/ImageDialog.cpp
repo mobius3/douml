@@ -54,7 +54,7 @@ static QString RelativePrj;
 ImageDialog::ImageDialog(QString & p)
     : QDialog(0), path(p)
 {
-    setWindowTitle(TR("Image dialog"));
+    setWindowTitle(tr("Image dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     QHBoxLayout * hbox;
@@ -65,16 +65,16 @@ ImageDialog::ImageDialog(QString & p)
     vbox->addLayout(hbox);
     hbox->setMargin(5);
 
-    hbox->addWidget(new QLabel(TR("Image path :"), this));
+    hbox->addWidget(new QLabel(tr("Image path :"), this));
     hbox->addWidget(edpath = new LineEdit(path, this));
 
-    RelativeRoot = TR("Set it relative to image root");
-    RelativePrj = TR("Set it relative to project");
-    Absolute = TR("Set it absolute");
+    RelativeRoot = tr("Set it relative to image root");
+    RelativePrj = tr("Set it relative to project");
+    Absolute = tr("Set it absolute");
 
     hbox->addWidget(new QLabel("", this));
 
-    QPushButton * b = new SmallPushButton(TR("Browse"), this);
+    QPushButton * b = new SmallPushButton(tr("Browse"), this);
 
     hbox->addWidget(b);
     connect(b, SIGNAL(clicked()), this, SLOT(browse()));
@@ -95,8 +95,8 @@ ImageDialog::ImageDialog(QString & p)
 
     //
 
-    QPushButton * accept = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * accept = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     accept->setDefault(TRUE);
@@ -123,7 +123,7 @@ ImageDialog::~ImageDialog()
 void ImageDialog::browse()
 {
     QString s = edpath->text().simplified();
-    const QString ns = QFileDialog::getOpenFileName(0, QObject::TR("Select image"),s);//(s, "", this, 0, QObject::tr("Select image"));
+    const QString ns = QFileDialog::getOpenFileName(0, QObject::tr("Select image"),s);//(s, "", this, 0, QObject::tr("Select image"));
 
 
     if (! ns.isEmpty()) {

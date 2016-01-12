@@ -164,20 +164,20 @@ void BrowserDeploymentNode::menu()
     if (!deletedp()) {
         if (!is_edited) {
             MenuFactory::addItem(m, QObject::tr("Edit"), 0,
-                                 QObject::TR("to edit the <i>node</i>, \
+                                 QObject::tr("to edit the <i>node</i>, \
                                              a double click with the left mouse button does the same thing"));
 
                                              if (!is_read_only && (edition_number == 0)) {
                                                  m.addSeparator();
                                                  MenuFactory::addItem(m, QObject::tr("Delete"), 1,
-                                                 QObject::TR("to delete the <i>node</i>. \
+                                                 QObject::tr("to delete the <i>node</i>. \
                                                  Note that you can undelete it after"));
                                              }
         }
 
         m.addSeparator();
         MenuFactory::addItem(m, QObject::tr("Referenced by"), 3,
-                             QObject::TR("to know who reference the <i>node</i> \
+                             QObject::tr("to know who reference the <i>node</i> \
                                          through a relation"));
                                          mark_menu(m, QObject::tr("the node").toLatin1().constData(), 90);
                              ProfiledStereotypes::menu(m, this, 99990);
@@ -191,7 +191,7 @@ void BrowserDeploymentNode::menu()
     }
     else if (!is_read_only && (edition_number == 0))
         MenuFactory::addItem(m, QObject::tr("Undelete"), 2,
-                             QObject::TR("to undelete the <i>node</i>"));
+                             QObject::tr("to undelete the <i>node</i>"));
 
     QAction *resultAction = m.exec(QCursor::pos());
     if(resultAction)
@@ -202,7 +202,7 @@ void BrowserDeploymentNode::exec_menu_choice(int rank)
 {
     switch (rank) {
     case 0:
-        edit( QObject::TR("Node").toLatin1().constData(), its_default_stereotypes);
+        edit( QObject::tr("Node").toLatin1().constData(), its_default_stereotypes);
         return;
 
     case 1:
@@ -268,7 +268,7 @@ void BrowserDeploymentNode::open(bool force_edit)
             !associated_diagram->deletedp())
         associated_diagram->open(FALSE);
     else if (!is_edited)
-        edit( QObject::TR("Node").toLatin1().constData(), its_default_stereotypes);
+        edit( QObject::tr("Node").toLatin1().constData(), its_default_stereotypes);
 }
 
 void BrowserDeploymentNode::DragMoveEvent(QDragMoveEvent * e)
@@ -322,7 +322,7 @@ void BrowserDeploymentNode::DropAfterEvent(QDropEvent * e, BrowserNode * after)
             package_modified();
         }
         else {
-            msg_critical( QObject::TR("Error"), QObject::TR("Forbidden"));
+            msg_critical( QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }
@@ -339,7 +339,7 @@ UmlCode BrowserDeploymentNode::get_type() const
 
 QString BrowserDeploymentNode::get_stype() const
 {
-    return QObject::TR("node");
+    return QObject::tr("node");
 }
 
 int BrowserDeploymentNode::get_identifier() const
@@ -358,7 +358,7 @@ BrowserDeploymentNode * BrowserDeploymentNode::get_deploymentnode(BrowserNode * 
     QString name;
     BrowserNodeList nodes;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter node's name : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter node's name : "),
                                          UmlDeploymentNode, instances(nodes),
                                          &old, TRUE, FALSE))
         return 0;
@@ -376,7 +376,7 @@ BrowserDeploymentNode * BrowserDeploymentNode::add_deploymentnode(BrowserNode * 
 {
     QString name;
 
-    if (! future_parent->enter_child_name(name, QObject::TR("enter node's name : "),
+    if (! future_parent->enter_child_name(name, QObject::tr("enter node's name : "),
                                           UmlDeploymentNode, TRUE, FALSE))
         return 0;
 

@@ -96,7 +96,7 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
 
     SetDialogMode(o->browser_node->is_writable());
     //isWritable = hasOkButton();
-    setWindowTitle(TR("Operation dialog"));
+    setWindowTitle(tr("Operation dialog"));
     SetCurrentNode(o->browser_node);
     //setWindowFlags(!Qt::WindowTitleHint);
     InitGui();
@@ -199,20 +199,20 @@ void OperationDialog::init_uml()
     umlGrid->setSpacing(5);
     umlGrid->setMargin(5);
 
-    umlGrid->addWidget(new QLabel(TR("class : "), umlGrid));
+    umlGrid->addWidget(new QLabel(tr("class : "), umlGrid));
     lblFullClassName = new QLabel(((BrowserNode *) oper->get_browser_node()->parent())->full_name(TRUE),
                                   umlGrid);
     umlGrid->addWidget(lblFullClassName);
-    umlGrid->addWidget(new QLabel(TR("name : "), umlGrid));
+    umlGrid->addWidget(new QLabel(tr("name : "), umlGrid));
     edname = new LineEdit(oper->name(), umlGrid);
     umlGrid->addWidget(edname);
 
-    umlGrid->addWidget(new QLabel(TR("stereotype : "), umlGrid));
+    umlGrid->addWidget(new QLabel(tr("stereotype : "), umlGrid));
     edstereotype = new QComboBox(umlGrid);
     umlGrid->addWidget(edstereotype);
     edstereotype->setEditable(isWritable);
 
-    umlGrid->addWidget(pbValueType = new SmallPushButton(TR("value type :"), umlGrid));
+    umlGrid->addWidget(pbValueType = new SmallPushButton(tr("value type :"), umlGrid));
     connect(pbValueType, SIGNAL(clicked()), this, SLOT(menu_returntype()));
 
 
@@ -234,9 +234,9 @@ void OperationDialog::init_uml()
     htabBgUml->addWidget(bgUml2 = new BButtonGroup(2, Qt::Horizontal, QString(), htabBgUml));
 
     htabBgUml->setStretchFactor(bgUml2, 1000);
-    classoperation_cb = new QCheckBox(TR("static"), bgUml2);
+    classoperation_cb = new QCheckBox(tr("static"), bgUml2);
     bgUml2->addWidget(classoperation_cb);
-    abstract_cb = new QCheckBox(TR("abstract"), bgUml2);
+    abstract_cb = new QCheckBox(tr("abstract"), bgUml2);
     bgUml2->addWidget(abstract_cb);
 
     connect(classoperation_cb, SIGNAL(toggled(bool)), SLOT(classoper_toggled(bool)));
@@ -247,23 +247,23 @@ void OperationDialog::init_uml()
     bgUml3 = new BButtonGroup(1, Qt::Horizontal, QString(), htabBgUml);
     htabBgUml->addWidget(bgUml3);
     htabBgUml->setStretchFactor(bgUml3, 1000);
-    forcegenbody_cb = new QCheckBox(TR("force body generation"), bgUml3);
+    forcegenbody_cb = new QCheckBox(tr("force body generation"), bgUml3);
     bgUml3->addWidget(forcegenbody_cb);
 
 
     connect(forcegenbody_cb, SIGNAL(toggled(bool)), SLOT(forcegenbody_toggled(bool)));
 
-    umlGrid->addWidget(new QLabel(TR("parameters : "), umlGrid));
+    umlGrid->addWidget(new QLabel(tr("parameters : "), umlGrid));
     umlGrid->addWidget(table = new ParamsTable(oper, umlGrid, list, this, !isWritable));
 
-    umlGrid->addWidget(new QLabel(TR("exceptions : "), umlGrid));
+    umlGrid->addWidget(new QLabel(tr("exceptions : "), umlGrid));
     umlGrid->addWidget(etable = new ExceptionsTable(oper, umlGrid, list, !isWritable)); //todo update the table
 
     VVBox * vtab = new VVBox(umlGrid);
     umlGrid->addWidget(vtab);
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
-    vtab->addWidget(pbEditor = new SmallPushButton(TR("Editor"), vtab));
-    vtab->addWidget(pbDefault = new SmallPushButton(TR("Default"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
+    vtab->addWidget(pbEditor = new SmallPushButton(tr("Editor"), vtab));
+    vtab->addWidget(pbDefault = new SmallPushButton(tr("Default"), vtab));
 
     connect(pbEditor, SIGNAL(clicked()), this, SLOT(edit_description()));
     connect(pbDefault, SIGNAL(clicked()), this, SLOT(default_description()));
@@ -271,8 +271,8 @@ void OperationDialog::init_uml()
     umlGrid->addWidget(comment = new MultiLineEdit(umlGrid));
 
     umlGrid->addWidget(vtab = new VVBox(umlGrid));
-    vtab->addWidget(new QLabel(TR("constraint :"), vtab));
-    vtab->addWidget(pbConstraintEditor = new SmallPushButton(TR("Editor"), vtab));
+    vtab->addWidget(new QLabel(tr("constraint :"), vtab));
+    vtab->addWidget(pbConstraintEditor = new SmallPushButton(tr("Editor"), vtab));
     connect(pbConstraintEditor, SIGNAL(clicked()), this, SLOT(edit_constraint()));
 
     umlGrid->addWidget(constraint = new MultiLineEdit(umlGrid));
@@ -412,7 +412,7 @@ void OperationDialog::init_cpp()
     tabBgCppModifiers->setStretchFactor(label, 0);
 
 
-    visibilityBg = cpp_visibility.init(tabBgCppModifiers, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml")); // update this
+    visibilityBg = cpp_visibility.init(tabBgCppModifiers, oper->get_cpp_visibility(), FALSE, 0, tr("follow uml")); // update this
     tabBgCppModifiers->addWidget(visibilityBg);
     bgCppModifiers = new BButtonGroup(5, Qt::Horizontal, QString(), tabBgCppModifiers);
     tabBgCppModifiers->addWidget(bgCppModifiers);
@@ -470,7 +470,7 @@ void OperationDialog::FillcppTab(OperationData * oper)
             cppTab->ui->cbCppFrozen->setChecked(TRUE);
     }
 
-    visibilityBg = cpp_visibility.init(tabBgCppModifiers, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml")); // update this
+    visibilityBg = cpp_visibility.init(tabBgCppModifiers, oper->get_cpp_visibility(), FALSE, 0, tr("follow uml")); // update this
     visibilityBg->setEnabled(isWritable);
 
     SilentCall(cbCppConst)->setChecked(oper->get_cpp_const());
@@ -536,7 +536,7 @@ void OperationDialog::FillcppTab(OperationData * oper)
     cppTab->ui->edCppDefActual->setFont(comment->font());
 
     bool bodyEditable = (!isWritable || (preserve_bodies() && !forcegenbody_cb->isChecked()));
-    QString buttonText = bodyEditable ? TR("Show body") : TR("Edit body");
+    QString buttonText = bodyEditable ? tr("Show body") : tr("Edit body");
     cppTab->ui->editcppbody->setText(buttonText);
 
     char * b = oper->get_body('c');
@@ -580,7 +580,7 @@ void OperationDialog::init_java()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(javafrozen_cb = new QCheckBox(TR("frozen"), grid));
+    grid->addWidget(javafrozen_cb = new QCheckBox(tr("frozen"), grid));
 
     grid->addWidget(bg = new BButtonGroup(2, Qt::Horizontal, QString(), grid));
 
@@ -592,22 +592,22 @@ void OperationDialog::init_java()
 
     connect(synchronized_cb, SIGNAL(toggled(bool)), SLOT(java_finalsynchronized_toggled(bool)));
 
-    grid->addWidget(lblNameFormJava = new QLabel(TR("Name form : "), grid));
+    grid->addWidget(lblNameFormJava = new QLabel(tr("Name form : "), grid));
     grid->addWidget(namespecTab = new HHBox(grid));
             htab = namespecTab;
     htab->addWidget(edjavanamespec = new LineEdit(htab));
 
 
-    grid->addWidget(new QLabel(TR("Definition :"), grid));
+    grid->addWidget(new QLabel(tr("Definition :"), grid));
     grid->addWidget(edjavadef = new MultiLineEdit(grid));
     connect(edjavadef, SIGNAL(textChanged()), this, SLOT(java_update_def()));
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
 
-    vtab->addWidget(new QLabel(TR("Result after\nsubstitution : "), vtab));
+    vtab->addWidget(new QLabel(tr("Result after\nsubstitution : "), vtab));
 
-    vtab->addWidget(indentjavabody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab));
+    vtab->addWidget(indentjavabody_cb = new QCheckBox(tr("contextual\nbody indent"), vtab));
 
     grid->addWidget(showjavadef = new MultiLineEdit(grid));
 
@@ -623,8 +623,8 @@ void OperationDialog::init_java()
 
     grid->addWidget(htab = new HHBox(grid));
 
-    htab->addWidget(pbDefaultDeclarationJava = new QPushButton(TR("Default declaration"), htab));
-    htab->addWidget(pbNotGeneratedInJava = new QPushButton(TR("Not generated in Java"), htab));
+    htab->addWidget(pbDefaultDeclarationJava = new QPushButton(tr("Default declaration"), htab));
+    htab->addWidget(pbNotGeneratedInJava = new QPushButton(tr("Not generated in Java"), htab));
     connect(pbDefaultDeclarationJava, SIGNAL(clicked()), this, SLOT(java_default_def()));
     connect(pbNotGeneratedInJava, SIGNAL(clicked()), this, SLOT(java_unmapped_def()));
 
@@ -673,7 +673,7 @@ void OperationDialog::FillJavaTab(OperationData * oper)
     showjavadef->setFont(comment->font());
 
     bool bodyEditable = (!isWritable || (preserve_bodies() && !forcegenbody_cb->isChecked()));
-    QString buttonText = bodyEditable ? TR("Show body") : TR("Edit body");
+    QString buttonText = bodyEditable ? tr("Show body") : tr("Edit body");
     editjavabody->setText(buttonText);
 
     char * b = oper->get_body('j');
@@ -688,7 +688,7 @@ void OperationDialog::FillJavaTab(OperationData * oper)
 
     javaannotation = (const char *) oper->java_annotation;
 
-    editjavaannotation->setText((!isWritable) ? TR("Show annotation") : TR("Edit annotation"));
+    editjavaannotation->setText((!isWritable) ? tr("Show annotation") : tr("Edit annotation"));
 
     if (!GenerationSettings::java_get_default_defs())
         HideTab("Java");
@@ -712,7 +712,7 @@ void OperationDialog::init_php()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(phpfrozen_cb = new QCheckBox(TR("frozen"), grid));
+    grid->addWidget(phpfrozen_cb = new QCheckBox(tr("frozen"), grid));
 
     grid->addWidget(bgPhp = new BButtonGroup(2, Qt::Horizontal, QString(), grid));
 
@@ -720,22 +720,22 @@ void OperationDialog::init_php()
 
     connect(phpfinal_cb, SIGNAL(toggled(bool)), SLOT(php_final_toggled(bool)));
 
-    grid->addWidget(lblNameFormPhp = new QLabel(TR("Name form : "), grid));
+    grid->addWidget(lblNameFormPhp = new QLabel(tr("Name form : "), grid));
     grid->addWidget(namespecTab = new HHBox(grid));
             htab = namespecTab;
     htab->addWidget(edphpnamespec = new LineEdit(htab));
 
 
-    grid->addWidget(new QLabel(TR("Definition :"), grid));
+    grid->addWidget(new QLabel(tr("Definition :"), grid));
     grid->addWidget(edphpdef = new MultiLineEdit(grid));
     connect(edphpdef, SIGNAL(textChanged()), this, SLOT(php_update_def()));
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
 
-    vtab->addWidget(new QLabel(TR("Result after\nsubstitution : "), vtab));
+    vtab->addWidget(new QLabel(tr("Result after\nsubstitution : "), vtab));
 
-    vtab->addWidget(indentphpbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab));
+    vtab->addWidget(indentphpbody_cb = new QCheckBox(tr("contextual\nbody indent"), vtab));
 
     grid->addWidget(showphpdef = new MultiLineEdit(grid));
 
@@ -751,9 +751,9 @@ void OperationDialog::init_php()
 
     grid->addWidget(htab = new HHBox(grid));
 
-    htab->addWidget(pbDefaultDeclarationPhp = new QPushButton(TR("Default declaration"), htab));
-    htab->addWidget(pbNotGeneratedInPhp = new QPushButton(TR("Not generated in Php"), htab));
-    htab->addWidget(pbEditParametersPhp = new QPushButton(TR("Edit parameters"), htab));
+    htab->addWidget(pbDefaultDeclarationPhp = new QPushButton(tr("Default declaration"), htab));
+    htab->addWidget(pbNotGeneratedInPhp = new QPushButton(tr("Not generated in Php"), htab));
+    htab->addWidget(pbEditParametersPhp = new QPushButton(tr("Edit parameters"), htab));
     connect(pbDefaultDeclarationPhp, SIGNAL(clicked()), this, SLOT(php_default_def()));
     connect(pbNotGeneratedInPhp, SIGNAL(clicked()), this, SLOT(php_unmapped_def()));
     connect(pbEditParametersPhp, SIGNAL(clicked()), this, SLOT(php_edit_param()));
@@ -803,7 +803,7 @@ void OperationDialog::FillPhpTab(OperationData *)
     showphpdef->setFont(comment->font());
 
     bool bodyEditable = (!isWritable || (preserve_bodies() && !forcegenbody_cb->isChecked()));
-    QString buttonText = bodyEditable ? TR("Show body") : TR("Edit body");
+    QString buttonText = bodyEditable ? tr("Show body") : tr("Edit body");
     editphpbody->setText(buttonText);
 
     char * b = oper->get_body('p');
@@ -818,7 +818,7 @@ void OperationDialog::FillPhpTab(OperationData *)
 
     ///phpannotation = (const char *) oper->php_annotation; todo
 
-    pbEditParametersPhp->setText((!isWritable) ? TR("Show parameters") : TR("Edit parameters"));
+    pbEditParametersPhp->setText((!isWritable) ? tr("Show parameters") : tr("Edit parameters"));
 
     if (!GenerationSettings::php_get_default_defs())
         HideTab("Php");
@@ -841,26 +841,26 @@ void OperationDialog::init_python()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(pythonfrozen_cb = new QCheckBox(TR("frozen"), grid));
+    grid->addWidget(pythonfrozen_cb = new QCheckBox(tr("frozen"), grid));
 
     grid->addWidget(bgPython = new BButtonGroup(2, Qt::Horizontal, QString(), grid));
 
-    grid->addWidget(lblNameFormPython = new QLabel(TR("Name form : "), grid));
+    grid->addWidget(lblNameFormPython = new QLabel(tr("Name form : "), grid));
     grid->addWidget(pythonNamespecTab = new HHBox(grid));
             htab = pythonNamespecTab;
     htab->addWidget(edpythonnamespec = new LineEdit(htab));
 
 
-    grid->addWidget(new QLabel(TR("Definition :"), grid));
+    grid->addWidget(new QLabel(tr("Definition :"), grid));
     grid->addWidget(edpythondef = new MultiLineEdit(grid));
     connect(edpythondef, SIGNAL(textChanged()), this, SLOT(python_update_def()));
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
 
-    vtab->addWidget(new QLabel(TR("Result after\nsubstitution : "), vtab));
+    vtab->addWidget(new QLabel(tr("Result after\nsubstitution : "), vtab));
 
-    vtab->addWidget(indentpythonbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab));
+    vtab->addWidget(indentpythonbody_cb = new QCheckBox(tr("contextual\nbody indent"), vtab));
 
     grid->addWidget(showpythondef = new MultiLineEdit(grid));
 
@@ -876,9 +876,9 @@ void OperationDialog::init_python()
 
     grid->addWidget(htab = new HHBox(grid));
 
-    htab->addWidget(pbDefaultDeclarationPython = new QPushButton(TR("Default declaration"), htab));
-    htab->addWidget(pbNotGeneratedInPython = new QPushButton(TR("Not generated in Python"), htab));
-    htab->addWidget(pbEditParamsPython = new QPushButton(TR("Edit parameters"), htab));
+    htab->addWidget(pbDefaultDeclarationPython = new QPushButton(tr("Default declaration"), htab));
+    htab->addWidget(pbNotGeneratedInPython = new QPushButton(tr("Not generated in Python"), htab));
+    htab->addWidget(pbEditParamsPython = new QPushButton(tr("Edit parameters"), htab));
     connect(pbDefaultDeclarationPython, SIGNAL(clicked()), this, SLOT(python_default_def()));
     connect(pbNotGeneratedInPython, SIGNAL(clicked()), this, SLOT(python_unmapped_def()));
     connect(pbEditParamsPython, SIGNAL(clicked()), this, SLOT(python_edit_param()));
@@ -937,7 +937,7 @@ void OperationDialog::FillPythonTab(OperationData *)
     showpythondef->setFont(comment->font());
 
     bool bodyEditable = (!isWritable || (preserve_bodies() && !forcegenbody_cb->isChecked()));
-    QString buttonText = bodyEditable ? TR("Show body") : TR("Edit body");
+    QString buttonText = bodyEditable ? tr("Show body") : tr("Edit body");
     editpythonbody->setText(buttonText);
 
     char * b = oper->get_body('y');
@@ -951,7 +951,7 @@ void OperationDialog::FillPythonTab(OperationData *)
     pbNotGeneratedInPython->setEnabled(isWritable);
     pbEditParamsPython->setEnabled(isWritable);
     pythondecorator = (const char *) oper->python_decorator;
-    editpythondecorator->setText((!isWritable) ? TR("Show decorators") : TR("Edit decorators"));
+    editpythondecorator->setText((!isWritable) ? tr("Show decorators") : tr("Edit decorators"));
 
     if (!GenerationSettings::python_get_default_defs())
         HideTab("Python");
@@ -974,7 +974,7 @@ void OperationDialog::init_idl()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(idlfrozen_cb = new QCheckBox(TR("frozen"), grid));
+    grid->addWidget(idlfrozen_cb = new QCheckBox(tr("frozen"), grid));
 
     grid->addWidget(bgIdl = new BButtonGroup(2, Qt::Horizontal, QString(), grid));
 
@@ -982,20 +982,20 @@ void OperationDialog::init_idl()
 
     connect(oneway_cb, SIGNAL(toggled(bool)), SLOT(oneway_toggled(bool)));
 
-    grid->addWidget(lblNameFormIdl = new QLabel(TR("Name form : "), grid));
+    grid->addWidget(lblNameFormIdl = new QLabel(tr("Name form : "), grid));
     grid->addWidget(namespecTabIdl = new HHBox(grid));
            htab = namespecTabIdl;
     htab->addWidget(edidlnamespec = new LineEdit(htab));
 
 
-    grid->addWidget(new QLabel(TR("Definition :"), grid));
+    grid->addWidget(new QLabel(tr("Definition :"), grid));
     grid->addWidget(edidldecl = new MultiLineEdit(grid));
     connect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update_decl()));
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
 
-    vtab->addWidget(new QLabel(TR("Result after\nsubstitution : "), vtab));
+    vtab->addWidget(new QLabel(tr("Result after\nsubstitution : "), vtab));
 
     grid->addWidget(showidldecl = new MultiLineEdit(grid));
 
@@ -1005,8 +1005,8 @@ void OperationDialog::init_idl()
     grid->addWidget(new QLabel("", grid));
     grid->addWidget(htab = new HHBox(grid));
 
-    htab->addWidget(pbDefaultDeclarationIdl = new QPushButton(TR("Default declaration"), htab));
-    htab->addWidget(pbNotGeneratedInIdl = new QPushButton(TR("Not generated in Idl"), htab));
+    htab->addWidget(pbDefaultDeclarationIdl = new QPushButton(tr("Default declaration"), htab));
+    htab->addWidget(pbNotGeneratedInIdl = new QPushButton(tr("Not generated in Idl"), htab));
     connect(pbDefaultDeclarationIdl, SIGNAL(clicked()), this, SLOT(idl_default_def()));
     connect(pbNotGeneratedInIdl, SIGNAL(clicked()), this, SLOT(idl_unmapped_def()));
     addTab(grid, "Idl");
@@ -1157,13 +1157,13 @@ void OperationDialog::menu_returntype()
 {
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     int index = list.indexOf(edreturn_type->currentText().trimmed());
 
     if (index != -1)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -1171,11 +1171,11 @@ void OperationDialog::menu_returntype()
         bn = BrowserView::selected_item();
 
         if ((bn != 0) && (bn->get_type() == UmlClass) && !bn->deletedp())
-            MenuFactory::addItem(m, TR("Choose class selected in browser"), 1);
+            MenuFactory::addItem(m, tr("Choose class selected in browser"), 1);
         else
             bn = 0;
 
-        MenuFactory::addItem(m, TR("Create class and choose it"), 2);
+        MenuFactory::addItem(m, tr("Create class and choose it"), 2);
     }
 
     if (isWritable || (index != -1) || (bn != 0)) {
@@ -1277,7 +1277,7 @@ void OperationDialog::abstract_toggled(bool on)
 void OperationDialog::forcegenbody_toggled(bool on)
 {
     bool ro = (!isWritable || (preserve_bodies() && !on));
-    QString lbl = (ro) ? TR("Show body") : TR("Edit body");
+    QString lbl = (ro) ? tr("Show body") : tr("Edit body");
 
     if (!cpp_undef)
         cppTab->ui->editcppbody->setText(lbl);
@@ -1599,7 +1599,7 @@ void OperationDialog::cpp_edit_param_decl()
         }
     }
     else
-        msg_warning("Douml", TR("wrong specification"));
+        msg_warning("Douml", tr("wrong specification"));
 }
 
 
@@ -2220,7 +2220,7 @@ void OperationDialog::cpp_edit_param_def()
             cpp_update_def();
     }
     else
-        msg_warning("Douml", TR("wrong specification"));
+        msg_warning("Douml", tr("wrong specification"));
 }
 
 // return TRUE if stop on ${commnt} or ${description}
@@ -3359,7 +3359,7 @@ bool OperationDialog::SaveData(OperationData *oper)
             ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlOperation,
                                                              bn->allow_spaces(),
                                                              bn->allow_empty()))
-        msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
+        msg_critical(tr("Error"), s + tr("\n\nillegal name or already used"));
     else
     {
         bn->set_name(s);
@@ -3578,7 +3578,7 @@ void OperationDialog::php_edit_param()
             php_update_def();
     }
     else
-        msg_warning("Douml", TR("wrong specification"));
+        msg_warning("Douml", tr("wrong specification"));
 }
 
 // Python
@@ -4054,7 +4054,7 @@ void OperationDialog::python_edit_param()
             python_update_def();
     }
     else
-        msg_warning("Douml", TR("wrong specification"));
+        msg_warning("Douml", tr("wrong specification"));
 }
 
 void OperationDialog::python_edit_decorator()
@@ -4783,10 +4783,10 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
     setSelectionMode(NoSelection);	// single does not work
     verticalHeader()->setSectionsMovable(true);
     QStringList headerList;
-    headerList<<TR("Direction")
-             <<TR("Name")
-            <<TR("Type")
-           <<TR("Default value");
+    headerList<<tr("Direction")
+             <<tr("Name")
+            <<tr("Type")
+           <<tr("Default value");
 
     m_delegate = new TableWidgetItemDelegate(this);
     setItemDelegateForColumn(0,m_delegate);
@@ -4801,7 +4801,7 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
     }
     else {
         //setHorizontalHeaderLabel(4, TR("do"));
-        headerList << TR("do");
+        headerList << tr("do");
 
         alltypes = GenerationSettings::basic_types();
         ((ClassData *)((BrowserNode *) o->get_browser_node()->parent())->get_data())
@@ -4861,7 +4861,7 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
     {
         if(columnCount() == 4)
             insertColumn(4);
-        setHorizontalHeaderLabel(4, TR("do"));
+        setHorizontalHeaderLabel(4, tr("do"));
     }
     else
     {
@@ -4901,7 +4901,7 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
     }
     else
     {
-        setHorizontalHeaderLabel(4, TR("do"));
+        setHorizontalHeaderLabel(4, tr("do"));
 
         alltypes = GenerationSettings::basic_types();
         ((ClassData *)((BrowserNode *) o->get_browser_node()->parent())->get_data())
@@ -5006,21 +5006,21 @@ void ParamsTable::button_pressed(const QModelIndex &index)
         QMenu m;
 
         sprintf(s, "%d", row + 1);
-        MenuFactory::addItem(m, TR("param %1", s), -1);
+        MenuFactory::addItem(m, tr("param %1", s), -1);
         m.addSeparator();
 
         if (row < n) {
-            MenuFactory::addItem(m, TR("Insert param before"), 0);
-            MenuFactory::addItem(m, TR("Insert param after"), 1);
+            MenuFactory::addItem(m, tr("Insert param before"), 0);
+            MenuFactory::addItem(m, tr("Insert param after"), 1);
             m.addSeparator();
-            MenuFactory::addItem(m, TR("Delete param"), 2);
+            MenuFactory::addItem(m, tr("Delete param"), 2);
             m.addSeparator();
-            MenuFactory::addItem(m, TR("Copy param"), 3);
-            MenuFactory::addItem(m, TR("Cut param"), 4);
+            MenuFactory::addItem(m, tr("Copy param"), 3);
+            MenuFactory::addItem(m, tr("Cut param"), 4);
         }
 
         if (!name_copy.isEmpty() || !type_copy.isEmpty())
-            MenuFactory::addItem(m, TR("Paste param"), 5);
+            MenuFactory::addItem(m, tr("Paste param"), 5);
 
         QMenu mv;
         int rank;
@@ -5032,7 +5032,7 @@ void ParamsTable::button_pressed(const QModelIndex &index)
 
             if (mv.actions().count() != 0) {
                 m.addSeparator();
-                MenuFactory::insertItem(m, TR("Move param"), &mv);
+                MenuFactory::insertItem(m, tr("Move param"), &mv);
             }
         }
         QAction *retAction = m.exec(QCursor::pos());
@@ -5300,7 +5300,7 @@ ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
     setSortingEnabled(false);
     setSelectionMode(NoSelection);	// single does not work
     verticalHeader()->setSectionsMovable(true);
-    setHorizontalHeaderLabel(0, TR("Type"));
+    setHorizontalHeaderLabel(0, tr("Type"));
 
 
     m_delegate = new TableWidgetItemDelegate(this);
@@ -5311,7 +5311,7 @@ ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
             setItem(index, 0, new TableItem(this, TableItem::Never, o->get_exception(index).get_full_type(), TableItem::TableItemType));
     }
     else {
-        setHorizontalHeaderLabel(1, TR("do"));
+        setHorizontalHeaderLabel(1, tr("do"));
 
         for (index = 0; index < sup; index += 1) {
             setItem(index, 0, new ComboItem(this, o->get_exception(index).get_full_type(), types));
@@ -5358,7 +5358,7 @@ void ExceptionsTable::Reinitialize(OperationData *o, QStringList &list, bool isW
     else
     {
         setColumnCount(2);
-        setHorizontalHeaderLabel(1, TR("do"));
+        setHorizontalHeaderLabel(1, tr("do"));
         setColumnStretchable(1, FALSE);
         //adjustColumn(1);
 
@@ -5438,21 +5438,21 @@ void ExceptionsTable::button_pressed(const QModelIndex &index)
         QMenu m;
 
         sprintf(s, "%d", row + 1);
-        MenuFactory::addItem(m, TR("exception %1", s), -1);
+        MenuFactory::addItem(m, tr("exception %1", s), -1);
         m.addSeparator();
 
         if (row < n) {
-            MenuFactory::addItem(m, TR("Insert exception before"), 0);
-            MenuFactory::addItem(m, TR("Insert exception after"), 1);
+            MenuFactory::addItem(m, tr("Insert exception before"), 0);
+            MenuFactory::addItem(m, tr("Insert exception after"), 1);
             m.addSeparator();
-            MenuFactory::addItem(m, TR("Delete exception"), 2);
+            MenuFactory::addItem(m, tr("Delete exception"), 2);
             m.addSeparator();
-            MenuFactory::addItem(m, TR("Copy exception"), 3);
-            MenuFactory::addItem(m, TR("Cut exception"), 4);
+            MenuFactory::addItem(m, tr("Copy exception"), 3);
+            MenuFactory::addItem(m, tr("Cut exception"), 4);
         }
 
         if (!type_copy.isEmpty())
-            MenuFactory::addItem(m, TR("Paste exception"), 5);
+            MenuFactory::addItem(m, tr("Paste exception"), 5);
 
         QMenu mv;
         int rank;
@@ -5464,7 +5464,7 @@ void ExceptionsTable::button_pressed(const QModelIndex &index)
 
             if (mv.actions().count() != 0) {
                 m.addSeparator();
-                MenuFactory::insertItem(m, TR("Move exception"), &mv);
+                MenuFactory::insertItem(m, tr("Move exception"), &mv);
             }
         }
 
@@ -5653,20 +5653,20 @@ CppParamsTable::CppParamsTable(ParamsTable * p, MultiLineEdit * f,
     setSortingEnabled(false);
     setSelectionMode(NoSelection);	// single does not work
     verticalHeader()->setSectionsMovable(true);
-    setHorizontalHeaderLabel(0, TR("Name"));
-    setHorizontalHeaderLabel(1, TR("Specifier"));
+    setHorizontalHeaderLabel(0, tr("Name"));
+    setHorizontalHeaderLabel(1, tr("Specifier"));
     setHorizontalHeaderLabel(2, "${t<i>}");
-    setHorizontalHeaderLabel(3, TR("Pointer"));
+    setHorizontalHeaderLabel(3, tr("Pointer"));
     setHorizontalHeaderLabel(4, "${p<i>}");
 
     if (decl) {
         setHorizontalHeaderLabel(5, "${v<i>}");
-        setHorizontalHeaderLabel(6, TR("Modifier"));
-        setHorizontalHeaderLabel(7, TR("do"));
+        setHorizontalHeaderLabel(6, tr("Modifier"));
+        setHorizontalHeaderLabel(7, tr("do"));
     }
     else {
-        setHorizontalHeaderLabel(5, TR("Modifier"));
-        setHorizontalHeaderLabel(6, TR("do"));
+        setHorizontalHeaderLabel(5, tr("Modifier"));
+        setHorizontalHeaderLabel(6, tr("do"));
     }
 
     setColumnStretchable(0, TRUE);
@@ -5937,16 +5937,16 @@ void CppParamsTable::button_pressed(const QModelIndex &index)
         QMenu m;
 
         sprintf(s, "%d", row + 1);
-        MenuFactory::addItem(m, TR("param %1", s), -1);
+        MenuFactory::addItem(m, tr("param %1", s), -1);
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Insert param before"), 0);
-        MenuFactory::addItem(m, TR("Insert param after"), 1);
+        MenuFactory::addItem(m, tr("Insert param before"), 0);
+        MenuFactory::addItem(m, tr("Insert param after"), 1);
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Delete param"), 2);
+        MenuFactory::addItem(m, tr("Delete param"), 2);
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Copy param"), 3);
-        MenuFactory::addItem(m, TR("Cut param"), 4);
-        MenuFactory::addItem(m, TR("Paste param"), 5);
+        MenuFactory::addItem(m, tr("Copy param"), 3);
+        MenuFactory::addItem(m, tr("Cut param"), 4);
+        MenuFactory::addItem(m, tr("Paste param"), 5);
         m.addSeparator();
 
         QMenu mv;
@@ -5956,7 +5956,7 @@ void CppParamsTable::button_pressed(const QModelIndex &index)
             if (rank != row)
                 MenuFactory::addItem(mv, QString::number(rank + 1), 10 + rank);
 
-        MenuFactory::insertItem(m, TR("Move param"), &mv);
+        MenuFactory::insertItem(m, tr("Move param"), &mv);
         m.addSeparator();
 
         QMenu rk;
@@ -5982,7 +5982,7 @@ void CppParamsTable::button_pressed(const QModelIndex &index)
                     ((rank != t_i) || (rank != p_i)))
                 MenuFactory::addItem(rk,QString::number(rank), 100 + rank);
 
-        MenuFactory::insertItem(m, TR("Set rank <i>"), &rk);
+        MenuFactory::insertItem(m, tr("Set rank <i>"), &rk);
 
         QAction *retAction = m.exec(QCursor::pos());
         if(retAction)
@@ -6238,7 +6238,7 @@ CppParamsDialog::CppParamsDialog(QWidget * parent, ParamsTable * params,
                                  MultiLineEdit * form, bool decl)
     : QDialog(parent/*, "C++ parameters dialog", TRUE*/)
 {
-    setWindowTitle(TR("C++ parameters dialog"));
+    setWindowTitle(tr("C++ parameters dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
 
@@ -6250,8 +6250,8 @@ CppParamsDialog::CppParamsDialog(QWidget * parent, ParamsTable * params,
     QHBoxLayout * hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * accept = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * accept = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     accept->setDefault(TRUE);
@@ -6308,12 +6308,12 @@ PhpParamsTable::PhpParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit 
     setSortingEnabled(false);
     setSelectionMode(NoSelection);	// single does not work
     verticalHeader()->setSectionsMovable(true);
-    setHorizontalHeaderLabel(0, TR("Name"));
+    setHorizontalHeaderLabel(0, tr("Name"));
     setHorizontalHeaderLabel(1, "${t<i>}/array");
-    setHorizontalHeaderLabel(2, TR("Ref."));
+    setHorizontalHeaderLabel(2, tr("Ref."));
     setHorizontalHeaderLabel(3, "${p<i>}");
     setHorizontalHeaderLabel(4, "${v<i>}");
-    setHorizontalHeaderLabel(5, TR("do"));
+    setHorizontalHeaderLabel(5, tr("do"));
     setColumnStretchable(0, TRUE);
     setColumnStretchable(1, TRUE);
     //adjustColumn(2);
@@ -6360,7 +6360,7 @@ PhpParamsTable::PhpParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit 
         }
     }
 
-    PhpTypeRankList.append(TR("array"));
+    PhpTypeRankList.append(tr("array"));
 }
 
 void PhpParamsTable::init_row(int row)
@@ -6529,16 +6529,16 @@ void PhpParamsTable::button_pressed(const QModelIndex &index)
         QMenu m;
 
         sprintf(s, "%d", row + 1);
-        MenuFactory::addItem(m, TR("param %1", s), -1);
+        MenuFactory::addItem(m, tr("param %1", s), -1);
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Insert param before"), 0);
-        MenuFactory::addItem(m, TR("Insert param after"), 1);
+        MenuFactory::addItem(m, tr("Insert param before"), 0);
+        MenuFactory::addItem(m, tr("Insert param after"), 1);
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Delete param"), 2);
+        MenuFactory::addItem(m, tr("Delete param"), 2);
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Copy param"), 3);
-        MenuFactory::addItem(m, TR("Cut param"), 4);
-        MenuFactory::addItem(m, TR("Paste param"), 5);
+        MenuFactory::addItem(m, tr("Copy param"), 3);
+        MenuFactory::addItem(m, tr("Cut param"), 4);
+        MenuFactory::addItem(m, tr("Paste param"), 5);
         m.addSeparator();
 
         QMenu mv;
@@ -6548,7 +6548,7 @@ void PhpParamsTable::button_pressed(const QModelIndex &index)
             if (rank != row)
                 MenuFactory::addItem(mv, QString::number(rank + 1), 10 + rank);
 
-        MenuFactory::insertItem(m, TR("Move param"), &mv);
+        MenuFactory::insertItem(m, tr("Move param"), &mv);
         m.addSeparator();
 
         QMenu rk;
@@ -6573,7 +6573,7 @@ void PhpParamsTable::button_pressed(const QModelIndex &index)
                     ((rank != t_i) || (rank != p_i)))
                 MenuFactory::addItem(rk,QString::number(rank), 100 + rank);
 
-        MenuFactory::insertItem(m, TR("Set rank <i>"), &rk);
+        MenuFactory::insertItem(m, tr("Set rank <i>"), &rk);
 
         QAction *retAction = m.exec(QCursor::pos());
         if(retAction)
@@ -6810,7 +6810,7 @@ QSize PhpParamsDialog::previous_size;
 PhpParamsDialog::PhpParamsDialog(QWidget * parent, ParamsTable * params, MultiLineEdit * form)
     : QDialog(parent/*, "Php parameters dialog", TRUE*/)
 {
-    setWindowTitle(TR("Php parameters dialog"));
+    setWindowTitle(tr("Php parameters dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
 
@@ -6822,8 +6822,8 @@ PhpParamsDialog::PhpParamsDialog(QWidget * parent, ParamsTable * params, MultiLi
     QHBoxLayout * hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * accept = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * accept = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     accept->setDefault(TRUE);
@@ -6881,12 +6881,12 @@ PythonParamsTable::PythonParamsTable(QWidget * parent, ParamsTable * p, MultiLin
     setSortingEnabled(false);
     setSelectionMode(NoSelection);	// single does not work
     verticalHeader()->setSectionsMovable(true);
-    setHorizontalHeaderLabel(0, TR("Name"));
-    setHorizontalHeaderLabel(1, TR("Modifier"));
+    setHorizontalHeaderLabel(0, tr("Name"));
+    setHorizontalHeaderLabel(1, tr("Modifier"));
     setHorizontalHeaderLabel(2, "${p<i>}");
     setHorizontalHeaderLabel(3, "${t<i>}");
     setHorizontalHeaderLabel(4, "${v<i>}");
-    setHorizontalHeaderLabel(5, TR("do"));
+    setHorizontalHeaderLabel(5, tr("do"));
     setColumnStretchable(0, TRUE);
     //adjustColumn(1);
     setColumnStretchable(2, TRUE);
@@ -7070,16 +7070,16 @@ void PythonParamsTable::button_pressed(const QModelIndex &index)
         QMenu m;
 
         sprintf(s, "%d", row + 1);
-        MenuFactory::addItem(m, TR("param %1", s), -1);
+        MenuFactory::addItem(m, tr("param %1", s), -1);
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Insert param before"), 0);
-        MenuFactory::addItem(m, TR("Insert param after"), 1);
+        MenuFactory::addItem(m, tr("Insert param before"), 0);
+        MenuFactory::addItem(m, tr("Insert param after"), 1);
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Delete param"), 2);
+        MenuFactory::addItem(m, tr("Delete param"), 2);
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Copy param"), 3);
-        MenuFactory::addItem(m, TR("Cut param"), 4);
-        MenuFactory::addItem(m, TR("Paste param"), 5);
+        MenuFactory::addItem(m, tr("Copy param"), 3);
+        MenuFactory::addItem(m, tr("Cut param"), 4);
+        MenuFactory::addItem(m, tr("Paste param"), 5);
         m.addSeparator();
 
         QMenu mv;
@@ -7089,7 +7089,7 @@ void PythonParamsTable::button_pressed(const QModelIndex &index)
             if (rank != row)
                 MenuFactory::addItem(mv, QString::number(rank + 1), 10 + rank);
 
-        MenuFactory::insertItem(m, TR("Move param"), &mv);
+        MenuFactory::insertItem(m, tr("Move param"), &mv);
         m.addSeparator();
 
         QMenu rk;
@@ -7113,7 +7113,7 @@ void PythonParamsTable::button_pressed(const QModelIndex &index)
             if (!params->name(rank).isEmpty() && (rank != p_i))
                 MenuFactory::addItem(rk,QString::number(rank), 100 + rank);
 
-        MenuFactory::insertItem(m, TR("Set rank <i>"), &rk);
+        MenuFactory::insertItem(m, tr("Set rank <i>"), &rk);
 
         QAction *retAction = m.exec(QCursor::pos());
         if(retAction)
@@ -7341,7 +7341,7 @@ QSize PythonParamsDialog::previous_size;
 PythonParamsDialog::PythonParamsDialog(QWidget * parent, ParamsTable * params, MultiLineEdit * form)
     : QDialog(parent/*, "Python parameters dialog", TRUE*/)
 {
-    setWindowTitle(TR("Python parameters dialog"));
+    setWindowTitle(tr("Python parameters dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
 
@@ -7353,8 +7353,8 @@ PythonParamsDialog::PythonParamsDialog(QWidget * parent, ParamsTable * params, M
     QHBoxLayout * hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * accept = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * accept = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     accept->setDefault(TRUE);
@@ -7469,7 +7469,7 @@ void OperationDialog::InitPropertiesTab()
 
     kvtable = new KeyValuesTable(oper->get_browser_node(), grid, !isWritable); //update this table
     grid->addWidget(kvtable);
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
 }
 

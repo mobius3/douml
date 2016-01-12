@@ -406,7 +406,7 @@ UmlCode BrowserClassDiagram::get_type() const
 
 QString BrowserClassDiagram::get_stype() const
 {
-    return QObject::TR("class diagram");
+    return QObject::tr("class diagram");
 }
 
 int BrowserClassDiagram::get_identifier() const

@@ -121,22 +121,22 @@ void InfoCanvas::menu(const QPoint &)
     QMenu m(0);
     QMenu fontsubm(0);
 
-    MenuFactory::createTitle(m, TR("Information"));
+    MenuFactory::createTitle(m, tr("Information"));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 5);
-    MenuFactory::addItem(m, TR("Go down"), 6);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 5);
+    MenuFactory::addItem(m, tr("Go down"), 6);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit"), 2);
+    MenuFactory::addItem(m, tr("Edit"), 2);
     m.addSeparator();
-    MenuFactory::insertItem(m, TR("Font"), &fontsubm);
+    MenuFactory::insertItem(m, tr("Font"), &fontsubm);
     init_font_menu(fontsubm, the_canvas(), 10);
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 3);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 3);
 
     if (linked()) {
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Select linked items"), 4);
+        MenuFactory::addItem(m, tr("Select linked items"), 4);
     }
 
     m.addSeparator();
@@ -174,7 +174,7 @@ void InfoCanvas::menu(const QPoint &)
         for (;;) {
             ColorSpecVector co(1);
 
-            co[0].set(TR("note color"), &itscolor);
+            co[0].set(tr("note color"), &itscolor);
 
             SettingsDialog dialog(0, &co, FALSE);
 
@@ -235,7 +235,7 @@ void InfoCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         ColorSpecVector co(1);
         UmlColor itscolor;
 
-        co[0].set(TR("note color"), &itscolor);
+        co[0].set(tr("note color"), &itscolor);
 
         SettingsDialog dialog(0, &co, FALSE, TRUE);
 

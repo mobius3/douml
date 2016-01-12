@@ -68,7 +68,7 @@ void ObjectDiagramView::menu(const QPoint &)
 {
     QMenu m(0);
 
-    MenuFactory::createTitle(m, TR("Object diagram menu"));
+    MenuFactory::createTitle(m, tr("Object diagram menu"));
 
     switch (default_menu(m, 30)) {
     case EDIT_DRAWING_SETTING_CMD:

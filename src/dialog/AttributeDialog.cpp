@@ -72,12 +72,12 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     a->browser_node->edit_start();
 
     if (a->browser_node->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
     visit = !hasOkButton();
@@ -111,7 +111,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     idl_in_struct = !idl_in_enum && ((lang_st == "struct") || (lang_st == "exception"));
     idl_in_union = !idl_in_enum && (lang_st == "union");
 
-    setCaption((in_enum || java_in_enum_pattern) ? TR("Enum item dialog") : TR("Attribute dialog"));
+    setCaption((in_enum || java_in_enum_pattern) ? tr("Enum item dialog") : tr("Attribute dialog"));
 
     GridBox * grid;
     HHBox * htab;
@@ -124,11 +124,11 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     grid->setMargin(0);
     grid->setSpacing(0);
 
-    grid->addWidget(new QLabel(TR("class : "), grid));
+    grid->addWidget(new QLabel(tr("class : "), grid));
     grid->addWidget(new QLabel(((BrowserNode *) a->get_browser_node()->parent())->full_name(TRUE),
                grid));
 
-    grid->addWidget(new QLabel(TR("name :"), grid));
+    grid->addWidget(new QLabel(tr("name :"), grid));
     edname = new LineEdit(a->name(), grid);
     grid->addWidget(edname);
     edname->setReadOnly(visit);
@@ -141,7 +141,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     font.setFixedPitch(TRUE);
 
     if (!java_in_enum_pattern) {
-        grid->addWidget(new QLabel(TR("stereotype :"), grid));
+        grid->addWidget(new QLabel(tr("stereotype :"), grid));
         htab = new HHBox(grid);
         grid->addWidget(htab);
         edstereotype = new QComboBox(htab);
@@ -185,7 +185,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         sp.setHorizontalPolicy(QSizePolicy::Expanding);
         edstereotype->setSizePolicy(sp);
 
-        htab->addWidget(new QLabel(TR("    multiplicity :  "), htab));
+        htab->addWidget(new QLabel(tr("    multiplicity :  "), htab));
         multiplicity = new QComboBox( htab);
         htab->addWidget(multiplicity);
         multiplicity->setEditable(!visit);
@@ -199,7 +199,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
             multiplicity->addItem("*");
             multiplicity->addItem("1..*");
         }
-        connect(pButton = new SmallPushButton(TR("type :"), grid), SIGNAL(clicked()),
+        connect(pButton = new SmallPushButton(tr("type :"), grid), SIGNAL(clicked()),
                 this, SLOT(menu_type()));
         grid->addWidget(pButton);
         edtype = new QComboBox( grid);
@@ -223,11 +223,11 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         edtype->setCurrentIndex(0);
         edtype->setSizePolicy(sp);
 
-        grid->addWidget(new QLabel(TR("initial value :"), grid));
+        grid->addWidget(new QLabel(tr("initial value :"), grid));
     }
     else {
         multiplicity = 0;
-        grid->addWidget(new QLabel(TR("value :"), grid));
+        grid->addWidget(new QLabel(tr("value :"), grid));
     }
     htab = new HHBox(grid);
     grid->addWidget(htab);
@@ -237,7 +237,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     if (visit)
         edinit->setReadOnly(TRUE);
     else
-        connect( pButton = new SmallPushButton(TR("Editor"), htab), SIGNAL(clicked()),
+        connect( pButton = new SmallPushButton(tr("Editor"), htab), SIGNAL(clicked()),
                 this, SLOT(edit_init()));
     htab->addWidget(pButton);
     BButtonGroup * bg;
@@ -271,7 +271,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 
         volatile_cb->setDisabled(visit);
 
-        constattribute_cb = new QCheckBox(TR("read-only"), bg);
+        constattribute_cb = new QCheckBox(tr("read-only"), bg);
         bg->addWidget(constattribute_cb);
 
         if (a->get_isa_const_attribute())
@@ -279,7 +279,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 
         constattribute_cb->setDisabled(visit);
 
-        derived_cb = new QCheckBox(TR("derived"), bg);
+        derived_cb = new QCheckBox(tr("derived"), bg);
         bg->addWidget(derived_cb);
         if (a->get_is_derived())
             derived_cb->setChecked(TRUE);
@@ -293,7 +293,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 
         derivedunion_cb->setDisabled(visit || !derived_cb->isChecked());
 
-        ordered_cb = new QCheckBox(TR("ordered"), bg);
+        ordered_cb = new QCheckBox(tr("ordered"), bg);
         bg->addWidget(ordered_cb);
         if (a->get_is_ordered())
             ordered_cb->setChecked(TRUE);
@@ -311,13 +311,13 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     VVBox * vtab = new VVBox(grid);
     grid->addWidget(vtab);
 
-    new QLabel(TR("description :"), vtab);
+    new QLabel(tr("description :"), vtab);
 
     if (! visit) {
-        connect(pButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(pButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(pButton);
-        connect(pButton = new SmallPushButton(TR("Default"), vtab), SIGNAL(clicked()),
+        connect(pButton = new SmallPushButton(tr("Default"), vtab), SIGNAL(clicked()),
                 this, SLOT(default_description()));
         vtab->addWidget(pButton);
     }
@@ -331,10 +331,10 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 
     vtab = new VVBox(grid);
     grid->addWidget(vtab);
-    vtab->addWidget(new QLabel(TR("constraint :"), vtab));
+    vtab->addWidget(new QLabel(tr("constraint :"), vtab));
 
     if (! visit) {
-        connect(pButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(pButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_constraint()));
         vtab->addWidget(pButton);
     }
@@ -355,11 +355,11 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         grid->setSpacing(0);
 
         if (!cpp_in_enum) {
-            grid->addWidget(new QLabel(TR("Visibility :"), grid));
+            grid->addWidget(new QLabel(tr("Visibility :"), grid));
             htab = new HHBox(grid);
             grid->addWidget(htab);
             BButtonGroup * bg =
-                cpp_visibility.init((QWidget *)htab, a->get_cpp_visibility(), FALSE, NULL, TR("follow uml"));
+                cpp_visibility.init((QWidget *)htab, a->get_cpp_visibility(), FALSE, NULL, tr("follow uml"));
 
             htab->addWidget(bg);
             if (visit)
@@ -378,7 +378,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
                 connect(mutable_cb, SIGNAL(toggled(bool)), this, SLOT(cpp_update()));
         }
 
-        grid->addWidget(new QLabel(TR("Declaration :"), grid));
+        grid->addWidget(new QLabel(tr("Declaration :"), grid));
         edcppdecl = new MultiLineEdit(grid);
         grid->addWidget(edcppdecl);
         edcppdecl->setText(a->get_cppdecl());
@@ -389,7 +389,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         else
             connect(edcppdecl, SIGNAL(textChanged()), this, SLOT(cpp_update()));
 
-        grid->addWidget(new QLabel(TR("Result after\nsubstitution :"), grid));
+        grid->addWidget(new QLabel(tr("Result after\nsubstitution :"), grid));
         showcppdecl = new MultiLineEdit(grid);
         grid->addWidget(showcppdecl);
         showcppdecl->setReadOnly(TRUE);
@@ -400,10 +400,10 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
             htab = new HHBox(grid);
             grid->addWidget(htab);
             QPushButton *button;
-            connect(button = new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked()),
+            connect(button = new QPushButton(tr("Default declaration"), htab), SIGNAL(clicked()),
                     this, SLOT(cpp_default()));
             htab->addWidget(button);
-            connect(button = new QPushButton(TR("Not generated in C++"), htab), SIGNAL(clicked()),
+            connect(button = new QPushButton(tr("Not generated in C++"), htab), SIGNAL(clicked()),
                     this, SLOT(cpp_unmapped()));
             htab->addWidget(button);
         }
@@ -437,7 +437,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
                 connect(transient_cb, SIGNAL(toggled(bool)), this, SLOT(java_update()));
         }
 
-        grid->addWidget(new QLabel(TR("Declaration :"), grid));
+        grid->addWidget(new QLabel(tr("Declaration :"), grid));
         edjavadecl = new MultiLineEdit(grid);
         grid->addWidget(edjavadecl);
         edjavadecl->setText(a->get_javadecl());
@@ -448,7 +448,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         else
             connect(edjavadecl, SIGNAL(textChanged()), this, SLOT(java_update()));
 
-        grid->addWidget(new QLabel(TR("Result after\nsubstitution :"), grid));
+        grid->addWidget(new QLabel(tr("Result after\nsubstitution :"), grid));
         showjavadecl = new MultiLineEdit(grid);
         grid->addWidget(showjavadecl);
         showjavadecl->setReadOnly(TRUE);
@@ -461,21 +461,21 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
             QPushButton *button;
 
             if (java_in_enum) {
-                connect(button = new QPushButton(TR("Default item declaration"), htab), SIGNAL(clicked()),
+                connect(button = new QPushButton(tr("Default item declaration"), htab), SIGNAL(clicked()),
                         this, SLOT(java_default_item()));
                 htab->addWidget(button);
-                connect(button = new QPushButton(TR("Default attribute declaration"), htab), SIGNAL(clicked()),
+                connect(button = new QPushButton(tr("Default attribute declaration"), htab), SIGNAL(clicked()),
                         this, SLOT(java_default()));
                 htab->addWidget(button);
             }
             else
             {
-                connect(button = new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked()),
+                connect(button = new QPushButton(tr("Default declaration"), htab), SIGNAL(clicked()),
                         this, SLOT(java_default()));
                 htab->addWidget(button);
             }
 
-            connect(button = new QPushButton(TR("Not generated in Java"), htab), SIGNAL(clicked()),
+            connect(button = new QPushButton(tr("Not generated in Java"), htab), SIGNAL(clicked()),
                     this, SLOT(java_unmapped()));
             htab->addWidget(button);
 
@@ -483,7 +483,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 
         javaannotation = (const char *) a->java_annotation;
         htab->addWidget(editjavaannotation =
-            new QPushButton((visit) ? TR("Show annotation") : TR("Edit annotation"),
+            new QPushButton((visit) ? tr("Show annotation") : tr("Edit annotation"),
                             htab));
         connect(editjavaannotation, SIGNAL(clicked()),
                 this, SLOT(java_edit_annotation()));
@@ -508,7 +508,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         grid->setMargin(0);
         grid->setSpacing(0);
 
-        grid->addWidget(new QLabel(TR("Declaration :"), grid));
+        grid->addWidget(new QLabel(tr("Declaration :"), grid));
         edphpdecl = new MultiLineEdit(grid);
         grid->addWidget(edphpdecl);
         edphpdecl->setText(a->get_phpdecl());
@@ -519,7 +519,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         else
             connect(edphpdecl, SIGNAL(textChanged()), this, SLOT(php_update()));
 
-        grid->addWidget(new QLabel(TR("Result after\nsubstitution :"), grid));
+        grid->addWidget(new QLabel(tr("Result after\nsubstitution :"), grid));
         showphpdecl = new MultiLineEdit(grid);
         grid->addWidget(showphpdecl);
         showphpdecl->setReadOnly(TRUE);
@@ -530,10 +530,10 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         grid->addWidget(htab);
         if (! visit) {
             QPushButton *button;
-            connect(button = new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked()),
+            connect(button = new QPushButton(tr("Default declaration"), htab), SIGNAL(clicked()),
                     this, SLOT(php_default()));
             htab->addWidget(button);
-            connect(button = new QPushButton(TR("Not generated in Php"), htab), SIGNAL(clicked()),
+            connect(button = new QPushButton(tr("Not generated in Php"), htab), SIGNAL(clicked()),
                     this, SLOT(php_unmapped()));
             htab->addWidget(button);
         }
@@ -554,7 +554,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         grid->setMargin(0);
         grid->setSpacing(0);
 
-        grid->addWidget(new QLabel(TR("Declaration :"), grid));
+        grid->addWidget(new QLabel(tr("Declaration :"), grid));
         edpythondecl = new MultiLineEdit(grid);
         grid->addWidget(edpythondecl);
         edpythondecl->setText(a->get_pythondecl());
@@ -565,7 +565,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         else
             connect(edpythondecl, SIGNAL(textChanged()), this, SLOT(python_update()));
 
-        grid->addWidget(new QLabel(TR("Result after\nsubstitution :"), grid));
+        grid->addWidget(new QLabel(tr("Result after\nsubstitution :"), grid));
         showpythondecl = new MultiLineEdit(grid);
         grid->addWidget(showpythondecl);
         showpythondecl->setReadOnly(TRUE);
@@ -576,10 +576,10 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         grid->addWidget(htab);
         if (! visit) {
             QPushButton* button;
-            connect(button = new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked()),
+            connect(button = new QPushButton(tr("Default declaration"), htab), SIGNAL(clicked()),
                     this, SLOT(python_default()));
             htab->addWidget(button);
-            connect(button =  new QPushButton(TR("Not generated in Python"), htab), SIGNAL(clicked()),
+            connect(button =  new QPushButton(tr("Not generated in Python"), htab), SIGNAL(clicked()),
                     this, SLOT(python_unmapped()));
             htab->addWidget(button);
         }
@@ -629,7 +629,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
                 connect(edcase, SIGNAL(activated(int)), this, SLOT(idl_update()));
         }
 
-        grid->addWidget(new QLabel(TR("Declaration :"), grid));
+        grid->addWidget(new QLabel(tr("Declaration :"), grid));
         edidldecl = new MultiLineEdit(grid);
         grid->addWidget(edidldecl);
         edidldecl->setText(a->get_idldecl());
@@ -640,7 +640,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         else
             connect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update()));
 
-        grid->addWidget(new QLabel(TR("Result after\nsubstitution :"), grid));
+        grid->addWidget(new QLabel(tr("Result after\nsubstitution :"), grid));
         showidldecl = new MultiLineEdit(grid);
         grid->addWidget(showidldecl);
         showidldecl->setReadOnly(TRUE);
@@ -651,8 +651,8 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
             htab = new HHBox(grid);
             grid->addWidget(htab);
             QPushButton *button;
-            connect(button = new QPushButton((idl_in_enum) ? TR("Default declaration")
-                                    : TR("Default attribute declaration"),
+            connect(button = new QPushButton((idl_in_enum) ? tr("Default declaration")
+                                    : tr("Default attribute declaration"),
                                     htab),
                     SIGNAL(clicked()), this, SLOT(idl_default()));
             htab->addWidget(button);
@@ -660,17 +660,17 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
             if (!idl_in_enum && !idl_in_union) {
                 if (!idl_in_struct)
                 {
-                    connect(button = new QPushButton(TR("Default state declaration"), htab), SIGNAL(clicked()),
+                    connect(button = new QPushButton(tr("Default state declaration"), htab), SIGNAL(clicked()),
                             this, SLOT(idl_default_state()));
                     htab->addWidget(button);
                 }
 
-                connect(button = new QPushButton(TR("Default constant declaration"), htab), SIGNAL(clicked()),
+                connect(button = new QPushButton(tr("Default constant declaration"), htab), SIGNAL(clicked()),
                         this, SLOT(idl_default_constant()));
                 htab->addWidget(button);
             }
 
-            connect(button = new QPushButton(TR("Not generated in Idl"), htab), SIGNAL(clicked()),
+            connect(button = new QPushButton(tr("Not generated in Idl"), htab), SIGNAL(clicked()),
                     this, SLOT(idl_unmapped()));
             htab->addWidget(button);
         }
@@ -691,7 +691,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 
     kvtable = new KeyValuesTable(a->browser_node, grid, visit);
     grid->addWidget(kvtable);
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     //
 
@@ -742,13 +742,13 @@ void AttributeDialog::menu_type()
 {
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     int index = list.indexOf(edtype->currentText().trimmed());
 
     if (index != -1)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -756,11 +756,11 @@ void AttributeDialog::menu_type()
         bn = BrowserView::selected_item();
 
         if ((bn != 0) && (bn->get_type() == UmlClass) && !bn->deletedp())
-            MenuFactory::addItem(m, TR("Choose class selected in browser"), 1);
+            MenuFactory::addItem(m, tr("Choose class selected in browser"), 1);
         else
             bn = 0;
 
-        MenuFactory::addItem(m, TR("Create class and choose it"), 2);
+        MenuFactory::addItem(m, tr("Create class and choose it"), 2);
     }
 
     if (!visit || (index != -1) || (bn != 0)) {
@@ -831,7 +831,7 @@ void AttributeDialog::accept()
         ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlAttribute,
                 bn->allow_spaces(),
                 bn->allow_empty()))
-        msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
+        msg_critical(tr("Error"), s + tr("\n\nillegal name or already used"));
     else {
         default_defs_if_needed();
 

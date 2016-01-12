@@ -382,32 +382,32 @@ void PinCanvas::menu(const QPoint &)
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 13);
-    MenuFactory::addItem(m, TR("Go down"), 14);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 13);
+    MenuFactory::addItem(m, tr("Go down"), 14);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 2);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit pin"), 3);
+    MenuFactory::addItem(m, tr("Edit pin"), 3);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Select in browser"), 4);
+    MenuFactory::addItem(m, tr("Select in browser"), 4);
 
     if (cl != 0)
-        MenuFactory::addItem(m, TR("Select class in browser"), 9);
+        MenuFactory::addItem(m, tr("Select class in browser"), 9);
 
     if (linked())
-        MenuFactory::addItem(m, TR("Select linked items"), 5);
+        MenuFactory::addItem(m, tr("Select linked items"), 5);
 
     m.addSeparator();
 
     if (browser_node->is_writable()) {
-        MenuFactory::addItem(m, TR("Delete from model"), 8);
+        MenuFactory::addItem(m, tr("Delete from model"), 8);
         m.addSeparator();
     }
 
     if (Tool::menu_insert(&toolm, UmlActivityPin, 20))
-        MenuFactory::insertItem(m, TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -502,7 +502,7 @@ void PinCanvas::edit_drawing_settings()
     for (;;) {
         ColorSpecVector co(1);
 
-        co[0].set(TR("pin color"), &itscolor);
+        co[0].set(tr("pin color"), &itscolor);
 
         SettingsDialog dialog(0, &co, FALSE);
 
@@ -527,7 +527,7 @@ void PinCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         ColorSpecVector co(1);
         UmlColor itscolor;
 
-        co[0].set(TR("pin color"), &itscolor);
+        co[0].set(tr("pin color"), &itscolor);
 
         SettingsDialog dialog(0, &co, FALSE, TRUE);
 
@@ -560,7 +560,7 @@ QString PinCanvas::may_start(UmlCode & l) const
         return ((BrowserPin *) browser_node)->may_start();
 
     case UmlDependOn:
-        return TR("illegal");
+        return tr("illegal");
 
     default: // anchor
         return 0;
@@ -572,7 +572,7 @@ QString PinCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
     if (l == UmlAnchor)
         return dest->may_start(l);
     else if (dest->get_bn() == 0)
-        return TR("illegal");
+        return tr("illegal");
     else
         return ((BrowserPin *) browser_node)->may_connect(dest->get_bn());
 }

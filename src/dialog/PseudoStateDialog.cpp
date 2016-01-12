@@ -75,12 +75,12 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
     bn->edit_start();
 
     if (bn->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
     QString s = stringify(bn->get_type());
@@ -99,11 +99,11 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(pst->get_stereotype()));
@@ -120,7 +120,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
     edstereotype->setSizePolicy(sp);
 
     if (refst != 0) {
-        connect(new SmallPushButton(TR("reference :"), grid), SIGNAL(clicked()),
+        connect(new SmallPushButton(tr("reference :"), grid), SIGNAL(clicked()),
                 this, SLOT(menu_reference()));
         grid->addWidget(edreference = new QComboBox(grid));
         edreference->setSizePolicy(sp);
@@ -175,11 +175,11 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
 
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(sButton);
     }
@@ -205,7 +205,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
     grid->setSpacing(5);
 
     grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     open_dialog(this);
 }
@@ -232,13 +232,13 @@ void PseudoStateDialog::menu_reference()
 {
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     int index = reflist.indexOf(edreference->currentText());
 
     if (index != -1)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -248,7 +248,7 @@ void PseudoStateDialog::menu_reference()
         if ((bn != 0) &&
             !bn->deletedp() &&
             ((BrowserPseudoState *) pst->browser_node)->can_reference(bn))
-            MenuFactory::addItem(m, TR("Choose pseudo state selected in browser"), 1);
+            MenuFactory::addItem(m, tr("Choose pseudo state selected in browser"), 1);
         else
             bn = 0;
     }
@@ -317,7 +317,7 @@ void PseudoStateDialog::accept()
         ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlPseudoState,
                 bn->allow_spaces(),
                 bn->allow_empty())) {
-        msg_critical(TR("Error"), edname->text() + TR("\n\nillegal name or already used"));
+        msg_critical(tr("Error"), edname->text() + tr("\n\nillegal name or already used"));
         return;
     }
     else

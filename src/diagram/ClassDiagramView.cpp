@@ -128,7 +128,7 @@ void ClassDiagramView::menu(const QPoint & p)
 {
     QMenu m(0);
 
-    MenuFactory::createTitle(m, TR("Class diagram menu"));
+    MenuFactory::createTitle(m, tr("Class diagram menu"));
 
     if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
         BrowserNode * bn = BrowserView::selected_item();
@@ -139,16 +139,16 @@ void ClassDiagramView::menu(const QPoint & p)
 
         if ((bn != 0) && (bn->get_type() == UmlClassView)) {
             if (not_yet_drawn(bn, drawn)) {
-                MenuFactory::addItem(m, TR("Add classes of the selected class view"), 29);
+                MenuFactory::addItem(m, tr("Add classes of the selected class view"), 29);
 
                 if (marked_not_yet_drawn(drawn))
-                    MenuFactory::addItem(m, TR("Add marked elements"), 28);
+                    MenuFactory::addItem(m, tr("Add marked elements"), 28);
 
                 m.addSeparator();
             }
         }
         else if (marked_not_yet_drawn(drawn)) {
-            MenuFactory::addItem(m, TR("Add marked elements"), 28);
+            MenuFactory::addItem(m, tr("Add marked elements"), 28);
             m.addSeparator();
         }
 

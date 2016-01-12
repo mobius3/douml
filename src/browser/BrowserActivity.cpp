@@ -189,7 +189,7 @@ BrowserActivity * BrowserActivity::add_activity(BrowserNode * future_parent)
 {
     QString name;
 
-    return (!future_parent->enter_child_name(name, QObject::TR("enter activity's name : "),
+    return (!future_parent->enter_child_name(name, QObject::tr("enter activity's name : "),
                                              UmlActivity, TRUE, FALSE))
 
             ? 0
@@ -220,7 +220,7 @@ BrowserActivity * BrowserActivity::get_activity(BrowserNode * parent)
     BrowserNode * old;
     QString name;
 
-    if (!parent->enter_child_name(name, QObject::TR("enter activity's name : "),
+    if (!parent->enter_child_name(name, QObject::tr("enter activity's name : "),
                                   UmlActivity, l, &old,
                                   TRUE, FALSE))
         return 0;
@@ -239,7 +239,7 @@ BrowserActivity * BrowserActivity::get_activity(BrowserNode * parent)
 BrowserNode * BrowserActivity::add_parameter(BrowserParameter * param)
 {
     QString name;
-    if (enter_child_name(name, QObject::TR("enter parameter's name : "),
+    if (enter_child_name(name, QObject::tr("enter parameter's name : "),
                          UmlParameter, TRUE, FALSE)) {
         param = (param == 0) ? new BrowserParameter(name, this)
                              : (BrowserParameter *) param->duplicate(this, name);
@@ -332,7 +332,7 @@ void BrowserActivity::menu()
                     "Referenced by",
                     12,
                     "to know who reference the <i>activity</i>");
-        mark_menu(builder.menu(), QObject::TR("the activity").toLatin1().constData(), 90);
+        mark_menu(builder.menu(), QObject::tr("the activity").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(builder.menu(), this, 99990);
 
         if ((edition_number == 0) &&
@@ -402,7 +402,7 @@ void BrowserActivity::exec_menu_choice(int rank)
     case 6: {
         QString name;
 
-        if (((BrowserNode *) parent())->enter_child_name(name, QObject::TR("enter activity's name : "),
+        if (((BrowserNode *) parent())->enter_child_name(name, QObject::tr("enter activity's name : "),
                                                          UmlActivity, TRUE, FALSE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
     }
@@ -544,7 +544,7 @@ UmlCode BrowserActivity::get_type() const
 
 QString BrowserActivity::get_stype() const
 {
-    return QObject::TR("activity");
+    return QObject::tr("activity");
 }
 
 int BrowserActivity::get_identifier() const
@@ -796,7 +796,7 @@ QString BrowserActivity::may_connect(const BrowserNode * dest) const
         return 0;
 
     default:
-        return QObject::TR("illegal");
+        return QObject::tr("illegal");
     }
 }
 
@@ -858,7 +858,7 @@ void BrowserActivity::DropAfterEvent(QDropEvent * e, BrowserNode * after)
         if (may_contains(bn, FALSE))
             move(bn, after);
         else {
-            msg_critical(QObject::TR("Error"), QObject::TR("Forbidden"));
+            msg_critical(QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }

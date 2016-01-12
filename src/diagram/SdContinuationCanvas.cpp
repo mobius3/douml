@@ -197,24 +197,24 @@ void SdContinuationCanvas::menu(const QPoint &)
 {
     QMenu m(0);
 
-    MenuFactory::createTitle(m, TR("Continuation"));
+    MenuFactory::createTitle(m, tr("Continuation"));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 6);
-    MenuFactory::addItem(m, TR("Go down"), 7);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 6);
+    MenuFactory::addItem(m, tr("Go down"), 7);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit"), 2);
+    MenuFactory::addItem(m, tr("Edit"), 2);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 3);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 3);
 
     if (linked()) {
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Select linked items"), 4);
+        MenuFactory::addItem(m, tr("Select linked items"), 4);
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 5);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 5);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -297,7 +297,7 @@ void SdContinuationCanvas::edit_drawing_settings()
     for (;;) {
         ColorSpecVector co(1);
 
-        co[0].set(TR("continuation color"), &itscolor);
+        co[0].set(tr("continuation color"), &itscolor);
 
         SettingsDialog dialog(0, &co, FALSE);
 
@@ -322,7 +322,7 @@ void SdContinuationCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         ColorSpecVector co(1);
         UmlColor itscolor;
 
-        co[0].set(TR("continuation color"), &itscolor);
+        co[0].set(tr("continuation color"), &itscolor);
 
         SettingsDialog dialog(0, &co, FALSE, TRUE);
 
@@ -350,12 +350,12 @@ void SdContinuationCanvas::clone_drawing_settings(const DiagramItem *src)
 
 QString SdContinuationCanvas::may_start(UmlCode & l) const
 {
-    return (l == UmlAnchor) ? QString() : TR("illegal");
+    return (l == UmlAnchor) ? QString() : tr("illegal");
 }
 
 QString SdContinuationCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 {
-    return (l == UmlAnchor) ? dest->may_start(l) : TR("illegal");
+    return (l == UmlAnchor) ? dest->may_start(l) : tr("illegal");
 }
 
 aCorner SdContinuationCanvas::on_resize_point(const QPoint & p)

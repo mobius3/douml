@@ -281,7 +281,7 @@ void ClassDialog::edStereotypeActivated(const QString & s)
 void ClassDialog::icon_browse()
 {
     QString s = ediconpath->text().simplified();
-    const QString ns = QFileDialog::getOpenFileName(0, QObject::TR("Select image"),s);//(s, "", this, 0, QObject::tr("Select image"));
+    const QString ns = QFileDialog::getOpenFileName(0, QObject::tr("Select image"),s);//(s, "", this, 0, QObject::tr("Select image"));
 
     if (! ns.isEmpty()) {
         ediconpath->setText(ns);
@@ -2041,14 +2041,14 @@ void FormalParamsTable::button_pressed(const QModelIndex &index)
         QMenu m;
         MenuFactory::addItem(m, tr("formal param %1").arg(s), -1);
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Insert param before"), 0);
-        MenuFactory::addItem(m, TR("Insert param after"), 1);
+        MenuFactory::addItem(m, tr("Insert param before"), 0);
+        MenuFactory::addItem(m, tr("Insert param after"), 1);
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Delete param"), 2);
+        MenuFactory::addItem(m, tr("Delete param"), 2);
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Copy param"), 3);
-        MenuFactory::addItem(m, TR("Cut param"), 4);
-        MenuFactory::addItem(m, TR("Paste param"), 5);
+        MenuFactory::addItem(m, tr("Copy param"), 3);
+        MenuFactory::addItem(m, tr("Cut param"), 4);
+        MenuFactory::addItem(m, tr("Paste param"), 5);
         m.addSeparator();
 
         QMenu mv;
@@ -2058,7 +2058,7 @@ void FormalParamsTable::button_pressed(const QModelIndex &index)
             if (rank != row)
                 MenuFactory::addItem(mv, QString::number(rank + 1), 10 + rank);
 
-        MenuFactory::insertItem(m, TR("Move param"), &mv);
+        MenuFactory::insertItem(m, tr("Move param"), &mv);
 
         QAction* retAction = m.exec(QCursor::pos());
         if(retAction)
@@ -2486,7 +2486,7 @@ ApplicableOnTable::ApplicableOnTable(QWidget * parent, QString s, bool visit)
     for (it = available.begin(); it != available.end(); ++it) {
         setItem(row, 0,
                 new TableItem(this, TableItem::Never,
-                              TR(ProfiledStereotypes::pretty(*it).toLatin1().constData()), TableItem::TableItemType));
+                              tr(ProfiledStereotypes::pretty(*it).toLatin1().constData()), TableItem::TableItemType));
         setItem(row, 1,
                 new TableItem(this, TableItem::Never,
                               (l.indexOf(*it) == -1) ? empty : yes, TableItem::TableItemType));
@@ -2532,7 +2532,7 @@ uint ClassDialog::TypeID()
 
 void ClassDialog::InitGui()
 {
-    setWindowTitle(TR("Class dialog"));
+    setWindowTitle(tr("Class dialog"));
 
     currentNode = (BrowserClass *) cl->get_browser_node();
     grandParent = (BrowserNode *) currentNode->parent()->parent();
@@ -2562,10 +2562,10 @@ void ClassDialog::InitGui()
     grid->setSpacing(5);
     grid->setMargin(5);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(cl->name(), grid)); //toadd
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
 
     grid->addWidget(edstereotype = new QComboBox( grid)); // toadd
     edstereotype->setEditable(isWritable);
@@ -2583,20 +2583,20 @@ void ClassDialog::InitGui()
     // ASSUMING INSTANTIATE ON NULL
     htabUml->addWidget(uml_visibility.init(htabUml, cl->get_uml_visibility(), TRUE)); //toAdd
 
-    grid->addWidget(basetypelbl = new QLabel(TR("base type : "), grid));
+    grid->addWidget(basetypelbl = new QLabel(tr("base type : "), grid));
     grid->addWidget(edbasetype = new QComboBox( grid));
     edbasetype->setEditable( isWritable);
 
-    grid->addWidget(new QLabel(TR("artifact : "), grid));
+    grid->addWidget(new QLabel(tr("artifact : "), grid));
 
     grid->addWidget(artifact = new QComboBox(grid));
 
 
     grid->addWidget(vtab = new VVBox(grid));
-    new QLabel(TR("description :"), vtab);
+    new QLabel(tr("description :"), vtab);
 
-    vtab->addWidget(pbEditorForDescription = new SmallPushButton(TR("Editor"), vtab));
-    vtab->addWidget(pbDefaultForDescription = new SmallPushButton(TR("Default"), vtab));
+    vtab->addWidget(pbEditorForDescription = new SmallPushButton(tr("Editor"), vtab));
+    vtab->addWidget(pbDefaultForDescription = new SmallPushButton(tr("Default"), vtab));
 
 
     grid->addWidget(comment = new MultiLineEdit(grid));
@@ -2604,8 +2604,8 @@ void ClassDialog::InitGui()
     comment->setFont(font);
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("constraint :"), vtab));
-    vtab->addWidget(pbEditorForConstrant = new SmallPushButton(TR("Editor"), vtab));
+    vtab->addWidget(new QLabel(tr("constraint :"), vtab));
+    vtab->addWidget(pbEditorForConstrant = new SmallPushButton(tr("Editor"), vtab));
 
     grid->addWidget(constraint = new MultiLineEdit(grid));
     constraint->setReadOnly(!isWritable);
@@ -2623,7 +2623,7 @@ void ClassDialog::InitGui()
 
 
     QLabel *label;
-    parametrized_vtab->addWidget(label = new QLabel(TR("\nEnter formals in case the class is parameterized\n"),
+    parametrized_vtab->addWidget(label = new QLabel(tr("\nEnter formals in case the class is parameterized\n"),
                                                     parametrized_vtab));
     label->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
@@ -2637,7 +2637,7 @@ void ClassDialog::InitGui()
     instantiate_vtab = new VVBox(this);
     RegisterTab("Instantiate", instantiate_vtab);
     instantiate_vtab->setMargin(5);
-    instantiate_vtab->addWidget(instantiateNotice = new QLabel(TR("\nSpecify actuals else formals default value will be used\n"),
+    instantiate_vtab->addWidget(instantiateNotice = new QLabel(tr("\nSpecify actuals else formals default value will be used\n"),
                                                                instantiate_vtab));
     instantiateNotice->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     instantiate_vtab->addWidget(actuals_table = new ActualParamsTable(cl, instantiate_vtab, node_names, isWritable)); //todo VISIT NOT FIXED
@@ -2669,21 +2669,21 @@ void ClassDialog::InitGui()
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(lbl2cpp = new QLabel(TR("Declaration : "), htab));
+    htab->addWidget(lbl2cpp = new QLabel(tr("Declaration : "), htab));
     htab->addWidget(edcppdecl = new MultiLineEdit(htab));
 
     vtab = new VVBox(split);
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(lbl3cpp = new QLabel(TR("Result after\nsubstitution : "), htab));
+    htab->addWidget(lbl3cpp = new QLabel(tr("Result after\nsubstitution : "), htab));
     htab->addWidget(showcppdecl = new MultiLineEdit(htab));
 
     vtab->addWidget(htabcpp = new HHBox(vtab));
     htabcpp->addWidget(lbl4cpp = new QLabel("",htabcpp));
 
-    htabcpp->addWidget(pbCppDefaultDeclaration = new QPushButton(TR("Default declaration"), htabcpp));
-    htabcpp->addWidget(pbNotGeneratedInCPP = new QPushButton(TR("Not generated in C++"), htabcpp));
+    htabcpp->addWidget(pbCppDefaultDeclaration = new QPushButton(tr("Default declaration"), htabcpp));
+    htabcpp->addWidget(pbNotGeneratedInCPP = new QPushButton(tr("Not generated in C++"), htabcpp));
 
     addTab(cppTab, "Cpp");
 
@@ -2707,7 +2707,7 @@ void ClassDialog::InitGui()
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(lbl2java = new QLabel(TR("Definition : "), htab));
+    htab->addWidget(lbl2java = new QLabel(tr("Definition : "), htab));
     htab->addWidget(edjavadecl = new MultiLineEdit(htab));
 
 
@@ -2715,13 +2715,13 @@ void ClassDialog::InitGui()
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(lbl3java = new QLabel(TR("Result after\nsubstitution : "), htab));
+    htab->addWidget(lbl3java = new QLabel(tr("Result after\nsubstitution : "), htab));
     htab->addWidget(showjavadecl = new MultiLineEdit(htab));
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->addWidget(lbl4java = new QLabel("",htab));
-    htab->addWidget(pbJavaDefaultDefinition = new QPushButton(TR("Default definition"), htab));
-    htab->addWidget(pbNotGeneratedInJava = new QPushButton(TR("Not generated in Java"), htab));
+    htab->addWidget(pbJavaDefaultDefinition = new QPushButton(tr("Default definition"), htab));
+    htab->addWidget(pbNotGeneratedInJava = new QPushButton(tr("Not generated in Java"), htab));
 
     htab->addWidget(pbJavaAnnotation = new QPushButton("", htab));
 
@@ -2749,7 +2749,7 @@ void ClassDialog::InitGui()
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(lbl2php = new QLabel(TR("Definition : "), htab));
+    htab->addWidget(lbl2php = new QLabel(tr("Definition : "), htab));
     htab->addWidget(edphpdecl = new MultiLineEdit(htab));
     edphpdecl->setFont(font);
 
@@ -2759,15 +2759,15 @@ void ClassDialog::InitGui()
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
 
-    htab->addWidget(lbl3php = new QLabel(TR("Result after\nsubstitution : "), htab));
+    htab->addWidget(lbl3php = new QLabel(tr("Result after\nsubstitution : "), htab));
     htab->addWidget(showphpdecl = new MultiLineEdit(htab));
     showphpdecl->setReadOnly(TRUE);
     showphpdecl->setFont(font);
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->addWidget(lbl4php = new QLabel("",htab));
-    htab->addWidget(pbPhpDefaultDefinition =  new QPushButton(TR("Default definition"), htab));
-    htab->addWidget(pbNotGeneratedInPhp =  new QPushButton(TR("Not generated in Php"), htab));
+    htab->addWidget(pbPhpDefaultDefinition =  new QPushButton(tr("Default definition"), htab));
+    htab->addWidget(pbNotGeneratedInPhp =  new QPushButton(tr("Not generated in Php"), htab));
 
 
     addTab(phptab, "Php");
@@ -2796,14 +2796,14 @@ void ClassDialog::InitGui()
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(lbl2python = new QLabel(TR("Definition : "), htab));
+    htab->addWidget(lbl2python = new QLabel(tr("Definition : "), htab));
     htab->addWidget(edpythondecl = new MultiLineEdit(htab));
 
     vtab = new VVBox(split);
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(lbl3python = new QLabel(TR("Result after\nsubstitution : "), htab));
+    htab->addWidget(lbl3python = new QLabel(tr("Result after\nsubstitution : "), htab));
     htab->addWidget(showpythondecl = new MultiLineEdit(htab));
     showpythondecl->setReadOnly(TRUE);
     showpythondecl->setFont(font);
@@ -2811,8 +2811,8 @@ void ClassDialog::InitGui()
     vtab->addWidget(htab = new HHBox(vtab));
     htab->addWidget(lbl4python = new QLabel("",htab));
 
-    htab->addWidget(pbPythonDefaultDefinition = new QPushButton(TR("Default definition"), htab));
-    htab->addWidget(pbNotGeneratedInPython = new QPushButton(TR("Not generated in Python"), htab));
+    htab->addWidget(pbPythonDefaultDefinition = new QPushButton(tr("Default definition"), htab));
+    htab->addWidget(pbNotGeneratedInPython = new QPushButton(tr("Not generated in Python"), htab));
 
     addTab(pythontab, "Python");
 
@@ -2831,7 +2831,7 @@ void ClassDialog::InitGui()
     htab->setMargin(5);
     htab->addWidget(switch_bg = new QGroupBox(QString(), htab));
     hLayout = new QHBoxLayout(switch_bg);
-    hLayout->addWidget(new QLabel(TR("switch type : "), switch_bg));
+    hLayout->addWidget(new QLabel(tr("switch type : "), switch_bg));
     hLayout->addWidget(edswitch_type = new QComboBox(switch_bg));
     switch_bg->setLayout(hLayout);
     edswitch_type->setEditable(isWritable);
@@ -2853,7 +2853,7 @@ void ClassDialog::InitGui()
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(lbl2idl = new QLabel(TR("Declaration : "), htab));
+    htab->addWidget(lbl2idl = new QLabel(tr("Declaration : "), htab));
     htab->addWidget(edidldecl = new MultiLineEdit(htab));
     edidldecl->setFont(font);
 
@@ -2863,7 +2863,7 @@ void ClassDialog::InitGui()
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(lbl3idl = new QLabel(TR("Result after\nsubstitution : "), htab));
+    htab->addWidget(lbl3idl = new QLabel(tr("Result after\nsubstitution : "), htab));
     htab->addWidget(showidldecl = new MultiLineEdit(htab));
     showidldecl->setReadOnly(TRUE);
     showidldecl->setFont(font);
@@ -2871,8 +2871,8 @@ void ClassDialog::InitGui()
 
     vtab->addWidget(htabidl = new HHBox(vtab));
     htabidl->addWidget(lbl4idl = new QLabel("",htabidl));
-    htabidl->addWidget(pbIdlDefaultDeclaration = new QPushButton(TR("Default declaration"), htabidl));
-    htabidl->addWidget(pbINotGeneratedInIdl = new QPushButton(TR("Not generated in IDL"), htabidl));
+    htabidl->addWidget(pbIdlDefaultDeclaration = new QPushButton(tr("Default declaration"), htabidl));
+    htabidl->addWidget(pbINotGeneratedInIdl = new QPushButton(tr("Not generated in IDL"), htabidl));
 
     addTab(idltab, "Idl");
 
@@ -2883,26 +2883,26 @@ void ClassDialog::InitGui()
     stereotypeGrid->setSpacing(5);
     stereotypeGrid->setMargin(5);
 
-    stereotypeGrid->addWidget(new QLabel(TR("Initialization \nplug-out :"), stereotypeGrid));
+    stereotypeGrid->addWidget(new QLabel(tr("Initialization \nplug-out :"), stereotypeGrid));
     stereotypeGrid->addWidget(htab = new HHBox(stereotypeGrid));
     htab->addWidget(stereo_init_cb = new QComboBox(htab));
 
-    htab->addWidget(new QLabel(TR("  parameter(s) : "), htab));
+    htab->addWidget(new QLabel(tr("  parameter(s) : "), htab));
     htab->addWidget(edinitparam = new LineEdit(currentNode->get_value("stereotypeSetParameters"), htab));
 
-    stereotypeGrid->addWidget(new QLabel(TR("Check \nplug-out :"), stereotypeGrid));
+    stereotypeGrid->addWidget(new QLabel(tr("Check \nplug-out :"), stereotypeGrid));
     stereotypeGrid->addWidget(htab = new HHBox(stereotypeGrid));
     htab->addWidget(stereo_check_cb = new QComboBox( htab));
 
-    htab->addWidget(new QLabel(TR("  parameter(s) : "), htab));
+    htab->addWidget(new QLabel(tr("  parameter(s) : "), htab));
     htab->addWidget(edcheckparam = new LineEdit(currentNode->get_value("stereotypeCheckParameters"), htab));
 
-    stereotypeGrid->addWidget(new QLabel(TR("Icon path :"), stereotypeGrid));
+    stereotypeGrid->addWidget(new QLabel(tr("Icon path :"), stereotypeGrid));
     stereotypeGrid->addWidget(htab = new HHBox(stereotypeGrid));
     htab->addWidget(ediconpath = new LineEdit("", htab));
 
     htab->addWidget(lblProfiledEmpty = new QLabel("", htab));
-    htab->addWidget(pbProfiledSteretypeBrowse = new SmallPushButton(TR("Browse"), htab));
+    htab->addWidget(pbProfiledSteretypeBrowse = new SmallPushButton(tr("Browse"), htab));
     htab->addWidget(lblProfiledEmpty2 = new QLabel("", htab));
     htab->addWidget(vtabProfiled = new VVBox(htab));
     QString ip = currentNode->get_value("stereotypeIconPath");
@@ -2912,7 +2912,7 @@ void ClassDialog::InitGui()
                                                             ? Absolute : RelativePrj, vtabProfiled));
 
     htab->addWidget(lblProfiledEmpty3 = new QLabel("", htab));
-    stereotypeGrid->addWidget(new QLabel(TR("Apply on : "), stereotypeGrid));
+    stereotypeGrid->addWidget(new QLabel(tr("Apply on : "), stereotypeGrid));
     stereotypeGrid->addWidget(applicableon_table = new ApplicableOnTable(stereotypeGrid, "", !isWritable)); // todo!! important !!! turned off parameter
 
     addTab(stereotypetab, QObject::tr("Stereotype"));
@@ -3707,13 +3707,13 @@ bool ClassDialog::SaveData()
         if (((BrowserNode *) bn->parent())->wrong_child_name(s, UmlClass,
                                                              bn->allow_spaces(),
                                                              bn->allow_empty())) {
-            msg_critical(TR("Error"), s + QObject::tr("\n\nillegal name or already used"));
+            msg_critical(tr("Error"), s + QObject::tr("\n\nillegal name or already used"));
             return true;
         }
 
         if ((st == "stereotype") &&
                 (!(err = ProfiledStereotypes::canAddStereotype(bn, s)).isEmpty())) {
-            msg_critical(TR("Error"), s + " " + err);
+            msg_critical(tr("Error"), s + " " + err);
             return true;
         }
 
@@ -3722,14 +3722,14 @@ bool ClassDialog::SaveData()
     else if (st == "stereotype") {
         if (!was_st &&
                 (!(err = ProfiledStereotypes::canAddStereotype(bn, s)).isEmpty())) {
-            msg_critical(TR("Error"), oldname + " " + err);
+            msg_critical(tr("Error"), oldname + " " + err);
             return true;
         }
         else if (stereotypetab != 0) {
             WrapperStr path = ediconpath->text().simplified().toLatin1().constData()/*fromUnicode(ediconpath->text().simplified())*/;
 
             if (!path.isEmpty() && (get_pixmap((const char *) path) == 0)) {
-                msg_critical(TR("Error"),
+                msg_critical(tr("Error"),
                              ((const char *) path) +
                              QObject::tr("\ndoesn't exist or is not a know image format"));
                 return true;

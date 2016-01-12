@@ -54,7 +54,7 @@ RelatedElementsDialog::RelatedElementsDialog(BrowserNode * e, const char * what,
         bool inh, bool assoc, BrowserNodeList & l)
     : QDialog(0), elt(e), elts(l)
 {
-    setWindowTitle(TR("Related elements dialog"));
+    setWindowTitle(tr("Related elements dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     QHBoxLayout * hbox;
@@ -64,32 +64,32 @@ RelatedElementsDialog::RelatedElementsDialog(BrowserNode * e, const char * what,
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    hbox->addWidget(new QLabel(TR("Search for : "), this));
-    referenced_rb = new QCheckBox(TR("referenced elements  "), this);
+    hbox->addWidget(new QLabel(tr("Search for : "), this));
+    referenced_rb = new QCheckBox(tr("referenced elements  "), this);
     referenced_rb->setChecked(TRUE);
     hbox->addWidget(referenced_rb);
-    referencing_rb = new QCheckBox(TR("referencing elements  "), this);
+    referencing_rb = new QCheckBox(tr("referencing elements  "), this);
     hbox->addWidget(referencing_rb);
 
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    hbox->addWidget(new QLabel(TR("Through relations : "), this));
+    hbox->addWidget(new QLabel(tr("Through relations : "), this));
 
     if (inh) {
-        inh_rb = new QCheckBox(TR("generalization  "), this);
+        inh_rb = new QCheckBox(tr("generalization  "), this);
         inh_rb->setChecked(TRUE);
         hbox->addWidget(inh_rb);
     }
     else
         inh_rb = 0;
 
-    dep_rb = new QCheckBox(TR("dependency  "), this);
+    dep_rb = new QCheckBox(tr("dependency  "), this);
     dep_rb->setChecked(TRUE);
     hbox->addWidget(dep_rb);
 
     if (assoc) {
-        assoc_rb = new QCheckBox(TR("other"), this);
+        assoc_rb = new QCheckBox(tr("other"), this);
         assoc_rb->setChecked(TRUE);
         hbox->addWidget(assoc_rb);
     }
@@ -101,26 +101,26 @@ RelatedElementsDialog::RelatedElementsDialog(BrowserNode * e, const char * what,
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    sametype_rb = new QCheckBox(TR("Search only for %1").arg(what), this);
+    sametype_rb = new QCheckBox(tr("Search only for %1").arg(what), this);
     sametype_rb->setChecked(TRUE);
     hbox->addWidget(sametype_rb);
     hbox->addWidget(new QLabel(this), 1000);
-    hbox->addWidget(new QLabel(TR("     Search on "), this));
+    hbox->addWidget(new QLabel(tr("     Search on "), this));
     //sb_level = new QSpinBox(1, 10, 1, this, TR("levels"));
     sb_level = new QSpinBox(this);
     sb_level->setMinimum(1);
     sb_level->setMaximum(10);
     sb_level->setSingleStep(1);
-    sb_level->setObjectName(TR("levels"));
+    sb_level->setObjectName(tr("levels"));
     sb_level->setValue(1);
     hbox->addWidget(sb_level);
-    hbox->addWidget(new QLabel(TR("levels"), this));
+    hbox->addWidget(new QLabel(tr("levels"), this));
 
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * accept = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * accept = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     accept->setDefault(TRUE);

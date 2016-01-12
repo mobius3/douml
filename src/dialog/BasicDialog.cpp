@@ -55,12 +55,12 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
     nd->get_browser_node()->edit_start();
 
     if (nd->get_browser_node()->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
     setWindowTitle(s + tr(" dialog"));
@@ -76,12 +76,12 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
     if (unnamed)
         edname = 0;
     else {
-        grid->addWidget(new QLabel(TR("name : "), grid));
+        grid->addWidget(new QLabel(tr("name : "), grid));
         grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
         edname->setReadOnly(visit);
     }
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(data->get_stereotype()));
@@ -99,12 +99,12 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
 
     VVBox * vtab = new VVBox(grid);
     grid->addWidget(vtab);
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
 
     SmallPushButton *sButton;
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(sButton);
     }
@@ -179,7 +179,7 @@ void BasicDialog::accept()
             ((BrowserNode *) bn->parent())->wrong_child_name(s, bn->get_type(),
                     bn->allow_spaces(),
                     bn->allow_empty())) {
-            msg_critical(TR("Error"), edname->text() + QObject::tr("\n\nillegal name or already used"));
+            msg_critical(tr("Error"), edname->text() + QObject::tr("\n\nillegal name or already used"));
             return;
         }
         else

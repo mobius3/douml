@@ -850,7 +850,7 @@ void ArrowCanvas::remove(bool)
                 }
 
                 if (a && !a->end->isSelected() && !a->end->get_bn()->deletedp()) {
-                    msg_warning("Douml", TR("<i>Draw all relations</i> forced to <i>no</i>"));
+                    msg_warning("Douml", tr("<i>Draw all relations</i> forced to <i>no</i>"));
                     the_canvas()->dont_draw_all_relations();
                 }
             }
@@ -888,12 +888,12 @@ bool ArrowCanvas::contains(int, int) const
 
 QString ArrowCanvas::may_start(UmlCode & l) const
 {
-    return (l == UmlAnchor) ? QString() : TR("a relation can't have a relation");
+    return (l == UmlAnchor) ? QString() : tr("a relation can't have a relation");
 }
 
 QString ArrowCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 {
-    return (l == UmlAnchor) ? dest->may_start(l) : TR("illegal");
+    return (l == UmlAnchor) ? dest->may_start(l) : tr("illegal");
 }
 
 void ArrowCanvas::connexion(UmlCode action, DiagramItem * dest,
@@ -920,8 +920,8 @@ bool ArrowCanvas::edit(const QStringList & defaults,
         st = pstereotype->stereotype->get_name();
 
     StereotypeDialog d(defaults, st, la,
-                       TR("stereotype/label dialog"),
-                       TR("label : "));
+                       tr("stereotype/label dialog"),
+                       tr("label : "));
 
     d.raise();
 
@@ -1028,33 +1028,33 @@ void ArrowCanvas::menu(const QPoint &)
 
     MenuFactory::createTitle(m, ((plabel == 0) ||
                                  plabel->label->get_name().isEmpty())
-                             ? QString(TR("line")) : plabel->label->get_name());
+                             ? QString(tr("line")) : plabel->label->get_name());
 
     if (IsaRelation(itstype)) {
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Edit"), 1);
+        MenuFactory::addItem(m, tr("Edit"), 1);
     }
 
     if (pstereotype || plabel) {
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Select stereotype and label"), 2);
-        MenuFactory::addItem(m, TR("Default stereotype and label position"), 3);
+        MenuFactory::addItem(m, tr("Select stereotype and label"), 2);
+        MenuFactory::addItem(m, tr("Default stereotype and label position"), 3);
 
         if (plabel && (label == 0))
-            MenuFactory::addItem(m, TR("Attach label to this segment"), 4);
+            MenuFactory::addItem(m, tr("Attach label to this segment"), 4);
 
         if (pstereotype && (stereotype == 0))
-            MenuFactory::addItem(m, TR("Attach stereotype to this segment"), 5);
+            MenuFactory::addItem(m, tr("Attach stereotype to this segment"), 5);
     }
 
     if (get_start() != get_end()) {
         m.addSeparator();
         init_geometry_menu(geo, 10);
-        MenuFactory::insertItem(m, TR("Geometry (Ctrl+l)"), &geo);
+        MenuFactory::insertItem(m, tr("Geometry (Ctrl+l)"), &geo);
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 6);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 6);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -1132,7 +1132,7 @@ void ArrowCanvas::init_geometry_menu(QMenu & m, int first)
     QPixmap vh((const char **) geometry_vh);
     QPixmap hvh((const char **) geometry_hvh);
     QPixmap vhv((const char **) geometry_vhv);
-    MenuFactory::addItem(m, TR("None"), first);
+    MenuFactory::addItem(m, tr("None"), first);
     m.addAction(hv,"")->setData( first + HVGeometry);
     m.addAction(vh,"")->setData(VHGeometry);
     m.addAction(hvh,"")->setData( HVHGeometry);
@@ -1161,10 +1161,10 @@ void ArrowCanvas::init_geometry_menu(QMenu & m, int first)
         MenuFactory::findAction(m ,first + VHVGeometry)->setChecked( TRUE);
     }
     if (decenter_begin >= 0)
-        MenuFactory::addItem(m, TR("Recenter begin"), first + RecenterBegin);
+        MenuFactory::addItem(m, tr("Recenter begin"), first + RecenterBegin);
 
     if (decenter_end >= 0)
-        MenuFactory::addItem(m, TR("Recenter end"), first + RecenterEnd);
+        MenuFactory::addItem(m, tr("Recenter end"), first + RecenterEnd);
 }
 
 DiagramItem * ArrowCanvas::get_start() const

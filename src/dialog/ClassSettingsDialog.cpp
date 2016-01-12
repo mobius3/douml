@@ -68,7 +68,7 @@ QSize ClassSettingsDialog::previous_size;
 ClassSettingsDialog::ClassSettingsDialog(ClassSettings * se, bool nodefault)
     : QDialog(0/*, "Class Settings dialog", TRUE*/), settings(se)
 {
-    setWindowTitle(TR("Class Settings dialog"));
+    setWindowTitle(tr("Class Settings dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     QHBoxLayout * hbox;
@@ -79,29 +79,29 @@ ClassSettingsDialog::ClassSettingsDialog(ClassSettings * se, bool nodefault)
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    hbox->addWidget(new QLabel(TR("default attributes visibility : "), this), 1000);
+    hbox->addWidget(new QLabel(tr("default attributes visibility : "), this), 1000);
     cbattribute = new ComboVisibility(this, settings->attribute_visibility, nodefault);
     hbox->addWidget(cbattribute);
 
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    hbox->addWidget(new QLabel(TR("default relations visibility : "), this), 1000);
+    hbox->addWidget(new QLabel(tr("default relations visibility : "), this), 1000);
     cbrelation = new ComboVisibility(this, settings->relation_visibility, nodefault);
     hbox->addWidget(cbrelation);
 
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    hbox->addWidget(new QLabel(TR("default operations visibility : "), this), 1000);
+    hbox->addWidget(new QLabel(tr("default operations visibility : "), this), 1000);
     cboperation = new ComboVisibility(this, settings->operation_visibility, nodefault);
     hbox->addWidget(cboperation);
 
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * accept = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * accept = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     accept->setDefault(TRUE);
