@@ -1,5 +1,0 @@
-class UmlTestIdentityAction
-!!!271875.cpp!!!	write(inout out : FileOut) : void
-  write_begin(out, "TestIdentityAction");
-  write_end(out);
-

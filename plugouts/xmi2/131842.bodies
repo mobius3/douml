@@ -1,3 +1,0 @@
-class UmlJunctionPseudoState
-!!!207490.cpp!!!	sKind() : str
-  return "junction";

@@ -1,3 +1,0 @@
-class UmlDeepHistoryPseudoState
-!!!206594.cpp!!!	sKind() : str
-  return "deepHistory";

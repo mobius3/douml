@@ -1,8 +1,0 @@
-
-
-!!!
-grep --color=auto -o -h -R -P '(?<!\S)\b(?!Q[^aeiou]|BooL)([A-Z][a-z][A-Za-z]+)(?=\s\*)(?!\/)' --include '*.cpp' --include '*.h' * | sort | uniq | more > types.txt
-
-grep --color=auto -h -o -R -P '(?<!\S)\b(?!Q[^aeiou]|BooL)([A-Z][a-z][A-Za-z]+)\s\*\s[A-Za-z_]+\:\:[A-Za-z_]+' --include '*.cpp' --include '*.h' * | sort | uniq | more > pfuncs_1.txt
-
-grep --color=auto -o -R -P '(?<=\:\:)[A-Za-z_]+' pfuncs_1.txt | sort | uniq | more > pfuncs_2.txt

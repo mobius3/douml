@@ -1,5 +1,0 @@
-class UmlSendObjectAction
-!!!203650.cpp!!!	write(inout out : FileOut) : void
-  write_begin(out, "SendObjectAction");
-  write_end(out);
-

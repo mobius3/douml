@@ -1,4 +1,0 @@
-class UmlDeploymentDiagram
-!!!129132.cpp!!!	import(inout f : File, inout p : UmlDeploymentView) : void
-  //!!!!!!!!!!!
-  f.skipBlock();

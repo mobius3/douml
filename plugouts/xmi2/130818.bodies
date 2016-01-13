@@ -1,3 +1,0 @@
-class UmlTerminatePseudoState
-!!!206978.cpp!!!	sKind() : str
-  return "terminate";

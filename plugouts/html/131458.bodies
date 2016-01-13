@@ -1,5 +1,0 @@
-class UmlDeepHistoryPseudoState
-!!!146562.cpp!!!	sKind() : string
-  return "deep history pseudo state";
-!!!146562.java!!!	sKind() : string
-  return "deep history pseudo state";

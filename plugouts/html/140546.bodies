@@ -1,5 +1,0 @@
-class UmlActivityFinalActivityNode
-!!!194818.cpp!!!	sKind() : string
-  return "activity final";
-!!!194818.java!!!	sKind() : string
-  return "activity final";

@@ -1,5 +1,0 @@
-class UmlRaiseExceptionAction
-!!!272003.cpp!!!	write(inout out : FileOut) : void
-  write_begin(out, "RaiseExceptionAction");
-  write_end(out);
-

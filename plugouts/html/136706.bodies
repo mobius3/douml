@@ -1,5 +1,0 @@
-class UmlBroadcastSignalAction
-!!!200194.cpp!!!	sKind() : string
-  return "broadcast signal activity action";
-!!!200194.java!!!	sKind() : string
-  return "broadcast signal activity action";
