@@ -229,7 +229,9 @@ void Shortcut::init(bool conv)
         "Upper",
         "Zoom +",
         "Zoom -",
-        "Zoom 100%"
+        "Zoom 100%",
+        "Expand All",
+        "Collapse All"
     };
 
     for (i = 0; i != sizeof(cmds) / sizeof(cmds[0]); i += 1)

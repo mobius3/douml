@@ -488,6 +488,14 @@ void BrowserView::keyPressEvent(QKeyEvent * e)
                     bn->apply_shortcut("Delete");
                     QApplication::restoreOverrideCursor();
                 }
+                else if(s == "Expand All")
+                {
+                    bn->expandAll();
+                }
+                else if(s == "Collapse All")
+                {
+                    bn->collapseAll();
+                }
                 else if ((s != "Move left") && (s != "Move right") &&
                          (s != "Move up") && (s != "Move down"))
                     bn->apply_shortcut(s);

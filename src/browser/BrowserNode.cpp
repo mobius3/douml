@@ -2208,6 +2208,30 @@ void BrowserNode::insertItem(BrowserNode *node)
 {
     addChild(node);
 }
+
+void BrowserNode::expandAll()
+{
+    int numChildren = childCount();
+    setExpanded(true);
+    for(int i = 0; i < numChildren; i++)
+    {
+        BrowserNode * node = static_cast <BrowserNode *>(child(i));
+        if(node)
+            node->expandAll();
+    }
+}
+
+void BrowserNode::collapseAll()
+{
+    int numChildren = childCount();
+    setExpanded(false);
+    for(int i = 0; i < numChildren; i++)
+    {
+        BrowserNode * node = static_cast <BrowserNode *>(child(i));
+        if(node)
+            node->collapseAll();
+    }
+}
 //
 
 void BrowserNodeList::sort_it()

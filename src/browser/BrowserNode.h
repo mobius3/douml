@@ -317,6 +317,8 @@ public:
     void moveItem(BrowserNode *after);
     void takeItem(BrowserNode *node);
     void insertItem(BrowserNode *node);
+    void expandAll();
+    void collapseAll();
 };
 
 inline QString BrowserNode::fullname(bool rev) const
