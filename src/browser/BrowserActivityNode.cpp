@@ -217,7 +217,7 @@ QString BrowserActivityNode::may_start() const
     switch (get_type()) {
     case FlowFinalAN:
     case ActivityFinalAN:
-        return QObject::TR("can't have outgoing flow");
+        return QObject::tr("can't have outgoing flow");
 
     case InitialAN:
     case MergeAN:	      // theo all input and output must
@@ -229,7 +229,7 @@ QString BrowserActivityNode::may_start() const
         for (child = firstChild(); child != 0; child = child->nextSibling())
             if ((((BrowserNode *) child)->get_type() == UmlFlow) &&
                 (!((BrowserNode *) child)->deletedp()))
-                return QObject::TR("can't have several outgoing flows");
+                return QObject::tr("can't have several outgoing flows");
     }
 
     // no break
@@ -244,35 +244,35 @@ QString BrowserActivityNode::may_connect(const BrowserNode * dest) const
     BrowserNode * bn = dest->get_container(UmlActivity);
 
     if ((bn != 0) && (get_container(UmlActivity) != bn))
-        return QObject::TR("not in the same activity");
+        return QObject::tr("not in the same activity");
 
     BasicData * data = dest->get_data();
 
     switch (dest->get_type()) {
     case InitialAN:
-        return QObject::TR("initial node can't have incoming flow");
+        return QObject::tr("initial node can't have incoming flow");
 
     case ForkAN:
         return (((BrowserActivityNode *) dest)->target_of_flow())
-               ? QObject::TR("fork can't have several incoming flow")
+               ? QObject::tr("fork can't have several incoming flow")
                : QString();
 
     case UmlParameter:
         if (((ParameterData *) data)->get_dir() == UmlIn)
-            return QObject::TR("an input parameter can't have incoming flows");
+            return QObject::tr("an input parameter can't have incoming flows");
         else if (!((ParameterData *) data)->get_is_control())
-            return QObject::TR("parameter can't accept control flow (not 'is_control')");
+            return QObject::tr("parameter can't accept control flow (not 'is_control')");
         else
             return QString();
 
     case UmlExpansionNode:
         return (!((ActivityObjectData *) data)->get_is_control())
-               ? QObject::TR("can't accept control flow (not 'is_control')")
+               ? QObject::tr("can't accept control flow (not 'is_control')")
                : QString();
 
     case UmlActivityPin:
         return (!((PinData *) data)->get_is_control())
-               ? QObject::TR("pin can't accept control flow (not 'is_control')")
+               ? QObject::tr("pin can't accept control flow (not 'is_control')")
                : QString();
 
     case UmlActivityObject:
@@ -285,7 +285,7 @@ QString BrowserActivityNode::may_connect(const BrowserNode * dest) const
         return 0;
 
     default:
-        return QObject::TR("illegal");
+        return QObject::tr("illegal");
     }
 }
 
@@ -294,14 +294,14 @@ QString BrowserActivityNode::connexion_from(bool control) const
     switch (get_type()) {
     case ForkAN:  // theo all input and output must be control/data exclusively
         if (target_of_flow())
-            return QObject::TR("fork can't have several incoming flow");
+            return QObject::tr("fork can't have several incoming flow");
         else
             return 0;
 
     case FlowFinalAN:
     case ActivityFinalAN:
         if (! control)
-            return QObject::TR("can't have incoming data flow");
+            return QObject::tr("can't have incoming data flow");
         else
             return 0;
 
@@ -311,7 +311,7 @@ QString BrowserActivityNode::connexion_from(bool control) const
         return 0;
 
     default:
-        return QObject::TR("illegal");
+        return QObject::tr("illegal");
     }
 }
 
@@ -352,23 +352,23 @@ void BrowserActivityNode::menu()
     m.addSeparator();
 
     if (!deletedp()) {
-        MenuFactory::addItem(m, QObject::TR("Edit"), 1,
-                       QObject::TR("to edit the <i>%1</i>, \
+        MenuFactory::addItem(m, QObject::tr("Edit"), 1,
+                       QObject::tr("to edit the <i>%1</i>, \
 a double click with the left mouse button does the same thing").arg(s));
 
         if (!is_read_only) {
             MenuFactory::addItem(m,  QObject::tr("Duplicate"), 2,
-                           QObject::TR("to copy the <i>%1</i> in a new one").arg(s));
+                           QObject::tr("to copy the <i>%1</i> in a new one").arg(s));
             m.addSeparator();
 
             if (edition_number == 0)
                 MenuFactory::addItem(m, QObject::tr("Delete"), 3,
-                               QObject::TR("to delete the <i>%1</i>. \
+                               QObject::tr("to delete the <i>%1</i>. \
 Note that you can undelete it after").arg(s));
         }
 
         MenuFactory::addItem(m,  QObject::tr("Referenced by"), 5,
-                       QObject::TR("to know who reference the <i>%1</i> \
+                       QObject::tr("to know who reference the <i>%1</i> \
 through a flow").arg(s));
         mark_menu(m, QObject::tr("the %1").arg(s).toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);;
@@ -381,8 +381,8 @@ through a flow").arg(s));
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        MenuFactory::addItem(m, QObject::TR("Undelete"), 4,
-                       QObject::TR("to undelete the <i>%1</i>").arg(s));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 4,
+                       QObject::tr("to undelete the <i>%1</i>").arg(s));
     }
 
     QAction *resultAction = m.exec(QCursor::pos());
@@ -495,7 +495,7 @@ QString BrowserActivityNode::get_stype() const
     if (index != -1)
         s.replace(index, 1, " ");
 
-    return s; //QObject::TR(s);
+    return s; //QObject::tr(s);
 }
 
 int BrowserActivityNode::get_identifier() const
@@ -618,7 +618,7 @@ void BrowserActivityNode::DropAfterEvent(QDropEvent * e, BrowserNode * after)
         if (may_contains(bn, FALSE))
             move(bn, after);
         else {
-            msg_critical(QObject::TR("Error"), QObject::TR("Forbidden"));
+            msg_critical(QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }

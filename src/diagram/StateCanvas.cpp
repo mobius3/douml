@@ -1261,52 +1261,52 @@ void StateCanvas::menu(const QPoint &)
 
     MenuFactory::createTitle(m, data->definition(FALSE, TRUE));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 13);
-    MenuFactory::addItem(m, TR("Go down"), 14);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 13);
+    MenuFactory::addItem(m, tr("Go down"), 14);
     m.addSeparator();
 
     if (ref == 0) {
         if (show_decomp_icon)
-            MenuFactory::addItem(m, TR("Hide decomposition indicator"), 15);
+            MenuFactory::addItem(m, tr("Hide decomposition indicator"), 15);
         else
-            MenuFactory::addItem(m, TR("Show decomposition indicator"), 15);
+            MenuFactory::addItem(m, tr("Show decomposition indicator"), 15);
     }
 
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 2);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit state"), 3);
+    MenuFactory::addItem(m, tr("Edit state"), 3);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Select in browser"), 4);
+    MenuFactory::addItem(m, tr("Select in browser"), 4);
 
     if (ref != 0)
-        MenuFactory::addItem(m, TR("Select referenced state in browser"), 16);
+        MenuFactory::addItem(m, tr("Select referenced state in browser"), 16);
 
     if (linked())
-        MenuFactory::addItem(m, TR("Select linked items"), 5);
+        MenuFactory::addItem(m, tr("Select linked items"), 5);
 
     m.addSeparator();
 
     if (browser_node->is_writable()) {
         if (browser_node->get_associated() !=
             (BrowserNode *) the_canvas()->browser_diagram())
-            MenuFactory::addItem(m, TR("Set associated diagram"), 6);
+            MenuFactory::addItem(m, tr("Set associated diagram"), 6);
 
         if (browser_node->get_associated())
-            MenuFactory::addItem(m, TR("Remove diagram association"), 9);
+            MenuFactory::addItem(m, tr("Remove diagram association"), 9);
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        MenuFactory::addItem(m, TR("Delete from model"), 8);
+        MenuFactory::addItem(m, tr("Delete from model"), 8);
 
     m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlState, 20))
-        MenuFactory::insertItem(m, TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -1422,11 +1422,11 @@ void StateCanvas::edit_drawing_settings()
         StateSpecVector st(3);
         ColorSpecVector co(1);
 
-        st[0].set(TR("show activities"), &settings.show_activities);
-        st[1].set(TR("draw regions horizontally"), &settings.region_horizontally);
-        st[2].set(TR("drawing language"), &settings.drawing_language);
+        st[0].set(tr("show activities"), &settings.show_activities);
+        st[1].set(tr("draw regions horizontally"), &settings.region_horizontally);
+        st[2].set(tr("drawing language"), &settings.drawing_language);
 
-        co[0].set(TR("state color"), &itscolor);
+        co[0].set(tr("state color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -1455,11 +1455,11 @@ void StateCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         UmlColor itscolor;
         DrawingLanguage language;
 
-        st[0].set(TR("show activities"), &show_activities);
-        st[1].set(TR("draw regions horizontally"), &region_horizontally);
-        st[2].set(TR("drawing language"), &language);
+        st[0].set(tr("show activities"), &show_activities);
+        st[1].set(tr("draw regions horizontally"), &region_horizontally);
+        st[2].set(tr("drawing language"), &language);
 
-        co[0].set(TR("state color"), &itscolor);
+        co[0].set(tr("state color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE, TRUE);
 
@@ -1522,7 +1522,7 @@ QString StateCanvas::may_start(UmlCode & l) const
         return 0;
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 
@@ -1544,10 +1544,10 @@ QString StateCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
     case ChoicePS:
     case ForkPS:
     case JoinPS:
-        return (l == UmlTransition) ? QString() : TR("illegal");
+        return (l == UmlTransition) ? QString() : tr("illegal");
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 

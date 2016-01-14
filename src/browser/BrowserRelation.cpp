@@ -148,13 +148,13 @@ bool BrowserRelation::undelete(bool, QString & warning, QString & renamed)
     if (def->get_start_class()->deletedp() ||
             def->get_end_class()->deletedp()) {
         if (def->is_a(this))
-            warning += QString("<li><b>") + quote(def->get_name(this)) + "</b> " + QObject::TR("from") + " <b>" +
+            warning += QString("<li><b>") + quote(def->get_name(this)) + "</b> " + QObject::tr("from") + " <b>" +
                     def->get_start_class()->full_name() +
-                    "</b> " + QObject::TR("to") + " <b>" + def->get_end_class()->full_name() + "</b>\n";
+                    "</b> " + QObject::tr("to") + " <b>" + def->get_end_class()->full_name() + "</b>\n";
         else
-            warning += QString("<li><b>") + def->get_name(this) + "</b> " + QObject::TR("from") + " <b>" +
+            warning += QString("<li><b>") + def->get_name(this) + "</b> " + QObject::tr("from") + " <b>" +
                     def->get_end_class()->full_name() +
-                    "</b> " + QObject::TR("to") + " <b>" + quote(def->get_start_class()->full_name()) + "</b>\n";
+                    "</b> " + QObject::tr("to") + " <b>" + quote(def->get_start_class()->full_name()) + "</b>\n";
 
         return FALSE;
     }
@@ -532,62 +532,62 @@ void BrowserRelation::menu()
 
     if (!deletedp()) {
         if (!in_edition()) {
-            MenuFactory::addItem(m, QObject::TR("Edit"), 0,
-                                 QObject::TR("to edit the <i>relation</i>, \
+            MenuFactory::addItem(m, QObject::tr("Edit"), 0,
+                                 QObject::tr("to edit the <i>relation</i>, \
                                              a double click with the left mouse button does the same thing"));
 
                                              if (!is_read_only && (edition_number == 0)) {
                                                  if (RelationData::isa_association(def->get_type())) {
-                                                     MenuFactory::addItem(m, QObject::TR("Duplicate"), 1,
-                                                     QObject::TR("to copy the <i>relation</i> in a new one"));
+                                                     MenuFactory::addItem(m, QObject::tr("Duplicate"), 1,
+                                                     QObject::tr("to copy the <i>relation</i> in a new one"));
 
                                                      if (get_oper == 0)
-                                                     MenuFactory::addItem(m, QObject::TR("New get operation"), 4,
-                                                     QObject::TR("to auto define the <i>get operation</i>"));
+                                                     MenuFactory::addItem(m, QObject::tr("New get operation"), 4,
+                                                     QObject::tr("to auto define the <i>get operation</i>"));
 
                                                      if (set_oper == 0)
-                                                     MenuFactory::addItem(m, QObject::TR("New set operation"), 5,
-                                                     QObject::TR("to auto define the <i>set operation</i>"));
+                                                     MenuFactory::addItem(m, QObject::tr("New set operation"), 5,
+                                                     QObject::tr("to auto define the <i>set operation</i>"));
 
                                                      if ((get_oper == 0) && (set_oper == 0))
-                                                     MenuFactory::addItem(m, QObject::TR("New get and set operation"), 6,
-                                                     QObject::TR("to auto define the <i>get</i> and <i>set operation</i>s"));
+                                                     MenuFactory::addItem(m, QObject::tr("New get and set operation"), 6,
+                                                     QObject::tr("to auto define the <i>get</i> and <i>set operation</i>s"));
 
                                                      m.addSeparator();
                                                  }
                                              }
 
-                                             MenuFactory::addItem(m, QObject::TR("Referenced by"), 8,
-                                                                  QObject::TR("to know who reference the <i>relation</i>"));
+                                             MenuFactory::addItem(m, QObject::tr("Referenced by"), 8,
+                                                                  QObject::tr("to know who reference the <i>relation</i>"));
                                  m.addSeparator();
 
                     if (!is_read_only && (edition_number == 0)) {
-                MenuFactory::addItem(m, QObject::TR("Delete"), 2,
-                                     QObject::TR("to delete the <i>relation</i>. \
+                MenuFactory::addItem(m, QObject::tr("Delete"), 2,
+                                     QObject::tr("to delete the <i>relation</i>. \
                                                  Note that you can undelete it after"));
             }
 
             m.addSeparator();
         }
 
-        MenuFactory::addItem(m, QString(QObject::TR("select ")) +
+        MenuFactory::addItem(m, QString(QObject::tr("select ")) +
                              ((def->is_a(this))
                               ? def->get_end_class()
                               : def->get_start_class())->get_name(),
                              7,
-                             QObject::TR("to select the destination class"));
+                             QObject::tr("to select the destination class"));
         mark_menu(m, QObject::tr("the relation").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0)
                 && Tool::menu_insert(&toolm, get_type(), 100)) {
             m.addSeparator();
-            MenuFactory::insertItem(m, QObject::TR("Tool"), &toolm);
+            MenuFactory::insertItem(m, QObject::tr("Tool"), &toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        MenuFactory::addItem(m, QObject::TR("Undelete"), 3,
-                             QObject::TR("undelete the <i>relation</i> \
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 3,
+                             QObject::tr("undelete the <i>relation</i> \
                                          (except if the class at the other side is also deleted)"));
 
                                          if (def->get_start_class()->deletedp() ||
@@ -756,7 +756,7 @@ UmlCode BrowserRelation::get_type() const
 
 QString BrowserRelation::get_stype() const
 {
-    return QObject::TR("relation");
+    return QObject::tr("relation");
 }
 
 int BrowserRelation::get_identifier() const

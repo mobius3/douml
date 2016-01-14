@@ -620,45 +620,45 @@ void ActivityCanvas::menu(const QPoint &)
     m.addSeparator();
 
     if (browser_node->is_writable()) {
-        MenuFactory::addItem(m, TR("Add parameter"), 9);
+        MenuFactory::addItem(m, tr("Add parameter"), 9);
         m.addSeparator();
     }
 
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 13);
-    MenuFactory::addItem(m, TR("Go down"), 14);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 13);
+    MenuFactory::addItem(m, tr("Go down"), 14);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 2);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit activity"), 3);
+    MenuFactory::addItem(m, tr("Edit activity"), 3);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Select in browser"), 4);
+    MenuFactory::addItem(m, tr("Select in browser"), 4);
 
     if (linked())
-        MenuFactory::addItem(m, TR("Select linked items"), 5);
+        MenuFactory::addItem(m, tr("Select linked items"), 5);
 
     m.addSeparator();
 
     if (browser_node->is_writable()) {
         if (browser_node->get_associated() !=
                 (BrowserNode *) the_canvas()->browser_diagram())
-            MenuFactory::addItem(m, TR("Set associated diagram"), 6);
+            MenuFactory::addItem(m, tr("Set associated diagram"), 6);
 
         if (browser_node->get_associated())
-            MenuFactory::addItem(m, TR("Remove diagram association"), 10);
+            MenuFactory::addItem(m, tr("Remove diagram association"), 10);
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        MenuFactory::addItem(m, TR("Delete from model"), 8);
+        MenuFactory::addItem(m, tr("Delete from model"), 8);
 
     m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlActivity, 20))
-        MenuFactory::insertItem(m, TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
     QAction *retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -770,10 +770,10 @@ void ActivityCanvas::edit_drawing_settings()
         StateSpecVector st(2);
         ColorSpecVector co(1);
 
-        st[0].set(TR("show conditions"), &settings.show_infonote);
-        st[1].set(TR("drawing language"), &settings.drawing_language);
+        st[0].set(tr("show conditions"), &settings.show_infonote);
+        st[1].set(tr("drawing language"), &settings.drawing_language);
 
-        co[0].set(TR("activity color"), &itscolor);
+        co[0].set(tr("activity color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -801,10 +801,10 @@ void ActivityCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         DrawingLanguage drawing_language;
         UmlColor itscolor;
 
-        st[0].set(TR("show conditions"), &show_infonote);
-        st[1].set(TR("drawing language"), &drawing_language);
+        st[0].set(tr("show conditions"), &show_infonote);
+        st[1].set(tr("drawing language"), &drawing_language);
 
-        co[0].set(TR("activity color"), &itscolor);
+        co[0].set(tr("activity color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE, TRUE);
 
@@ -854,7 +854,7 @@ bool ActivityCanvas::get_show_stereotype_properties() const
 
 QString ActivityCanvas::may_start(UmlCode & l) const
 {
-    return (l == UmlFlow) ? TR("illegal") : QString();
+    return (l == UmlFlow) ? tr("illegal") : QString();
 }
 
 QString ActivityCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
@@ -862,7 +862,7 @@ QString ActivityCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
     if (l == UmlAnchor)
         return dest->may_start(l);
     else if (dest->get_bn() == 0)
-        return TR("illegal");
+        return tr("illegal");
     else
         // dependency
         return ((BrowserActivity *) browser_node)->may_connect(dest->get_bn());

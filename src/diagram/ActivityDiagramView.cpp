@@ -82,7 +82,7 @@ void ActivityDiagramView::menu(const QPoint &)
 {
     QMenu m(0);
 
-    MenuFactory::createTitle(m, TR("Activity diagram menu"));
+    MenuFactory::createTitle(m, tr("Activity diagram menu"));
 
     switch (default_menu(m, 30)) {
     case EDIT_DRAWING_SETTING_CMD:
@@ -130,7 +130,7 @@ void ActivityDiagramView::mousePressEvent(QMouseEvent * e)
 
             if (b != 0) {
                 if (the_canvas()->already_drawn(b)) {
-                    msg_information("Douml", TR("already drawn"));
+                    msg_information("Douml", tr("already drawn"));
                     history_protected = FALSE;
                     return;
                 }
@@ -159,7 +159,7 @@ void ActivityDiagramView::mousePressEvent(QMouseEvent * e)
 
             if (b != 0) {
                 if (the_canvas()->already_drawn(b)) {
-                    msg_information("Douml", TR("already drawn"));
+                    msg_information("Douml", tr("already drawn"));
                     history_protected = FALSE;
                     return;
                 }
@@ -190,7 +190,7 @@ void ActivityDiagramView::mousePressEvent(QMouseEvent * e)
 
             if (b != 0) {
                 if (the_canvas()->already_drawn(b)) {
-                    msg_information("Douml", TR("already drawn"));
+                    msg_information("Douml", tr("already drawn"));
                     history_protected = FALSE;
                     return;
                 }
@@ -250,7 +250,7 @@ void ActivityDiagramView::mousePressEvent(QMouseEvent * e)
                 history_protected = TRUE;
 
                 if (the_canvas()->already_drawn(b)) {
-                    msg_information("Douml", TR("already drawn"));
+                    msg_information("Douml", tr("already drawn"));
                     history_protected = FALSE;
                     return;
                 }
@@ -278,7 +278,7 @@ void ActivityDiagramView::mousePressEvent(QMouseEvent * e)
 
             if (b != 0) {
                 if (the_canvas()->already_drawn(b)) {
-                    msg_information("Douml", TR("already drawn"));
+                    msg_information("Douml", tr("already drawn"));
                     history_protected = FALSE;
                     return;
                 }
@@ -309,7 +309,7 @@ void ActivityDiagramView::mousePressEvent(QMouseEvent * e)
 
             if (b != 0) {
                 if (the_canvas()->already_drawn(b)) {
-                    msg_information("Douml", TR("already drawn"));
+                    msg_information("Douml", tr("already drawn"));
                     history_protected = FALSE;
                     return;
                 }
@@ -418,13 +418,13 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     if ((bn = UmlDrag::decode(e, UmlActivity, TRUE)) != 0) {
         QMenu m(0);
 
-        MenuFactory::createTitle(m, TR("Choose"));
+        MenuFactory::createTitle(m, tr("Choose"));
         m.addSeparator();
 
         if (!the_canvas()->already_drawn(bn))
-            MenuFactory::addItem(m, TR("Draw activity"), 0);
+            MenuFactory::addItem(m, tr("Draw activity"), 0);
 
-        MenuFactory::addItem(m, TR("Add a call behavior"), 1);
+        MenuFactory::addItem(m, tr("Add a call behavior"), 1);
 
         QAction* retAction = m.exec(QCursor::pos());
         if(retAction)
@@ -491,7 +491,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlActivityNode, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Douml", TR("already drawn"));
+            msg_information("Douml", tr("already drawn"));
         else {
             history_save();
 
@@ -510,7 +510,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlInterruptibleActivityRegion, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Douml", TR("already drawn"));
+            msg_information("Douml", tr("already drawn"));
         else {
             history_save();
 
@@ -534,7 +534,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlExpansionRegion, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Douml", TR("already drawn"));
+            msg_information("Douml", tr("already drawn"));
         else {
             history_save();
 
@@ -558,7 +558,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlActivityPartition, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Douml", TR("already drawn"));
+            msg_information("Douml", tr("already drawn"));
         else {
             history_save();
 
@@ -582,7 +582,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlActivityAction, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Douml", TR("already drawn"));
+            msg_information("Douml", tr("already drawn"));
         else {
             history_save();
             history_protected = TRUE;
@@ -602,7 +602,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlActivityObject, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Douml", TR("already drawn"));
+            msg_information("Douml", tr("already drawn"));
         else {
             history_save();
             history_protected = TRUE;
@@ -682,13 +682,13 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
              ((bn = UmlDrag::decode(e, UmlRelations, TRUE)) != 0)) {
         QMenu m(0);
 
-        MenuFactory::createTitle(m, TR("Choose"));
+        MenuFactory::createTitle(m, tr("Choose"));
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Add a read variable value action"), 0);
-        MenuFactory::addItem(m, TR("Add a clear variable value action"), 1);
-        MenuFactory::addItem(m, TR("Add a write variable value action"), 2);
-        MenuFactory::addItem(m, TR("Add a add variable value action"), 3);
-        MenuFactory::addItem(m, TR("Add a remove variable value action"), 4);
+        MenuFactory::addItem(m, tr("Add a read variable value action"), 0);
+        MenuFactory::addItem(m, tr("Add a clear variable value action"), 1);
+        MenuFactory::addItem(m, tr("Add a write variable value action"), 2);
+        MenuFactory::addItem(m, tr("Add a add variable value action"), 3);
+        MenuFactory::addItem(m, tr("Add a remove variable value action"), 4);
 
         QAction* retAction = m.exec(QCursor::pos());
         if(retAction)

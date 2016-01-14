@@ -61,8 +61,8 @@ QPixmap * get_pixmap(const char * path)
         DiagramPixmap.insert(path, px);
 
         if (px->isNull()) {
-            msg_critical(QObject::TR("Error"),
-                         QString(path) + QObject::TR("\ndoesn't exist or is not a know image format"));
+            msg_critical(QObject::tr("Error"),
+                         QString(path) + QObject::tr("\ndoesn't exist or is not a know image format"));
             return 0;
         }
 

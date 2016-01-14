@@ -110,7 +110,7 @@ void ComponentDiagramView::menu(const QPoint & p)
 {
     QMenu m(0);
 
-    MenuFactory::createTitle(m, TR("Component diagram menu"));
+    MenuFactory::createTitle(m, tr("Component diagram menu"));
 
     if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
         DiagramItemList items(canvas()->items());
@@ -119,7 +119,7 @@ void ComponentDiagramView::menu(const QPoint & p)
         get_drawn(items, drawn);
 
         if (marked_not_yet_drawn(drawn))
-            MenuFactory::addItem(m, TR("Add marked elements"), 28);
+            MenuFactory::addItem(m, tr("Add marked elements"), 28);
 
         switch (default_menu(m, 30)) {
         case EDIT_DRAWING_SETTING_CMD:

@@ -546,7 +546,7 @@ SOURCES = \
     dialog/tablewidgetitemdelegate.cpp
 
 TARGET = douml
-DEFINES = BooL=bool  FALSE=false TRUE=true TR=tr
+DEFINES = BooL=bool  FALSE=false TRUE=true
 #DEBUGCOM
 
 DEFINES += __sil__
@@ -582,3 +582,9 @@ FORMS += \
     ui/constructorinitializerdialog.ui \
     ui/catalogwidget.ui \
     ui/quickedit.ui
+win32:RC_ICONS += ../douml.ico
+
+TRANSLATIONS += translations/frFR.ts\
+                translations/deDE.ts\
+                translations/esES.ts\
+                translations/ptBR.ts

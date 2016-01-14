@@ -60,7 +60,7 @@ InstanceDialog::InstanceDialog(Instance * i, QString w, UmlCode k)
     GridBox * grid = new GridBox(2, this);
 
     vbox->addWidget(grid);
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(inst->get_name(), grid));
     edname->setFocus();
 
@@ -85,8 +85,8 @@ InstanceDialog::InstanceDialog(Instance * i, QString w, UmlCode k)
     vbox->addLayout(hbox);
 
     hbox->setMargin(5);
-    QPushButton * accept = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * accept = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     accept->setDefault(TRUE);
@@ -118,26 +118,26 @@ void InstanceDialog::menu_type()
 {
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     int index = list.indexOf(edtype->currentText().trimmed());
 
     if (index != -1)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = BrowserView::selected_item();
 
     if ((bn != 0) &&
         (bn->get_type() == kind) && !bn->deletedp())
-        MenuFactory::addItem(m, TR("Choose ") + what + tr(" selected in browser"), 1);
+        MenuFactory::addItem(m, tr("Choose ") + what + tr(" selected in browser"), 1);
     else
         bn = 0;
 
     bool new_available = inst->new_type_available();
 
     if (new_available)
-        MenuFactory::addItem(m, TR("Create ") + what + tr(" and choose it"), 2);
+        MenuFactory::addItem(m, tr("Create ") + what + tr(" and choose it"), 2);
 
     if (new_available || (index != -1) || (bn != 0)) {
         QAction* retAction = m.exec(QCursor::pos());

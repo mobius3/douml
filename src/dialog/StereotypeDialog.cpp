@@ -70,7 +70,7 @@ StereotypeDialog::StereotypeDialog(const QStringList & defaults,
 
     vbox->addLayout(hbox = new QHBoxLayout());
     hbox->setMargin(5);
-    hbox->addWidget(label2 = new QLabel(TR("stereotype : "), this));
+    hbox->addWidget(label2 = new QLabel(tr("stereotype : "), this));
     cb = new QComboBox(this);
     cb->setEditable(true);
     cb->addItem(ste);
@@ -88,8 +88,8 @@ StereotypeDialog::StereotypeDialog(const QStringList & defaults,
 
     vbox->addLayout(hbox = new QHBoxLayout());
     hbox->setMargin(5);
-    QPushButton * accept = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * accept = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     accept->setDefault(TRUE);

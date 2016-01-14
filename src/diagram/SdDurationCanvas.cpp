@@ -318,7 +318,7 @@ QString SdDurationCanvas::may_connect(UmlCode & l, const DiagramItem * dest) con
             return 0;
 
         default:
-            return TR("illegal");
+            return tr("illegal");
         }
     }
 }
@@ -738,27 +738,27 @@ void SdDurationCanvas::menu(const QPoint & p)
         }
     }
 
-    MenuFactory::createTitle(m, TR("Activity bar"));
+    MenuFactory::createTitle(m, tr("Activity bar"));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 9);
-    MenuFactory::addItem(m, TR("Go down"), 10);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 9);
+    MenuFactory::addItem(m, tr("Go down"), 10);
     m.addSeparator();
-    MenuFactory::addItem(m, (coregion) ? TR("Draw as activity bar") :  TR("Draw as a coregion"), 7);
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    MenuFactory::addItem(m, (coregion) ? tr("Draw as activity bar") :  tr("Draw as a coregion"), 7);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 2);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Select linked items"), 3);
+    MenuFactory::addItem(m, tr("Select linked items"), 3);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 4);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 4);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Cut here"), 5);
+    MenuFactory::addItem(m, tr("Cut here"), 5);
 
     if (!l.isEmpty())
-        MenuFactory::addItem(m, TR("Merge juxtaposed activity bars"), 6);
+        MenuFactory::addItem(m, tr("Merge juxtaposed activity bars"), 6);
 
     if (support->isaDuration())
-        MenuFactory::addItem(m, TR("Collapse in parent bar"), 8);
+        MenuFactory::addItem(m, tr("Collapse in parent bar"), 8);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -856,7 +856,7 @@ void SdDurationCanvas::edit_drawing_settings()
     for (;;) {
         ColorSpecVector co(1);
 
-        co[0].set(TR("duration color"), &itscolor);
+        co[0].set(tr("duration color"), &itscolor);
 
         SettingsDialog dialog(0, &co, FALSE);
 
@@ -881,7 +881,7 @@ void SdDurationCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         ColorSpecVector co(1);
         UmlColor itscolor;
 
-        co[0].set(TR("duration color"), &itscolor);
+        co[0].set(tr("duration color"), &itscolor);
 
         SettingsDialog dialog(0, &co, FALSE, TRUE);
 

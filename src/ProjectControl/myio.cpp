@@ -142,7 +142,7 @@ char * read_token(char *& st)
 
 static int open_file(QFile & fp, BooL & ro)
 {
-    QString filename = fp.name();
+    QString filename = fp.fileName();
 
     while (! fp.open(QIODevice::ReadOnly)) {
         if (QMessageBox::critical(0, "Uml",
@@ -160,14 +160,14 @@ static int open_file(QFile & fp, BooL & ro)
 
 char * read_file(QDir & dir, QString fn, BooL & ro)
 {
-    QString filename = dir.absFilePath(fn);
+    QString filename = dir.absoluteFilePath(fn);
     QFile fp(filename);
     int size;
 
     if ((size = open_file(fp, ro)) != -1) {
         char * s = new char[size + 1];
 
-        if (fp.readBlock(s, size) == -1) {
+        if (fp.read(s, size) == -1) {
             QMessageBox::critical(0, "Error", filename + "cannot be read");
             delete [] s;
             return 0;

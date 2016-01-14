@@ -161,8 +161,8 @@ int main(int argc, char ** argv)
         try {
             if ((argc == 3) &&
                 !strcmp(argv[2], "-root") &&
-                (msg_critical(QObject::TR("DO NOT CONFIRM"),
-                              QObject::TR("Root mode protection\n\n"
+                (msg_critical(QObject::tr("DO NOT CONFIRM"),
+                              QObject::tr("Root mode protection\n\n"
                                  "This mode allows me to develop BOUML\n\n"
                                  "do NOT confirm to avoid a disaster !!!\n\n"
                                  "confirm ?"),
@@ -204,7 +204,7 @@ int main(int argc, char ** argv)
             }
             else
             {
-                msg_warning(QObject::TR("Error"), QObject::TR("Bouml was called with wrong parameters, ignore them"));
+                msg_warning(QObject::tr("Error"), QObject::tr("Bouml was called with wrong parameters, ignore them"));
             }
         }
 

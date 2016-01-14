@@ -57,9 +57,9 @@ void MenuFactory::addItem(
     const int         id,
     const char * const whatsThis)
 {
-    QAction *action = menu.addAction(QObject::TR(name));
+    QAction *action = menu.addAction(QObject::tr(name));
     if(whatsThis)
-        action->setWhatsThis(QObject::TR(whatsThis));
+        action->setWhatsThis(QObject::tr(whatsThis));
     action->setData(id);
 }
 void MenuFactory::addItem(

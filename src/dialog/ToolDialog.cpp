@@ -137,13 +137,13 @@ QSize ToolDialog::previous_size;
 
 ToolDialog::ToolDialog() : TabDialog(0, "ToolDialog", TRUE)
 {
-    setWindowTitle(TR("Tools dialog"));
-    setOkButton(TR("OK"));
-    setCancelButton(TR("Cancel"));
+    setWindowTitle(tr("Tools dialog"));
+    setOkButton(tr("OK"));
+    setCancelButton(tr("Cancel"));
 
     for (unsigned i = 0; i != sizeof(Tables) / sizeof(Tbl); i += 1) {
         Tables[i].tbl = new ToolTable(this, Tables[i].cd, Tables[i].ncol);
-        addTab(Tables[i].tbl, TR(Tables[i].label));
+        addTab(Tables[i].tbl, tr(Tables[i].label));
     }
 }
 

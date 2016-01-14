@@ -8,7 +8,7 @@ SOURCES          = main.cpp BrowserNode.cpp ControlWindow.cpp \
 
 
 TARGET          = projectControl
-DEFINES          = BooL=bool
+DEFINES          = BooL=bool FALSE=false TRUE=true TR=tr
 INCLUDEPATH   = 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets

@@ -236,12 +236,12 @@ void SdMsgBaseCanvas::set_synchronous(bool yes)
 
 QString SdMsgBaseCanvas::may_start(UmlCode & l) const
 {
-    return (l == UmlAnchor) ? QString() : TR("illegal");
+    return (l == UmlAnchor) ? QString() : tr("illegal");
 }
 
 QString SdMsgBaseCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 {
-    return (l == UmlAnchor) ? dest->may_start(l) : TR("illegal");
+    return (l == UmlAnchor) ? dest->may_start(l) : tr("illegal");
 }
 
 bool SdMsgBaseCanvas::is_decenter(const QPoint &, BooL &) const
@@ -286,7 +286,7 @@ void SdMsgBaseCanvas::open()
             st = stereotype->get_name();
 
         StereotypeDialog d(BrowserSeqDiagram::msg_default_stereotypes(),
-                           st, val, TR("Return"), TR("value :"));
+                           st, val, tr("Return"), tr("value :"));
 
         d.raise();
 

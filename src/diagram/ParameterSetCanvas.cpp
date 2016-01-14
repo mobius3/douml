@@ -314,29 +314,29 @@ void ParameterSetCanvas::menu(const QPoint &)
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 13);
-    MenuFactory::addItem(m, TR("Go down"), 14);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 13);
+    MenuFactory::addItem(m, tr("Go down"), 14);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 2);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit parameter set"), 3);
+    MenuFactory::addItem(m, tr("Edit parameter set"), 3);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Select in browser"), 4);
+    MenuFactory::addItem(m, tr("Select in browser"), 4);
 
     if (linked())
-        MenuFactory::addItem(m, TR("Select linked items"), 5);
+        MenuFactory::addItem(m, tr("Select linked items"), 5);
 
     m.addSeparator();
 
     if (browser_node->is_writable()) {
-        MenuFactory::addItem(m, TR("Delete from model"), 8);
+        MenuFactory::addItem(m, tr("Delete from model"), 8);
         m.addSeparator();
     }
 
     if (Tool::menu_insert(&toolm, UmlParameterSet, 20))
-        MenuFactory::insertItem(m, TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -427,7 +427,7 @@ void ParameterSetCanvas::edit_drawing_settings()
     for (;;) {
         ColorSpecVector co(1);
 
-        co[0].set(TR("parameter set color"), &itscolor);
+        co[0].set(tr("parameter set color"), &itscolor);
 
         SettingsDialog dialog(0, &co, FALSE);
 
@@ -452,7 +452,7 @@ void ParameterSetCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         ColorSpecVector co(1);
         UmlColor itscolor;
 
-        co[0].set(TR("parameter set color"), &itscolor);
+        co[0].set(tr("parameter set color"), &itscolor);
 
         SettingsDialog dialog(0, &co, FALSE, TRUE);
 
@@ -480,12 +480,12 @@ void ParameterSetCanvas::clone_drawing_settings(const DiagramItem *src)
 
 QString ParameterSetCanvas::may_start(UmlCode &) const
 {
-    return TR("illegal");
+    return tr("illegal");
 }
 
 QString ParameterSetCanvas::may_connect(UmlCode &, const DiagramItem *) const
 {
-    return TR("illegal");
+    return tr("illegal");
 }
 
 void ParameterSetCanvas::modified()

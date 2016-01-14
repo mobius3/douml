@@ -129,7 +129,7 @@ BrowserUseCaseView * BrowserUseCaseView::add_use_case_view(BrowserNode * future_
 {
     QString name;
 
-    if (future_parent->enter_child_name(name, QObject::TR("enter use case view's name : "),
+    if (future_parent->enter_child_name(name, QObject::tr("enter use case view's name : "),
                                         UmlUseCaseView, TRUE, FALSE))
         return new BrowserUseCaseView(name, future_parent);
     else
@@ -232,13 +232,13 @@ void BrowserUseCaseView::menu()
             }
         }
 
-        mark_menu(m, QObject::TR("the use case view").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the use case view").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
                 Tool::menu_insert(&toolm, get_type(), 100)) {
             m.addSeparator();
-            toolm.setTitle(QObject::TR("Tool"));
+            toolm.setTitle(QObject::tr("Tool"));
             m.addMenu(&toolm);
         }
     }
@@ -337,7 +337,7 @@ void BrowserUseCaseView::exec_menu_choice(int rank)
         break;
 
     case 8:
-        edit(QObject::TR("Use case view").toLatin1().constData(), its_default_stereotypes);
+        edit(QObject::tr("Use case view").toLatin1().constData(), its_default_stereotypes);
         return;
 
     case 9:
@@ -353,21 +353,21 @@ void BrowserUseCaseView::exec_menu_choice(int rank)
             statediagram_settings.complete(st, FALSE);
             activitydiagram_settings.complete(st, FALSE);
 
-            co[0].set(QObject::TR("note color"), &note_color);
-            co[1].set(QObject::TR("use case color"), &usecase_color);
-            co[2].set(QObject::TR("package color"), &package_color);
-            co[3].set(QObject::TR("fragment color"), &fragment_color);
-            co[4].set(QObject::TR("subject color"), &subject_color);
-            co[5].set(QObject::TR("duration color"), &duration_color);
-            co[6].set(QObject::TR("continuation color"), &continuation_color);
-            co[7].set(QObject::TR("class color"), &class_color);
-            co[8].set(QObject::TR("state color"), &state_color);
-            co[9].set(QObject::TR("state action color"), &stateaction_color);
-            co[10].set(QObject::TR("activity color"), &activity_color);
-            co[11].set(QObject::TR("activity region color"), &activityregion_color);
-            co[12].set(QObject::TR("activity partition color"), &activitypartition_color);
-            co[13].set(QObject::TR("activity action color"), &activityaction_color);
-            co[14].set(QObject::TR("parameter and pin color"), &parameterpin_color);
+            co[0].set(QObject::tr("note color"), &note_color);
+            co[1].set(QObject::tr("use case color"), &usecase_color);
+            co[2].set(QObject::tr("package color"), &package_color);
+            co[3].set(QObject::tr("fragment color"), &fragment_color);
+            co[4].set(QObject::tr("subject color"), &subject_color);
+            co[5].set(QObject::tr("duration color"), &duration_color);
+            co[6].set(QObject::tr("continuation color"), &continuation_color);
+            co[7].set(QObject::tr("class color"), &class_color);
+            co[8].set(QObject::tr("state color"), &state_color);
+            co[9].set(QObject::tr("state action color"), &stateaction_color);
+            co[10].set(QObject::tr("activity color"), &activity_color);
+            co[11].set(QObject::tr("activity region color"), &activityregion_color);
+            co[12].set(QObject::tr("activity partition color"), &activitypartition_color);
+            co[13].set(QObject::tr("activity action color"), &activityaction_color);
+            co[14].set(QObject::tr("parameter and pin color"), &parameterpin_color);
 
             SettingsDialog dialog(&st, &co, FALSE);
 
@@ -534,7 +534,7 @@ void BrowserUseCaseView::apply_shortcut(QString s)
 void BrowserUseCaseView::open(bool)
 {
     if (!is_edited)
-        edit(QObject::TR("Use case view").toLatin1().constData(), its_default_stereotypes);
+        edit(QObject::tr("Use case view").toLatin1().constData(), its_default_stereotypes);
 }
 
 UmlCode BrowserUseCaseView::get_type() const
@@ -544,7 +544,7 @@ UmlCode BrowserUseCaseView::get_type() const
 
 QString BrowserUseCaseView::get_stype() const
 {
-    return QObject::TR("Use case view");
+    return QObject::tr("Use case view");
 }
 
 int BrowserUseCaseView::get_identifier() const
@@ -943,7 +943,7 @@ void BrowserUseCaseView::DropAfterEvent(QDropEvent * e, BrowserNode * after)
         else if (after == 0)
             ((BrowserNode *) parent())->DropAfterEvent(e, this);
         else {
-            msg_critical(QObject::TR("Error"), QObject::TR("Forbidden"));
+            msg_critical(QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }

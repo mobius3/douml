@@ -139,12 +139,12 @@ ColMsgTable::ColMsgTable(QWidget * parent, ColDiagramView * v, ColMsgList & m)
     setColumnCount(6);
 
     verticalHeader()->hide();
-    setHorizontalHeaderLabel(ABS_RANK_COL, TR("Rank"));
-    setHorizontalHeaderLabel(HI_RANK_COL, TR("Hierarchical rank"));
-    setHorizontalHeaderLabel(FROM_COL, TR("From"));
-    setHorizontalHeaderLabel(MSG_COL, TR("Message"));
-    setHorizontalHeaderLabel(TO_COL, TR("To"));
-    setHorizontalHeaderLabel(CMD_COL, TR("do"));
+    setHorizontalHeaderLabel(ABS_RANK_COL, tr("Rank"));
+    setHorizontalHeaderLabel(HI_RANK_COL, tr("Hierarchical rank"));
+    setHorizontalHeaderLabel(FROM_COL, tr("From"));
+    setHorizontalHeaderLabel(MSG_COL, tr("Message"));
+    setHorizontalHeaderLabel(TO_COL, tr("To"));
+    setHorizontalHeaderLabel(CMD_COL, tr("do"));
 
     refresh();
 
@@ -165,16 +165,16 @@ void ColMsgTable::button_pressed(int row, int col, int, const QPoint &)
     else {
         QMenu m;
 
-        MenuFactory::createTitle(m, QString(TR("rank ")) + text(row, ABS_RANK_COL)
+        MenuFactory::createTitle(m, QString(tr("rank ")) + text(row, ABS_RANK_COL)
                                  + " : " + text(row, HI_RANK_COL));
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Edit message"), 1);
-        MenuFactory::addItem(m, TR("Change ranks"), 2);
+        MenuFactory::addItem(m, tr("Edit message"), 1);
+        MenuFactory::addItem(m, tr("Change ranks"), 2);
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Delete it"), 3);
+        MenuFactory::addItem(m, tr("Delete it"), 3);
 
         if (!flat_msg_list[row]->msgs.isEmpty())
-            MenuFactory::addItem(m, TR("Delete recursively"), 4);
+            MenuFactory::addItem(m, tr("Delete recursively"), 4);
 
         QAction* retAction = m.exec(QCursor::pos());
         if(retAction)
@@ -236,7 +236,7 @@ void ColMsgTable::refresh(ColMsgList & m)
         setItem(r, FROM_COL, new MsgTableItem(this, from->get_full_name()));
         setItem(r, MSG_COL, new MsgTableItem(this, def.mid(def.indexOf(" ") + 1)));
         setItem(r, TO_COL, new MsgTableItem(this, to->get_full_name()));
-        setItem(r, CMD_COL, new MsgTableItem(this, TR("do"), Qt::AlignHCenter));
+        setItem(r, CMD_COL, new MsgTableItem(this, tr("do"), Qt::AlignHCenter));
 
         flat_msg_list.append(msg);
 
@@ -325,7 +325,7 @@ void ColMsgTable::change_ranks(int row, int col)
             }
 
             if (msg->hierarchical_rank != new_hr) {
-                msg_warning(TR("Warning"), TR("Invalid hierarchical rank"));
+                msg_warning(tr("Warning"), tr("Invalid hierarchical rank"));
                 new_hr = old_hr;
             }
             else

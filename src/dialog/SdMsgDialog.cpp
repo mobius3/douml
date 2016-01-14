@@ -60,7 +60,7 @@ QSize SdMsgDialog::previous_size;
 SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
     : QDialog(0/*, "Message editor", TRUE*/), mc(a)
 {
-    setWindowTitle(TR("Message dialog"));
+    setWindowTitle(tr("Message dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     QHBoxLayout * hbox;
@@ -71,7 +71,7 @@ SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
     vbox->addLayout(hbox);
     hbox->setMargin(5);
 
-    SmallPushButton * b = new SmallPushButton(TR("message :"), this);
+    SmallPushButton * b = new SmallPushButton(tr("message :"), this);
 
     hbox->addWidget(b);
     connect(b, SIGNAL(clicked()), this, SLOT(menu_op()));
@@ -112,7 +112,7 @@ SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    hbox->addWidget(new QLabel(TR("stereotype : "), this));
+    hbox->addWidget(new QLabel(tr("stereotype : "), this));
     edst = new QComboBox(this);
     edst->setEditable(true);
 
@@ -141,11 +141,11 @@ SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
 
     htab->setMargin(5);
 
-    BButtonGroup * bg = new BButtonGroup(2, Qt::Horizontal, TR("Message type"), htab);
+    BButtonGroup * bg = new BButtonGroup(2, Qt::Horizontal, tr("Message type"), htab);
 
     bg->setExclusive(TRUE);
-    synchronous_rb = new QRadioButton(TR("synchronous"), bg);
-    asynchronous_rb = new QRadioButton(TR("asynchronous"), bg);
+    synchronous_rb = new QRadioButton(tr("synchronous"), bg);
+    asynchronous_rb = new QRadioButton(tr("asynchronous"), bg);
 
     if (a->is_synchronous())
         synchronous_rb->setChecked(TRUE);
@@ -154,14 +154,14 @@ SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
 
     hbox->addWidget(htab);
 
-    vbox->addWidget(new QLabel(TR("\n\nWhen the arguments are specified they replace the \
+    vbox->addWidget(new QLabel(tr("\n\nWhen the arguments are specified they replace the \
 operation's parameter(s) without any check"),
                                this));
 
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    hbox->addWidget(new QLabel(TR("arguments : "), this));
+    hbox->addWidget(new QLabel(tr("arguments : "), this));
     edargs = new MultiLineEdit(this);
     edargs->setText(a->get_args());
     hbox->addWidget(edargs);
@@ -170,8 +170,8 @@ operation's parameter(s) without any check"),
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * ok = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * ok = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     ok->setDefault(TRUE);
@@ -200,13 +200,13 @@ void SdMsgDialog::menu_op()
 {
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     int index = list.indexOf(edoper->currentText().trimmed());
 
     if (index != -1)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = BrowserView::selected_item();
 
@@ -214,12 +214,12 @@ void SdMsgDialog::menu_op()
         (bn->get_type() == UmlOperation) &&
         !bn->deletedp() &&
         (opers.indexOf((OperationData *) bn->get_data()) != -1))
-        MenuFactory::addItem(m, TR("Choose operation selected in browser"), 1);
+        MenuFactory::addItem(m, tr("Choose operation selected in browser"), 1);
     else
         bn = 0;
 
     if (cl != 0)
-        MenuFactory::addItem(m, TR("Create operation and choose it"), 2);
+        MenuFactory::addItem(m, tr("Create operation and choose it"), 2);
 
     if ((index != -1) || (bn != 0) || (cl != 0)) {
         QAction* retAction = m.exec(QCursor::pos());

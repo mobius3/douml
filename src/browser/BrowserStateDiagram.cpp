@@ -127,7 +127,7 @@ BrowserStateDiagram * BrowserStateDiagram::add_state_diagram(BrowserNode * futur
 {
     QString name;
 
-    if (future_parent->enter_child_name(name,  QObject::TR("enter state diagram's name : "),
+    if (future_parent->enter_child_name(name,  QObject::tr("enter state diagram's name : "),
                                         UmlStateDiagram, TRUE, FALSE))
         return new BrowserStateDiagram(name, future_parent);
     else
@@ -221,24 +221,24 @@ void BrowserStateDiagram::menu()
     m.addSeparator();
 
     if (!deletedp()) {
-        MenuFactory::addItem(m,  QObject::TR("Show"), 0,
-                             QObject::TR("to show and edit the <i>state diagram</i>"));
+        MenuFactory::addItem(m,  QObject::tr("Show"), 0,
+                             QObject::tr("to show and edit the <i>state diagram</i>"));
 
         if (!is_edited) {
-            MenuFactory::addItem(m,  QObject::TR("Edit"), 1,
-                                 QObject::TR("to edit the <i>state diagram</i>"));
+            MenuFactory::addItem(m,  QObject::tr("Edit"), 1,
+                                 QObject::tr("to edit the <i>state diagram</i>"));
 
             if (!is_read_only) {
-                MenuFactory::addItem(m,  QObject::TR("Edit drawing settings"), 2,
-                                     QObject::TR("to set how the <i>state diagram</i>'s items must be drawn"));
+                MenuFactory::addItem(m,  QObject::tr("Edit drawing settings"), 2,
+                                     QObject::tr("to set how the <i>state diagram</i>'s items must be drawn"));
                 m.addSeparator();
-                MenuFactory::addItem(m,  QObject::TR("Duplicate"), 3,
-                                     QObject::TR("to duplicate the <i>state diagram</i>"));
+                MenuFactory::addItem(m,  QObject::tr("Duplicate"), 3,
+                                     QObject::tr("to duplicate the <i>state diagram</i>"));
 
                 if (edition_number == 0) {
                     m.addSeparator();
-                    MenuFactory::addItem(m,  QObject::TR("Delete"), 4,
-                                         QObject::TR("to delete the <i>state diagram</i>. \
+                    MenuFactory::addItem(m,  QObject::tr("Delete"), 4,
+                                         QObject::tr("to delete the <i>state diagram</i>. \
                                                      Note that you can undelete it after"));
                 }
             }
@@ -250,12 +250,12 @@ void BrowserStateDiagram::menu()
         if ((edition_number == 0) &&
                 Tool::menu_insert(&toolm, get_type(), 100)) {
             m.addSeparator();
-            MenuFactory::insertItem(m, QObject::TR("Tool"), &toolm);
+            MenuFactory::insertItem(m, QObject::tr("Tool"), &toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0))
-        MenuFactory::addItem(m,  QObject::TR("Undelete"), 5,
-                             QObject::TR("to undelete the <i>state diagram</i>"));
+        MenuFactory::addItem(m,  QObject::tr("Undelete"), 5,
+                             QObject::tr("to undelete the <i>state diagram</i>"));
 
     QAction *resultAction = m.exec(QCursor::pos());
     if(resultAction)
@@ -270,7 +270,7 @@ void BrowserStateDiagram::exec_menu_choice(int rank)
         return;
 
     case 1:
-        edit( QObject::TR("State diagram"), its_default_stereotypes);
+        edit( QObject::tr("State diagram"), its_default_stereotypes);
         return;
 
     case 2:
@@ -280,7 +280,7 @@ void BrowserStateDiagram::exec_menu_choice(int rank)
     case 3: {
         QString name;
 
-        if (((BrowserNode *)parent())->enter_child_name(name,  QObject::TR("enter state diagram's name : "),
+        if (((BrowserNode *)parent())->enter_child_name(name,  QObject::tr("enter state diagram's name : "),
                                                         UmlStateDiagram, TRUE, FALSE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
         else
@@ -365,11 +365,11 @@ void BrowserStateDiagram::edit_settings()
 
         settings.complete(st, TRUE);
 
-        co[0].set( QObject::TR("state color"), &state_color);
-        co[1].set( QObject::TR("state action color"), &stateaction_color);
-        co[2].set( QObject::TR("note color"), &note_color);
-        co[3].set( QObject::TR("package color"), &package_color);
-        co[4].set( QObject::TR("fragment color"), &fragment_color);
+        co[0].set( QObject::tr("state color"), &state_color);
+        co[1].set( QObject::tr("state action color"), &stateaction_color);
+        co[2].set( QObject::tr("note color"), &note_color);
+        co[3].set( QObject::tr("package color"), &package_color);
+        co[4].set( QObject::tr("fragment color"), &fragment_color);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -407,7 +407,7 @@ UmlCode BrowserStateDiagram::get_type() const
 
 QString BrowserStateDiagram::get_stype() const
 {
-    return  QObject::TR("state diagram");
+    return  QObject::tr("state diagram");
 }
 
 int BrowserStateDiagram::get_identifier() const

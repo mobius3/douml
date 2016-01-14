@@ -135,7 +135,7 @@ BrowserDeploymentDiagram * BrowserDeploymentDiagram::add_deployment_diagram(Brow
 {
     QString name;
 
-    if (future_parent->enter_child_name(name, QObject::TR("enter deployment diagram's name : "),
+    if (future_parent->enter_child_name(name, QObject::tr("enter deployment diagram's name : "),
                                         UmlDeploymentDiagram, TRUE, FALSE))
         return new BrowserDeploymentDiagram(name, future_parent);
     else
@@ -225,23 +225,23 @@ void BrowserDeploymentDiagram::menu()
 
     if (!deletedp()) {
         MenuFactory::addItem(m, QObject::tr("Show"), 0,
-                             QObject::TR("to show and edit the <i>deployment diagram</i>"));
+                             QObject::tr("to show and edit the <i>deployment diagram</i>"));
 
         if (!is_edited) {
             MenuFactory::addItem(m, QObject::tr("Edit"), 1,
-                                 QObject::TR("to edit the <i>deployment diagram</i>"));
+                                 QObject::tr("to edit the <i>deployment diagram</i>"));
 
             if (!is_read_only) {
                 MenuFactory::addItem(m, QObject::tr("Edit drawing settings"), 2,
-                                     QObject::TR("to set how the <i>deployment diagram</i>'s items must be drawn"));
+                                     QObject::tr("to set how the <i>deployment diagram</i>'s items must be drawn"));
                 m.addSeparator();
                 MenuFactory::addItem(m, QObject::tr("Duplicate"), 3,
-                                     QObject::TR("to duplicate the <i>deployment diagram</i>"));
+                                     QObject::tr("to duplicate the <i>deployment diagram</i>"));
 
                 if (edition_number == 0) {
                     m.addSeparator();
                     MenuFactory::addItem(m, QObject::tr("Delete"), 4,
-                                         QObject::TR("to delete the <i>deployment diagram</i>. \
+                                         QObject::tr("to delete the <i>deployment diagram</i>. \
                                                      Note that you can undelete it after"));
                 }
             }
@@ -259,7 +259,7 @@ void BrowserDeploymentDiagram::menu()
     }
     else if (!is_read_only && (edition_number == 0))
         MenuFactory::addItem(m, QObject::tr("Undelete"), 5,
-                             QObject::TR("to undelete the <i>deployment diagram</i>"));
+                             QObject::tr("to undelete the <i>deployment diagram</i>"));
 
     QAction *resultAction = m.exec(QCursor::pos());
     if(resultAction)
@@ -274,7 +274,7 @@ void BrowserDeploymentDiagram::exec_menu_choice(int rank)
         return;
 
     case 1:
-        edit( QObject::TR("Deployment diagram"), its_default_stereotypes);
+        edit( QObject::tr("Deployment diagram"), its_default_stereotypes);
         return;
 
     case 2:
@@ -284,7 +284,7 @@ void BrowserDeploymentDiagram::exec_menu_choice(int rank)
     case 3: {
         QString name;
 
-        if (((BrowserNode *)parent())->enter_child_name(name, QObject::TR("enter deployment diagram's name : "),
+        if (((BrowserNode *)parent())->enter_child_name(name, QObject::tr("enter deployment diagram's name : "),
                                                         UmlDeploymentDiagram, TRUE, FALSE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
         else
@@ -369,12 +369,12 @@ void BrowserDeploymentDiagram::edit_settings()
 
         settings.complete(st, TRUE);
 
-        co[0].set( QObject::TR("note color"), &note_color);
-        co[1].set( QObject::TR("artifact color"), &artifact_color);
-        co[2].set( QObject::TR("node color"), &deploymentnode_color);
-        co[3].set( QObject::TR("component color"), &component_color);
-        co[4].set( QObject::TR("package color"), &package_color);
-        co[5].set( QObject::TR("fragment color"), &fragment_color);
+        co[0].set( QObject::tr("note color"), &note_color);
+        co[1].set( QObject::tr("artifact color"), &artifact_color);
+        co[2].set( QObject::tr("node color"), &deploymentnode_color);
+        co[3].set( QObject::tr("component color"), &component_color);
+        co[4].set( QObject::tr("package color"), &package_color);
+        co[5].set( QObject::tr("fragment color"), &fragment_color);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -412,7 +412,7 @@ UmlCode BrowserDeploymentDiagram::get_type() const
 
 QString BrowserDeploymentDiagram::get_stype() const
 {
-    return QObject::TR("deployment diagram");
+    return QObject::tr("deployment diagram");
 }
 
 int BrowserDeploymentDiagram::get_identifier() const

@@ -74,14 +74,14 @@ void SeqDiagramView::menu(const QPoint &)
 {
     QMenu m(0);
 
-    MenuFactory::createTitle(m, TR("Sequence diagram menu"));
+    MenuFactory::createTitle(m, tr("Sequence diagram menu"));
 
     if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
         BrowserSeqDiagram * sd = (BrowserSeqDiagram *) window()->browser_diagram();
         bool overlapping = sd->is_overlapping_bars();
 
-        MenuFactory::addItem(m, (overlapping) ? TR("Transform to flat activity bars")
-                                              : TR("Transform to overlapping activity bars"),
+        MenuFactory::addItem(m, (overlapping) ? tr("Transform to flat activity bars")
+                                              : tr("Transform to overlapping activity bars"),
                              29);
         m.addSeparator();
 

@@ -61,15 +61,15 @@ ParameterSetDialog::ParameterSetDialog(ParameterSetData * nd)
     nd->browser_node->edit_start();
 
     if (nd->browser_node->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
-    setWindowTitle(TR("ParameterSet dialog"));
+    setWindowTitle(tr("ParameterSet dialog"));
 
     init_uml_tab();
     init_pins_tab();
@@ -83,7 +83,7 @@ ParameterSetDialog::ParameterSetDialog(ParameterSetData * nd)
 
     grid->addWidget(kvtable = new KeyValuesTable((BrowserParameterSet *) data->get_browser_node(),
                                  grid, !hasOkButton()));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     //
 
@@ -130,11 +130,11 @@ void ParameterSetDialog::init_uml_tab()
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(true);
     edstereotype->addItem(toUnicode(data->get_stereotype()));
@@ -151,10 +151,10 @@ void ParameterSetDialog::init_uml_tab()
     edstereotype->setSizePolicy(sp);
 
     grid->addWidget(vbox = new VVBox(grid));
-    vbox->addWidget(new QLabel(TR("description :"), vbox));
+    vbox->addWidget(new QLabel(tr("description :"), vbox));
     SmallPushButton* b;
     if (! visit) {
-        connect( b = new SmallPushButton(TR("Editor"), vbox), SIGNAL(clicked()),
+        connect( b = new SmallPushButton(tr("Editor"), vbox), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vbox->addWidget(b);
     }
@@ -187,7 +187,7 @@ void ParameterSetDialog::init_pins_tab()
         vbox->addWidget(hbox = new HHBox(vbox));
         hbox->addWidget(vbox = new VVBox(hbox));
         vbox->setMargin(5);
-        (l = new QLabel(TR("Parameters out of Parameter Set"), vbox))->setAlignment(Qt::AlignCenter);
+        (l = new QLabel(tr("Parameters out of Parameter Set"), vbox))->setAlignment(Qt::AlignCenter);
         vbox->addWidget(l);
         vbox->addWidget(lb_available = new QListWidget(vbox));
         lb_available->setSelectionMode(QListWidget::MultiSelection);
@@ -221,7 +221,7 @@ void ParameterSetDialog::init_pins_tab()
     }
 
     vbox->setMargin(5);
-    (l = new QLabel(TR("Parameters in Parameter Set"), vbox))->setAlignment(Qt::AlignCenter);
+    (l = new QLabel(tr("Parameters in Parameter Set"), vbox))->setAlignment(Qt::AlignCenter);
     vbox->addWidget(l);
     vbox->addWidget(lb_member = new QListWidget(vbox));
     lb_member->setSelectionMode((visit) ? QListWidget::NoSelection
@@ -230,7 +230,7 @@ void ParameterSetDialog::init_pins_tab()
     for (it = inpins.begin(); it != inpins.end(); ++it)
         lb_member->addItem(new ListBoxBrowserNode(*it, (*it)->full_name(TRUE)));
 
-    addTab(page, TR("Parameters"));
+    addTab(page, tr("Parameters"));
 }
 
 void ParameterSetDialog::edit_description()
@@ -293,7 +293,7 @@ void ParameterSetDialog::accept()
         ((BrowserNode *) bn->parent())->wrong_child_name(s, bn->get_type(),
                 bn->allow_spaces(),
                 bn->allow_empty()))
-        msg_critical(TR("Error"), edname->text() + TR("\n\nillegal name or already used"));
+        msg_critical(tr("Error"), edname->text() + tr("\n\nillegal name or already used"));
     else {
         bn->set_name(s);
         bn->set_comment(comment->text());

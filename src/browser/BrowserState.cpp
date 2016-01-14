@@ -241,7 +241,7 @@ BrowserState * BrowserState::add_state(BrowserNode * future_parent,
 {
     QString name;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter state's name : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter state's name : "),
                                          UmlState, TRUE, FALSE))
 
         return 0;
@@ -274,7 +274,7 @@ BrowserState * BrowserState::get_state(BrowserNode * parent)
     BrowserNode * old;
     QString name;
 
-    if (!parent->enter_child_name(name, QObject::TR("enter state's name : "),
+    if (!parent->enter_child_name(name, QObject::tr("enter state's name : "),
                                   UmlState, l, &old,
                                   TRUE, FALSE))
         return 0;
@@ -327,23 +327,23 @@ void BrowserState::menu()
     if (!deletedp()) {
         if (!is_read_only && !ref) {
             MenuFactory::addItem(m, QObject::tr("New state diagram"), 0,
-                                 QObject::TR("to add a <i>state diagram</i>"));
+                                 QObject::tr("to add a <i>state diagram</i>"));
 
             if (mach) {
                 MenuFactory::addItem(m, QObject::tr("New submachine"), 1,
-                                     QObject::TR("to add a <i>submachine</i> to the <i>machine</i>"));
+                                     QObject::tr("to add a <i>submachine</i> to the <i>machine</i>"));
                 MenuFactory::addItem(m, QObject::tr("New state"), 2,
-                                     QObject::TR("to add a <i>state</i> to the <i>machine</i>"));
+                                     QObject::tr("to add a <i>state</i> to the <i>machine</i>"));
             }
             else if (what == "state")
                 MenuFactory::addItem(m, QObject::tr("New nested state"), 2,
-                                     QObject::TR("to add a <i>nested state</i> to the <i>state</i>"));
+                                     QObject::tr("to add a <i>nested state</i> to the <i>state</i>"));
             else
                 MenuFactory::addItem(m, QObject::tr("New state"), 2,
-                                     QObject::TR("to add a <i>state</i> to the <i>submachine</i>"));
+                                     QObject::tr("to add a <i>state</i> to the <i>submachine</i>"));
 
             MenuFactory::addItem(m, QObject::tr("New region"), 11,
-                                 QObject::TR("to add a <i>region</i>"));
+                                 QObject::tr("to add a <i>region</i>"));
             m.addSeparator();
         }
 
@@ -353,17 +353,17 @@ void BrowserState::menu()
 
                                          if (!is_read_only) {
                                              MenuFactory::addItem(m, QObject::tr("Duplicate"), 4,
-                                             QObject::TR("to copy the <i>%1</i> in a new one").arg(what));
+                                             QObject::tr("to copy the <i>%1</i> in a new one").arg(what));
                                              m.addSeparator();
 
                                              if (edition_number == 0)
                                              MenuFactory::addItem(m, QObject::tr("Delete"), 7,
-                                             QObject::TR("to delete the <i>%1</i>. \
+                                             QObject::tr("to delete the <i>%1</i>. \
                                              Note that you can undelete it after").arg(what));
                                          }
 
                                          MenuFactory::addItem(m, QObject::tr("Referenced by"), 10,
-                                                              QObject::TR("to know who reference the <i>state</i> \
+                                                              QObject::tr("to know who reference the <i>state</i> \
                                                                           through a transition or a reference"));
                                                                           mark_menu(m, QObject::tr("the %1").arg(what).toLatin1().constData(), 90);
                                                               ProfiledStereotypes::menu(m, this, 99990);
@@ -371,20 +371,20 @@ void BrowserState::menu()
                                          if ((edition_number == 0) &&
                                              Tool::menu_insert(&toolm, get_type(), 100)) {
                                              m.addSeparator();
-                                             toolm.setTitle(QObject::TR("Tool"));
+                                             toolm.setTitle(QObject::tr("Tool"));
                                              m.addMenu(&toolm);
                                          }
     }
     else if (!is_read_only && (edition_number == 0)) {
         MenuFactory::addItem(m, QObject::tr("Undelete"), 8,
-                             QObject::TR("to undelete the <i>%1</i>").arg(what));
+                             QObject::tr("to undelete the <i>%1</i>").arg(what));
 
         BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
                 MenuFactory::addItem(m, QObject::tr("Undelete recursively"), 9,
-                                     QObject::TR("undelete the %1 and its children").arg(what));
+                                     QObject::tr("undelete the %1 and its children").arg(what));
                 break;
             }
         }
@@ -427,13 +427,13 @@ void BrowserState::exec_menu_choice(int rank,
         QString what;
 
         if (mach)
-            what = QObject::TR("state machine");
+            what = QObject::tr("state machine");
         else
             what = (!strcmp(get_stereotype(), "submachine"))
-                    ? QObject::TR("state submachine")
-                    : QObject::TR("state");
+                    ? QObject::tr("state submachine")
+                    : QObject::tr("state");
 
-        if (((BrowserNode *) parent())->enter_child_name(name, QObject::TR("enter ") + what + QObject::TR("'s name : "),
+        if (((BrowserNode *) parent())->enter_child_name(name, QObject::tr("enter ") + what + QObject::tr("'s name : "),
                                                          UmlState, TRUE, FALSE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
     }
@@ -561,11 +561,11 @@ UmlCode BrowserState::get_type() const
 QString BrowserState::get_stype() const
 {
     if (is_ref())
-        return QObject::TR("state machine reference");
+        return QObject::tr("state machine reference");
     else if (is_machine(this))
-        return QObject::TR("state machine");
+        return QObject::tr("state machine");
     else
-        return QObject::TR("state");
+        return QObject::tr("state");
 }
 
 int BrowserState::get_identifier() const
@@ -895,7 +895,7 @@ void BrowserState::DropAfterEvent(QDropEvent * e, BrowserNode * after)
                 // have choice
                 QMenu m(0);
 
-                MenuFactory::createTitle(m, QObject::TR("move ") + bn->get_name());
+                MenuFactory::createTitle(m, QObject::tr("move ") + bn->get_name());
                 m.addSeparator();
                 MenuFactory::addItem(m, QObject::tr("In ") + QString(get_name()), 1);
                 MenuFactory::addItem(m, QObject::tr("After ") + QString(get_name()), 2);
@@ -921,7 +921,7 @@ void BrowserState::DropAfterEvent(QDropEvent * e, BrowserNode * after)
                 ((BrowserState *) bn)->def->set_stereotype("submachine");
         }
         else {
-            msg_critical(QObject::TR("Error"), QObject::TR("Forbidden"));
+            msg_critical(QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }

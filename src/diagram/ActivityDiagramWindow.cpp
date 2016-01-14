@@ -125,33 +125,33 @@ ActivityDiagramWindow::ActivityDiagramWindow(const QString & s, BrowserActivityD
     add_edit_button(toolbar);
 
     select =
-        ToolBarFactory::createToolButton(*selectButton, TR("Select"), QString(),
+        ToolBarFactory::createToolButton(*selectButton, tr("Select"), QString(),
                         this, SLOT(hit_select()), toolbar, "select");
     select->setCheckable(TRUE);
     select->setChecked(TRUE);
     current_button = UmlSelect;
 
     addPackage
-        = ToolBarFactory::createToolButton(*packageButton, TR("New Package"), QString(),
+        = ToolBarFactory::createToolButton(*packageButton, tr("New Package"), QString(),
                           this, SLOT(hit_package()), toolbar, "add package");
     addPackage->setCheckable(TRUE);
     addPackage->setWhatsThis(addpackageText());
 
     addFragment
-        = ToolBarFactory::createToolButton(*fragmentButton, TR("New Fragment"), QString(),
+        = ToolBarFactory::createToolButton(*fragmentButton, tr("New Fragment"), QString(),
                           this, SLOT(hit_fragment()), toolbar, "add fragment");
     addFragment->setCheckable(TRUE);
     addFragment->setWhatsThis( addfragmentText());
 
     addActivity =
-        ToolBarFactory::createToolButton(*activityButton, TR("New Activity"), QString(),
+        ToolBarFactory::createToolButton(*activityButton, tr("New Activity"), QString(),
                         this, SLOT(hit_activity()), toolbar, "add activity");
     addActivity->setCheckable(TRUE);
     addActivity->setWhatsThis( addactivityText());
 
     addInterruptibleActivityRegion =
         ToolBarFactory::createToolButton(*interruptibleactivityregionButton,
-                        TR("New Interruptible Activity Region"), QString(),
+                        tr("New Interruptible Activity Region"), QString(),
                         this, SLOT(hit_interruptibleactivityregion()),
                         toolbar, "add interruptible activity region");
     addInterruptibleActivityRegion->setCheckable(TRUE);
@@ -160,7 +160,7 @@ ActivityDiagramWindow::ActivityDiagramWindow(const QString & s, BrowserActivityD
 
     addExpansionRegion =
         ToolBarFactory::createToolButton(*expansionregionButton,
-                        TR("New Expansion Region"), QString(),
+                        tr("New Expansion Region"), QString(),
                         this, SLOT(hit_expansionregion()),
                         toolbar, "add expansion region");
     addExpansionRegion->setCheckable(TRUE);
@@ -169,7 +169,7 @@ ActivityDiagramWindow::ActivityDiagramWindow(const QString & s, BrowserActivityD
 
     addActivityPartition =
         ToolBarFactory::createToolButton(*activitypartitionButton,
-                        TR("New Activity Partition"), QString(),
+                        tr("New Activity Partition"), QString(),
                         this, SLOT(hit_activitypartition()),
                         toolbar, "add activity partition");
     addActivityPartition->setCheckable(TRUE);
@@ -177,91 +177,91 @@ ActivityDiagramWindow::ActivityDiagramWindow(const QString & s, BrowserActivityD
                      addactivitypartitionText());
 
     addAction =
-        ToolBarFactory::createToolButton(*activityactionButton, TR("New Action"), QString(),
+        ToolBarFactory::createToolButton(*activityactionButton, tr("New Action"), QString(),
                         this, SLOT(hit_action()), toolbar, "add action");
     addAction->setCheckable(TRUE);
     addAction->setWhatsThis( addactionText());
 
     addObject =
-        ToolBarFactory::createToolButton(*actionButton, TR("New Object Node"), QString(),
+        ToolBarFactory::createToolButton(*actionButton, tr("New Object Node"), QString(),
                         this, SLOT(hit_object()), toolbar, "add object node");
     addObject->setCheckable(TRUE);
     addObject->setWhatsThis( addobjectText());
 
     addInitial =
-        ToolBarFactory::createToolButton(*initialButton, TR("New Initial node"), QString(),
+        ToolBarFactory::createToolButton(*initialButton, tr("New Initial node"), QString(),
                         this, SLOT(hit_initial()), toolbar, "add initial");
     addInitial->setCheckable(TRUE);
     addInitial->setWhatsThis( addinitialText());
 
     addActivityFinal =
-        ToolBarFactory::createToolButton(*finalButton, TR("New Activity Final"), QString(),
+        ToolBarFactory::createToolButton(*finalButton, tr("New Activity Final"), QString(),
                         this, SLOT(hit_activityfinal()), toolbar, "add activity final");
     addActivityFinal->setCheckable(TRUE);
     addActivityFinal->setWhatsThis( addactivityfinalText());
 
     addFlowFinal =
-        ToolBarFactory::createToolButton(*exitpointButton, TR("New Flow Final"), QString(),
+        ToolBarFactory::createToolButton(*exitpointButton, tr("New Flow Final"), QString(),
                         this, SLOT(hit_flowfinal()), toolbar, "add flow final");
     addFlowFinal->setCheckable(TRUE);
     addFlowFinal->setWhatsThis( addflowfinalText());
 
     addMerge =
-        ToolBarFactory::createToolButton(*mergeButton, TR("New Merge"), QString(),
+        ToolBarFactory::createToolButton(*mergeButton, tr("New Merge"), QString(),
                         this, SLOT(hit_merge()), toolbar, "add merge");
     addMerge->setCheckable(TRUE);
     addMerge->setWhatsThis( addmergeText());
 
     addDecision =
-        ToolBarFactory::createToolButton(*decisionButton, TR("New Decision"), QString(),
+        ToolBarFactory::createToolButton(*decisionButton, tr("New Decision"), QString(),
                         this, SLOT(hit_decision()), toolbar, "add decision");
     addDecision->setCheckable(TRUE);
     addDecision->setWhatsThis( adddecisionText());
 
     addFork =
-        ToolBarFactory::createToolButton(*forkButton, TR("New Fork"), QString(),
+        ToolBarFactory::createToolButton(*forkButton, tr("New Fork"), QString(),
                         this, SLOT(hit_fork()), toolbar, "add fork");
     addFork->setCheckable(TRUE);
     addFork->setWhatsThis( addforkText());
 
     addJoin =
-        ToolBarFactory::createToolButton(*joinButton, TR("New Join"), QString(),
+        ToolBarFactory::createToolButton(*joinButton, tr("New Join"), QString(),
                         this, SLOT(hit_join()), toolbar, "add join");
     addJoin->setCheckable(TRUE);
     addJoin->setWhatsThis( addjoinText());
 
     addFlow =
-        ToolBarFactory::createToolButton(*directionalAssociationButton, TR("New Flow"), QString(),
+        ToolBarFactory::createToolButton(*directionalAssociationButton, tr("New Flow"), QString(),
                         this, SLOT(hit_flow()), toolbar, "add flow");
     addFlow->setCheckable(TRUE);
     addFlow->setWhatsThis( addflowText());
 
     dependency =
-        ToolBarFactory::createToolButton(*dependencyButton, TR("Dependency"), QString(),
+        ToolBarFactory::createToolButton(*dependencyButton, tr("Dependency"), QString(),
                         this, SLOT(hit_dependency()), toolbar, "dependency");
     dependency->setCheckable(TRUE);
     dependency->setWhatsThis( dependencyText());
 
     note =
-        ToolBarFactory::createToolButton(*noteButton, TR("Note"), QString(),
+        ToolBarFactory::createToolButton(*noteButton, tr("Note"), QString(),
                         this, SLOT(hit_note()), toolbar, "note");
     note->setCheckable(TRUE);
     note->setWhatsThis( noteText());
 
     anchor =
-        ToolBarFactory::createToolButton(*anchorButton, TR("Anchor"), QString(),
+        ToolBarFactory::createToolButton(*anchorButton, tr("Anchor"), QString(),
                         this, SLOT(hit_anchor()), toolbar, "anchor");
     anchor->setCheckable(TRUE);
     anchor->setWhatsThis( anchorText());
 
     text =
-        ToolBarFactory::createToolButton(*textButton, TR("Text"), QString(),
+        ToolBarFactory::createToolButton(*textButton, tr("Text"), QString(),
                         this, SLOT(hit_text()), toolbar, "text");
     text->setCheckable(TRUE);
     text->setWhatsThis( textText());
 
     image =
-        ToolBarFactory::createToolButton(*imageButton, TR("Image"), QString(),
+        ToolBarFactory::createToolButton(*imageButton, tr("Image"), QString(),
                         this, SLOT(hit_image()), toolbar, "image");
     image->setCheckable(TRUE);
     image->setWhatsThis( imageText());

@@ -52,7 +52,7 @@ FragmentDialog::FragmentDialog(const QStringList & defaults, QString & s,
                                QString & fo, BrowserNode *& d)
     : QDialog(0/*, "Fragment dialog", TRUE*/), name(s), form(fo), refer(d)
 {
-    setWindowTitle(TR("Fragment dialog"));
+    setWindowTitle(tr("Fragment dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     QHBoxLayout * hbox;
@@ -65,7 +65,7 @@ FragmentDialog::FragmentDialog(const QStringList & defaults, QString & s,
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    hbox->addWidget(lbl1 = new QLabel(TR("name : "), this));
+    hbox->addWidget(lbl1 = new QLabel(tr("name : "), this));
     name_cb = new QComboBox(this);
     name_cb->setEditable(true);
     name_cb->addItem(name);
@@ -82,7 +82,7 @@ FragmentDialog::FragmentDialog(const QStringList & defaults, QString & s,
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    hbox->addWidget(refer_bt = new SmallPushButton(TR("refer to : "), this));
+    hbox->addWidget(refer_bt = new SmallPushButton(tr("refer to : "), this));
     connect(refer_bt, SIGNAL(clicked()), this, SLOT(menu_refer()));
     diag_cb = new QComboBox(this);
     BrowserDiagram::instances(nodes, TRUE);
@@ -100,7 +100,7 @@ FragmentDialog::FragmentDialog(const QStringList & defaults, QString & s,
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    hbox->addWidget(lbl2 = new QLabel(TR("arguments \n/ value : "), this));
+    hbox->addWidget(lbl2 = new QLabel(tr("arguments \n/ value : "), this));
     hbox->addWidget(ed_form = new LineEdit(this));
     ed_form->setText(form);
 
@@ -109,8 +109,8 @@ FragmentDialog::FragmentDialog(const QStringList & defaults, QString & s,
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * accept = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * accept = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     accept->setDefault(TRUE);
@@ -140,12 +140,12 @@ void FragmentDialog::menu_refer()
     QMenu m(0);
     bool used = FALSE;
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     if (diag_cb->currentIndex() != 0) {
         used = TRUE;
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
     }
 
     BrowserNode * bn = BrowserView::selected_item();
@@ -153,7 +153,7 @@ void FragmentDialog::menu_refer()
     if ((bn != 0) &&
         !bn->deletedp() &&
         (dynamic_cast<BrowserDiagram *>(bn) != 0)) {
-        MenuFactory::addItem(m, TR("Choose diagram selected in browser"), 1);
+        MenuFactory::addItem(m, tr("Choose diagram selected in browser"), 1);
         used = TRUE;
     }
     else

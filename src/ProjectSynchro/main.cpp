@@ -39,7 +39,9 @@
 #include "SynchroWindow.h"
 #include "Pixmap.h"
 #include "myio.h"
-
+#include <QSettings>
+#include <QDesktopWidget>
+#include <QTextCodec>
 int main(int argc, char ** argv)
 {
     QApplication * app = new QApplication(argc, argv);
@@ -76,7 +78,7 @@ int main(int argc, char ** argv)
     else if ((uid < 2) || (uid > 127))
         QMessageBox::critical(0, "Synchro project", "invalid Identifier");
     else {
-        set_user_id(uid, homeDir.dirName());
+        set_user_id(uid, QDir::home().dirName());
         app->connect(app, SIGNAL(lastWindowClosed()), SLOT(quit()));
         init_pixmaps();
 

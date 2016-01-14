@@ -68,15 +68,15 @@ PackageDialog::PackageDialog(PackageData * da)
     bool visit = !da->browser_node->is_writable();
 
     if (!visit) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
-    setWindowTitle(TR("Package dialog"));
+    setWindowTitle(tr("Package dialog"));
     GridBox * grid;
     VVBox * vtab;
     HHBox * htab;
@@ -89,12 +89,12 @@ PackageDialog::PackageDialog(PackageData * da)
     grid->setSpacing(5);
     grid->setMargin(5);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(pa->name(), grid));
     edname->setReadOnly(!da->browser_node->is_writable() ||
                         (da->browser_node == BrowserView::get_project()));
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(pa->stereotype));
@@ -113,12 +113,12 @@ PackageDialog::PackageDialog(PackageData * da)
     edstereotype->setSizePolicy(sp);
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
 
     SmallPushButton *sButton;
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(sButton);
     }
@@ -143,13 +143,13 @@ PackageDialog::PackageDialog(PackageData * da)
 
     vtab->addWidget( htab = new HHBox(vtab));
     htab->setMargin(1);
-    htab->addWidget(new QLabel(TR("The generation directories may be relative in case the root directory\n\
+    htab->addWidget(new QLabel(tr("The generation directories may be relative in case the root directory\n\
 is specified (through the project menu entry 'edit generation settings')\n\n"), htab));
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(1);
     QLabel * lbl1;
-    htab->addWidget(lbl1 = new QLabel(TR("headers directory : "), htab));
+    htab->addWidget(lbl1 = new QLabel(tr("headers directory : "), htab));
     htab->addWidget(edcpphdir = new LineEdit(pa->cpp_h_dir, htab));
 
     if (visit)
@@ -157,7 +157,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
     else {
         vtab->addWidget(htab = new HHBox(vtab));
         htab->addWidget(new QLabel("", htab));
-        htab->addWidget(button = new QPushButton(TR("Browse"), htab));
+        htab->addWidget(button = new QPushButton(tr("Browse"), htab));
         connect(button, SIGNAL(clicked()), this, SLOT(cpph_browse()));
         htab->addWidget(new QLabel("", htab));
         htab->addWidget(cpphbutton = new QPushButton((pa->cpp_h_dir.isEmpty() ||
@@ -178,7 +178,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(1);
     QLabel * lbl2;
-    htab->addWidget(lbl2 = new QLabel(TR("sources directory : "), htab));
+    htab->addWidget(lbl2 = new QLabel(tr("sources directory : "), htab));
     htab->addWidget(edcppsrcdir = new LineEdit(pa->cpp_src_dir, htab));
 
     if (visit)
@@ -186,7 +186,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
     else {
         vtab->addWidget(htab = new HHBox(vtab));
         htab->addWidget(new QLabel("", htab));
-        htab->addWidget(button = new QPushButton(TR("Browse"), htab));
+        htab->addWidget(button = new QPushButton(tr("Browse"), htab));
         connect(button, SIGNAL(clicked()), this, SLOT(cppsrc_browse()));
         htab->addWidget(new QLabel("", htab));
         htab->addWidget(cppsrcbutton =
@@ -229,12 +229,12 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(1);
-    htab->addWidget(new QLabel(TR("The generation directory may be relative in case the root directory\n\
+    htab->addWidget(new QLabel(tr("The generation directory may be relative in case the root directory\n\
 is specified (through the project menu entry 'edit generation settings')\n\n"), htab));
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(1);
-    htab->addWidget(lbl1 = new QLabel(TR("directory : "), htab));
+    htab->addWidget(lbl1 = new QLabel(tr("directory : "), htab));
     htab->addWidget(edjavadir = new LineEdit(pa->java_dir, htab));
 
     if (visit)
@@ -242,7 +242,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
     else {
         vtab->addWidget(htab = new HHBox(vtab));
         htab->addWidget(new QLabel("", htab));
-        htab->addWidget(button = new QPushButton(TR("Browse"), htab));
+        htab->addWidget(button = new QPushButton(tr("Browse"), htab));
         connect(button, SIGNAL(clicked()), this, SLOT(java_browse()));
         htab->addWidget(new QLabel("", htab));
         htab->addWidget(javabutton = new QPushButton((pa->java_dir.isEmpty() ||
@@ -283,12 +283,12 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(new QLabel(TR("The generation directory may be relative in case the root directory\n\
+    htab->addWidget(new QLabel(tr("The generation directory may be relative in case the root directory\n\
 is specified (through the project menu entry 'edit generation settings')\n\n"), htab));
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(lbl1 = new QLabel(TR("directory : "), htab));
+    htab->addWidget(lbl1 = new QLabel(tr("directory : "), htab));
     htab->addWidget(edphpdir = new LineEdit(pa->php_dir, htab));
 
     if (visit)
@@ -296,7 +296,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
     else {
         vtab->addWidget(htab = new HHBox(vtab));
         htab->addWidget(new QLabel("", htab));
-        htab->addWidget(button = new QPushButton(TR("Browse"), htab));
+        htab->addWidget(button = new QPushButton(tr("Browse"), htab));
         connect(button, SIGNAL(clicked()), this, SLOT(php_browse()));
         htab->addWidget(new QLabel("", htab));
         htab->addWidget(phpbutton = new QPushButton((pa->php_dir.isEmpty() ||
@@ -337,12 +337,12 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(new QLabel(TR("The generation directory may be relative in case the root directory\n\
+    htab->addWidget(new QLabel(tr("The generation directory may be relative in case the root directory\n\
 is specified (through the project menu entry 'edit generation settings')\n\n"), htab));
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(lbl1 = new QLabel(TR("directory : "), htab));
+    htab->addWidget(lbl1 = new QLabel(tr("directory : "), htab));
     htab->addWidget(edpythondir = new LineEdit(pa->python_dir, htab));
 
     if (visit)
@@ -350,7 +350,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
     else {
         vtab->addWidget(htab = new HHBox(vtab));
         htab->addWidget(new QLabel("", htab));
-        htab->addWidget(button = new QPushButton(TR("Browse"), htab));
+        htab->addWidget(button = new QPushButton(tr("Browse"), htab));
         connect(button, SIGNAL(clicked()), this, SLOT(python_browse()));
        htab->addWidget( new QLabel("", htab));
         htab->addWidget(pythonbutton = new QPushButton((pa->python_dir.isEmpty() ||
@@ -391,12 +391,12 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(new QLabel(TR("The generation directory may be relative in case the root directory\n\
+    htab->addWidget(new QLabel(tr("The generation directory may be relative in case the root directory\n\
 is specified (through the project menu entry 'edit generation settings')\n\n"), htab));
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(lbl1 = new QLabel(TR("directory : "), htab));
+    htab->addWidget(lbl1 = new QLabel(tr("directory : "), htab));
     htab->addWidget(edidldir = new LineEdit(pa->idl_dir, htab));
 
     if (visit)
@@ -404,7 +404,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
     else {
         vtab->addWidget(htab = new HHBox(vtab));
         htab->addWidget(new QLabel("", htab));
-        htab->addWidget(button = new QPushButton(TR("Browse"), htab));
+        htab->addWidget(button = new QPushButton(tr("Browse"), htab));
         connect(button, SIGNAL(clicked()), this, SLOT(idl_browse()));
         htab->addWidget(new QLabel("", htab));
         htab->addWidget(idlbutton = new QPushButton((pa->idl_dir.isEmpty() ||
@@ -449,7 +449,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(lbl1 = new QLabel(TR("meta model : \nreference"), htab));
+    htab->addWidget(lbl1 = new QLabel(tr("meta model : \nreference"), htab));
     htab->addWidget(edmetamodelReference =
         new LineEdit(pa->browser_node->get_value("metamodelReference"), htab));
     edmetamodelReference->setReadOnly(visit);
@@ -460,7 +460,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
 
     vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    htab->addWidget(lbl2 = new QLabel(TR("meta class : \nreference"), htab));
+    htab->addWidget(lbl2 = new QLabel(tr("meta class : \nreference"), htab));
     htab->addWidget(edmetaclassreference =
         new LineEdit(pa->browser_node->get_value("metaclassreference"), htab));
     edidlmodule->setReadOnly(visit);
@@ -579,12 +579,12 @@ void PackageDialog::accept()
         if (((BrowserNode *) bn->parent())->wrong_child_name(s, UmlPackage,
                 bn->allow_spaces(),
                 bn->allow_empty())) {
-            msg_critical(TR("Error"), s + QObject::tr("\n\nillegal name or already used"));
+            msg_critical(tr("Error"), s + QObject::tr("\n\nillegal name or already used"));
             return;
         }
 
         if ((st == "profile") && !ProfiledStereotypes::canAddPackage(bn, s)) {
-            msg_critical(TR("Error"), QObject::tr("conflict on stereotypes"));
+            msg_critical(tr("Error"), QObject::tr("conflict on stereotypes"));
             return;
         }
 
@@ -593,7 +593,7 @@ void PackageDialog::accept()
     else if ((st == "profile") &&
              !was_pr &&
              !ProfiledStereotypes::canAddPackage(bn, s)) {
-        msg_critical(TR("Error"), QObject::tr("conflict on stereotypes"));
+        msg_critical(tr("Error"), QObject::tr("conflict on stereotypes"));
         return;
     }
 
@@ -629,7 +629,7 @@ void PackageDialog::accept()
             ProfiledStereotypes::renamed(bn, oldname);
     }
     else if (was_pr) {
-        bool propag = (msg_warning(TR("Question"),
+        bool propag = (msg_warning(tr("Question"),
                                    QObject::tr("Propagate the removal of the profile ?"),
                                    1, 2)
                        == 1);

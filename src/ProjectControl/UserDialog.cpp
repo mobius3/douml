@@ -27,24 +27,25 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <QComboBox>
 #include <qpushbutton.h>
 #include <qlineedit.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include "UserDialog.h"
 #include "myio.h"
 
 UserDialog::UserDialog(const QPoint & p)
-    : QDialog(0, "Browser search", TRUE)
+    : QDialog(0)
 {
-    setCaption("Choose user");
+    setWindowTitle("Choose user");
+    setModal(true);
     move(p);
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
     QLabel * lbl1;
     QLabel * lbl2;
 
@@ -57,30 +58,33 @@ UserDialog::UserDialog(const QPoint & p)
     lbl->setAlignment(::Qt::AlignCenter);
     vbox->addWidget(lbl);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     lbl1 = new QLabel("User : ", this);
     hbox->addWidget(lbl1);
-    ids = new Q3ComboBox(FALSE, this);
+    ids = new QComboBox(this);
+    ids->setEditable(false);
 
     for (int index = 2; index != 128; index += 1) {
         QString s = user_name(index);
 
-        ids->insertItem((s.isEmpty())
+        ids->addItem((s.isEmpty())
                         ? QString::number(index)
                         : QString::number(index) + " (" + s + ")");
     }
 
-    ids->setCurrentItem(user_id() - 2);
+    ids->setCurrentIndex(user_id() - 2);
 
     QSizePolicy sp = ids->sizePolicy();
 
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     ids->setSizePolicy(sp);
 
     hbox->addWidget(ids);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     lbl2 = new QLabel("New name : ", this);
     lbl1->setFixedWidth(lbl2->sizeHint().width());
@@ -88,7 +92,8 @@ UserDialog::UserDialog(const QPoint & p)
     edname = new QLineEdit(this);
     hbox->addWidget(edname);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
 
     QPushButton * ok = new QPushButton("Ok", this);
@@ -110,12 +115,12 @@ UserDialog::~UserDialog()
 
 int UserDialog::id()
 {
-    return ids->currentItem() + 2;
+    return ids->currentIndex() + 2;
 }
 
 QString UserDialog::name()
 {
-    QString s = edname->text().stripWhiteSpace();
+    QString s = edname->text().trimmed();
 
     return (s.isEmpty()) ? user_name(id()) : s;
 }

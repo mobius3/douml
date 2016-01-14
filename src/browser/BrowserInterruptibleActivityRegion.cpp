@@ -156,7 +156,7 @@ BrowserInterruptibleActivityRegion::add_interruptibleactivityregion(BrowserNode 
 {
     QString name;
 
-    return (!future_parent->enter_child_name(name, QObject::TR("enter interruptible activity \nregion's name (may be empty) : "),
+    return (!future_parent->enter_child_name(name, QObject::tr("enter interruptible activity \nregion's name (may be empty) : "),
                                              UmlInterruptibleActivityRegion, TRUE, TRUE))
 
             ? 0
@@ -190,7 +190,7 @@ BrowserInterruptibleActivityRegion::get_interruptibleactivityregion(BrowserNode 
     BrowserNode * old;
     QString name;
 
-    if (!parent->enter_child_name(name, QObject::TR(" enter interruptible activity \nregion's name (may be empty) : "),
+    if (!parent->enter_child_name(name, QObject::tr(" enter interruptible activity \nregion's name (may be empty) : "),
                                   UmlInterruptibleActivityRegion, l, &old,
                                   TRUE, TRUE))
         return 0;
@@ -217,54 +217,54 @@ void BrowserInterruptibleActivityRegion::menu()
 
     if (!deletedp()) {
         if (!is_read_only) {
-            MenuFactory::addItem(m, QObject::TR("New nested interruptible activity region"), 0,
-                                 QObject::TR("to add a nested <i>interruptible activity region</i>"));
-            MenuFactory::addItem(m, QObject::TR("New expansion region"), 1,
-                                 QObject::TR("to add a nested <i>expansion region</i>"));
-            MenuFactory::addItem(m, QObject::TR("Add activity action"), 6,
-                                 QObject::TR("to add an <i>activity action</i> to the <i>region</i>"));
-            MenuFactory::addItem(m, QObject::TR("Add object node"), 7,
-                                 QObject::TR("to add an <i>activity object node</i> to the <i>region</i>"));
+            MenuFactory::addItem(m, QObject::tr("New nested interruptible activity region"), 0,
+                                 QObject::tr("to add a nested <i>interruptible activity region</i>"));
+            MenuFactory::addItem(m, QObject::tr("New expansion region"), 1,
+                                 QObject::tr("to add a nested <i>expansion region</i>"));
+            MenuFactory::addItem(m, QObject::tr("Add activity action"), 6,
+                                 QObject::tr("to add an <i>activity action</i> to the <i>region</i>"));
+            MenuFactory::addItem(m, QObject::tr("Add object node"), 7,
+                                 QObject::tr("to add an <i>activity object node</i> to the <i>region</i>"));
             m.addSeparator();
         }
 
-        MenuFactory::addItem(m, QObject::TR("Edit"), 4,
-                             QObject::TR("to edit the <i>interruptible activity region</i>, \
+        MenuFactory::addItem(m, QObject::tr("Edit"), 4,
+                             QObject::tr("to edit the <i>interruptible activity region</i>, \
                                          a double click with the left mouse button does the same thing"));
 
                                          if (!is_read_only) {
-                                             MenuFactory::addItem(m, QObject::TR("Duplicate"), 5,
-                                             QObject::TR("to copy the <i>interruptible activity region</i> in a new one"));
+                                             MenuFactory::addItem(m, QObject::tr("Duplicate"), 5,
+                                             QObject::tr("to copy the <i>interruptible activity region</i> in a new one"));
                                              m.addSeparator();
 
                                              if (edition_number == 0)
-                                             MenuFactory::addItem(m, QObject::TR("Delete"), 8,
-                                             QObject::TR("to delete the <i>interruptible activity region</i>. \
+                                             MenuFactory::addItem(m, QObject::tr("Delete"), 8,
+                                             QObject::tr("to delete the <i>interruptible activity region</i>. \
                                              Note that you can undelete it after"));
                                          }
 
-                                         MenuFactory::addItem(m, QObject::TR("Referenced by"), 3,
-                                                              QObject::TR("to know who reference the <i>region</i>"));
+                                         MenuFactory::addItem(m, QObject::tr("Referenced by"), 3,
+                                                              QObject::tr("to know who reference the <i>region</i>"));
                              mark_menu(m, QObject::tr("the interruptible activity region").toLatin1().constData(), 90);
                 ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
                 Tool::menu_insert(&toolm, get_type(), 100)) {
             m.addSeparator();
-            toolm.setTitle(QObject::TR("Tool"));
+            toolm.setTitle(QObject::tr("Tool"));
             m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        MenuFactory::addItem(m, QObject::TR("Undelete"), 9,
-                             QObject::TR("to undelete the <i>interruptible activity region</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 9,
+                             QObject::tr("to undelete the <i>interruptible activity region</i>"));
 
         BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
-                MenuFactory::addItem(m, QObject::TR("Undelete recursively"), 10,
-                                     QObject::TR("undelete the interruptible activity region and its children"));
+                MenuFactory::addItem(m, QObject::tr("Undelete recursively"), 10,
+                                     QObject::tr("undelete the interruptible activity region and its children"));
                 break;
             }
         }
@@ -297,7 +297,7 @@ void BrowserInterruptibleActivityRegion::exec_menu_choice(int rank)
     case 5: {
         QString name;
 
-        if (((BrowserNode *) parent())->enter_child_name(name, QObject::TR("enter interruptible activity \nregion's name (may be empty) : "),
+        if (((BrowserNode *) parent())->enter_child_name(name, QObject::tr("enter interruptible activity \nregion's name (may be empty) : "),
                                                          UmlActivity, TRUE, TRUE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
     }
@@ -433,7 +433,7 @@ UmlCode BrowserInterruptibleActivityRegion::get_type() const
 
 QString BrowserInterruptibleActivityRegion::get_stype() const
 {
-    return QObject::TR("interruptible activity region");
+    return QObject::tr("interruptible activity region");
 }
 
 int BrowserInterruptibleActivityRegion::get_identifier() const
@@ -652,10 +652,10 @@ void BrowserInterruptibleActivityRegion::DropAfterEvent(QDropEvent * e, BrowserN
                 // have choice
                 QMenu m(0);
 
-                MenuFactory::createTitle(m, QObject::TR("move ") + bn->get_name());
+                MenuFactory::createTitle(m, QObject::tr("move ") + bn->get_name());
                 m.addSeparator();
-                MenuFactory::addItem(m, QObject::TR("In ") + QString(get_name()), 1);
-                MenuFactory::addItem(m, QObject::TR("After ") + QString(get_name()), 2);
+                MenuFactory::addItem(m, QObject::tr("In ") + QString(get_name()), 1);
+                MenuFactory::addItem(m, QObject::tr("After ") + QString(get_name()), 2);
 
                 QAction *retAction = m.exec(QCursor::pos());
                 if(retAction)
@@ -676,7 +676,7 @@ void BrowserInterruptibleActivityRegion::DropAfterEvent(QDropEvent * e, BrowserN
             move(bn, after);
         }
         else {
-            msg_critical( QObject::TR("Error"), QObject::TR("Forbidden"));
+            msg_critical( QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }

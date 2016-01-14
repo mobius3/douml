@@ -28,7 +28,7 @@
 #ifndef CONTROLWINDOW_H
 #define CONTROLWINDOW_H
 
-#include <q3mainwindow.h>
+#include <QMainWindow>
 #include <qstringlist.h>
 
 class BrowserView;
@@ -37,7 +37,7 @@ class QDir;
 
 // singleton
 
-class ControlWindow : public Q3MainWindow
+class ControlWindow : public QMainWindow
 {
     Q_OBJECT
 
@@ -58,7 +58,7 @@ private slots:
     void load();
     void quit();
     void browser_search();
-    void historicActivated(int id);
+    void historicActivated();
     void change_user();
 
 

@@ -46,7 +46,7 @@ QSize ContinuationDialog::previous_size;
 ContinuationDialog::ContinuationDialog(QString & s)
     : QDialog(0/*, "continuation dialog", TRUE*/), name(s)
 {
-    setWindowTitle(TR("stereotype/continuation dialog"));
+    setWindowTitle(tr("stereotype/continuation dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     QHBoxLayout * hbox;
@@ -57,7 +57,7 @@ ContinuationDialog::ContinuationDialog(QString & s)
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    hbox->addWidget(label = new QLabel(TR("label : "), this));
+    hbox->addWidget(label = new QLabel(tr("label : "), this));
     ed = new LineEdit(name, this);
     hbox->addWidget(ed);
     ed->setFocus();
@@ -65,8 +65,8 @@ ContinuationDialog::ContinuationDialog(QString & s)
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * accept = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * accept = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     accept->setDefault(TRUE);

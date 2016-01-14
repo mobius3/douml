@@ -153,7 +153,7 @@ QString BrowserParameter::may_start() const
         return 0;
 
     default:
-        return QObject::TR("can't have outgoing flow");
+        return QObject::tr("can't have outgoing flow");
     }
 }
 
@@ -163,27 +163,27 @@ QString BrowserParameter::may_connect(const BrowserNode * dest) const
     BrowserNode * container = dest->get_container(UmlActivity);
 
     if (container == 0)
-        return QObject::TR("illegal");
+        return QObject::tr("illegal");
 
     if (get_container(UmlActivity) != container)
-        return QObject::TR("not in the same activity");
+        return QObject::tr("not in the same activity");
 
     const BrowserActivityElement * elt =
             dynamic_cast<const BrowserActivityElement *>(dest);
 
     return (elt == 0)
-            ? QObject::TR("illegal")
+            ? QObject::tr("illegal")
             : elt->connexion_from(def->get_is_control());
 }
 
 QString BrowserParameter::connexion_from(bool control) const
 {
     if (def->get_dir() == UmlIn)
-        return QObject::TR("an input parameter can't have incoming flows");
+        return QObject::tr("an input parameter can't have incoming flows");
     else if (def->get_is_control() != control)
         return (control)
-                ? QObject::TR("parameter can't accept control flow (not 'is_control')")
-                : QObject::TR("parameter can't accept data flow (is 'is_control')");
+                ? QObject::tr("parameter can't accept control flow (not 'is_control')")
+                : QObject::tr("parameter can't accept data flow (is 'is_control')");
     else
         return 0;
 }
@@ -198,21 +198,21 @@ void BrowserParameter::menu()
 
     if (!deletedp()) {
         if (!is_edited)
-            MenuFactory::addItem(m, QObject::TR("Edit"), 0,
-                                 QObject::TR("to edit the <i>parameter</i>, \
+            MenuFactory::addItem(m, QObject::tr("Edit"), 0,
+                                 QObject::tr("to edit the <i>parameter</i>, \
                                              a double click with the left mouse button does the same thing"));
 
                                              if (!is_read_only && (edition_number == 0)) {
-                                                 MenuFactory::addItem(m, QObject::TR("Duplicate"), 1,
-                                                 QObject::TR("to copy the <i>parameter</i> in a new one"));
+                                                 MenuFactory::addItem(m, QObject::tr("Duplicate"), 1,
+                                                 QObject::tr("to copy the <i>parameter</i> in a new one"));
                                                  m.addSeparator();
-                                                 MenuFactory::addItem(m, QObject::TR("Delete"), 2,
-                                                 QObject::TR("to delete the <i>parameter</i>. \
+                                                 MenuFactory::addItem(m, QObject::tr("Delete"), 2,
+                                                 QObject::tr("to delete the <i>parameter</i>. \
                                                  Note that you can undelete it after"));
                                              }
 
-                                             MenuFactory::addItem(m, QObject::TR("Referenced by"), 4,
-                                                                  QObject::TR("to know who reference the <i>parameter</i> \
+                                             MenuFactory::addItem(m, QObject::tr("Referenced by"), 4,
+                                                                  QObject::tr("to know who reference the <i>parameter</i> \
                                                                               through a flow"));
                                                                               mark_menu(m, QObject::tr("the parameter").toLatin1().constData(), 90);
                                                                   ProfiledStereotypes::menu(m, this, 99990);
@@ -220,13 +220,13 @@ void BrowserParameter::menu()
                                              if ((edition_number == 0) &&
                                                  Tool::menu_insert(&toolm, get_type(), 100)) {
                                                  m.addSeparator();
-                                                 toolm.setTitle( QObject::TR("Tool"));
+                                                 toolm.setTitle( QObject::tr("Tool"));
                                                  m.addMenu(&toolm);
                                              }
     }
     else if (!is_read_only && (edition_number == 0))
-        MenuFactory::addItem(m, QObject::TR("Undelete"), 3,
-                             QObject::TR("to undelete the <i>parameter</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 3,
+                             QObject::tr("to undelete the <i>parameter</i>"));
 
     QAction *retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -321,7 +321,7 @@ UmlCode BrowserParameter::get_type() const
 
 QString BrowserParameter::get_stype() const
 {
-    return QObject::TR("parameter");
+    return QObject::tr("parameter");
 }
 
 int BrowserParameter::get_identifier() const
@@ -447,7 +447,7 @@ void BrowserParameter::DropAfterEvent(QDropEvent * e, BrowserNode * after)
         if (may_contains(bn, FALSE))
             move(bn, after);
         else {
-            msg_critical( QObject::TR("Error"), QObject::TR("Forbidden"));
+            msg_critical( QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }

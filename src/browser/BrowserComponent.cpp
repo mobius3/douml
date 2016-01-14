@@ -197,7 +197,7 @@ QString BrowserComponent::check_inherit(const BrowserNode * new_parent) const
              == new_parent))
             return QObject::tr("already exist");
     }
-    return (new_parent != this) ? QString() : QObject::TR("circular inheritance");
+    return (new_parent != this) ? QString() : QObject::tr("circular inheritance");
 }
 
 static void make_clsubm(QMenu & m, QMenu & sm,
@@ -465,7 +465,7 @@ UmlCode BrowserComponent::get_type() const
 
 QString BrowserComponent::get_stype() const
 {
-    return QObject::TR("component");
+    return QObject::tr("component");
 }
 
 int BrowserComponent::get_identifier() const

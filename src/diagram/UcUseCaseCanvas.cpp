@@ -407,7 +407,7 @@ void UcUseCaseCanvas::menu(const QPoint &)
 
     case 10:
         ((UmlCanvas *) canvas())->get_view()
-        ->add_related_elements(this, TR("use case"), TRUE, FALSE);
+        ->add_related_elements(this, tr("use case"), TRUE, FALSE);
         return;
 
     default:
@@ -441,7 +441,7 @@ void UcUseCaseCanvas::apply_shortcut(QString s)
     }
     else if (s == "Add related elements") {
         ((UmlCanvas *) canvas())->get_view()
-        ->add_related_elements(this, TR("use case"), TRUE, FALSE);
+        ->add_related_elements(this, tr("use case"), TRUE, FALSE);
         return;
     }
     else {
@@ -514,11 +514,11 @@ QString UcUseCaseCanvas::may_start(UmlCode & l) const
     switch (l) {
     case UmlDependency:
         l = UmlDependOn;
-        return (browser_node->is_writable()) ? QString() : TR("read only");
+        return (browser_node->is_writable()) ? QString() : tr("read only");
 
     case UmlGeneralisation:
         l = UmlInherit;
-        return (browser_node->is_writable()) ? QString() : TR("read only");
+        return (browser_node->is_writable()) ? QString() : tr("read only");
 
     case UmlAnchor:
     case UmlAssociation:
@@ -526,7 +526,7 @@ QString UcUseCaseCanvas::may_start(UmlCode & l) const
         return 0;
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 
@@ -547,15 +547,15 @@ QString UcUseCaseCanvas::may_connect(UmlCode & l, const DiagramItem * dest) cons
             return 0;
 
         default:
-            return TR("illegal");
+            return tr("illegal");
         }
 
     case UmlClass:
         return ((l == UmlAssociation) || (l == UmlDirectionalAssociation))
-               ? QString() : TR("illegal");
+               ? QString() : tr("illegal");
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 

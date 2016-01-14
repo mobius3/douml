@@ -31,8 +31,8 @@
 #include <qpushbutton.h>
 #include <qapplication.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 //Added by qt3to4:
 
 
@@ -40,23 +40,23 @@
 #include "BrowserView.h"
 
 SynchroDialog::SynchroDialog(QList<BrowserView *> & b)
-    : QDialog(0, "Synchronize", TRUE), browsers(b)
+    : QDialog(), browsers(b)
 {
-    setCaption("Synchronize");
+    setWindowTitle("Synchronize");
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
 
     vbox->setMargin(5);
 
     bool has_ro = FALSE;
     bool has_ro_need_update = FALSE;
     bool has_need_update = FALSE;
-    Q3PtrListIterator<BrowserView> it(browsers);
+    QList<BrowserView*>::iterator it = browsers.begin();
 
-    for (; it.current(); ++it) {
-        if (it.current()->is_need_update()) {
-            if (it.current()->is_cant_update()) {
+    for (; it != browsers.end(); ++it) {
+        if ((*it)->is_need_update()) {
+            if ((*it)->is_cant_update()) {
                 has_ro = TRUE;
                 has_ro_need_update = TRUE;
             }
@@ -103,13 +103,15 @@ SynchroDialog::SynchroDialog(QList<BrowserView *> & b)
 
     //
 
-    for (it.toFirst() ; it.current(); ++it) {
-        if (it.current()->is_need_update()) {
-            QCheckBox * cb = new QCheckBox(it.current()->get_dir().path(), this);
+    it = browsers.begin();
+
+        for (; it != browsers.end(); ++it) {
+        if ((*it)->is_need_update()) {
+            QCheckBox * cb = new QCheckBox((*it)->get_dir().path(), this);
 
             vbox->addWidget(cb);
 
-            if (it.current()->is_cant_update())
+            if ((*it)->is_cant_update())
                 cb->setEnabled(FALSE);
             else
                 checks.append(cb);
@@ -118,7 +120,8 @@ SynchroDialog::SynchroDialog(QList<BrowserView *> & b)
 
     //
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
 
     if (has_need_update) {
@@ -143,17 +146,17 @@ SynchroDialog::~SynchroDialog()
 
 void SynchroDialog::accept()
 {
-    Q3PtrListIterator<BrowserView> itprj(browsers);
-    Q3PtrListIterator<QCheckBox> itcb(checks);
+    QList<BrowserView*>::iterator itprj = browsers.begin();
+    QList<QCheckBox*>::iterator itcb = checks.begin();
     bool work = FALSE;
 
-    QApplication::setOverrideCursor(Qt::waitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    for (; itprj.current(); ++itprj) {
-        if (itprj.current()->is_need_update() &&
-            !itprj.current()->is_cant_update()) {
-            if (itcb.current()->isChecked()) {
-                itprj.current()->synchronize();
+    for (; itprj != browsers.end(); ++itprj) {
+        if ((*itprj)->is_need_update() &&
+            !(*itprj)->is_cant_update()) {
+            if ((*itcb)->isChecked()) {
+                (*itprj)->synchronize();
                 work = TRUE;
             }
 

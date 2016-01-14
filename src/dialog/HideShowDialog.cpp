@@ -53,7 +53,7 @@ HideShowDialog::HideShowDialog(const BrowserNodeList & a,
     : QDialog(0/*, "hide/show dialog", TRUE*/), all(a),
       hidden_visible(hv), on_visible(visible)
 {
-    setWindowTitle(TR("Settings dialog"));
+    setWindowTitle(tr("Settings dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     QHBoxLayout * hbox;
@@ -67,7 +67,7 @@ HideShowDialog::HideShowDialog(const BrowserNodeList & a,
     subvbox = new QVBoxLayout();
     hbox->addLayout(subvbox);
     subvbox->setMargin(5);
-    subvbox->addWidget(new QLabel(TR("Visible"), this), 0, Qt::AlignHCenter);
+    subvbox->addWidget(new QLabel(tr("Visible"), this), 0, Qt::AlignHCenter);
     subvbox->addWidget(lb_visible = new QListWidget (this));
     lb_visible->setSelectionMode(QListWidget ::MultiSelection);
 
@@ -87,7 +87,7 @@ HideShowDialog::HideShowDialog(const BrowserNodeList & a,
     subvbox = new QVBoxLayout();
     hbox->addLayout(subvbox);
     subvbox->setMargin(5);
-    subvbox->addWidget(new QLabel(TR("Hidden"), this), 0, Qt::AlignHCenter);
+    subvbox->addWidget(new QLabel(tr("Hidden"), this), 0, Qt::AlignHCenter);
     subvbox->addWidget(lb_hidden = new QListWidget (this));
     lb_hidden->setSelectionMode(QListWidget ::MultiSelection);
 
@@ -105,10 +105,10 @@ HideShowDialog::HideShowDialog(const BrowserNodeList & a,
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * sh_all = new SmallPushButton(TR("Show all"), this);
-    QPushButton * hi_all = new SmallPushButton(TR("Hide all"), this);
-    QPushButton * hi_priv = new SmallPushButton(TR("Hide private ones"), this);
-    QPushButton * hi_priv_prot = new SmallPushButton(TR("Hide private and\nprotected ones"), this);
+    QPushButton * sh_all = new SmallPushButton(tr("Show all"), this);
+    QPushButton * hi_all = new SmallPushButton(tr("Hide all"), this);
+    QPushButton * hi_priv = new SmallPushButton(tr("Hide private ones"), this);
+    QPushButton * hi_priv_prot = new SmallPushButton(tr("Hide private and\nprotected ones"), this);
     QSize bs(hi_priv_prot->sizeHint());
 
     sh_all->setFixedSize(bs);
@@ -132,7 +132,7 @@ HideShowDialog::HideShowDialog(const BrowserNodeList & a,
     vbox->addLayout(hbox);
     hbox->setMargin(5);
 
-    cb_visible = new QCheckBox(TR("Specify visible members rather than hidden ones"), this);
+    cb_visible = new QCheckBox(tr("Specify visible members rather than hidden ones"), this);
     cb_visible->setChecked(on_visible);
     hbox->addWidget(cb_visible);
 
@@ -141,8 +141,8 @@ HideShowDialog::HideShowDialog(const BrowserNodeList & a,
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * ok = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * ok = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
 
     ok->setDefault(TRUE);
 

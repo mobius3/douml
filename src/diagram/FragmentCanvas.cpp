@@ -346,29 +346,29 @@ void FragmentCanvas::menu(const QPoint &)
 {
     QMenu m(0);
 
-    MenuFactory::createTitle(m, TR("Fragment"));
+    MenuFactory::createTitle(m, tr("Fragment"));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 7);
-    MenuFactory::addItem(m, TR("Go down"), 8);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 7);
+    MenuFactory::addItem(m, tr("Go down"), 8);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit"), 2);
-    MenuFactory::addItem(m, TR("Add separator"), 6);
+    MenuFactory::addItem(m, tr("Edit"), 2);
+    MenuFactory::addItem(m, tr("Add separator"), 6);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 3);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 3);
 
     if (linked()) {
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Select linked items"), 4);
+        MenuFactory::addItem(m, tr("Select linked items"), 4);
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 5);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 5);
 
     if ((refer != 0) && !refer->deletedp()) {
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Show referenced diagram"), 9);
+        MenuFactory::addItem(m, tr("Show referenced diagram"), 9);
     }
 
     QAction* retAction = m.exec(QCursor::pos());
@@ -467,7 +467,7 @@ void FragmentCanvas::edit_drawing_settings()
     for (;;) {
         ColorSpecVector co(1);
 
-        co[0].set(TR("fragment color"), &itscolor);
+        co[0].set(tr("fragment color"), &itscolor);
 
         SettingsDialog dialog(0, &co, FALSE);
 
@@ -492,7 +492,7 @@ void FragmentCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         ColorSpecVector co(1);
         UmlColor itscolor;
 
-        co[0].set(TR("fragment color"), &itscolor);
+        co[0].set(tr("fragment color"), &itscolor);
 
         SettingsDialog dialog(0, &co, FALSE, TRUE);
 
@@ -519,12 +519,12 @@ void FragmentCanvas::clone_drawing_settings(const DiagramItem *src)
 
 QString FragmentCanvas::may_start(UmlCode & l) const
 {
-    return (l == UmlAnchor) ? QString() : TR("illegal");
+    return (l == UmlAnchor) ? QString() : tr("illegal");
 }
 
 QString FragmentCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 {
-    return (l == UmlAnchor) ? dest->may_start(l) : TR("illegal");
+    return (l == UmlAnchor) ? dest->may_start(l) : tr("illegal");
 }
 
 aCorner FragmentCanvas::on_resize_point(const QPoint & p)

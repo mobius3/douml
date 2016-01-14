@@ -77,7 +77,7 @@ HelpDialog * HelpDialog::the;
 HelpDialog::HelpDialog()
     : QDialog(0, Qt::Dialog)
 {
-    setWindowTitle(TR("BOUML Help"));
+    setWindowTitle(tr("BOUML Help"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     QHBoxLayout * hbox;
@@ -95,7 +95,7 @@ HelpDialog::HelpDialog()
         hbox = new QHBoxLayout();
         vbox->addLayout(hbox);
         hbox->addWidget(new QLabel(this));
-        hbox->addWidget(new QLabel(TR("To set the navigator by setting the environment through the menu"
+        hbox->addWidget(new QLabel(tr("To set the navigator by setting the environment through the menu"
                                       " Miscellaneous allows to see all the documentation in better conditions")
                                    , this));
         hbox->addWidget(new QLabel(this));
@@ -106,7 +106,7 @@ HelpDialog::HelpDialog()
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
 
-    QPushButton * ok = new QPushButton(TR("Close"), this);
+    QPushButton * ok = new QPushButton(tr("Close"), this);
 
     hbox->addWidget(new QLabel(this));
     hbox->addWidget(ok);

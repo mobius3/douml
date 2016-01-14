@@ -219,22 +219,22 @@ void BrowserStateAction::menu()
 
     if (!deletedp()) {
         MenuFactory::addItem(m, QObject::tr("Edit"), 1,
-                       QObject::TR("to edit the <i>%1</i>, \
+                       QObject::tr("to edit the <i>%1</i>, \
 a double click with the left mouse button does the same thing").arg(s));
 
         if (!is_read_only) {
             MenuFactory::addItem(m, QObject::tr("Duplicate"), 2,
-                           QObject::TR("to copy the <i>%1</i> in a new one").arg(s));
+                           QObject::tr("to copy the <i>%1</i> in a new one").arg(s));
             m.addSeparator();
 
             if (edition_number == 0)
                 MenuFactory::addItem(m, QObject::tr("Delete"), 3,
-                               QObject::TR("to delete the <i>%1</i>. \
+                               QObject::tr("to delete the <i>%1</i>. \
 Note that you can undelete it after").arg(s));
         }
 
         MenuFactory::addItem(m, QObject::tr("Referenced by"), 5,
-                       QObject::TR("to know who reference the <i>%1</i> \
+                       QObject::tr("to know who reference the <i>%1</i> \
 through a transition").arg(s));
         mark_menu(m, QObject::tr("the %1").arg(s).toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
@@ -242,13 +242,13 @@ through a transition").arg(s));
         if ((edition_number == 0) &&
             Tool::menu_insert(&toolm, get_type(), 100)) {
             m.addSeparator();
-            toolm.setTitle(QObject::TR("Tool"));
+            toolm.setTitle(QObject::tr("Tool"));
             m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
         MenuFactory::addItem(m, QObject::tr("Undelete"), 4,
-                       QObject::TR("to undelete the <i>%1</i>").arg(s));
+                       QObject::tr("to undelete the <i>%1</i>").arg(s));
     }
 
     QAction *resultAction = m.exec(QCursor::pos());
@@ -352,11 +352,11 @@ QString BrowserStateAction::get_stype() const
     const char * st = def->get_stereotype();
 
     if (!strcmp(st, "receive-signal"))
-        return QObject::TR("receive-signal action");
+        return QObject::tr("receive-signal action");
     else if (!strcmp(st, "send-signal"))
-        return QObject::TR("send-signal action");
+        return QObject::tr("send-signal action");
     else
-        return QObject::TR("state action");
+        return QObject::tr("state action");
 }
 
 int BrowserStateAction::get_identifier() const
@@ -486,7 +486,7 @@ void BrowserStateAction::DropAfterEvent(QDropEvent * e, BrowserNode * after)
         if (may_contains(bn, FALSE))
             move(bn, after);
         else {
-            msg_critical(QObject::TR("Error"), QObject::TR("Forbidden"));
+            msg_critical(QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }

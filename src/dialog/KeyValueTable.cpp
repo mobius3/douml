@@ -87,7 +87,7 @@ bool KeyValuesTable::check_unique()
             const QString & s = text(index, 0);
 
             if (l.indexOf(s) != -1) {
-                msg_critical(TR("Error"), QObject::tr("key '%1' used several times").arg(s));
+                msg_critical(tr("Error"), QObject::tr("key '%1' used several times").arg(s));
                 return FALSE;
             }
             else

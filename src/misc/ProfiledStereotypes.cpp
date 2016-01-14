@@ -657,13 +657,13 @@ QString ProfiledStereotypes::canAddStereotype(BrowserClass * cl, QString name)
 
     if ((pf->get_type() != UmlPackage) ||
         (strcmp(pf->get_data()->get_stereotype(), "profile") != 0))
-        return QObject::TR("isn't in a profile");
+        return QObject::tr("isn't in a profile");
     else {
         ProfiledStereotype * st =
             All[pf->get_name() + QString(":") + name];
 
         return ((st != 0) && (st->cl != cl))
-               ? QObject::TR("is already a stereotype")
+               ? QObject::tr("is already a stereotype")
                : QString();
     }
 }
@@ -674,13 +674,13 @@ QString ProfiledStereotypes::canAddStereotype(BrowserClassView * v, QString name
     BrowserNode * pf = (BrowserNode *) v->parent();
 
     if (strcmp(pf->get_data()->get_stereotype(), "profile") != 0)
-        return QObject::TR("isn't in a profile");
+        return QObject::tr("isn't in a profile");
     else {
         ProfiledStereotype * st =
             All[pf->get_name() + QString(":") + name];
 
         return (st != 0)
-               ? QObject::TR("is already a stereotype")
+               ? QObject::tr("is already a stereotype")
                : QString();
     }
 }
@@ -696,7 +696,7 @@ void ProfiledStereotypes::added(BrowserClass * cl)
 
         if (All[s] != 0) {
             // only possible during a load / import
-            msg_critical(QObject::TR("Unconsistency"),
+            msg_critical(QObject::tr("Unconsistency"),
                          QObject::tr("stereotype '%1' defined several times,\n"
                             "redondant definition is not managed as a stereotype").arg(s));
             cl->get_data()->set_stereotype("redondantProfiledStereotype");
@@ -976,8 +976,8 @@ static void recompute_st_list()
             QString s = pf->get_name() + QString(":") + cl->get_name();
 
             if (All[s] != 0) {
-                msg_critical(QObject::TR("Unconsistency"),
-                             QObject::TR("stereotype '%1' defined several times,\n"
+                msg_critical(QObject::tr("Unconsistency"),
+                             QObject::tr("stereotype '%1' defined several times,\n"
                                 "redondant definition is not managed as a stereotype").arg(
                                 s));
                 cl->get_data()->set_stereotype("redondantProfiledStereotype");
@@ -1178,11 +1178,11 @@ void ProfiledStereotypes::menu(QMenu & m, BrowserNode * bn, int bias)
             separatorinserted = TRUE;
             m.addSeparator();
             QAction *action;
-            action = m.addAction(QObject::TR("Check"));
+            action = m.addAction(QObject::tr("Check"));
             action->setData(bias);
-            action->setWhatsThis(QObject::TR("to call the <i>check plug-out</i> associated to the stereotype"));
-            //MenuFactory::addItem(m, QObject::TR("Check"), bias),
-              //             QObject::TR("to call the <i>check plug-out</i> associated to the stereotype"));
+            action->setWhatsThis(QObject::tr("to call the <i>check plug-out</i> associated to the stereotype"));
+            //MenuFactory::addItem(m, QObject::tr("Check"), bias),
+              //             QObject::tr("to call the <i>check plug-out</i> associated to the stereotype"));
         }
     }
 
@@ -1200,24 +1200,24 @@ void ProfiledStereotypes::menu(QMenu & m, BrowserNode * bn, int bias)
             m.addSeparator();
 
         QAction *action;
-        action = m.addAction(QObject::TR("Force stereotype consistency"));
+        action = m.addAction(QObject::tr("Force stereotype consistency"));
         action->setData(bias+2);
-        action->setWhatsThis(QObject::TR("to recompute all concerning the profiles"));
+        action->setWhatsThis(QObject::tr("to recompute all concerning the profiles"));
 
 
-        //MenuFactory::addItem(m, QObject::TR("Force stereotype consistency"), bias + 2),
-          //             QObject::TR("to recompute all concerning the profiles"));
+        //MenuFactory::addItem(m, QObject::tr("Force stereotype consistency"), bias + 2),
+          //             QObject::tr("to recompute all concerning the profiles"));
 
         if (!ProfiledStereotyped.isEmpty() && haveCheck(bn))
         {
             QAction *action;
-            action = m.addAction(QObject::TR("Check recursively"));
+            action = m.addAction(QObject::tr("Check recursively"));
             action->setData(bias+1);
-            action->setWhatsThis(QObject::TR("to call the <i>check plug-out</i> associated to the stereotypes,"
+            action->setWhatsThis(QObject::tr("to call the <i>check plug-out</i> associated to the stereotypes,"
                                              "doing down recursively"));
 
-            //MenuFactory::addItem(m, QObject::TR("Check recursively"), bias + 1),
-              //             QObject::TR("to call the <i>check plug-out</i> associated to the stereotypes,"
+            //MenuFactory::addItem(m, QObject::tr("Check recursively"), bias + 1),
+              //             QObject::tr("to call the <i>check plug-out</i> associated to the stereotypes,"
                 //              "doing down recursively"));
         }
     }

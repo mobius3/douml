@@ -48,46 +48,46 @@
 
 QString addactorText()
 {
-    return QObject::TR("Click this button to add an <i>actor</i> in the diagram. <br><br>"
+    return QObject::tr("Click this button to add an <i>actor</i> in the diagram. <br><br>"
               "You can also drop the class from the <b>browser</b>.");
 }
 QString addusecaseText()
 {
-    return QObject::TR("Click this button to add an <i>use case</i> in the diagram. <br><br>"
+    return QObject::tr("Click this button to add an <i>use case</i> in the diagram. <br><br>"
               "You can also drop the use case from the <b>browser</b>.");
 }
 extern QString addpackageText();
 QString addfragmentText()
 {
-    return QObject::TR("Click this button to add a <i>fragment</i>.");
+    return QObject::tr("Click this button to add a <i>fragment</i>.");
 }
 QString addsubjectText()
 {
-    return QObject::TR("Click this button to add a <i>subject</i>.");
+    return QObject::tr("Click this button to add a <i>subject</i>.");
 }
 QString associationText()
 {
-    return QObject::TR("Click this button to create an <i>association</i>");
+    return QObject::tr("Click this button to create an <i>association</i>");
 }
 extern QString dependencyText();
 QString inheritText()
 {
-    return QObject::TR("Click this button to create a <i>generalisation</i>");
+    return QObject::tr("Click this button to create a <i>generalisation</i>");
 }
 QString noteText()
 {
-    return QObject::TR("Click this button to create a <i>note</i>");
+    return QObject::tr("Click this button to create a <i>note</i>");
 }
 QString anchorText()
 {
-    return QObject::TR("Click this button to create a connection between a "
+    return QObject::tr("Click this button to create a connection between a "
               "<i>note</i> and any other item, or between an <i>association</i> "
               "and a <i>class</i> in case of an <i>association class</i>.");
 }
 extern QString textText();
 QString imageText()
 {
-    return QObject::TR("Click this button to add an <i>image</i>");
+    return QObject::tr("Click this button to add an <i>image</i>");
 }
 
 // id is an old ident in case of an import

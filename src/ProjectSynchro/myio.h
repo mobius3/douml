@@ -40,7 +40,7 @@ bool has_backup_files(QDir & dir);
 void delete_backup_files(QDir & dir);
 void copy(QDir & fromdir, QDir & todir, QString fn);
 void copy_if_needed(QDir & fromdir, QDir & todir, QString fn);
-void purge(QDir & dir, Q3Dict<void> & useful);
+void purge(QDir & dir, QHash<QString, void *> &useful);
 
 void set_user_name(int owner, QString s);
 QString user_name(int id);

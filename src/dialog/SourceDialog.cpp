@@ -131,13 +131,13 @@ SourceDialog::SourceDialog(QString p, BooL & flg, unsigned & edn)
 #endif
         }
         else
-            e->setText(TR("cannot read %1"/*, p*/));
+            e->setText(tr("cannot read %1"/*, p*/));
 
         delete [] s;
         f.close();
     }
     else
-        e->setText(TR("cannot read %1"/*, p*/));
+        e->setText(tr("cannot read %1"/*, p*/));
 
 #if 0
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);

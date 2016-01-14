@@ -32,9 +32,8 @@
 #include <stdlib.h>
 
 #include <qapplication.h>
-#include <q3popupmenu.h>
+#include <QMenu>
 #include <qcursor.h>
-//Added by qt3to4:
 #include <QPixmap>
 
 #include <QKeyEvent>
@@ -58,15 +57,15 @@
 #endif
 
 BrowserNode::BrowserNode(BrowserView * parent, QString fn)
-    : Q3ListViewItem(parent), filename(fn)
+    : QTreeWidgetItem(parent), filename(fn)
 {
 }
 
 BrowserNode::BrowserNode(BrowserNode * parent, QString fn)
-    : Q3ListViewItem(parent), filename(fn)
+    : QTreeWidgetItem(parent), filename(fn)
 {
     // move it at end
-    Q3ListViewItem * child = parent->firstChild();
+    BrowserNode * child = parent->firstChild();
 
     while (child->nextSibling())
         child = child->nextSibling();
@@ -89,7 +88,16 @@ const QPixmap * BrowserNode::pixmap(int col) const
     else
         return (ro) ? RoOtherPackageIcon : OtherPackageIcon;
 }
-
+QVariant	BrowserNode::data(int column, int role) const
+{
+    if(role == Qt::DecorationRole)
+    {
+        const QPixmap *pix = pixmap(column);
+        if(pix)
+            return QIcon(*pix);
+    }
+    return QTreeWidgetItem::data(column, role);
+}
 bool BrowserNode::load(QDir & dir)
 {
     char * buff = read_file(dir, filename, ro);
@@ -186,9 +194,9 @@ bool BrowserNode::load(QDir & dir)
 void BrowserNode::key_event(QKeyEvent * e)
 {
     // control or alt is pressed with p, u or a
-    QApplication::setOverrideCursor(Qt::waitCursor);
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-    if (e->state() == ::Qt::ControlModifier) {
+    if (e->modifiers()&::Qt::ControlModifier) {
         switch (e->key()) {
         case ::Qt::Key_A:
             assign(user_id());
@@ -229,91 +237,113 @@ void BrowserNode::menu()
     if (who.isEmpty())
         who = "<" + QString::number(user_id()) + ">";
 
-    Q3PopupMenu m(0);
+    QMenu m(0);
+    QAction *action;
 
-    m.insertItem("Package " + text(0), -1);
+    action = m.addAction("Package " + text(0));
+    action->setData(-1);
 
     if (! ro) {
-        m.insertSeparator();
+        m.addSeparator();
 
         if (owner == user_id()) {
-            m.insertItem("Protect this package ("CTRL"+p)", 3);
-            m.insertItem("Unassign this package ("CTRL"+u)", 2);
+            action = m.addAction("Protect this package ("CTRL"+p)");
+            action->setData(3);
+            action = m.addAction("Unassign this package ("CTRL"+u)");
+            action->setData(2);
         }
         else if (owner == -1) {
-            m.insertItem("Protect this package ("CTRL"+p)", 3);
-            m.insertItem("Assign this package to " + who + " ("CTRL"+a)", 1);
+            action = m.addAction("Protect this package ("CTRL"+p)");
+            action->setData(3);
+            action = m.addAction("Assign this package to " + who + " ("CTRL"+a)");
+            action->setData(1);
         }
         else if (owner < 2) {
-            m.insertItem("Assign this package to " + who + " ("CTRL"+a)", 1);
-            m.insertItem("Unassign this package (Ctrl+u)", 2);
+            action = m.addAction("Assign this package to " + who + " ("CTRL"+a)");
+            action->setData(1);
+            action = m.addAction("Unassign this package (Ctrl+u)");
+            action->setData(2);
         }
         else {
-            m.insertItem("Protect this package ("CTRL"+p)", 3);
-            m.insertItem("Unassign this package ("CTRL"+u)", 2);
-            m.insertItem("Assign this package to " + who + " ("CTRL"+a)", 1);
+            action =  m.addAction("Protect this package ("CTRL"+p)");
+            action->setData(3);
+            action = m.addAction("Unassign this package ("CTRL"+u)");
+            action->setData(2);
+            action = m.addAction("Assign this package to " + who + " ("CTRL"+a)");
+            action->setData(1);
         }
     }
 
     if (firstChild() != 0) {
-        m.insertSeparator();
-        m.insertItem("Protect " + who + "'s packages recursively from this one", 10);
-        m.insertItem("Protect unassigned packages recursively from this one", 11);
-        m.insertItem("Protect all packages recursively from this one (Alt+p)", 12);
-        m.insertItem("Assign to " + who + " unassigned packages recursively from this one", 13);
-        m.insertItem("Assign to " + who + " all packages recursively from this one (Alt+a)", 14);
-        m.insertItem("Unassign " + who + "'s packages recursively from this one", 15);
-        m.insertItem("Unassign all packages recursively from this one (Alt+u)", 16);
+        m.addSeparator();
+        action = m.addAction("Protect " + who + "'s packages recursively from this one");
+        action->setData(10);
+        action = m.addAction("Protect unassigned packages recursively from this one");
+        action->setData(11);
+        action = m.addAction("Protect all packages recursively from this one (Alt+p)");
+        action->setData(12);
+        action = m.addAction("Assign to " + who + " unassigned packages recursively from this one");
+        action->setData(13);
+        action = m.addAction("Assign to " + who + " all packages recursively from this one (Alt+a)");
+        action->setData(14);
+        action = m.addAction("Unassign " + who + "'s packages recursively from this one");
+        action->setData(15);
+        action = m.addAction("Unassign all packages recursively from this one (Alt+u)");
+        action->setData(16);
     }
     else if (ro)
         return;
 
-    int choice = m.exec(QCursor::pos());
+    QAction *retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        int choice = retAction->data().toInt();
 
-    QApplication::setOverrideCursor(Qt::waitCursor);
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-    switch (choice) {
-    case 1:
-        assign(user_id());
-        break;
+        switch (choice) {
+        case 1:
+            assign(user_id());
+            break;
 
-    case 2:
-        assign(-1);
-        break;
+        case 2:
+            assign(-1);
+            break;
 
-    case 3:
-        assign(0);
-        break;
+        case 3:
+            assign(0);
+            break;
 
-    case 10:
-        assign_mine(0);
-        break;
+        case 10:
+            assign_mine(0);
+            break;
 
-    case 11:
-        assign_unassigned(0);
-        break;
+        case 11:
+            assign_unassigned(0);
+            break;
 
-    case 12:
-        assign_all(0);
-        break;
+        case 12:
+            assign_all(0);
+            break;
 
-    case 13:
-        assign_unassigned(user_id());
-        break;
+        case 13:
+            assign_unassigned(user_id());
+            break;
 
-    case 14:
-        assign_all(user_id());
-        break;
+        case 14:
+            assign_all(user_id());
+            break;
 
-    case 15:
-        assign_mine(-1);
-        break;
+        case 15:
+            assign_mine(-1);
+            break;
 
-    case 16:
-        assign_all(-1);
+        case 16:
+            assign_all(-1);
 
-    default:
-        break;
+        default:
+            break;
+        }
     }
 
     QApplication::restoreOverrideCursor();
@@ -328,15 +358,15 @@ void BrowserNode::assign(int w)
         char * p = read_file(dir, filename, dummy);
 
         if (p != 0) {
-            QString path = dir.absFilePath(filename);
-            FILE * fp = fopen(path, "wb");
+            QString path = dir.absoluteFilePath(filename);
+            FILE * fp = fopen(path.toLatin1().constData(), "wb");
 
             if (fp != 0) {
                 fprintf(fp, "format %d\n\"%s\"\n  revision %s\n",
-                        format, (const char *) text(TREE_COL), (const char *) text(REVISION_COL));
+                        format, (const char *) text(TREE_COL).toLatin1().constData(), (const char *) text(REVISION_COL).toLatin1().constData());
 
                 if (!modifier_name.isEmpty())
-                    fprintf(fp, "  modified_by %d \"%s\"\n", modifier_id, (const char *) modifier_name);
+                    fprintf(fp, "  modified_by %d \"%s\"\n", modifier_id, (const char *) modifier_name.toLatin1().constData());
 
                 if (w != -1) {
                     fprintf(fp, "  owner %d", w);
@@ -348,7 +378,7 @@ void BrowserNode::assign(int w)
                         setText(OWNERNAME_COL, s);
 
                         if (! s.isEmpty())
-                            fprintf(fp, " \"%s\"\n", (const char *) s);
+                            fprintf(fp, " \"%s\"\n", (const char *) s.toLatin1().constData());
                         else
                             fputs(" \"\"\n", fp);
                     }
@@ -386,7 +416,7 @@ void BrowserNode::assign_mine(int w)
     if (owner == user_id())
         assign(w);
 
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling())
         ((BrowserNode *) child)->assign_mine(w);
@@ -397,7 +427,7 @@ void BrowserNode::assign_unassigned(int w)
     if (owner == -1)
         assign(w);
 
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling())
         ((BrowserNode *) child)->assign_unassigned(w);
@@ -407,28 +437,52 @@ void BrowserNode::assign_all(int w)
 {
     assign(w);
 
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling())
         ((BrowserNode *) child)->assign_all(w);
 }
 
+BrowserNode *BrowserNode::nextSibling()
+{
+    for(int i = 0; i < parent()->childCount(); i++)
+    {
+        if(parent()->child(i) == this)
+        {
+            if((i+1)<parent()->childCount())
+                return (BrowserNode *)parent()->child(i+1);
+            break;
+        }
+    }
+    return NULL;
+}
+
+void BrowserNode::moveItem(BrowserNode *after)
+{
+    if(this->parent())
+    {
+        this->parent()->removeChild(this);
+        if(after->parent())
+        {
+            after->parent()->insertChild(after->parent()->indexOfChild(after)+1, this);
+        }
+    }
+}
 //
 
 void BrowserNodeList::search(BrowserNode * bn, const QString & s, bool cs)
 {
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = bn->firstChild(); child != 0; child = child->nextSibling()) {
-        if (child->text(TREE_COL).find(s, 0, cs) != -1)
+        if (child->text(TREE_COL).indexOf(s, 0, cs ? Qt::CaseInsensitive : Qt::CaseInsensitive) != -1)
             append((BrowserNode *) child);
 
         search((BrowserNode *) child, s, cs);
     }
 }
-
-int BrowserNodeList::compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2)
+int BrowserNodeList::compareItems(void *item1, void* item2)
 {
     return ((BrowserNode *) item1)->text(TREE_COL)
-           .compare(((BrowserNode *) item2)->text(TREE_COL));
+            .compare(((BrowserNode *) item2)->text(TREE_COL));
 }

@@ -56,15 +56,15 @@ StateActionDialog::StateActionDialog(StateActionData * d)
     d->browser_node->edit_start();
 
     if (d->browser_node->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
-    setWindowTitle(TR("State Action dialog"));
+    setWindowTitle(tr("State Action dialog"));
     visit = !hasOkButton();
 
     BrowserNode * bn = action->browser_node;
@@ -78,7 +78,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(true);
     edstereotype->addItem(toUnicode(action->get_stereotype()));
@@ -95,12 +95,12 @@ StateActionDialog::StateActionDialog(StateActionData * d)
     edstereotype->setSizePolicy(sp);
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
 
     if (! visit)
     {
         SmallPushButton* sButton;
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(sButton);
     }
@@ -118,7 +118,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("behavior"), grid));
+    grid->addWidget(new QLabel(tr("behavior"), grid));
     grid->addWidget(uml = new MultiLineEdit(grid));
     uml->setText(action->uml);
 
@@ -133,7 +133,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("behavior"), grid));
+    grid->addWidget(new QLabel(tr("behavior"), grid));
     grid->addWidget(cpp = new MultiLineEdit(grid));
     cpp->setText(action->cpp);
 
@@ -151,7 +151,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("behavior"), grid));
+    grid->addWidget(new QLabel(tr("behavior"), grid));
     grid->addWidget(java = new MultiLineEdit(grid));
     java->setText(action->java);
 
@@ -170,7 +170,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
     grid->setSpacing(5);
 
     grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     //
 

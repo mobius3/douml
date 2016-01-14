@@ -154,7 +154,7 @@ void RelationCanvas::remove(bool from_model)
                 }
 
                 if (a && !a->end->isSelected() && !a->end->get_bn()->deletedp()) {
-                    msg_warning("Douml", TR("<i>Draw all relations</i> forced to <i>no</i>"));
+                    msg_warning("Douml", tr("<i>Draw all relations</i> forced to <i>no</i>"));
                     the_canvas()->dont_draw_all_relations();
                 }
             }
@@ -388,42 +388,42 @@ void RelationCanvas::menu(const QPoint & lpos)
 
         MenuFactory::createTitle(m, data->definition(FALSE, TRUE));
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Edit"), 0);
+        MenuFactory::addItem(m, tr("Edit"), 0);
         m.addSeparator();
 
-        MenuFactory::addItem(m, TR("Select in browser"), 2);
+        MenuFactory::addItem(m, tr("Select in browser"), 2);
 
         if (plabel || pstereotype ||
             first->role_b || first->multiplicity_b ||
             last->role_a || last->multiplicity_a) {
             m.addSeparator();
-            MenuFactory::addItem(m, TR("Select labels"), 3);
-            MenuFactory::addItem(m, TR("Labels default position"), 4);
+            MenuFactory::addItem(m, tr("Select labels"), 3);
+            MenuFactory::addItem(m, tr("Labels default position"), 4);
 
             if (plabel && (label == 0))
-                MenuFactory::addItem(m, TR("Attach relation's name to this segment"), 5);
+                MenuFactory::addItem(m, tr("Attach relation's name to this segment"), 5);
 
             if (pstereotype && (stereotype == 0))
-                MenuFactory::addItem(m, TR("Attach relation's stereotype to this segment"), 6);
+                MenuFactory::addItem(m, tr("Attach relation's stereotype to this segment"), 6);
         }
 
         if (get_start() != get_end()) {
             m.addSeparator();
             init_geometry_menu(geo, 10);
-            MenuFactory::insertItem(m, TR("Geometry (Ctrl+l)"), &geo);
+            MenuFactory::insertItem(m, tr("Geometry (Ctrl+l)"), &geo);
         }
 
         m.addSeparator();
-        MenuFactory::addItem(m, TR("Remove from diagram"), 7);
+        MenuFactory::addItem(m, tr("Remove from diagram"), 7);
 
         if ((data->get_end()) ? data->is_writable(data->get_end())
             : data->is_writable(data->get_start()))
-            MenuFactory::addItem(m, TR("Delete from model"), 8);
+            MenuFactory::addItem(m, tr("Delete from model"), 8);
 
         m.addSeparator();
 
         if (Tool::menu_insert(&toolm, itstype, 20))
-            MenuFactory::insertItem(m, TR("Tool"), &toolm);
+            MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
         QAction* retAction = m.exec(QCursor::pos());
         if(retAction)
@@ -1142,7 +1142,7 @@ void RelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
 
     if ((ccfrom != 0) && (ccto != 0)) {
         if (ccfrom->has_relation(def))
-            msg_information("Douml", TR("relation already drawn"));
+            msg_information("Douml", tr("relation already drawn"));
         else {
             RelationCanvas * rel =
                 new RelationCanvas(canvas, ccfrom, ccto, from, bn->get_type(),
@@ -1315,7 +1315,7 @@ QString RelationCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
                     ? data->is_writable(data->get_end())
                     : data->is_writable(data->get_start()))
                    ? QString() // ok
-                   : TR("read-only relation");
+                   : tr("read-only relation");
         else
             // ok
             return QString();

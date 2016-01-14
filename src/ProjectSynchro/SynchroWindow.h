@@ -28,9 +28,8 @@
 #ifndef SYNCHROWINDOW_H
 #define SYNCHROWINDOW_H
 
-#include <q3mainwindow.h>
-
-//Added by qt3to4:
+#include <QMainWindow>
+#include <QHBoxLayout>
 
 
 class Q3HBox;
@@ -39,7 +38,7 @@ class BrowserNode;
 
 // singleton
 
-class SynchroWindow : public Q3MainWindow
+class SynchroWindow : public QMainWindow
 {
     Q_OBJECT
 
@@ -59,7 +58,7 @@ protected:
 
     QString project_name;
     QList<BrowserView *> browsers;
-    Q3HBox * hbox;
+    QHBoxLayout * hbox;
 
     void load(QString path);
 

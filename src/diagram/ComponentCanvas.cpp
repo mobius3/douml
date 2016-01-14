@@ -851,43 +851,43 @@ void ComponentCanvas::menu(const QPoint &)
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 13);
-    MenuFactory::addItem(m, TR("Go down"), 14);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 13);
+    MenuFactory::addItem(m, tr("Go down"), 14);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Add related elements"), 10);
+    MenuFactory::addItem(m, tr("Add related elements"), 10);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 2);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit component"), 3);
+    MenuFactory::addItem(m, tr("Edit component"), 3);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Select in browser"), 4);
+    MenuFactory::addItem(m, tr("Select in browser"), 4);
 
     if (linked())
-        MenuFactory::addItem(m, TR("Select linked items"), 5);
+        MenuFactory::addItem(m, tr("Select linked items"), 5);
 
     m.addSeparator();
 
     if (browser_node->is_writable()) {
         if (browser_node->get_associated() !=
             (BrowserNode *) the_canvas()->browser_diagram())
-            MenuFactory::addItem(m, TR("Set associated diagram"), 6);
+            MenuFactory::addItem(m, tr("Set associated diagram"), 6);
 
         if (browser_node->get_associated())
-            MenuFactory::addItem(m, TR("Remove diagram association"), 9);
+            MenuFactory::addItem(m, tr("Remove diagram association"), 9);
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        MenuFactory::addItem(m, TR("Delete from model"), 8);
+        MenuFactory::addItem(m, tr("Delete from model"), 8);
 
     m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlComponent, 20))
-        MenuFactory::insertItem(m, TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -953,7 +953,7 @@ void ComponentCanvas::menu(const QPoint &)
 
     case 10:
         ((UmlCanvas *) canvas())->get_view()
-        ->add_related_elements(this, TR("component"), TRUE, FALSE);
+        ->add_related_elements(this, tr("component"), TRUE, FALSE);
         return;
 
     default:
@@ -987,7 +987,7 @@ void ComponentCanvas::apply_shortcut(QString s)
     }
     else if (s == "Add related elements") {
         ((UmlCanvas *) canvas())->get_view()
-        ->add_related_elements(this, TR("component"), TRUE, FALSE);
+        ->add_related_elements(this, tr("component"), TRUE, FALSE);
         return;
     }
     else {
@@ -1005,11 +1005,11 @@ void ComponentCanvas::edit_drawing_settings()
         StateSpecVector st(4);
         ColorSpecVector co(1);
 
-        st[0].set(TR("drawn as icon"), &settings.draw_component_as_icon);
-        st[1].set(TR("show required and provided interfaces"), &settings.show_component_req_prov);
-        st[2].set(TR("show realizations"), &settings.show_component_rea);
-        st[3].set(TR("show stereotype properties"), &settings.show_stereotype_properties);
-        co[0].set(TR("component color"), &itscolor);
+        st[0].set(tr("drawn as icon"), &settings.draw_component_as_icon);
+        st[1].set(tr("show required and provided interfaces"), &settings.show_component_req_prov);
+        st[2].set(tr("show realizations"), &settings.show_component_rea);
+        st[3].set(tr("show stereotype properties"), &settings.show_stereotype_properties);
+        co[0].set(tr("component color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -1037,11 +1037,11 @@ void ComponentCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         Uml3States show_stereotype_properties;
         UmlColor itscolor;
 
-        st[0].set(TR("drawn as icon"), &draw_component_as_icon);
-        st[1].set(TR("show required and provided interfaces"), &show_component_req_prov);
-        st[2].set(TR("show realizations"), &show_component_rea);
-        st[3].set(TR("show stereotype properties"), &show_stereotype_properties);
-        co[0].set(TR("component color"), &itscolor);
+        st[0].set(tr("drawn as icon"), &draw_component_as_icon);
+        st[1].set(tr("show required and provided interfaces"), &show_component_req_prov);
+        st[2].set(tr("show realizations"), &show_component_rea);
+        st[3].set(tr("show stereotype properties"), &show_stereotype_properties);
+        co[0].set(tr("component color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE, TRUE);
 
@@ -1100,17 +1100,17 @@ QString ComponentCanvas::may_start(UmlCode & l) const
     switch (l) {
     case UmlDependency:
         l = UmlDependOn;
-        return (browser_node->is_writable()) ? QString() : TR("read only");
+        return (browser_node->is_writable()) ? QString() : tr("read only");
 
     case UmlGeneralisation:
         l = UmlInherit;
-        return (browser_node->is_writable()) ? QString() : TR("read only");
+        return (browser_node->is_writable()) ? QString() : tr("read only");
 
     case UmlProvided: {
         QList<BrowserClass *> ll;
 
         ((BrowserComponent *) browser_node)->get_all_provided_classes(ll, FALSE);
-        return (!ll.isEmpty()) ? QString() : TR("no provided interfaces");
+        return (!ll.isEmpty()) ? QString() : tr("no provided interfaces");
     }
     break;
 
@@ -1118,7 +1118,7 @@ QString ComponentCanvas::may_start(UmlCode & l) const
         QList<BrowserClass *> ll;
 
         ((BrowserComponent *) browser_node)->get_all_required_classes(ll, FALSE);
-        return (!ll.isEmpty()) ? QString() : TR("no required interfaces");
+        return (!ll.isEmpty()) ? QString() : tr("no required interfaces");
     }
     break;
 
@@ -1126,7 +1126,7 @@ QString ComponentCanvas::may_start(UmlCode & l) const
         return 0;
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 
@@ -1157,7 +1157,7 @@ QString ComponentCanvas::may_connect(UmlCode & l, const DiagramItem * dest) cons
             return browser_node->check_inherit(dest->get_bn());
 
         default:
-            return TR("illegal");
+            return tr("illegal");
         }
 
     case UmlArrowJunction:
@@ -1167,7 +1167,7 @@ QString ComponentCanvas::may_connect(UmlCode & l, const DiagramItem * dest) cons
 
             ((BrowserComponent *) browser_node)->get_all_required_classes(ll, FALSE);
             return (ll.indexOf(((ArrowJunctionCanvas *) dest)->get_interface()) != -1)
-                   ? QString() : TR("not required");
+                   ? QString() : tr("not required");
         }
 
         case UmlProvided: {
@@ -1175,15 +1175,15 @@ QString ComponentCanvas::may_connect(UmlCode & l, const DiagramItem * dest) cons
 
             ((BrowserComponent *) browser_node)->get_all_provided_classes(ll, FALSE);
             return (ll.indexOf(((ArrowJunctionCanvas *) dest)->get_interface()) != -1)
-                   ? QString() : TR("not provided");
+                   ? QString() : tr("not provided");
         }
 
         default:
-            return TR("illegal");
+            return tr("illegal");
         }
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 

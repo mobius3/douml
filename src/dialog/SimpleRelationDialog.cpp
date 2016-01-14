@@ -56,12 +56,12 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
     r->browser_node->edit_start();
 
     if (r->browser_node->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
     bool visit = !hasOkButton();
@@ -75,24 +75,24 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
 
     switch (rel->get_type()) {
     case UmlInherit:
-        setWindowTitle(TR("Generalisation dialog"));
+        setWindowTitle(tr("Generalisation dialog"));
         break;
 
     case UmlDependOn:
-        setWindowTitle(TR("Dependency dialog"));
+        setWindowTitle(tr("Dependency dialog"));
         break;
 
     default:
-        setWindowTitle(TR("unknown relation dialog"));
+        setWindowTitle(tr("unknown relation dialog"));
         break;
     }
 
-    grid->addWidget(new QLabel(TR("from : "), grid));
+    grid->addWidget(new QLabel(tr("from : "), grid));
     grid->addWidget(new QLabel(rel->get_start_node()->full_name(TRUE), grid));
-    grid->addWidget(new QLabel(TR("to : "), grid));
+    grid->addWidget(new QLabel(tr("to : "), grid));
     grid->addWidget(new QLabel(rel->get_end_node()->full_name(TRUE), grid));
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(rel->get_stereotype()));
@@ -112,11 +112,11 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
             SmallPushButton* sButton;
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(sButton);
     }
@@ -141,7 +141,7 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
     grid->setSpacing(5);
 
     grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     open_dialog(this);
 }

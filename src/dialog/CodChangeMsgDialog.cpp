@@ -54,7 +54,7 @@ QSize CodChangeMsgDialog::previous_size;
 CodChangeMsgDialog::CodChangeMsgDialog(QWidget * parent, ColMsg * m)
     : QDialog(parent/*, "Communication message dialog", TRUE*/), msg(m)
 {
-    setWindowTitle(TR("Communicationg message dialog"));
+    setWindowTitle(tr("Communicationg message dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     QHBoxLayout * hbox;
@@ -65,7 +65,7 @@ CodChangeMsgDialog::CodChangeMsgDialog(QWidget * parent, ColMsg * m)
     vbox->addLayout(hbox);
     hbox->setMargin(5);
 
-    SmallPushButton * b = new SmallPushButton(TR("message :"), this);
+    SmallPushButton * b = new SmallPushButton(tr("message :"), this);
 
     hbox->addWidget(b);
     connect(b, SIGNAL(clicked()), this, SLOT(menu_op()));
@@ -109,8 +109,8 @@ CodChangeMsgDialog::CodChangeMsgDialog(QWidget * parent, ColMsg * m)
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * ok = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * ok = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     ok->setDefault(TRUE);
@@ -139,13 +139,13 @@ void CodChangeMsgDialog::menu_op()
 {
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     int index = list.indexOf(edoper->currentText().trimmed());
 
     if (index != -1)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = BrowserView::selected_item();
 
@@ -153,12 +153,12 @@ void CodChangeMsgDialog::menu_op()
         (bn->get_type() == UmlOperation) &&
         !bn->deletedp() &&
         (opers.indexOf((OperationData *) bn->get_data()) != -1))
-        MenuFactory::addItem(m, TR("Choose operation selected in browser"), 1);
+        MenuFactory::addItem(m, tr("Choose operation selected in browser"), 1);
     else
         bn = 0;
 
     if (cl != 0)
-        MenuFactory::addItem(m, TR("Create operation and choose it"), 2);
+        MenuFactory::addItem(m, tr("Create operation and choose it"), 2);
 
     if ((index != -1) || (bn != 0) || (cl != 0)) {
         QAction* retAction = m.exec(QCursor::pos());

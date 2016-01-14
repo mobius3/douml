@@ -70,9 +70,9 @@ QSize GenerationSettingsDialog::previous_size;
 GenerationSettingsDialog::GenerationSettingsDialog()
     : TabDialog(0, "Generation Settings dialog", TRUE)
 {
-    setWindowTitle(TR("Generation settings dialog"));
-    setOkButton(TR("OK"));
-    setCancelButton(TR("Cancel"));
+    setWindowTitle(tr("Generation settings dialog"));
+    setOkButton(tr("OK"));
+    setCancelButton(tr("Cancel"));
     init_types();
     init_stereotypes();
     init_cpp1();
@@ -119,7 +119,7 @@ void GenerationSettingsDialog::init_types()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("Types correspondence, and C++ operation argument default passing for them :"), grid));
+    grid->addWidget(new QLabel(tr("Types correspondence, and C++ operation argument default passing for them :"), grid));
     grid->addWidget(builtinTable = new BuiltinTable(grid));
     grid->addWidget(builtinTable);
     builtinTable->Init();
@@ -138,7 +138,7 @@ void GenerationSettingsDialog::init_stereotypes()
     gridW->setSpacing(3);
 
     this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    gridW->addWidget(new QLabel(TR("Attributes and \nRelations\nstereotypes \ncorrespondence : "), gridW));
+    gridW->addWidget(new QLabel(tr("Attributes and \nRelations\nstereotypes \ncorrespondence : "), gridW));
     relation_stereotypes_table =
             new StereotypesTable(gridW, GenerationSettings::nrelattrstereotypes,
                                  GenerationSettings::relattr_stereotypes, FALSE);
@@ -146,7 +146,7 @@ void GenerationSettingsDialog::init_stereotypes()
     //new QLabel(grid));
     //new QLabel(grid));
 
-    gridW->addWidget(new QLabel(TR("Classes's \nstereotypes \ncorrespondence : "), gridW));
+    gridW->addWidget(new QLabel(tr("Classes's \nstereotypes \ncorrespondence : "), gridW));
     class_stereotypes_table =
             new StereotypesTable(gridW, GenerationSettings::nclassstereotypes,
                                  GenerationSettings::class_stereotypes, TRUE);
@@ -156,8 +156,8 @@ void GenerationSettingsDialog::init_stereotypes()
 
 static void init_indent(QComboBox * cb, const char * v)
 {
-    cb->addItem(QObject::TR("empty"));
-    cb->addItem(QObject::TR("1 space"));
+    cb->addItem(QObject::tr("empty"));
+    cb->addItem(QObject::tr("1 space"));
 
     QString f = "%1 spaces";
     QString s = "2";
@@ -167,7 +167,7 @@ static void init_indent(QComboBox * cb, const char * v)
         cb->addItem(f.arg(s));
     }
 
-    cb->addItem(QObject::TR("1 tab"));
+    cb->addItem(QObject::tr("1 tab"));
 
     if (*v == '\t')
         cb->setCurrentIndex(9);
@@ -188,7 +188,7 @@ void GenerationSettingsDialog::init_cpp1()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("Header file\ndefault content :"), grid));
+    grid->addWidget(new QLabel(tr("Header file\ndefault content :"), grid));
     grid->addWidget(edcpp_h_content = new MultiLineEdit(grid));
     edcpp_h_content->setText(GenerationSettings::cpp_h_content);
     QFont font = edcpp_h_content->font();
@@ -199,7 +199,7 @@ void GenerationSettingsDialog::init_cpp1()
     font.setFixedPitch(TRUE);
     edcpp_h_content->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Source file\ndefault content :"), grid));
+    grid->addWidget(new QLabel(tr("Source file\ndefault content :"), grid));
     grid->addWidget(edcpp_src_content = new MultiLineEdit(grid));
     edcpp_src_content->setText(GenerationSettings::cpp_src_content);
     edcpp_src_content->setFont(font);
@@ -210,7 +210,7 @@ void GenerationSettingsDialog::init_cpp1()
     vtab->addWidget(htab = new HHBox(vtab));
 
     htab->setMargin(3);
-    htab->addWidget(new QLabel(TR("generated/reversed \nheader file extension : "), htab));
+    htab->addWidget(new QLabel(tr("generated/reversed \nheader file extension : "), htab));
     htab->addWidget(edcpp_h_extension = new QComboBox(/*TRUE,*/ htab));
     edcpp_h_extension->setEditable(true);
     //htab->addWidget((edcpp_h_extension, 100);
@@ -219,7 +219,7 @@ void GenerationSettingsDialog::init_cpp1()
     edcpp_h_extension->addItem("h");
     edcpp_h_extension->addItem("hh");
 
-    htab->addWidget(new QLabel(TR("    generated/reversed \n    source file extension : "), htab));
+    htab->addWidget(new QLabel(tr("    generated/reversed \n    source file extension : "), htab));
     edcpp_src_extension = new QComboBox(htab);
     edcpp_src_extension->setEditable(true);
     htab->addWidget(edcpp_src_extension);
@@ -230,10 +230,10 @@ void GenerationSettingsDialog::init_cpp1()
 
     htab->addWidget(new QLabel("    #include : ", htab));
     htab->addWidget(cpp_include_with_path_cb = new QComboBox(htab));
-    cpp_include_with_path_cb->addItem(TR("without path"));
-    cpp_include_with_path_cb->addItem(TR("with absolute path"));
-    cpp_include_with_path_cb->addItem(TR("with relative path"));
-    cpp_include_with_path_cb->addItem(TR("with root relative path"));
+    cpp_include_with_path_cb->addItem(tr("without path"));
+    cpp_include_with_path_cb->addItem(tr("with absolute path"));
+    cpp_include_with_path_cb->addItem(tr("with relative path"));
+    cpp_include_with_path_cb->addItem(tr("with root relative path"));
 
     if (!GenerationSettings::cpp_include_with_path)
         cpp_include_with_path_cb->setCurrentIndex(0);
@@ -248,19 +248,19 @@ void GenerationSettingsDialog::init_cpp1()
     vtab->addWidget(htab);
     htab->setMargin(3);
 
-    htab->addWidget(new QLabel(TR("force namespace \nprefix generation : "), htab));
+    htab->addWidget(new QLabel(tr("force namespace \nprefix generation : "), htab));
     htab->addWidget(cpp_force_namespace_gen_cb = new QCheckBox(htab));
     cpp_force_namespace_gen_cb->setChecked(GenerationSettings::cpp_force_namespace_gen);
 
-    htab->addWidget(new QLabel(TR("            inline operation force \n            includes in header : "), htab));
+    htab->addWidget(new QLabel(tr("            inline operation force \n            includes in header : "), htab));
     htab->addWidget(cpp_inline_force_incl_in_h_cb = new QCheckBox(htab));
     cpp_inline_force_incl_in_h_cb->setChecked(GenerationSettings::cpp_inline_force_incl_in_h);
 
-    htab->addWidget(new QLabel(TR("            generate Javadoc \n            style comment : "), htab));
+    htab->addWidget(new QLabel(tr("            generate Javadoc \n            style comment : "), htab));
     htab->addWidget(cpp_javadoc_cb = new QCheckBox(htab));
     cpp_javadoc_cb->setChecked(GenerationSettings::cpp_javadoc_comment);
 
-    htab->addWidget(new QLabel(TR("            visibility indent : "), htab));
+    htab->addWidget(new QLabel(tr("            visibility indent : "), htab));
     htab->addWidget(indentvisi_cb = new QComboBox(htab));
     init_indent(indentvisi_cb, GenerationSettings::cpp_indent_visibility);
 
@@ -279,7 +279,7 @@ void GenerationSettingsDialog::init_cpp2()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("Class default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Class default \ndeclaration :"), grid));
     grid->addWidget(edcpp_class_decl = new MultiLineEdit(grid));
     edcpp_class_decl->setText(GenerationSettings::cpp_class_decl);
     QFont font = edcpp_class_decl->font();
@@ -290,22 +290,22 @@ void GenerationSettingsDialog::init_cpp2()
     font.setFixedPitch(TRUE);
     edcpp_class_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Struct default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Struct default \ndeclaration :"), grid));
     grid->addWidget(edcpp_struct_decl = new MultiLineEdit(grid));
     edcpp_struct_decl->setText(GenerationSettings::cpp_struct_decl);
     edcpp_struct_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Union default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Union default \ndeclaration :"), grid));
     grid->addWidget(edcpp_union_decl = new MultiLineEdit(grid));
     edcpp_union_decl->setText(GenerationSettings::cpp_union_decl);
     edcpp_union_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Enum default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Enum default \ndeclaration :"), grid));
     grid->addWidget(edcpp_enum_decl = new MultiLineEdit(grid));
     edcpp_enum_decl->setText(GenerationSettings::cpp_enum_decl);
     edcpp_enum_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Typedef default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Typedef default \ndeclaration :"), grid));
     grid->addWidget(edcpp_typedef_decl = new MultiLineEdit(grid));
     edcpp_typedef_decl->setText(GenerationSettings::cpp_typedef_decl);
     edcpp_typedef_decl->setFont(font);
@@ -325,18 +325,18 @@ void GenerationSettingsDialog::init_cpp3()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Attribute \ndefault \ndeclaration :"), grid));
 
     grid->addWidget(grid2 = new GridBox(2, grid));
-    QLabel *label = new QLabel(TR("Multiplicity"), grid2);
+    QLabel *label = new QLabel(tr("Multiplicity"), grid2);
     label->setAlignment(Qt::AlignCenter);
     grid2->addWidget(label);
     grid2->addWidget(new QLabel(grid2));
-    grid2->addWidget(new QLabel(TR("unspecified,\nor 1"), grid2));
+    grid2->addWidget(new QLabel(tr("unspecified,\nor 1"), grid2));
     grid2->addWidget(edcpp_attr_decl[0] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("* or a..b"), grid2));
+    grid2->addWidget(new QLabel(tr("* or a..b"), grid2));
     grid2->addWidget(edcpp_attr_decl[1] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("X (means [X])\nor [...]...[...]"), grid2));
+    grid2->addWidget(new QLabel(tr("X (means [X])\nor [...]...[...]"), grid2));
     grid2->addWidget(edcpp_attr_decl[2] = new MultiLineEdit(grid2));
 
     QFont font = edcpp_attr_decl[0]->font();
@@ -355,47 +355,47 @@ void GenerationSettingsDialog::init_cpp3()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Association\nand\naggregation\ndefault\ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Association\nand\naggregation\ndefault\ndeclaration :"), grid));
     grid->addWidget(grid2 = new GridBox(2, grid));
-    grid2->addWidget(label = new QLabel(TR("Multiplicity"), grid2));
+    grid2->addWidget(label = new QLabel(tr("Multiplicity"), grid2));
     label->setAlignment(Qt::AlignCenter);
     grid2->addWidget(htab =new HHBox(grid2));
     htab->addWidget( new QLabel(htab));
-    htab->addWidget(( label = new QLabel(TR("Association "), htab)));
+    htab->addWidget(( label = new QLabel(tr("Association "), htab)));
     label->setAlignment(Qt::AlignCenter);
     htab->addWidget((label = new QLabel(htab)));
     label->setPixmap(*associationButton);
-    htab->addWidget((label =  new QLabel(TR("  and aggregation "), htab)));
+    htab->addWidget((label =  new QLabel(tr("  and aggregation "), htab)));
     label->setAlignment(Qt::AlignCenter);
     htab->addWidget((label = new QLabel(htab)));
     label->setPixmap(*aggregationButton);
     htab->addWidget(new QLabel(htab));
-    grid2->addWidget(new QLabel(TR("unspecified,\n1 or 0..1"), grid2));
+    grid2->addWidget(new QLabel(tr("unspecified,\n1 or 0..1"), grid2));
     grid2->addWidget(edcpp_rel_decl[0][0] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("* or a..b"), grid2));
+    grid2->addWidget(new QLabel(tr("* or a..b"), grid2));
     grid2->addWidget(edcpp_rel_decl[0][1] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("X (means [X])\nor [...]...[...]"), grid2));
+    grid2->addWidget(new QLabel(tr("X (means [X])\nor [...]...[...]"), grid2));
     grid2->addWidget(edcpp_rel_decl[0][2] = new MultiLineEdit(grid2));
 
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Composition\ndefault\ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Composition\ndefault\ndeclaration :"), grid));
     grid->addWidget(grid2 = new GridBox(2, grid));
-    grid2->addWidget(label = new QLabel(TR("Multiplicity"), grid2));
+    grid2->addWidget(label = new QLabel(tr("Multiplicity"), grid2));
     label->setAlignment(Qt::AlignCenter);
     grid2->addWidget(htab =new HHBox(grid2));
     htab->addWidget(new QLabel(htab));
-    htab->addWidget((label = new QLabel(TR("Composition "), htab)));
+    htab->addWidget((label = new QLabel(tr("Composition "), htab)));
     label->setAlignment(Qt::AlignCenter);
     htab->addWidget((label =new QLabel("",htab)));
     label->setPixmap(*aggregationByValueButton);
     htab->addWidget(new QLabel("",htab));
-    grid2->addWidget(new QLabel(TR("unspecified\nor 1"), grid2));
+    grid2->addWidget(new QLabel(tr("unspecified\nor 1"), grid2));
     grid2->addWidget(edcpp_rel_decl[1][0] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("* or a..b"), grid2));
+    grid2->addWidget(new QLabel(tr("* or a..b"), grid2));
     grid2->addWidget(edcpp_rel_decl[1][1] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("X (means [X])\nor [...]...[...]"), grid2));
+    grid2->addWidget(new QLabel(tr("X (means [X])\nor [...]...[...]"), grid2));
     grid2->addWidget(edcpp_rel_decl[1][2] = new MultiLineEdit(grid2));
 
     for (i = 0; i != 2; i += 1) {
@@ -421,7 +421,7 @@ void GenerationSettingsDialog::init_cpp4()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("Get operation\ndefault definition : "), grid));
+    grid->addWidget(new QLabel(tr("Get operation\ndefault definition : "), grid));
 
     grid->addWidget(vtab = new VVBox(grid));
 
@@ -430,16 +430,16 @@ void GenerationSettingsDialog::init_cpp4()
                             FALSE, tr("Visibility").toLatin1().constData()));
 
     //bg = new QGroupBox(3, Qt::Horizontal, QObject::tr("Modifiers"), htab));
-    htab->addWidget(bg = new BButtonGroup(/*3, Qt::Horizontal, */TR("Modifiers"), htab));
+    htab->addWidget(bg = new BButtonGroup(/*3, Qt::Horizontal, */tr("Modifiers"), htab));
     ////bg->setExclusive(FALSE);
     bg->addWidget(cpp_get_inline_cb = new QCheckBox("inline", bg));
-    bg->addWidget(cpp_get_value_const_cb = new QCheckBox(TR("const value"), bg));
+    bg->addWidget(cpp_get_value_const_cb = new QCheckBox(tr("const value"), bg));
     bg->addWidget(cpp_get_const_cb = new QCheckBox("const", bg));
     cpp_get_inline_cb->setChecked(GenerationSettings::cpp_get_inline);
     cpp_get_value_const_cb->setChecked(GenerationSettings::cpp_get_value_const);
     cpp_get_const_cb->setChecked(GenerationSettings::cpp_get_const);
 
-    htab->addWidget(new QLabel(TR("  name : "), htab));
+    htab->addWidget(new QLabel(tr("  name : "), htab));
     htab->addWidget(edcpp_get_name = new LineEdit(htab));
     edcpp_get_name->setText(GenerationSettings::cpp_get_name);
     QFont font = edcpp_get_name->font();
@@ -451,7 +451,7 @@ void GenerationSettingsDialog::init_cpp4()
     edcpp_get_name->setFont(font);
 
     htab->addWidget(new QLabel("  ", htab));
-    htab->addWidget(uml_follow_cpp_get_name = new QCheckBox(TR("also in uml"), htab));
+    htab->addWidget(uml_follow_cpp_get_name = new QCheckBox(tr("also in uml"), htab));
 
     if (GenerationSettings::uml_get_name == CppView)
         uml_follow_cpp_get_name->setChecked(TRUE);
@@ -459,7 +459,7 @@ void GenerationSettingsDialog::init_cpp4()
     connect(uml_follow_cpp_get_name, SIGNAL(toggled(bool)),
             this, SLOT(follow_cpp_get_name()));
 
-    grid->addWidget(new QLabel(TR("Set operation\ndefault definition : "), grid));
+    grid->addWidget(new QLabel(tr("Set operation\ndefault definition : "), grid));
 
     grid->addWidget(vtab = new VVBox(grid));
 
@@ -467,22 +467,22 @@ void GenerationSettingsDialog::init_cpp4()
     htab->addWidget(cpp_set_visibility.init(htab, GenerationSettings::cpp_get_visibility,
                                             FALSE, tr("Visibility").toLatin1().constData()));
 
-    htab->addWidget(bg = new BButtonGroup(/*4, Qt::Horizontal, */TR("Modifiers"), htab));
+    htab->addWidget(bg = new BButtonGroup(/*4, Qt::Horizontal, */tr("Modifiers"), htab));
     ////bg->setExclusive(FALSE);
     bg->addWidget(cpp_set_inline_cb = new QCheckBox("inline", bg));
-    bg->addWidget(cpp_set_param_const_cb = new QCheckBox(TR("const param"), bg));
-    bg->addWidget(cpp_set_param_ref_cb = new QCheckBox(TR("by ref"), bg));
+    bg->addWidget(cpp_set_param_const_cb = new QCheckBox(tr("const param"), bg));
+    bg->addWidget(cpp_set_param_ref_cb = new QCheckBox(tr("by ref"), bg));
     cpp_set_inline_cb->setChecked(GenerationSettings::cpp_set_inline);
     cpp_set_param_const_cb->setChecked(GenerationSettings::cpp_set_param_const);
     cpp_set_param_ref_cb->setChecked(GenerationSettings::cpp_set_param_ref);
 
-    htab->addWidget(new QLabel(TR("  name : "), htab));
+    htab->addWidget(new QLabel(tr("  name : "), htab));
     htab->addWidget(edcpp_set_name = new LineEdit(htab));
     edcpp_set_name->setText(GenerationSettings::cpp_set_name);
     edcpp_set_name->setFont(font);
 
     htab->addWidget(new QLabel("  ", htab));
-    htab->addWidget(uml_follow_cpp_set_name = new QCheckBox(TR("also in uml"), htab));
+    htab->addWidget(uml_follow_cpp_set_name = new QCheckBox(tr("also in uml"), htab));
 
     if (GenerationSettings::uml_set_name == CppView)
         uml_follow_cpp_set_name->setChecked(TRUE);
@@ -493,7 +493,7 @@ void GenerationSettingsDialog::init_cpp4()
     //new QLabel(grid));
     //new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Enumeration item \ndefault definition :"), grid));
+    grid->addWidget(new QLabel(tr("Enumeration item \ndefault definition :"), grid));
     grid->addWidget(edcpp_enum_item_decl = new MultiLineEdit(grid));
     edcpp_enum_item_decl->setText(GenerationSettings::cpp_enum_item_decl);
     edcpp_enum_item_decl->setFont(font);
@@ -501,42 +501,42 @@ void GenerationSettingsDialog::init_cpp4()
     //new QLabel(grid));
     //new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Default type forms\nfor the enums :"), grid));
+    grid->addWidget(new QLabel(tr("Default type forms\nfor the enums :"), grid));
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
-    htab->addWidget(new QLabel(TR("input\nparameter : "), htab));
+    htab->addWidget(new QLabel(tr("input\nparameter : "), htab));
     htab->addWidget(cpp_enum_in = new LineEdit(htab));
     cpp_enum_in->setText(GenerationSettings::cpp_enum_in);
     cpp_enum_in->setFont(font);
-    htab->addWidget(new QLabel(TR("   output\n   parameter : "), htab));
+    htab->addWidget(new QLabel(tr("   output\n   parameter : "), htab));
     htab->addWidget(cpp_enum_out = new LineEdit(htab));
     cpp_enum_out->setText(GenerationSettings::cpp_enum_out);
     cpp_enum_out->setFont(font);
-    htab->addWidget(new QLabel(TR("   input output \n   parameter : "), htab));
+    htab->addWidget(new QLabel(tr("   input output \n   parameter : "), htab));
     htab->addWidget(cpp_enum_inout = new LineEdit(htab));
     cpp_enum_inout->setText(GenerationSettings::cpp_enum_inout);
     cpp_enum_inout->setFont(font);
-    htab->addWidget(new QLabel(TR("   operation \n   return : "), htab));
+    htab->addWidget(new QLabel(tr("   operation \n   return : "), htab));
     htab->addWidget(cpp_enum_return = new LineEdit(htab));
     cpp_enum_return->setText(GenerationSettings::cpp_enum_return);
     cpp_enum_return->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Default type forms for\nthe types not given\nin the first tab:"), grid));
+    grid->addWidget(new QLabel(tr("Default type forms for\nthe types not given\nin the first tab:"), grid));
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
-    htab->addWidget(new QLabel(TR("input\nparameter : "), htab));
+    htab->addWidget(new QLabel(tr("input\nparameter : "), htab));
     htab->addWidget(cpp_in = new LineEdit(htab));
     cpp_in->setText(GenerationSettings::cpp_in);
     cpp_in->setFont(font);
-    htab->addWidget(new QLabel(TR("   output\n   parameter : "), htab));
+    htab->addWidget(new QLabel(tr("   output\n   parameter : "), htab));
     htab->addWidget(cpp_out = new LineEdit(htab));
     cpp_out->setText(GenerationSettings::cpp_out);
     cpp_out->setFont(font);
-    htab->addWidget(new QLabel(TR("   input output \n   parameter : "), htab));
+    htab->addWidget(new QLabel(tr("   input output \n   parameter : "), htab));
     htab->addWidget(cpp_inout = new LineEdit(htab));
     cpp_inout->setText(GenerationSettings::cpp_inout);
     cpp_inout->setFont(font);
-    htab->addWidget(new QLabel(TR("   operation \n   return : "), htab));
+    htab->addWidget(new QLabel(tr("   operation \n   return : "), htab));
     htab->addWidget(cpp_return = new LineEdit(htab));
     cpp_return->setText(GenerationSettings::cpp_return);
     cpp_return->setFont(font);
@@ -544,12 +544,12 @@ void GenerationSettingsDialog::init_cpp4()
     //new QLabel(grid));
     //new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Operation default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Operation default \ndeclaration :"), grid));
     grid->addWidget(edcpp_oper_decl = new MultiLineEdit(grid));
     edcpp_oper_decl->setText(GenerationSettings::cpp_oper_decl);
     edcpp_oper_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Operation default \ndefinition :"), grid));
+    grid->addWidget(new QLabel(tr("Operation default \ndefinition :"), grid));
     grid->addWidget(htab =new HHBox(grid));
     htab->addWidget(edcpp_oper_def = new MultiLineEdit(htab));
     edcpp_oper_def->setText(GenerationSettings::cpp_oper_def);
@@ -576,12 +576,12 @@ void GenerationSettingsDialog::init_cpp5()
     htab =new HHBox(split);
     htab->setMargin(3);
     QLabel * lbl1;
-    htab->addWidget(lbl1 = new QLabel(TR("External classes : \nname making\n#include, using"), htab));
+    htab->addWidget(lbl1 = new QLabel(tr("External classes : \nname making\n#include, using"), htab));
     htab->addWidget(edcpp_external_class_decl = new MultiLineEdit(htab));
     edcpp_external_class_decl->setText(GenerationSettings::cpp_external_class_decl);
     htab =new HHBox(split);
     htab->setMargin(3);
-    QLabel * lbl2 = new QLabel(TR("External types :\n#include form(s),\nusing, etc..."), htab);
+    QLabel * lbl2 = new QLabel(tr("External types :\n#include form(s),\nusing, etc..."), htab);
     htab->addWidget(lbl2);
     htab->addWidget(cpp_include_table =
             new IncludeTable(htab, GenerationSettings::cpp_includes,
@@ -603,7 +603,7 @@ void GenerationSettingsDialog::init_java1()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("file default \ncontent :"), grid));
+    grid->addWidget(new QLabel(tr("file default \ncontent :"), grid));
     HHBox * htab;
     grid->addWidget(htab =new HHBox(grid));
 
@@ -626,7 +626,7 @@ void GenerationSettingsDialog::init_java1()
     vtab->setMargin(3);
     htab2->setMargin(3);
 
-    htab2->addWidget(new QLabel(TR("    generated/reversed file extension "), htab2));
+    htab2->addWidget(new QLabel(tr("    generated/reversed file extension "), htab2));
     htab2->addWidget(edjava_extension = new QComboBox(htab2));
     edjava_extension->setEditable(true);
     edjava_extension->addItem(GenerationSettings::java_extension);
@@ -635,32 +635,32 @@ void GenerationSettingsDialog::init_java1()
 
     vtab->addWidget(htab2 = new HHBox(vtab));
     htab2->setMargin(3);
-    htab2->addWidget(new QLabel(TR("    generate Javadoc style comment "), htab2));
+    htab2->addWidget(new QLabel(tr("    generate Javadoc style comment "), htab2));
     htab2->addWidget(java_javadoc_cb = new QCheckBox(htab2));
     java_javadoc_cb->setChecked(GenerationSettings::java_javadoc_comment);
 
     vtab->addWidget(htab2 = new HHBox(vtab));
     htab2->setMargin(3);
-    htab2->addWidget(new QLabel(TR("    force package prefix generation "), htab2));
+    htab2->addWidget(new QLabel(tr("    force package prefix generation "), htab2));
     htab2->addWidget(java_force_package_gen_cb = new QCheckBox(htab2));
     java_force_package_gen_cb->setChecked(GenerationSettings::java_force_package_gen);
 
-    grid->addWidget(new QLabel(TR("Class default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Class default \ndeclaration :"), grid));
     grid->addWidget(edjava_class_decl = new MultiLineEdit(grid));
     edjava_class_decl->setText(GenerationSettings::java_class_decl);
     edjava_class_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Interface default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Interface default \ndeclaration :"), grid));
     grid->addWidget(edjava_interface_decl = new MultiLineEdit(grid));
     edjava_interface_decl->setText(GenerationSettings::java_interface_decl);
     edjava_interface_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Enum default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Enum default \ndeclaration :"), grid));
     grid->addWidget(edjava_enum_decl = new MultiLineEdit(grid));
     edjava_enum_decl->setText(GenerationSettings::java_enum_decl);
     edjava_enum_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Enum pattern \ndefault declaration :"), grid));
+    grid->addWidget(new QLabel(tr("Enum pattern \ndefault declaration :"), grid));
     grid->addWidget(edjava_enum_pattern_decl = new MultiLineEdit(grid));
     edjava_enum_pattern_decl->setText(GenerationSettings::java_enum_pattern_decl);
     edjava_enum_pattern_decl->setFont(font);
@@ -680,14 +680,14 @@ void GenerationSettingsDialog::init_java2()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Attribute \ndefault \ndeclaration :"), grid));
 
     grid->addWidget(grid2 = new GridBox(2, grid));
-    grid2->addWidget(new QLabel(TR("multiplicity '1'\nor unspecified"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '1'\nor unspecified"), grid2));
     grid2->addWidget(edjava_attr_decl[0] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '*'\nor 'a..b'"), grid2));
     grid2->addWidget(edjava_attr_decl[1] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("X (probably a\nnumber)"), grid2));
+    grid2->addWidget(new QLabel(tr("X (probably a\nnumber)"), grid2));
     grid2->addWidget(edjava_attr_decl[2] = new MultiLineEdit(grid2));
 
     QFont font = edjava_attr_decl[0]->font();
@@ -706,13 +706,13 @@ void GenerationSettingsDialog::init_java2()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Association and\naggregation\ndefault\ndeclaration :"), grid));
     grid->addWidget(grid2 = new GridBox(2, grid));
-    grid2->addWidget(new QLabel(TR("multiplicity '1'\nor unspecified"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '1'\nor unspecified"), grid2));
     grid2->addWidget(edjava_rel_decl[0] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '*'\nor 'a..b'"), grid2));
     grid2->addWidget(edjava_rel_decl[1] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("X (probably a\nnumber)"), grid2));
+    grid2->addWidget(new QLabel(tr("X (probably a\nnumber)"), grid2));
     grid2->addWidget(edjava_rel_decl[2] = new MultiLineEdit(grid2));
 
     for (i = 0; i != 3; i += 1) {
@@ -737,7 +737,7 @@ void GenerationSettingsDialog::init_java3()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("Enumeration item \ndefault definition :"), grid));
+    grid->addWidget(new QLabel(tr("Enumeration item \ndefault definition :"), grid));
     grid->addWidget(edjava_enum_item_decl = new MultiLineEdit(grid));
     edjava_enum_item_decl->setText(GenerationSettings::java_enum_item_decl);
 
@@ -749,35 +749,35 @@ void GenerationSettingsDialog::init_java3()
     font.setFixedPitch(TRUE);
     edjava_enum_item_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Enum pattern item \ndefault definition :"), grid));
+    grid->addWidget(new QLabel(tr("Enum pattern item \ndefault definition :"), grid));
     grid->addWidget(edjava_enum_pattern_item_decl = new MultiLineEdit(grid));
     edjava_enum_pattern_item_decl->setText(GenerationSettings::java_enum_pattern_item_decl);
     edjava_enum_pattern_item_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Enum pattern item \n'case' in 'from_int' :"), grid));
+    grid->addWidget(new QLabel(tr("Enum pattern item \n'case' in 'from_int' :"), grid));
     grid->addWidget(edjava_enum_pattern_item_case = new MultiLineEdit(grid));
     edjava_enum_pattern_item_case->setText(GenerationSettings::java_enum_pattern_item_case);
     edjava_enum_pattern_item_case->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Get operation\ndefault definition : "), grid));
+    grid->addWidget(new QLabel(tr("Get operation\ndefault definition : "), grid));
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
     htab->addWidget(java_get_visibility.init(htab, GenerationSettings::noncpp_get_visibility,
                                              TRUE, tr("Visibility (shared with Php)").toLatin1().constData()));
     java_get_visibility.connect(SIGNAL(clicked(int)), this, SLOT(java_get_visi_changed(int)));
 
-    htab->addWidget(bg = new BButtonGroup(/*1, Qt::Horizontal, */TR("Modifiers"), htab));
+    htab->addWidget(bg = new BButtonGroup(/*1, Qt::Horizontal, */tr("Modifiers"), htab));
     ////bg->setExclusive(FALSE);
     bg->addWidget(java_get_final_cb = new QCheckBox("final", bg));
     java_get_final_cb->setChecked(GenerationSettings::java_get_final);
 
-    htab->addWidget(new QLabel(TR("  name : "), htab));
+    htab->addWidget(new QLabel(tr("  name : "), htab));
     htab->addWidget(edjava_get_name = new LineEdit(htab));
     edjava_get_name->setText(GenerationSettings::java_get_name);
     edjava_get_name->setFont(font);
 
     htab->addWidget(new QLabel("  ", htab));
-    htab->addWidget(uml_follow_java_get_name = new QCheckBox(TR("also in uml"), htab));
+    htab->addWidget(uml_follow_java_get_name = new QCheckBox(tr("also in uml"), htab));
 
     if (GenerationSettings::uml_get_name == JavaView)
         uml_follow_java_get_name->setChecked(TRUE);
@@ -785,7 +785,7 @@ void GenerationSettingsDialog::init_java3()
     connect(uml_follow_java_get_name, SIGNAL(toggled(bool)),
             this, SLOT(follow_java_get_name()));
 
-    grid->addWidget(new QLabel(TR("Set operation\ndefault definition : "), grid));
+    grid->addWidget(new QLabel(tr("Set operation\ndefault definition : "), grid));
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
     htab->addWidget(java_set_visibility.init(htab, GenerationSettings::noncpp_set_visibility,
@@ -795,17 +795,17 @@ void GenerationSettingsDialog::init_java3()
     htab->addWidget(bg = new BButtonGroup(/*2, Qt::Horizontal,*/ QObject::tr("Modifiers"), htab));
     ////bg->setExclusive(FALSE);
     bg->addWidget(java_set_final_cb = new QCheckBox("final", bg));
-    bg->addWidget(java_set_param_final_cb = new QCheckBox(TR("final parameter"), bg));
+    bg->addWidget(java_set_param_final_cb = new QCheckBox(tr("final parameter"), bg));
     java_set_final_cb->setChecked(GenerationSettings::java_set_final);
     java_set_param_final_cb->setChecked(GenerationSettings::java_set_param_final);
 
-    htab->addWidget(new QLabel(TR("  name : "), htab));
+    htab->addWidget(new QLabel(tr("  name : "), htab));
     htab->addWidget(edjava_set_name = new LineEdit(htab));
     edjava_set_name->setText(GenerationSettings::java_set_name);
     edjava_set_name->setFont(font);
 
     htab->addWidget(new QLabel("  ", htab));
-    htab->addWidget(uml_follow_java_set_name = new QCheckBox(TR("also in uml"), htab));
+    htab->addWidget(uml_follow_java_set_name = new QCheckBox(tr("also in uml"), htab));
 
     if (GenerationSettings::uml_set_name == JavaView)
         uml_follow_java_set_name->setChecked(TRUE);
@@ -816,7 +816,7 @@ void GenerationSettingsDialog::init_java3()
     //new QLabel(grid));
     //new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Operation\ndefault definition :"), grid));
+    grid->addWidget(new QLabel(tr("Operation\ndefault definition :"), grid));
     grid->addWidget(edjava_oper_def = new MultiLineEdit(grid));
     edjava_oper_def->setText(GenerationSettings::java_oper_def);
     edjava_oper_def->setFont(font);
@@ -841,7 +841,7 @@ void GenerationSettingsDialog::init_java4()
     htab->setMargin(3);
     QLabel * lbl1;
     htab->addWidget(lbl1 =
-            new QLabel(TR("External classes : \nname making"), htab));
+            new QLabel(tr("External classes : \nname making"), htab));
     htab->addWidget(edjava_external_class_decl = new LineEdit(htab));
     edjava_external_class_decl->setText(GenerationSettings::java_external_class_decl);
 
@@ -849,7 +849,7 @@ void GenerationSettingsDialog::init_java4()
     htab->setMargin(3);
     QLabel * lbl2;
     htab->addWidget(lbl2 =
-            new QLabel(TR("External types :\nimport form(s) etc..."), htab));
+            new QLabel(tr("External types :\nimport form(s) etc..."), htab));
     htab->addWidget(java_import_table =
             new IncludeTable(htab, GenerationSettings::java_imports,
                              "Import etc...", "import "));
@@ -870,7 +870,7 @@ void GenerationSettingsDialog::init_php1()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("file default \ncontent :"), grid));
+    grid->addWidget(new QLabel(tr("file default \ncontent :"), grid));
 
     HHBox * htab;
     grid->addWidget(htab =new HHBox(grid));
@@ -895,7 +895,7 @@ void GenerationSettingsDialog::init_php1()
     vtab->setMargin(3);
     htab2->setMargin(3);
 
-    htab2->addWidget(new QLabel(TR("    generated / reversed file extension : "), htab2));
+    htab2->addWidget(new QLabel(tr("    generated / reversed file extension : "), htab2));
     htab2->addWidget(edphp_extension = new QComboBox(htab2));
     edphp_extension->setEditable(true);
     edphp_extension->addItem(GenerationSettings::php_extension);
@@ -904,18 +904,18 @@ void GenerationSettingsDialog::init_php1()
 
     vtab->addWidget(htab2 = new HHBox(vtab));
     htab2->setMargin(3);
-    htab2->addWidget(new QLabel(TR("    generate Javadoc style comment : "), htab2));
+    htab2->addWidget(new QLabel(tr("    generate Javadoc style comment : "), htab2));
     htab2->addWidget(php_javadoc_cb = new QCheckBox(htab2));
     php_javadoc_cb->setChecked(GenerationSettings::php_javadoc_comment);
 
     vtab->addWidget(htab2 = new HHBox(vtab));
     htab2->setMargin(3);
-    htab2->addWidget(new QLabel(TR("    require_once : "), htab2));
+    htab2->addWidget(new QLabel(tr("    require_once : "), htab2));
     htab2->addWidget(php_require_with_path_cb = new QComboBox( htab2));
-    php_require_with_path_cb->addItem(TR("without path"));
-    php_require_with_path_cb->addItem(TR("with absolute path"));
-    php_require_with_path_cb->addItem(TR("with relative path"));
-    php_require_with_path_cb->addItem(TR("with root relative path"));
+    php_require_with_path_cb->addItem(tr("without path"));
+    php_require_with_path_cb->addItem(tr("with absolute path"));
+    php_require_with_path_cb->addItem(tr("with relative path"));
+    php_require_with_path_cb->addItem(tr("with root relative path"));
 
     if (!GenerationSettings::php_req_with_path)
         php_require_with_path_cb->setCurrentIndex(0);
@@ -928,21 +928,21 @@ void GenerationSettingsDialog::init_php1()
 
     vtab->addWidget(htab2 = new HHBox(vtab));
     htab2->setMargin(3);
-    htab2->addWidget(new QLabel(TR("    force namespace prefix generation : "), htab2));
+    htab2->addWidget(new QLabel(tr("    force namespace prefix generation : "), htab2));
     htab2->addWidget(php_force_namespace_gen_cb = new QCheckBox(htab2));
     php_force_namespace_gen_cb->setChecked(GenerationSettings::php_force_namespace_gen);
 
-    grid->addWidget(new QLabel(TR("Class default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Class default \ndeclaration :"), grid));
     grid->addWidget(edphp_class_decl = new MultiLineEdit(grid));
     edphp_class_decl->setText(GenerationSettings::php_class_decl);
     edphp_class_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Interface default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Interface default \ndeclaration :"), grid));
     grid->addWidget(edphp_interface_decl = new MultiLineEdit(grid));
     edphp_interface_decl->setText(GenerationSettings::php_interface_decl);
     edphp_interface_decl->setFont(font);
 
-    grid->addWidget( new QLabel(TR("Enum default \ndeclaration :"), grid));
+    grid->addWidget( new QLabel(tr("Enum default \ndeclaration :"), grid));
     grid->addWidget(edphp_enum_decl = new MultiLineEdit(grid));
     edphp_enum_decl->setText(GenerationSettings::php_enum_decl);
     edphp_enum_decl->setFont(font);
@@ -962,7 +962,7 @@ void GenerationSettingsDialog::init_php2()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("Attribute default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Attribute default \ndeclaration :"), grid));
     grid->addWidget(edphp_attr_decl = new MultiLineEdit(grid));
 
     QFont font = edphp_attr_decl->font();
@@ -975,7 +975,7 @@ void GenerationSettingsDialog::init_php2()
     edphp_attr_decl->setText(GenerationSettings::php_attr_decl);
     edphp_attr_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Association and\naggregation\ndefault\ndeclaration :"), grid));
     grid->addWidget(edphp_rel_decl = new MultiLineEdit(grid));
     edphp_rel_decl->setText(GenerationSettings::php_rel_decl);
     edphp_rel_decl->setFont(font);
@@ -983,7 +983,7 @@ void GenerationSettingsDialog::init_php2()
     HHBox * htab;
     BButtonGroup * bg;
 
-    grid->addWidget(new QLabel(TR("Enumeration item \ndefault definition :"), grid));
+    grid->addWidget(new QLabel(tr("Enumeration item \ndefault definition :"), grid));
     grid->addWidget(edphp_enum_item_decl = new MultiLineEdit(grid));
     edphp_enum_item_decl->setText(GenerationSettings::php_enum_item_decl);
 
@@ -993,7 +993,7 @@ void GenerationSettingsDialog::init_php2()
     font.setFixedPitch(TRUE);
     edphp_enum_item_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Get operation\ndefault definition : "), grid));
+    grid->addWidget(new QLabel(tr("Get operation\ndefault definition : "), grid));
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
     htab->addWidget(php_get_visibility.init(htab, GenerationSettings::noncpp_get_visibility,
@@ -1005,13 +1005,13 @@ void GenerationSettingsDialog::init_php2()
     bg->addWidget(php_get_final_cb = new QCheckBox("final", bg));
     php_get_final_cb->setChecked(GenerationSettings::php_get_final);
 
-    htab->addWidget(new QLabel(TR("  name : "), htab));
+    htab->addWidget(new QLabel(tr("  name : "), htab));
     htab->addWidget(edphp_get_name = new LineEdit(htab));
     edphp_get_name->setText(GenerationSettings::php_get_name);
     edphp_get_name->setFont(font);
 
     htab->addWidget(new QLabel("  ", htab));
-    htab->addWidget(uml_follow_php_get_name = new QCheckBox(TR("also in uml"), htab));
+    htab->addWidget(uml_follow_php_get_name = new QCheckBox(tr("also in uml"), htab));
 
     if (GenerationSettings::uml_get_name == PhpView)
         uml_follow_php_get_name->setChecked(TRUE);
@@ -1019,7 +1019,7 @@ void GenerationSettingsDialog::init_php2()
     connect(uml_follow_php_get_name, SIGNAL(toggled(bool)),
             this, SLOT(follow_php_get_name()));
 
-    grid->addWidget(new QLabel(TR("Set operation\ndefault definition : "), grid));
+    grid->addWidget(new QLabel(tr("Set operation\ndefault definition : "), grid));
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
     htab->addWidget(php_set_visibility.init(htab, GenerationSettings::noncpp_set_visibility,
@@ -1031,13 +1031,13 @@ void GenerationSettingsDialog::init_php2()
     bg->addWidget(php_set_final_cb = new QCheckBox("final", bg));
     php_set_final_cb->setChecked(GenerationSettings::php_set_final);
 
-    htab->addWidget(new QLabel(TR("  name : "), htab));
+    htab->addWidget(new QLabel(tr("  name : "), htab));
     htab->addWidget(edphp_set_name = new LineEdit(htab));
     edphp_set_name->setText(GenerationSettings::php_set_name);
     edphp_set_name->setFont(font);
 
     htab->addWidget(new QLabel("  ", htab));
-    htab->addWidget(uml_follow_php_set_name = new QCheckBox(TR("also in uml"), htab));
+    htab->addWidget(uml_follow_php_set_name = new QCheckBox(tr("also in uml"), htab));
 
     if (GenerationSettings::uml_set_name == PhpView)
         uml_follow_php_set_name->setChecked(TRUE);
@@ -1048,7 +1048,7 @@ void GenerationSettingsDialog::init_php2()
     //new QLabel(grid));
     //new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Operation\ndefault definition :"), grid));
+    grid->addWidget(new QLabel(tr("Operation\ndefault definition :"), grid));
     grid->addWidget(edphp_oper_def = new MultiLineEdit(grid));
     edphp_oper_def->setText(GenerationSettings::php_oper_def);
     edphp_oper_def->setFont(font);
@@ -1056,7 +1056,7 @@ void GenerationSettingsDialog::init_php2()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("External classes : \nname making"), grid));
+    grid->addWidget(new QLabel(tr("External classes : \nname making"), grid));
     grid->addWidget(edphp_external_class_decl = new LineEdit(grid));
     edphp_external_class_decl->setText(GenerationSettings::php_external_class_decl);
 
@@ -1075,7 +1075,7 @@ void GenerationSettingsDialog::init_python1()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("indent step :"), grid));
+    grid->addWidget(new QLabel(tr("indent step :"), grid));
 
     HHBox * htab;
     grid->addWidget(htab =new HHBox(grid));
@@ -1090,7 +1090,7 @@ void GenerationSettingsDialog::init_python1()
     sp.setHorizontalPolicy(QSizePolicy::Expanding);
     lbl->setSizePolicy(sp);
 
-    grid->addWidget(new QLabel(TR("file default \ncontent :"), grid));
+    grid->addWidget(new QLabel(tr("file default \ncontent :"), grid));
 
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
@@ -1104,14 +1104,14 @@ void GenerationSettingsDialog::init_python1()
     font.setFixedPitch(TRUE);
     edpython_src_content->setFont(font);
 
-    htab->addWidget(new QLabel(TR("    generated /\n    reversed\n    file extension : "), htab));
+    htab->addWidget(new QLabel(tr("    generated /\n    reversed\n    file extension : "), htab));
     htab->addWidget(edpython_extension = new QComboBox(htab));
     edpython_extension->setEditable(true);
     edpython_extension->addItem(GenerationSettings::python_extension);
     edpython_extension->setCurrentIndex(0);
     edpython_extension->addItem("py");
 
-    grid->addWidget(new QLabel(TR("Class default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Class default \ndeclaration :"), grid));
 
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
@@ -1119,28 +1119,28 @@ void GenerationSettingsDialog::init_python1()
     edpython_class_decl->setText(GenerationSettings::python_class_decl);
     edpython_class_decl->setFont(font);
 
-    htab->addWidget(new QLabel(TR("    classes of Python 2.2 "), htab));
+    htab->addWidget(new QLabel(tr("    classes of Python 2.2 "), htab));
     htab->addWidget(python_2_2_cb = new QCheckBox(htab));
     python_2_2_cb->setChecked(GenerationSettings::python_2_2);
 
-    grid->addWidget(new QLabel(TR("Enum default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Enum default \ndeclaration :"), grid));
     grid->addWidget(edpython_enum_decl = new MultiLineEdit(grid));
     edpython_enum_decl->setText(GenerationSettings::python_enum_decl);
     edpython_enum_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Enumeration item \ndefault definition :"), grid));
+    grid->addWidget(new QLabel(tr("Enumeration item \ndefault definition :"), grid));
     grid->addWidget(edpython_enum_item_decl = new MultiLineEdit(grid));
     edpython_enum_item_decl->setText(GenerationSettings::python_enum_item_decl);
     edpython_enum_item_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Attribute \ndefault \ndeclaration :"), grid));
 
     GridBox * grid2;
     grid->addWidget(grid2 = new GridBox(2, grid));
 
-    grid2->addWidget(new QLabel(TR("multiplicity '1'\nor unspecified"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '1'\nor unspecified"), grid2));
     grid2->addWidget(edpython_attr_decl[0] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("other\nmultiplicity"), grid2));
+    grid2->addWidget(new QLabel(tr("other\nmultiplicity"), grid2));
     grid2->addWidget(edpython_attr_decl[1] = new MultiLineEdit(grid2));
 
     int i;
@@ -1166,9 +1166,9 @@ void GenerationSettingsDialog::init_python2()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Association and\naggregation\ndefault\ndeclaration :"), grid));
     grid->addWidget(grid2 = new GridBox(2, grid));
-    grid2->addWidget(new QLabel(TR("multiplicity '1'\nor unspecified"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '1'\nor unspecified"), grid2));
     grid2->addWidget(edpython_rel_decl[0][0] = new MultiLineEdit(grid2));
 
     QFont font = edpython_rel_decl[0][0]->font();
@@ -1179,7 +1179,7 @@ void GenerationSettingsDialog::init_python2()
 
     font.setFixedPitch(TRUE);
 
-    grid2->addWidget(new QLabel(TR("other\nmultiplicity"), grid2));
+    grid2->addWidget(new QLabel(tr("other\nmultiplicity"), grid2));
     grid2->addWidget(edpython_rel_decl[0][1] = new MultiLineEdit(grid2));
 
     for (i = 0; i != 2; i += 1) {
@@ -1190,11 +1190,11 @@ void GenerationSettingsDialog::init_python2()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Composition\ndefault\ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Composition\ndefault\ndeclaration :"), grid));
     grid->addWidget(grid2 = new GridBox(2, grid));
-    grid2->addWidget(new QLabel(TR("multiplicity '1'\nor unspecified"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '1'\nor unspecified"), grid2));
     grid2->addWidget(edpython_rel_decl[1][0] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("other\nmultiplicity"), grid2));
+    grid2->addWidget(new QLabel(tr("other\nmultiplicity"), grid2));
     grid2->addWidget(edpython_rel_decl[1][1] = new MultiLineEdit(grid2));
 
     for (i = 0; i != 2; i += 1) {
@@ -1207,16 +1207,16 @@ void GenerationSettingsDialog::init_python2()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Get operation\ndefault definition : "), grid));
+    grid->addWidget(new QLabel(tr("Get operation\ndefault definition : "), grid));
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
-    htab->addWidget(new QLabel(TR("  name : "), htab));
+    htab->addWidget(new QLabel(tr("  name : "), htab));
     htab->addWidget(edpython_get_name = new LineEdit(htab));
     edpython_get_name->setText(GenerationSettings::python_get_name);
     edpython_get_name->setFont(font);
 
     htab->addWidget(new QLabel("  ", htab));
-    htab->addWidget(uml_follow_python_get_name = new QCheckBox(TR("also in uml"), htab));
+    htab->addWidget(uml_follow_python_get_name = new QCheckBox(tr("also in uml"), htab));
 
     if (GenerationSettings::uml_get_name == PythonView)
         uml_follow_python_get_name->setChecked(TRUE);
@@ -1224,16 +1224,16 @@ void GenerationSettingsDialog::init_python2()
     connect(uml_follow_python_get_name, SIGNAL(toggled(bool)),
             this, SLOT(follow_python_get_name()));
 
-    grid->addWidget(new QLabel(TR("Set operation\ndefault definition : "), grid));
+    grid->addWidget(new QLabel(tr("Set operation\ndefault definition : "), grid));
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
-    htab->addWidget(new QLabel(TR("  name : "), htab));
+    htab->addWidget(new QLabel(tr("  name : "), htab));
     htab->addWidget(edpython_set_name = new LineEdit(htab));
     edpython_set_name->setText(GenerationSettings::python_set_name);
     edpython_set_name->setFont(font);
 
     htab->addWidget(new QLabel("  ", htab));
-    htab->addWidget(uml_follow_python_set_name = new QCheckBox(TR("also in uml"), htab));
+    htab->addWidget(uml_follow_python_set_name = new QCheckBox(tr("also in uml"), htab));
 
     if (GenerationSettings::uml_set_name == PythonView)
         uml_follow_python_set_name->setChecked(TRUE);
@@ -1244,17 +1244,17 @@ void GenerationSettingsDialog::init_python2()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Operation\ndefault definition :"), grid));
+    grid->addWidget(new QLabel(tr("Operation\ndefault definition :"), grid));
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
     htab->addWidget(edpython_oper_def = new MultiLineEdit(htab));
     edpython_oper_def->setText(GenerationSettings::python_oper_def);
     edpython_oper_def->setFont(font);
-    htab->addWidget(new QLabel(TR("    operation of Python 3 (pep-3107) "), htab));
+    htab->addWidget(new QLabel(tr("    operation of Python 3 (pep-3107) "), htab));
     htab->addWidget(python_3_operation_cb = new QCheckBox(htab));
     python_3_operation_cb->setChecked(GenerationSettings::python_3_operation);
 
-    grid->addWidget(new QLabel(TR("Operation __init__\ndefault definition :"), grid));
+    grid->addWidget(new QLabel(tr("Operation __init__\ndefault definition :"), grid));
     grid->addWidget(edpython_initoper_def = new MultiLineEdit(grid));
     edpython_initoper_def->setText(GenerationSettings::python_initoper_def);
     edpython_initoper_def->setFont(font);
@@ -1279,7 +1279,7 @@ void GenerationSettingsDialog::init_python3()
     htab->setMargin(3);
     QLabel * lbl1;
     htab->addWidget(lbl1 =
-            new QLabel(TR("External classes : \nname making\nimport"), htab));
+            new QLabel(tr("External classes : \nname making\nimport"), htab));
     htab->addWidget(edpython_external_class_decl = new MultiLineEdit(htab));
     edpython_external_class_decl->setText(GenerationSettings::python_external_class_decl);
 
@@ -1287,7 +1287,7 @@ void GenerationSettingsDialog::init_python3()
     htab->setMargin(3);
     QLabel * lbl2;
     htab->addWidget(lbl2 =
-            new QLabel(TR("External types :\nimport form(s)"), htab));
+            new QLabel(tr("External types :\nimport form(s)"), htab));
     htab->addWidget(python_import_table =
             new IncludeTable(htab, GenerationSettings::python_imports,
                              "Import", "import "));
@@ -1313,7 +1313,7 @@ void GenerationSettingsDialog::init_idl1()
     htab->setMargin(3);
     QLabel * lbl1;
     htab->addWidget(lbl1 =
-            new QLabel(TR("file default \ncontent :"), htab));
+            new QLabel(tr("file default \ncontent :"), htab));
     htab->addWidget(edidl_src_content = new MultiLineEdit(htab));
     edidl_src_content->setText(GenerationSettings::idl_src_content);
     QFont font = edidl_src_content->font();
@@ -1324,7 +1324,7 @@ void GenerationSettingsDialog::init_idl1()
     font.setFixedPitch(TRUE);
     edidl_src_content->setFont(font);
 
-    htab->addWidget(new QLabel(TR("    file extension : "), htab));
+    htab->addWidget(new QLabel(tr("    file extension : "), htab));
     htab->addWidget(edidl_extension = new QComboBox( htab));
     edidl_extension->setEditable(true);
     edidl_extension->addItem(GenerationSettings::idl_extension);
@@ -1336,39 +1336,39 @@ void GenerationSettingsDialog::init_idl1()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("Interface default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Interface default \ndeclaration :"), grid));
     grid->addWidget(edidl_interface_decl = new MultiLineEdit(grid));
     edidl_interface_decl->setText(GenerationSettings::idl_interface_decl);
     edidl_interface_decl->setFont(font);
 
     QLabel * lbl2;
-    grid->addWidget( lbl2 = new QLabel(TR("Valuetype default \ndeclaration :"), grid));
+    grid->addWidget( lbl2 = new QLabel(tr("Valuetype default \ndeclaration :"), grid));
     same_width(lbl1, lbl2);
     grid->addWidget(edidl_valuetype_decl = new MultiLineEdit(grid));
     edidl_valuetype_decl->setText(GenerationSettings::idl_valuetype_decl);
     edidl_valuetype_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Struct default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Struct default \ndeclaration :"), grid));
     grid->addWidget(edidl_struct_decl = new MultiLineEdit(grid));
     edidl_struct_decl->setText(GenerationSettings::idl_struct_decl);
     edidl_struct_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Union default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Union default \ndeclaration :"), grid));
     grid->addWidget(edidl_union_decl = new MultiLineEdit(grid));
     edidl_union_decl->setText(GenerationSettings::idl_union_decl);
     edidl_union_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Enum default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Enum default \ndeclaration :"), grid));
     grid->addWidget(edidl_enum_decl = new MultiLineEdit(grid));
     edidl_enum_decl->setText(GenerationSettings::idl_enum_decl);
     edidl_enum_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Typedef default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Typedef default \ndeclaration :"), grid));
     grid->addWidget(edidl_typedef_decl = new MultiLineEdit(grid));
     edidl_typedef_decl->setText(GenerationSettings::idl_typedef_decl);
     edidl_typedef_decl->setFont(font);
 
-    grid->addWidget(new QLabel(TR("Exception default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Exception default \ndeclaration :"), grid));
     grid->addWidget(edidl_exception_decl = new MultiLineEdit(grid));
     edidl_exception_decl->setText(GenerationSettings::idl_exception_decl);
     edidl_exception_decl->setFont(font);
@@ -1389,13 +1389,13 @@ void GenerationSettingsDialog::init_idl2()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("Attribute default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Attribute default \ndeclaration :"), grid));
     grid->addWidget(grid2 = new GridBox(2, grid));
-    grid2->addWidget(new QLabel(TR("multiplicity '1'\nor unspecified"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '1'\nor unspecified"), grid2));
     grid2->addWidget(edidl_attr_decl[0] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '*'\nor 'a..b'"), grid2));
     grid2->addWidget(edidl_attr_decl[1] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("X (probably a\nnumber)"), grid2));
+    grid2->addWidget(new QLabel(tr("X (probably a\nnumber)"), grid2));
     grid2->addWidget(edidl_attr_decl[2] = new MultiLineEdit(grid2));
 
     QFont font = edjava_attr_decl[0]->font();
@@ -1414,13 +1414,13 @@ void GenerationSettingsDialog::init_idl2()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Attribute default \ndeclaration in\nvaluetype :"), grid));
+    grid->addWidget(new QLabel(tr("Attribute default \ndeclaration in\nvaluetype :"), grid));
     grid->addWidget(grid2 = new GridBox(2, grid));
-    grid2->addWidget(new QLabel(TR("multiplicity '1'\nor unspecified"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '1'\nor unspecified"), grid2));
     grid2->addWidget(edidl_valuetype_attr_decl[0] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '*'\nor 'a..b'"), grid2));
     grid2->addWidget(edidl_valuetype_attr_decl[1] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("X (probably a\nnumber)"), grid2));
+    grid2->addWidget(new QLabel(tr("X (probably a\nnumber)"), grid2));
     grid2->addWidget(edidl_valuetype_attr_decl[2] = new MultiLineEdit(grid2));
 
     for (i = 0; i != 3; i += 1) {
@@ -1431,13 +1431,13 @@ void GenerationSettingsDialog::init_idl2()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Constant default \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Constant default \ndeclaration :"), grid));
     grid->addWidget(grid2 = new GridBox(2, grid));
-    grid2->addWidget(new QLabel(TR("multiplicity '1'\nor unspecified"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '1'\nor unspecified"), grid2));
     grid2->addWidget(edidl_const_decl[0] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '*'\nor 'a..b'"), grid2));
     grid2->addWidget(edidl_const_decl[1] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("X (probably a\nnumber)"), grid2));
+    grid2->addWidget(new QLabel(tr("X (probably a\nnumber)"), grid2));
     grid2->addWidget(edidl_const_decl[2] = new MultiLineEdit(grid2));
 
     for (i = 0; i != 3; i += 1) {
@@ -1462,13 +1462,13 @@ void GenerationSettingsDialog::init_idl3()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Association and\naggregation\ndefault\ndeclaration :"), grid));
     grid->addWidget(grid2 = new GridBox(2, grid));
-    grid2->addWidget(new QLabel(TR("multiplicity '1'\nor unspecified"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '1'\nor unspecified"), grid2));
     grid2->addWidget(edidl_rel_decl[0] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '*'\nor 'a..b'"), grid2));
     grid2->addWidget(edidl_rel_decl[1] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("X (probably a\nnumber)"), grid2));
+    grid2->addWidget(new QLabel(tr("X (probably a\nnumber)"), grid2));
     grid2->addWidget(edidl_rel_decl[2] = new MultiLineEdit(grid2));
     QFont font = edidl_rel_decl[0]->font();
 
@@ -1485,13 +1485,13 @@ void GenerationSettingsDialog::init_idl3()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Association and\naggregation\ndefault\ndeclaration in\nvaluetype :"), grid));
+    grid->addWidget(new QLabel(tr("Association and\naggregation\ndefault\ndeclaration in\nvaluetype :"), grid));
     grid->addWidget(grid2 = new GridBox(2, grid));
-    grid2->addWidget(new QLabel(TR("multiplicity '1'\nor unspecified"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '1'\nor unspecified"), grid2));
     grid2->addWidget(edidl_valuetype_rel_decl[0] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '*'\nor 'a..b'"), grid2));
     grid2->addWidget(edidl_valuetype_rel_decl[1] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("X (probably a\nnumber)"), grid2));
+    grid2->addWidget(new QLabel(tr("X (probably a\nnumber)"), grid2));
     grid2->addWidget(edidl_valuetype_rel_decl[2] = new MultiLineEdit(grid2));
 
     for (i = 0; i != 3; i += 1) {
@@ -1502,13 +1502,13 @@ void GenerationSettingsDialog::init_idl3()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Association and\naggregation\ndefault\ndeclaration in\nunion:"), grid));
+    grid->addWidget(new QLabel(tr("Association and\naggregation\ndefault\ndeclaration in\nunion:"), grid));
     grid->addWidget(grid2 = new GridBox(2, grid));
-    grid2->addWidget(new QLabel(TR("multiplicity '1'\nor unspecified"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '1'\nor unspecified"), grid2));
     grid2->addWidget(edidl_union_rel_decl[0] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '*'\nor 'a..b'"), grid2));
     grid2->addWidget(edidl_union_rel_decl[1] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("X (probably a\nnumber)"), grid2));
+    grid2->addWidget(new QLabel(tr("X (probably a\nnumber)"), grid2));
     grid2->addWidget(edidl_union_rel_decl[2] = new MultiLineEdit(grid2));
 
     for (i = 0; i != 3; i += 1) {
@@ -1533,13 +1533,13 @@ void GenerationSettingsDialog::init_idl4()
     grid->setMargin(3);
     grid->setSpacing(3);
 
-    grid->addWidget(new QLabel(TR("Union item \ndefault \ndeclaration :"), grid));
+    grid->addWidget(new QLabel(tr("Union item \ndefault \ndeclaration :"), grid));
     grid->addWidget(grid2 = new GridBox(2, grid));
-    grid2->addWidget(new QLabel(TR("multiplicity '1'\nor unspecified"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '1'\nor unspecified"), grid2));
     grid2->addWidget(edidl_union_item_decl[0] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2));
+    grid2->addWidget(new QLabel(tr("multiplicity '*'\nor 'a..b'"), grid2));
     grid2->addWidget(edidl_union_item_decl[1] = new MultiLineEdit(grid2));
-    grid2->addWidget(new QLabel(TR("X (probably a\nnumber)"), grid2));
+    grid2->addWidget(new QLabel(tr("X (probably a\nnumber)"), grid2));
     grid2->addWidget(edidl_union_item_decl[2] = new MultiLineEdit(grid2));
 
     QFont font = edidl_union_item_decl[0]->font();
@@ -1558,7 +1558,7 @@ void GenerationSettingsDialog::init_idl4()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Enumeration item \ndefault declaration :"), grid));
+    grid->addWidget(new QLabel(tr("Enumeration item \ndefault declaration :"), grid));
     grid->addWidget(edidl_enum_item_decl = new MultiLineEdit(grid));
     edidl_enum_item_decl->setText(GenerationSettings::idl_enum_item_decl);
     edidl_enum_item_decl->setFont(font);
@@ -1566,15 +1566,15 @@ void GenerationSettingsDialog::init_idl4()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Get operation\ndefault definition : "), grid));
+    grid->addWidget(new QLabel(tr("Get operation\ndefault definition : "), grid));
     grid->addWidget(htab =new HHBox(grid));
-    htab->addWidget(new QLabel(TR("name : "), htab));
+    htab->addWidget(new QLabel(tr("name : "), htab));
     htab->addWidget(edidl_get_name = new LineEdit(htab));
     edidl_get_name->setText(GenerationSettings::idl_get_name);
     edidl_get_name->setFont(font);
 
     htab->addWidget(new QLabel("  ", htab));
-    htab->addWidget(uml_follow_idl_get_name = new QCheckBox(TR("also in uml"), htab));
+    htab->addWidget(uml_follow_idl_get_name = new QCheckBox(tr("also in uml"), htab));
 
     if (GenerationSettings::uml_get_name == IdlView)
         uml_follow_idl_get_name->setChecked(TRUE);
@@ -1582,18 +1582,18 @@ void GenerationSettingsDialog::init_idl4()
     connect(uml_follow_idl_get_name, SIGNAL(toggled(bool)),
             this, SLOT(follow_idl_get_name()));
 
-    grid->addWidget(new QLabel(TR("Set operation\ndefault definition : "), grid));
+    grid->addWidget(new QLabel(tr("Set operation\ndefault definition : "), grid));
     grid->addWidget(htab =new HHBox(grid));
     htab->addWidget(idl_set_oneway_cb = new QCheckBox("oneway", htab));
     idl_set_oneway_cb->setChecked(GenerationSettings::idl_set_oneway);
 
-    htab->addWidget(new QLabel(TR("  name : "), htab));
+    htab->addWidget(new QLabel(tr("  name : "), htab));
     htab->addWidget(edidl_set_name = new LineEdit(htab));
     edidl_set_name->setText(GenerationSettings::idl_set_name);
     edidl_set_name->setFont(font);
 
     htab->addWidget(new QLabel("  ", htab));
-    htab->addWidget(uml_follow_idl_set_name = new QCheckBox(TR("also in uml"), htab));
+    htab->addWidget(uml_follow_idl_set_name = new QCheckBox(tr("also in uml"), htab));
 
     if (GenerationSettings::uml_set_name == IdlView)
         uml_follow_idl_set_name->setChecked(TRUE);
@@ -1604,7 +1604,7 @@ void GenerationSettingsDialog::init_idl4()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Operation default \ndeclaration : "), grid));
+    grid->addWidget(new QLabel(tr("Operation default \ndeclaration : "), grid));
     grid->addWidget(edidl_oper_decl = new MultiLineEdit(grid));
     edidl_oper_decl->setText(GenerationSettings::idl_oper_decl);
     edidl_oper_decl->setFont(font);
@@ -1629,14 +1629,14 @@ void GenerationSettingsDialog::init_idl5()
     htab->setMargin(3);
     QLabel * lbl1;
     htab->addWidget(lbl1 =
-            new QLabel(TR("External classes : \nname making\n#include"), htab));
+            new QLabel(tr("External classes : \nname making\n#include"), htab));
     htab->addWidget(edidl_external_class_decl = new MultiLineEdit(htab));
     edidl_external_class_decl->setText(GenerationSettings::idl_external_class_decl);
     htab =new HHBox(split);
     htab->setMargin(3);
     QLabel * lbl2;
     htab->addWidget(lbl2 =
-            new QLabel(TR("External types :\n#include form(s)\netc..."), htab));
+            new QLabel(tr("External types :\n#include form(s)\netc..."), htab));
     htab->addWidget(idl_include_table =
             new IncludeTable(htab, GenerationSettings::idl_includes,
                              "Include etc...", "#include \"\""));
@@ -1661,31 +1661,31 @@ void GenerationSettingsDialog::init_descriptions()
 
     htab =new HHBox(split);
     htab->setMargin(3);
-    htab->addWidget(new QLabel(TR("Artifact\ndefault\ndescription : "), htab));
+    htab->addWidget(new QLabel(tr("Artifact\ndefault\ndescription : "), htab));
     htab->addWidget(edartifact_default_description = new MultiLineEdit(htab));
     edartifact_default_description->setText(GenerationSettings::artifact_default_description);
 
     htab =new HHBox(split);
     htab->setMargin(3);
-    htab->addWidget(new QLabel(TR("Class\ndefault\ndescription : "), htab));
+    htab->addWidget(new QLabel(tr("Class\ndefault\ndescription : "), htab));
     htab->addWidget(edclass_default_description = new MultiLineEdit(htab));
     edclass_default_description->setText(GenerationSettings::class_default_description);
 
     htab =new HHBox(split);
     htab->setMargin(3);
-    htab->addWidget(new QLabel(TR("Operation\ndefault\ndescription : "), htab));
+    htab->addWidget(new QLabel(tr("Operation\ndefault\ndescription : "), htab));
     htab->addWidget(edoperation_default_description = new MultiLineEdit(htab));
     edoperation_default_description->setText(GenerationSettings::operation_default_description);
 
     htab =new HHBox(split);
     htab->setMargin(3);
-    htab->addWidget(new QLabel(TR("Attribute\ndefault\ndescription : "), htab));
+    htab->addWidget(new QLabel(tr("Attribute\ndefault\ndescription : "), htab));
     htab->addWidget(edattribute_default_description = new MultiLineEdit(htab));
     edattribute_default_description->setText(GenerationSettings::attribute_default_description);
 
     htab =new HHBox(split);
     htab->setMargin(3);
-    htab->addWidget(new QLabel(TR("Relation\ndefault\ndescription : "), htab));
+    htab->addWidget(new QLabel(tr("Relation\ndefault\ndescription : "), htab));
     htab->addWidget(edrelation_default_description = new MultiLineEdit(htab));
     edrelation_default_description->setText(GenerationSettings::relation_default_description);
 
@@ -1710,7 +1710,7 @@ void GenerationSettingsDialog::init_dirs()
 
     vtab->addWidget(htab =new HHBox(vtab));
     htab->setMargin(3);
-    htab->addWidget(new QLabel(TR("Defining a project root directory allows to specify \
+    htab->addWidget(new QLabel(tr("Defining a project root directory allows to specify \
                                   packages's generation directory relative to the root directory rather \
                                   than absolute.\n"
                                                   "A root directory may itself be relative to the project path"),
@@ -1719,10 +1719,10 @@ void GenerationSettingsDialog::init_dirs()
     vtab->addWidget(htab =new HHBox(vtab));
     htab->setMargin(3);
     QLabel * lbl1;
-    htab->addWidget(lbl1 = new QLabel(TR("C++ root dir : "), htab));
+    htab->addWidget(lbl1 = new QLabel(tr("C++ root dir : "), htab));
     htab->addWidget(edcpproot = new LineEdit(GenerationSettings::cpp_root_dir, htab));
     htab->addWidget(new QLabel(" ", htab));
-    htab->addWidget(button = new SmallPushButton(TR("Browse"), htab));
+    htab->addWidget(button = new SmallPushButton(tr("Browse"), htab));
     connect(button, SIGNAL(clicked()), this, SLOT(cpproot_browse()));
     htab->addWidget(new QLabel("", htab));
     htab->addWidget(cpprelbutton = new SmallPushButton((GenerationSettings::cpp_root_dir.isEmpty() ||
@@ -1738,11 +1738,11 @@ void GenerationSettingsDialog::init_dirs()
     vtab->addWidget(htab =new HHBox(vtab));
     htab->setMargin(3);
     QLabel * lbl2;
-    htab->addWidget(lbl2 = new QLabel(TR("Java root dir : "), htab));
+    htab->addWidget(lbl2 = new QLabel(tr("Java root dir : "), htab));
     htab->addWidget(lbl2);
     htab->addWidget(edjavaroot = new LineEdit(GenerationSettings::java_root_dir, htab));
     htab->addWidget(new QLabel(" ", htab));
-    htab->addWidget(button = new SmallPushButton(TR("Browse"), htab));
+    htab->addWidget(button = new SmallPushButton(tr("Browse"), htab));
     connect(button, SIGNAL(clicked()), this, SLOT(javaroot_browse()));
     htab->addWidget(new QLabel("", htab));
     htab->addWidget(javarelbutton = new SmallPushButton((GenerationSettings::java_root_dir.isEmpty() ||
@@ -1758,10 +1758,10 @@ void GenerationSettingsDialog::init_dirs()
     vtab->addWidget(htab =new HHBox(vtab));
     htab->setMargin(3);
     QLabel * lbl3;
-    htab->addWidget(lbl3 = new QLabel(TR("Php root dir : "), htab));
+    htab->addWidget(lbl3 = new QLabel(tr("Php root dir : "), htab));
     htab->addWidget(edphproot = new LineEdit(GenerationSettings::php_root_dir, htab));
     htab->addWidget(new QLabel(" ", htab));
-    htab->addWidget(button = new SmallPushButton(TR("Browse"), htab));
+    htab->addWidget(button = new SmallPushButton(tr("Browse"), htab));
     connect(button, SIGNAL(clicked()), this, SLOT(phproot_browse()));
     htab->addWidget(new QLabel("", htab));
     htab->addWidget(phprelbutton = new SmallPushButton((GenerationSettings::php_root_dir.isEmpty() ||
@@ -1777,10 +1777,10 @@ void GenerationSettingsDialog::init_dirs()
     vtab->addWidget(htab =new HHBox(vtab));
     htab->setMargin(3);
     QLabel * lbl4;
-    htab->addWidget( lbl4 = new QLabel(TR("Python root dir : "), htab));
+    htab->addWidget( lbl4 = new QLabel(tr("Python root dir : "), htab));
     htab->addWidget(edpythonroot = new LineEdit(GenerationSettings::python_root_dir, htab));
     htab->addWidget(new QLabel(" ", htab));
-    htab->addWidget(button = new SmallPushButton(TR("Browse"), htab));
+    htab->addWidget(button = new SmallPushButton(tr("Browse"), htab));
     connect(button, SIGNAL(clicked()), this, SLOT(pythonroot_browse()));
     htab->addWidget(new QLabel("", htab));
     htab->addWidget(pythonrelbutton = new SmallPushButton((GenerationSettings::python_root_dir.isEmpty() ||
@@ -1796,10 +1796,10 @@ void GenerationSettingsDialog::init_dirs()
     vtab->addWidget(htab =new HHBox(vtab));
     htab->setMargin(3);
     QLabel * lbl5;
-    htab->addWidget(lbl5 = new QLabel(TR("Idl root dir : "), htab));
+    htab->addWidget(lbl5 = new QLabel(tr("Idl root dir : "), htab));
     htab->addWidget(edidlroot = new LineEdit(GenerationSettings::idl_root_dir, htab));
     htab->addWidget(new QLabel(" ", htab));
-    htab->addWidget(button = new SmallPushButton(TR("Browse"), htab));
+    htab->addWidget(button = new SmallPushButton(tr("Browse"), htab));
     connect(button, SIGNAL(clicked()), this, SLOT(idlroot_browse()));
     htab->addWidget(new QLabel("", htab));
     htab->addWidget(idlrelbutton = new SmallPushButton((GenerationSettings::idl_root_dir.isEmpty() ||
@@ -1956,22 +1956,22 @@ void GenerationSettingsDialog::accept()
         QString enum_return = cpp_enum_return->text().trimmed();
 
         if (enum_in.indexOf("${type}") == -1) {
-            msg_critical(TR("Error"), QObject::tr("C++ 'in' enum argument default passing must contains ${type}"));
+            msg_critical(tr("Error"), QObject::tr("C++ 'in' enum argument default passing must contains ${type}"));
             return;
         }
 
         if (enum_out.indexOf("${type}") == -1) {
-            msg_critical(TR("Error"), QObject::tr("C++ 'out' enum argument default passing must contains ${type}"));
+            msg_critical(tr("Error"), QObject::tr("C++ 'out' enum argument default passing must contains ${type}"));
             return;
         }
 
         if (enum_inout.indexOf("${type}") == -1) {
-            msg_critical(TR("Error"), QObject::tr("C++ 'inout' enum argument default passing must contains ${type}"));
+            msg_critical(tr("Error"), QObject::tr("C++ 'inout' enum argument default passing must contains ${type}"));
             return;
         }
 
         if (enum_return.indexOf("${type}") == -1) {
-            msg_critical(TR("Error"), QObject::tr("C++ 'return' enum argument default passing must contains ${type}"));
+            msg_critical(tr("Error"), QObject::tr("C++ 'return' enum argument default passing must contains ${type}"));
             return;
         }
 
@@ -1981,22 +1981,22 @@ void GenerationSettingsDialog::accept()
         QString opreturn = cpp_return->text().trimmed();
 
         if (in.indexOf("${type}") == -1) {
-            msg_critical(TR("Error"), QObject::tr("C++ 'in' argument default passing must contains ${type}"));
+            msg_critical(tr("Error"), QObject::tr("C++ 'in' argument default passing must contains ${type}"));
             return;
         }
 
         if (out.indexOf("${type}") == -1) {
-            msg_critical(TR("Error"), QObject::tr("C++ 'out' argument default passing must contains ${type}"));
+            msg_critical(tr("Error"), QObject::tr("C++ 'out' argument default passing must contains ${type}"));
             return;
         }
 
         if (inout.indexOf("${type}") == -1) {
-            msg_critical(TR("Error"), QObject::tr("C++ 'inout' argument default passing must contains ${type}"));
+            msg_critical(tr("Error"), QObject::tr("C++ 'inout' argument default passing must contains ${type}"));
             return;
         }
 
         if (opreturn.indexOf("${type}") == -1) {
-            msg_critical(TR("Error"), QObject::tr("C++ 'return' argument default passing must contains ${type}"));
+            msg_critical(tr("Error"), QObject::tr("C++ 'return' argument default passing must contains ${type}"));
             return;
         }
 
@@ -2487,7 +2487,7 @@ StereotypesTable::StereotypesTable(QWidget * parent, int nst,
         horizontalHeaderItem(4)->setText("Python");
         horizontalHeaderItem(5)->setText("Idl");
         horizontalHeaderItem(6)->setText(TR("do"));*/
-        headerLabels<<"Php"<<"Python"<<"Idl"<<TR("do");
+        headerLabels<<"Php"<<"Python"<<"Idl"<<tr("do");
 
         int index;
 
@@ -2519,7 +2519,7 @@ StereotypesTable::StereotypesTable(QWidget * parent, int nst,
         /*horizontalHeaderItem(3)->setText("Python");
         horizontalHeaderItem(4)->setText("Idl");
         horizontalHeaderItem(5)->setText(TR("do"));*/
-        headerLabels<<"Python"<<"Idl"<<TR("do");
+        headerLabels<<"Python"<<"Idl"<<tr("do");
         int index;
 
         for (index = 0; index < nst; index += 1) {
@@ -2607,7 +2607,7 @@ IncludeTable::IncludeTable(QWidget * parent, IncludesSpec & spc,
       spec(spc), dflt(df)
 {
     QStringList headerLabels;
-    headerLabels<<TR("External type")<<title<<TR("do");
+    headerLabels<<tr("External type")<<title<<tr("do");
     setHorizontalHeaderLabels(headerLabels);
     int index;
     int sup = spc.types.count();

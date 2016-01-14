@@ -1274,65 +1274,65 @@ void CdClassCanvas::menu(const QPoint &)
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 21);
-    MenuFactory::addItem(m, TR("Go down"), 22);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 21);
+    MenuFactory::addItem(m, tr("Go down"), 22);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Add related elements"), 5);
+    MenuFactory::addItem(m, tr("Add related elements"), 5);
 
     if (nesting_cl != 0)
-        MenuFactory::addItem(m, TR("Show nesting relation"), 23);
+        MenuFactory::addItem(m, tr("Show nesting relation"), 23);
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 2);
 
     if (attributes.count() != 0)
-        MenuFactory::addItem(m, TR("Individual attribute visibility"), 3);
+        MenuFactory::addItem(m, tr("Individual attribute visibility"), 3);
 
     if (operations.count() != 0)
-        MenuFactory::addItem(m, TR("Individual operation visibility"), 4);
+        MenuFactory::addItem(m, tr("Individual operation visibility"), 4);
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit class"), 6);
+    MenuFactory::addItem(m, tr("Edit class"), 6);
 
     if (!strcmp(stereotype, "enum")) {
         if (browser_node->is_writable()) {
-            MenuFactory::addItem(m, TR("Add item"), 7);
-            MenuFactory::addItem(m, TR("Add attribute"), 9);
+            MenuFactory::addItem(m, tr("Add item"), 7);
+            MenuFactory::addItem(m, tr("Add attribute"), 9);
         }
 
         if (attributes.count() != 0)
-            MenuFactory::insertItem(m, TR("Edit item or attribute"), &attrsubm);
+            MenuFactory::insertItem(m, tr("Edit item or attribute"), &attrsubm);
 
         if (browser_node->is_writable())
-            MenuFactory::addItem(m, TR("Add operation"), 8);
+            MenuFactory::addItem(m, tr("Add operation"), 8);
     }
     else if (!strcmp(stereotype, "enum_pattern")) {
         if (browser_node->is_writable()) {
-            MenuFactory::addItem(m, TR("Add item"), 7);
+            MenuFactory::addItem(m, tr("Add item"), 7);
         }
 
         if (attributes.count() != 0)
-            MenuFactory::insertItem(m, TR("Edit item"), &attrsubm);
+            MenuFactory::insertItem(m, tr("Edit item"), &attrsubm);
     }
     else if (strcmp(stereotype, "typedef")) {
         if (browser_node->is_writable())
-            MenuFactory::addItem(m, TR("Add attribute"), 9);
+            MenuFactory::addItem(m, tr("Add attribute"), 9);
 
         if (attributes.count() != 0)
-            MenuFactory::insertItem(m, TR("Edit attribute"), &attrsubm);
+            MenuFactory::insertItem(m, tr("Edit attribute"), &attrsubm);
 
         if (browser_node->is_writable())
-            MenuFactory::addItem(m, TR("Add operation"), 8);
+            MenuFactory::addItem(m, tr("Add operation"), 8);
 
         if (browser_node->is_writable() &&
             strcmp(stereotype, "union") &&
             (l.count() != 0)) {
             if (l.count() > 20)
-                MenuFactory::addItem(m, TR("Add inherited operation"), 2999);
+                MenuFactory::addItem(m, tr("Add inherited operation"), 2999);
             else {
-                MenuFactory::createTitle(inhopersubm, TR("Choose operation"));
+                MenuFactory::createTitle(inhopersubm, tr("Choose operation"));
                 inhopersubm.addSeparator();
 
                 index = 3000;
@@ -1352,40 +1352,40 @@ void CdClassCanvas::menu(const QPoint &)
                     ++index;
                 }
 
-                MenuFactory::insertItem(m, TR("Add inherited operation"), &inhopersubm);
+                MenuFactory::insertItem(m, tr("Add inherited operation"), &inhopersubm);
             }
         }
 
         if (operations.count() != 0) {
             if (operations.count() <= 20)
-                MenuFactory::insertItem(m, TR("Edit operation"), &opersubm);
+                MenuFactory::insertItem(m, tr("Edit operation"), &opersubm);
             else
-                MenuFactory::addItem(m, TR("Edit operation"), 1999);
+                MenuFactory::addItem(m, tr("Edit operation"), 1999);
         }
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Select in browser"), 10);
+    MenuFactory::addItem(m, tr("Select in browser"), 10);
 
     if (linked())
-        MenuFactory::addItem(m, TR("Select linked items"), 17);
+        MenuFactory::addItem(m, tr("Select linked items"), 17);
 
     m.addSeparator();
 
     if (browser_node->is_writable()) {
         if (browser_node->get_associated() !=
             (BrowserNode *) the_canvas()->browser_diagram())
-            MenuFactory::addItem(m, TR("Set associated diagram"), 11);
+            MenuFactory::addItem(m, tr("Set associated diagram"), 11);
 
         if (browser_node->get_associated())
-            MenuFactory::addItem(m, TR("Remove diagram association"), 18);
+            MenuFactory::addItem(m, tr("Remove diagram association"), 18);
     }
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 12);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 12);
 
     if (browser_node->is_writable())
-        MenuFactory::addItem(m, TR("Delete from model"), 13);
+        MenuFactory::addItem(m, tr("Delete from model"), 13);
 
     m.addSeparator();
     bool cpp = GenerationSettings::cpp_get_default_defs();
@@ -1395,10 +1395,10 @@ void CdClassCanvas::menu(const QPoint &)
     bool idl = GenerationSettings::idl_get_default_defs();
 
     if (cpp || java || php || python || idl)
-        MenuFactory::insertItem(m, TR("Generate"), &gensubm);
+        MenuFactory::insertItem(m, tr("Generate"), &gensubm);
 
     if (Tool::menu_insert(&toolm, UmlClass, 30))
-        MenuFactory::insertItem(m, TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
     if (cpp)
         MenuFactory::addItem(gensubm, "C++", 14);
@@ -1486,7 +1486,7 @@ void CdClassCanvas::menu(const QPoint &)
 
     case 5:
         ((UmlCanvas *) canvas())->get_view()
-        ->add_related_elements(this, TR("class"), TRUE, TRUE);
+        ->add_related_elements(this, tr("class"), TRUE, TRUE);
         return;
 
     case 6:
@@ -1625,7 +1625,7 @@ void CdClassCanvas::apply_shortcut(QString s)
     }
     else if (s == "Add related elements") {
         ((UmlCanvas *) canvas())->get_view()
-        ->add_related_elements(this, TR("class"), TRUE, TRUE);
+        ->add_related_elements(this, tr("class"), TRUE, TRUE);
         return;
     }
     else {
@@ -1645,7 +1645,7 @@ void CdClassCanvas::edit_drawing_settings()
 
         settings.complete(st, UmlClass);
 
-        co[0].set(TR("class color"), &itscolor);
+        co[0].set(tr("class color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -1676,7 +1676,7 @@ void CdClassCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 
         settings.complete(st, UmlClass);
 
-        co[0].set(TR("class color"), &itscolor);
+        co[0].set(tr("class color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE, TRUE);
 
@@ -1726,17 +1726,17 @@ QString CdClassCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
                ->may_connect(l, (BrowserClass *) dest->get_bn());
 
     case UmlArrowPoint:
-        return TR("illegal");
+        return tr("illegal");
 
     case UmlPackage:
         if (l != UmlDependency)
-            return TR("illegal");
+            return tr("illegal");
 
         l = UmlDependOn;
         return 0;
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 

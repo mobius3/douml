@@ -271,7 +271,7 @@ UmlCode BrowserExtraMember::get_type() const
 
 QString BrowserExtraMember::get_stype() const
 {
-    return QObject::TR("extra member");
+    return QObject::tr("extra member");
 }
 
 int BrowserExtraMember::get_identifier() const

@@ -512,7 +512,7 @@ UmlCode BrowserAttribute::get_type() const
 
 QString BrowserAttribute::get_stype() const
 {
-    return QObject::TR("attribute");
+    return QObject::tr("attribute");
 }
 
 int BrowserAttribute::get_identifier() const

@@ -477,30 +477,30 @@ void DeploymentNodeCanvas::menu(const QPoint &)
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 13);
-    MenuFactory::addItem(m, TR("Go down"), 14);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 13);
+    MenuFactory::addItem(m, tr("Go down"), 14);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Add related elements"), 10);
+    MenuFactory::addItem(m, tr("Add related elements"), 10);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit"), 2);
+    MenuFactory::addItem(m, tr("Edit"), 2);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 3);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 3);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Select node in browser"), 4);
+    MenuFactory::addItem(m, tr("Select node in browser"), 4);
 
     if (linked())
-        MenuFactory::addItem(m, TR("Select linked items"), 5);
+        MenuFactory::addItem(m, tr("Select linked items"), 5);
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Set node associated diagram"), 6);
+    MenuFactory::addItem(m, tr("Set node associated diagram"), 6);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 7);
     m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlDeploymentNode, 20))
-        MenuFactory::insertItem(m, TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -558,7 +558,7 @@ void DeploymentNodeCanvas::menu(const QPoint &)
 
         case 10:
             ((UmlCanvas *) canvas())->get_view()
-                    ->add_related_elements(this, TR("node"), FALSE, FALSE);
+                    ->add_related_elements(this, tr("node"), FALSE, FALSE);
             return;
 
         default:
@@ -592,7 +592,7 @@ void DeploymentNodeCanvas::apply_shortcut(QString s)
     }
     else if (s == "Add related elements") {
         ((UmlCanvas *) canvas())->get_view()
-                ->add_related_elements(this, TR("node"), FALSE, FALSE);
+                ->add_related_elements(this, tr("node"), FALSE, FALSE);
         return;
     }
     else {
@@ -609,9 +609,9 @@ void DeploymentNodeCanvas::edit_drawing_settings()
         StateSpecVector st(2);
         ColorSpecVector co(1);
 
-        st[0].set(TR("write node instance \nhorizontally"), &write_horizontally);
-        st[1].set(TR("show stereotype \nproperties"), &show_stereotype_properties);
-        co[0].set(TR("Node color"), &itscolor);
+        st[0].set(tr("write node instance \nhorizontally"), &write_horizontally);
+        st[1].set(tr("show stereotype \nproperties"), &show_stereotype_properties);
+        co[0].set(tr("Node color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -639,9 +639,9 @@ void DeploymentNodeCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         Uml3States show_stereotype_properties;
         UmlColor itscolor;
 
-        st[0].set(TR("write node instance \nhorizontally"), &write_horizontally);
-        st[1].set(TR("show stereotype \nproperties"), &show_stereotype_properties);
-        co[0].set(TR("Node color"), &itscolor);
+        st[0].set(tr("write node instance \nhorizontally"), &write_horizontally);
+        st[1].set(tr("show stereotype \nproperties"), &show_stereotype_properties);
+        co[0].set(tr("Node color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE, TRUE);
 
@@ -698,14 +698,14 @@ QString DeploymentNodeCanvas::may_start(UmlCode & l) const
     switch (l) {
     case UmlDependency:
         l = UmlDependOn;
-        return (browser_node->is_writable()) ? QString() : TR("read only");
+        return (browser_node->is_writable()) ? QString() : tr("read only");
 
     case UmlAssociation:
     case UmlAnchor:
         return 0;
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 
@@ -719,10 +719,10 @@ QString DeploymentNodeCanvas::may_connect(UmlCode & l, const DiagramItem * dest)
         return 0;
 
     case UmlHub:
-        return (l == UmlAssociation) ? QString() : TR("illegal");
+        return (l == UmlAssociation) ? QString() : tr("illegal");
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 

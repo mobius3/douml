@@ -55,15 +55,15 @@ FlowDialog::FlowDialog(FlowData * d)
     d->browser_node->edit_start();
 
     if (d->browser_node->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
-    setWindowTitle(TR("Flow dialog"));
+    setWindowTitle(tr("Flow dialog"));
     visit = !hasOkButton();
 
     BrowserNode * bn = flow->browser_node;
@@ -78,11 +78,11 @@ FlowDialog::FlowDialog(FlowData * d)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(new QLabel(tr("name : "), grid));
     grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox( grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(flow->get_stereotype()));
@@ -100,11 +100,11 @@ FlowDialog::FlowDialog(FlowData * d)
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
     SmallPushButton* sButton;
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(sButton);
     }
@@ -137,7 +137,7 @@ FlowDialog::FlowDialog(FlowData * d)
     grid->setSpacing(5);
 
     grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     //
 
@@ -181,7 +181,7 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("weight : "), grid));
+    grid->addWidget(new QLabel(tr("weight : "), grid));
     grid->addWidget(d.edweight = new LineEdit(grid));
 
     QFont font = d.edweight->font();
@@ -197,11 +197,11 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
         d.edweight->setReadOnly(TRUE);
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("guard : "), vtab));
+    vtab->addWidget(new QLabel(tr("guard : "), vtab));
     SmallPushButton* b;
     if (! visit)
     {
-        connect( b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_guard);
+        connect( b = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()), this, sl_guard);
         vtab->addWidget(b);
     }
 
@@ -213,11 +213,11 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
         d.edguard->setReadOnly(TRUE);
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("selection : "), vtab));
+    vtab->addWidget(new QLabel(tr("selection : "), vtab));
 
     if (! visit)
     {
-        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_selection);
+        connect(b = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()), this, sl_selection);
         vtab->addWidget(b);
     }
 
@@ -229,11 +229,11 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
         d.edselection->setReadOnly(TRUE);
 
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("transformation : "), vtab));
+    vtab->addWidget(new QLabel(tr("transformation : "), vtab));
 
     if (! visit)
     {
-        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_transformation);
+        connect(b = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()), this, sl_transformation);
         vtab->addWidget(b);
     }
 
@@ -298,7 +298,7 @@ void FlowDialog::accept()
         ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlFlow,
                 bn->allow_spaces(),
                 bn->allow_empty()))
-        msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
+        msg_critical(tr("Error"), s + tr("\n\nillegal name or already used"));
     else {
         bn->set_name(s);
 

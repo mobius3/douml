@@ -54,7 +54,7 @@ ReferenceDialog::ReferenceDialog(BrowserNode * bn)
     the = this;
     target = bn;
 
-    setWindowTitle(TR("Referenced By dialog"));
+    setWindowTitle(tr("Referenced By dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
 
@@ -71,15 +71,15 @@ ReferenceDialog::ReferenceDialog(BrowserNode * bn)
 
     QHBoxLayout * hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
-    QPushButton * search_b = new QPushButton(TR("Recompute"), this);
-    QPushButton * close_b = new QPushButton(TR("Close"), this);
+    QPushButton * search_b = new QPushButton(tr("Recompute"), this);
+    QPushButton * close_b = new QPushButton(tr("Close"), this);
 
     hbox->setMargin(5);
     hbox->addWidget(search_b);
-    hbox->addWidget(select_b = new QPushButton(TR("Select"), this));
-    hbox->addWidget(mark_unmark_b = new QPushButton(TR("Unmark"), this));
-    hbox->addWidget(mark_them_b = new QPushButton(TR("Mark them"), this));
-    hbox->addWidget(unmark_all_b = new QPushButton(TR("Unmark all"), this));
+    hbox->addWidget(select_b = new QPushButton(tr("Select"), this));
+    hbox->addWidget(mark_unmark_b = new QPushButton(tr("Unmark"), this));
+    hbox->addWidget(mark_them_b = new QPushButton(tr("Mark them"), this));
+    hbox->addWidget(unmark_all_b = new QPushButton(tr("Unmark all"), this));
     hbox->addWidget(close_b);
 
     search_b->setDefault(TRUE);

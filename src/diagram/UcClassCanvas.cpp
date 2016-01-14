@@ -597,36 +597,36 @@ void UcClassCanvas::menu(const QPoint &)
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Upper"), 0);
-    MenuFactory::addItem(m, TR("Lower"), 1);
-    MenuFactory::addItem(m, TR("Go up"), 8);
-    MenuFactory::addItem(m, TR("Go down"), 9);
+    MenuFactory::addItem(m, tr("Upper"), 0);
+    MenuFactory::addItem(m, tr("Lower"), 1);
+    MenuFactory::addItem(m, tr("Go up"), 8);
+    MenuFactory::addItem(m, tr("Go down"), 9);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Add related elements"), 10);
+    MenuFactory::addItem(m, tr("Add related elements"), 10);
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Edit drawing settings"), 4);
+    MenuFactory::addItem(m, tr("Edit drawing settings"), 4);
     m.addSeparator();
 
     if (browser_node->is_writable()) {
-        MenuFactory::addItem(m, TR("Edit"), 7);
+        MenuFactory::addItem(m, tr("Edit"), 7);
         m.addSeparator();
     }
 
-    MenuFactory::addItem(m, TR("Select in browser"), 2);
+    MenuFactory::addItem(m, tr("Select in browser"), 2);
 
     if (linked())
-        MenuFactory::addItem(m, TR("Select linked items"), 3);
+        MenuFactory::addItem(m, tr("Select linked items"), 3);
 
     m.addSeparator();
-    MenuFactory::addItem(m, TR("Remove from diagram"), 5);
+    MenuFactory::addItem(m, tr("Remove from diagram"), 5);
 
     if (browser_node->is_writable())
-        MenuFactory::addItem(m, TR("Delete from model"), 6);
+        MenuFactory::addItem(m, tr("Delete from model"), 6);
 
     m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlClass, 20))
-        MenuFactory::insertItem(m, TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, tr("Tool"), &toolm);
 
     QAction* retAction = m.exec(QCursor::pos());
     if(retAction)
@@ -687,7 +687,7 @@ void UcClassCanvas::menu(const QPoint &)
 
         case 10:
             ((UmlCanvas *) canvas())->get_view()
-                    ->add_related_elements(this, TR("class/actor"), TRUE, FALSE);
+                    ->add_related_elements(this, tr("class/actor"), TRUE, FALSE);
             return;
 
         default:
@@ -721,7 +721,7 @@ void UcClassCanvas::apply_shortcut(QString s)
     }
     else if (s == "Add related elements") {
         ((UmlCanvas *) canvas())->get_view()
-                ->add_related_elements(this, TR("class/actor"), TRUE, FALSE);
+                ->add_related_elements(this, tr("class/actor"), TRUE, FALSE);
         return;
     }
     else {
@@ -741,7 +741,7 @@ void UcClassCanvas::edit_drawing_settings()
 
         settings.complete(st);
 
-        co[0].set(TR("class color"), &itscolor);
+        co[0].set(tr("class color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -772,7 +772,7 @@ void UcClassCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 
         settings.complete(st);
 
-        co[0].set(TR("class color"), &itscolor);
+        co[0].set(tr("class color"), &itscolor);
 
         SettingsDialog dialog(&st, &co, FALSE, TRUE);
 
@@ -815,10 +815,10 @@ QString UcClassCanvas::may_start(UmlCode & c) const
 
     case UmlGeneralisation:
     case UmlDependency:
-        return (browser_node->is_writable()) ? QString() : TR("read only");
+        return (browser_node->is_writable()) ? QString() : tr("read only");
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 
@@ -830,16 +830,16 @@ QString UcClassCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
     switch (dest->typeUmlCode()) {
     case UmlUseCase:
         return ((l == UmlAssociation) || (l == UmlDirectionalAssociation))
-                ? QString() : TR("illegal");
+                ? QString() : tr("illegal");
 
     case UmlClass:
         return ((l == UmlGeneralisation) || (l == UmlDependency))
                 ? ((BrowserClass *) browser_node)
                   ->may_connect(l, (BrowserClass *)((const UcClassCanvas *) dest)->browser_node)
-                : TR("illegal");
+                : tr("illegal");
 
     default:
-        return TR("illegal");
+        return tr("illegal");
     }
 }
 

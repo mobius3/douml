@@ -75,68 +75,68 @@ ColDiagramWindow::ColDiagramWindow(const QString & s, BrowserColDiagram * b, int
     add_edit_button(toolbar);
 
     select =
-        ToolBarFactory::createToolButton(*selectButton, TR("Select"), QString(),
+        ToolBarFactory::createToolButton(*selectButton, tr("Select"), QString(),
                         this, SLOT(hit_select()), toolbar, "select");
     select->setCheckable(TRUE);
     select->setChecked(TRUE);
     current_button = UmlSelect;
 
     addPackage
-        = ToolBarFactory::createToolButton(*packageButton, TR("Add Package"), QString(),
+        = ToolBarFactory::createToolButton(*packageButton, tr("Add Package"), QString(),
                           this, SLOT(hit_package()), toolbar, "add package");
     addPackage->setCheckable(TRUE);
     addPackage->setWhatsThis(addpackageText());
 
     addFragment
-        = ToolBarFactory::createToolButton(*fragmentButton, TR("Add Fragment"), QString(),
+        = ToolBarFactory::createToolButton(*fragmentButton, tr("Add Fragment"), QString(),
                           this, SLOT(hit_fragment()), toolbar, "add fragment");
     addFragment->setCheckable(TRUE);
     addFragment->setWhatsThis(addfragmentText());
 
     addClassInstance
-        = ToolBarFactory::createToolButton(*classinstanceButton, TR("Add modeled Class instance"), QString(),
+        = ToolBarFactory::createToolButton(*classinstanceButton, tr("Add modeled Class instance"), QString(),
                           this, SLOT(hit_classinstance()), toolbar, "add modeled class instance");
     addClassInstance->setCheckable(TRUE);
     addClassInstance->setWhatsThis(addmodeledclassinstanceText());
 
     addClass
-        = ToolBarFactory::createToolButton(*classButton, TR("Add Class instance"), QString(),
+        = ToolBarFactory::createToolButton(*classButton, tr("Add Class instance"), QString(),
                           this, SLOT(hit_class()), toolbar, "add class instance");
     addClass->setCheckable(TRUE);
     addClass->setWhatsThis(addclassinstanceText());
 
     addLink =
-        ToolBarFactory::createToolButton(*associationButton, TR("Add Link"), QString(),
+        ToolBarFactory::createToolButton(*associationButton, tr("Add Link"), QString(),
                         this, SLOT(hit_link()), toolbar, "add link");
     addLink->setCheckable(TRUE);
     addLink->setWhatsThis(linkText());
 
     addSelfLink =
-        ToolBarFactory::createToolButton(*selflinkButton, TR("Add Self Link"), QString(),
+        ToolBarFactory::createToolButton(*selflinkButton, tr("Add Self Link"), QString(),
                         this, SLOT(hit_selflink()), toolbar, "add self link");
     addSelfLink->setCheckable(TRUE);
     addSelfLink->setWhatsThis(selflinkText());
 
     note =
-        ToolBarFactory::createToolButton(*noteButton, TR("Note"), QString(),
+        ToolBarFactory::createToolButton(*noteButton, tr("Note"), QString(),
                         this, SLOT(hit_note()), toolbar, "note");
     note->setCheckable(TRUE);
     note->setWhatsThis(noteText());
 
     anchor =
-        ToolBarFactory::createToolButton(*anchorButton, TR("Anchor"), QString(),
+        ToolBarFactory::createToolButton(*anchorButton, tr("Anchor"), QString(),
                         this, SLOT(hit_anchor()), toolbar, "anchor");
     anchor->setCheckable(TRUE);
     anchor->setWhatsThis(anchorText());
 
     text =
-        ToolBarFactory::createToolButton(*textButton, TR("Text"), QString(),
+        ToolBarFactory::createToolButton(*textButton, tr("Text"), QString(),
                         this, SLOT(hit_text()), toolbar, "text");
     text->setCheckable(TRUE);
     text->setWhatsThis(textText());
 
     image =
-        ToolBarFactory::createToolButton(*imageButton, TR("Image"), QString(),
+        ToolBarFactory::createToolButton(*imageButton, tr("Image"), QString(),
                         this, SLOT(hit_image()), toolbar, "image");
     image->setCheckable(TRUE);
     image->setWhatsThis(imageText());

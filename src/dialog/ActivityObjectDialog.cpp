@@ -63,12 +63,12 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
     d->browser_node->edit_start();
 
     if (d->browser_node->is_writable()) {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(tr("OK"));
+        setCancelButton(tr("Cancel"));
     }
     else {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(tr("Close"));
     }
 
     visit = !hasOkButton();
@@ -85,7 +85,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    grid->addWidget(new QLabel(TR("name :"), grid));
+    grid->addWidget(new QLabel(tr("name :"), grid));
     grid->addWidget(edname = new LineEdit(data->name(), grid));
     edname->setReadOnly(visit);
 
@@ -96,7 +96,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
 
     font.setFixedPitch(TRUE);
 
-    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(new QLabel(tr("stereotype : "), grid));
     grid->addWidget(edstereotype = new QComboBox(grid));
     edstereotype->setEditable(!visit);
     edstereotype->addItem(toUnicode(data->stereotype));
@@ -115,7 +115,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
     edstereotype->setSizePolicy(sp);
 
     SmallPushButton* sButton;
-    connect( sButton= new SmallPushButton(TR("type :"), grid), SIGNAL(clicked()),
+    connect( sButton= new SmallPushButton(tr("type :"), grid), SIGNAL(clicked()),
             this, SLOT(menu_type()));
     grid->addWidget(sButton);
 
@@ -146,7 +146,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
     edtype->setCurrentIndex(0);
     edtype->setSizePolicy(sp);
 
-    grid->addWidget(new QLabel(TR("multiplicity : "), grid));
+    grid->addWidget(new QLabel(tr("multiplicity : "), grid));
     grid->addWidget(htab = new HHBox(grid));
     htab->addWidget(edmultiplicity = new QComboBox(htab));
     edmultiplicity->setEditable(!visit);
@@ -160,7 +160,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
         edmultiplicity->addItem("1..*");
     }
 
-    htab->addWidget(new QLabel(TR("   ordering : "), htab));
+    htab->addWidget(new QLabel(tr("   ordering : "), htab));
     htab->addWidget(edordering = new QComboBox(htab));
 
     UmlOrderingKind o = data->get_ordering();
@@ -181,13 +181,13 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
             edordering->addItem(stringify(UmlFifo));
     }
 
-    grid->addWidget(new QLabel(TR("in state : "), grid));
+    grid->addWidget(new QLabel(tr("in state : "), grid));
     grid->addWidget(htab = new HHBox(grid));
     htab->addWidget(edin_state = new LineEdit(data->in_state, htab));
     edin_state->setReadOnly(visit);
 
     htab->addWidget(new QLabel("  ", htab));
-    htab->addWidget(is_control_cb = new QCheckBox(TR("is control"), htab));
+    htab->addWidget(is_control_cb = new QCheckBox(tr("is control"), htab));
 
     if (data->is_control)
         is_control_cb->setChecked(TRUE);
@@ -196,10 +196,10 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
 
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
-    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(new QLabel(tr("description :"), vtab));
 
     if (! visit) {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         vtab->addWidget(sButton);
     }
@@ -232,7 +232,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
     grid->setSpacing(5);
 
     grid->addWidget(kvtable = new KeyValuesTable(data->browser_node, grid, visit));
-    addTab(grid, TR("Properties"));
+    addTab(grid, tr("Properties"));
 
     //
 
@@ -288,12 +288,12 @@ void ActivityObjectDialog::init_tab(QWidget *& w, MultiLineEdit *& ed,
     VVBox * vtab;
     grid->addWidget(vtab = new VVBox(grid));
 
-    vtab->addWidget(new QLabel(TR("selection : "), vtab));
+    vtab->addWidget(new QLabel(tr("selection : "), vtab));
 
     SmallPushButton *sButton;
     if (! visit)
     {
-        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl);
+        connect(sButton = new SmallPushButton(tr("Editor"), vtab), SIGNAL(clicked()), this, sl);
         vtab->addWidget(sButton);
     }
 
@@ -321,13 +321,13 @@ void ActivityObjectDialog::menu_type()
 {
     QMenu m(0);
 
-    MenuFactory::addItem(m, TR("Choose"), -1);
+    MenuFactory::addItem(m, tr("Choose"), -1);
     m.addSeparator();
 
     int index = list.indexOf(edtype->currentText().trimmed());
 
     if (index != -1)
-        MenuFactory::addItem(m, TR("Select in browser"), 0);
+        MenuFactory::addItem(m, tr("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -335,11 +335,11 @@ void ActivityObjectDialog::menu_type()
         bn = BrowserView::selected_item();
 
         if ((bn != 0) && (bn->get_type() == UmlClass) && !bn->deletedp())
-            MenuFactory::addItem(m, TR("Choose class selected in browser"), 1);
+            MenuFactory::addItem(m, tr("Choose class selected in browser"), 1);
         else
             bn = 0;
 
-        MenuFactory::addItem(m, TR("Create class and choose it"), 2);
+        MenuFactory::addItem(m, tr("Create class and choose it"), 2);
     }
 
     if (!visit || (index != -1) || (bn != 0)) {

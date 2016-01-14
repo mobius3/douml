@@ -113,9 +113,9 @@ bool BrowserTransition::undelete(bool, QString & warning, QString & renamed)
 
     if (def->get_start_node()->deletedp() ||
         def->get_end_node()->deletedp()) {
-        warning += QString("<li><b>") + quote(name) + "</b> " + QObject::TR("from") + " <b>" +
+        warning += QString("<li><b>") + quote(name) + "</b> " + QObject::tr("from") + " <b>" +
                    def->get_start_node()->full_name() +
-                   "</b> " + QObject::TR("to") + " <b>" + def->get_end_node()->full_name() + "</b>\n";
+                   "</b> " + QObject::tr("to") + " <b>" + def->get_end_node()->full_name() + "</b>\n";
         return FALSE;
     }
 
@@ -218,12 +218,12 @@ void BrowserTransition::menu()
     if (!deletedp()) {
         if (!in_edition()) {
             MenuFactory::addItem(m, QObject::tr("Edit"), 0,
-                           QObject::TR("to edit the <i>transition</i>, \
+                           QObject::tr("to edit the <i>transition</i>, \
 a double click with the left mouse button does the same thing"));
 
             if (!is_read_only && (edition_number == 0)) {
                 MenuFactory::addItem(m, QObject::tr("Delete"), 2,
-                               QObject::TR("to delete the <i>transition</i>. \
+                               QObject::tr("to delete the <i>transition</i>. \
 Note that you can undelete it after"));
             }
 
@@ -236,9 +236,9 @@ Note that you can undelete it after"));
             s = stringify(def->get_end_node()->get_type());
 
         MenuFactory::addItem(m, QObject::tr("Select ") + s, 7,
-                       QObject::TR("to select the destination"));
+                       QObject::tr("to select the destination"));
         MenuFactory::addItem(m, QObject::tr("Referenced by"), 4,
-                       QObject::TR("to know who reference the <i>transition</i>"));
+                       QObject::tr("to know who reference the <i>transition</i>"));
         mark_menu(m, QObject::tr("the transition").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
@@ -251,7 +251,7 @@ Note that you can undelete it after"));
     }
     else if (!is_read_only && (edition_number == 0)) {
         MenuFactory::addItem(m, QObject::tr("Undelete"), 3,
-                       QObject::TR("undelete the <i>transition</i> \
+                       QObject::tr("undelete the <i>transition</i> \
 (except if the other side is also deleted)"));
 
         if (def->get_start_node()->deletedp() ||
@@ -363,7 +363,7 @@ UmlCode BrowserTransition::get_type() const
 
 QString BrowserTransition::get_stype() const
 {
-    return QObject::TR("transition");
+    return QObject::tr("transition");
 }
 
 int BrowserTransition::get_identifier() const

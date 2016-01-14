@@ -162,7 +162,7 @@ void BrowserNode::delete_it()
             QString warning;
 
             if (!delete_internal(warning)) {
-                warning = full_name() + QObject::TR(" cannot be deleted because :") + warning;
+                warning = full_name() + QObject::tr(" cannot be deleted because :") + warning;
 
                 warn(warning);
             }
@@ -220,7 +220,7 @@ bool BrowserNode::delete_internal(QString & warning)
         return TRUE;
 
     if (!is_writable() && !root_permission() && !is_from_lib()) {
-        warning += "\n    " + QObject::TR("%1 is read-only").arg(full_name());
+        warning += "\n    " + QObject::tr("%1 is read-only").arg(full_name());
         return FALSE;
     }
 
@@ -246,15 +246,15 @@ bool BrowserNode::delete_internal(QString & warning)
 
                 switch (r->get_type()) {
                 case UmlComponent:
-                    warning += QObject::TR("%1 referenced by the read-only component %2").arg(full_name()).arg(r->full_name());
+                    warning += QObject::tr("%1 referenced by the read-only component %2").arg(full_name()).arg(r->full_name());
                     break;
 
                 case UmlArtifact:
-                    warning += QObject::TR("%1 referenced by the read-only artifact %2").arg(full_name()).arg(r->full_name());
+                    warning += QObject::tr("%1 referenced by the read-only artifact %2").arg(full_name()).arg(r->full_name());
                     break;
 
                 default:
-                    warning += QObject::TR("%1 is the target of the read-only relation %2").arg(full_name()).arg( r->full_name());
+                    warning += QObject::tr("%1 is the target of the read-only relation %2").arg(full_name()).arg( r->full_name());
                     break;
                 }
             }
@@ -340,11 +340,11 @@ void BrowserNode::undelete(bool recursive)
     }
 
     if (!warning.isEmpty())
-        warning = "<p>" + QObject::TR("Some items cannot be undeleted") + " :\n<ul>"
+        warning = "<p>" + QObject::tr("Some items cannot be undeleted") + " :\n<ul>"
                 + warning + "</ul></p>";
 
     if (! renamed.isEmpty()) {
-        warning += "<p>" + QObject::TR("Some items are renamed") + " :\n<ul>"
+        warning += "<p>" + QObject::tr("Some items are renamed") + " :\n<ul>"
                 + renamed + "</ul></p>";
     }
 
@@ -792,7 +792,7 @@ void BrowserNode::DragMoveInsideEvent(QDragMoveEvent * e)
 void BrowserNode::DropAfterEvent(QDropEvent * e, BrowserNode *)
 {
     e->ignore();
-    msg_critical(QObject::TR("Error"), QObject::TR("Forbidden"));
+    msg_critical(QObject::tr("Error"), QObject::tr("Forbidden"));
 }
 
 BrowserNode *BrowserNode::get_first_generatable_node()
@@ -905,7 +905,7 @@ QString BrowserNode::check_inherit(const BrowserNode * new_parent) const
     QList<BrowserNode *> notyet = parents();
 
     if (notyet.contains(const_cast<BrowserNode *>(new_parent)))
-        return QObject::TR("already generalize / realize");
+        return QObject::tr("already generalize / realize");
 
     notyet.append(const_cast<BrowserNode *>(new_parent));
 
@@ -913,7 +913,7 @@ QString BrowserNode::check_inherit(const BrowserNode * new_parent) const
         BrowserNode *cl = notyet.takeFirst();
 
         if (cl == this)
-            return QObject::TR("can't have circular generalization / realization");
+            return QObject::tr("can't have circular generalization / realization");
 
         if (! all_parents.contains(cl)) {
             all_parents.append(cl);
@@ -1053,11 +1053,11 @@ void BrowserNode::mark_menu(QMenu & m, const char * s, int bias) const
     else {
         m.addSeparator();
         MenuFactory::addItem(m,("Unmark"), bias + 1,
-                             QObject::TR("to unmark %1").arg(s).toLatin1().constData());
+                             QObject::tr("to unmark %1").arg(s).toLatin1().constData());
 
         if (!marked_list.isEmpty())
             MenuFactory::addItem(m,("Unmark all"), bias + 2,
-                                 QObject::TR("to unmark all the marked items").toLatin1().constData());
+                                 QObject::tr("to unmark all the marked items").toLatin1().constData());
     }
 
 }

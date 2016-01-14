@@ -144,7 +144,7 @@ BrowserActivityDiagram  * BrowserActivityDiagram::add_activity_diagram(BrowserNo
 {
     QString name;
 
-    if (future_parent->enter_child_name(name, QObject::TR("enter activity diagram's name : "),
+    if (future_parent->enter_child_name(name, QObject::tr("enter activity diagram's name : "),
                                         UmlActivityDiagram, TRUE, FALSE))
         return new BrowserActivityDiagram(name, future_parent);
     else
@@ -232,23 +232,23 @@ void BrowserActivityDiagram::menu()
 
     if (!deletedp()) {
         MenuFactory::addItem(m, QObject::tr("Show"), 0,
-                       QObject::TR("to show and edit the <i>activity diagram</i>"));
+                       QObject::tr("to show and edit the <i>activity diagram</i>"));
 
         if (!is_edited) {
             MenuFactory::addItem(m, QObject::tr("Edit"), 1,
-                           QObject::TR("to edit the <i>activity diagram</i>"));
+                           QObject::tr("to edit the <i>activity diagram</i>"));
 
             if (!is_read_only) {
                 MenuFactory::addItem(m, QObject::tr("Edit drawing settings"), 2,
-                               QObject::TR("to set how the <i>activity diagram</i>'s items must be drawn"));
+                               QObject::tr("to set how the <i>activity diagram</i>'s items must be drawn"));
                 m.addSeparator();
                 MenuFactory::addItem(m, QObject::tr("Duplicate"), 3,
-                               QObject::TR("to duplicate the <i>activity diagram</i>"));
+                               QObject::tr("to duplicate the <i>activity diagram</i>"));
 
                 if (edition_number == 0) {
                     m.addSeparator();
                     MenuFactory::addItem(m, QObject::tr("Delete"), 4,
-                                   QObject::TR("to delete the <i>activity diagram</i>. \
+                                   QObject::tr("to delete the <i>activity diagram</i>. \
 Note that you can undelete it after"));
                 }
             }
@@ -266,7 +266,7 @@ Note that you can undelete it after"));
     }
     else if (!is_read_only && (edition_number == 0))
         MenuFactory::addItem(m, QObject::tr("Undelete"), 5,
-                       QObject::TR("to undelete the <i>activity diagram</i>"));
+                       QObject::tr("to undelete the <i>activity diagram</i>"));
 
     QAction *resultAction = m.exec(QCursor::pos());
     if(resultAction)
@@ -281,7 +281,7 @@ void BrowserActivityDiagram::exec_menu_choice(int rank)
         return;
 
     case 1:
-        edit( QObject::TR("Activity diagram"), its_default_stereotypes);
+        edit( QObject::tr("Activity diagram"), its_default_stereotypes);
         return;
 
     case 2:
@@ -291,7 +291,7 @@ void BrowserActivityDiagram::exec_menu_choice(int rank)
     case 3: {
         QString name;
 
-        if (((BrowserNode *)parent())->enter_child_name(name, QObject::TR("enter activity diagram's name : "),
+        if (((BrowserNode *)parent())->enter_child_name(name, QObject::tr("enter activity diagram's name : "),
                 UmlActivityDiagram, TRUE, FALSE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
         else
@@ -375,14 +375,14 @@ void BrowserActivityDiagram::edit_settings()
 
         settings.complete(st, TRUE);
 
-        co[0].set( QObject::TR("activity color"), &activity_color);
-        co[1].set( QObject::TR("activity region color"), &activityregion_color);
-        co[2].set( QObject::TR("activity partition color"), &activitypartition_color);
-        co[3].set( QObject::TR("activity action color"), &activityaction_color);
-        co[4].set( QObject::TR("parameter and pin color"), &parameterpin_color);
-        co[5].set( QObject::TR("note color"), &note_color);
-        co[6].set( QObject::TR("package color"), &package_color);
-        co[7].set( QObject::TR("fragment color"), &fragment_color);
+        co[0].set( QObject::tr("activity color"), &activity_color);
+        co[1].set( QObject::tr("activity region color"), &activityregion_color);
+        co[2].set( QObject::tr("activity partition color"), &activitypartition_color);
+        co[3].set( QObject::tr("activity action color"), &activityaction_color);
+        co[4].set( QObject::tr("parameter and pin color"), &parameterpin_color);
+        co[5].set( QObject::tr("note color"), &note_color);
+        co[6].set( QObject::tr("package color"), &package_color);
+        co[7].set( QObject::tr("fragment color"), &fragment_color);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -420,7 +420,7 @@ UmlCode BrowserActivityDiagram::get_type() const
 
 QString BrowserActivityDiagram::get_stype() const
 {
-    return QObject::TR("activity diagram");
+    return QObject::tr("activity diagram");
 }
 
 int BrowserActivityDiagram::get_identifier() const

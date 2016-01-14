@@ -447,126 +447,126 @@ void ClassDiagramSettings::complete(StateSpecVector & a, UmlCode who)
         // order known by ClassDiagramSettings::set
         a.resize(i + 18);
 
-        a[i].set(QObject::TR("drawing language"), &drawing_language);
-        a[i + 1].set(QObject::TR("drawing mode"), &class_drawing_mode);
-        a[i + 2].set(QObject::TR("show context"), &show_context_mode);
-        a[i + 3].set(QObject::TR("hide attributes"), &hide_attributes);
-        a[i + 4].set(QObject::TR("hide operations"), &hide_operations);
-        a[i + 5].set(QObject::TR("hide get/set operations"), &hide_getset_operations);
-        a[i + 6].set(QObject::TR("show members full definition"),
+        a[i].set(QObject::tr("drawing language"), &drawing_language);
+        a[i + 1].set(QObject::tr("drawing mode"), &class_drawing_mode);
+        a[i + 2].set(QObject::tr("show context"), &show_context_mode);
+        a[i + 3].set(QObject::tr("hide attributes"), &hide_attributes);
+        a[i + 4].set(QObject::tr("hide operations"), &hide_operations);
+        a[i + 5].set(QObject::tr("hide get/set operations"), &hide_getset_operations);
+        a[i + 6].set(QObject::tr("show members full definition"),
                      &show_full_members_definition);
-        a[i + 7].set(QObject::TR("show members visibility"),
+        a[i + 7].set(QObject::tr("show members visibility"),
                      &show_members_visibility);
-        a[i + 8].set(QObject::TR("show members stereotype"),
+        a[i + 8].set(QObject::tr("show members stereotype"),
                      &show_members_stereotype);
-        a[i + 9].set(QObject::TR("show context in members definition"),
+        a[i + 9].set(QObject::tr("show context in members definition"),
                      &show_members_context);
-        a[i + 10].set(QObject::TR("show attributes multiplicity"),
+        a[i + 10].set(QObject::tr("show attributes multiplicity"),
                       &show_members_multiplicity);
-        a[i + 11].set(QObject::TR("show attributes initialisation"),
+        a[i + 11].set(QObject::tr("show attributes initialisation"),
                       &show_members_initialization);
-        a[i + 12].set(QObject::TR("show attribute modifiers"),
+        a[i + 12].set(QObject::tr("show attribute modifiers"),
                       &show_attribute_modifiers);
-        a[i + 13].set(QObject::TR("show parameter direction"),
+        a[i + 13].set(QObject::tr("show parameter direction"),
                       &show_parameter_dir);
-        a[i + 14].set(QObject::TR("show parameter name"),
+        a[i + 14].set(QObject::tr("show parameter name"),
                       &show_parameter_name);
-        a[i + 15].set(QObject::TR("members max width"),
+        a[i + 15].set(QObject::tr("members max width"),
                       &member_max_width);
-        a[i + 16].set(QObject::TR("show information note"),
+        a[i + 16].set(QObject::tr("show information note"),
                       &show_infonote);
-        a[i + 17].set(QObject::TR("show stereotype properties"),
+        a[i + 17].set(QObject::tr("show stereotype properties"),
                       &show_stereotype_properties);
         break;
 
     case UmlPackage:
         a.resize(i + 3);
 
-        a[i].set(QObject::TR("name in tab"), &package_name_in_tab);
-        a[i + 1].set(QObject::TR("show context"), &show_context_mode);
-        a[i + 2].set(QObject::TR("show stereotype properties"), &show_stereotype_properties);
+        a[i].set(QObject::tr("name in tab"), &package_name_in_tab);
+        a[i + 1].set(QObject::tr("show context"), &show_context_mode);
+        a[i + 2].set(QObject::tr("show stereotype properties"), &show_stereotype_properties);
         break;
 
     case UmlClassDiagram:
         a.resize(i + 24);
 
-        a[i].set(QObject::TR("drawing language"), &drawing_language);
-        a[i + 1].set(QObject::TR("classes drawing mode"), &class_drawing_mode);
-        a[i + 2].set(QObject::TR("hide classes attributes"), &hide_attributes);
-        a[i + 3].set(QObject::TR("hide classes operations"), &hide_operations);
-        a[i + 4].set(QObject::TR("hide classes get/set operations"), &hide_getset_operations);
-        a[i + 5].set(QObject::TR("show classes members full definition"),
+        a[i].set(QObject::tr("drawing language"), &drawing_language);
+        a[i + 1].set(QObject::tr("classes drawing mode"), &class_drawing_mode);
+        a[i + 2].set(QObject::tr("hide classes attributes"), &hide_attributes);
+        a[i + 3].set(QObject::tr("hide classes operations"), &hide_operations);
+        a[i + 4].set(QObject::tr("hide classes get/set operations"), &hide_getset_operations);
+        a[i + 5].set(QObject::tr("show classes members full definition"),
                      &show_full_members_definition);
-        a[i + 6].set(QObject::TR("show members visibility"),
+        a[i + 6].set(QObject::tr("show members visibility"),
                      &show_members_visibility);
-        a[i + 7].set(QObject::TR("show members stereotype"),
+        a[i + 7].set(QObject::tr("show members stereotype"),
                      &show_members_stereotype);
-        a[i + 8].set(QObject::TR("show context in members definition"),
+        a[i + 8].set(QObject::tr("show context in members definition"),
                      &show_members_context);
-        a[i + 9].set(QObject::TR("show attributes multiplicity"),
+        a[i + 9].set(QObject::tr("show attributes multiplicity"),
                      &show_members_multiplicity);
-        a[i + 10].set(QObject::TR("show attributes initialization"),
+        a[i + 10].set(QObject::tr("show attributes initialization"),
                       &show_members_initialization);
-        a[i + 11].set(QObject::TR("show attribute modifiers"),
+        a[i + 11].set(QObject::tr("show attribute modifiers"),
                       &show_attribute_modifiers);
-        a[i + 12].set(QObject::TR("show parameter direction"),
+        a[i + 12].set(QObject::tr("show parameter direction"),
                       &show_parameter_dir);
-        a[i + 13].set(QObject::TR("show parameter name"),
+        a[i + 13].set(QObject::tr("show parameter name"),
                       &show_parameter_name);
-        a[i + 14].set(QObject::TR("members max width"),
+        a[i + 14].set(QObject::tr("members max width"),
                       &member_max_width);
-        a[i + 15].set(QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 16].set(QObject::TR("show relation modifiers"), &show_relation_modifiers);
-        a[i + 17].set(QObject::TR("show relation visibility"), &show_relation_visibility);
-        a[i + 18].set(QObject::TR("show packages name in tab"), &package_name_in_tab);
-        a[i + 19].set(QObject::TR("show classes and packages context"), &show_context_mode);
-        a[i + 20].set(QObject::TR("automatic labels position"), &auto_label_position);
-        a[i + 21].set(QObject::TR("show information note"), &show_infonote);
-        a[i + 22].set(QObject::TR("show stereotype properties"),
+        a[i + 15].set(QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 16].set(QObject::tr("show relation modifiers"), &show_relation_modifiers);
+        a[i + 17].set(QObject::tr("show relation visibility"), &show_relation_visibility);
+        a[i + 18].set(QObject::tr("show packages name in tab"), &package_name_in_tab);
+        a[i + 19].set(QObject::tr("show classes and packages context"), &show_context_mode);
+        a[i + 20].set(QObject::tr("automatic labels position"), &auto_label_position);
+        a[i + 21].set(QObject::tr("show information note"), &show_infonote);
+        a[i + 22].set(QObject::tr("show stereotype properties"),
                       &show_stereotype_properties);
-        a[i + 23].set(QObject::TR("draw shadow"), &shadow);
+        a[i + 23].set(QObject::tr("draw shadow"), &shadow);
         break;
 
     default: {
-        QString s = QObject::TR("class") + "#";
+        QString s = QObject::tr("class") + "#";
 
         a.resize(i + 24);
 
-        a[i].set(s + QObject::TR("drawing language"), &drawing_language);
-        a[i + 1].set(s + QObject::TR("classes drawing mode"), &class_drawing_mode);
-        a[i + 2].set(s + QObject::TR("hide classes attributes"), &hide_attributes);
-        a[i + 3].set(s + QObject::TR("hide classes operations"), &hide_operations);
-        a[i + 4].set(s + QObject::TR("hide classes get/set operations"), &hide_getset_operations);
-        a[i + 5].set(s + QObject::TR("show classes members full definition"),
+        a[i].set(s + QObject::tr("drawing language"), &drawing_language);
+        a[i + 1].set(s + QObject::tr("classes drawing mode"), &class_drawing_mode);
+        a[i + 2].set(s + QObject::tr("hide classes attributes"), &hide_attributes);
+        a[i + 3].set(s + QObject::tr("hide classes operations"), &hide_operations);
+        a[i + 4].set(s + QObject::tr("hide classes get/set operations"), &hide_getset_operations);
+        a[i + 5].set(s + QObject::tr("show classes members full definition"),
                      &show_full_members_definition);
-        a[i + 6].set(s + QObject::TR("show classes members visibility"),
+        a[i + 6].set(s + QObject::tr("show classes members visibility"),
                      &show_members_visibility);
-        a[i + 7].set(s + QObject::TR("show classes members stereotype"),
+        a[i + 7].set(s + QObject::tr("show classes members stereotype"),
                      &show_members_stereotype);
-        a[i + 8].set(s + QObject::TR("show context in classes members definition"),
+        a[i + 8].set(s + QObject::tr("show context in classes members definition"),
                      &show_members_context);
-        a[i + 9].set(s + QObject::TR("show attribute multiplicity"),
+        a[i + 9].set(s + QObject::tr("show attribute multiplicity"),
                      &show_members_multiplicity);
-        a[i + 10].set(s + QObject::TR("show attribute initialization"),
+        a[i + 10].set(s + QObject::tr("show attribute initialization"),
                       &show_members_initialization);
-        a[i + 11].set(s + QObject::TR("show attribute modifiers"),
+        a[i + 11].set(s + QObject::tr("show attribute modifiers"),
                       &show_attribute_modifiers);
-        a[i + 12].set(s + QObject::TR("show operation parameter direction"),
+        a[i + 12].set(s + QObject::tr("show operation parameter direction"),
                       &show_parameter_dir);
-        a[i + 13].set(s + QObject::TR("show operation parameter name"),
+        a[i + 13].set(s + QObject::tr("show operation parameter name"),
                       &show_parameter_name);
-        a[i + 14].set(s + QObject::TR("max members width"),
+        a[i + 14].set(s + QObject::tr("max members width"),
                       &member_max_width);
-        a[i + 15].set(s + QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 16].set(s + QObject::TR("show packages name in tab"), &package_name_in_tab);
-        a[i + 17].set(s + QObject::TR("show relation modifiers"), &show_relation_modifiers);
-        a[i + 18].set(s + QObject::TR("show relation visibility"), &show_relation_visibility);
-        a[i + 19].set(s + QObject::TR("show classes and packages context"), &show_context_mode);
-        a[i + 20].set(s + QObject::TR("automatic labels position"), &auto_label_position);
-        a[i + 21].set(s + QObject::TR("show information note"), &show_infonote);
-        a[i + 22].set(s + QObject::TR("show stereotype properties"),
+        a[i + 15].set(s + QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 16].set(s + QObject::tr("show packages name in tab"), &package_name_in_tab);
+        a[i + 17].set(s + QObject::tr("show relation modifiers"), &show_relation_modifiers);
+        a[i + 18].set(s + QObject::tr("show relation visibility"), &show_relation_visibility);
+        a[i + 19].set(s + QObject::tr("show classes and packages context"), &show_context_mode);
+        a[i + 20].set(s + QObject::tr("automatic labels position"), &auto_label_position);
+        a[i + 21].set(s + QObject::tr("show information note"), &show_infonote);
+        a[i + 22].set(s + QObject::tr("show stereotype properties"),
                       &show_stereotype_properties);
-        a[i + 23].set(s + QObject::TR("draw shadow"), &shadow);
+        a[i + 23].set(s + QObject::tr("draw shadow"), &shadow);
     }
     }
 }
@@ -679,9 +679,9 @@ void SimpleClassDiagramSettings::complete(StateSpecVector & a)
 
     a.resize(i + 3);
 
-    a[i].set(QObject::TR("drawing mode"), &class_drawing_mode);
-    a[i + 1].set(QObject::TR("show context"), &show_context_mode);
-    a[i + 2].set(QObject::TR("show stereotype properties"), &show_stereotype_properties);
+    a[i].set(QObject::tr("drawing mode"), &class_drawing_mode);
+    a[i + 1].set(QObject::tr("show context"), &show_context_mode);
+    a[i + 2].set(QObject::tr("show stereotype properties"), &show_stereotype_properties);
 }
 
 // to update class canvas settings
@@ -820,28 +820,28 @@ void SequenceDiagramSettings::complete(StateSpecVector & a, bool local)
     a.resize(i + 9);
 
     if (local) {
-        a[i].set(QObject::TR("drawing language"), &drawing_language);
-        a[i + 1].set(QObject::TR("instances drawing mode"), &instances_drawing_mode);
-        a[i + 2].set(QObject::TR("show operations full definition"), &show_full_operations_definition);
-        a[i + 3].set(QObject::TR("write name:type horizontally"), &write_horizontally);
-        a[i + 4].set(QObject::TR("show classes context"), &show_class_context_mode);
-        a[i + 5].set(QObject::TR("show messages context"), &show_msg_context_mode);
-        a[i + 6].set(QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 7].set(QObject::TR("show stereotype properties"), &show_stereotype_properties);
-        a[i + 8].set(QObject::TR("draw shadow"), &shadow);
+        a[i].set(QObject::tr("drawing language"), &drawing_language);
+        a[i + 1].set(QObject::tr("instances drawing mode"), &instances_drawing_mode);
+        a[i + 2].set(QObject::tr("show operations full definition"), &show_full_operations_definition);
+        a[i + 3].set(QObject::tr("write name:type horizontally"), &write_horizontally);
+        a[i + 4].set(QObject::tr("show classes context"), &show_class_context_mode);
+        a[i + 5].set(QObject::tr("show messages context"), &show_msg_context_mode);
+        a[i + 6].set(QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 7].set(QObject::tr("show stereotype properties"), &show_stereotype_properties);
+        a[i + 8].set(QObject::tr("draw shadow"), &shadow);
     }
     else {
-        QString s = QObject::TR("sequence") + "#";
+        QString s = QObject::tr("sequence") + "#";
 
-        a[i].set(s + QObject::TR("drawing language"), &drawing_language);
-        a[i + 1].set(s + QObject::TR("instances drawing mode"), &instances_drawing_mode);
-        a[i + 2].set(s + QObject::TR("show operations full definition"), &show_full_operations_definition);
-        a[i + 3].set(s + QObject::TR("write name:type horizontally"), &write_horizontally);
-        a[i + 4].set(s + QObject::TR("show classes context"), &show_class_context_mode);
-        a[i + 5].set(s + QObject::TR("show messages context"), &show_msg_context_mode);
-        a[i + 6].set(s + QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 7].set(s + QObject::TR("show stereotype properties"), &show_stereotype_properties);
-        a[i + 8].set(s + QObject::TR("draw shadow"), &shadow);
+        a[i].set(s + QObject::tr("drawing language"), &drawing_language);
+        a[i + 1].set(s + QObject::tr("instances drawing mode"), &instances_drawing_mode);
+        a[i + 2].set(s + QObject::tr("show operations full definition"), &show_full_operations_definition);
+        a[i + 3].set(s + QObject::tr("write name:type horizontally"), &write_horizontally);
+        a[i + 4].set(s + QObject::tr("show classes context"), &show_class_context_mode);
+        a[i + 5].set(s + QObject::tr("show messages context"), &show_msg_context_mode);
+        a[i + 6].set(s + QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 7].set(s + QObject::tr("show stereotype properties"), &show_stereotype_properties);
+        a[i + 8].set(s + QObject::tr("draw shadow"), &shadow);
     }
 }
 
@@ -988,37 +988,37 @@ void CollaborationDiagramSettings::complete(StateSpecVector & a, bool local)
     a.resize(i + 10);
 
     if (local) {
-        a[i].set(QObject::TR("drawing language"), &drawing_language);
-        a[i + 1].set(QObject::TR("show operations full definition"),
+        a[i].set(QObject::tr("drawing language"), &drawing_language);
+        a[i + 1].set(QObject::tr("show operations full definition"),
                      &show_full_operations_definition);
-        a[i + 2].set(QObject::TR("show hierarchical rank"),
+        a[i + 2].set(QObject::tr("show hierarchical rank"),
                      &show_hierarchical_rank);
-        a[i + 3].set(QObject::TR("write name:type horizontally"),
+        a[i + 3].set(QObject::tr("write name:type horizontally"),
                      &write_horizontally);
-        a[i + 4].set(QObject::TR("packages name in tab"), &package_name_in_tab);
-        a[i + 5].set(QObject::TR("show classes and packages context"), &show_class_pack_context_mode);
-        a[i + 6].set(QObject::TR("show messages context"), &show_msg_context_mode);
-        a[i + 7].set(QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 8].set(QObject::TR("show stereotype properties"), &show_stereotype_properties);
-        a[i + 9].set(QObject::TR("draw shadow"), &shadow);
+        a[i + 4].set(QObject::tr("packages name in tab"), &package_name_in_tab);
+        a[i + 5].set(QObject::tr("show classes and packages context"), &show_class_pack_context_mode);
+        a[i + 6].set(QObject::tr("show messages context"), &show_msg_context_mode);
+        a[i + 7].set(QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 8].set(QObject::tr("show stereotype properties"), &show_stereotype_properties);
+        a[i + 9].set(QObject::tr("draw shadow"), &shadow);
     }
     else {
-        QString s = QObject::TR("communication") + "#";
+        QString s = QObject::tr("communication") + "#";
 
-        a[i].set(s + QObject::TR("drawing language"),
+        a[i].set(s + QObject::tr("drawing language"),
                  &drawing_language);
-        a[i + 1].set(s + QObject::TR("show operations full definition"),
+        a[i + 1].set(s + QObject::tr("show operations full definition"),
                      &show_full_operations_definition);
-        a[i + 2].set(s + QObject::TR("show hierarchical rank"),
+        a[i + 2].set(s + QObject::tr("show hierarchical rank"),
                      &show_hierarchical_rank);
-        a[i + 3].set(s + QObject::TR("write name:type horizontally"),
+        a[i + 3].set(s + QObject::tr("write name:type horizontally"),
                      &write_horizontally);
-        a[i + 4].set(s + QObject::TR("show packages name in tab"), &package_name_in_tab);
-        a[i + 5].set(s + QObject::TR("show classes and packages context"), &show_class_pack_context_mode);
-        a[i + 6].set(s + QObject::TR("show messages context"), &show_msg_context_mode);
-        a[i + 7].set(s + QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 8].set(s + QObject::TR("show stereotype properties"), &show_stereotype_properties);
-        a[i + 9].set(s + QObject::TR("draw shadow"), &shadow);
+        a[i + 4].set(s + QObject::tr("show packages name in tab"), &package_name_in_tab);
+        a[i + 5].set(s + QObject::tr("show classes and packages context"), &show_class_pack_context_mode);
+        a[i + 6].set(s + QObject::tr("show messages context"), &show_msg_context_mode);
+        a[i + 7].set(s + QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 8].set(s + QObject::tr("show stereotype properties"), &show_stereotype_properties);
+        a[i + 9].set(s + QObject::tr("draw shadow"), &shadow);
     }
 }
 
@@ -1027,11 +1027,11 @@ void CollaborationDiagramSettings::complete_msg(StateSpecVector & a)
     int i = a.size();
 
     a.resize(i + 4);
-    a[i].set(QObject::TR("drawing language"), &drawing_language);
-    a[i + 1].set(QObject::TR("show operations full definition"),
+    a[i].set(QObject::tr("drawing language"), &drawing_language);
+    a[i + 1].set(QObject::tr("show operations full definition"),
                  &show_full_operations_definition);
-    a[i + 2].set(QObject::TR("show messages context"), &show_msg_context_mode);
-    a[i + 3].set(QObject::TR("show hierarchical rank"),
+    a[i + 2].set(QObject::tr("show messages context"), &show_msg_context_mode);
+    a[i + 3].set(QObject::tr("show hierarchical rank"),
                  &show_hierarchical_rank);
 }
 
@@ -1132,24 +1132,24 @@ void ObjectDiagramSettings::complete(StateSpecVector & a, bool local)
     a.resize(i + 7);
 
     if (local) {
-        a[i].set(QObject::TR("write name:type horizontally"), &write_horizontally);
-        a[i + 1].set(QObject::TR("packages name in tab"), &package_name_in_tab);
-        a[i + 2].set(QObject::TR("show classes and packages context"), &show_class_pack_context_mode);
-        a[i + 3].set(QObject::TR("automatic labels position"), &auto_label_position);
-        a[i + 4].set(QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 5].set(QObject::TR("show stereotype properties"), &show_stereotype_properties);
-        a[i + 6].set(QObject::TR("draw shadow"), &shadow);
+        a[i].set(QObject::tr("write name:type horizontally"), &write_horizontally);
+        a[i + 1].set(QObject::tr("packages name in tab"), &package_name_in_tab);
+        a[i + 2].set(QObject::tr("show classes and packages context"), &show_class_pack_context_mode);
+        a[i + 3].set(QObject::tr("automatic labels position"), &auto_label_position);
+        a[i + 4].set(QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 5].set(QObject::tr("show stereotype properties"), &show_stereotype_properties);
+        a[i + 6].set(QObject::tr("draw shadow"), &shadow);
     }
     else {
-        QString s = QObject::TR("object") + "#";
+        QString s = QObject::tr("object") + "#";
 
-        a[i].set(s + QObject::TR("write name:type horizontally"), &write_horizontally);
-        a[i + 1].set(s + QObject::TR("show packages name in tab"), &package_name_in_tab);
-        a[i + 2].set(s + QObject::TR("show classes and packages context"), &show_class_pack_context_mode);
-        a[i + 3].set(s + QObject::TR("automatic labels position"), &auto_label_position);
-        a[i + 4].set(s + QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 5].set(s + QObject::TR("show stereotype properties"), &show_stereotype_properties);
-        a[i + 6].set(s + QObject::TR("draw shadow"), &shadow);
+        a[i].set(s + QObject::tr("write name:type horizontally"), &write_horizontally);
+        a[i + 1].set(s + QObject::tr("show packages name in tab"), &package_name_in_tab);
+        a[i + 2].set(s + QObject::tr("show classes and packages context"), &show_class_pack_context_mode);
+        a[i + 3].set(s + QObject::tr("automatic labels position"), &auto_label_position);
+        a[i + 4].set(s + QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 5].set(s + QObject::tr("show stereotype properties"), &show_stereotype_properties);
+        a[i + 6].set(s + QObject::tr("draw shadow"), &shadow);
     }
 }
 
@@ -1260,24 +1260,24 @@ void UseCaseDiagramSettings::complete(StateSpecVector & a, bool local)
     a.resize(i + 7);
 
     if (local) {
-        a[i].set(QObject::TR("packages name in tab"), &package_name_in_tab);
-        a[i + 1].set(QObject::TR("show packages context"), &show_context_mode);
-        a[i + 2].set(QObject::TR("automatic labels position"), &auto_label_position);
-        a[i + 3].set(QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 4].set(QObject::TR("class drawing mode"), &class_drawing_mode);
-        a[i + 5].set(QObject::TR("show stereotype properties"), &show_stereotype_properties);
-        a[i + 6].set(QObject::TR("draw shadow"), &shadow);
+        a[i].set(QObject::tr("packages name in tab"), &package_name_in_tab);
+        a[i + 1].set(QObject::tr("show packages context"), &show_context_mode);
+        a[i + 2].set(QObject::tr("automatic labels position"), &auto_label_position);
+        a[i + 3].set(QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 4].set(QObject::tr("class drawing mode"), &class_drawing_mode);
+        a[i + 5].set(QObject::tr("show stereotype properties"), &show_stereotype_properties);
+        a[i + 6].set(QObject::tr("draw shadow"), &shadow);
     }
     else {
-        QString s = QObject::TR("use case") + "#";
+        QString s = QObject::tr("use case") + "#";
 
-        a[i].set(s + QObject::TR("show packages name in tab"), &package_name_in_tab);
-        a[i + 1].set(s + QObject::TR("show packages context"), &show_context_mode);
-        a[i + 2].set(s + QObject::TR("automatic labels position"), &auto_label_position);
-        a[i + 3].set(s + QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 4].set(s + QObject::TR("class drawing mode"), &class_drawing_mode);
-        a[i + 5].set(s + QObject::TR("show stereotype properties"), &show_stereotype_properties);
-        a[i + 6].set(s + QObject::TR("draw shadow"), &shadow);
+        a[i].set(s + QObject::tr("show packages name in tab"), &package_name_in_tab);
+        a[i + 1].set(s + QObject::tr("show packages context"), &show_context_mode);
+        a[i + 2].set(s + QObject::tr("automatic labels position"), &auto_label_position);
+        a[i + 3].set(s + QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 4].set(s + QObject::tr("class drawing mode"), &class_drawing_mode);
+        a[i + 5].set(s + QObject::tr("show stereotype properties"), &show_stereotype_properties);
+        a[i + 6].set(s + QObject::tr("draw shadow"), &shadow);
     }
 }
 
@@ -1365,20 +1365,20 @@ void ComponentDiagramSettings::complete(StateSpecVector & a, bool local)
     a.resize(i + 5);
 
     if (local) {
-        a[i].set(QObject::TR("packages name in tab"), &package_name_in_tab);
-        a[i + 1].set(QObject::TR("show packages context"), &show_context_mode);
-        a[i + 2].set(QObject::TR("automatic labels position"), &auto_label_position);
-        a[i + 3].set(QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 4].set(QObject::TR("draw shadow"), &shadow);
+        a[i].set(QObject::tr("packages name in tab"), &package_name_in_tab);
+        a[i + 1].set(QObject::tr("show packages context"), &show_context_mode);
+        a[i + 2].set(QObject::tr("automatic labels position"), &auto_label_position);
+        a[i + 3].set(QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 4].set(QObject::tr("draw shadow"), &shadow);
     }
     else {
-        QString s = QObject::TR("component") + "#";
+        QString s = QObject::tr("component") + "#";
 
-        a[i].set(s + QObject::TR("show packages name in tab"), &package_name_in_tab);
-        a[i + 1].set(s + QObject::TR("show packages context"), &show_context_mode);
-        a[i + 2].set(s + QObject::TR("automatic labels position"), &auto_label_position);
-        a[i + 3].set(s + QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 4].set(s + QObject::TR("draw shadow"), &shadow);
+        a[i].set(s + QObject::tr("show packages name in tab"), &package_name_in_tab);
+        a[i + 1].set(s + QObject::tr("show packages context"), &show_context_mode);
+        a[i + 2].set(s + QObject::tr("automatic labels position"), &auto_label_position);
+        a[i + 3].set(s + QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 4].set(s + QObject::tr("draw shadow"), &shadow);
     }
 
     componentdrawingsettings.complete(a, local, FALSE);
@@ -1478,22 +1478,22 @@ void DeploymentDiagramSettings::complete(StateSpecVector & a, bool local)
     a.resize(i + 6);
 
     if (local) {
-        a[i].set(QObject::TR("packages name in tab"), &package_name_in_tab);
-        a[i + 1].set(QObject::TR("show packages context"), &show_context_mode);
-        a[i + 2].set(QObject::TR("write node instance horizontally"), &write_horizontally);
-        a[i + 3].set(QObject::TR("automatic labels position"), &auto_label_position);
-        a[i + 4].set(QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 5].set(QObject::TR("draw shadow"), &shadow);
+        a[i].set(QObject::tr("packages name in tab"), &package_name_in_tab);
+        a[i + 1].set(QObject::tr("show packages context"), &show_context_mode);
+        a[i + 2].set(QObject::tr("write node instance horizontally"), &write_horizontally);
+        a[i + 3].set(QObject::tr("automatic labels position"), &auto_label_position);
+        a[i + 4].set(QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 5].set(QObject::tr("draw shadow"), &shadow);
     }
     else  {
-        QString s = QObject::TR("deployment") + "#";
+        QString s = QObject::tr("deployment") + "#";
 
-        a[i].set(s + QObject::TR("show packages name in tab"), &package_name_in_tab);
-        a[i + 1].set(s + QObject::TR("show packages context"), &show_context_mode);
-        a[i + 2].set(s + QObject::TR("write node instances horizontally"), &write_horizontally);
-        a[i + 3].set(s + QObject::TR("automatic labels position"), &auto_label_position);
-        a[i + 4].set(s + QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 5].set(s + QObject::TR("draw shadow"), &shadow);
+        a[i].set(s + QObject::tr("show packages name in tab"), &package_name_in_tab);
+        a[i + 1].set(s + QObject::tr("show packages context"), &show_context_mode);
+        a[i + 2].set(s + QObject::tr("write node instances horizontally"), &write_horizontally);
+        a[i + 3].set(s + QObject::tr("automatic labels position"), &auto_label_position);
+        a[i + 4].set(s + QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 5].set(s + QObject::tr("draw shadow"), &shadow);
     }
 
     componentdrawingsettings.complete(a, local, TRUE);
@@ -1570,25 +1570,25 @@ void ComponentDrawingSettings::assign(const ComponentDiagramSettings & from)
 void ComponentDrawingSettings::complete(StateSpecVector & a,
                                         bool local, bool depl)
 {
-    QString s = ((depl) ? QObject::TR("deployment") : QObject::TR("component")) + "#";
+    QString s = ((depl) ? QObject::tr("deployment") : QObject::tr("component")) + "#";
     int i = a.size();
 
     a.resize(i + 4);
-    a[i].set((local) ? QObject::TR("draw component as icon")
-             : s + ((depl) ? QObject::TR("draw component as icon")
-                    : QObject::TR("draw component as icon")),
+    a[i].set((local) ? QObject::tr("draw component as icon")
+             : s + ((depl) ? QObject::tr("draw component as icon")
+                    : QObject::tr("draw component as icon")),
              &draw_component_as_icon);
-    a[i + 1].set((local) ? QObject::TR("show component's required\nand provided interfaces")
-                 : s + ((depl) ? QObject::TR("show component's required\nand provided interfaces")
-                        : QObject::TR("show component's required\nand provided interfaces")),
+    a[i + 1].set((local) ? QObject::tr("show component's required\nand provided interfaces")
+                 : s + ((depl) ? QObject::tr("show component's required\nand provided interfaces")
+                        : QObject::tr("show component's required\nand provided interfaces")),
                  &show_component_req_prov);
-    a[i + 2].set((local) ? QObject::TR("show component's realizations")
-                 : s + ((depl) ? QObject::TR("show component's realizations")
-                        : QObject::TR("show component's realizations")),
+    a[i + 2].set((local) ? QObject::tr("show component's realizations")
+                 : s + ((depl) ? QObject::tr("show component's realizations")
+                        : QObject::tr("show component's realizations")),
                  &show_component_rea);
-    a[i + 3].set((local) ? QObject::TR("show stereotype properties")
-                 : s + ((depl) ? QObject::TR("show stereotype properties")
-                        : QObject::TR("show stereotype properties")),
+    a[i + 3].set((local) ? QObject::tr("show stereotype properties")
+                 : s + ((depl) ? QObject::tr("show stereotype properties")
+                        : QObject::tr("show stereotype properties")),
                  &show_stereotype_properties);
 }
 
@@ -1694,24 +1694,24 @@ void StateDiagramSettings::complete(StateSpecVector & a, bool local)
     a.resize(i + 7);
 
     if (local) {
-        a[i].set(QObject::TR("packages name in tab"), &package_name_in_tab);
-        a[i + 1].set(QObject::TR("show packages context"), &show_context_mode);
-        a[i + 2].set(QObject::TR("automatic labels position"), &auto_label_position);
-        a[i + 3].set(QObject::TR("write transition horizontally"), &write_label_horizontally);
-        a[i + 4].set(QObject::TR("show transition definition"), &show_trans_definition);
-        a[i + 5].set(QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 6].set(QObject::TR("draw shadow"), &shadow);
+        a[i].set(QObject::tr("packages name in tab"), &package_name_in_tab);
+        a[i + 1].set(QObject::tr("show packages context"), &show_context_mode);
+        a[i + 2].set(QObject::tr("automatic labels position"), &auto_label_position);
+        a[i + 3].set(QObject::tr("write transition horizontally"), &write_label_horizontally);
+        a[i + 4].set(QObject::tr("show transition definition"), &show_trans_definition);
+        a[i + 5].set(QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 6].set(QObject::tr("draw shadow"), &shadow);
     }
     else {
-        QString s = QObject::TR("state") + "#";
+        QString s = QObject::tr("state") + "#";
 
-        a[i].set(s + QObject::TR("show packages name in tab"), &package_name_in_tab);
-        a[i + 1].set(s + QObject::TR("show packages context"), &show_context_mode);
-        a[i + 2].set(s + QObject::TR("automatic labels position"), &auto_label_position);
-        a[i + 3].set(s + QObject::TR("write transition horizontally"), &write_label_horizontally);
-        a[i + 4].set(s + QObject::TR("show transition definition"), &show_trans_definition);
-        a[i + 5].set(s + QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 6].set(s + QObject::TR("draw shadow"), &shadow);
+        a[i].set(s + QObject::tr("show packages name in tab"), &package_name_in_tab);
+        a[i + 1].set(s + QObject::tr("show packages context"), &show_context_mode);
+        a[i + 2].set(s + QObject::tr("automatic labels position"), &auto_label_position);
+        a[i + 3].set(s + QObject::tr("write transition horizontally"), &write_label_horizontally);
+        a[i + 4].set(s + QObject::tr("show transition definition"), &show_trans_definition);
+        a[i + 5].set(s + QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 6].set(s + QObject::tr("draw shadow"), &shadow);
     }
 
     statedrawingsettings.complete(a, local);
@@ -1786,18 +1786,18 @@ void StateDrawingSettings::complete(StateSpecVector & a, bool local)
     a.resize(i + 4);
 
     if (local) {
-        a[i].set(QObject::TR("show state activities"), &show_activities);
-        a[i + 1].set(QObject::TR("draw state's regions horizontally"), &region_horizontally);
-        a[i + 2].set(QObject::TR("drawing language"), &drawing_language);
-        a[i + 3].set(QObject::TR("show stereotype properties"), &show_stereotype_properties);
+        a[i].set(QObject::tr("show state activities"), &show_activities);
+        a[i + 1].set(QObject::tr("draw state's regions horizontally"), &region_horizontally);
+        a[i + 2].set(QObject::tr("drawing language"), &drawing_language);
+        a[i + 3].set(QObject::tr("show stereotype properties"), &show_stereotype_properties);
     }
     else {
-        QString s = QObject::TR("state") + "#";
+        QString s = QObject::tr("state") + "#";
 
-        a[i].set(s + QObject::TR("show state activities"), &show_activities);
-        a[i + 1].set(s + QObject::TR("draw state's regions horizontally"), &region_horizontally);
-        a[i + 2].set(s + QObject::TR("drawing language"), &drawing_language);
-        a[i + 3].set(s + QObject::TR("show stereotype properties"), &show_stereotype_properties);
+        a[i].set(s + QObject::tr("show state activities"), &show_activities);
+        a[i + 1].set(s + QObject::tr("draw state's regions horizontally"), &region_horizontally);
+        a[i + 2].set(s + QObject::tr("drawing language"), &drawing_language);
+        a[i + 3].set(s + QObject::tr("show stereotype properties"), &show_stereotype_properties);
     }
 }
 
@@ -1903,24 +1903,24 @@ void ActivityDiagramSettings::complete(StateSpecVector & a, bool local)
     a.resize(i + 7);
 
     if (local) {
-        a[i].set(QObject::TR("packages name in tab"), &package_name_in_tab);
-        a[i + 1].set(QObject::TR("show packages context"), &show_context_mode);
-        a[i + 2].set(QObject::TR("automatic labels position"), &auto_label_position);
-        a[i + 3].set(QObject::TR("write flow label horizontally"), &write_label_horizontally);
-        a[i + 4].set(QObject::TR("show opaque action definition"), &show_opaque_action_definition);
-        a[i + 5].set(QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 6].set(QObject::TR("draw shadow"), &shadow);
+        a[i].set(QObject::tr("packages name in tab"), &package_name_in_tab);
+        a[i + 1].set(QObject::tr("show packages context"), &show_context_mode);
+        a[i + 2].set(QObject::tr("automatic labels position"), &auto_label_position);
+        a[i + 3].set(QObject::tr("write flow label horizontally"), &write_label_horizontally);
+        a[i + 4].set(QObject::tr("show opaque action definition"), &show_opaque_action_definition);
+        a[i + 5].set(QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 6].set(QObject::tr("draw shadow"), &shadow);
     }
     else {
-        QString s = QObject::TR("activity") + "#";
+        QString s = QObject::tr("activity") + "#";
 
-        a[i].set(s + QObject::TR("show packages name in tab"), &package_name_in_tab);
-        a[i + 1].set(s + QObject::TR("show packages context"), &show_context_mode);
-        a[i + 2].set(s + QObject::TR("automatic labels position"), &auto_label_position);
-        a[i + 3].set(s + QObject::TR("write flow label horizontally"), &write_label_horizontally);
-        a[i + 4].set(s + QObject::TR("show opaque action definition"), &show_opaque_action_definition);
-        a[i + 5].set(s + QObject::TR("draw all relations"), &draw_all_relations);
-        a[i + 6].set(s + QObject::TR("draw shadow"), &shadow);
+        a[i].set(s + QObject::tr("show packages name in tab"), &package_name_in_tab);
+        a[i + 1].set(s + QObject::tr("show packages context"), &show_context_mode);
+        a[i + 2].set(s + QObject::tr("automatic labels position"), &auto_label_position);
+        a[i + 3].set(s + QObject::tr("write flow label horizontally"), &write_label_horizontally);
+        a[i + 4].set(s + QObject::tr("show opaque action definition"), &show_opaque_action_definition);
+        a[i + 5].set(s + QObject::tr("draw all relations"), &draw_all_relations);
+        a[i + 6].set(s + QObject::tr("draw shadow"), &shadow);
     }
 
     activitydrawingsettings.complete(a, local);
@@ -1986,16 +1986,16 @@ void ActivityDrawingSettings::complete(StateSpecVector & a, bool local)
     a.resize(i + 3);
 
     if (local) {
-        a[i].set(QObject::TR("show information note"), &show_infonote);
-        a[i + 1].set(QObject::TR("drawing language"), &drawing_language);
-        a[i + 2].set(QObject::TR("show stereotype properties"), &show_stereotype_properties);
+        a[i].set(QObject::tr("show information note"), &show_infonote);
+        a[i + 1].set(QObject::tr("drawing language"), &drawing_language);
+        a[i + 2].set(QObject::tr("show stereotype properties"), &show_stereotype_properties);
     }
     else {
-        QString s = QObject::TR("activity") + "#";
+        QString s = QObject::tr("activity") + "#";
 
-        a[i].set(s + QObject::TR("show information note"), &show_infonote);
-        a[i + 1].set(s + QObject::TR("drawing language"), &drawing_language);
-        a[i + 2].set(s + QObject::TR("show stereotype properties"), &show_stereotype_properties);
+        a[i].set(s + QObject::tr("show information note"), &show_infonote);
+        a[i + 1].set(s + QObject::tr("drawing language"), &drawing_language);
+        a[i + 2].set(s + QObject::tr("show stereotype properties"), &show_stereotype_properties);
     }
 }
 

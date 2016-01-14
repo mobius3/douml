@@ -54,7 +54,7 @@ QSize RevSettingsDialog::previous_size;
 RevSettingsDialog::RevSettingsDialog()
     : QDialog(0/*, "Reverse/Roundtrip Settings dialog", TRUE*/)
 {
-    setWindowTitle(TR("Reverse/Roundtrip Settings dialog"));
+    setWindowTitle(tr("Reverse/Roundtrip Settings dialog"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
 
@@ -68,11 +68,11 @@ RevSettingsDialog::RevSettingsDialog()
     grid->setSpacing(5);
 
     grid->addWidget(new QLabel(grid));
-    grid->addWidget(new QLabel(TR("To specify through regular expression the directories\n"
+    grid->addWidget(new QLabel(tr("To specify through regular expression the directories\n"
                   "and/or files to bypass during reverse and roundtrip"), grid));
 
     SmallPushButton * help;
-    grid->addWidget(help = new SmallPushButton(TR("Help regexp"), grid));
+    grid->addWidget(help = new SmallPushButton(tr("Help regexp"), grid));
 
     connect(help, SIGNAL(clicked()), this, SLOT(show_regexp_help()));
 
@@ -80,18 +80,18 @@ RevSettingsDialog::RevSettingsDialog()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("C++ directory : "), grid));
+    grid->addWidget(new QLabel(tr("C++ directory : "), grid));
     grid->addWidget(cpp_dir = new LineEdit(grid));
     cpp_dir->setText(GenerationSettings::cpp_dir_filter.regexp);
-    grid->addWidget(cpp_dir_case_sensitive = new QCheckBox(TR("case sensitive"), grid));
+    grid->addWidget(cpp_dir_case_sensitive = new QCheckBox(tr("case sensitive"), grid));
 
     if (GenerationSettings::cpp_dir_filter.case_sensitive)
         cpp_dir_case_sensitive->setChecked(TRUE);
 
-    grid->addWidget(new QLabel(TR("C++ file : "), grid));
+    grid->addWidget(new QLabel(tr("C++ file : "), grid));
     grid->addWidget(cpp_file = new LineEdit(grid));
     cpp_file->setText(GenerationSettings::cpp_file_filter.regexp);
-    grid->addWidget(cpp_file_case_sensitive = new QCheckBox(TR("case sensitive"), grid));
+    grid->addWidget(cpp_file_case_sensitive = new QCheckBox(tr("case sensitive"), grid));
 
     if (GenerationSettings::cpp_file_filter.case_sensitive)
         cpp_file_case_sensitive->setChecked(TRUE);
@@ -101,7 +101,7 @@ RevSettingsDialog::RevSettingsDialog()
     grid->addWidget(new QLabel(grid));
 
     htab->setMargin(3);
-    htab->setStretchFactor(new QLabel(TR("generated/reversed \nheader file extension : "), htab), 0);
+    htab->setStretchFactor(new QLabel(tr("generated/reversed \nheader file extension : "), htab), 0);
     edcpp_h_extension = new QComboBox(htab);
     edcpp_h_extension->setEditable(true);
     htab->setStretchFactor(edcpp_h_extension, 100);
@@ -110,7 +110,7 @@ RevSettingsDialog::RevSettingsDialog()
     edcpp_h_extension->addItem("h");
     edcpp_h_extension->addItem("hh");
 
-    htab->setStretchFactor(new QLabel(TR("    generated/reversed \n    source file extension : "), htab), 0);
+    htab->setStretchFactor(new QLabel(tr("    generated/reversed \n    source file extension : "), htab), 0);
     edcpp_src_extension = new QComboBox(htab);
     edcpp_src_extension->setEditable(true);
     htab->setStretchFactor(edcpp_src_extension, 100);
@@ -123,18 +123,18 @@ RevSettingsDialog::RevSettingsDialog()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Java directory : "), grid));
+    grid->addWidget(new QLabel(tr("Java directory : "), grid));
     grid->addWidget(java_dir = new LineEdit(grid));
     java_dir->setText(GenerationSettings::java_dir_filter.regexp);
-    grid->addWidget(java_dir_case_sensitive = new QCheckBox(TR("case sensitive"), grid));
+    grid->addWidget(java_dir_case_sensitive = new QCheckBox(tr("case sensitive"), grid));
 
     if (GenerationSettings::java_dir_filter.case_sensitive)
         java_dir_case_sensitive->setChecked(TRUE);
 
-    grid->addWidget(new QLabel(TR("Java file : "), grid));
+    grid->addWidget(new QLabel(tr("Java file : "), grid));
     grid->addWidget(java_file = new LineEdit(grid));
     java_file->setText(GenerationSettings::java_file_filter.regexp);
-    grid->addWidget(java_file_case_sensitive = new QCheckBox(TR("case sensitive"), grid));
+    grid->addWidget(java_file_case_sensitive = new QCheckBox(tr("case sensitive"), grid));
 
     if (GenerationSettings::java_file_filter.case_sensitive)
         java_file_case_sensitive->setChecked(TRUE);
@@ -144,7 +144,7 @@ RevSettingsDialog::RevSettingsDialog()
     grid->addWidget(new QLabel(grid));
 
     htab->setMargin(3);
-    htab->setStretchFactor(new QLabel(TR("generated/reversed file extension : "), htab), 0);
+    htab->setStretchFactor(new QLabel(tr("generated/reversed file extension : "), htab), 0);
     edjava_extension = new QComboBox(htab);
     edjava_extension->setEditable(true);
     htab->setStretchFactor(edjava_extension, 100);
@@ -156,18 +156,18 @@ RevSettingsDialog::RevSettingsDialog()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    grid->addWidget(new QLabel(TR("Php directory : "), grid));
+    grid->addWidget(new QLabel(tr("Php directory : "), grid));
     grid->addWidget(php_dir = new LineEdit(grid));
     php_dir->setText(GenerationSettings::php_dir_filter.regexp);
-    grid->addWidget(php_dir_case_sensitive = new QCheckBox(TR("case sensitive"), grid));
+    grid->addWidget(php_dir_case_sensitive = new QCheckBox(tr("case sensitive"), grid));
 
     if (GenerationSettings::php_dir_filter.case_sensitive)
         php_dir_case_sensitive->setChecked(TRUE);
 
-    grid->addWidget(new QLabel(TR("Php file : "), grid));
+    grid->addWidget(new QLabel(tr("Php file : "), grid));
     grid->addWidget(php_file = new LineEdit(grid));
     php_file->setText(GenerationSettings::php_file_filter.regexp);
-    grid->addWidget(php_file_case_sensitive = new QCheckBox(TR("case sensitive"), grid));
+    grid->addWidget(php_file_case_sensitive = new QCheckBox(tr("case sensitive"), grid));
 
     if (GenerationSettings::php_file_filter.case_sensitive)
         php_file_case_sensitive->setChecked(TRUE);
@@ -177,7 +177,7 @@ RevSettingsDialog::RevSettingsDialog()
     grid->addWidget(new QLabel(grid));
 
     htab->setMargin(3);
-    htab->setStretchFactor(new QLabel(TR("generated / reversed file extension : "), htab), 0);
+    htab->setStretchFactor(new QLabel(tr("generated / reversed file extension : "), htab), 0);
     edphp_extension = new QComboBox(htab);
     edphp_extension->setEditable(true);
     htab->setStretchFactor(edphp_extension, 100);
@@ -189,8 +189,8 @@ RevSettingsDialog::RevSettingsDialog()
     grid->addWidget(new QLabel(grid));
     grid->addWidget(new QLabel(grid));
 
-    QPushButton * accept = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QPushButton * accept = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
     accept->setDefault(TRUE);
@@ -257,7 +257,7 @@ QSize HelpRegexpDialog::previous_size;
 HelpRegexpDialog::HelpRegexpDialog()
     : QDialog(0/*, "Help, regular expression", TRUE*/)
 {
-    setWindowTitle(TR("Help regular expression"));
+    setWindowTitle(tr("Help regular expression"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
 
@@ -286,7 +286,7 @@ HelpRegexpDialog::HelpRegexpDialog()
     vbox->addLayout(hbox);
     hbox->setMargin(5);
 
-    QPushButton * close = new QPushButton(TR("Close"), this);
+    QPushButton * close = new QPushButton(tr("Close"), this);
 
     close->setDefault(TRUE);
 

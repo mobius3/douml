@@ -3724,7 +3724,7 @@ void OperationData::read(char *& st, char *& k)
 
     if(strcmp(k, "nparams"))
     {
-        msg_critical(TR("Error"),  QObject::tr("Expected nparams instead of ")+QString(k));
+        msg_critical(tr("Error"),  QObject::tr("Expected nparams instead of ")+QString(k));
         THROW_ERROR 0;
     }
 

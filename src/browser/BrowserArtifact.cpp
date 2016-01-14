@@ -304,7 +304,7 @@ QString BrowserArtifact::check_inherit(const BrowserNode * new_parent) const
                  == new_parent))
             return QObject::tr("already exist");
     }
-    return (new_parent != this) ? QString() : QObject::TR("circular inheritance");
+    return (new_parent != this) ? QString() : QObject::tr("circular inheritance");
 }
 
 void BrowserArtifact::menu()
@@ -805,7 +805,7 @@ UmlCode BrowserArtifact::get_type() const
 
 QString BrowserArtifact::get_stype() const
 {
-    return QObject::TR("artifact");
+    return QObject::tr("artifact");
 }
 
 int BrowserArtifact::get_identifier() const
@@ -909,7 +909,7 @@ BrowserArtifact * BrowserArtifact::add_artifact(BrowserNode * future_parent)
 {
     QString name;
 
-    if (!future_parent->enter_child_name(name, QObject::TR("enter artifact's name : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter artifact's name : "),
                                          UmlArtifact, TRUE, FALSE))
         return 0;
 

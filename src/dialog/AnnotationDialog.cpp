@@ -69,7 +69,7 @@ AnnotationDialog::AnnotationDialog(QWidget * parent, QString & s, bool visit)
         // to choose and add an annotation
 
         QLabel * label =
-            new QLabel(TR("\nTo add an annotation at the cursor position\n"
+            new QLabel(tr("\nTo add an annotation at the cursor position\n"
                           "you may select it in the list and press 'add'\n"),
                        this);
         label->setAlignment(Qt::AlignCenter);
@@ -80,7 +80,7 @@ AnnotationDialog::AnnotationDialog(QWidget * parent, QString & s, bool visit)
         QPushButton * add_button;
 
         hbox->setMargin(5);
-        add_button = new QPushButton(TR("Add "), this);
+        add_button = new QPushButton(tr("Add "), this);
         hbox->addWidget(add_button);
         connect(add_button, SIGNAL(clicked()), this, SLOT(add_annotation()));
 
@@ -115,8 +115,8 @@ AnnotationDialog::AnnotationDialog(QWidget * parent, QString & s, bool visit)
         hbox = new QHBoxLayout();
         vbox->addLayout(hbox);
         hbox->setMargin(5);
-        QPushButton * accept = new QPushButton(TR("&OK"), this);
-        QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+        QPushButton * accept = new QPushButton(tr("&OK"), this);
+        QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
         QSize bs(cancel->sizeHint());
 
         accept->setDefault(TRUE);
@@ -140,7 +140,7 @@ AnnotationDialog::AnnotationDialog(QWidget * parent, QString & s, bool visit)
         vbox->addLayout(hbox);
 
         hbox->setMargin(5);
-        QPushButton * close = new QPushButton(TR("&Close"), this);
+        QPushButton * close = new QPushButton(tr("&Close"), this);
 
         hbox->addWidget(close);
 

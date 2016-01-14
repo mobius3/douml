@@ -296,7 +296,7 @@ void BrowserRegion::apply_shortcut(QString s)
 void BrowserRegion::open(bool)
 {
     if (!is_edited)
-        edit(QObject::TR("Region").toLatin1().constData(), its_default_stereotypes);
+        edit(QObject::tr("Region").toLatin1().constData(), its_default_stereotypes);
 }
 
 void BrowserRegion::modified()
@@ -312,7 +312,7 @@ UmlCode BrowserRegion::get_type() const
 
 QString BrowserRegion::get_stype() const
 {
-    return QObject::TR("Region");
+    return QObject::tr("Region");
 }
 
 int BrowserRegion::get_identifier() const
