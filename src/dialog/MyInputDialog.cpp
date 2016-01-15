@@ -49,7 +49,7 @@ QSize MyInputDialog::previous_size;
 
 MyInputDialog::MyInputDialog(const char * title, const QString & msg,
                              const QString & init)
-    : QDialog(0/*, title, TRUE*/)
+    : QDialog(0/*, title, TRUE*/), le(NULL), cb(NULL)
 {
     setWindowTitle(title);
     move(QCursor::pos());
@@ -74,7 +74,7 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * ok = new QPushButton(tr("&OK"), this);
+    ok = new QPushButton(tr("&OK"), this);
     QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
@@ -93,8 +93,8 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
 
 MyInputDialog::MyInputDialog(const char * title, const QString & msg,
                              const QStringList & list, const QString & init,
-                             bool existing)
-    : QDialog(0/*, title, TRUE*/), le(0)
+                             bool existing, const QValidator *v)
+    : QDialog(0/*, title, TRUE*/), le(0), vl(v),cb(NULL)
 {
     setWindowTitle(title);
     move(QCursor::pos());
@@ -132,10 +132,18 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
 
     cb->setMinimumWidth(fm.width("azertyuiopqsdfghjklm"));
 
+
+    if(vl)
+    {
+        lb = new QLabel(this);
+        lb->setAlignment(Qt::AlignCenter);
+        vbox->addWidget(lb);
+        connect(cb->lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(onTextChanged()));
+    }
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(5);
-    QPushButton * ok = new QPushButton(tr("&OK"), this);
+    ok = new QPushButton(tr("&OK"), this);
     QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
     QSize bs(cancel->sizeHint());
 
@@ -150,8 +158,60 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
     connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
 
     cb->setFocus();
+    if(vl)
+    {
+        onTextChanged();
+    }
 }
+MyInputDialog::MyInputDialog(const char * title, const QString & msg,
+                             const QString & init, QValidator *validator)
+    : QDialog(0/*, title, TRUE*/), vl(validator), le(NULL), cb(NULL)
+{
+    setWindowTitle(title);
+    move(QCursor::pos());
 
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
+
+    vbox->setMargin(5);
+
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
+    hbox->setMargin(5);
+    hbox->addWidget(new QLabel(msg, this));
+    le = new LineEdit(init, this);
+
+    hbox->addWidget(le);
+
+    QFontMetrics fm(QApplication::font());
+
+    le->setMinimumWidth(fm.width("AZERTYUIOPQSDFGHJKLMWXCVBN"));
+
+    connect(le, SIGNAL(textChanged(QString)), this, SLOT(onTextChanged()));
+
+    lb = new QLabel(this);
+    lb->setAlignment(Qt::AlignCenter);
+    vbox->addWidget(lb);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
+    hbox->setMargin(5);
+    ok = new QPushButton(tr("&OK"), this);
+    QPushButton * cancel = new QPushButton(tr("&Cancel"), this);
+    QSize bs(cancel->sizeHint());
+
+    ok->setDefault(TRUE);
+    ok->setFixedSize(bs);
+    cancel->setFixedSize(bs);
+
+    hbox->addWidget(ok);
+    hbox->addWidget(cancel);
+
+    connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
+
+    le->setFocus();
+    onTextChanged();
+}
 void MyInputDialog::polish()
 {
     QDialog::ensurePolished();
@@ -176,6 +236,55 @@ void MyInputDialog::accept()
     }
 }
 
+void MyInputDialog::onTextChanged()
+{
+    QString text;
+    int pos = 0;
+    bool isValidated = false;
+    if(le)
+    {
+        text = le->text();
+        pos = le->cursorPosition();
+    }
+    else if(cb)
+    {
+        if(cb->lineEdit()->hasFocus())
+        {
+            //loose and regain focus so that cb compare current text with items' text to set current index
+            this->setFocus();
+            cb->lineEdit()->setFocus();
+        }
+        text = cb->currentText();
+        pos = cb->lineEdit()->cursorPosition();
+
+        if (!text.isEmpty()) {
+            int index = cb->currentIndex();
+            if (index != -1 && cb->itemText(index) == cb->currentText()) {
+                ok->setEnabled(true);
+                lb->setText(tr("Ok"));
+                return;
+            }
+        }
+    }
+    if(QValidator::Invalid == vl->validate(text, pos))
+        ok->setEnabled(false);
+    else
+        ok->setEnabled(true);
+
+    vl->fixup(text);
+    lb->setText(text);
+}
+QString MyInputDialog::getTextWithOnlineValidator(const char * title, const QString & msg,
+                                                  const QString & init, BooL & ok,
+                                                  QValidator * v)
+{
+    MyInputDialog d(title, msg, init, v);
+    ok = d.exec() == QDialog::Accepted;
+
+    return (ok)
+            ? d.le->text()
+            : QString();
+}
 QString MyInputDialog::getText(const char * title, const QString & msg,
                                const QString & init, BooL & ok,
                                const QValidator * v)
@@ -188,19 +297,19 @@ QString MyInputDialog::getText(const char * title, const QString & msg,
     ok = d.exec() == QDialog::Accepted;
 
     return (ok)
-           ? d.le->text()
-           : QString();
+            ? d.le->text()
+            : QString();
 }
 
 QString MyInputDialog::getText(const char * title, const QString & msg,
                                const QStringList & list, const QString & init,
-                               bool existing, BooL & ok)
+                               bool existing, BooL & ok, const QValidator * v)
 {
-    MyInputDialog d(title, msg, list, init, existing);
+    MyInputDialog d(title, msg, list, init, existing, v);
 
     ok = d.exec() == QDialog::Accepted;
 
     return (ok)
-           ? d.cb->currentText()
-           : QString();
+            ? d.cb->currentText()
+            : QString();
 }

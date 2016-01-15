@@ -38,7 +38,8 @@ class QComboBox;
 class QValidator;
 
 class LineEdit;
-
+class QLabel;
+class QValidator;
 class MyInputDialog : public QDialog
 {
     Q_OBJECT
@@ -46,26 +47,37 @@ class MyInputDialog : public QDialog
 protected:
     LineEdit * le;
     QComboBox * cb;
+    QLabel * lb;
+    const QValidator *vl;
 
     static QSize previous_size;
 
     MyInputDialog(const char * title, const QString & msg,
                   const QString & init);
     MyInputDialog(const char * title, const QString & msg,
-                  const QStringList & l, const QString & init, bool existing);
+                  const QStringList & l, const QString & init, bool existing, const QValidator * v = 0);
+    MyInputDialog(const char * title, const QString & msg,
+                                 const QString & init, QValidator *validator);
     virtual ~MyInputDialog();
 
 public:
+    static QString getTextWithOnlineValidator(const char * title, const QString & msg,
+                                   const QString & init, BooL & ok,
+                                   QValidator * v);
     static QString getText(const char * title, const QString & msg,
                            const QString & init, BooL & ok,
                            const QValidator * v = 0);
     static QString getText(const char * title, const QString & msg,
                            const QStringList & l, const QString & init,
-                           bool existing, BooL & ok);
+                           bool existing, BooL & ok,
+                           const QValidator * v = NULL);
 
 protected slots:
     virtual void polish();
     virtual void accept();
+    void onTextChanged();
+private:
+    QPushButton * ok;
 };
 
 #endif
