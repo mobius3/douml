@@ -99,10 +99,10 @@ SOURCES          = util.cpp activity.cpp state.cpp instance.cpp \
     ../Logging/QsDebugOutput.cpp
 
 TARGET          = plug_out_upgrade
-DEFINES          = WITHCPP WITHJAVA WITHPHP WITHIDL WITHPYTHON
+DEFINES          = WITHCPP WITHJAVA WITHPHP WITHIDL WITHPYTHON FALSE=false TRUE=true
 INCLUDEPATH   = ../Tools ../PlugOutUpgrade ../
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network  widgets
 
 HEADERS += \
     ../Logging/QsLogDest.h \

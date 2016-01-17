@@ -583,7 +583,7 @@ UmlRelation * UmlClass::add_vect_assoc(const char * name, aVisibility v, UmlClas
 
 UmlOperation * UmlClass::get_operation(const char * who)
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
 
     for (unsigned i = 0; i != ch.size(); i += 1)
         if ((ch[i]->kind() == anOperation) &&
@@ -595,7 +595,7 @@ UmlOperation * UmlClass::get_operation(const char * who)
 
 UmlAttribute * UmlClass::get_attribute(const char * who)
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
 
     for (unsigned i = 0; i != ch.size(); i += 1)
         if ((ch[i]->kind() == anAttribute) &&
@@ -607,7 +607,7 @@ UmlAttribute * UmlClass::get_attribute(const char * who)
 
 UmlRelation * UmlClass::get_relation(aRelationKind k, const char * who)
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
 
     for (unsigned i = 0; i != ch.size(); i += 1) {
         if (ch[i]->kind() == aRelation) {
@@ -624,7 +624,7 @@ UmlRelation * UmlClass::get_relation(aRelationKind k, const char * who)
 
 UmlRelation * UmlClass::get_relation(const char * who)
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
 
     for (unsigned i = 0; i != ch.size(); i += 1) {
         if (ch[i]->kind() == aRelation) {
@@ -641,7 +641,7 @@ UmlRelation * UmlClass::get_relation(const char * who)
 void UmlClass::replace_friend()
 {
     WrapperStr s;
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned i = ch.size();
 
     while (i--) {
@@ -661,7 +661,7 @@ void UmlClass::replace_friend()
 void UmlClass::add_friend(const char * scl)
 {
     WrapperStr s = WrapperStr("  friend class ") + scl + ";\n";
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned i = ch.size();
 
     while (i--) {

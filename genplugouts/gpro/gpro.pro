@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= gpro
-CONFIG        += debug warn_on qt
+CONFIG        += warn_on qt
 DEFINES        = WITHCPP WITHJAVA WITHPHP WITHPYTHON WITHIDL TRUE=true FALSE=false
 HEADERS		= ./PackageGlobalCmd.h \
 		  ./UmlBaseItem.h \

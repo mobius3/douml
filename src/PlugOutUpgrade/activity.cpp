@@ -39,7 +39,6 @@
 
 #include "util.h"
 #include "activity.h"
-//Added by qt3to4:
 #include <QList>
 #include "misc/mystr.h"
 
@@ -2080,7 +2079,7 @@ void add_pinparam(UmlClassView * base_class_view, UmlClassView * user_class_view
     op->set_Description(" set the pins");
     op->add_param(0, InputDirection, "v", user_activitypin);
     op->set_cpp("${type}", "const Q3PtrVector<${t0}> & ${p0}",
-                "  UmlCom::send_cmd(_identifier, replaceParameterCmd, (const Q3PtrVector<UmlItem> &) v);\n"
+                "  UmlCom::send_cmd(_identifier, replaceParameterCmd, (const QVector<UmlItem*> &) v);\n"
                 "  if (UmlCom::read_bool()) {\n"
                 "    if (_defined) _pins = v;\n"
                 "    return TRUE;\n"
@@ -2139,7 +2138,7 @@ void add_pinparam(UmlClassView * base_class_view, UmlClassView * user_class_view
     op = base_parameterset->add_op("read_uml_", ProtectedVisibility, "void");
     op->set_cpp("${type}", "",
                 "  UmlBaseItem::read_uml_();\n"
-                "  UmlCom::read_item_list((Q3PtrVector<UmlItem> &) _pins);\n",
+                "  UmlCom::read_item_list((QVector<UmlItem*> &) _pins);\n",
                 FALSE, 0, 0);
     op->set_java("${type}", "",
                  "  super.read_uml_();\n"
@@ -2149,7 +2148,7 @@ void add_pinparam(UmlClassView * base_class_view, UmlClassView * user_class_view
 
     // update an UmlCom::send_cmd
 
-    const Q3PtrVector<UmlItem> ch = UmlClass::get("UmlCom", 0)->children();
+    const QVector<UmlItem*> ch = UmlClass::get("UmlCom", 0)->children();
     UmlClass * cl = UmlClass::get("UmlClass", 0);
 
     UmlCom::trace("update UmlCom::send_cmd(...)<br>\n");
@@ -2197,7 +2196,7 @@ void add_pinparam(UmlClassView * base_class_view, UmlClassView * user_class_view
         s = op->cppBody();
 
         if ((index = s.find("l);")) != -1) {
-            s.insert(index, "(const Q3PtrVector<UmlItem> &) ");
+            s.insert(index, "(const QVector<UmlItem*> &) ");
             op->set_CppBody(s);
         }
     }
@@ -3213,7 +3212,7 @@ void add_additionalactions(UmlClass * base_item, UmlClass * user_item)
 
     // replace friends rels
 
-    const Q3PtrVector<UmlItem> ch = base_item->children();
+    const QVector<UmlItem*> ch = base_item->children();
     UmlExtraClassMember * ex = 0;
 
     i = ch.size();

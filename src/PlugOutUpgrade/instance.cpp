@@ -247,7 +247,7 @@ void add_class_instance(UmlClassView * base_class_view, UmlClassView * user_clas
     op->add_param(0, OutputDirection, "result", attr);
     op->set_cpp("void", "Q3PtrVector<${t0}> & ${p0}",
                 "  UmlCom::send_cmd(_identifier, attributesCmd, (char) 1);\n"
-                "  UmlCom::read_item_list((Q3PtrVector<UmlItem> &) result);\n",
+                "  UmlCom::read_item_list((QVector<UmlItem*> &) result);\n",
                 FALSE, 0, 0);
     op->set_java("${type}[]", "",
                  "  UmlCom.send_cmd(identifier_(), OnInstanceCmd.attributesCmd, (byte) 1);\n"
@@ -270,7 +270,7 @@ void add_class_instance(UmlClassView * base_class_view, UmlClassView * user_clas
     op->set_cpp("void",
                 "${t0} * ${p0}, Q3PtrVector<${t1}> & ${p1}",
                 "  UmlCom::send_cmd(_identifier, relationsCmd, other->_identifier);\n"
-                "  UmlCom::read_item_list((Q3PtrVector<UmlItem> &) result);\n",
+                "  UmlCom::read_item_list((QVector<UmlItem*> &) result);\n",
                 FALSE, 0, 0);
     op->set_java("${type}[]", "${t0} ${p0}",
                  "  UmlCom.send_cmd(identifier_(), OnInstanceCmd.relationsCmd, other.identifier_());\n"
@@ -310,7 +310,7 @@ void add_class_instance(UmlClassView * base_class_view, UmlClassView * user_clas
     op->add_param(0, InputDirection, "relation", attr);
     op->add_param(1, InputDirection, "other", user_class_instance);
     op->set_cpp("bool", "${t0} * ${p0}, ${t1} * ${p1}",
-                "  Q3PtrVector<UmlItem> v(2);\n"
+                "  QVector<UmlItem*> v(2);\n"
                 "\n"
                 "  v.insert(0, relation);\n"
                 "  v.insert(1, other);\n"
@@ -335,7 +335,7 @@ void add_class_instance(UmlClassView * base_class_view, UmlClassView * user_clas
     op->add_param(0, InputDirection, "relation", attr);
     op->add_param(1, InputDirection, "other", user_class_instance);
     op->set_cpp("bool", "${t0} * ${p0}, ${t1} * ${p1}",
-                "  Q3PtrVector<UmlItem> v(2);\n"
+                "  QVector<UmlItem*> v(2);\n"
                 "\n"
                 "  v.insert(0, relation);\n"
                 "  v.insert(1, other);\n"

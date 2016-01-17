@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on debug
+CONFIG          += qt warn_on
 HEADERS          = BrowserNode.h BrowserView.h BrowserSearchDialog.h \
         ControlWindow.h UserDialog.h
 SOURCES          = main.cpp BrowserNode.cpp ControlWindow.cpp \
@@ -10,5 +10,5 @@ SOURCES          = main.cpp BrowserNode.cpp ControlWindow.cpp \
 TARGET          = projectControl
 DEFINES          = BooL=bool FALSE=false TRUE=true TR=tr
 INCLUDEPATH   = 
-#The following line was inserted by qt3to4
 QT += network widgets
+DESTDIR = ../../bin

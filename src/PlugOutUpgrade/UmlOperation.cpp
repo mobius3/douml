@@ -253,8 +253,8 @@ static bool rename(WrapperStr & s, bool java, bool javasettings)
             int index = 0;
 
             while ((index = s.find(o, index)) != -1) {
-                if (((index == 0) || is_sep(s[index - 1].ascii())) &&
-                    is_sep(s[index + o_len].ascii())) {
+                if (((index == 0) || is_sep(s[index - 1].toLatin1())) &&
+                    is_sep(s[index + o_len].toLatin1())) {
                     s.replace(index, o_len, n);
                     index += n_len;
                     changed = TRUE;

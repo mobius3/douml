@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= singleton
-CONFIG		+= debug warn_on qt
+CONFIG		+= warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHIDL FALSE=false TRUE=true
 HEADERS		= ./UmlBaseOperation.h \
 		  ./JavaSettings.h \
