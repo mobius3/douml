@@ -327,7 +327,10 @@ void BrowserDeploymentView::exec_menu_choice(int rank)
         BrowserArtifact * dn = BrowserArtifact::add_artifact(this);
 
         if (dn != 0)
+        {
             dn->select_in_browser();
+            dn->open(false);
+        }
     }
     break;
 

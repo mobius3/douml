@@ -138,7 +138,10 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
         lb = new QLabel(this);
         lb->setAlignment(Qt::AlignCenter);
         vbox->addWidget(lb);
-        connect(cb->lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(onTextChanged()));
+        if(cb->isEditable())
+            connect(cb->lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(onTextChanged()));
+        else
+            connect(cb, SIGNAL(currentTextChanged(QString)), this, SLOT(onTextChanged()));
     }
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
@@ -248,14 +251,18 @@ void MyInputDialog::onTextChanged()
     }
     else if(cb)
     {
-        if(cb->lineEdit()->hasFocus())
+        if(cb->isEditable())
         {
-            //loose and regain focus so that cb compare current text with items' text to set current index
-            this->setFocus();
-            cb->lineEdit()->setFocus();
+            if(cb->hasFocus())
+            {
+                //loose and regain focus so that cb compare current text with items' text to set current index
+                this->setFocus();
+                cb->setFocus();
+            }
+            pos = cb->lineEdit()->cursorPosition();
         }
+
         text = cb->currentText();
-        pos = cb->lineEdit()->cursorPosition();
 
         if (!text.isEmpty()) {
             int index = cb->currentIndex();
