@@ -133,7 +133,8 @@ void BrowserView::clear()
 void BrowserView::set_project(const QDir & di)
 {
     dir = di;
-    project = new BrowserPackage(dir.dirName(), the, PROJECT_ID);
+    project = new BrowserPackage(dir.dirName(), (BrowserView *) 0, PROJECT_ID);
+    the->addTopLevelItem(project);
     setRootIsDecorated(FALSE);
 }
 
@@ -487,6 +488,14 @@ void BrowserView::keyPressEvent(QKeyEvent * e)
                     QApplication::setOverrideCursor(::Qt::WaitCursor);
                     bn->apply_shortcut("Delete");
                     QApplication::restoreOverrideCursor();
+                }
+                else if(s == "Expand All")
+                {
+                    bn->expandAll();
+                }
+                else if(s == "Collapse All")
+                {
+                    bn->collapseAll();
                 }
                 else if ((s != "Move left") && (s != "Move right") &&
                          (s != "Move up") && (s != "Move down"))

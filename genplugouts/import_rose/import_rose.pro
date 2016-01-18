@@ -1,6 +1,6 @@
 TEMPLATE    = app
 TARGET        = irose
-CONFIG        += debug warn_on qt
+CONFIG        += warn_on qt
 DEFINES        = WITHCPP WITHJAVA WITHIDL  WITHPHP WITHPYTHON TRUE=true FALSE=false
 HEADERS        = ./UmlDeploymentView.h \
           ./UmlTypeSpec.h \

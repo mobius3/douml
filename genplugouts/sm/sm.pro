@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= stmgen
-CONFIG		+= debug warn_on qt
+CONFIG		+= warn_on qt
 DEFINES		= WITHCPP FALSE=false TRUE=true TRACE
 HEADERS		= ./UmlBaseRelation.h \
 		  ./UmlStateAction.h \

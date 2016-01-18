@@ -390,7 +390,8 @@ void StateCanvas::resize(aCorner c, int dx, int dy, QPoint & o)
 {
     DiagramCanvas::resize(c, dx, dy, o, min_width, min_height, TRUE);
 
-    force_sub_inside(FALSE);
+    //do not move internal items while resize
+    //force_sub_inside(FALSE);
 }
 
 void StateCanvas::resize(const QSize & sz, bool w, bool h)

@@ -1017,7 +1017,7 @@ void associate_python_artifacts(UmlArtifact * pythonsettingsart,
 {
     UmlDeploymentView * dv = (UmlDeploymentView *)
                              UmlClass::get("UmlArtifact", 0)->associatedArtifact()->parent();
-    const Q3PtrVector<UmlItem> ch = dv->children();
+    const QVector<UmlItem*> ch = dv->children();
 
     for (unsigned i = 0; i != ch.size(); i += 1) {
         if ((ch[i]->kind() == anArtifact) && (ch[i]->name() == "executable")) {

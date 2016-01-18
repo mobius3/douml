@@ -10,6 +10,7 @@ BButtonGroup::BButtonGroup(QWidget *parent) :
     this->setLayout(m_hLayout);
     m_hLayout->setSpacing(0);
     m_hLayout->setMargin(0);
+    connect(&m_buttonGroup, SIGNAL(buttonClicked(int)), this, SIGNAL(clicked(int)));
 }
 
 BButtonGroup::BButtonGroup(const QString &title, QWidget *parent):
@@ -52,14 +53,15 @@ void BButtonGroup::setExclusive(bool isEx)
 
 }
 
-void BButtonGroup::addWidget(QWidget *widget)
+void BButtonGroup::addWidget(QAbstractButton *widget)
 {
+    m_buttonGroup.addButton(widget);
     if(m_orientation == Qt::Horizontal)
     {
-        m_hLayout->addWidget(widget);
+        m_hLayout->addWidget((QWidget*)widget);
     }
     else
     {
-        m_vLayout->addWidget(widget);
+        m_vLayout->addWidget((QWidget*)widget);
     }
 }

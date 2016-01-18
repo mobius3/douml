@@ -104,6 +104,49 @@ QString BrowserNode::FullPathPrefix = "   [";
 QString BrowserNode::FullPathPostfix = "]";
 QString BrowserNode::FullPathDotDot = "::";
 BrowserView* BrowserNode::viewptr = 0;
+
+
+
+class BrowserItemNameValidator: public QValidator{
+public:
+    BrowserItemNameValidator(  BrowserNode* node, UmlCode type,
+                                        bool allow_spaces, bool allow_empty):
+    m_node(node), m_type(type), m_allow_spaces(allow_spaces), m_allow_empty(allow_empty)
+
+    {
+
+    }
+
+private:
+    mutable QString infoMessage;
+    UmlCode m_type;
+    bool m_allow_spaces;
+    bool m_allow_empty;
+    BrowserNode* m_node;
+
+
+
+    // QValidator interface
+public:
+    virtual State validate(QString &str, int &) const;
+    virtual void fixup(QString &) const;
+};
+
+BrowserItemNameValidator::State BrowserItemNameValidator::validate(QString &str, int &) const
+{
+    if (!m_node->wrong_child_name(str, m_type, m_allow_spaces, m_allow_empty, &infoMessage))
+    {
+        infoMessage = tr("Ok");
+        return Acceptable;
+    }
+    return Invalid;
+}
+
+void BrowserItemNameValidator::fixup(QString &str) const
+{
+    str = infoMessage;
+}
+
 BrowserNode::BrowserNode(QString s, BrowserView * parent)
     : QTreeWidgetItem(parent),
       name(s)
@@ -1442,11 +1485,15 @@ bool BrowserNode::enter_child_name(QString & r, const QString & msg, UmlCode typ
 {
     for (;;) {
         BooL ok = FALSE;
-        r = MyInputDialog::getText("Uml", msg, r, ok);
+        BrowserItemNameValidator vl(this, type, allow_spaces, allow_empty);
+        r = MyInputDialog::getTextWithOnlineValidator("Uml", msg, r, ok, &vl);
 
         if (ok) {
-            if (wrong_child_name(r, type, allow_spaces, allow_empty))
-                msg_critical(QObject::tr("Error"), r + "\n\n" + QObject::tr("illegal name or already used"));
+            QString cause;
+            if (wrong_child_name(r, type, allow_spaces, allow_empty, &cause))
+            {
+                msg_critical(QObject::tr("Error"), r + "\n\n" + cause);
+            }
             else
                 return TRUE;
         }
@@ -1472,13 +1519,13 @@ bool BrowserNode::enter_child_name(QString & r, const QString & msg, UmlCode typ
     list.prepend(QString());
 
     *old = 0;
-
+    BrowserItemNameValidator vl(this, type, allow_spaces, allow_empty);
     for (;;) {
         BooL ok = FALSE;
 
         r = (list.count() == 1)
-                ? MyInputDialog::getText("Uml", msg, QString(), ok)
-                : MyInputDialog::getText("Uml", msg, list,  QString(), existing, ok);
+                ? MyInputDialog::getTextWithOnlineValidator("Uml", msg, QString(), ok, &vl)
+                : MyInputDialog::getText("Uml", msg, list,  QString(), existing, ok, &vl);
 
         if (! ok)
             return FALSE;
@@ -1500,10 +1547,16 @@ bool BrowserNode::enter_child_name(QString & r, const QString & msg, UmlCode typ
 }
 
 bool BrowserNode::wrong_child_name( const QString & s, UmlCode type,
-                                    bool allow_spaces, bool allow_empty) const
+                                    bool allow_spaces, bool allow_empty, QString *cause) const
 {
     if (s.isEmpty())
+    {
+        if(cause && !allow_empty)
+        {
+            *cause = QObject::tr("Empty name");
+        }
         return !allow_empty;
+    }
 
     QByteArray sArray = s.toLatin1();
     const char * str = sArray.constData();
@@ -1511,7 +1564,13 @@ bool BrowserNode::wrong_child_name( const QString & s, UmlCode type,
     bool nonUnicodeName = fromUnicode(s) != str  ;
     bool controllable = type >= UmlAssociation && type <= UmlClass;
     if (nonUnicodeName && controllable)
+    {
+        if(cause)
+        {
+            *cause = QObject::tr("Nonunicode name");
+        }
         return true;
+    }
     if (allow_empty)
         // synonymous allowed
         return FALSE;
@@ -1522,37 +1581,19 @@ bool BrowserNode::wrong_child_name( const QString & s, UmlCode type,
         case ' ' :
         case '\t':
         case '\r':
+            if(cause)
+            {
+                *cause = QObject::tr("Name starting with witespace");
+            }
             return TRUE;
 
         default:
             // synonymous allowed
             return FALSE;
         }
-
     default:
         if (type <= UmlClass) {
-#if 0
-            while (*str) {
-                char c = *str++;
 
-                if (((c >= 'a') && (c <= 'z')) ||
-                        ((c >= 'A') && (c <= 'Z')) ||
-                        ((c >= '0') && (c <= '9')) ||
-                        (c == '_'))
-                    ;
-                else if ((strchr("()&^[]%|!+-*/=>", c) != 0) ||
-                         (((c == ' ') || (c == '\t') || (c == '\r')) &&
-                          !allow_spaces))
-                    return TRUE;
-                else if (c == '<') {
-                    if (type == UmlClass)
-                        // suppose it is a valid template
-                        break;
-                    else
-                        return TRUE;
-                }
-            }
-#else
             for (QString::const_iterator it = s.begin(); it != s.end(); ++it) {
                 char c = (*it).toLatin1();
 
@@ -1564,16 +1605,27 @@ bool BrowserNode::wrong_child_name( const QString & s, UmlCode type,
                 else if ((strchr("()&^[]%|!+-*/=>", c) != 0) ||
                          (((c == ' ') || (c == '\t') || (c == '\r')) &&
                           !allow_spaces))
+                {
+                    if(cause)
+                    {
+                        *cause = QObject::tr("Name containing illegal character: ") + c;
+                    }
                     return TRUE;
+                }
                 else if (c == '<') {
                     if (type == UmlClass)
                         // suppose it is a valid template
                         break;
                     else
+                    {
+                        if(cause)
+                        {
+                            *cause = QObject::tr("Name containing illegal character: ") + c;
+                        }
                         return TRUE;
+                    }
                 }
             }
-#endif
         }
     }
 
@@ -1583,7 +1635,13 @@ bool BrowserNode::wrong_child_name( const QString & s, UmlCode type,
     {
         if (!((BrowserNode *) child)->deletedp() &&
                 ((BrowserNode *) child)->same_name(s, type))
+        {
+            if(cause)
+            {
+                *cause = QObject::tr("Name already used");
+            }
             return TRUE;
+        }
     }
 
 
@@ -2207,6 +2265,30 @@ void BrowserNode::takeItem(BrowserNode *node)
 void BrowserNode::insertItem(BrowserNode *node)
 {
     addChild(node);
+}
+
+void BrowserNode::expandAll()
+{
+    int numChildren = childCount();
+    setExpanded(true);
+    for(int i = 0; i < numChildren; i++)
+    {
+        BrowserNode * node = static_cast <BrowserNode *>(child(i));
+        if(node)
+            node->expandAll();
+    }
+}
+
+void BrowserNode::collapseAll()
+{
+    int numChildren = childCount();
+    setExpanded(false);
+    for(int i = 0; i < numChildren; i++)
+    {
+        BrowserNode * node = static_cast <BrowserNode *>(child(i));
+        if(node)
+            node->collapseAll();
+    }
 }
 //
 

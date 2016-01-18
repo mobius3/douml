@@ -192,7 +192,7 @@ public:
                           bool allow_spaces, bool allow_empty,
                           bool exiting = false);
     bool wrong_child_name(const QString & s, UmlCode type,
-                          bool allow_spaces, bool allow_empty) const;
+                          bool allow_spaces, bool allow_empty, QString *cause = NULL) const;
     virtual bool allow_spaces() const;
     virtual bool allow_empty() const;
     virtual bool same_name(const QString & s, UmlCode type) const;
@@ -317,6 +317,8 @@ public:
     void moveItem(BrowserNode *after);
     void takeItem(BrowserNode *node);
     void insertItem(BrowserNode *node);
+    void expandAll();
+    void collapseAll();
 };
 
 inline QString BrowserNode::fullname(bool rev) const

@@ -26,7 +26,6 @@
 // *************************************************************************
 
 #include <qmessagebox.h>
-//Added by qt3to4:
 #include <QList>
 #include "misc/mystr.h"
 
@@ -86,7 +85,7 @@ void upgrade_rename_class(UmlClass * base_item,
   if (!UmlBaseItem::set_Name(s))\n\
     return FALSE;\n\
 \n\
-  const Q3PtrVector<UmlItem> ch = children();\n\
+  const QVector<UmlItem*> ch = children();\n\
   WrapperStr destr = \"~\" + name();\n\
 \n\
   for (unsigned i = 0; i != ch.size(); i += 1) {\n\
@@ -248,7 +247,7 @@ void upgrade_UmlSettings()
 
     for (i = 0; i != sizeof(s) / sizeof(s[0]); i += 1) {
         // add attribute
-        const Q3PtrVector<UmlItem> ch = cl->children();
+        const QVector<UmlItem*> ch = cl->children();
         UmlAttribute * at =
             cl->add_attribute(s[i].att, ProtectedVisibility, "string", 0, 0);
         at->set_isClassMember(TRUE);
@@ -362,7 +361,7 @@ void upgrade_CppSettings()
             cl->add_attribute(s[i].att, PrivateVisibility, "string", 0, 0);
         at->set_isClassMember(TRUE);
 
-        const Q3PtrVector<UmlItem> ch = cl->children();
+        const QVector<UmlItem*> ch = cl->children();
 
         for (j = 0; j != ch.size(); j += 1) {
             if (ch[j]->name() == s[i].after_att) {
@@ -562,7 +561,7 @@ void upgrade_jdk5(UmlClass * javasettings)
 
     UmlPackage::getProject()->rename_jdk5();
 
-    Q3PtrVector<UmlItem> ch = javasettings->children();
+    QVector<UmlItem*> ch = javasettings->children();
     UmlOperation * set_EnumPatternDecl = 0;
     UmlOperation * set_EnumPatternItemCase = 0;
     UmlAttribute * _enum_pattern_decl = 0;
@@ -1176,7 +1175,7 @@ void fixe_package_diagram()
 
     // replace _assoc_diagram
 
-    const Q3PtrVector<UmlItem> ch = basepackage->children();
+    const QVector<UmlItem*> ch = basepackage->children();
     unsigned i;
 
     for (i = 0; i != ch.size(); i += 1) {
@@ -1396,7 +1395,7 @@ void add_object_activity_diagram_item_kind()
     UmlAttribute * anObjectDiagram = itkind->add_enum_item("anObjectDiagram");
     UmlAttribute * anActivityDiagram = itkind->add_enum_item("anActivityDiagram");
 
-    const Q3PtrVector<UmlItem> ch = itkind->children();
+    const QVector<UmlItem*> ch = itkind->children();
 
     for (unsigned i = 0; i != ch.size(); i += 1) {
         if (ch[i]->name() == "aDeploymentDiagram") {
@@ -3257,7 +3256,7 @@ void add_missing_opers()
         op->set_cpp("const Q3PtrVector<${type}>", "",
                     "  UmlCom::send_cmd(miscGlobalCmd, allMarkedCmd);\n"
                     "  \n"
-                    "  Q3PtrVector<UmlItem> result;\n"
+                    "  QVector<UmlItem*> result;\n"
                     "  \n"
                     "  UmlCom::read_item_list(result);\n"
                     "  return result;\n",
@@ -3278,7 +3277,7 @@ void add_missing_opers()
         op->set_cpp("const Q3PtrVector<${type}>", "",
                     "  UmlCom::send_cmd(_identifier, referencedByCmd);\n"
                     "  \n"
-                    "  Q3PtrVector<UmlItem> result;\n"
+                    "  QVector<UmlItem*> result;\n"
                     "  \n"
                     "  UmlCom::read_item_list(result);\n"
                     "  return result;\n",
@@ -3441,7 +3440,7 @@ void replacefriend()
 
 void UmlPackage::replace_friend()
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned i;
 
     for (i = 0; i != ch.size(); i += 1)
@@ -3885,7 +3884,7 @@ void fixe_idlsetting_read()
 
 UmlOperation * wrong_umlcom_send_cmd(UmlClass * uml_com)
 {
-    const Q3PtrVector<UmlItem> ch = uml_com->children();
+    const QVector<UmlItem*> ch = uml_com->children();
     UmlOperation * r = 0;
 
     for (unsigned i = 0; i != ch.size(); i += 1) {
@@ -4731,11 +4730,11 @@ void fixe_set_associateddiagram(UmlItem * v)
 
     UmlCom::trace("<b>fixe operations <i>set_AssociatedDiagram</i></b><br>");
 
-    const Q3PtrVector<UmlItem> ch1 = v->children();
+    const QVector<UmlItem*> ch1 = v->children();
 
     for (unsigned i1 = 0; i1 != ch1.size(); i1 += 1) {
         if (ch1[i1]->kind() == aClass) {
-            const Q3PtrVector<UmlItem> ch2 = ch1[i1]->children();
+            const QVector<UmlItem*> ch2 = ch1[i1]->children();
 
             for (unsigned i2 = 0; i2 != ch2.size(); i2 += 1) {
                 if ((ch2[i2]->kind() == anOperation) &&
@@ -4801,7 +4800,7 @@ void bypass_q3ptrvector_bug()
 
     UmlClass::get("UmlBaseArtifact", 0)
     ->get_operation("set_AssociatedClasses")
-    ->set_CppBody("  UmlCom::send_cmd(_identifier, setAssocClassesCmd, (const Q3PtrVector<UmlItem> &) l);\n"
+    ->set_CppBody("  UmlCom::send_cmd(_identifier, setAssocClassesCmd, (const QVector<UmlItem*> &) l);\n"
                   "  if (UmlCom::read_bool()) {\n"
                   "      // tests != to bypass Qt 2.3 bug\n"
                   "    if (_defined && (&_assoc_classes != &l))\n"
@@ -4813,7 +4812,7 @@ void bypass_q3ptrvector_bug()
 
     UmlClass::get("UmlBaseParameterSet", 0)
     ->get_operation("set_Pins")
-    ->set_CppBody("  UmlCom::send_cmd(_identifier, replaceParameterCmd, (const Q3PtrVector<UmlItem> &) v);\n"
+    ->set_CppBody("  UmlCom::send_cmd(_identifier, replaceParameterCmd, (const QVector<UmlItem*> &) v);\n"
                   "  if (UmlCom::read_bool()) {\n"
                   "      // tests != to bypass Qt 2.3 bug\n"
                   "    if (_defined && (&_pins != &v)) _pins = v;\n"
@@ -4843,7 +4842,7 @@ void add_methods(UmlClass * opercl, UmlClass * uml_item)
 
     op->set_isCppConst(TRUE);
     op->set_cpp("const Q3PtrVector<${type}>", "",
-                "  Q3PtrVector<UmlItem> l;\n"
+                "  QVector<UmlItem*> l;\n"
                 "\n"
                 "  UmlCom::send_cmd(_identifier, sideCmd);\n"
                 "  UmlCom::read_item_list(l);\n"
@@ -5373,7 +5372,7 @@ bool ask_for_upgrade()
 void update_api_version(const char * v)
 {
     UmlClass * com = UmlClass::get("UmlCom", 0);
-    const Q3PtrVector<UmlItem> ch = com->children();
+    const QVector<UmlItem*> ch = com->children();
 
     for (unsigned i = 0; i != ch.size(); i += 1) {
         if ((ch[i]->kind() == anOperation) &&
