@@ -133,7 +133,8 @@ void BrowserView::clear()
 void BrowserView::set_project(const QDir & di)
 {
     dir = di;
-    project = new BrowserPackage(dir.dirName(), the, PROJECT_ID);
+    project = new BrowserPackage(dir.dirName(), (BrowserView *) 0, PROJECT_ID);
+    the->addTopLevelItem(project);
     setRootIsDecorated(FALSE);
 }
 

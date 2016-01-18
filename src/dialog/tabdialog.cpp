@@ -17,6 +17,7 @@ TabDialog::TabDialog(QWidget *parent, const char *name, bool modal, Qt::WidgetAt
     m_buttonLayout = new QHBoxLayout();
     layout->addWidget(m_tabWidget);
     layout->addLayout(m_buttonLayout);
+    connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentTabChanged(int)));
 
 
 }
@@ -34,6 +35,11 @@ void TabDialog::insertTab(QWidget *tabWidget, QString name, int index)
 void TabDialog::setTabEnabled(QWidget *w, bool isEnabled)
 {
     m_tabWidget->setTabEnabled(m_tabWidget->indexOf(w), isEnabled);
+}
+
+void TabDialog::onCurrentTabChanged(int i)
+{
+    emit currentChanged(m_tabWidget->widget(i));
 }
 void TabDialog::removePage(QWidget *page)
 {
