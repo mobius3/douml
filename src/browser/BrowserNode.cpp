@@ -1686,7 +1686,9 @@ BrowserNode * BrowserNode::get_associated() const
 
 void BrowserNode::package_modified()
 {
-    ((BrowserNode *) parent())->package_modified();
+    //check if parent exists. added for crash during roundtrip
+    if(parent())
+        ((BrowserNode *) parent())->package_modified();
 }
 
 bool BrowserNode::api_compatible(unsigned) const
