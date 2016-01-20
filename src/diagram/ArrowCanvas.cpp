@@ -385,6 +385,8 @@ void ArrowCanvas::move_outside(QRect r)
             ArrowPointCanvas * p = (ArrowPointCanvas *) ar->end;
             double px = p->x();
             double py = p->y();
+            double pxInitial = p->x();
+            double pyInitial = p->y();
 
             double dx = (px < c.x()) ? -10.0 : 10.0;
             double dy = (py < c.y()) ? -10.0 : 10.0;
@@ -393,7 +395,9 @@ void ArrowCanvas::move_outside(QRect r)
                 px += dx;
                 py += dy;
             }
-            p->moveBy(px, py);
+
+            //delta displacement. Self relation update position wrong displacement
+            p->moveBy(px- pxInitial, py - pyInitial);
             ar = p->get_other(ar);
 
             if (ar == 0)
