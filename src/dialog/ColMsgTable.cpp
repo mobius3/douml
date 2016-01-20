@@ -148,12 +148,15 @@ ColMsgTable::ColMsgTable(QWidget * parent, ColDiagramView * v, ColMsgList & m)
 
     refresh();
 
-    connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-            this, SLOT(button_pressed(int, int, int, const QPoint &)));
+    connect(this, SIGNAL(pressed(QModelIndex)),
+            this, SLOT(button_pressed(QModelIndex)));
 }
 
-void ColMsgTable::button_pressed(int row, int col, int, const QPoint &)
+void ColMsgTable::button_pressed(const QModelIndex &index)
 {
+    int row, col;
+    row = index.row();
+    col = index.column();
     if ((( row) >= flat_msg_list.count()) || (col > CMD_COL))
         // wrong signal
         return;

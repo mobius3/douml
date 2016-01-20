@@ -73,7 +73,7 @@ public:
     void update(ConstraintCanvas * c);
 
 protected slots:
-    virtual void button_pressed(int row, int col, int button, const QPoint & mousePos);
+    virtual void button_pressed(const QModelIndex &index);
 };
 
 #endif
