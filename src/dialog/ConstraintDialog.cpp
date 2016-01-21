@@ -217,12 +217,15 @@ ConstraintTable::ConstraintTable(QWidget * parent, ConstraintCanvas * c)
     horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
     horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
-    connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-            this, SLOT(button_pressed(int, int, int, const QPoint &)));
+    connect(this, SIGNAL(pressed(QModelIndex)),
+            this, SLOT(button_pressed(QModelIndex)));
 }
 
-void ConstraintTable::button_pressed(int row, int col, int, const QPoint &)
+void ConstraintTable::button_pressed(const QModelIndex &index)
 {
+    int row, col;
+    row = index.row();
+    col = index.column();
     if (col == 0&&item(row, col))
         item(row, col)->setText( (item(row, col)->text().isEmpty()) ? tr("  yes") : QString());
 }

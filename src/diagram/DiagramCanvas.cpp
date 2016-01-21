@@ -442,7 +442,7 @@ bool DiagramCanvas::move_with(UmlCode k) const
 
 void DiagramCanvas::force_self_rel_visible()
 {
-    QRect r = rect();
+    QRect r = sceneRect(); //rect();
 
     // add a marging
     r.setLeft(r.left() - 5);

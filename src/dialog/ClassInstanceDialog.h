@@ -51,7 +51,7 @@ public:
     void init_row(const SlotRel & sr, int row, QString a, bool visit);
 
 protected slots:
-    virtual void button_pressed(int row, int col, int button, const QPoint & mousePos);
+    virtual void button_pressed(const QModelIndex &index);
 };
 
 class ClassInstanceDialog : public TabDialog

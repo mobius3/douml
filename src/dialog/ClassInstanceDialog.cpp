@@ -87,8 +87,8 @@ RelTable::RelTable(QWidget * parent, ClassInstanceData * inst, bool visit)
     if (! visit)
         adjustColumn(5);
 
-    connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-            this, SLOT(button_pressed(int, int, int, const QPoint &)));
+    connect(this, SIGNAL(pressed(QModelIndex)),
+            this, SLOT(button_pressed(QModelIndex)));
 }
 
 void RelTable::init_row(const SlotRel & sr, int row, QString a, bool visit)
@@ -117,10 +117,10 @@ void RelTable::init_row(const SlotRel & sr, int row, QString a, bool visit)
         setText(row, 5, "");
 }
 
-void RelTable::button_pressed(int row, int col, int, const QPoint &)
+void RelTable::button_pressed(const QModelIndex &index)
 {
-    if (col == 5)
-        setText(row, col, text(row, col).isEmpty() ? tr("   Yes") : QString());
+    if (index.column() == 5)
+        setText(index.row(), index.column(), text(index.row(), index.column()).isEmpty() ? tr("   Yes") : QString());
 }
 
 //

@@ -939,7 +939,9 @@ void BrowserOperation::open(bool)
 void BrowserOperation::modified()
 {
     repaint();
-    ((BrowserNode *) parent())->modified();
+    //check if parent exists. added for crash during roundtrip
+    if(parent())
+        ((BrowserNode *) parent())->modified();
 }
 
 UmlCode BrowserOperation::get_type() const
