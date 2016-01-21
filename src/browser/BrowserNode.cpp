@@ -872,16 +872,13 @@ QList<BrowserNode *> BrowserNode::get_generation_list()
 
 BrowserNode *BrowserNode::nextSibling()
 {
-    for(int i = 0; i < parent()->childCount(); i++)
-    {
-        if(parent()->child(i) == this)
-        {
-            if((i+1)<parent()->childCount())
-                return (BrowserNode *)parent()->child(i+1);
-            break;
-        }
+    if(parent()){
+      return (BrowserNode *) parent()->child(parent()->indexOfChild(this)+1);
     }
-    return NULL;
+    else {
+      QTreeWidget *tWidget = treeWidget();
+      return (BrowserNode *) tWidget->topLevelItem(tWidget->indexOfTopLevelItem(this)+1);
+    }
 }
 
 //
