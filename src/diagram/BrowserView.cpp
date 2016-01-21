@@ -135,7 +135,7 @@ void BrowserView::set_project(const QDir & di)
     dir = di;
     project = new BrowserPackage(dir.dirName(), (BrowserView *) 0, PROJECT_ID);
     the->addTopLevelItem(project);
-    setRootIsDecorated(FALSE);
+    setRootIsDecorated(true);
 }
 
 void BrowserView::set_imported_project(const QDir & di,
