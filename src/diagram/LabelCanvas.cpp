@@ -314,7 +314,7 @@ int LabelCanvas::rtti() const
 
 QPoint LabelCanvas::center() const
 {
-    return boundingRect().center().toPoint();
+    return sceneBoundingRect().center().toPoint();
 }
 
 QRect LabelCanvas::rect() const

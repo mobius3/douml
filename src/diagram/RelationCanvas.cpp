@@ -974,23 +974,22 @@ void RelationCanvas::role_a_default_position() const
 
         if (dx > 0) {
             int w = fm.width(role_a->get_name());
-
-            role_a->moveBy(endp.x() - w - ARROW_LENGTH,
-                         endp.y() - 4 * h / 3 + (dy * ARROW_LENGTH) / dx);
+            role_a->setPos(endp.x() - w - ARROW_LENGTH, endp.y() - 4 * h / 3 + (dy * ARROW_LENGTH) / dx);
         }
         else
-            role_a->moveBy(endp.x() + ARROW_LENGTH,
-                         endp.y() - 4 * h / 3 + (dy * ARROW_LENGTH) / dx);
+        {
+            role_a->setPos(endp.x() + ARROW_LENGTH, endp.y() - 4 * h / 3 + (dy * ARROW_LENGTH) / dx);
+        }
     }
     else {
         // vertical line
         if (dy == 0) dy = 1;
 
         if (dy > 0)
-            role_a->moveBy(endp.x() + ARROW_LENGTH - (dx * h / 2) / dy,
+            role_a->setPos(endp.x() + ARROW_LENGTH - (dx * h / 2) / dy,
                          endp.y() - 4 * h / 3);
         else
-            role_a->moveBy(endp.x() + ARROW_LENGTH + (dx * h / 2) / dy,
+            role_a->setPos(endp.x() + ARROW_LENGTH + (dx * h / 2) / dy,
                          endp.y() + h / 2);
     }
 
@@ -1009,12 +1008,12 @@ void RelationCanvas::role_b_default_position() const
         if (dx == 0) dx = 1;
 
         if (dx > 0)
-            role_b->moveBy(beginp.x() + ARROW_LENGTH,
+            role_b->setPos(beginp.x() + ARROW_LENGTH,
                          beginp.y() - 4 * h / 3 + (dy * ARROW_LENGTH) / dx);
         else {
             int w = fm.width(role_b->get_name());
 
-            role_b->moveBy(beginp.x() - w - ARROW_LENGTH,
+            role_b->setPos(beginp.x() - w - ARROW_LENGTH,
                          beginp.y() - 4 * h / 3 + (dy * ARROW_LENGTH) / dx);
         }
     }
@@ -1023,10 +1022,10 @@ void RelationCanvas::role_b_default_position() const
         if (dy == 0) dy = 1;
 
         if (dy > 0)
-            role_b->moveBy(beginp.x() + ARROW_LENGTH + (dx * h / 2) / dy,
+            role_b->setPos(beginp.x() + ARROW_LENGTH + (dx * h / 2) / dy,
                          beginp.y() + h / 2);
         else
-            role_b->moveBy(beginp.x() + ARROW_LENGTH - (dx * h / 2) / dy,
+            role_b->setPos(beginp.x() + ARROW_LENGTH - (dx * h / 2) / dy,
                          beginp.y() - 4 * h / 3);
     }
 
@@ -1046,10 +1045,10 @@ void RelationCanvas::multiplicity_a_default_position() const
         if (dx == 0) dx = 1;
 
         if (dx > 0)
-            multiplicity_a->moveBy(endp.x() - w - ARROW_LENGTH,
+            multiplicity_a->setPos(endp.x() - w - ARROW_LENGTH,
                                  endp.y() + h / 2 + (dy * ARROW_LENGTH) / dx);
         else
-            multiplicity_a->moveBy(endp.x() + ARROW_LENGTH,
+            multiplicity_a->setPos(endp.x() + ARROW_LENGTH,
                                  endp.y() + h / 2 + (dy * ARROW_LENGTH) / dx);
     }
     else {
@@ -1057,10 +1056,10 @@ void RelationCanvas::multiplicity_a_default_position() const
         if (dy == 0) dy = 1;
 
         if (dy > 0)
-            multiplicity_a->moveBy(endp.x() - w - ARROW_LENGTH - (dx * h / 2) / dy,
+            multiplicity_a->setPos(endp.x() - w - ARROW_LENGTH - (dx * h / 2) / dy,
                                  endp.y() - 4 * h / 3);
         else
-            multiplicity_a->moveBy(endp.x() - w - ARROW_LENGTH + (dx * h / 2) / dy,
+            multiplicity_a->setPos(endp.x() - w - ARROW_LENGTH + (dx * h / 2) / dy,
                                  endp.y() + h / 2);
     }
 
@@ -1080,10 +1079,10 @@ void RelationCanvas::multiplicity_b_default_position() const
         if (dx == 0) dx = 1;
 
         if (dx > 0)
-            multiplicity_b->moveBy(beginp.x() + ARROW_LENGTH,
+            multiplicity_b->setPos(beginp.x() + ARROW_LENGTH,
                                  beginp.y() + h / 2 + (dy * ARROW_LENGTH) / dx);
         else
-            multiplicity_b->moveBy(beginp.x() - w - ARROW_LENGTH,
+            multiplicity_b->setPos(beginp.x() - w - ARROW_LENGTH,
                                  beginp.y() + h / 2 + (dy * ARROW_LENGTH) / dx);
     }
     else {
@@ -1091,10 +1090,10 @@ void RelationCanvas::multiplicity_b_default_position() const
         if (dy == 0) dy = 1;
 
         if (dy > 0)
-            multiplicity_b->moveBy(beginp.x() - w - ARROW_LENGTH + (dx * h / 2) / dy,
+            multiplicity_b->setPos(beginp.x() - w - ARROW_LENGTH + (dx * h / 2) / dy,
                                  beginp.y() + h / 2);
         else
-            multiplicity_b->moveBy(beginp.x() - w - ARROW_LENGTH - (dx * h / 2) / dy,
+            multiplicity_b->setPos(beginp.x() - w - ARROW_LENGTH - (dx * h / 2) / dy,
                                  beginp.y() - 4 * h / 3);
     }
 
