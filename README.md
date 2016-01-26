@@ -1,11 +1,11 @@
-Built from tag: 1.0b7
-
-DoUML version 1.0b7
+DoUML
 ==================
 
-*** IMPORTANT NOTICE ***
+##IMPORTANT NOTICE
 
 This is still a work in progress and the fact that the release is made doesn't mean that it is bug free. We recommend that you use DoUML along with source control and save your work frequently.
+
+**A discussion group for DoUML was created for subjects other than issues: https://groups.google.com/forum/#!forum/douml**
 
 ___________________
 
