@@ -18,6 +18,7 @@ bool VVBox::setStretchFactor(QWidget *w, int stretch)
     if(m_layout->indexOf(w) == -1)
         m_layout->addWidget(w);
     m_layout->setStretchFactor(w, stretch);
+    return 0;
 }
 void VVBox::setMargin(int margin)
 {
