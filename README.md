@@ -125,8 +125,8 @@ Manual
   Currently - the manual of Bouml version 4.22 is being used. To access it, set "Manual" path in
   miscelaneous settings in application's menu.
 
-Compiling
----------
+Compiling & Installing
+----------------------
 
 #### Under Linux:
   
@@ -144,13 +144,21 @@ Compiling
  * Mingw based on gcc 4.7+
  * Qt 5.4+ built with aforementioned mingw.
  * Boost's headers of version 1.5+ must be visible in scope.
+ 
+#### Pre-built binaries
 
-	
+Binaries are kindly provided by the community.
+
+- OpenSUSE binaries were provided by @gilbertoca
+- Ubuntu PPA, provided by @pasgui: https://launchpad.net/%7Epasgui/+archive/ubuntu/ppa
+
+Be a maintainer! Contact-us through the mainling list or issues.
+ 
 Webpage
 -------
-  http://douml.github.io/douml/
-  
-  
+
+http://douml.github.io/douml/
+
   *** CONTRIBUTORS NEEDED ***		
 	
 And remember - we all own a debt of gratitude to Bouml's original creator - Bruno Pages. 
