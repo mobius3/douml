@@ -149,10 +149,7 @@ Compiling
 Webpage
 -------
   http://douml.github.io/douml/
-
-Contact email: 
--------------
-  doumleditor@gmail.com
+  
   
   *** CONTRIBUTORS NEEDED ***		
 	
