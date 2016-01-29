@@ -198,7 +198,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
         grid->addWidget(new QLabel(tr("\nOptional, to indicate a character set in case you use non ISO_8859-1/latin1 characters. For instance KOI8-R or KOI8-RU for Cyrillic")),13,1);
 
         grid->addWidget(new QLabel(tr("Character set ")),14,0);
-        cb_charset = new QComboBox(FALSE);
+        cb_charset = new QComboBox();
         grid->addWidget(cb_charset,14,1);
         cb_charset->setAutoCompletion(completion());
         QStringList l;
