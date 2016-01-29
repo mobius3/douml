@@ -86,7 +86,7 @@ ShortcutDialog::ShortcutDialog() : TabDialog(0, 0, TRUE)
     vtab->addWidget((new QLabel(tr("Here are the shortcuts to do a command (menu entry)"), vtab)));
 
 #ifdef __APPLE__
-    (new QLabel(TR("Note : sometimes the key 'Alt' is named 'Option'"), vtab))
+    (new QLabel(tr("Note : sometimes the key 'Alt' is named 'Option'"), vtab))
             ->setAlignment(::Qt::AlignHCenter);
 #endif
 
@@ -105,7 +105,7 @@ ShortcutDialog::ShortcutDialog() : TabDialog(0, 0, TRUE)
     label->setAlignment(::Qt::AlignHCenter);
 
 #ifdef __APPLE__
-    (new QLabel(TR("Note : sometimes the key 'Alt' is named 'Option'"), vtab))
+    (new QLabel(tr("Note : sometimes the key 'Alt' is named 'Option'"), vtab))
             ->setAlignment(::Qt::AlignHCenter);
 
 #endif
@@ -156,10 +156,11 @@ ShortcutTable::ShortcutTable(QWidget * parent, bool tool, int n)
     QStringList headerLabels;
     headerLabels.append(tr("Shift"));
 #ifdef __APPLE__
-#include "../xpm/pomme_xpm.xpm"
-    QPixmap pomme_xpm((const char **) pomme);
-    QIcon ic(pomme_xpm);
-    headerLabels.append(ic, "");
+	//#include "../xpm/pomme_xpm.xpm"
+	//    QPixmap pomme_xpm((const char **) pomme);
+	//    QIcon ic(pomme_xpm);
+	//    headerLabels.append(ic, "");
+    headerLabels.append(tr("Cmd"));
 #else
     headerLabels.append(tr("Ctrl"));
 #endif
