@@ -36,7 +36,7 @@
 Progress * Progress::it = 0;
 
 Progress::Progress(int n, const char * lbl, QApplication * a)
-    : QProgressDialog(0, 0, n, 0, 0, FALSE), n(0), app(a)
+    : QProgressDialog(0, 0, 0, n, 0, 0), n(0), app(a)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     if (it != 0)
