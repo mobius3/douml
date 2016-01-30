@@ -115,3 +115,4 @@ src/CppReverse/cpp_reverse
 /install/
 .DS_Store
 .qmake.stash
+xcuserdata/
