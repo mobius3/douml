@@ -255,6 +255,7 @@ CreateToolButton(
 }
 
 UmlWindow::UmlWindow(bool ) : QMainWindow(0)
+	, isToolMenuLoaded(false)
 {
     setAttribute(Qt::WA_QuitOnClose);
     setWindowTitle("DoUML");
@@ -344,15 +345,21 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     menuBar()->addMenu(projectMenu);
     connect(projectMenu, SIGNAL(aboutToShow()),
             this, SLOT(projectMenuAboutToShow()));
+    // Add at least one menu item to each menu right after creation, otherwise the
+    // menus are never shown on OS X with Qt built againt Cocoa.
+    projectMenu->addAction(QObject::tr("&New"), this, SLOT(newProject()));
+
     windowsMenu = new QMenu(tr("&Windows"),this);
     //windowsMenu->setCheckable(TRUE);
     connect(windowsMenu, SIGNAL(aboutToShow()),
             this, SLOT(windowsMenuAboutToShow()));
     menuBar()->addMenu(windowsMenu);
+    windowsMenu->addAction(tr("&Cascade"), ws, SLOT(cascadeSubWindows()));
 
     toolMenu = new QMenu(tr("&Tools"),this);
     connect(toolMenu, SIGNAL(aboutToShow()), this, SLOT(toolMenuAboutToShow()));
     menuBar()->addMenu(toolMenu);
+    toolMenu->addAction(tr("Show &Trace Window"), this, SLOT(show_trace()));
 
     langMenu = new QMenu(tr("&Languages"),this);
     menuBar()->addMenu(langMenu);
@@ -882,6 +889,9 @@ void UmlWindow::toolMenuAboutToShow()
     toolMenu->addAction(tr("Show &Trace Window"), this, SLOT(show_trace()));
 
     if (browser->get_project() != 0) {
+
+		isToolMenuLoaded = true;
+
         if (lang_except_idl | idl) {
             toolMenu->addSeparator();
 
@@ -1455,7 +1465,11 @@ void UmlWindow::close_it()
         the->browser->clear();
 
         // remove tools
-        the->toolMenu->clear();
+        if (the->isToolMenuLoaded) {
+            // Only clear the menu if it has already been loaded once, otherwise the
+            // menu is never shown on OS X if Qt is built againt Cocoa.
+            the->toolMenu->clear();
+        }
 
         QApplication::restoreOverrideCursor();
         the->setWindowTitle("DoUML");
