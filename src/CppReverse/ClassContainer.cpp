@@ -352,7 +352,7 @@ bool ClassContainer::find_type(WrapperStr type, UmlTypeSpec & typespec,
                 }
             }
 
-            if ((type[index2] != (char)0) && (defined[type.left(index2)] != (char)0))
+            if ((type[index2] != (char)0) && (defined[type.left(index2)] != 0))
                 // explicit template
                 index = index2;
             else if (defined[type.left(index)] != 0)

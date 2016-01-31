@@ -96,6 +96,7 @@ protected:
     QMenu * projectMenu;
     QMenu * windowsMenu;
     QMenu * toolMenu;
+	bool isToolMenuLoaded;
     QMenu * langMenu;
     QMenu * miscMenu;
     QMenu * fontSizeMenu;
