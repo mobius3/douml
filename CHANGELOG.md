@@ -1,5 +1,5 @@
 # Next release
-* Fixed compilation on OS X El Capitan
+* Fixed compilation on OS X El Capitan [#155](https://github.com/DoUML/douml/pull/155)
 
 # v1.0.8
 * Numerous bugfixes
