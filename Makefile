@@ -93,10 +93,10 @@ PROGS=douml \
 	usecasewizard
 
 xcodeprojects:
-	( cd src/Libs/L_UniversalModels ; $(QMAKE) -spec macx-xcode L_UniversalModels.pro; ) || exit 1
-	( cd src ; $(QMAKE) -spec macx-xcode douml.pro; ) || exit 1
-	for i in $(SRC_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -spec macx-xcode; ) || exit 1 ; fi; done
-	for i in $(PLUGOUT_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -spec macx-xcode; ) || exit 1 ; fi; done
+	( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${config} -spec macx-xcode L_UniversalModels.pro; ) || exit 1
+	( cd src ; $(QMAKE) -config ${config} -spec macx-xcode douml.pro; ) || exit 1
+	for i in $(SRC_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config} -spec macx-xcode; ) || exit 1 ; fi; done
+	for i in $(PLUGOUT_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config} -spec macx-xcode; ) || exit 1 ; fi; done
 
 compile:
 	( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${config} L_UniversalModels.pro; ) || exit 1 ; $(MAKE) -C src/Libs/L_UniversalModels || exit 1
