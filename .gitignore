@@ -116,3 +116,6 @@ src/CppReverse/cpp_reverse
 .DS_Store
 .qmake.stash
 xcuserdata/
+Info.plist
+*.xcodeproj
+

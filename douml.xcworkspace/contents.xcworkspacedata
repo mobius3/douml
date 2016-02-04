@@ -2,6 +2,87 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:douml/douml.xcodeproj">
+      location = "group:Makefile">
    </FileRef>
+   <Group
+      location = "container:"
+      name = "Src">
+      <FileRef
+         location = "group:src/douml.xcodeproj">
+      </FileRef>
+      <Group
+         location = "container:"
+         name = "Libs">
+         <FileRef
+            location = "group:src/Libs/L_UniversalModels/UniversalModels.xcodeproj">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:src/CppGenerator/cpp_generator.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:src/CppReverse/cpp_reverse.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:src/CppRoundtrip/cpp_roundtrip.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:src/IdlGenerator/idl_generator.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:src/JavaCat/java_catalog.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:src/JavaGenerator/java_generator.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:src/JavaReverse/java_reverse.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:src/JavaRoundtrip/java_roundtrip.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:src/PhpGenerator/php_generator.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:src/PhpReverse/php_reverse.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:src/PythonGenerator/python_generator.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:src/RoundtripBody/roundtrip_body.xcodeproj">
+      </FileRef>
+   </Group>
+   <Group
+      location = "container:"
+      name = "Plugout">
+      <FileRef
+         location = "group:genplugouts/BrowserSort/browsersort.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:genplugouts/CppUtilities/cpp_util.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:genplugouts/deploy/deplcl.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:genplugouts/FileControl/file_control.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:genplugouts/GlobalChange/global_change.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:genplugouts/HtmlDoc/ghtml.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:genplugouts/usecasewizard/usecasewizard.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:genplugouts/Xmi2Generator/gxmi2.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:genplugouts/xmi2import/ixmi2.xcodeproj">
+      </FileRef>
+   </Group>
 </Workspace>
