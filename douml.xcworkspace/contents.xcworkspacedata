@@ -48,6 +48,15 @@
          location = "group:src/PhpReverse/php_reverse.xcodeproj">
       </FileRef>
       <FileRef
+         location = "group:src/PlugOutUpgrade/plug_out_upgrade.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:src/ProjectControl/projectControl.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:src/ProjectSynchro/projectSynchro.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:src/PythonGenerator/python_generator.xcodeproj">
       </FileRef>
       <FileRef
@@ -73,10 +82,28 @@
          location = "group:genplugouts/GlobalChange/global_change.xcodeproj">
       </FileRef>
       <FileRef
+         location = "group:genplugouts/gpro/gpro.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:genplugouts/HtmlDoc/ghtml.xcodeproj">
       </FileRef>
       <FileRef
+         location = "group:genplugouts/import_rose/irose.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:genplugouts/singleton/singleton.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:genplugouts/sm/stmgen.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:genplugouts/uml_projection/uml_proj.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:genplugouts/usecasewizard/usecasewizard.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:genplugouts/xmi/gxmi.xcodeproj">
       </FileRef>
       <FileRef
          location = "group:genplugouts/Xmi2Generator/gxmi2.xcodeproj">

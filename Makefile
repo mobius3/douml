@@ -56,6 +56,9 @@ SRC_DIRS=\
 	src/JavaRoundtrip  \
 	src/PhpGenerator  \
 	src/PhpReverse  \
+	src/PlugOutUpgrade  \
+	src/ProjectControl  \
+	src/ProjectSynchro  \
 	src/PythonGenerator  \
 	src/RoundtripBody
 
@@ -64,8 +67,14 @@ PLUGOUT_DIRS=genplugouts/BrowserSort  \
 	genplugouts/deploy  \
 	genplugouts/FileControl  \
 	genplugouts/GlobalChange  \
+	genplugouts/gpro  \
 	genplugouts/HtmlDoc  \
+	genplugouts/import_rose  \
+	genplugouts/singleton  \
+	genplugouts/sm  \
+	genplugouts/uml_projection  \
 	genplugouts/usecasewizard  \
+	genplugouts/xmi  \
 	genplugouts/Xmi2Generator  \
 	genplugouts/xmi2import
 
