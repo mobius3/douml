@@ -109,11 +109,11 @@ compile:
 	for i in $(SRC_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config}; ) || exit 1 ; $(MAKE) -C $$i || exit 1 ; fi; done
 	for i in $(PLUGOUT_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config}; ) || exit 1 ; $(MAKE) -C $$i || exit 1 ; fi; done
 
-xcodeprojects:
-        ( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${config} -spec macx-xcode L_UniversalModels.pro; ) || exit 1
-        ( cd src ; $(QMAKE) -config ${config} -spec macx-xcode douml.pro; ) || exit 1
-        for i in $(SRC_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config} -spec macx-xcode; ) || exit 1$
-        for i in $(PLUGOUT_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config} -spec macx-xcode; ) || ex$
+xcodeprojects: $(QTPROJECTFILES)
+	( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${config} -spec macx-xcode L_UniversalModels.pro; ) || exit 1
+	( cd src ; $(QMAKE) -config ${config} -spec macx-xcode douml.pro; ) || exit 1
+	for i in $(SRC_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config} -spec macx-xcode; ) || exit 1 ; fi; done
+	for i in $(PLUGOUT_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config} -spec macx-xcode; ) || exit 1 ; fi; done
 
 install:
 	mkdir -p "$(DESTDIR)$(DOUML_DIR)"
