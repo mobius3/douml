@@ -4,19 +4,19 @@
    <FileRef
       location = "group:Makefile">
    </FileRef>
+   <FileRef
+      location = "group:src/douml.xcodeproj">
+   </FileRef>
+   <Group
+      location = "container:"
+      name = "Libs">
+      <FileRef
+         location = "group:src/Libs/L_UniversalModels/UniversalModels.xcodeproj">
+      </FileRef>
+   </Group>
    <Group
       location = "container:"
       name = "Src">
-      <FileRef
-         location = "group:src/douml.xcodeproj">
-      </FileRef>
-      <Group
-         location = "container:"
-         name = "Libs">
-         <FileRef
-            location = "group:src/Libs/L_UniversalModels/UniversalModels.xcodeproj">
-         </FileRef>
-      </Group>
       <FileRef
          location = "group:src/CppGenerator/cpp_generator.xcodeproj">
       </FileRef>
