@@ -28,6 +28,9 @@
 #ifndef VERSION_H
 
 #define DOUML_VERSION    "1.0b6"
-#define DOUML_BUILD_DATE "Sat, 30 Mar 2013 18:23:21 +0100"
+
+#define DOUML_BUILD_DATE  __DATE__
+#define DOUML_BUILD_TIME   __TIME__
+
 
 #endif /* VERSION_H */

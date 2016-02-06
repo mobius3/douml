@@ -76,7 +76,7 @@ AboutDialog::AboutDialog() : QDialog(0/*, "About DoUML", TRUE*/)
     vbox->addLayout(hbox);
     hbox->setMargin(5);
     lbp = new QLabel(this);
-    lbp->setText(QString("Build: " DOUML_BUILD_DATE " - Qt version " QT_VERSION_STR));
+    lbp->setText(QString("Build: \" %1 %2\" - Qt version " QT_VERSION_STR).arg(DOUML_BUILD_DATE).arg(DOUML_BUILD_TIME));
     hbox->addWidget(lbp);
 
     hbox = new QHBoxLayout();
