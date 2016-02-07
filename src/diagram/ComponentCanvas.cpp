@@ -813,10 +813,15 @@ void ComponentCanvas::draw(QPainter & p)
     if (isSelected())
         show_mark(p, rect());
 }
+
 void ComponentCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode ComponentCanvas::typeUmlCode() const
 {
     return UmlComponent;

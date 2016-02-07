@@ -118,10 +118,15 @@ void SdLostFoundMsgSupportCanvas::draw(QPainter & p)
 
     // don't use show_mark is selected : too small
 }
+
 void SdLostFoundMsgSupportCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode SdLostFoundMsgSupportCanvas::typeUmlCode() const
 {
     return UmlLostFoundMsgSupport;

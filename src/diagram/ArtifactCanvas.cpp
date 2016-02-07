@@ -531,10 +531,15 @@ void ArtifactCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
+
 void ArtifactCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode ArtifactCanvas::typeUmlCode() const
 {
     return UmlArtifact;

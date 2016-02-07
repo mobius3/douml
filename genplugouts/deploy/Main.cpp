@@ -28,6 +28,8 @@ int main(int argc, char ** argv)
     logger.addDestination(fileDestination.get());
     //QTest::qSleep(15000);
     QLOG_INFO() << " STARTING DEPLOY";
+#else
+    Q_UNUSED(argc);
 #endif
     if (UmlCom::connect(QString(argv[1]).toUInt())) {
         try {

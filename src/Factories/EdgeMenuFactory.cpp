@@ -40,8 +40,9 @@ void EdgeMenuFactory::OnEdgeMenuRequested(uint classID)
 
 void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialogBase * sender)
 {
-    EdgeMenuToolBar * toolbar;
 #ifdef EDGETOOLENABLED
+    EdgeMenuToolBar * toolbar;
+    
     if (!createdToolbars.contains(classID)) {
         toolbar = (factories[classID])();
         createdToolbars.insert(classID, toolbar);
@@ -120,6 +121,9 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialogBase * sender)
         toolbar->setAttribute(Qt::WA_ShowWithoutActivating);
         toolbar->show();
     }
+#else
+    Q_UNUSED(classID);
+    Q_UNUSED(sender);
 #endif
 }
 

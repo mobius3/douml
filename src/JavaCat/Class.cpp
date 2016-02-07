@@ -1617,6 +1617,12 @@ const QPixmap * Class::pixmap(int) const
 void Class::paintCell(QPainter * p, const QColorGroup & cg, int column,
                       int width, int alignment)
 {
+    Q_UNUSED(p);
+    Q_UNUSED(cg);
+    Q_UNUSED(column);
+    Q_UNUSED(width);
+    Q_UNUSED(alignment);
+
     /*
     if (abstractp) {
         QFont fnt = p->font();

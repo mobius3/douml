@@ -565,10 +565,15 @@ void PseudoStateCanvas::draw(QPainter & p)
         }
     }
 }
+
 void PseudoStateCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode PseudoStateCanvas::typeUmlCode() const
 {
     return browser_node->get_type();

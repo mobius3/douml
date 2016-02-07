@@ -391,7 +391,6 @@ void CatalogWidget::OnPerformFavouritesFiltering()
     PerformFiltering(expandedNodesFavourites, ui->tvFavourites, tmodFavourites, rootFavouritesInterface);
 }
 
-
 void CatalogWidget::PerformFiltering(QStringList expandedNodes, QTreeView* view, TreeModel* model, QSharedPointer<TreeItemInterface > interface)
 {
     std::function<QVariant(BrowserNode*)> dataAccessFunc =
@@ -405,10 +404,10 @@ void CatalogWidget::PerformFiltering(QStringList expandedNodes, QTreeView* view,
              expandedNodes, view, model, interface);
 }
 
-
-
 void CatalogWidget::OnUpdateVisitedView(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
+    Q_UNUSED(previous);
+    
     if(UseSkipVisited())
         return;
     //this->ui->tabWidget->setCurrentWidget(this->ui->tabVisited);

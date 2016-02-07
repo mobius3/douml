@@ -194,10 +194,15 @@ void SdSelfMsgCanvas::draw(QPainter & p)
     if (isSelected())
         show_mark(p, r);
 }
+
 void SdSelfMsgCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 void SdSelfMsgCanvas::update()
 {
     if (((BrowserSeqDiagram *) the_canvas()->browser_diagram())

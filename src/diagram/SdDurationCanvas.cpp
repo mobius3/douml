@@ -189,10 +189,15 @@ void SdDurationCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, r);
 }
+
 void SdDurationCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 void SdDurationCanvas::moveBy(double dx, double dy)
 {
     if (dy > 80000) {

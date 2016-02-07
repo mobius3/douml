@@ -284,6 +284,8 @@ void BrowserView::dragLeaveEvent(QDragLeaveEvent *event)
 
 void BrowserView::startDrag(Qt::DropActions supportedActions)
 {
+    Q_UNUSED(supportedActions);
+    
     /*BrowserNode * item = (BrowserNode *)itemAt(e->pos());
 
     if (item) {

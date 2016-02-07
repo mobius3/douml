@@ -27,7 +27,8 @@ BButtonGroup::BButtonGroup(const QString &title, QWidget *parent):
 BButtonGroup::BButtonGroup(int strips, Qt::Orientation orientation, const QString &title, QWidget *parent, QString):
 QGroupBox(title, parent)
 {
-
+    Q_UNUSED(strips);
+    
     m_hLayout = 0;
     m_vLayout = 0;
     m_orientation = orientation;
@@ -49,7 +50,7 @@ QGroupBox(title, parent)
 
 void BButtonGroup::setExclusive(bool isEx)
 {
-
+    Q_UNUSED(isEx);
 }
 
 void BButtonGroup::addWidget(QWidget *widget)

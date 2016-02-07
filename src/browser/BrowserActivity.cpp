@@ -753,6 +753,8 @@ bool BrowserActivity::tool_cmd(ToolCom * com, const char * args)
 bool BrowserActivity::may_contains_them(const QList<BrowserNode *> & l,
                                         BooL & duplicable) const
 {
+    Q_UNUSED(duplicable);
+    
     foreach (BrowserNode *node, l) {
         switch (node->get_type()) {
         case UmlInterruptibleActivityRegion:

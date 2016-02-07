@@ -137,10 +137,15 @@ void CodClassInstCanvas::draw(QPainter & p)
             show_mark(p, rect());
     }
 }
+
 void CodClassInstCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 // all cases
 QString CodClassInstCanvas::get_name() const
 {

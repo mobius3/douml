@@ -121,10 +121,15 @@ void FragmentSeparatorCanvas::drawShape(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
+
 void FragmentSeparatorCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     drawShape(*painter);
 }
+
 void FragmentSeparatorCanvas::moveBy(double, double dy)
 {
     // moved by user

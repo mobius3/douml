@@ -2564,11 +2564,11 @@ void UmlWindow::OnPickSelectionFromItem(const QModelIndex & current, const QMode
 
 void UmlWindow::OnChooseQuickEditMode(QTreeWidgetItem* item, QTreeWidgetItem* old)
 {
-    if(!item)
+    Q_UNUSED(old);
+
+    if (!item)
         return;
-    //TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
-    //    if(!itemAsInterface)
-    //        return;
+
     BrowserNode* itemAsNode = static_cast<BrowserNode*>(item);
     if(!itemAsNode)
         return;

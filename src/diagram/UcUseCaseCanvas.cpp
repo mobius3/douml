@@ -221,10 +221,15 @@ void UcUseCaseCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
+
 void UcUseCaseCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode UcUseCaseCanvas::typeUmlCode() const
 {
     return UmlUseCase;

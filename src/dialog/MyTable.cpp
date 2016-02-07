@@ -144,5 +144,7 @@ void MyTable::setRowStretchable(int column, bool state)
 
 void MyTable::adjustColumn(int col)
 {
+    Q_UNUSED(col);
+    
     horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 }

@@ -154,10 +154,15 @@ void SdLifeLineCanvas::drawShape(QPainter & p)
                     "</g>\n",
                 m, (int) fakeY, m, svg_height());
 }
+
 void SdLifeLineCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     drawShape(*painter);
 }
+
 void SdLifeLineCanvas::moveBy(double dx, double dy)
 {
     DiagramCanvas::moveBy(dx, (dy > 80000) ? dy - 100000 : /*dy*/0);

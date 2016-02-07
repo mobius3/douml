@@ -42,8 +42,10 @@ bool UmlDrag::ro;
 BrowserNode* UmlDrag::node = nullptr;
 
 UmlDrag::UmlDrag(BrowserNode * bn, QWidget * parent, const char * name)
-    : QMimeData(/*UmlDrag::Key + bn->drag_key(), parent, name*/)
 {
+    Q_UNUSED(parent);
+    Q_UNUSED(name);
+
     // stay in the same application : can use address directly
 
     QByteArray a((char *)&bn, sizeof(bn));

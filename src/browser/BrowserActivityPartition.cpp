@@ -516,6 +516,8 @@ bool BrowserActivityPartition::tool_cmd(ToolCom * com, const char * args)
 bool BrowserActivityPartition::may_contains_them(const QList<BrowserNode *> & l,
                                                  BooL & duplicable) const
 {
+    Q_UNUSED(duplicable);
+    
     BrowserNode * activity = get_container(UmlActivity);
     foreach (BrowserNode *node, l) {
         switch (node->get_type()) {

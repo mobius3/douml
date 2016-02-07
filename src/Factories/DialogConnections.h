@@ -32,6 +32,7 @@ class EdgeMenuToolBar;
 #include "CustomWidgets/EdgeMenuToolBar.h"
 #include "dialog/EdgeMenuDialog.h"
 #include "QPushButton"
+
 template<typename DialogType>
 void ConnectToLimitedDialog(DialogType * dialog, EdgeMenuToolBar * toolbar)
 {
@@ -66,8 +67,12 @@ void ConnectToLimitedDialog(DialogType * dialog, EdgeMenuToolBar * toolbar)
     dialog->ConnectionToToolBarEstablished();
     dialog->SetToolBar(toolbar);
     //toolbar->setParent(dialog);
+#else
+    Q_UNUSED(dialog);
+    Q_UNUSED(toolbar);
 #endif
 }
+
 template<typename DialogType>
 void ConnectToClassDialog(DialogType * dialog, EdgeMenuToolBar * toolbar)
 {
@@ -82,10 +87,11 @@ void ConnectToClassDialog(DialogType * dialog, EdgeMenuToolBar * toolbar)
     QObject::connect(pageButton, SIGNAL(clicked()), dialog, SLOT(OnPickPreviousSibling()));
 
     ConnectToLimitedDialog<DialogType>(dialog, toolbar);
+#else
+    Q_UNUSED(dialog);
+    Q_UNUSED(toolbar);
 #endif
 }
-
-
 
 
 #endif // DIALOGCONNECTIONS_H

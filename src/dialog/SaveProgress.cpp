@@ -36,6 +36,7 @@
 SaveProgress::SaveProgress(int n)
     : QProgressDialog(0/*, 0, n, 0, 0, FALSE, Qt::WDestructiveClose*/)
 {
+    Q_UNUSED(n);
 
     if (UmlDesktop::fixed())
         UmlDesktop::tocenter(this);

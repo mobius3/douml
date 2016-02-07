@@ -287,10 +287,15 @@ void ParameterSetCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, r);
 }
+
 void ParameterSetCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode ParameterSetCanvas::typeUmlCode() const
 {
     return UmlParameterSet;
