@@ -60,7 +60,7 @@
 IdDict<BrowserAttribute> BrowserAttribute::all(1021, __FILE__);
 QStringList BrowserAttribute::its_default_stereotypes;	// unicode
 
-BrowserAttribute::BrowserAttribute(QString s, BrowserNode * p, AttributeData * d, int id)
+BrowserAttribute::BrowserAttribute(const QString & s, BrowserNode * p, AttributeData * d, int id)
     : BrowserNode(s, p), Labeled<BrowserAttribute>(all, id),
       def(d), get_oper(0), set_oper(0)
 {
@@ -82,7 +82,7 @@ BrowserAttribute::BrowserAttribute(const BrowserAttribute * model, BrowserNode *
     comment = model->comment;
 }
 
-BrowserAttribute * BrowserAttribute::new_one(QString s, BrowserNode * p,
+BrowserAttribute * BrowserAttribute::new_one(const QString & s, BrowserNode * p,
         bool enum_item)
 {
     AttributeData * d = new AttributeData();
@@ -93,7 +93,7 @@ BrowserAttribute * BrowserAttribute::new_one(QString s, BrowserNode * p,
     return result;
 }
 
-BrowserNode * BrowserAttribute::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserAttribute::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserAttribute * result = new BrowserAttribute(this, p);
 
@@ -433,7 +433,7 @@ void BrowserAttribute::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserAttribute::apply_shortcut(QString s)
+void BrowserAttribute::apply_shortcut(const QString & s)
 {
     int choice = -1;
     const char * st = ((BrowserClass *) parent())->get_stereotype();

@@ -207,7 +207,7 @@ void InfoCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void InfoCanvas::apply_shortcut(QString s)
+void InfoCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

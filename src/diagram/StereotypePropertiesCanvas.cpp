@@ -208,7 +208,7 @@ void StereotypePropertiesCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void StereotypePropertiesCanvas::apply_shortcut(QString s)
+void StereotypePropertiesCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

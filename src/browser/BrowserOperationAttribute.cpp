@@ -31,7 +31,7 @@ BrowserOperationAttribute::~BrowserOperationAttribute()
     set_marked(false);
 }
 
-void BrowserOperationAttribute::set_name(QString value)
+void BrowserOperationAttribute::set_name(const QString & value)
 {
     param->set_name(value.toLatin1().constData());
 }
@@ -41,7 +41,7 @@ QString BrowserOperationAttribute::get_name() const
     return param->get_name();
 }
 
-void BrowserOperationAttribute::set_direction(QString value)
+void BrowserOperationAttribute::set_direction(const QString & value)
 {
     FIllDirList();
     UmlParamDirection dir = static_cast<UmlParamDirection>(DirList.indexOf(value));
@@ -53,7 +53,7 @@ QString BrowserOperationAttribute::get_direction() const
     return stringify(param->get_dir());
 }
 
-void BrowserOperationAttribute::set_param_type(QString value)
+void BrowserOperationAttribute::set_param_type(const QString & value)
 {
     QStringList list;
     BrowserNodeList nodes;
@@ -82,7 +82,7 @@ AType BrowserOperationAttribute::get_param_type() const
     return param->get_type();
 }
 
-void BrowserOperationAttribute::set_default_value(QString value)
+void BrowserOperationAttribute::set_default_value(const QString & value)
 {
     param->set_default_value(value);
 }
@@ -92,7 +92,7 @@ QString BrowserOperationAttribute::get_default_value() const
     return param->get_default_value();
 }
 
-void BrowserOperationAttribute::set_passage_type(QString value, int position)
+void BrowserOperationAttribute::set_passage_type(const QString & value, int position)
 {
     OperationData* data = (OperationData*)operation->get_data();
     data->set_cppdecl(OperationFuncs::set_pointer(position, data->get_cppdecl(), value));
@@ -117,7 +117,7 @@ BrowserOperationReturnType::BrowserOperationReturnType(BrowserView* view, Browse
     data = (OperationData*)operation->get_data();
 }
 
-void BrowserOperationReturnType::set_param_type(QString value)
+void BrowserOperationReturnType::set_param_type(const QString & value)
 {
     QStringList list;
     BrowserNodeList nodes;
@@ -182,7 +182,7 @@ QString BrowserOperationAttribute::get_specifier(int position) const
     return OperationFuncs::extract_specifier(position, data->get_cppdecl());
 }
 
-void BrowserOperationAttribute::set_specifier(QString value, int position)
+void BrowserOperationAttribute::set_specifier(const QString & value, int position)
 {
     OperationData* data = (OperationData*)operation->get_data();
     data->set_cppdecl(OperationFuncs::set_specifier(position, data->get_cppdecl(), value));

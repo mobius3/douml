@@ -65,7 +65,7 @@
 IdDict<BrowserActivityPartition> BrowserActivityPartition::all(__FILE__);
 QStringList BrowserActivityPartition::its_default_stereotypes;	// unicode
 
-BrowserActivityPartition::BrowserActivityPartition(QString s, BrowserNode * p, int id)
+BrowserActivityPartition::BrowserActivityPartition(const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserActivityPartition>(all, id),
       def(new ActivityPartitionData), associated_diagram(0)
 {
@@ -87,7 +87,7 @@ BrowserActivityPartition::BrowserActivityPartition(const BrowserActivityPartitio
     comment = model->comment;
 }
 
-BrowserNode * BrowserActivityPartition::duplicate(BrowserNode * p, QString s)
+BrowserNode * BrowserActivityPartition::duplicate(BrowserNode * p, const QString & s)
 {
     BrowserNode * result = new BrowserActivityPartition(this, p);
 
@@ -321,7 +321,7 @@ void BrowserActivityPartition::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserActivityPartition::apply_shortcut(QString s)
+void BrowserActivityPartition::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

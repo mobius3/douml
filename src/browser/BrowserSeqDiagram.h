@@ -66,29 +66,29 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserSeqDiagram(QString s, BrowserNode * p, int id = 0);
+    BrowserSeqDiagram(const QString & s, BrowserNode * p, int id = 0);
     virtual ~BrowserSeqDiagram();
 
     virtual void delete_it() override;
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString()) override;
 
-    virtual const QPixmap * pixmap(int) const;
-    virtual void draw_svg() const;
+    virtual const QPixmap * pixmap(int) const override;
+    virtual void draw_svg() const override;
 
-    virtual void menu();
-    virtual void apply_shortcut(QString s);
-    virtual void open(bool);
-    virtual void on_close();
-    virtual void read_session(char *& st);
-    virtual UmlCode get_type() const;
-    virtual QString get_stype() const;
-    virtual int get_identifier() const;
-    virtual const char * help_topic() const;
-    virtual BasicData * get_data() const;
-    virtual void set_name(const char * s);
-    virtual void update_drawing_settings();
-    virtual void get_sequencediagramsettings(SequenceDiagramSettings &) const;
+    virtual void menu() override;
+    virtual void apply_shortcut(const QString & s) override;
+    virtual void open(bool) override;
+    virtual void on_close() override;
+    virtual void read_session(char *& st) override;
+    virtual UmlCode get_type() const override;
+    virtual QString get_stype() const override;
+    virtual int get_identifier() const override;
+    virtual const char * help_topic() const override;
+    virtual BasicData * get_data() const override;
+    virtual void set_name(const QString & s) override;
+    virtual void update_drawing_settings() override;
+    virtual void get_sequencediagramsettings(SequenceDiagramSettings &) const override;
     void get_sequencediagramsettings_msg(SequenceDiagramSettings &) const;
     virtual UmlColor get_color(UmlCode) const override;
     virtual bool get_shadow() const override;

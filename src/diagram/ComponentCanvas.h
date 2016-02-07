@@ -106,7 +106,7 @@ public:
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const override;
 
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s) override;
 
 private slots:
     void modified();	// canvas must be updated

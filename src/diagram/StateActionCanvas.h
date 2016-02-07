@@ -91,7 +91,7 @@ public:
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const override;
 
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s) override;
 
     virtual void save(QTextStream  & st, bool ref, QString & warning) const override;
     static StateActionCanvas * read(char *& , UmlCanvas *, char *);

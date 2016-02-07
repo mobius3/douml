@@ -360,7 +360,7 @@ void TransitionCanvas::menu(const QPoint &)
     }
 }
 
-void TransitionCanvas::apply_shortcut(QString s)
+void TransitionCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         data->get_start()->select_in_browser();

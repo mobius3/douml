@@ -1496,7 +1496,7 @@ static void set_previous_word(char * s)
     Context.previous_word = s;
 }
 
-void backup(QDir & d, QString fn)
+void backup(QDir & d, const QString & fn)
 {
     QString s;
 
@@ -1513,22 +1513,17 @@ void backup(QDir & d, QString fn)
         ;
 }
 
-void delete_backup(QDir & d)
+void delete_backup(const QDir & d)
 {
     QStringList s;
 
-    //s.sprintf("*_%u.bak", user_id());
     s.append(QString("*_%1.bak").arg(user_id()));
     //[lgfreitas] entryInfoList des not return a pointer anymore
     QFileInfoList l = d.entryInfoList(s);
 
     if (!l.empty()) {
-        QFileInfoList::iterator it = l.begin(); //[lgfreitas] above iterator was not working.
-        //QFileInfo fi;
-
-        while (it != l.end())  {
-            QFile::remove((*it).absoluteFilePath());
-            it++;
+        for (const auto& fileInfo : l) {
+            QFile::remove(fileInfo.absoluteFilePath());
         }
     }
 }
@@ -1604,7 +1599,7 @@ bool copy_file(QFileInfo * src, const QDir & dest)
     return TRUE;
 }
 
-void save_if_needed(const char * filename, QSharedPointer<QByteArray> newdef)
+void save_if_needed(const char * filename, const QSharedPointer<QByteArray> & newdef)
 {
     QDir d = BrowserView::get_dir();
     QString path = d.absoluteFilePath(filename);
@@ -1876,35 +1871,29 @@ void save_string(const char * p, QTextStream & st)
                     p2 = p3;
 
                 // do NOT use writeRawBytes !
-                while (p != p2)
-                {
-
+                while (p != p2) {
                     QString temp1 = QTextCodec::codecForLocale()->toUnicode(p).left(1);
                     int size = QTextCodec::codecForLocale()->fromUnicode(temp1).size();
                     st << temp1;
-                    p+=size;
-                    if(size == 0)
-                    {
+                    p += size;
+                    if (size == 0) {
                         zeroCount++;
-                        if(zeroCount > 5)
+                        if (zeroCount > 5)
                             break;
                     }
-
-
                 }
 
                 st << '\\';
                 QString temp1 = QTextCodec::codecForLocale()->toUnicode(p).left(1);
                 int size =  QTextCodec::codecForLocale()->fromUnicode(temp1).size();
-                p+=size;
+                p += size;
                 st << temp1;
-                if(size == 0)
-                {
+
+                if (size == 0) {
                     zeroCount++;
-                    if(zeroCount > 5)
+                    if (zeroCount > 5)
                         break;
                 }
-
 
                 if (*p == 0)
                     break;
@@ -1914,8 +1903,7 @@ void save_string(const char * p, QTextStream & st)
                 break;
             }
 
-            if(zeroCount > 5)
-            {
+            if (zeroCount > 5) {
                 printf("unicode error\r\n");
                 break;
             }
@@ -1925,26 +1913,22 @@ void save_string(const char * p, QTextStream & st)
     }
 }
 
-void save_string_list(QStringList & list, QTextStream & st)
+void save_string_list(const QStringList & list, QTextStream & st)
 {
     st << " " << list.count();
 
-    for (QStringList::Iterator it = list.begin();
-         it != list.end();
-         ++it) {
+    for (const auto& s : list) {
         st << " ";
-        save_string((*it).toLatin1().constData(), st);
+        save_string(s.toLatin1().constData(), st);
     }
 }
 
-void save_unicode_string_list(QStringList & list, QTextStream & st)
+void save_unicode_string_list(const QStringList & list, QTextStream & st)
 {
     st << " " << list.count();
-    for (QStringList::Iterator it = list.begin();
-         it != list.end();
-         ++it) {
+    for (const auto& s : list) {
         st << " ";
-        save_string(fromUnicode((*it)), st);
+        save_string(fromUnicode(s), st);
     }
 }
 
@@ -2759,13 +2743,13 @@ void draw_shadow(FILE * fp, QPolygon & poly)
     (void) fputs("\" />\n", fp);
 }
 
-void draw_text(const QRect & r, int align, QString s, const QFont & fn, FILE * fp)
+void draw_text(const QRect & r, int align, const QString & s, const QFont & fn, FILE * fp)
 {
     draw_text(r.left(), r.top(), r.width(), r.height(),
               align, s, fn, fp);
 }
 
-static void xml_text(FILE * fp, QString s)
+static void xml_text(FILE * fp, const QString & s)
 {
     WrapperStr cs = s.toUtf8();
     const char * p = cs;
@@ -2802,9 +2786,11 @@ static void xml_text(FILE * fp, QString s)
 }
 
 void draw_text(int x, int y, int w, int h, int align,
-               QString s, const QFont & fn, FILE * fp,
+               const QString & sInit, const QFont & fn, FILE * fp,
                UmlColor fg, UmlColor bg)
 {
+    QString s = sInit;
+    
     if (s.isEmpty())
         return;
 
@@ -2961,7 +2947,7 @@ void draw_text(int x, int y, int w, int h, int align,
     }
 }
 
-void draw_rotate_text(int cx, int cy, int angle, QString s,
+void draw_rotate_text(int cx, int cy, int angle, const QString & s,
                       const QFont & fn, FILE * fp, UmlColor fg)
 {
     if (s.isEmpty())
@@ -3010,7 +2996,7 @@ QString last_used_directory()
     return Last_Used_Directory;
 }
 
-void set_last_used_directory(QString s)
+void set_last_used_directory(const QString & s)
 {
     QFileInfo fi(s);
 

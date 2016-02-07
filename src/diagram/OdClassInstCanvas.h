@@ -95,7 +95,7 @@ public:
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const override;
 
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s) override;
     void draw_all_relations(OdClassInstCanvas * end = 0);
     bool has_relation_slot(const SlotRel &) const;
     bool is_duplicated(ObjectLinkCanvas * lnk,

@@ -49,7 +49,7 @@ protected:
 
 
 public:
-    BrowserDiagram(QString s, BrowserNode * parent, int id);
+    BrowserDiagram(const QString & s, BrowserNode * parent, int id);
     virtual ~BrowserDiagram();
     void set_window_destroyed(){ windowDestroyed = true;}
     virtual void package_modified();

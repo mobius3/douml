@@ -122,10 +122,12 @@ public:
 
     void SetStart(BrowserRelation*);
     void SetEnd(BrowserRelation*);
-    RoleData* GetDataForClass(QString node)
+    RoleData* GetDataForClass(const QString & node)
     {
-        if(dataForClass.contains(node))
-                return dataForClass[node];
+        if (dataForClass.contains(node))
+            return dataForClass[node];
+
+        return NULL;
     }
 
     void garbage(BrowserRelation * r);
@@ -250,10 +252,10 @@ public:
     const char * get_comment_b() const {
         return b.comment;
     }
-    void  set_comment_a(const char * s) {
+    void  set_comment_a(const WrapperStr & s) {
         a.comment = s;
     }
-    void set_comment_b(const char * s) {
+    void set_comment_b(const WrapperStr & s) {
         b.comment = s;
     }
 
@@ -263,10 +265,10 @@ public:
     const char * get_constraint_b() const {
         return b.constraint;
     }
-    void  set_constraint_a(const char * s) {
+    void  set_constraint_a(const WrapperStr & s) {
         a.constraint = s;
     }
-    void set_constraint_b(const char * s) {
+    void set_constraint_b(const WrapperStr & s) {
         b.constraint = s;
     }
 

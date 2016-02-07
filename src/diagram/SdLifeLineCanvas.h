@@ -86,18 +86,18 @@ public:
     virtual void drawShape(QPainter & p);
     virtual void moveBy(double dx, double dy) override;
 
-    virtual UmlCode typeUmlCode() const;
-    virtual void open();
-    virtual void menu(const QPoint &);
-    virtual void change_scale();
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual bool may_connect(UmlCode l) const;
-    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
-    virtual bool connexion(UmlCode, const QPoint &, const QPoint &);
-    virtual LineDirection allowed_direction(UmlCode);
-    virtual bool copyable() const;
-    virtual void apply_shortcut(QString s);
+    virtual UmlCode typeUmlCode() const override;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
+    virtual void change_scale() override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual bool may_connect(UmlCode l) const override;
+    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &) override;
+    virtual bool connexion(UmlCode, const QPoint &, const QPoint &) override;
+    virtual LineDirection allowed_direction(UmlCode) override;
+    virtual bool copyable() const override;
+    virtual void apply_shortcut(const QString & s) override;
 
     virtual void save(QTextStream &, bool ref, QString & warning) const override;
     virtual void history_save(QBuffer &) const override;

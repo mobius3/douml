@@ -61,7 +61,7 @@
 
 IdDict<BrowserClassInstance> BrowserClassInstance::all(__FILE__);
 
-BrowserClassInstance::BrowserClassInstance(QString s, BrowserClass * cl,
+BrowserClassInstance::BrowserClassInstance(const QString & s, BrowserClass * cl,
                                            BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserClassInstance>(all, id)
 {
@@ -116,7 +116,7 @@ bool BrowserClassInstance::undelete(bool, QString & warning, QString & renamed)
     return TRUE;
 }
 
-BrowserNode * BrowserClassInstance::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserClassInstance::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserClassInstance * result = new BrowserClassInstance(this, p);
 
@@ -363,7 +363,7 @@ void BrowserClassInstance::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserClassInstance::apply_shortcut(QString s)
+void BrowserClassInstance::apply_shortcut(const QString & s)
 {
     int choice = -1;
 
@@ -500,7 +500,7 @@ BrowserClassInstance * BrowserClassInstance::add_classinstance(BrowserNode * fut
 }
 
 // to add BrowserClassInstance from old diagrams
-BrowserClassInstance * BrowserClassInstance::get_it(QString s, BrowserClass * cl,
+BrowserClassInstance * BrowserClassInstance::get_it(const QString & s, BrowserClass * cl,
                                                     BrowserNode * parent)
 {
     if (! s.isEmpty()) {

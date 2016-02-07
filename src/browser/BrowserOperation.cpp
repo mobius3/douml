@@ -85,7 +85,7 @@ BrowserOperation::BrowserOperation(int id)
     // not yet read
 }
 
-BrowserOperation::BrowserOperation(QString s, BrowserNode * p, OperationData * d, int id)
+BrowserOperation::BrowserOperation(const QString & s, BrowserNode * p, OperationData * d, int id)
     : BrowserNode(s, p), Labeled<BrowserOperation>(all, id), def(d),
       get_of(0), set_of(0)
 {
@@ -121,10 +121,11 @@ BrowserOperation::BrowserOperation(const BrowserOperation * model, BrowserNode *
         def->new_body(b, 'y');
 }
 
-BrowserNode * BrowserOperation::duplicate(BrowserNode * p, QString n)
+BrowserNode * BrowserOperation::duplicate(BrowserNode * p, const QString & nInit)
 {
     BrowserOperation * result = new BrowserOperation(this, p);
 
+    QString n = nInit;
     if (n.isEmpty()) {
         if (get_name()[0] == '~')
             // destructor, change the name
@@ -879,7 +880,7 @@ void BrowserOperation::exec_menu_choice(int rank)
     ImplBy.clear();
 }
 
-void BrowserOperation::apply_shortcut(QString s)
+void BrowserOperation::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

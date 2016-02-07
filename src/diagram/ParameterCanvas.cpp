@@ -475,7 +475,7 @@ void ParameterCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void ParameterCanvas::apply_shortcut(QString s)
+void ParameterCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

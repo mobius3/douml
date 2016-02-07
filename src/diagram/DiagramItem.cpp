@@ -395,7 +395,7 @@ void DiagramItem::clone_drawing_settings(const DiagramItem *src)
 
 //
 
-void DiagramItem::apply_shortcut(QString)
+void DiagramItem::apply_shortcut(const QString &)
 {
     // do nothing
 }

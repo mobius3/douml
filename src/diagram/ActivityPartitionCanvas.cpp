@@ -569,7 +569,7 @@ void ActivityPartitionCanvas::turn(int cx100, int cy100)
     }
 }
 
-void ActivityPartitionCanvas::apply_shortcut(QString s)
+void ActivityPartitionCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

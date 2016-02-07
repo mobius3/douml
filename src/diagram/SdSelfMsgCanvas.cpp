@@ -368,7 +368,7 @@ void SdSelfMsgCanvas::menu(const QPoint &)
     canvas()->update();
 }
 
-void SdSelfMsgCanvas::apply_shortcut(QString s)
+void SdSelfMsgCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

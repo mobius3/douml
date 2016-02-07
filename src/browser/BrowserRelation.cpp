@@ -99,7 +99,7 @@ bool BrowserRelation::is_undefined() const
     return ((BrowserNode *) parent())->is_undefined();
 }
 
-BrowserNode * BrowserRelation::duplicate(BrowserNode * p, QString)
+BrowserNode * BrowserRelation::duplicate(BrowserNode * p, const QString &)
 {
     BrowserRelation * result = new BrowserRelation(this, p);
 
@@ -200,7 +200,7 @@ const char * BrowserRelation::get_comment() const
             : def->get_comment_b();
 }
 
-void BrowserRelation::set_comment(const char * c)
+void BrowserRelation::set_comment(const QString & c)
 {
     if (def->is_a(this))
         def->set_comment_a(c);
@@ -671,7 +671,7 @@ void BrowserRelation::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserRelation::apply_shortcut(QString s)
+void BrowserRelation::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

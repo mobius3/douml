@@ -60,12 +60,12 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserActivityObject(QString s, BrowserNode * p, int id = 0);
+    BrowserActivityObject(const QString & s, BrowserNode * p, int id = 0);
     BrowserActivityObject(const BrowserActivityObject * model, BrowserNode * p);
     virtual ~BrowserActivityObject();
 
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     virtual bool may_contains_them(const QList<BrowserNode *> & l,
                                    BooL & duplicable) const;
     static BrowserActivityObject * add_activityobject(BrowserNode * future_parent,
@@ -80,7 +80,7 @@ public:
     virtual void iconChanged();
 
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;

@@ -285,7 +285,7 @@ void SubjectCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void SubjectCanvas::apply_shortcut(QString s)
+void SubjectCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

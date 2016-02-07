@@ -53,7 +53,7 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserClassInstance(QString s, BrowserClass * cl,
+    BrowserClassInstance(const QString & s, BrowserClass * cl,
                          BrowserNode * p, int id = 0);
     BrowserClassInstance(const BrowserClassInstance * model, BrowserNode * p);
     BrowserClassInstance(int id);
@@ -64,14 +64,14 @@ public:
 
     virtual bool undelete(bool, QString & warning, QString & renamed);
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual bool allow_empty() const;
     virtual void update_stereotype(bool rec = FALSE);
 
 
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool force_edit);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;
@@ -86,7 +86,7 @@ public:
     static BrowserClassInstance * read(char *& , char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
 
-    static BrowserClassInstance * get_it(QString s, BrowserClass * cl,
+    static BrowserClassInstance * get_it(const QString & s, BrowserClass * cl,
                                          BrowserNode * parent);
 
     virtual bool tool_cmd(ToolCom * com, const char * args);

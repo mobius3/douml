@@ -322,7 +322,7 @@ void NoteCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void NoteCanvas::apply_shortcut(QString s)
+void NoteCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

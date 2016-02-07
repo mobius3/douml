@@ -66,10 +66,10 @@ public:
     virtual void delete_it() override;
     virtual bool undelete(bool rec, QString & warning, QString & renamed) override;
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString()) override;
 
-    virtual const char * get_comment() const;
-    virtual void set_comment(const char * c);
+    virtual const char * get_comment() const override;
+    virtual void set_comment(const QString & c) override;
 
     virtual UmlVisibility get_visibility() const override;
 
@@ -91,27 +91,27 @@ public:
     BrowserNode * extract();
     static BrowserRelation * reinsert(BrowserNode * p, RelationData * d);
 
-    virtual void menu();
-    virtual void apply_shortcut(QString s);
-    virtual void open(bool);
-    virtual bool in_edition() const;
-    virtual UmlCode get_type() const;
-    virtual QString get_stype() const;
-    virtual int get_identifier() const;
-    virtual const char * help_topic() const;
-    virtual void modified();
-    virtual BasicData * get_data() const;
-    virtual bool same_name(const QString & s, UmlCode type) const;
-    virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
+    virtual void menu() override;
+    virtual void apply_shortcut(const QString & s) override;
+    virtual void open(bool) override;
+    virtual bool in_edition() const override;
+    virtual UmlCode get_type() const override;
+    virtual QString get_stype() const override;
+    virtual int get_identifier() const override;
+    virtual const char * help_topic() const override;
+    virtual void modified() override;
+    virtual BasicData * get_data() const override;
+    virtual bool same_name(const QString & s, UmlCode type) const override;
+    virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const override;
     virtual void member_cpp_def(const QString & prefix, const QString &,
-                                QString & s, bool templ) const;
-    virtual void update_stereotype(bool = FALSE);
-    virtual QString stereotypes_properties() const;
-    virtual AType class_association() const;
-    virtual const char * constraint() const;
+                                QString & s, bool templ) const override;
+    virtual void update_stereotype(bool = FALSE) override;
+    virtual QString stereotypes_properties() const override;
+    virtual AType class_association() const override;
+    virtual const char * constraint() const override;
 
-    virtual void write_id(ToolCom * com);
-    virtual void save(QTextStream &, bool ref, QString & warning);
+    virtual void write_id(ToolCom * com) override;
+    virtual void save(QTextStream &, bool ref, QString & warning) override;
     static BrowserRelation * read(char *& , char *, BrowserNode *, bool force = TRUE);
     static BrowserRelation * read_ref(char *& st);
     static BrowserRelation * read_ref(char *& , char * k);

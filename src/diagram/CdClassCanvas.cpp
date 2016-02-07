@@ -1609,7 +1609,7 @@ void CdClassCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void CdClassCanvas::apply_shortcut(QString s)
+void CdClassCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

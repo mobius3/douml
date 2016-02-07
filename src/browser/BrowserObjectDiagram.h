@@ -63,19 +63,19 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserObjectDiagram(QString s, BrowserNode * p, int id = 0);
+    BrowserObjectDiagram(const QString & s, BrowserNode * p, int id = 0);
     virtual ~BrowserObjectDiagram();
     virtual void set_diagram_window(DiagramWindow*);
 
     virtual void delete_it();
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
 
     virtual const QPixmap * pixmap(int) const;
     virtual void draw_svg() const;
 
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool);
     virtual void on_close();
     virtual void read_session(char *& st);
@@ -84,7 +84,7 @@ public:
     virtual int get_identifier() const;
     virtual const char * help_topic() const;
     virtual BasicData * get_data() const;
-    virtual void set_name(QString s);
+    virtual void set_name(const QString & s);
     virtual void update_drawing_settings();
     virtual void get_objectdiagramsettings(ObjectDiagramSettings &) const;
     virtual bool get_auto_label_position() const;

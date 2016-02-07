@@ -57,10 +57,10 @@ public:
     virtual void open() override;
     virtual void menu(const QPoint &) override;
 
-    virtual void apply_shortcut(QString s);
-    virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(QList<DiagramItem *> &);
-    virtual void clone_drawing_settings(const DiagramItem *src);
+    virtual void apply_shortcut(const QString & s) override;
+    virtual bool has_drawing_settings() const override;
+    virtual void edit_drawing_settings(QList<DiagramItem *> &) override;
+    virtual void clone_drawing_settings(const DiagramItem *src) override;
 
     virtual void save(QTextStream  & st, bool ref, QString & warning) const override;
     static StereotypePropertiesCanvas * read(char *& , UmlCanvas *, char *);

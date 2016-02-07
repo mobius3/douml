@@ -224,7 +224,7 @@ void ConstraintCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void ConstraintCanvas::apply_shortcut(QString s)
+void ConstraintCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

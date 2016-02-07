@@ -278,7 +278,7 @@ void TextCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void TextCanvas::apply_shortcut(QString s)
+void TextCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

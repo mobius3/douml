@@ -147,7 +147,7 @@ void BrowserItemNameValidator::fixup(QString &str) const
     str = infoMessage;
 }
 
-BrowserNode::BrowserNode(QString s, BrowserView * parent)
+BrowserNode::BrowserNode(const QString & s, BrowserView * parent)
     : QTreeWidgetItem(parent),
       name(s)
 {
@@ -155,7 +155,7 @@ BrowserNode::BrowserNode(QString s, BrowserView * parent)
     viewptr = parent;
 }
 
-BrowserNode::BrowserNode(QString s, BrowserNode * parent)
+BrowserNode::BrowserNode(const QString & s, BrowserNode * parent)
     :      QTreeWidgetItem(parent),
       name(s)
 {
@@ -340,7 +340,7 @@ const char * BrowserNode::get_comment() const
     return comment.operator const char *();
 }
 
-void BrowserNode::set_comment(QString c)
+void BrowserNode::set_comment(const QString & c)
 {
     comment = c;
 }
@@ -462,7 +462,7 @@ bool BrowserNode::is_writable() const
     return !is_read_only;
 }
 
-void BrowserNode::set_name(QString  s)
+void BrowserNode::set_name(const QString & s)
 {
     bool firsttime = name.isEmpty();
     name = s;
@@ -795,7 +795,7 @@ QString BrowserNode::visibility_as_string() const
     return stringify(get_visibility());
 }
 
-UmlVisibility BrowserNode::encode_visibility(QString val)
+UmlVisibility BrowserNode::encode_visibility(const QString & val)
 {
     return visibility(val.toLatin1().constData());
 }
@@ -902,7 +902,7 @@ BasicData * BrowserNode::add_relation(UmlCode t, BrowserNode * end)
     return d;
 }
 
-void BrowserNode::edit(QString s, const QStringList & default_stereotypes)
+void BrowserNode::edit(const QString & s, const QStringList & default_stereotypes)
 {
 
     if (!is_edited) {
@@ -1102,7 +1102,7 @@ void BrowserNode::mark_menu(QMenu & m, const char * s, int bias) const
 
 }
 
-void BrowserNode::mark_shortcut(QString s, int & index, int bias)
+void BrowserNode::mark_shortcut(const QString & s, int & index, int bias)
 {
     if (! is_marked) {
         if (s == "Mark")

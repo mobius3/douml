@@ -442,7 +442,7 @@ void FragmentCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void FragmentCanvas::apply_shortcut(QString s)
+void FragmentCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

@@ -73,24 +73,24 @@ public:
     void compute_size();
     bool force_inside();
 
-    virtual UmlCode typeUmlCode() const;
-    virtual void open();
-    virtual void menu(const QPoint &);
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
-    virtual bool move_with_its_package() const;
-    virtual void moveBy(double dx, double dy);
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual bool alignable() const;
-    virtual bool copyable() const;
-    virtual void remove(bool from_model);
+    virtual UmlCode typeUmlCode() const override;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &) override;
+    virtual bool move_with_its_package() const override;
+    virtual void moveBy(double dx, double dy) override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual bool alignable() const override;
+    virtual bool copyable() const override;
+    virtual void remove(bool from_model) override;
 
-    virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(QList<DiagramItem *> &);
-    virtual void clone_drawing_settings(const DiagramItem *src);
+    virtual bool has_drawing_settings() const override;
+    virtual void edit_drawing_settings(QList<DiagramItem *> &) override;
+    virtual void clone_drawing_settings(const DiagramItem *src) override;
 
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s) override;
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const override;
 

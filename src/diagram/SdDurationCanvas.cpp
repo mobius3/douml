@@ -836,7 +836,7 @@ void SdDurationCanvas::menu(const QPoint & p)
     canvas()->update();
 }
 
-void SdDurationCanvas::apply_shortcut(QString s)
+void SdDurationCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

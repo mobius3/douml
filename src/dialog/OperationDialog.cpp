@@ -1680,12 +1680,12 @@ void OperationDialog::manage_cpp_exceptions(QString & s)
         s += " throw ()";
 }
 
-bool CompareAgainstTag(QString & currentTag, QString tagToCompare, const char * p)
+bool CompareAgainstTag(QString & currentTag, const QString & tagToCompare, const char * p)
 {
     currentTag = tagToCompare;
-    tagToCompare = "${" + tagToCompare + "}";
 
-    if (!strncmp(p, tagToCompare.toLatin1().constData(), tagToCompare.length()))
+    const QString tagToCompareBracketed = "${" + tagToCompare + "}";
+    if (!strncmp(p, tagToCompareBracketed.toLatin1().constData(), tagToCompareBracketed.length()))
         return true;
 
     return false;

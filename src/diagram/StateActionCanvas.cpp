@@ -614,7 +614,7 @@ void StateActionCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void StateActionCanvas::apply_shortcut(QString s)
+void StateActionCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

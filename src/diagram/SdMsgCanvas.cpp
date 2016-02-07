@@ -390,7 +390,7 @@ void SdMsgCanvas::menu(const QPoint &)
     canvas()->update();
 }
 
-void SdMsgCanvas::apply_shortcut(QString s)
+void SdMsgCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

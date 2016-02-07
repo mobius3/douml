@@ -64,7 +64,7 @@ protected:
     void get_all_required_classes(QList<BrowserClass *> &) const;
 
 public:
-    BrowserComponent(QString s, BrowserNode * p, int id = 0);
+    BrowserComponent(const QString & s, BrowserNode * p, int id = 0);
     BrowserComponent(const BrowserComponent * model, BrowserNode * p);
     BrowserComponent(int id);
 
@@ -91,10 +91,10 @@ public:
     void get_all_required_classes(QList<BrowserClass *> &, bool sorted) const;
 
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool force_edit);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;

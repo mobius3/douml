@@ -59,13 +59,13 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserAttribute(QString s, BrowserNode * p, AttributeData * d, int id = 0);
+    BrowserAttribute(const QString & s, BrowserNode * p, AttributeData * d, int id = 0);
     BrowserAttribute(const BrowserAttribute * model, BrowserNode * p);
     virtual ~BrowserAttribute();
     uint TypeID() override;
     virtual void delete_it() override;
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString()) override;
 
     BrowserOperation * get_get_oper() {
         return get_oper;
@@ -83,9 +83,9 @@ public:
     virtual const QPixmap * pixmap(int) const;
     virtual void paintCell(QPainter *, const QPalette &, int, int, int);
 
-    virtual void menu();
-    virtual void apply_shortcut(QString s);
-    virtual void open(bool);
+    virtual void menu() override;
+    virtual void apply_shortcut(const QString & s) override;
+    virtual void open(bool) override;
     void open_new_ste_attr();
     virtual UmlCode get_type() const override;
     virtual QString get_stype() const override;
@@ -106,7 +106,7 @@ public:
     static BrowserNode * get_it(const char * k, int id);
     static void post_load();
 
-    static BrowserAttribute * new_one(QString s, BrowserNode * p, bool enum_item);
+    static BrowserAttribute * new_one(const QString & s, BrowserNode * p, bool enum_item);
 
     static void init();
     static void clear(bool old);

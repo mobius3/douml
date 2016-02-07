@@ -273,7 +273,7 @@ void SdContinuationCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void SdContinuationCanvas::apply_shortcut(QString s)
+void SdContinuationCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

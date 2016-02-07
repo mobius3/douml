@@ -58,14 +58,14 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserActivityPartition(QString s, BrowserNode * p, int id = 0);
+    BrowserActivityPartition(const QString & s, BrowserNode * p, int id = 0);
     BrowserActivityPartition(const BrowserActivityPartition * model, BrowserNode * p);
     virtual ~BrowserActivityPartition();
 
     virtual bool may_contains_them(const QList<BrowserNode *> & l,
                                    BooL & duplicable) const;
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     static BrowserActivityPartition * add_activitypartition(BrowserNode * future_parent);
     static BrowserActivityPartition * add_activitypartition(BrowserNode * future_parent, const char * name);
     static BrowserActivityPartition * get_activitypartition(BrowserNode * parent);
@@ -73,7 +73,7 @@ public:
     virtual const QPixmap * pixmap(int) const;
 
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;

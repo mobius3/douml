@@ -46,19 +46,19 @@ public:
     virtual void draw(QPainter & p);
     virtual void change_scale() override;
 
-    virtual UmlCode typeUmlCode() const;
-    virtual void open();
-    virtual void menu(const QPoint &);
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual bool alignable() const;
-    virtual bool copyable() const;
-    virtual bool represents(BrowserNode *);
-    virtual void apply_shortcut(QString s);
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
-    virtual void save(QTextStream &, bool ref, QString & warning) const;
+    virtual UmlCode typeUmlCode() const override;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual bool alignable() const override;
+    virtual bool copyable() const override;
+    virtual bool represents(BrowserNode *) override;
+    virtual void apply_shortcut(const QString & s) override;
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
+    virtual void save(QTextStream &, bool ref, QString & warning) const override;
     static IconCanvas * read(char *& , UmlCanvas *, char *);
 
 protected:

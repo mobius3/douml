@@ -218,7 +218,7 @@ void IconCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void IconCanvas::apply_shortcut(QString s)
+void IconCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

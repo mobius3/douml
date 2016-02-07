@@ -382,7 +382,7 @@ void CodClassInstCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void CodClassInstCanvas::apply_shortcut(QString s)
+void CodClassInstCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

@@ -67,7 +67,7 @@
 IdDict<BrowserActivityAction> BrowserActivityAction::all(257, __FILE__);
 QStringList BrowserActivityAction::its_default_stereotypes;	// unicode
 
-BrowserActivityAction::BrowserActivityAction(QString s, BrowserNode * p, int id)
+BrowserActivityAction::BrowserActivityAction(const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserActivityAction>(all, id),
       def(new ActivityActionData), associated_diagram(0)
 {
@@ -89,7 +89,7 @@ BrowserActivityAction::BrowserActivityAction(const BrowserActivityAction * model
     comment = model->comment;
 }
 
-BrowserActivityAction::BrowserActivityAction(QString s, BrowserNode * p,
+BrowserActivityAction::BrowserActivityAction(const QString & s, BrowserNode * p,
                                              UmlActionKind k)
     : BrowserNode(s, p), Labeled<BrowserActivityAction>(all, 0),
       def(new ActivityActionData(k)), associated_diagram(0)
@@ -97,7 +97,7 @@ BrowserActivityAction::BrowserActivityAction(QString s, BrowserNode * p,
     def->set_browser_node(this);
 }
 
-BrowserNode * BrowserActivityAction::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserActivityAction::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserNode * result = new BrowserActivityAction(this, p);
 
@@ -655,7 +655,7 @@ void BrowserActivityAction::exec_menu_choice(int rank,
     package_modified();
 }
 
-void BrowserActivityAction::apply_shortcut(QString s)
+void BrowserActivityAction::apply_shortcut(const QString & s)
 {
     int choice = -1;
 
@@ -1186,7 +1186,7 @@ BrowserActivityAction * BrowserActivityAction::read(char *& st, char * k,
             k = read_keyword(st);
         }
 
-        result->BrowserNode::read(st, k, id);
+        result->read_browser_node(st, k, id);
 
         // was not done because of internal action not read soon
         result->update_stereotype(FALSE);

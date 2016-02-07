@@ -414,7 +414,7 @@ void SdLifeLineCanvas::menu(const QPoint &)
     }
 }
 
-void SdLifeLineCanvas::apply_shortcut(QString s)
+void SdLifeLineCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         exec_menu(0);

@@ -63,7 +63,7 @@
 IdDict<BrowserInterruptibleActivityRegion> BrowserInterruptibleActivityRegion::all(__FILE__);
 QStringList BrowserInterruptibleActivityRegion::its_default_stereotypes;	// unicode
 
-BrowserInterruptibleActivityRegion::BrowserInterruptibleActivityRegion(QString s, BrowserNode * p, int id)
+BrowserInterruptibleActivityRegion::BrowserInterruptibleActivityRegion(const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserInterruptibleActivityRegion>(all, id),
       def(new SimpleData), associated_diagram(0)
 {
@@ -86,7 +86,7 @@ BrowserInterruptibleActivityRegion::BrowserInterruptibleActivityRegion(const Bro
     comment = model->comment;
 }
 
-BrowserNode * BrowserInterruptibleActivityRegion::duplicate(BrowserNode * p, QString s)
+BrowserNode * BrowserInterruptibleActivityRegion::duplicate(BrowserNode * p, const QString & s)
 {
     BrowserNode * result = new BrowserInterruptibleActivityRegion(this, p);
 
@@ -350,7 +350,7 @@ void BrowserInterruptibleActivityRegion::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserInterruptibleActivityRegion::apply_shortcut(QString s)
+void BrowserInterruptibleActivityRegion::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

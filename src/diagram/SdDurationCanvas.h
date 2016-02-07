@@ -106,24 +106,24 @@ public:
     virtual bool may_connect(UmlCode l) const;
     virtual aCorner on_resize_point(const QPoint &);
     virtual void resize(int w, int h);
-    virtual void resize(aCorner c, int dx, int dy, QPoint &);
-    virtual void resize(const QSize & sz, bool w, bool h);
-    virtual void change_scale();
-    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
-    virtual bool connexion(UmlCode, const QPoint &, const QPoint &);
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual LineDirection allowed_direction(UmlCode);
-    virtual void select_associated();
-    virtual bool copyable() const;
-    virtual void history_save(QBuffer & b) const;
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
+    virtual void resize(aCorner c, int dx, int dy, QPoint &) override;
+    virtual void resize(const QSize & sz, bool w, bool h) override;
+    virtual void change_scale() override;
+    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &) override;
+    virtual bool connexion(UmlCode, const QPoint &, const QPoint &) override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual LineDirection allowed_direction(UmlCode) override;
+    virtual void select_associated() override;
+    virtual bool copyable() const override;
+    virtual void history_save(QBuffer & b) const override;
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
 
-    virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(QList<DiagramItem *> &);
-    virtual void clone_drawing_settings(const DiagramItem *src);
+    virtual bool has_drawing_settings() const override;
+    virtual void edit_drawing_settings(QList<DiagramItem *> &) override;
+    virtual void clone_drawing_settings(const DiagramItem *src) override;
 
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s) override;
     void edit_drawing_settings();
 
     virtual void save(QTextStream &, bool ref, QString & warning) const override;

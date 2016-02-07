@@ -68,7 +68,7 @@ public:
     virtual void edit_drawing_settings(QList<DiagramItem *> &) override;
     virtual void clone_drawing_settings(const DiagramItem *src) override;
 
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s) override;
     void edit_drawing_settings();
 
     virtual void save(QTextStream &, bool ref, QString & warning) const override;

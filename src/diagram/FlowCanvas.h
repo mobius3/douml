@@ -82,7 +82,7 @@ public:
     virtual void clone_drawing_settings(const DiagramItem *src) override;
     void edit_drawing_settings();
 
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s) override;
 
     static FlowCanvas * read(char *& st, UmlCanvas * canvas, char *);
     virtual BasicData * get_data() const override;

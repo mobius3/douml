@@ -68,7 +68,7 @@ public:
     virtual void history_load(QBuffer &) override;
     virtual void history_hide() override;
 
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s) override;
 
     virtual void save(QTextStream & st, bool ref, QString & warning) const override;
     static SimpleRelationCanvas * read(char *& st, UmlCanvas * canvas, char *);

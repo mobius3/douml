@@ -972,7 +972,7 @@ void ComponentCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void ComponentCanvas::apply_shortcut(QString s)
+void ComponentCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

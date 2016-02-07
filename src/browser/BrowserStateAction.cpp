@@ -83,7 +83,7 @@ BrowserStateAction::BrowserStateAction(const BrowserStateAction * model, Browser
     comment = model->comment;
 }
 
-BrowserNode * BrowserStateAction::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserStateAction::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserNode * result = new BrowserStateAction(this, p);
 
@@ -294,7 +294,7 @@ void BrowserStateAction::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserStateAction::apply_shortcut(QString s)
+void BrowserStateAction::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

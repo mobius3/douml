@@ -647,7 +647,7 @@ void OdClassInstCanvas::menu(const QPoint &)
     }
 }
 
-void OdClassInstCanvas::apply_shortcut(QString s)
+void OdClassInstCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

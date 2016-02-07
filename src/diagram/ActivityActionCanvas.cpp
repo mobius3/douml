@@ -1003,7 +1003,7 @@ void ActivityActionCanvas::menu(const QPoint &)
     }
 }
 
-void ActivityActionCanvas::apply_shortcut(QString s)
+void ActivityActionCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

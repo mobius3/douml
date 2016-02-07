@@ -73,7 +73,7 @@ protected:
     void exec_menu_choice(int index, QList<BrowserOperation *> & l);
 
 public:
-    BrowserClass(QString s, BrowserNode * p, ClassData * d, int id = 0);
+    BrowserClass(const QString & s, BrowserNode * p, ClassData * d, int id = 0);
     BrowserClass(const BrowserClass * model, BrowserNode * p);
     virtual ~BrowserClass();
 
@@ -87,7 +87,7 @@ public:
     BrowserNode * addOperation(BrowserOperation * oper = nullptr);
     BrowserNode * add_inherited_operation(BrowserOperation * model);
     BrowserNode * add_extra_member(BrowserExtraMember * em = 0);
-    QList<BrowserOperation *> inherited_operations(unsigned limit, QString parent_name = QString()) const;
+    QList<BrowserOperation *> inherited_operations(unsigned limit, const QString & parent_name = QString()) const;
     QString may_start(UmlCode l) const;
     QString may_connect(UmlCode l, BrowserClass * other);
     virtual BasicData * add_relation(UmlCode, BrowserNode *) override;
@@ -132,23 +132,23 @@ public:
                                     const QString & name = QString()) override;
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const override;
     QString contextual_name(ShowContextMode) const;
-    virtual void set_name(QString s);
-    virtual void member_cpp_def(const QString &, const QString &, QString & s, bool) const;
-    virtual void menu();
-    virtual void apply_shortcut(QString s);
-    virtual void open(bool force_edit);
-    virtual UmlCode get_type() const;
-    virtual QString get_stype() const;
-    virtual int get_identifier() const;
-    virtual const char * help_topic() const;
-    virtual void modified();
-    virtual void on_delete();
-    virtual BasicData * get_data() const;
-    virtual bool allow_spaces() const;
-    virtual const QStringList & default_stereotypes(UmlCode, const BrowserNode *) const; // non class rel
-    virtual const char * constraint() const;
+    virtual void set_name(const QString & s) override;
+    virtual void member_cpp_def(const QString &, const QString &, QString & s, bool) const override;
+    virtual void menu() override;
+    virtual void apply_shortcut(const QString & s) override;
+    virtual void open(bool force_edit) override;
+    virtual UmlCode get_type() const override;
+    virtual QString get_stype() const override;
+    virtual int get_identifier() const override;
+    virtual const char * help_topic() const override;
+    virtual void modified() override;
+    virtual void on_delete() override;
+    virtual BasicData * get_data() const override;
+    virtual bool allow_spaces() const override;
+    virtual const QStringList & default_stereotypes(UmlCode, const BrowserNode *) const override; // non class rel
+    virtual const char * constraint() const override;
 
-    virtual void save(QTextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning) override;
     static BrowserClass * read_ref(char *& , const char * k = 0);
     static BrowserClass * read(char *& , char *, BrowserNode *, bool force = TRUE);
     static BrowserNode * read_any_ref(char *& , char *);
@@ -171,7 +171,7 @@ public:
                                     const char * stereotype = 0);
     static BrowserClass * add_class(bool stereotypep,
                                     BrowserNode * future_parent,
-                                    QString name = QString());
+                                    const QString & name = QString());
     static BrowserClass * find(const char * s);
 
     static void init();
@@ -187,7 +187,7 @@ public:
 
     virtual void referenced_by(QList<BrowserNode *> &, bool ondelete = FALSE);
 
-    static bool new_java_enums(QString new_st);
+    static bool new_java_enums(const QString & new_st);
 
     virtual const QPixmap * pixmap(int) const;
     virtual void update_stereotype(bool rec = FALSE);

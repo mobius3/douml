@@ -62,7 +62,7 @@
 IdDict<BrowserPin> BrowserPin::all(257, __FILE__);
 QStringList BrowserPin::its_default_stereotypes;	// unicode
 
-BrowserPin::BrowserPin(QString s, BrowserNode * p, PinData * d, int id)
+BrowserPin::BrowserPin(const QString & s, BrowserNode * p, PinData * d, int id)
     : BrowserNode(s, p), Labeled<BrowserPin>(all, id), def(d)
 {
 }
@@ -82,7 +82,7 @@ BrowserPin::BrowserPin(const BrowserPin * model, BrowserNode * p)
     comment = model->comment;
 }
 
-BrowserNode * BrowserPin::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserPin::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserNode * result = new BrowserPin(this, p);
 
@@ -347,7 +347,7 @@ void BrowserPin::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserPin::apply_shortcut(QString s)
+void BrowserPin::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

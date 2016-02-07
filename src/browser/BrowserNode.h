@@ -112,17 +112,19 @@ protected:
     virtual bool delete_internal(QString & warning);
 
 public:
-    BrowserNode* firstChild() const {return (BrowserNode*)this->child(0);}
-    BrowserNode(QString s, BrowserView * parent);
-    BrowserNode(QString s, BrowserNode * parent);
+    BrowserNode* firstChild() const {
+        return static_cast<BrowserNode*>(child(0));
+    }
+    BrowserNode(const QString & s, BrowserView * parent);
+    BrowserNode(const QString & s, BrowserNode * parent);
     virtual ~BrowserNode();
 
     virtual bool is_undefined() const;
 
-   virtual QString get_name() const {
+    virtual QString get_name() const {
         return name;
     }
-    virtual void set_name(QString s);
+    virtual void set_name(const QString & s);
     virtual void update_stereotype(bool rec = false);
 
     static bool edition_active() {
@@ -133,10 +135,10 @@ public:
     virtual bool in_edition() const;
 
     void mark_menu(QMenu & m, const char *, int bias) const;
-    void mark_shortcut(QString s, int & index, int bias);
+    void mark_shortcut(const QString & s, int & index, int bias);
     void mark_management(int choice);
     void toggle_mark();
-    void set_marked(bool value);//{is_marked = value;}
+    void set_marked(bool value);
     bool markedp() const {
         return is_marked;
     }
@@ -171,13 +173,13 @@ public:
     virtual bool undelete(bool rec, QString & warning, QString & renamed);
     void must_be_deleted(); // deleted after load time
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString()) = 0;
+                                    const QString & name = QString()) = 0;
 
     bool nestedp() const {
         return ((BrowserNode *) parent())->get_type() == get_type();
     }
     virtual const char * get_comment() const;
-    virtual void set_comment(QString c);
+    virtual void set_comment(const QString & c);
     const char * get_stereotype() const;
     virtual QString stereotypes_properties() const;
     bool may_contains(BrowserNode *, bool rec) const;
@@ -197,18 +199,18 @@ public:
     virtual bool allow_empty() const;
     virtual bool same_name(const QString & s, UmlCode type) const;
     void select_in_browser();
-    void edit(QString, const QStringList & default_stereotypes);
+    void edit(const QString & s, const QStringList & default_stereotypes);
     void children(BrowserNodeList & nodes,
                   UmlCode kind1, UmlCode kind2 = UmlRelations) const;
     QList<BrowserNode*> children(QList<UmlCode>, bool includeDeleted = true) const;
 
     virtual QString full_name(bool rev = false, bool itself = true) const;
     QString fullname(bool rev) const;
-    QString fullname(QString & s, bool rev) const;
+    QString fullname(const QString & s, bool rev) const;
     virtual void menu() = 0;
-    virtual void apply_shortcut(QString s) = 0;
+    virtual void apply_shortcut(const QString & s) = 0;
     /* Open a Diagram Window */
-    virtual const QPixmap * pixmap(int) const = 0; //{return 0;}
+    virtual const QPixmap * pixmap(int) const = 0;
     virtual void open(bool force_edit);
     virtual void on_close();
     virtual UmlCode get_type() const = 0;
@@ -243,11 +245,13 @@ public:
     virtual void get_activitydiagramsettings(ActivityDiagramSettings &) const;
     virtual UmlColor get_color(UmlCode) const;
     virtual UmlVisibility get_visibility(UmlCode) const;
-    virtual UmlVisibility get_visibility() const {return UmlDefaultVisibility;}
+    virtual UmlVisibility get_visibility() const {
+        return UmlDefaultVisibility;
+    }
     //stringifies visibility of this node
     QString visibility_as_string() const;
     //converts visibility from string to enum representation
-    static UmlVisibility encode_visibility(QString) ;
+    static UmlVisibility encode_visibility(const QString & val);
 
     virtual void package_settings(BooL & name_in_tab, ShowContextMode & show_context) const;
     virtual const QStringList & default_stereotypes(UmlCode, const BrowserNode *) const; // non class rel
@@ -334,7 +338,7 @@ inline QString BrowserNode::fullname(bool rev) const
         return p + (FullPathDotDot + name);
 }
 
-inline QString BrowserNode::fullname(QString & s, bool rev) const
+inline QString BrowserNode::fullname(const QString & s, bool rev) const
 {
     QString p = ((BrowserNode *) parent())->full_name(false, false);
 
