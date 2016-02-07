@@ -229,7 +229,7 @@ void FileIn::finish(WrapperStr what)
             WrapperStr s = tk.xmiId();
 
             if (! s.isEmpty())
-                BypassedIds.insert(s, "");
+                BypassedIds.insert(s);
 
             if (! tk.closed())
                 finish(tk.what());
@@ -239,7 +239,7 @@ void FileIn::finish(WrapperStr what)
 
 void FileIn::bypass(Token & tk)
 {
-    static QHash<QString, char*> bypassed;
+    static QSet<QString> bypassed;
 
     WrapperStr s = tk.xmiType();
 
@@ -248,7 +248,7 @@ void FileIn::bypass(Token & tk)
 
         if (!bypassed.contains(k)) {
             warning("bypass &lt;" + tk.what() + "...&gt; (other cases not signaled)");
-            bypassed.insert(k, "");
+            bypassed.insert(k);
         }
     }
     else {
@@ -257,14 +257,14 @@ void FileIn::bypass(Token & tk)
         if (!bypassed.contains(k)) {
             warning("bypass &lt;" + tk.what() +
                     " xmi:type=\"" + s + "\"...&gt; (other cases not signaled)");
-            bypassed.insert(k, "");
+            bypassed.insert(k);
         }
     }
 
     s = tk.xmiId();
 
     if (! s.isEmpty())
-        BypassedIds.insert(s, "");
+        BypassedIds.insert(s);
 
     if (! tk.closed())
         finish(tk.what());
@@ -276,7 +276,7 @@ void FileIn::bypassedId(Token & tk)
     WrapperStr s = tk.xmiId();
 
     if (! s.isEmpty())
-        BypassedIds.insert(s, "");
+        BypassedIds.insert(s);
 
 }
 
@@ -300,7 +300,7 @@ void FileIn::warning(WrapperStr s)
 
 }
 
-QHash<WrapperStr,char*> FileIn::BypassedIds;
+QSet<WrapperStr> FileIn::BypassedIds;
 
 const char * FileIn::read_word(int c, bool any)
 {
