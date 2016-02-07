@@ -45,8 +45,8 @@ public:
     ParameterData();
     ParameterData(ParameterData * model, BrowserNode * bn);
 
-    virtual void do_connect(BrowserClass * c);
-    virtual void do_disconnect(BrowserClass * c);
+    virtual void do_connect(BrowserClass * c) override;
+    virtual void do_disconnect(BrowserClass * c) override;
 
     const char * get_default_value() const {
         return default_value;
@@ -55,11 +55,11 @@ public:
     void edit();
 
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-                              const QString & comment);
+                              const QString & comment) override;
     virtual bool tool_cmd(ToolCom * com, const char * args,
-                          BrowserNode * bn, const QString & comment);
-    virtual void send_cpp_def(ToolCom * com);
-    virtual void send_java_def(ToolCom * com);
+                          BrowserNode * bn, const QString & comment) override;
+    virtual void send_cpp_def(ToolCom * com) override;
+    virtual void send_java_def(ToolCom * com) override;
 
     void save(QTextStream &, QString & warning) const;
     void read(char *& , char *&);

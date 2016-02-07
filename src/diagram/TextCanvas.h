@@ -69,7 +69,7 @@ public:
     static TextCanvas * read(char *& , UmlCanvas *, char *);
 
     static void send(ToolCom * com, QList<QGraphicsItem*> & all);
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 };
 
 #endif

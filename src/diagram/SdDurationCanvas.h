@@ -67,7 +67,7 @@ protected:
 
     static SdDurationCanvas * read_internal(char *& st, UmlCanvas *, int id, SdDurationSupport *);
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     SdDurationCanvas(UmlCanvas * canvas, SdDurationSupport * sp,
                      int v, bool isdest);
@@ -90,7 +90,7 @@ public:
     void go_up(SdMsgBaseCanvas *, bool isdest);
     void go_down(SdMsgBaseCanvas *);
     void update_hpos();
-    virtual void update_v_to_contain(const QRect re);
+    virtual void update_v_to_contain(const QRect re) override;
     void toFlat();
     void toOverlapping();
 
@@ -126,7 +126,7 @@ public:
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
 
-    virtual void save(QTextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const override;
     static SdDurationCanvas * read(char *& st, UmlCanvas * canvas, char *);
     static SdDurationCanvas * read(char *& st, UmlCanvas * canvas, bool ref);
 

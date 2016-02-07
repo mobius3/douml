@@ -45,18 +45,18 @@ public:
                  int x, int y, int w, int h, int id);
     virtual ~CodObjCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
 
-    virtual void moveBy(double dx, double dy);
-    virtual void set_z(double z);
+    virtual void moveBy(double dx, double dy) override;
+    virtual void set_z(double z) override;
 
     virtual BrowserClass * get_class() const;
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
-    virtual void change_scale();
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &) override;
+    virtual void change_scale() override;
 
     virtual QString get_full_name() const = 0;
     void get_all_in_all_out(ColMsgList & all_in, ColMsgList & all_out) const;

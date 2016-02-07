@@ -53,41 +53,41 @@ public:
                          SimpleRelationData * d = 0);
     virtual ~SimpleRelationCanvas();
 
-    virtual void delete_it();
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual void remove(bool from_model);
-    virtual void unconnect();
+    virtual void delete_it() override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual void remove(bool from_model) override;
+    virtual void unconnect() override;
 
-    virtual ArrowPointCanvas * brk(const QPoint &);
-    virtual ArrowCanvas * join(ArrowCanvas * other, ArrowPointCanvas * ap);
+    virtual ArrowPointCanvas * brk(const QPoint &) override;
+    virtual ArrowCanvas * join(ArrowCanvas * other, ArrowPointCanvas * ap) override;
 
     virtual void setSelected(bool yes);
 
     void stereotype_default_position() const;
 
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
 
     virtual void apply_shortcut(QString s);
 
-    virtual void save(QTextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const override;
     static SimpleRelationCanvas * read(char *& st, UmlCanvas * canvas, char *);
 
-    virtual BasicData * get_data() const;
+    virtual BasicData * get_data() const override;
 
-    virtual void open();
-    virtual void menu(const QPoint &);
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
 
-    virtual void setVisible(bool yes);
-    virtual void moveBy(double dx, double dy);
-    virtual void select_associated();
-    virtual void check_stereotypeproperties();
+    virtual void setVisible(bool yes) override;
+    virtual void moveBy(double dx, double dy) override;
+    virtual void select_associated() override;
+    virtual void check_stereotypeproperties() override;
 
     static void drop(BrowserNode *, UmlCanvas *);
     static void drop(BrowserNode *, UmlCanvas *,
                      QHash<BasicData *, DiagramItem *> &drawn);
 
-    virtual bool represents(BrowserNode *);
+    virtual bool represents(BrowserNode *) override;
 
 protected:
     BrowserNode * update_begin(DiagramItem * cnend);

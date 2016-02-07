@@ -52,12 +52,12 @@ protected:
     PseudoStateCanvas(UmlCanvas * canvas, int id);
     void set_xpm();
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     PseudoStateCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~PseudoStateCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     virtual void draw(QPainter & p);
     virtual void change_scale();
@@ -83,7 +83,7 @@ public:
 
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static PseudoStateCanvas * read(char *& , UmlCanvas *, char *);
-    virtual void post_loaded();
+    virtual void post_loaded() override;
 
 private slots:
     void modified();	// canvas must be updated

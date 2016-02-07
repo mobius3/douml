@@ -50,12 +50,12 @@ protected:
 
     void exec_menu(int rank);
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     SdLifeLineCanvas(UmlCanvas * canvas, SdObjCanvas * o);
     virtual ~SdLifeLineCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     SdObjCanvas * get_obj() const {
         return obj;
@@ -73,18 +73,18 @@ public:
         return end == 0;
     }
     void set_masked(bool y);
-    virtual void update_instance_dead();
-    virtual void update_v_to_contain(SdDurationCanvas *, bool);
-    virtual int sub_x(int sub_w) const;
-    virtual double min_y() const;
-    virtual SdLifeLineCanvas * get_line() const;
-    virtual bool isaDuration() const;
-    virtual double getZ() const;
+    virtual void update_instance_dead() override;
+    virtual void update_v_to_contain(SdDurationCanvas *, bool) override;
+    virtual int sub_x(int sub_w) const override;
+    virtual double min_y() const override;
+    virtual SdLifeLineCanvas * get_line() const override;
+    virtual bool isaDuration() const override;
+    virtual double getZ() const override;
 
     virtual bool is_decenter(const QPoint &, BooL &) const;
 
     virtual void drawShape(QPainter & p);
-    virtual void moveBy(double dx, double dy);
+    virtual void moveBy(double dx, double dy) override;
 
     virtual UmlCode typeUmlCode() const;
     virtual void open();
@@ -99,9 +99,9 @@ public:
     virtual bool copyable() const;
     virtual void apply_shortcut(QString s);
 
-    virtual void save(QTextStream &, bool ref, QString & warning) const;
-    virtual void history_save(QBuffer &) const;
-    virtual void history_load(QBuffer &);
+    virtual void save(QTextStream &, bool ref, QString & warning) const override;
+    virtual void history_save(QBuffer &) const override;
+    virtual void history_load(QBuffer &) override;
 
     static void send(ToolCom * com, const QList<QGraphicsItem*> & l,
                      QList<FragmentCanvas *> & fragments,

@@ -44,7 +44,7 @@ public:
     virtual ~IconCanvas();
 
     virtual void draw(QPainter & p);
-    virtual void change_scale();
+    virtual void change_scale() override;
 
     virtual UmlCode typeUmlCode() const;
     virtual void open();
@@ -62,7 +62,7 @@ public:
     static IconCanvas * read(char *& , UmlCanvas *, char *);
 
 protected:
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 private slots:
     void deleted();	// the browser_node is deleted
 };

@@ -53,40 +53,40 @@ protected:
     ClassDrawingMode drawing_mode;
     ClassDrawingMode used_drawing_mode;
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     SdClassInstCanvas(BrowserNode * t, UmlCanvas * canvas, int x, int id);
     virtual ~SdClassInstCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     virtual void draw(QPainter & p);
 
     void compute_size();
-    virtual UmlCode typeUmlCode() const;	// -> class or classinstance
-    virtual QString get_name() const;	// all cases
-    virtual void set_name(const QString & s);	// out of model case
-    virtual BrowserNode * get_type() const;	// return class, all cases
-    virtual void set_type(BrowserNode * t);	// out of model case
-    virtual BrowserNodeList & get_types(BrowserNodeList &) const;
-    virtual BrowserNode * container(UmlCode) const;
-    virtual BrowserClass * get_class() const;
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual void remove(bool from_model);
-    virtual void open();
-    virtual void menu(const QPoint &);
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
+    virtual UmlCode typeUmlCode() const override;	// -> class or classinstance
+    virtual QString get_name() const override;	// all cases
+    virtual void set_name(const QString & s) override;	// out of model case
+    virtual BrowserNode * get_type() const override;	// return class, all cases
+    virtual void set_type(BrowserNode * t) override;	// out of model case
+    virtual BrowserNodeList & get_types(BrowserNodeList &) const override;
+    virtual BrowserNode * container(UmlCode) const override;
+    virtual BrowserClass * get_class() const override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual void remove(bool from_model) override;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
 
-    virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(QList<DiagramItem *> &);
-    virtual void clone_drawing_settings(const DiagramItem *src);
+    virtual bool has_drawing_settings() const override;
+    virtual void edit_drawing_settings(QList<DiagramItem *> &) override;
+    virtual void clone_drawing_settings(const DiagramItem *src) override;
     void edit_drawing_settings();
-    virtual bool get_show_stereotype_properties() const;
+    virtual bool get_show_stereotype_properties() const override;
 
     virtual void apply_shortcut(QString s);
 
-    virtual void save(QTextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const override;
     static SdClassInstCanvas * read(char *& , UmlCanvas * canvas, char *);
 
     static void send(ToolCom * com, QList<QGraphicsItem*> & all);

@@ -21,8 +21,10 @@
 // e-mail : doumleditor@gmail.com
 //
 // *************************************************************************
+
 #ifndef EDGEMENUDIALOGQT4_H
 #define EDGEMENUDIALOGQT4_H
+
 #include <QWidget>
 #include <QMouseEvent>
 #include <QList>
@@ -32,8 +34,11 @@
 #include "CustomWidgets/MultiPurposeDragArea.h"
 #include "CustomWidgets/EdgeMenuToolBar.h"
 #include "edgemenudialogbase.h"
+
 unsigned int ClosestEdge(QWidget *, QPoint);
+
 class BrowserNode;
+
 class EdgeMenuDialogQt4 : public QDialog, public EdgeMenuDialogBase
 {
     Q_OBJECT
@@ -54,48 +59,48 @@ public:
 protected:
 
     //! called when user leaves the window
-    void leaveEvent(QEvent * event);
+    virtual void leaveEvent(QEvent * event) override;
 
     //! called when user enters the window
-    void enterEvent(QEvent * event) override;
+    virtual void enterEvent(QEvent * event) override;
 
-    void closeEvent(QCloseEvent *) override;
+    virtual void closeEvent(QCloseEvent *) override;
 
-    void hideEvent(QHideEvent *) override;
+    virtual void hideEvent(QHideEvent *) override;
 
-    void moveEvent(QMoveEvent *) override;
+    virtual void moveEvent(QMoveEvent *) override;
 
-    void focusOutEvent(QFocusEvent *) override;
+    virtual void focusOutEvent(QFocusEvent *) override;
 
     //! called on window show()
-    void showEvent(QShowEvent * event);
+    virtual void showEvent(QShowEvent * event) override;
     //! called when user srolls with mouse wheel
 
 
     //! if data contains unsaved changes this shoould pop up to warn the user
     void ShowSaveDataWarning();
 
-    void IntitiateMove(QPoint);
-    void InitiateResize(QPoint);
-    void ResizeThis(QPoint, QPoint);
+    virtual void IntitiateMove(QPoint) override;
+    virtual void InitiateResize(QPoint) override;
+    virtual void ResizeThis(QPoint, QPoint) override;
     void MoveThis(QPoint, QPoint);
 
     //! Returns the current node associated with this dialog
-    virtual BrowserNode * GetCurrentNode();
+    virtual BrowserNode * GetCurrentNode() override;
     //! Assigns a browser node(listview node effectively) to this dialog
     void SetCurrentNode(BrowserNode *);
 
     // these functions should be pure virtual in the end
     //! Initializes GUI elements
-    virtual void InitGui();
+    virtual void InitGui() override;
     //! fills GUI elements with values from a new BrowserNode
-    virtual void FillGuiElements(BrowserNode *);
+    virtual void FillGuiElements(BrowserNode *) override;
     //! Tells if there have been any changes in the data associated with the dialog
     bool ContainsUnsavedChanges();
     //! Called on accept() and saves GUI elements
-    virtual bool SaveData();
+    virtual bool SaveData() override;
     //! Called on reject() and discards gui data
-    virtual void RejectData();
+    virtual void RejectData() override;
 
 
 

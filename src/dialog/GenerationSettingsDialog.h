@@ -254,8 +254,8 @@ protected:
 
 protected slots:
     virtual void polish();
-    virtual void accept();
-    virtual void reject();
+    virtual void accept() override;
+    virtual void reject() override;
     void cpproot_browse();
     void javaroot_browse();
     void phproot_browse();

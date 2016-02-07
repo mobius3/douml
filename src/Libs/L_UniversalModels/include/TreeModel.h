@@ -21,9 +21,9 @@
 // e-mail : doumleditor@gmail.com
 //
 // *************************************************************************
+
 #ifndef TREEFILTER_TREEMODEL_H
 #define TREEFILTER_TREEMODEL_H
-
 
 #include <QObject>
 #include <QVariant>
@@ -32,6 +32,7 @@
 #include <QDebug>
 #include "include/TreeItemInterface.h"
 #include "l_tree_controller_global.h"
+
 class QTreeView;
 
 class L_TREE_CONTROLLER_EXPORT TreeModel  : public QAbstractItemModel
@@ -42,33 +43,22 @@ class L_TREE_CONTROLLER_EXPORT TreeModel  : public QAbstractItemModel
 
     virtual ~TreeModel();
 
-    QVariant data(const QModelIndex & index, int role) const;
-
-    bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
-
-    Qt::ItemFlags flags(const QModelIndex & index) const;
-
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-
-    QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
-
-    QModelIndex parent(const QModelIndex & index) const;
-
-    int rowCount(const QModelIndex & parent = QModelIndex()) const;
-
-    int columnCount(const QModelIndex & parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex & index, int role) const override;
+    virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override;
+    virtual Qt::ItemFlags flags(const QModelIndex & index) const override;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    virtual QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const override;
+    virtual QModelIndex parent(const QModelIndex & index) const override;
+    virtual int rowCount(const QModelIndex & parent = QModelIndex()) const override;
+    virtual int columnCount(const QModelIndex & parent = QModelIndex()) const override;
 
     TreeItemInterface * RootItem();
-
     void UpdateData(QModelIndex);
-
     void InsertRootItem(QSharedPointer<TreeItemInterface>);
-
     TreeItemInterface * getItem(const QModelIndex & index) const;
 
-    bool insertRows(int position, int rows, const QModelIndex & parent);
-
-    bool removeRows(int position, int rows, const QModelIndex & parent);
+    virtual bool insertRows(int position, int rows, const QModelIndex & parent) override;
+    virtual bool removeRows(int position, int rows, const QModelIndex & parent) override;
 
     void reset();
 
@@ -76,7 +66,6 @@ class L_TREE_CONTROLLER_EXPORT TreeModel  : public QAbstractItemModel
 
 signals:
     void dataEditFinished(const QModelIndex &);
-
 };
 
 

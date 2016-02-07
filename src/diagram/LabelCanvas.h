@@ -53,20 +53,20 @@ protected:
     int center_x_scale100;
     int center_y_scale100;
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     LabelCanvas(const QString & n, UmlCanvas * canvas, int x, int y,
                 bool bold = FALSE, bool italic = FALSE,
                 bool underlined = FALSE, bool mlcentered = TRUE);
     virtual ~LabelCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     const QString get_name() const {
         return text();
     };
-    virtual QRect rect() const;
-    virtual QRect sceneRect() const;
+    virtual QRect rect() const override;
+    virtual QRect sceneRect() const override;
 
     int width() const {
         return boundingRect().width();
@@ -83,10 +83,10 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode typeUmlCode() const;
+    virtual UmlCode typeUmlCode() const override;
     virtual int rtti() const;
-    void moveBy(double dx, double dy);
-    virtual QPoint center() const;
+    virtual void moveBy(double dx, double dy) override;
+    virtual QPoint center() const override;
     void recenter();
     void set_center100();
     virtual bool contains(int, int) const;
@@ -102,13 +102,13 @@ public:
     virtual bool isSelected() const;
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static LabelCanvas * read(char *& st, UmlCanvas * canvas, char *);
-    virtual void history_save(QBuffer &) const;
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
+    virtual void history_save(QBuffer &) const override;
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
 
-    virtual void check_stereotypeproperties();
+    virtual void check_stereotypeproperties() override;
 
-    virtual int type() const;
+    virtual int type() const override;
 };
 
 #endif

@@ -206,13 +206,13 @@ protected:
 
     VVBox * keyValueTab;
 
-    virtual uint TypeID();
+    virtual uint TypeID() override;
 
-    virtual void InitGui();
-    void FillGuiElements(BrowserNode *);
+    virtual void InitGui() override;
+    virtual void FillGuiElements(BrowserNode *) override;
     void FillGuiElements(ClassData * _cl);
     void NullPointers();
-    bool SaveData();
+    virtual bool SaveData() override;
 
     //refactoring changes
 
@@ -280,7 +280,7 @@ public:
 
 protected slots:
     virtual void polish();
-    void accept();
+    virtual void accept() override;
     void default_description();
     void edit_description();
     void edit_constraint();

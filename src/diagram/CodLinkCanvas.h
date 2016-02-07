@@ -49,17 +49,17 @@ public:
                   int id, float d_start, float d_end);
     virtual ~CodLinkCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
-    virtual void setVisible(bool yes);
-    virtual void moveBy(double dx, double dy);
+    virtual void setVisible(bool yes) override;
+    virtual void moveBy(double dx, double dy) override;
 
-    virtual void update_pos();
-    virtual ArrowPointCanvas * brk(const QPoint &);
-    virtual ArrowCanvas * join(ArrowCanvas * other, ArrowPointCanvas * ap);
+    virtual void update_pos() override;
+    virtual ArrowPointCanvas * brk(const QPoint &) override;
+    virtual ArrowCanvas * join(ArrowCanvas * other, ArrowPointCanvas * ap) override;
 
-    virtual void open();
-    virtual void menu(const QPoint &);
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
 
     void get_start_end(CodObjCanvas *& from, CodObjCanvas *& to);
     CodDirsCanvas * find_dirs() const;
@@ -67,10 +67,10 @@ public:
         dirs = d;
     };
 
-    virtual void history_save(QBuffer &) const;
-    virtual void history_load(QBuffer &);
+    virtual void history_save(QBuffer &) const override;
+    virtual void history_load(QBuffer &) override;
 
-    virtual void save(QTextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const override;
     static CodLinkCanvas * read(char *& st, UmlCanvas * canvas, char *& k);
 };
 

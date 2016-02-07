@@ -90,7 +90,7 @@ protected:
 
 protected slots:
     virtual void polish();
-    virtual void accept();
+    virtual void accept() override;
 
     void menu_specification();
     void edit_description();

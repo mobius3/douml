@@ -66,7 +66,7 @@ public:
     BrowserClassDiagram(QString s, BrowserNode * p, int id = 0);
     virtual ~BrowserClassDiagram();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     QString name = QString());
 
@@ -108,7 +108,7 @@ public:
     static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
 
-    virtual void renumber(int phase);
+    virtual void renumber(int phase) override;
     static void open_all();
     static void import();
 

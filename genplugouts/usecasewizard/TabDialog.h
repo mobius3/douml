@@ -19,26 +19,17 @@ class TabDialog : public TabDialogWrapper
 public:
     TabDialog(UmlUseCase * u);
 
-
 protected:
     UmlUseCase * uc;
-
     QTextCodec * Codec;
-
 
 public:
     QTextEdit * summary;
-
     QTextEdit * context;
-
     QTextEdit * precond;
-
     QTextEdit * description;
-
     QTextEdit * postcond;
-
     QTextEdit * exceptions;
-
 
 protected:
     QPoint desktopCenter;
@@ -46,20 +37,14 @@ protected:
 protected slots:
     virtual void polish();
 
-
 public:
-    void accept();
-
-    void reject();
-
+    virtual void accept() override;
+    virtual void reject() override;
 
 private:
     QString toUnicode(const char * str);
-
     void latinize(QString & s);
-
     QByteArray fromUnicode(const QString & s);
-
 };
 
 #endif

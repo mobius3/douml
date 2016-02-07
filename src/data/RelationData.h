@@ -131,10 +131,10 @@ public:
     void garbage(BrowserRelation * r);
     void copy(RelationData * model);
 
-    virtual bool deletedp() const;
-    virtual void set_deletedp(bool y);
-    virtual void delete_it();
-    virtual void undelete(QString & warning, QString & renamed);
+    virtual bool deletedp() const override;
+    virtual void set_deletedp(bool y) override;
+    virtual void delete_it() override;
+    virtual void undelete(QString & warning, QString & renamed) override;
     bool undelete(QString & warning, QString & renamed,
                   BrowserRelation * rel, BooL & br_deleted);
 
@@ -162,12 +162,12 @@ public:
     }
     QString get_name(BrowserRelation *) const;
     void set_name(const QString &);
-    virtual QString definition(bool full, bool with_kind) const;
-    virtual bool set_stereotype(const QString &);
-    virtual bool set_stereotype(const WrapperStr &);
-    virtual bool set_stereotype(const char *);
+    virtual QString definition(bool full, bool with_kind) const override;
+    virtual bool set_stereotype(const QString &) override;
+    virtual bool set_stereotype(const WrapperStr &) override;
+    virtual bool set_stereotype(const char *) override;
 
-    virtual bool decldefbody_contain(const QString & s, bool cs, BrowserNode *);
+    virtual bool decldefbody_contain(const QString & s, bool cs, BrowserNode *) override;
 
     bool is_a(const BrowserRelation * br) const {
         return br == start;
@@ -242,7 +242,7 @@ public:
     UmlVisibility get_uml_visibility_b() const {
         return b.uml_visibility;
     }
-    virtual UmlVisibility get_visibility(BrowserNode *);
+    virtual UmlVisibility get_visibility(BrowserNode *) override;
 
     const char * get_comment_a() const {
         return a.comment;

@@ -55,16 +55,16 @@ protected:
     void update_relations();
     void update_relations(ArtifactCanvas * other);
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     ArtifactCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ArtifactCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     void compute_size();
     void draw_all_relations();
-    virtual void unassociate(DiagramItem * other);
+    virtual void unassociate(DiagramItem * other) override;
 
     virtual void draw(QPainter & p);
     virtual void change_scale();
@@ -92,9 +92,9 @@ public:
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
 
-    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const override;
     static ArtifactCanvas * read(char *& , UmlCanvas *, char *);
-    virtual void post_loaded();
+    virtual void post_loaded() override;
 
 private slots:
     void modified();	// canvas must be updated

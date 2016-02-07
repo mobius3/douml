@@ -90,8 +90,8 @@ public:
     QList<BrowserOperation *> inherited_operations(unsigned limit, QString parent_name = QString()) const;
     QString may_start(UmlCode l) const;
     QString may_connect(UmlCode l, BrowserClass * other);
-    virtual BasicData * add_relation(UmlCode, BrowserNode *);
-    virtual QList<BrowserNode *> parents() const;
+    virtual BasicData * add_relation(UmlCode, BrowserNode *) override;
+    virtual QList<BrowserNode *> parents() const override;
     void get_all_parents(QList<BrowserClass *> &) const;
     // more modern interface to get all parents. Still a lot of qt3 compatibility inside
     QList<BrowserClass*> get_all_parents();
@@ -99,7 +99,7 @@ public:
     using BrowserNode::get_visibility;
     virtual UmlVisibility get_visibility() const override;
 
-    virtual QString check_inherit(const BrowserNode * parent) const;
+    virtual QString check_inherit(const BrowserNode * parent) const override;
     bool have_abstract_operation();
     void get_opers(QList<const OperationData *> & opers,
                    QStringList & list) const;
@@ -115,7 +115,7 @@ public:
     void get_rels(BrowserClass *, QList<RelationData *> &, int * rev = 0) const;
     void get_rels(BrowserClass * target, QList<BrowserRelation *> & l) const;
     void get_tree(BrowserNodeList &);
-    virtual BrowserNode * get_associated() const;
+    virtual BrowserNode * get_associated() const override;
     void set_associated_diagram(BrowserClassDiagram *, bool on_read = FALSE);
     BrowserArtifact * get_associated_artifact() const;
     void set_associated_artifact(BrowserArtifact *, bool on_read = FALSE);
@@ -123,14 +123,14 @@ public:
     void add_associated_component(BrowserComponent *);
     void remove_associated_component(BrowserComponent *);
 
-    virtual void delete_it();
-    virtual bool undelete(bool rec, QString & warning, QString & renamed);
+    virtual void delete_it() override;
+    virtual bool undelete(bool rec, QString & warning, QString & renamed) override;
     virtual bool may_contains_them(const QList<BrowserNode *> &,
-                                   BooL & duplicable) const;
-    virtual void move(BrowserNode *, BrowserNode * after);
+                                   BooL & duplicable) const override;
+    virtual void move(BrowserNode *, BrowserNode * after) override;
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
-    virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
+                                    const QString & name = QString()) override;
+    virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const override;
     QString contextual_name(ShowContextMode) const;
     virtual void set_name(QString s);
     virtual void member_cpp_def(const QString &, const QString &, QString & s, bool) const;
@@ -163,7 +163,7 @@ public:
     void set_bodies_modified(bool y);
     QString bodies_file() const;
 
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
     static bool tool_global_cmd(ToolCom * com, const char * args);
 
     static BrowserNodeList & instances(BrowserNodeList &, const char * st = 0, bool non_nested = FALSE);
@@ -177,9 +177,9 @@ public:
     static void init();
     static void clear(bool old);
     static void update_idmax_for_root();
-    virtual void renumber(int phase);
-    virtual void prepare_update_lib() const;
-    virtual void support_file(QHash<QString,char*> & files, bool add) const;
+    virtual void renumber(int phase) override;
+    virtual void prepare_update_lib() const override;
+    virtual void support_file(QHash<QString,char*> & files, bool add) const override;
 
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char *& , char *&);
@@ -208,7 +208,7 @@ private:
 
 public:
     QList<OperationData*>  CollectSameThroughInheritance(OperationData*,  QList<BrowserNode*>&, bool goBack = true);
-    virtual QVariant	data(int column, int role) const;
+    virtual QVariant	data(int column, int role) const override;
 
 };
 

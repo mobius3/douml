@@ -54,7 +54,7 @@ class SmallPushButton : public QPushButton
 public:
     SmallPushButton(const QString & text, QWidget * parent);
 
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const override;
 };
 
 // redefine text() to remove non latin1 characters

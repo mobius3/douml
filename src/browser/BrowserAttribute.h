@@ -63,7 +63,7 @@ public:
     BrowserAttribute(const BrowserAttribute * model, BrowserNode * p);
     virtual ~BrowserAttribute();
     uint TypeID() override;
-    virtual void delete_it();
+    virtual void delete_it() override;
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     QString name = QString());
 
@@ -87,20 +87,20 @@ public:
     virtual void apply_shortcut(QString s);
     virtual void open(bool);
     void open_new_ste_attr();
-    virtual UmlCode get_type() const;
-    virtual QString get_stype() const;
-    virtual int get_identifier() const;
-    virtual const char * help_topic() const;
-    virtual void modified();
-    virtual BasicData * get_data() const;
-    virtual bool allow_spaces() const;
-    virtual bool same_name(const QString & s, UmlCode type) const;
-    virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
+    virtual UmlCode get_type() const override;
+    virtual QString get_stype() const override;
+    virtual int get_identifier() const override;
+    virtual const char * help_topic() const override;
+    virtual void modified() override;
+    virtual BasicData * get_data() const override;
+    virtual bool allow_spaces() const override;
+    virtual bool same_name(const QString & s, UmlCode type) const override;
+    virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const override;
     virtual void member_cpp_def(const QString & prefix, const QString &,
-                                QString & s, bool templ) const;
-    virtual const char * constraint() const;
+                                QString & s, bool templ) const override;
+    virtual const char * constraint() const override;
 
-    virtual void save(QTextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning) override;
     static BrowserAttribute * read_ref(char *&);
     static BrowserAttribute * read(char *& , char *, BrowserNode *, bool force = TRUE);
     static BrowserNode * get_it(const char * k, int id);
@@ -111,20 +111,20 @@ public:
     static void init();
     static void clear(bool old);
     static void update_idmax_for_root();
-    virtual void renumber(int phase);
-    virtual void prepare_update_lib() const;
+    virtual void renumber(int phase) override;
+    virtual void prepare_update_lib() const override;
 
-    virtual void referenced_by(QList<BrowserNode *> &, bool ondelete = FALSE);
+    virtual void referenced_by(QList<BrowserNode *> &, bool ondelete = FALSE) override;
     static void compute_referenced_by(QList<BrowserNode *> &, BrowserNode *);
 
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 
-    virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
+    virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after) override;
 
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
-    virtual QVariant	data(int column, int role) const;
+    virtual QVariant data(int column, int role) const override;
 };
 
 #endif

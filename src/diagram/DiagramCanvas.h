@@ -60,33 +60,33 @@ public:
                   int x, int y, int w, int h, int id);
     virtual ~DiagramCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
-    virtual BrowserNode * get_bn() const;
+    virtual BrowserNode * get_bn() const override;
 
     virtual void upper();
     virtual void lower();
     virtual void z_up();
     virtual void z_down();
     virtual bool primaryItem() const;
-    virtual double get_z() const;
-    virtual void set_z(double z);	// only called by upper() & lower()
+    virtual double get_z() const override;
+    virtual void set_z(double z) override;	// only called by upper() & lower()
 
     virtual void setVisible(bool yes);
-    virtual void moveBy(double dx, double dy);
+    virtual void moveBy(double dx, double dy) override;
     virtual void setSelected(bool yes);
-    virtual void select_associated();
-    virtual bool isSelected() const;
-    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
-    virtual void prepare_for_move(bool on_resize);
-    virtual bool move_with(UmlCode) const;
+    virtual void select_associated() override;
+    virtual bool isSelected() const override;
+    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &) override;
+    virtual void prepare_for_move(bool on_resize) override;
+    virtual bool move_with(UmlCode) const override;
     void force_self_rel_visible();
     void moveSelfRelsBy(double dx, double dy);
 
-    virtual void change_scale();
-    virtual QPoint center() const;
-    virtual QRect rect() const;
-    virtual QRect sceneRect() const;
+    virtual void change_scale() override;
+    virtual QPoint center() const override;
+    virtual QRect rect() const override;
+    virtual QRect sceneRect() const override;
     void recenter();
     void set_center100();
     virtual bool contains(int, int) const;
@@ -109,11 +109,11 @@ public:
     bool has_transition(BasicData * def) const;
     void draw_all_transitions(DiagramCanvas * end = 0);
 
-    virtual void history_save(QBuffer &) const;
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
+    virtual void history_save(QBuffer &) const override;
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
 
-    virtual void check_stereotypeproperties();
+    virtual void check_stereotypeproperties() override;
     virtual bool get_show_stereotype_properties() const;
     void save_stereotype_property(QTextStream & st, QString &) const;
     void read_stereotype_property(char *& st, char *& k);
@@ -133,8 +133,8 @@ public:
     int width()const { return rect().width();}
     int height() const {return rect().height();}
     QGraphicsScene* canvas() const { return scene();}
-    virtual QRectF boundingRect() const;
-    virtual int type() const;
+    virtual QRectF boundingRect() const override;
+    virtual int type() const override;
 };
 
 #define CLASS_ICON_SIZE 20

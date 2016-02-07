@@ -52,29 +52,29 @@ public:
                      RelationData * d = 0);
     virtual ~ObjectLinkCanvas();
 
-    virtual void delete_it();
-    virtual void unconnect();
+    virtual void delete_it() override;
+    virtual void unconnect() override;
 
-    virtual void history_save(QBuffer & b) const;
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
+    virtual void history_save(QBuffer & b) const override;
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
 
-    virtual void setVisible(bool yes);
-    virtual void moveBy(double dx, double dy);
-    virtual void set_z(double z);
-    virtual void select_associated();
+    virtual void setVisible(bool yes) override;
+    virtual void moveBy(double dx, double dy) override;
+    virtual void set_z(double z) override;
+    virtual void select_associated() override;
 
-    virtual void update_pos();
-    virtual ArrowPointCanvas * brk(const QPoint &);
-    virtual ArrowCanvas * join(ArrowCanvas * other, ArrowPointCanvas * ap);
+    virtual void update_pos() override;
+    virtual ArrowPointCanvas * brk(const QPoint &) override;
+    virtual ArrowCanvas * join(ArrowCanvas * other, ArrowPointCanvas * ap) override;
 
-    virtual void save(QTextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const override;
     static ObjectLinkCanvas * read(char *& st, UmlCanvas * canvas, char *);
 
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual void remove(bool from_model);
-    virtual void open();
-    virtual void menu(const QPoint &);
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual void remove(bool from_model) override;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
 
     void label_default_position() const;
     void role_a_default_position() const;
@@ -88,12 +88,12 @@ public:
         return data;
     }
 
-    virtual bool represents(BrowserNode *);
+    virtual bool represents(BrowserNode *) override;
 
 protected:
     void internal_set_relation(RelationData * d);
     void set_relation(RelationData * d);
-    void update(bool updatepos);
+    void update_object_link_canvas(bool updatepos);
 
 private slots:
     void modified();	// canvas must be updated

@@ -431,7 +431,7 @@ public:
 
 protected slots:
     virtual void polish();
-    virtual void accept();
+    virtual void accept() override;
 
     void edTypeActivated(int);
     void edit_description();

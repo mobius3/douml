@@ -59,8 +59,8 @@ private:
     QLineEdit * ed_ymax;
 
 private slots:
-    virtual void accept();
-    virtual void reject();
+    virtual void accept() override;
+    virtual void reject() override;
     void doc_browse();
     void navigator_browse();
     void template_browse();

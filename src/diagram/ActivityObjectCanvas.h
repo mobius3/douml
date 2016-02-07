@@ -60,15 +60,15 @@ protected:
     ActivityObjectCanvas(UmlCanvas * canvas, int id);
     void check_selection();
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     ActivityObjectCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ActivityObjectCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     virtual void draw(QPainter & p);
-    virtual void change_scale();
+    virtual void change_scale() override;
 
     void compute_size();
     bool force_inside();
@@ -92,14 +92,14 @@ public:
 
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
-    virtual bool get_show_stereotype_properties() const;
+    virtual bool get_show_stereotype_properties() const override;
 
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
 
-    virtual void save(QTextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const override;
     static ActivityObjectCanvas * read(char *& , UmlCanvas * canvas, char *);
-    virtual void post_loaded();
+    virtual void post_loaded() override;
 
 private slots:
     void modified();	// canvas must be updated

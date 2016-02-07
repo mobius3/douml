@@ -60,7 +60,7 @@ public:
 
 protected slots:
     virtual void polish();
-    void accept();
+    virtual void accept() override;
 };
 
 #endif

@@ -52,12 +52,12 @@ protected:
     ActivityNodeCanvas(UmlCanvas * canvas, int id);
     void set_xpm();
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     ActivityNodeCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ActivityNodeCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     virtual void draw(QPainter & p);
     virtual void change_scale();
@@ -84,7 +84,7 @@ public:
 
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static ActivityNodeCanvas * read(char *& , UmlCanvas *, char *);
-    virtual void post_loaded();
+    virtual void post_loaded() override;
 
     bool force_inside();
 

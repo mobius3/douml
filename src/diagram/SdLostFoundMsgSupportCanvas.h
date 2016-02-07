@@ -68,7 +68,7 @@ public:
     virtual void save(QTextStream & st, bool ref, QString & warning) const;
     static SdLostFoundMsgSupportCanvas * read(char *& st, UmlCanvas * canvas, char * k);
 protected:
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 };
 
 #endif

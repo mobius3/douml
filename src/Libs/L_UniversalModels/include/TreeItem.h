@@ -1,6 +1,29 @@
+// *************************************************************************
+//
+// 
+//
+// This file is part of the Douml Uml Toolkit.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License Version 3.0 as published by
+// the Free Software Foundation and appearing in the file LICENSE.GPL included in the
+//  packaging of this file.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License Version 3.0 for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// e-mail : doumleditor@gmail.com
+//
+// *************************************************************************
+
 #ifndef _TREEITEM_H
 #define _TREEITEM_H
-
 
 #include <QList>
 #include <QSharedPointer>
@@ -18,85 +41,59 @@ template<class T>
 class TreeItem : public TreeItemInterface  
 {
 typedef TreeItem<T> value_type;
-  public:
+public:
     TreeItem(T * data = nullptr);
-
     explicit TreeItem();
 
-    virtual QList<QSharedPointer<TreeItemInterface> > GetChildren();
+    virtual QList<QSharedPointer<TreeItemInterface> > GetChildren() override;
 
     void ResetState();
 
     virtual ~TreeItem();
 
-    virtual int columnCount() const;
-
-    virtual int childCount() const;
-
-    virtual QVariant data(const QModelIndex & index, int role);
-
-    virtual bool isCheckable() const;
-
-    virtual void setCheckState(Qt::CheckState state);
-
-    virtual Qt::CheckState checkState();
-
-    virtual bool setData(const QModelIndex & index, const QVariant & value, int role);
-
-    virtual bool removeChildren(int position, int count);
-
-    virtual bool insertChildren(int position, int count);
+    virtual int columnCount() const override;
+    virtual int childCount() const override;
+    virtual QVariant data(const QModelIndex & index, int role) override;
+    virtual bool isCheckable() const override;
+    virtual void setCheckState(Qt::CheckState state) override;
+    virtual Qt::CheckState checkState() override;
+    virtual bool setData(const QModelIndex & index, const QVariant & value, int role) override;
+    virtual bool removeChildren(int position, int count) override;
+    virtual bool insertChildren(int position, int count) override;
 
     virtual QList<QSharedPointer<TreeItemInterface > >& children();
-
     virtual const QList<QSharedPointer<TreeItemInterface > >& children() const;
-
     void addChildren(QList<QSharedPointer<TreeItemInterface> > _children);
-
     inline QSharedPointer<ItemController<T> > GetController() const;
 
     void SetController(QSharedPointer<ItemController<T> > value);
-
-    virtual QStringList GetColumns();
-
-    virtual int IndexOf(TreeItemInterface * item);
-
+    virtual QStringList GetColumns() override;
+    virtual int IndexOf(TreeItemInterface * item) override;
     void SetInternalData(T * _data);
+    virtual void* InternalPointer() override;
+    virtual void* InternalPointer() const override;
+    virtual TreeItemInterface* child(int row) override;
+    virtual TreeItemInterface* parent() override;
+    virtual int row() override;
+    virtual void SetParent(QSharedPointer<TreeItemInterface > _parent) override;
+    virtual int GetIndexOfChild(TreeItemInterface * child) override;
+    virtual Qt::ItemFlags flags(const QModelIndex & index) const override;
+    virtual void AddChildren(QList<QSharedPointer<TreeItemInterface> > children, int insertAfter = 0) override;
+    virtual QSharedPointer<TreeItemInterface> GetParent() override;
 
-    void* InternalPointer();
+private:
+    T* m_data = nullptr;
 
-    virtual void* InternalPointer() const;
-
-    virtual TreeItemInterface* child(int row);
-
-    virtual TreeItemInterface* parent();
-
-    virtual int row();
-
-    virtual void SetParent(QSharedPointer<TreeItemInterface > _parent);
-
-    int GetIndexOfChild(TreeItemInterface * child);
-
-    virtual Qt::ItemFlags flags(const QModelIndex & index) const;
-
-    virtual void AddChildren(QList<QSharedPointer<TreeItemInterface> > children, int insertAfter = 0);
-
-    virtual QSharedPointer<TreeItemInterface> GetParent();
-
-
-  private:
-     T* m_data = nullptr;
-
-  protected:
+protected:
      QList<QSharedPointer<TreeItemInterface > > m_children;
      QWeakPointer<TreeItemInterface > m_parent;
 
-  private:
-     bool m_isCheckable;
-     Qt::CheckState m_checkState;
+private:
+    bool m_isCheckable;
+    Qt::CheckState m_checkState;
     QSharedPointer<ItemController<T> > controller;
-
 };
+
 template<class T>
 TreeItem<T>::TreeItem(T * data) : TreeItemInterface()
 {
@@ -312,7 +309,7 @@ TreeItemInterface* TreeItem<T>::child(int row)
 {
     // Bouml preserved body begin 0020CD2A
     TreeItemInterface* returnChildren = nullptr;
-    if(m_children.size() > row)
+    if (m_children.size() > row)
         returnChildren = m_children[row].data();
     return returnChildren;
     // Bouml preserved body end 0020CD2A
@@ -348,9 +345,9 @@ template<class T>
 int TreeItem<T>::GetIndexOfChild(TreeItemInterface * child) 
 {
     // Bouml preserved body begin 0020D02A
-    for(int i(0); i < m_children.size(); ++i)
+    for (int i = 0; i < m_children.size(); ++i)
     {
-        if(m_children.at(i).data() == child)
+        if (m_children.at(i).data() == child)
             return i;
     }
     return -1;
@@ -361,7 +358,7 @@ template<class T>
 Qt::ItemFlags TreeItem<T>::flags(const QModelIndex & index) const 
 {
     // Bouml preserved body begin 0021B2AA
-    if(index.isValid())
+    if (index.isValid())
         return controller->flags(index);
     return Qt::ItemFlags();
     // Bouml preserved body end 0021B2AA
@@ -373,8 +370,8 @@ void TreeItem<T>::AddChildren(QList<QSharedPointer<TreeItemInterface> > children
     // Bouml preserved body begin 002201AA
     //m_children.insert(m_children.begin() + insertAfter, children);
     //m_children.reserve(m_children.size() + children.size());
-    int i(0);
-    for(auto child : children)
+    int i = 0;
+    for (const auto& child : children)
     {
         m_children.insert(m_children.begin() + insertAfter + i, child);
         i++;
@@ -389,6 +386,5 @@ QSharedPointer<TreeItemInterface> TreeItem<T>::GetParent()
     return m_parent.toStrongRef();
     // Bouml preserved body end 002341AA
 }
-
 
 #endif

@@ -88,7 +88,7 @@ public:
 
 protected slots:
     virtual void polish();
-    void accept();
+    virtual void accept() override;
 
     void edit_description();
     void type_changed(int);

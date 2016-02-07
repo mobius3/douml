@@ -39,39 +39,39 @@ class SdMsgCanvas : public SdMsgBaseCanvas
 protected:
     SdMsgSupport * start;
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     SdMsgCanvas(UmlCanvas * canvas, SdMsgSupport * s,
                 SdMsgSupport * d, UmlCode l, int v, int id);
     virtual ~SdMsgCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     SdMsgSupport * get_start()  const {
         return start;
     };
 
     virtual void draw(QPainter & p);
-    virtual void set_z(double);
-    virtual void update_hpos();
-    virtual void check_vpos(const QRect &);
-    virtual double min_y() const;
+    virtual void set_z(double) override;
+    virtual void update_hpos() override;
+    virtual void check_vpos(const QRect &) override;
+    virtual double min_y() const override;
     virtual void change_duration(SdDurationCanvas * oldone,
-                                 SdDurationCanvas * newone);
-    virtual int overlap_dir(SdDurationCanvas *) const;
-    virtual void update();
-    virtual void menu(const QPoint &);
-    virtual void select_associated();
-    virtual bool copyable() const;
+                                 SdDurationCanvas * newone) override;
+    virtual int overlap_dir(SdDurationCanvas *) const override;
+    virtual void update() override;
+    virtual void menu(const QPoint &) override;
+    virtual void select_associated() override;
+    virtual bool copyable() const override;
 
-    virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(QList<DiagramItem *> &);
-    virtual void clone_drawing_settings(const DiagramItem *src);
+    virtual bool has_drawing_settings() const override;
+    virtual void edit_drawing_settings(QList<DiagramItem *> &) override;
+    virtual void clone_drawing_settings(const DiagramItem *src) override;
 
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
 
-    virtual void save(QTextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const override;
     static SdMsgCanvas * read(char *& , UmlCanvas *, char *);
 };
 

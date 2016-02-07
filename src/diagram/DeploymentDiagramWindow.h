@@ -26,7 +26,7 @@
 // *************************************************************************
 
 #ifndef DEPLOYMENTDIAGRAMWINDOW_H
-#define DEPLOYMENTDISGRAMWINDOW_H
+#define DEPLOYMENTDIAGRAMWINDOW_H
 
 #include "DiagramWindow.h"
 
@@ -61,9 +61,9 @@ public:
     DeploymentDiagramWindow(const QString & s, BrowserDeploymentDiagram * b, int id = -1);
     virtual ~DeploymentDiagramWindow();
 
-    virtual DiagramView * get_view() const;
+    virtual DiagramView * get_view() const override;
 
-    virtual void hit_button(UmlCode, QToolButton *);
+    virtual void hit_button(UmlCode, QToolButton *) override;
 
 protected slots:
     void hit_package();

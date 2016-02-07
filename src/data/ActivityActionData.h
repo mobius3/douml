@@ -48,8 +48,8 @@ struct PinDescr : public PinParamData {
 
     PinDescr() : name(0) {}
 
-    virtual void do_connect(BrowserClass *);
-    virtual void do_disconnect(BrowserClass *);
+    virtual void do_connect(BrowserClass *) override;
+    virtual void do_disconnect(BrowserClass *) override;
 };
 
 struct AnyAction {
@@ -79,14 +79,14 @@ struct OpaqueAction : public AnyAction {
 
     OpaqueAction();
     virtual ~OpaqueAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QString str(DrawingLanguage lang, QString name) const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QString str(DrawingLanguage lang, QString name) const override;
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 };
 
 struct AcceptEventAction : public AnyAction {
@@ -100,13 +100,13 @@ struct AcceptEventAction : public AnyAction {
 
     AcceptEventAction();
     virtual ~AcceptEventAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 };
 
 struct AccessVariableValueAction : public AnyAction {
@@ -119,14 +119,14 @@ struct AccessVariableValueAction : public AnyAction {
     AnyAction * duplicate(AccessVariableValueAction * r) const;
     QList<PinDescr> pins(UmlParamDirection, const char * str) const;
     // [in/out] <str> : le type de la variable
-    virtual BasicData * depend_on();
-    virtual void on_delete();
-    virtual BrowserNode * referenced(const char *&) const;
+    virtual BasicData * depend_on() override;
+    virtual void on_delete() override;
+    virtual BrowserNode * referenced(const char *&) const override;
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 
     void set_variable(BrowserNode * v) {
         variable = v;
@@ -147,9 +147,9 @@ struct ReadVariableValueAction : public AccessVariableValueAction {
 
     ReadVariableValueAction();
     virtual ~ReadVariableValueAction();
-    AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [out] "result" : le type de la variable
 };
 
@@ -158,9 +158,9 @@ struct WriteVariableValueAction : public AccessVariableValueAction {
 
     WriteVariableValueAction();
     virtual ~WriteVariableValueAction();
-    AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    QList<PinDescr> pins() const;
+    AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [in] "value" : le type de la variable
 };
 
@@ -187,14 +187,14 @@ struct AddVariableValueAction : public ChangeVariableValueAction {
 
     AddVariableValueAction();
     virtual ~AddVariableValueAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [in] "value" : le type de la variable
     // [in] "insertAt" : UnlimitedNatural / uint
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
 };
 
 struct RemoveVariableValueAction : public ChangeVariableValueAction {
@@ -202,14 +202,14 @@ struct RemoveVariableValueAction : public ChangeVariableValueAction {
 
     RemoveVariableValueAction();
     virtual ~RemoveVariableValueAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [in] "value" : le type de la variable
     // [in] "removeAt" : UnlimitedNatural / uint
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
 };
 
 struct CallBehaviorAction : public AnyAction {
@@ -220,18 +220,18 @@ struct CallBehaviorAction : public AnyAction {
 
     CallBehaviorAction();
     virtual ~CallBehaviorAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [any]* : depend on activity's parameter
-    virtual BasicData * depend_on();
-    virtual void on_delete();
-    virtual BrowserNode * referenced(const char *&) const;
+    virtual BasicData * depend_on() override;
+    virtual void on_delete() override;
+    virtual BrowserNode * referenced(const char *&) const override;
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 
     void set_behavior(BrowserNode * beh) {
         behavior = beh;
@@ -246,20 +246,20 @@ struct CallOperationAction : public AnyAction {
 
     CallOperationAction();
     virtual ~CallOperationAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [in] "target" : instance,
     // [any]* : other depend on operation's params&result&exception
-    virtual QString str(DrawingLanguage lang, QString name) const;
-    virtual BasicData * depend_on();
-    virtual void on_delete();
-    virtual BrowserNode * referenced(const char *&) const;
+    virtual QString str(DrawingLanguage lang, QString name) const override;
+    virtual BasicData * depend_on() override;
+    virtual void on_delete() override;
+    virtual BrowserNode * referenced(const char *&) const override;
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 
     void set_operation(BrowserOperation * oper) {
         operation = oper;
@@ -271,16 +271,16 @@ struct SendObjectAction : public AnyAction {
 
     SendObjectAction();
     virtual ~SendObjectAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [in] "request" : the sent object
     // [in] "target" : target object,
     // [in]* : arguments (pin addable et removables)
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
 };
 
 struct SendSignalAction : public AnyAction {
@@ -292,16 +292,16 @@ struct SendSignalAction : public AnyAction {
 
     SendSignalAction();
     virtual ~SendSignalAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [in] "target"
     // [*] depend on signal parameters
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 };
 
 struct BroadcastSignalAction : public SendSignalAction {
@@ -309,9 +309,9 @@ struct BroadcastSignalAction : public SendSignalAction {
 
     BroadcastSignalAction();
     virtual ~BroadcastSignalAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
 };
 
 struct UnmarshallAction : public AnyAction {
@@ -319,15 +319,15 @@ struct UnmarshallAction : public AnyAction {
 
     UnmarshallAction();
     virtual ~UnmarshallAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [in] "object" : the unmashalled object
     // [out]* : the objects (pin addable et removables)
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
 };
 
 struct ValueSpecificationAction : public AnyAction {
@@ -339,16 +339,16 @@ struct ValueSpecificationAction : public AnyAction {
 
     ValueSpecificationAction();
     virtual ~ValueSpecificationAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [out] : the value
-    virtual bool may_add_pin() const;
+    virtual bool may_add_pin() const override;
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 };
 
 struct AcceptCallAction : public AnyAction {
@@ -360,15 +360,15 @@ struct AcceptCallAction : public AnyAction {
 
     AcceptCallAction();
     virtual ~AcceptCallAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [out] : returnInformation
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 };
 
 struct ReplyAction : public AnyAction {
@@ -380,15 +380,15 @@ struct ReplyAction : public AnyAction {
 
     ReplyAction();
     virtual ~ReplyAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [in] : returnInformation
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 };
 
 struct CreateObjectAction : public AnyAction {
@@ -398,15 +398,15 @@ struct CreateObjectAction : public AnyAction {
 
     CreateObjectAction();
     virtual ~CreateObjectAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [out] : result
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 };
 
 struct DestroyObjectAction : public AnyAction {
@@ -417,16 +417,16 @@ struct DestroyObjectAction : public AnyAction {
 
     DestroyObjectAction();
     virtual ~DestroyObjectAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [in] : result
-    virtual bool may_add_pin() const;
+    virtual bool may_add_pin() const override;
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 };
 
 struct TestIdentityAction : public AnyAction {
@@ -434,17 +434,17 @@ struct TestIdentityAction : public AnyAction {
 
     TestIdentityAction();
     virtual ~TestIdentityAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [in] : first
     // [in] : second
     // [out] : result
-    virtual bool may_add_pin() const;
+    virtual bool may_add_pin() const override;
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
 };
 
 struct RaiseExceptionAction : public AnyAction {
@@ -452,15 +452,15 @@ struct RaiseExceptionAction : public AnyAction {
 
     RaiseExceptionAction();
     virtual ~RaiseExceptionAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [in] : exception
-    virtual bool may_add_pin() const;
+    virtual bool may_add_pin() const override;
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
 };
 
 struct ReduceAction : public AnyAction {
@@ -471,20 +471,20 @@ struct ReduceAction : public AnyAction {
 
     ReduceAction();
     virtual ~ReduceAction();
-    virtual AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
-    virtual QList<PinDescr> pins() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
+    virtual QList<PinDescr> pins() const override;
     // [in] : collection
     // [out] : result
-    virtual bool may_add_pin() const;
-    virtual BasicData * depend_on();
-    virtual void on_delete();
-    virtual BrowserNode * referenced(const char *&) const;
+    virtual bool may_add_pin() const override;
+    virtual BasicData * depend_on() override;
+    virtual void on_delete() override;
+    virtual BrowserNode * referenced(const char *&) const override;
 
-    void save(QTextStream & st, QString & warning) const;
-    void read(char *& st, char *& k);
-    void send_def(ToolCom * com, DrawingLanguage);
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual void save(QTextStream & st, QString & warning) const override;
+    virtual void read(char *& st, char *& k) override;
+    virtual void send_def(ToolCom * com, DrawingLanguage) override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 };
 
 class ActivityActionData : public SimpleData
@@ -501,9 +501,9 @@ protected:
     AnyAction * action;
 
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-                              const QString & comment);
-    virtual void send_cpp_def(ToolCom * com);
-    virtual void send_java_def(ToolCom * com);
+                              const QString & comment) override;
+    virtual void send_cpp_def(ToolCom * com) override;
+    virtual void send_java_def(ToolCom * com) override;
 
 public:
     ActivityActionData();
@@ -534,7 +534,7 @@ public:
     void edit();
 
     virtual bool tool_cmd(ToolCom * com, const char * args,
-                          BrowserNode * bn, const QString & comment);
+                          BrowserNode * bn, const QString & comment) override;
 
     void save(QTextStream &, QString & warning) const;
     void read(char *& st, char *& k);

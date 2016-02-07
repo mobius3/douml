@@ -48,7 +48,7 @@ public:
                 int w, int h, int id);
     virtual ~SdObjCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     SdLifeLineCanvas * get_life_line() const {
         return life_line;
@@ -60,12 +60,12 @@ public:
 
     virtual BrowserClass * get_class() const = 0;
 
-    virtual void moveBy(double dx, double dy);
+    virtual void moveBy(double dx, double dy) override;
 
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    void change_scale();
-    virtual bool copyable() const;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    void change_scale() override;
+    virtual bool copyable() const override;
 
 protected:
     void read(char *& st, const char * k);

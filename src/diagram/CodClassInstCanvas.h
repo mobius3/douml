@@ -50,13 +50,13 @@ class CodClassInstCanvas : public QObject, public CodObjCanvas, public ClassInst
 protected:
     QString iname;	// useless if browser_node is a class instance rather than a class
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     CodClassInstCanvas(BrowserNode * t, UmlCanvas * canvas,
                        int x, int y, int id);
     virtual ~CodClassInstCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     virtual void draw(QPainter & p);
 
@@ -87,7 +87,7 @@ public:
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
 
-    virtual void save(QTextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const override;
     static CodClassInstCanvas * read(char *& , UmlCanvas * canvas, char *);
 
     static void send(ToolCom * com, QList<QGraphicsItem*> & all);

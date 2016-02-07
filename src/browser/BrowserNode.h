@@ -127,9 +127,9 @@ public:
 
     static bool edition_active() {
         return edition_number != 0;
-    };
-    virtual void edit_start();
-    virtual void edit_end();
+    }
+    virtual void edit_start() override;
+    virtual void edit_end() override;
     virtual bool in_edition() const;
 
     void mark_menu(QMenu & m, const char *, int bias) const;
@@ -225,7 +225,7 @@ public:
     }
     bool modifiedp() const {
         return is_modified;
-    };
+    }
     virtual void on_delete();
     virtual BasicData * get_data() const = 0;
     virtual QString drag_key() const;

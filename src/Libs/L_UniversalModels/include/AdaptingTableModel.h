@@ -21,6 +21,7 @@
 // e-mail : doumleditor@gmail.com
 //
 // *************************************************************************
+
 #ifndef _ADAPTINGTABLEMODEL_H
 #define _ADAPTINGTABLEMODEL_H
 
@@ -43,43 +44,33 @@ class L_TREE_CONTROLLER_EXPORT AdaptingTableModel  : public QAbstractTableModel
 
 Q_OBJECT
 
-  public:
+public:
     AdaptingTableModel(QObject * parent = 0);
 
     virtual ~AdaptingTableModel();
 
-    QVariant data(const QModelIndex & index, int role) const;
-
-    bool setData(const QModelIndex & index, const QVariant & value, int role);
-
-    int rowCount(const QModelIndex & index) const;
-
-    int columnCount(const QModelIndex & index) const;
-
+    virtual QVariant data(const QModelIndex & index, int role) const override;
+    virtual bool setData(const QModelIndex & index, const QVariant & value, int role) override;
+    virtual int rowCount(const QModelIndex & index) const override;
+    virtual int columnCount(const QModelIndex & index) const override;
     void SetInterface(QSharedPointer<TableDataInterface> _interface);
-
-    QModelIndex index(int row, int column, const QModelIndex & parent) const;
-
-    Qt::ItemFlags flags(const QModelIndex & index) const;
-
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-
+    virtual QModelIndex index(int row, int column, const QModelIndex & parent) const override;
+    Qt::ItemFlags flags(const QModelIndex & index) const override;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     int RowForValue(void* value);
 
     void sort();
 
     void RemoveRow(const QModelIndex & index);
 
-
 public slots:
     void OnReloadDataFromInterface();
 
-
-  private:
-
-
+private:
 Q_DECLARE_PRIVATE(AdaptingTableModel)
-  protected:
+
+protected:
      AdaptingTableModelPrivate* const d_ptr;
 };
+
 #endif

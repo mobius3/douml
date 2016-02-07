@@ -47,7 +47,7 @@ public:
     void set_default_value(QString);
     QString get_default_value() const;
 
-    bool is_writable() const
+    virtual bool is_writable() const override
     {
         if(operation)
             return operation->is_writable();
@@ -57,9 +57,9 @@ public:
     {
         return ((OperationData*)operation->get_data())->get_or_set();
     }
-    void modified(){operation->package_modified();}
-    virtual const QPixmap * pixmap(int) const;
-    virtual uint TypeID();
+    virtual void modified() override {operation->package_modified();}
+    virtual const QPixmap * pixmap(int) const override;
+    virtual uint TypeID() override;
     bool deletedp() const;
     void set_deleted(bool, int position = 0);
     std::shared_ptr<ParamData> get_param() {return param;}

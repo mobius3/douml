@@ -57,7 +57,7 @@ protected slots:
     void show_all();
     void hide_all();
     void hide_inherited();
-    virtual void accept();
+    virtual void accept() override;
     virtual void polish();
 };
 

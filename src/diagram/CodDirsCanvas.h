@@ -55,24 +55,24 @@ protected:
     LabelCanvas * backward_label;
     CodLinkCanvas * link;	// to get start & end
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     CodDirsCanvas(UmlCanvas * canvas, CodLinkCanvas * l, int id);
     virtual ~CodDirsCanvas();
 
-    virtual void delete_it();
-    virtual void remove_it(ColMsg * msg);
+    virtual void delete_it() override;
+    virtual void remove_it(ColMsg * msg) override;
 
     virtual void get_from_to(CodObjCanvas *& from, CodObjCanvas *& to,
-                             bool forward);
+                             bool forward) override;
 
-    virtual UmlCode typeUmlCode() const;
+    virtual UmlCode typeUmlCode() const override;
     virtual int rtti() const;
-    virtual void open();
-    virtual void menu(const QPoint &);
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode &, const DiagramItem *) const;
-    virtual bool copyable() const;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode &, const DiagramItem *) const override;
+    virtual bool copyable() const override;
 
     void set_link(CodLinkCanvas * l) {
         link = l;
@@ -82,16 +82,16 @@ public:
     virtual void update_msgs();
     bool edit_drawing_settings();
     virtual void draw(QPainter & p);
-    virtual void setVisible(bool yes);
+    virtual void setVisible(bool yes) override;
 
-    virtual bool represents(BrowserNode *);
+    virtual bool represents(BrowserNode *) override;
 
-    virtual void save(QTextStream & st, bool, QString & warning) const;
+    virtual void save(QTextStream & st, bool, QString & warning) const override;
     static CodDirsCanvas * read(char *& st, UmlCanvas * canvas, char *& k);
-    virtual void history_save(QBuffer &) const;
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
-    virtual int type() const;
+    virtual void history_save(QBuffer &) const override;
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
+    virtual int type() const override;
 
 private slots:
     void modified();	// messages must be updated

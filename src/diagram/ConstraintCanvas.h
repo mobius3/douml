@@ -55,22 +55,22 @@ public:
     ConstraintCanvas(UmlCanvas * canvas, CdClassCanvas *, QString);
     virtual ~ConstraintCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
-    virtual UmlCode typeUmlCode() const;
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual bool copyable() const;
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
-    virtual void open();
-    virtual void menu(const QPoint &);
+    virtual UmlCode typeUmlCode() const override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual bool copyable() const override;
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
 
     virtual void apply_shortcut(QString s);
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(QList<DiagramItem *> &);
     virtual void clone_drawing_settings(const DiagramItem *src);
 
-    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const override;
     static ConstraintCanvas * read(char *& , UmlCanvas *, char *, CdClassCanvas *);
 
     static ConstraintCanvas * compute(UmlCanvas * canvas,
@@ -78,7 +78,7 @@ public:
                                       ConstraintCanvas * current);
 
 public slots:
-    void update();
+    virtual void update() override;
 };
 
 #endif

@@ -84,12 +84,12 @@ public:
 
     static void clear(bool old);
     static void update_idmax_for_root();
-    virtual void renumber(int phase);
-    virtual void prepare_update_lib() const;
+    virtual void renumber(int phase) override;
+    virtual void prepare_update_lib() const override;
 
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 
-    virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
+    virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after) override;
 };
 
 #endif

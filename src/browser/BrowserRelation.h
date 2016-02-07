@@ -61,10 +61,10 @@ public:
     BrowserRelation(const BrowserRelation * model, BrowserNode * p);
     virtual ~BrowserRelation();
 
-    virtual bool is_undefined() const;
+    virtual bool is_undefined() const override;
 
-    virtual void delete_it();
-    virtual bool undelete(bool rec, QString & warning, QString & renamed);
+    virtual void delete_it() override;
+    virtual bool undelete(bool rec, QString & warning, QString & renamed) override;
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     QString name = QString());
 
@@ -122,23 +122,23 @@ public:
 
     static void clear(bool old);
     static void update_idmax_for_root();
-    virtual void renumber(int phase);
-    virtual void prepare_update_lib() const;
+    virtual void renumber(int phase) override;
+    virtual void prepare_update_lib() const override;
 
-    virtual void referenced_by(QList<BrowserNode *> &, bool ondelete = FALSE);
+    virtual void referenced_by(QList<BrowserNode *> &, bool ondelete = FALSE) override;
     static void compute_referenced_by(QList<BrowserNode *> &, BrowserClass *);
 
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 
     static QString drag_key(BrowserNode * p);
-    virtual QString drag_key() const;
-    virtual QString drag_postfix() const;
-    virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
+    virtual QString drag_key() const override;
+    virtual QString drag_postfix() const override;
+    virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after) override;
 
     static void get_relating(BrowserNode *, QHash<BrowserNode *, BrowserNode *> &d,
                              BrowserNodeList & newones,
                              bool inh, bool dep, bool assoc);
-    virtual QVariant	data(int column, int role) const;
+    virtual QVariant data(int column, int role) const override;
 };
 
 #endif

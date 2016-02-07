@@ -69,7 +69,7 @@ protected:
 public:
     virtual ~SdMsgBaseCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     SdMsgSupport * get_dest()  const {
         return dest;
@@ -92,7 +92,7 @@ public:
     virtual int overlap_dir(SdDurationCanvas *) const = 0;
 
     virtual bool is_decenter(const QPoint &, BooL &) const;
-    virtual void setVisible(bool yes);
+    virtual void setVisible(bool yes) override;
 
     virtual UmlCode typeUmlCode() const;
     virtual QString may_start(UmlCode &) const;

@@ -69,7 +69,7 @@ public:
     BrowserSeqDiagram(QString s, BrowserNode * p, int id = 0);
     virtual ~BrowserSeqDiagram();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     QString name = QString());
 
@@ -90,16 +90,16 @@ public:
     virtual void update_drawing_settings();
     virtual void get_sequencediagramsettings(SequenceDiagramSettings &) const;
     void get_sequencediagramsettings_msg(SequenceDiagramSettings &) const;
-    virtual UmlColor get_color(UmlCode) const;
-    virtual bool get_shadow() const;
-    virtual bool get_draw_all_relations() const;
-    virtual void dont_draw_all_relations();
-    virtual bool get_auto_label_position() const;
-    virtual bool get_show_stereotype_properties() const;
-    virtual bool get_classinstwritehorizontally() const;
-    virtual ShowContextMode get_classinstshowmode() const;
-    virtual bool tool_cmd(ToolCom * com, const char * args);
-    virtual void save(QTextStream &, bool ref, QString & warning);
+    virtual UmlColor get_color(UmlCode) const override;
+    virtual bool get_shadow() const override;
+    virtual bool get_draw_all_relations() const override;
+    virtual void dont_draw_all_relations() override;
+    virtual bool get_auto_label_position() const override;
+    virtual bool get_show_stereotype_properties() const override;
+    virtual bool get_classinstwritehorizontally() const override;
+    virtual ShowContextMode get_classinstshowmode() const override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
+    virtual void save(QTextStream &, bool ref, QString & warning) override;
     static BrowserSeqDiagram * read(char *& , char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
 
@@ -118,7 +118,7 @@ public:
     static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
 
-    virtual void renumber(int phase);
+    virtual void renumber(int phase) override;
     static void open_all();
     static void import();
 
