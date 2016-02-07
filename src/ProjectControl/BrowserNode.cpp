@@ -396,7 +396,7 @@ void BrowserNode::assign(int w)
 
                 fputs("  ", fp);
 
-                int new_offset = (int) ftell(fp);
+                long new_offset = ftell(fp);
 
                 fputs(p + offset, fp);
                 fclose(fp);

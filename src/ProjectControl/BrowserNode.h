@@ -70,7 +70,7 @@ private:
     int modifier_id;
     int owner;
     int format;
-    int offset;
+    size_t offset;
     BooL ro;
 };
 

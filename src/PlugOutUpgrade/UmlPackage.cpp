@@ -252,7 +252,7 @@ void upgrade_UmlSettings()
             cl->add_attribute(s[i].att, ProtectedVisibility, "string", 0, 0);
         at->set_isClassMember(TRUE);
 
-        for (unsigned j = 0; j != ch.size(); j += 1) {
+        for (int j = 0; j != ch.size(); j += 1) {
             if (ch[j]->name() == s[i].after) {
                 at->moveAfter(ch[j]);
                 break;
@@ -354,7 +354,7 @@ void upgrade_CppSettings()
     };
     UmlClass * cl = UmlClass::get("CppSettings", 0);
     unsigned i;
-    unsigned j;
+    int j;
 
     for (i = 0; i != sizeof(s) / sizeof(s[0]); i += 1) {
         UmlAttribute * at =
@@ -566,7 +566,7 @@ void upgrade_jdk5(UmlClass * javasettings)
     UmlOperation * set_EnumPatternItemCase = 0;
     UmlAttribute * _enum_pattern_decl = 0;
     UmlAttribute * _enum_pattern_item_case = 0;
-    unsigned i;
+    int i;
 
     // rename JavaSettings operations and attributes
     // updates read_'s body
@@ -1176,7 +1176,7 @@ void fixe_package_diagram()
     // replace _assoc_diagram
 
     const QVector<UmlItem*> ch = basepackage->children();
-    unsigned i;
+    int i;
 
     for (i = 0; i != ch.size(); i += 1) {
         if (ch[i]->kind() == aRelation) {
@@ -1397,7 +1397,7 @@ void add_object_activity_diagram_item_kind()
 
     const QVector<UmlItem*> ch = itkind->children();
 
-    for (unsigned i = 0; i != ch.size(); i += 1) {
+    for (int i = 0; i != ch.size(); i += 1) {
         if (ch[i]->name() == "aDeploymentDiagram") {
             anObjectDiagram->moveAfter(ch[i]);
             anActivityDiagram->moveAfter(anObjectDiagram);
@@ -3441,7 +3441,7 @@ void replacefriend()
 void UmlPackage::replace_friend()
 {
     const QVector<UmlItem*> ch = children();
-    unsigned i;
+    int i;
 
     for (i = 0; i != ch.size(); i += 1)
         ch[i]->replace_friend();
@@ -3887,7 +3887,7 @@ UmlOperation * wrong_umlcom_send_cmd(UmlClass * uml_com)
     const QVector<UmlItem*> ch = uml_com->children();
     UmlOperation * r = 0;
 
-    for (unsigned i = 0; i != ch.size(); i += 1) {
+    for (int i = 0; i != ch.size(); i += 1) {
         if ((ch[i]->kind() == anOperation)  && (ch[i]->name() == "send_cmd")) {
             UmlOperation * op = (UmlOperation *) ch[i];
             const QList<UmlParameter> p = op->params();
@@ -4732,11 +4732,11 @@ void fixe_set_associateddiagram(UmlItem * v)
 
     const QVector<UmlItem*> ch1 = v->children();
 
-    for (unsigned i1 = 0; i1 != ch1.size(); i1 += 1) {
+    for (int i1 = 0; i1 != ch1.size(); i1 += 1) {
         if (ch1[i1]->kind() == aClass) {
             const QVector<UmlItem*> ch2 = ch1[i1]->children();
 
-            for (unsigned i2 = 0; i2 != ch2.size(); i2 += 1) {
+            for (int i2 = 0; i2 != ch2.size(); i2 += 1) {
                 if ((ch2[i2]->kind() == anOperation) &&
                 (ch2[i2]->name() == "set_AssociatedDiagram")) {
                     UmlOperation * op = (UmlOperation *) ch2[i2];
@@ -5374,7 +5374,7 @@ void update_api_version(const char * v)
     UmlClass * com = UmlClass::get("UmlCom", 0);
     const QVector<UmlItem*> ch = com->children();
 
-    for (unsigned i = 0; i != ch.size(); i += 1) {
+    for (int i = 0; i != ch.size(); i += 1) {
         if ((ch[i]->kind() == anOperation) &&
         (ch[i]->name() == "connect")) {
             unsigned uid = UmlCom::user_id();

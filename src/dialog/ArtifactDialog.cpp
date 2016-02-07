@@ -1765,7 +1765,7 @@ void ArtifactDialog::idl_update_src()
 
 void ArtifactDialog::associate_cls()
 {
-    unsigned int i = 0;
+    int i = 0;
 
     while (i < lb_cl_available->count()) {
         QListWidgetItem * item = lb_cl_available->item(i);
@@ -1799,7 +1799,7 @@ void ArtifactDialog::associate_cls()
 
 void ArtifactDialog::unassociate_cls()
 {
-    unsigned int i = 0;
+    int i = 0;
 
     while (i < lb_cl_associated->count()) {
         QListWidgetItem * item = lb_cl_associated->item(i);
@@ -1867,7 +1867,7 @@ void ArtifactDialog::move_cls_down()
 
 void ArtifactDialog::associate_arts()
 {
-    unsigned int i = 0;
+    int i = 0;
 
     while (i < lb_art_available->count()) {
         QListWidgetItem * item = lb_art_available->item(i);
@@ -1890,7 +1890,7 @@ void ArtifactDialog::associate_arts()
 
 void ArtifactDialog::unassociate_arts()
 {
-    unsigned int i = 0;
+    int i = 0;
 
     while (i < lb_art_associated->count()) {
         QListWidgetItem * item = lb_art_associated->item(i);

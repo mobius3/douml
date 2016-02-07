@@ -73,7 +73,7 @@ QTcpSocket * UmlCom::sock;
 
 char * UmlCom::buffer_in;
 
-unsigned int UmlCom::buffer_in_size;
+size_t UmlCom::buffer_in_size;
 
 char * UmlCom::p_buffer_in;
 
@@ -83,11 +83,11 @@ char * UmlCom::buffer_out;
 
 char * UmlCom::p_buffer_out;
 
-unsigned int UmlCom::buffer_out_size;
+size_t UmlCom::buffer_out_size;
 
-void UmlCom::check_size_out(unsigned int len)
+void UmlCom::check_size_out(size_t len)
 {
-    unsigned used = p_buffer_out - buffer_out;
+    ptrdiff_t used = p_buffer_out - buffer_out;
 
     if ((used + len) >= buffer_out_size) {
         buffer_out_size = used + len + 1024;
@@ -119,7 +119,7 @@ void UmlCom::read_if_needed()
     }
 }
 
-void UmlCom::read_buffer(unsigned int len)
+void UmlCom::read_buffer(size_t len)
 {
 #ifdef TRACE
     //cout << "enter UmlCom::read_buffer(" << len << ")\n";
@@ -131,8 +131,8 @@ void UmlCom::read_buffer(unsigned int len)
         buffer_in = new char[buffer_in_size];
     }
 
-    int remainder = (int) len;
-    int nread;
+    qint64 remainder = len;
+    qint64 nread;
     char * p = buffer_in;
 
     for (;;) {
@@ -206,7 +206,7 @@ void UmlCom::write_string(const char * p)
     if (p == 0)
         p = "";
 
-    unsigned len = strlen(p) + 1;
+    size_t len = strlen(p) + 1;
 
     check_size_out(len);
     memcpy(p_buffer_out, p, len);
@@ -610,7 +610,7 @@ const char * UmlCom::read_string()
 {
     read_if_needed();
 
-    unsigned len = strlen(p_buffer_in) + 1;
+    size_t len = strlen(p_buffer_in) + 1;
 
     p_buffer_in += len;
 
@@ -677,7 +677,7 @@ void UmlCom::fatal_error(const QByteArray &
 void UmlCom::flush()
 {
     if (sock != 0) {
-        int len = p_buffer_out - buffer_out - 4;
+        ptrdiff_t len = p_buffer_out - buffer_out - 4;
         /* the four first bytes of buffer_out are free to contains the length */
         buffer_out[0] = len >> 24;
         buffer_out[1] = len >> 16;
@@ -688,7 +688,7 @@ void UmlCom::flush()
         p_buffer_out = buffer_out;
 
         for (;;) {
-            int sent = sock->write(p_buffer_out, len);
+            qint64 sent = sock->write(p_buffer_out, len);
 
             if (sent == -1) {
                 close();	// to not try to send "bye" !

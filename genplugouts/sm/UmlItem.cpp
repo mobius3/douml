@@ -15,7 +15,7 @@ UmlItem::~UmlItem()
 UmlItem * UmlItem::getChild(anItemKind k, QByteArray s)
 {
     const QVector<UmlItem*> ch = children();
-    unsigned index;
+    int index;
 
     if (k == aRelation) {
         for (index = 0; index != ch.count(); index += 1)

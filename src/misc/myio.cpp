@@ -1533,7 +1533,7 @@ void delete_backup(QDir & d)
     }
 }
 
-int open_file(QFile & fp, int mode, bool silent)
+qint64 open_file(QFile & fp, int mode, bool silent)
 {
     Context.filename = fp.fileName();
 
@@ -1668,7 +1668,7 @@ char * read_file(QString filename)
             : BrowserView::get_dir().absoluteFilePath(filename);
 
     QFile fp(filename);
-    int size;
+    qint64 size;
 
     if ((size = open_file(fp, QIODevice::ReadOnly, TRUE)) != -1) {
         char * s = new char[size + 1];
@@ -1725,7 +1725,7 @@ char * read_definition(int id, const char * ext)
     return read_file(s);
 }
 
-char * read_file(QString filename, int offset, int len)
+char * read_file(QString filename, qint64 offset, qint64 len)
 {
     filename = BrowserView::get_dir().absoluteFilePath(filename);
 
@@ -1751,7 +1751,7 @@ char * read_file(QString filename, int offset, int len)
         return 0;
 }
 
-char * read_definition(int id, const char * ext, int offset, int len)
+char * read_definition(int id, const char * ext, qint64 offset, qint64 len)
 {
     if (len == 0)
         return 0;

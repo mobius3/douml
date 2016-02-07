@@ -623,7 +623,7 @@ void Package::update_class_list(WrapperStr pack, UmlItem * container)
 {
     const QVector<UmlItem*> & ch = container->children();
 
-    for (unsigned i = 0; i != ch.size(); i += 1) {
+    for (int i = 0; i != ch.size(); i += 1) {
         UmlItem * it = ch[i];
 
         switch (it->kind()) {
@@ -793,7 +793,7 @@ UmlPackage * Package::get_uml(bool mandatory)
 
         QVector<UmlItem*> ch = uml_pa->children();
 
-        for (unsigned index = 0; index != ch.size(); index += 1) {
+        for (int index = 0; index != ch.size(); index += 1) {
             UmlItem * it = ch[index];
 
             if ((it->kind() == aPackage) && (it->name() == name))

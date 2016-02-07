@@ -101,7 +101,7 @@ void UmlOperation::addParam(int rank, aDirection dir, const char * name, UmlClas
     p.type.type = type;
     p.name = name;
 
-    if (params().count() <= (unsigned) rank)
+    if (params().count() <= rank)
         addParameter(rank, p);
     else
         replaceParameter(rank, p);

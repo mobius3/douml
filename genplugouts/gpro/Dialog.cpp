@@ -267,7 +267,7 @@ void Dialog::compute_includepath()
     const QVector<UmlArtifact*> & arts = _art->associatedArtifacts();
     QFileInfo fi(edpro->text());
     QString prodir = fi.path();
-    unsigned index;
+    int index;
     QStringList l;
 
     for (index = 0; index != arts.count(); index += 1) {

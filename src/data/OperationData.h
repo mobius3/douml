@@ -52,8 +52,8 @@ class QuickEdit;
 class OperationBody
 {
 public:
-    int offset;	// offset in the file
-    int length;	// body length, 0 if empty, -1 if unknown (file not yet read)
+    qint64 offset;	// offset in the file
+    qint64 length;	// body length, 0 if empty, -1 if unknown (file not yet read)
 
     OperationBody() : offset(0), length(0) {};
 };

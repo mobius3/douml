@@ -101,7 +101,7 @@ SourceDialog::SourceDialog(QString p, BooL & flg, unsigned & edn)
     updateCursorPos(0, 0);
 
     QFile f(p);
-    unsigned size = fi.size();
+    qint64 size = fi.size();
 
     if (f.open(QIODevice::ReadOnly)) {
         char * s = new char[size + 1];

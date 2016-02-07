@@ -1435,7 +1435,7 @@ UmlPackage * Package::get_uml(bool mandatory)
 
         QVector<UmlItem*> ch = uml_pa->children();
 
-        for (unsigned index = 0; index != ch.size(); index += 1) {
+        for (int index = 0; index != ch.size(); index += 1) {
             UmlItem * it = ch[index];
 
             if ((it->kind() == aPackage) && (it->name() == name))

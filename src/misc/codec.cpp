@@ -108,7 +108,7 @@ WrapperStr fromUnicode(const QString & s)
 
 void remove_crlf(char * s)
 {
-    int len = strlen(s);
+    size_t len = strlen(s);
 
     if (len != 0) {
         if (s[len - 1] == '\n')

@@ -40,8 +40,8 @@ int UmlBaseFragment::vcenter_(int rank) const
 
 void UmlBaseFragment::read_covered_(QHash<void*,UmlClassInstanceReference*> & instances)
 {
-    unsigned n = UmlCom::read_unsigned();
-    unsigned rank;
+    int n = UmlCom::read_unsigned();
+    int rank;
 
     _covered.resize(n);
 

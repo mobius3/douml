@@ -67,7 +67,7 @@ void UmlPackage::subArtifacts(QList<UmlArtifact *> &l, QByteArray name, QByteArr
     foreach (deplview, _deplviews){
         if (deplview->baseName() == deplview_name) {
             const QVector<UmlItem*> ch = deplview->children();
-            unsigned i;
+            int i;
 
             for (i = 0; i != ch.size(); i += 1) {
                 UmlItem * it = ch[i];

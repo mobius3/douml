@@ -2146,7 +2146,7 @@ Class * Class::reverse_enum(ClassContainer * container,
                 QVector<UmlItem*> ch = p->children();
                 UmlItem * x;
 
-                for (unsigned chindex = 0; chindex != ch.size(); chindex += 1) {
+                for (int chindex = 0; chindex != ch.size(); chindex += 1) {
                     if (((x = ch[chindex])->kind() == aClass) && (x->name() == str)) {
                         uml = (UmlClass *) x;
 
@@ -2299,7 +2299,7 @@ bool Class::already_in_bouml()
 {
     QVector<UmlItem*> ch = get_uml()->children();
 
-    for (unsigned index = 0; index != ch.size(); index += 1)
+    for (int index = 0; index != ch.size(); index += 1)
         if (ch[index]->kind() != aClass)
             return TRUE;
 

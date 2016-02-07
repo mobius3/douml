@@ -319,7 +319,7 @@ void FlowDef::save(QTextStream & st, WrapperStr lang) const
 
 void FlowDef::read(char *& st, char *& k, WrapperStr lang)
 {
-    int ln = strlen(lang);
+    size_t ln = strlen(lang);
 
     if (!strncmp(k, lang, ln) && !strcmp(k + ln, "_weight")) {
         weight = read_string(st);

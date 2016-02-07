@@ -80,7 +80,7 @@ private:
 
     static char * buffer_in;
 
-    static unsigned int buffer_in_size;
+    static size_t buffer_in_size;
 
     static char * p_buffer_in;
 
@@ -90,13 +90,13 @@ private:
 
     static char * p_buffer_out;
 
-    static unsigned int buffer_out_size;
+    static size_t buffer_out_size;
 
 
 protected:
-    static void check_size_out(unsigned int len);
+    static void check_size_out(size_t len);
     static void read_if_needed();
-    static void read_buffer(unsigned int len);
+    static void read_buffer(size_t len);
     static void write_bool(bool b);
     static void write_char(char c);
     static void write_unsigned(unsigned int u);

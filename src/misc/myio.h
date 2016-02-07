@@ -80,13 +80,13 @@ extern void set_on_load_diagram(bool);
 extern void backup(QDir & d, QString fn);
 extern void delete_backup(QDir & d);
 
-extern int open_file(QFile & fp, int mode, bool silent = FALSE);
+extern qint64 open_file(QFile & fp, int mode, bool silent = FALSE);
 extern void read_in(const QString &);
 extern bool copy_file(QFileInfo * src, const QDir & dest);
 extern void save_if_needed(const char * filename, QSharedPointer<QByteArray>);
 
 extern char * read_file(QString filename);
-extern char * read_file(QString filename, int offset, int len);
+extern char * read_file(QString filename, qint64 offset, qint64 len);
 
 extern QString last_used_directory();
 extern void set_last_used_directory(QString);
@@ -96,7 +96,7 @@ extern unsigned read_file_format();
 
 extern QString abs_file_path(int id, const char * ext);
 extern char * read_definition(int id, const char * ext);
-char * read_definition(int id, const char * ext, int offset, int len);
+char * read_definition(int id, const char * ext, qint64 offset, qint64 len);
 extern void save_definition(int id, const char * ext, const char * def, BooL & is_new);
 extern void delete_definition(int id, const char * ext);
 

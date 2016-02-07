@@ -228,7 +228,7 @@ void UmlItem::memo_ref()
 
     const QVector<UmlItem*> ch = children();
 
-    for (unsigned i = 0; i != ch.size(); i += 1)
+    for (int i = 0; i != ch.size(); i += 1)
         ch[i]->memo_ref();
 }
 
@@ -324,7 +324,7 @@ void UmlItem::ref_indexes()
     UmlDeploymentDiagram::ref_index();
     fw.write("</p>\n<p>\n</p>\n<p>");
 
-    for (unsigned i = 0; i != letters.length(); i += 1) {
+    for (int i = 0; i != letters.length(); i += 1) {
         fw.write("<a href=\"index_");
         fw.write(letters.at(i) & 255u);
         fw.write(".html\" target = \"projectFrame\"><b> ");

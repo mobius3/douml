@@ -1588,7 +1588,7 @@ void UmlWindow::read_session()
     sprintf(fn, "%d.session", user_id());
 
     QFile fp(d.absoluteFilePath(fn));
-    int size;
+    qint64 size;
 
     if ((size = open_file(fp, QIODevice::ReadOnly, TRUE)) != -1) {
         char * s = new char[size + 1];

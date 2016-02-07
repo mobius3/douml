@@ -80,7 +80,7 @@ protected:
     BooL decenter_horiz;
     QList<QPoint> previousResizeCorrection;
     QList<QByteArray> history;
-    unsigned history_index;
+    int history_index;
 
 
 

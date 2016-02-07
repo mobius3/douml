@@ -246,7 +246,7 @@ void ParameterSetDialog::post_edit_description(ParameterSetDialog * d, QString s
 
 void ParameterSetDialog::associate_cls()
 {
-    unsigned int i = 0;
+    int i = 0;
 
     while (i < lb_available->count()) {
         QListWidgetItem * item = lb_available->item(i);
@@ -264,7 +264,7 @@ void ParameterSetDialog::associate_cls()
 
 void ParameterSetDialog::unassociate_cls()
 {
-    unsigned int i = 0;
+    int i = 0;
 
     while (i < lb_member->count()) {
         QListWidgetItem * item = lb_member->item(i);

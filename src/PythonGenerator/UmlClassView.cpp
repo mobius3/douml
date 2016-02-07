@@ -31,7 +31,7 @@ void UmlClassView::generate()
 {
     QVector<UmlItem*> ch = UmlItem::children();
 
-    for (unsigned index = 0; index != ch.size(); index += 1)
+    for (int index = 0; index != ch.size(); index += 1)
         ch[index]->generate();
 }
 

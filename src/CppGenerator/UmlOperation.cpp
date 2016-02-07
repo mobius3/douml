@@ -930,7 +930,7 @@ static char * read_file(const char * filename)
 
     if (fp.open(QIODevice::ReadOnly)) {
         QFileInfo fi(fp);
-        int size = fi.size();
+        qint64 size = fi.size();
         char * s = new char[size + 1];
 
         if (fp.read(s, size) == -1) {

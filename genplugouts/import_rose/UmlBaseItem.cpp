@@ -159,7 +159,7 @@ void UmlBaseItem::unload(bool rec, bool del)
 
     if (_children != 0) {
         if (rec) {
-            for (unsigned chindex = 0; chindex != _children->size(); chindex += 1) {
+            for (int chindex = 0; chindex != _children->size(); chindex += 1) {
                 _children->at(chindex)->unload(TRUE, del);
 
                 if (del)
@@ -250,10 +250,6 @@ UmlItem * UmlBaseItem::create_(anItemKind k, const char * s)
 
     if (result != 0) {
         if (_children != 0) {
-            unsigned n = _children->count();
-
-            //_children->resize(n + 1);
-            //_children->insert(n, result);
             _children->append(result);
         }
 

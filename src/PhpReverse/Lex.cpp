@@ -104,7 +104,7 @@ bool Lex::open(const QString & f)
     context.mark = 0;
 
     QFile in(f);
-    unsigned sz;
+    qint64 sz;
 
     if (!in.open(QIODevice::ReadOnly) ||
         ((context.buffer = new char[(sz = in.size()) + 1]) == 0))

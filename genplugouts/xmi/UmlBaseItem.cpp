@@ -209,7 +209,7 @@ void UmlBaseItem::unload(bool rec, bool del)
 
     if (_children != 0) {
         if (rec) {
-            for (unsigned chindex = 0; chindex != _children->size(); chindex += 1) {
+            for (int chindex = 0; chindex != _children->size(); chindex += 1) {
                 _children->at(chindex)->unload(TRUE, del);
 
                 if (del)
