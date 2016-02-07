@@ -547,6 +547,7 @@ SOURCES = \
 
 TARGET = douml
 DEFINES = BooL=bool  FALSE=false TRUE=true
+#DEFINES += _RUN_PLUGOUT_EXTERNAL_
 #DEBUGCOM
 
 DEFINES += __sil__

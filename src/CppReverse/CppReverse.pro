@@ -108,6 +108,7 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
 
 TARGET          = cpp_reverse
 DEFINES          = WITHCPP REVERSE BooL=bool DEBUG_BOUML FALSE=false TRUE=true
+#DEFINES += _RUN_PLUGOUT_EXTERNAL_
 
 INCLUDEPATH   = ../Tools ../CppReverse ../
 QT += testlib

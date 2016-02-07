@@ -217,7 +217,7 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
     com->externalProcess->start(QCoreApplication::applicationDirPath() + "/" + command, arguments);
 #endif
 #ifdef Q_OS_WIN
-#if 1
+#ifndef _RUN_PLUGOUT_EXTERNAL_
     com->externalProcess->start(command, arguments);
 #endif
 #endif

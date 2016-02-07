@@ -27,7 +27,7 @@
 
 #ifndef VERSION_H
 
-#define DOUML_VERSION    "1.0b6"
+#define DOUML_VERSION    "1.0.8"
 
 #define DOUML_BUILD_DATE  __DATE__
 #define DOUML_BUILD_TIME   __TIME__
