@@ -5,8 +5,8 @@ HHBox::HHBox(QWidget *parent, QString name) :
 {
     m_layout = new QHBoxLayout(this);
     this->setLayout(m_layout);
-    m_layout->setSpacing(0);
-    m_layout->setMargin(0);
+    m_layout->setSpacing(2);
+    m_layout->setMargin(2);
     setObjectName(name);
 }
 
