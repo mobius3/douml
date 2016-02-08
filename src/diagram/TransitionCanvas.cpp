@@ -769,7 +769,7 @@ void TransitionCanvas::save(QTextStream & st, bool ref, QString & warning) const
         }
 
         nl_indent(st);
-        (const TransitionCanvas *) ArrowCanvas::save_lines(st, TRUE, TRUE, warning);
+        save_lines(st, TRUE, TRUE, warning);
         nl_indent(st);
         st << "write_horizontally " << stringify(write_horizontally)
            << " show_definition " << stringify(show_definition)

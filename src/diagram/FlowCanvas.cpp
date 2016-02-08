@@ -861,7 +861,7 @@ void FlowCanvas::save(QTextStream & st, bool ref, QString & warning) const
         }
 
         nl_indent(st);
-        (const FlowCanvas *) ArrowCanvas::save_lines(st, TRUE, TRUE, warning);
+        save_lines(st, TRUE, TRUE, warning);
         settings.save(st);
         st << " write_horizontally " << stringify(write_horizontally);
 

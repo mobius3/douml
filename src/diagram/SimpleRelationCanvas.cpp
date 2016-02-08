@@ -595,7 +595,7 @@ void SimpleRelationCanvas::save(QTextStream & st, bool ref, QString & warning) c
             st << "decenter_end " << ((int)(decenter_end * 1000));
         }
 
-        (const SimpleRelationCanvas *) ArrowCanvas::save_lines(st, TRUE, TRUE, warning);
+        save_lines(st, TRUE, TRUE, warning);
 
         if (stereotypeproperties != 0)
             stereotypeproperties->save(st, FALSE, warning);
