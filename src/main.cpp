@@ -77,7 +77,11 @@ int main(int argc, char ** argv)
 
 //#ifdef DEBUG
     QsLogging::Logger & logger = QsLogging::Logger::instance();
+#ifdef DEBUG
+    logger.setLoggingLevel(QsLogging::HaltingLevel);
+#else
     logger.setLoggingLevel(QsLogging::FatalLevel);
+#endif
     QDir dir;
     dir.setPath(qApp->applicationDirPath());
     dir.remove(QString("douml") + QString(".log"));
