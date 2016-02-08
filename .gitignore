@@ -118,4 +118,8 @@ src/CppReverse/cpp_reverse
 xcuserdata/
 Info.plist
 *.xcodeproj
-
+project.pbxproj
+project.xcworkspace
+qt_makeqmake.mak
+qt_preprocess.mak
+xcshareddata/
