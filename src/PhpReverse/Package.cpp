@@ -187,7 +187,7 @@ void Package::progress_closed()
 static bool allowed(QRegExp * rg, QString f)
 {
     if (rg != 0) {
-        int matchLen;
+        //int matchLen;
         return rg->exactMatch(f);/*
     return ((rg->match(f, 0, &matchLen) != 0) ||
 	    (matchLen != (int) f.length()));*/

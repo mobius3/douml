@@ -411,28 +411,6 @@ void BrowserClass::update_stereotype(bool rec)
 
 }
 
-void BrowserClass::paintCell(QPainter * p, const QPalette & cg, int column,
-                             int width, int alignment)
-{
-/*BrowserClass::data used instead
-    const QColor & bg = p->background().color();
-
-    if (is_marked) {
-        p->setBackgroundMode(::Qt::OpaqueMode);
-        p->setBackgroundColor(UmlRedColor);
-    }
-
-    p->setFont((def->get_is_abstract())
-               ? ((is_writable()) ? BoldItalicFont : ItalicFont)
-               : ((is_writable()) ? BoldFont : NormalFont));
-    BrowserNode::paintCell(p, cg, column, width, alignment);
-
-    if (is_marked) {
-        p->setBackgroundMode(::Qt::TransparentMode);
-        p->setBackgroundColor(bg);
-    }
-    */
-}
 QVariant BrowserClass::data(int column, int role) const
 {
     if(role == Qt::FontRole)

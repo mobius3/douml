@@ -472,33 +472,6 @@ const QPixmap * BrowserRelation::pixmap(int) const
     }
 }
 
-void BrowserRelation::paintCell(QPainter * p, const QPalette & cg, int column,
-                                int width, int alignment)
-{
-    /* BrowserRelation::data used instead
-    bool class_relation = def->is_a(this)
-            ? def->get_isa_class_relation_a() : def->get_isa_class_relation_b();
-
-    const QColor & bg = p->background().color();
-    QBrush backColor = p->background();
-
-    if (is_marked) {
-        p->setBackgroundMode(Qt::OpaqueMode);
-        backColor.setColor(UmlRedColor);
-        p->setBackground(backColor);
-    }
-    p->setFont((class_relation)
-               ? ((is_writable()) ? BoldUnderlineFont : UnderlineFont)
-               : ((is_writable()) ? BoldFont : NormalFont));
-    BrowserNode::paintCell(p, cg, column, width, alignment);
-
-    if (is_marked) {
-        p->setBackgroundMode(Qt::TransparentMode);
-        backColor.setColor(bg);
-        p->setBackground(backColor);
-    }
-    */
-}
 QVariant BrowserRelation::data(int column, int role) const
 {
     if(role == Qt::FontRole)

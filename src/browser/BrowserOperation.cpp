@@ -589,35 +589,6 @@ const QPixmap * BrowserOperation::pixmap(int) const
     }
 }
 
-void BrowserOperation::paintCell(QPainter * p, const QPalette & cg, int column,
-                                 int width, int alignment)
-{
-
-    /* BrowserOperation::data is used instead
-    const QColor & bg = p->background().color();
-
-    QBrush backColor = p->background();
-    if (is_marked) {
-        p->setBackgroundMode(Qt::OpaqueMode);
-        backColor.setColor(UmlRedColor);
-        p->setBackground(backColor);
-    }
-
-    if (def->get_isa_class_operation())
-        p->setFont((is_writable()) ? BoldUnderlineFont : UnderlineFont);
-    else if (def->get_is_abstract())
-        p->setFont((is_writable()) ? BoldItalicFont : ItalicFont);
-    else
-        p->setFont((is_writable()) ? BoldFont : NormalFont);
-    BrowserNode::paintCell(p, cg, column, width, alignment);
-
-    if (is_marked) {
-        p->setBackgroundMode(Qt::TransparentMode);
-        backColor.setColor(bg);
-        p->setBackground(backColor);
-    }
-    */
-}
 QVariant BrowserOperation::data(int column, int role) const
 {
     if(role == Qt::FontRole)
@@ -855,10 +826,6 @@ void BrowserOperation::exec_menu_choice(int rank)
         AddConstructorInitalizer();
         return;
     }
-
-
-        ImplBy.clear();
-        return;
 
     default:
         if (rank >= 99990)

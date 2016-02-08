@@ -126,12 +126,6 @@ public:
     {
         return byteArray.constData();
     }
-    operator WrapperStr() const {
-         //QLOG_INFO()() << Q_FUNC_INFO;
-         //QLOG_INFO()() << this->wrappedString.toLatin1();
-         return this->byteArray;
-         //return this->wrappedString.toLatin1();
-     }
 
     operator QString() const {
         return this->wrappedString;

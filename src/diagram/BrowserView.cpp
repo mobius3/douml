@@ -307,9 +307,6 @@ void BrowserView::mousePressEvent(QMouseEvent * e)
     UmlWindow::abort_line_construction();
 
     //QPoint p(contentsToViewport(e->pos()));
-    QModelIndex indexOfItem = indexAt(e->pos());
-    int row = indexOfItem.row();
-    int column = indexOfItem.column();
     BrowserNode * i = (BrowserNode *)itemAt(e->pos());
 
     if (i != 0) {

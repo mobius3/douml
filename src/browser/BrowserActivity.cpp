@@ -777,11 +777,6 @@ bool BrowserActivity::may_contains_them(const QList<BrowserNode *> & l,
         default:
             return FALSE;
         }
-
-        if (! may_contains(node, FALSE))
-            return FALSE;
-
-        duplicable = may_contains_it(node);
     }
 
     return TRUE;

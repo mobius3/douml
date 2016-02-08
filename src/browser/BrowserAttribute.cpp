@@ -246,30 +246,6 @@ const QPixmap * BrowserAttribute::pixmap(int) const
     }
 }
 
-void BrowserAttribute::paintCell(QPainter * p, const QPalette & cg, int column,
-                                 int width, int alignment)
-{
-    /*BrowserAttribute::data is used instead
-    const QColor & bg = p->background().color();
-    QBrush backBrush = p->background();
-    if (is_marked) {
-        p->setBackgroundMode(Qt::OpaqueMode);
-        backBrush.setColor(UmlRedColor);
-        p->setBackground(backBrush);
-    }
-
-    p->setFont((def->get_isa_class_attribute())
-               ? ((is_writable()) ? BoldUnderlineFont : UnderlineFont)
-                   : ((is_writable()) ? BoldFont : NormalFont));
-    BrowserNode::paintCell(p, cg, column, width, alignment);
-
-    if (is_marked) {
-        p->setBackgroundMode(Qt::TransparentMode);
-        backBrush.setColor(bg);
-        p->setBackground(backBrush);
-    }
-    */
-}
 QVariant BrowserAttribute::data(int column, int role) const
 {
     if(role == Qt::FontRole)

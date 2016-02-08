@@ -157,7 +157,6 @@ void HelpDialog::show(QString topic)
                 else
                     topic = dir.absoluteFilePath(topic + ".html");
 
-                int index = 0;
 
                 QString navPath = QDir::toNativeSeparators(NavigatorPath);
                 navPath.prepend("\"");

@@ -559,29 +559,7 @@ QString BrowserNode::stereotypes_properties() const
     return QString();
 }
 
-void BrowserNode::paintCell(QPainter * p, const QPalette & cg, int column,
-                            int width, int alignment)
-{
-    /*BrowserNode::data used instead
-    const QColor & bg = p->background().color();
-    QBrush backBrush = p->background();
-    if (is_marked) {
-        p->setBackgroundMode(::Qt::OpaqueMode);
-        backBrush.setColor(UmlRedColor);
-        p->setBackground(backBrush);
-    }
-
-    p->setFont((is_writable()) ? BoldFont : NormalFont);
-    QTreeWidgetItem::paintCell(p, cg, column, width, alignment);
-    if (is_marked) {
-        p->setBackgroundMode(::Qt::TransparentMode);
-        backBrush.setColor(bg);
-        p->setBackground(backBrush);
-    }
-    */
-
-}
-QVariant	BrowserNode::data(int column, int role) const
+QVariant BrowserNode::data(int column, int role) const
 {
     if(role == Qt::DecorationRole)
     {

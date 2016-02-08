@@ -2054,7 +2054,7 @@ void UmlWindow::formatMenuAboutToShow()
 {
     abort_line_construction();
 
-    int i = IsoA0;
+    //int i = IsoA0;
 
     foreach(QAction* action,formatMenu->actions())
     {

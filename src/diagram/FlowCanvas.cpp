@@ -370,7 +370,6 @@ void FlowCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         data->get_start()->select_in_browser();
-        return;
     }
     else if (s == "Edit drawing settings") {
         ArrowCanvas * aplabel;
@@ -380,16 +379,10 @@ void FlowCanvas::apply_shortcut(const QString & s)
 
         if ((aplabel != 0) || (apstereotype != 0))
             edit_drawing_settings();
-
-        return;
     }
     else {
         data->get_start()->apply_shortcut(s);
-        return;
     }
-
-    modified();
-    package_modified();
 }
 
 void FlowCanvas::edit_drawing_settings()

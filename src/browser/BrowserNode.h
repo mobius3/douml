@@ -284,8 +284,6 @@ public:
 
     static bool toggle_show_stereotypes();
     virtual void iconChanged();
-    virtual void paintCell(QPainter * p, const QPalette & cg, int column,
-                           int width, int alignment);
 
     void unconsistent_fixed(const char * what, BrowserNode * newone);
     void unconsistent_removed(const char * what, BrowserNode * newone);

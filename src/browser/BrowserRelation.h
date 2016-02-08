@@ -86,8 +86,7 @@ public:
     void add_get_oper();
     void add_set_oper();
 
-    virtual const QPixmap * pixmap(int) const;
-    virtual void paintCell(QPainter *, const QPalette &, int, int, int);
+    virtual const QPixmap * pixmap(int) const override;
     BrowserNode * extract();
     static BrowserRelation * reinsert(BrowserNode * p, RelationData * d);
 

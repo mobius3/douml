@@ -189,16 +189,14 @@ public:
 
     static bool new_java_enums(const QString & new_st);
 
-    virtual const QPixmap * pixmap(int) const;
-    virtual void update_stereotype(bool rec = FALSE);
-    virtual void iconChanged();
-    virtual void paintCell(QPainter * p, const QPalette & cg, int column,
-                           int width, int alignment);
+    virtual const QPixmap * pixmap(int) const override;
+    virtual void update_stereotype(bool rec = FALSE) override;
+    virtual void iconChanged() override;
 
-    virtual void DragMoveEvent(QDragMoveEvent * e);
-    virtual void DropEvent(QDropEvent * e);
-    virtual void DragMoveInsideEvent(QDragMoveEvent * e);
-    virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
+    virtual void DragMoveEvent(QDragMoveEvent * e) override;
+    virtual void DropEvent(QDropEvent * e) override;
+    virtual void DragMoveInsideEvent(QDragMoveEvent * e) override;
+    virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after) override;
 
     static BrowserClass * temporary();
 private:

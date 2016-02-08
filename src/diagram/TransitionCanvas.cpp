@@ -364,18 +364,13 @@ void TransitionCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         data->get_start()->select_in_browser();
-        return;
     }
     else if (s == "Edit drawing settings") {
         edit_drawing_settings();
-        return;
     }
     else {
         data->get_start()->apply_shortcut(s);
-        return;
     }
-
-    modified(); // call package_modified()
 }
 
 void TransitionCanvas::edit_drawing_settings()

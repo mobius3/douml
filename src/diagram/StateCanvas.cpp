@@ -1674,7 +1674,7 @@ void StateCanvas::history_load(QBuffer & b)
     ::load(h, b);
     QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
-    QRect * r = regions_rect.data();
+    //QRect * r = regions_rect.data();
 
     //if (r != 0)
     {

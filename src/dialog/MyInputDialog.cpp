@@ -243,7 +243,7 @@ void MyInputDialog::onTextChanged()
 {
     QString text;
     int pos = 0;
-    bool isValidated = false;
+    
     if(le)
     {
         text = le->text();

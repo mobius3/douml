@@ -1135,7 +1135,6 @@ void ArrowCanvas::menu(const QPoint &)
 
 void ArrowCanvas::init_geometry_menu(QMenu & m, int first)
 {
-    QAction *currentAction;
     QPixmap hv((const char **) geometry_hv);
     QPixmap vh((const char **) geometry_vh);
     QPixmap hvh((const char **) geometry_hvh);

@@ -2027,7 +2027,7 @@ void ArtifactDialog::accept()
         bn->package_modified();
         data->modified();
 
-        BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
+        //BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
        // bn->edit_end();
 #ifdef EDGETOOLENABLED
         toolbar->setParent(0);
@@ -2039,7 +2039,7 @@ void ArtifactDialog::accept()
 
 void ArtifactDialog::reject()
 {
-    BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
+    //BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
     //bn->edit_end();
 #ifdef EDGETOOLENABLED
     toolbar->setParent(0);

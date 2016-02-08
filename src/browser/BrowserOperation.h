@@ -93,7 +93,6 @@ public:
     QString compute_name(const char * name_spec) const;
 
     virtual const QPixmap * pixmap(int) const;
-    virtual void paintCell(QPainter *, const QPalette &, int, int, int);
 
     virtual void menu();
     virtual void apply_shortcut(const QString & s);
