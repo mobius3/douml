@@ -192,7 +192,7 @@ void UmlCom::read_buffer(size_t len)
     QLOG_INFO() << "Allocated address" << (size_t) buffer_in;
     for (;;)
     {
-        sock->read(p, remainder);
+        nread = sock->read(p, remainder);
 //        QByteArray arr(p);
 //        QLOG_INFO() << arr;
         p += nread;
