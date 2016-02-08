@@ -37,7 +37,7 @@ class FileDestination : public Destination
 {
 public:
     FileDestination(const QString & filePath);
-    virtual void write(const QString & message);
+    virtual void write(const QString & message) override;
 
 private:
     QFile mFile;
@@ -62,7 +62,7 @@ void FileDestination::write(const QString & message)
 class DebugOutputDestination : public Destination
 {
 public:
-    virtual void write(const QString & message);
+    virtual void write(const QString & message) override;
 };
 
 void DebugOutputDestination::write(const QString & message)

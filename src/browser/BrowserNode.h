@@ -87,7 +87,6 @@ protected:
     bool is_read_only = false;
     bool is_edited = false;
     bool is_marked = false;
-    //bool is_marked_for_move = false;
     bool is_defined = false;	// to indicate unconsistency due to projectSynchro
     // pre condition not followed
 
@@ -153,22 +152,18 @@ public:
     static void setup_generatable_types();
     static void unmark_all();
 
-//    bool marked_for_move(){return is_marked_for_move;}
-//    void set_marked_for_move(bool value){ is_marked_for_move = value;}
-
-
     bool is_from_lib() const {
         return original_id != 0;
     }
     virtual void prepare_update_lib() const = 0;
     virtual void support_file(QHash<QString, char *> &files, bool add) const;
 
-    virtual bool is_writable() const;	// file writable & not api base
+    virtual bool is_writable() const override; // file writable & not api base
     virtual void delete_it();
     virtual void set_deleted(bool);
     bool deletedp() const {
         return is_deleted;
-    };
+    }
     void undelete(bool recursive);
     virtual bool undelete(bool rec, QString & warning, QString & renamed);
     void must_be_deleted(); // deleted after load time
@@ -312,7 +307,7 @@ public:
     void setOpen(bool isOpen){this->setExpanded(isOpen);}
     BrowserNode* nextSibling();
     void repaint(){ /*doldurulacak*/}
-    virtual QVariant	data(int column, int role) const;
+    virtual QVariant data(int column, int role) const override;
     BrowserNode * itemAbove();
     BrowserNode * itemBelow ();
     int depth();

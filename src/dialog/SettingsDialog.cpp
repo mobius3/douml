@@ -63,7 +63,7 @@ public:
     ComboStates(QWidget * parent, ShowContextMode v, bool nodefault, bool unchanged);
     ComboStates(QWidget * parent, char v, bool nodefault, bool unchanged);
 
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const override;
 };
 
 ComboStates::ComboStates(QWidget * parent, Uml3States v,

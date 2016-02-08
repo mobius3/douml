@@ -95,16 +95,16 @@ public:
     void toOverlapping();
 
     virtual void draw(QPainter & p);
-    virtual void moveBy(double dx, double dy);
-    virtual void prepare_for_move(bool on_resize);
+    virtual void moveBy(double dx, double dy) override;
+    virtual void prepare_for_move(bool on_resize) override;
 
-    virtual UmlCode typeUmlCode() const;
-    virtual void open();
-    virtual void menu(const QPoint &);
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual bool may_connect(UmlCode l) const;
-    virtual aCorner on_resize_point(const QPoint &);
+    virtual UmlCode typeUmlCode() const override;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual bool may_connect(UmlCode l) const override;
+    virtual aCorner on_resize_point(const QPoint &) override;
     virtual void resize(int w, int h);
     virtual void resize(aCorner c, int dx, int dy, QPoint &) override;
     virtual void resize(const QSize & sz, bool w, bool h) override;

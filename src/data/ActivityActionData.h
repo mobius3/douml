@@ -138,8 +138,8 @@ struct ClearVariableValueAction : public AccessVariableValueAction {
 
     ClearVariableValueAction();
     virtual ~ClearVariableValueAction();
-    AnyAction * duplicate() const;
-    virtual UmlActionKind kind() const;
+    virtual AnyAction * duplicate() const override;
+    virtual UmlActionKind kind() const override;
 };
 
 struct ReadVariableValueAction : public AccessVariableValueAction {

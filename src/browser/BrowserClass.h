@@ -185,7 +185,7 @@ public:
     static void read_stereotypes(char *& , char *&);
     static void save_stereotypes(QTextStream &);
 
-    virtual void referenced_by(QList<BrowserNode *> &, bool ondelete = FALSE);
+    virtual void referenced_by(QList<BrowserNode *> &, bool ondelete = FALSE) override;
 
     static bool new_java_enums(const QString & new_st);
 

@@ -124,12 +124,10 @@ private:
     bool m_allow_empty;
     BrowserNode* m_node;
 
-
-
     // QValidator interface
 public:
-    virtual State validate(QString &str, int &) const;
-    virtual void fixup(QString &) const;
+    virtual State validate(QString &str, int &) const override;
+    virtual void fixup(QString &) const override;
 };
 
 BrowserItemNameValidator::State BrowserItemNameValidator::validate(QString &str, int &) const
