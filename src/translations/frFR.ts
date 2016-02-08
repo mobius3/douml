@@ -1078,7 +1078,7 @@ you may select it in the list and press &apos;add&apos;
 </source>
         <translation type="unfinished">
 Pour ajouter une annotation à laposition du curseur
-pour pouvez choisir dans laliste et presser &apos;ajouter&apos;
+pour pouvez choisir dans la liste et presser &apos;ajouter&apos;
 </translation>
     </message>
     <message>
@@ -5975,7 +5975,7 @@ et protégés</translation>
         <source>
 short cut</source>
         <translation type="unfinished">
-raccoursis</translation>
+raccourci</translation>
     </message>
     <message>
         <location filename="../diagram/IconCanvas.cpp" line="138"/>
