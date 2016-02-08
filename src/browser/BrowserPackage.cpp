@@ -2839,15 +2839,15 @@ unsigned BrowserPackage::load(bool recursive, int id)
     QFile fp((in_import())
              ? BrowserView::get_import_dir().absoluteFilePath(fn)
              : BrowserView::get_dir().absoluteFilePath(fn));
-    int sz;
+    qint64 sz;
     //QString filename = fp.fileName();
 
     ReadContext context = current_context();
 
     if ((sz = open_file(fp, QIODevice::ReadOnly)) != -1) {
         char * s = new char[sz + 1];
-        int offset = 0;
-        int nread;
+        qint64 offset = 0;
+        qint64 nread;
 
         is_read_only = (!in_import() && read_only_file()) ||
                 ((user_id() != 0) && is_api_base());

@@ -1207,7 +1207,7 @@ void BrowserNode::mark_management(int choice)
             {
                 BrowserNode* nodeCopy = bn->duplicate(this);
                 nodeCopy->set_n_keys(bn->get_n_keys());
-                for(int i(0); i < bn->get_n_keys(); i++)
+                for(unsigned i = 0; i != bn->get_n_keys(); i++)
                 {
                     nodeCopy->set_key(i, bn->get_key(i));
                     nodeCopy->set_value(i, bn->get_value(i));
@@ -1284,7 +1284,7 @@ void BrowserNode::mark_management(int choice)
             {
                 BrowserNode* nodeCopy = bn->duplicate(p);
                 nodeCopy->set_n_keys(bn->get_n_keys());
-                for(int i(0); i < bn->get_n_keys(); i++)
+                for(unsigned i = 0; i != bn->get_n_keys(); i++)
                 {
                     nodeCopy->set_key(i, bn->get_key(i));
                     nodeCopy->set_value(i, bn->get_value(i));
