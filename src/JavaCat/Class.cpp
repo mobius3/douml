@@ -744,7 +744,7 @@ bool Class::manage_extends(ClassContainer * container,
 {
     // out of scanning
 #ifdef TRACE
-    QLOG_INFO() << name() << "->manage_extends()\n";
+    QLOG_INFO() << (uml ? uml->name() : "") << "->manage_extends()\n";
 #endif
 
     UmlTypeSpec typespec;
@@ -785,7 +785,7 @@ bool Class::manage_implements(ClassContainer * container, aRelationKind k,
 {
     // out of scanning
 #ifdef TRACE
-    QLOG_INFO() << name() << "->manage_implements()\n";
+    QLOG_INFO() << (uml ? uml->name() : "") << "->manage_implements()\n";
 #endif
 
     for (;;) {

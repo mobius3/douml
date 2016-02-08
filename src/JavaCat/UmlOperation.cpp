@@ -235,7 +235,7 @@ bool UmlOperation::new_one(Class * container, const WrapperStr & name,
                                      + name + "</i> in <i>" + cl->name()
                                      + "</i></b></font><br>");
 # ifdef TRACE
-                QLOG_INFO() << "ERROR cannot add param '" << param.name << "' type '" << param.type.Type() << '\n';
+                QLOG_INFO() << "ERROR cannot add param '" << param.name << "' type '" << param.type.toString() << '\n';
 # endif
                 return FALSE;
             }

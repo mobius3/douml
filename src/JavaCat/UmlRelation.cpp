@@ -102,11 +102,6 @@ bool UmlRelation::new_one(Class * container, const WrapperStr & name,
 #endif
                          )
 {
-#ifdef TRACE
-    QLOG_INFO() << "RELATION '" << name << "' from '" << cl->Name() << "' to '" << dest.type->Name()
-                << "' array '" << array << "'\n";
-#endif
-
     if (
 #ifdef REVERSE
         container->from_libp() &&
@@ -119,6 +114,11 @@ bool UmlRelation::new_one(Class * container, const WrapperStr & name,
 
     UmlClass * cl = container->get_uml();
     UmlRelation * rel;
+
+#ifdef TRACE
+    QLOG_INFO() << "RELATION '" << name << "' from '" << cl->name() << "' to '" << dest.type->name()
+        << "' array '" << array << "'\n";
+#endif
 
 #ifdef ROUNDTRIP
     bool created;
@@ -285,11 +285,6 @@ bool UmlRelation::new_one(Class * container, const WrapperStr & name,
 #endif
                              )
     {
-#ifdef TRACE
-        QLOG_INFO() << "RELATION '" << name << "' from '" << cl->Name() << "' to '" << type->Name()
-                    << "' array '" << array << "'\n";
-#endif
-
         if (
 #ifdef REVERSE
             container->from_libp() &&
@@ -307,6 +302,11 @@ bool UmlRelation::new_one(Class * container, const WrapperStr & name,
 
         UmlClass * cl = container->get_uml();
         UmlRelation * rel;
+
+#ifdef TRACE
+        QLOG_INFO() << "RELATION '" << name << "' from '" << cl->name() << "' to '" << type->name()
+            << "' array '" << array << "'\n";
+#endif
 
 #ifdef ROUNDTRIP
         bool created;

@@ -496,7 +496,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, con
 {
 #ifdef DEBUG_DOUML
 #ifdef TRACE
-    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", " << arg1 << \", \"" << arg2 << "\", \"" << arg3 << "\", " << ", UmlTypeSpec, UmlTypeSpec)\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", " << arg1 << "\", \"" << arg2 << "\", \"" << arg3 << "\", " << ", UmlTypeSpec, UmlTypeSpec)\n";
 #endif
 #endif
 
