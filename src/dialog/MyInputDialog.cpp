@@ -94,7 +94,10 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
 MyInputDialog::MyInputDialog(const char * title, const QString & msg,
                              const QStringList & list, const QString & init,
                              bool existing, const QValidator *v)
-    : QDialog(0/*, title, TRUE*/), le(0), vl(v),cb(NULL)
+    : QDialog(0/*, title, TRUE*/)
+    , le(0)
+    , cb(NULL)
+    , vl(v)
 {
     setWindowTitle(title);
     move(QCursor::pos());
@@ -166,9 +169,13 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
         onTextChanged();
     }
 }
+
 MyInputDialog::MyInputDialog(const char * title, const QString & msg,
                              const QString & init, QValidator *validator)
-    : QDialog(0/*, title, TRUE*/), vl(validator), le(NULL), cb(NULL)
+    : QDialog(0/*, title, TRUE*/)
+    , le(NULL)
+    , cb(NULL)
+    , vl(validator)
 {
     setWindowTitle(title);
     move(QCursor::pos());

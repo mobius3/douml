@@ -109,12 +109,13 @@ BrowserView* BrowserNode::viewptr = 0;
 
 class BrowserItemNameValidator: public QValidator{
 public:
-    BrowserItemNameValidator(  BrowserNode* node, UmlCode type,
-                                        bool allow_spaces, bool allow_empty):
-    m_node(node), m_type(type), m_allow_spaces(allow_spaces), m_allow_empty(allow_empty)
-
+    BrowserItemNameValidator(BrowserNode* node, UmlCode type,
+                             bool allow_spaces, bool allow_empty)
+        : m_type(type)
+        , m_allow_spaces(allow_spaces)
+        , m_allow_empty(allow_empty)
+        , m_node(node)
     {
-
     }
 
 private:
