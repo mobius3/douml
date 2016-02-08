@@ -4793,10 +4793,10 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
     setItemDelegateForColumn(2,m_delegate);
     if (isReadOnly) {
         for (index = 0; index < sup; index += 1) {
-            setItem(index, 0, new TableItem(this, TableItem::Never, stringify(o->get_param_dir(index)), TableItem::TableItemType));
-            setItem(index, 1, new TableItem(this, TableItem::Never, o->get_param_name(index), TableItem::TableItemType));
-            setItem(index, 2, new TableItem(this, TableItem::Never, o->get_param_type(index).get_full_type(), TableItem::TableItemType));
-            setItem(index, 3, new TableItem(this, TableItem::Never, o->get_param_default_value(index), TableItem::TableItemType));
+            setItem(index, 0, new TableItem(TableItem::Never, stringify(o->get_param_dir(index)), TableItem::TableItemType));
+            setItem(index, 1, new TableItem(TableItem::Never, o->get_param_name(index), TableItem::TableItemType));
+            setItem(index, 2, new TableItem(TableItem::Never, o->get_param_type(index).get_full_type(), TableItem::TableItemType));
+            setItem(index, 3, new TableItem(TableItem::Never, o->get_param_default_value(index), TableItem::TableItemType));
         }
     }
     else {
@@ -4822,16 +4822,16 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
         }
 
         for (index = 0; index < sup; index += 1) {
-            setItem(index, 0, new ComboItem(this, stringify(o->get_param_dir(index)), DirList, FALSE));
+            setItem(index, 0, new ComboItem(stringify(o->get_param_dir(index)), DirList, FALSE));
             setText(index, 1, o->get_param_name(index));
-            setItem(index, 2, new ComboItem(this, o->get_param_type(index).get_full_type(), alltypes));
+            setItem(index, 2, new ComboItem(o->get_param_type(index).get_full_type(), alltypes));
             setText(index, 3, o->get_param_default_value(index));
             setText(index, 4, QString());
         }
 
-        setItem(index, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
+        setItem(index, 0, new ComboItem(stringify(UmlIn), DirList, FALSE));
         setText(index, 1, QString());
-        setItem(index, 2, new ComboItem(this, QString(), alltypes));
+        setItem(index, 2, new ComboItem(QString(), alltypes));
         setText(index, 3, QString());
         setText(index, 4, QString());
     }
@@ -4893,10 +4893,10 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
             if(index == rowCount())
                 insertRow(rowCount());
 
-            setItem(index, 0, new TableItem(this, TableItem::Never, stringify(o->get_param_dir(index)), TableItem::TableItemType));
-            setItem(index, 1, new TableItem(this, TableItem::Never, o->get_param_name(index), TableItem::TableItemType));
-            setItem(index, 2, new TableItem(this, TableItem::Never, o->get_param_type(index).get_full_type(), TableItem::TableItemType));
-            setItem(index, 3, new TableItem(this, TableItem::Never, o->get_param_default_value(index), TableItem::TableItemType));
+            setItem(index, 0, new TableItem(TableItem::Never, stringify(o->get_param_dir(index)), TableItem::TableItemType));
+            setItem(index, 1, new TableItem(TableItem::Never, o->get_param_name(index), TableItem::TableItemType));
+            setItem(index, 2, new TableItem(TableItem::Never, o->get_param_type(index).get_full_type(), TableItem::TableItemType));
+            setItem(index, 3, new TableItem(TableItem::Never, o->get_param_default_value(index), TableItem::TableItemType));
         }
     }
     else
@@ -4927,9 +4927,9 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
             if(index == rowCount())
                 insertRow(rowCount());
 
-            setItem(index, 0, new ComboItem(this, stringify(o->get_param_dir(index)), DirList, FALSE));
+            setItem(index, 0, new ComboItem(stringify(o->get_param_dir(index)), DirList, FALSE));
             setText(index, 1, o->get_param_name(index));
-            setItem(index, 2, new ComboItem(this, o->get_param_type(index).get_full_type(), alltypes));
+            setItem(index, 2, new ComboItem(o->get_param_type(index).get_full_type(), alltypes));
             setText(index, 3, o->get_param_default_value(index));
             setText(index, 4, QString());
         }
@@ -4937,9 +4937,9 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
         //int columnCount = numCols();
         if(index == rowCount())
             insertRow(rowCount());
-        setItem(index, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
+        setItem(index, 0, new ComboItem(stringify(UmlIn), DirList, FALSE));
         setText(index, 1, QString());
-        setItem(index, 2, new ComboItem(this, QString(), alltypes));
+        setItem(index, 2, new ComboItem(QString(), alltypes));
         setText(index, 3, QString());
         setText(index, 4, QString());
 
@@ -4974,9 +4974,9 @@ void ParamsTable::activateNextCell()
         if (++row == rowCount()) {
             // adds a new line
             setRowCount(row + 1);
-            setItem(row, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
+            setItem(row, 0, new ComboItem(stringify(UmlIn), DirList, FALSE));
             setText(row, 1, QString());
-            setItem(row, 2, new ComboItem(this, QString(), alltypes));
+            setItem(row, 2, new ComboItem(QString(), alltypes));
             setText(row, 3, QString());
             setText(row, 4, QString());
         }
@@ -5085,9 +5085,9 @@ void ParamsTable::insert_row_before(int row)
     blockSignals(true);
     DISABLESORTINGMYTABLE;
     insertRow(row);
-    setItem(row, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
+    setItem(row, 0, new ComboItem(stringify(UmlIn), DirList, FALSE));
     setText(row, 1, QString());
-    setItem(row, 2, new ComboItem(this, QString(), alltypes));
+    setItem(row, 2, new ComboItem(QString(), alltypes));
     setText(row, 3, QString());
     setText(row, 4, QString());
     ENABLESORTINGMYTABLE;
@@ -5099,9 +5099,9 @@ void ParamsTable::insert_row_after(int row)
     blockSignals(true);
     DISABLESORTINGMYTABLE;
     insertRow(row+1);
-    setItem(row + 1, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
+    setItem(row + 1, 0, new ComboItem(stringify(UmlIn), DirList, FALSE));
     setText(row + 1, 1, QString());
-    setItem(row + 1, 2, new ComboItem(this, QString(), alltypes));
+    setItem(row + 1, 2, new ComboItem(QString(), alltypes));
     setText(row + 1, 3, QString());
     setText(row + 1, 4, QString());
     ENABLESORTINGMYTABLE;
@@ -5117,9 +5117,9 @@ void ParamsTable::delete_row(int row)
 
     if (row == (n - 1)) {
         // the last line : empty it
-        setItem(row, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
+        setItem(row, 0, new ComboItem(stringify(UmlIn), DirList, FALSE));
         setText(row, 1, QString());
-        setItem(row, 2, new ComboItem(this, QString(), alltypes));
+        setItem(row, 2, new ComboItem(QString(), alltypes));
         setText(row, 3, QString());
     }
     else {
@@ -5308,17 +5308,17 @@ ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
     if (visit)
     {
         for (index = 0; index < sup; index += 1)
-            setItem(index, 0, new TableItem(this, TableItem::Never, o->get_exception(index).get_full_type(), TableItem::TableItemType));
+            setItem(index, 0, new TableItem(TableItem::Never, o->get_exception(index).get_full_type(), TableItem::TableItemType));
     }
     else {
         setHorizontalHeaderLabel(1, tr("do"));
 
         for (index = 0; index < sup; index += 1) {
-            setItem(index, 0, new ComboItem(this, o->get_exception(index).get_full_type(), types));
+            setItem(index, 0, new ComboItem(o->get_exception(index).get_full_type(), types));
             setText(index, 1, QString());
         }
 
-        setItem(index, 0, new ComboItem(this, QString(), types));
+        setItem(index, 0, new ComboItem(QString(), types));
         setText(index, 1, QString());
     }
 
@@ -5353,7 +5353,7 @@ void ExceptionsTable::Reinitialize(OperationData *o, QStringList &list, bool isW
                    this, SLOT(value_changed(int, int)));
         setColumnCount(1);
         for (int index = 0; index < sup; index += 1)
-            setItem(index, 0, new TableItem(this, TableItem::Never, o->get_exception(index).get_full_type(), TableItem::TableItemType));
+            setItem(index, 0, new TableItem(TableItem::Never, o->get_exception(index).get_full_type(), TableItem::TableItemType));
     }
     else
     {
@@ -5364,11 +5364,11 @@ void ExceptionsTable::Reinitialize(OperationData *o, QStringList &list, bool isW
 
         int index;
         for (index = 0; index < sup; index += 1) {
-            setItem(index, 0, new ComboItem(this, o->get_exception(index).get_full_type(), types));
+            setItem(index, 0, new ComboItem(o->get_exception(index).get_full_type(), types));
             setText(index, 1, QString());
         }
 
-        setItem(index, 0, new ComboItem(this, QString(), types));
+        setItem(index, 0, new ComboItem(QString(), types));
         setText(index, 1, QString());
         connect(this, SIGNAL(pressed(QModelIndex)),
                 this, SLOT(button_pressed(QModelIndex)));
@@ -5415,7 +5415,7 @@ void ExceptionsTable::activateNextCell()
     if (++row == rowCount()) {
         // adds a new line
         setRowCount(row + 1);
-        setItem(row, 0, new ComboItem(this, QString(), types));
+        setItem(row, 0, new ComboItem(QString(), types));
         setText(row, 1, QString());
     }
 
@@ -5523,7 +5523,7 @@ void ExceptionsTable::insert_row_before(int row)
     blockSignals(true);
     DISABLESORTINGMYTABLE;
     insertRow(row);
-    setItem(row, 0, new ComboItem(this, QString(), types));
+    setItem(row, 0, new ComboItem(QString(), types));
     setText(row, 1, QString());
     ENABLESORTINGMYTABLE;
     blockSignals(false);
@@ -5545,7 +5545,7 @@ void ExceptionsTable::insert_row_after(int row)
     blockSignals(true);
     DISABLESORTINGMYTABLE;
     insertRow(row+1);
-    setItem(row + 1, 0, new ComboItem(this, QString(), types));
+    setItem(row + 1, 0, new ComboItem(QString(), types));
     setText(row + 1, 1, QString());
     ENABLESORTINGMYTABLE;
     blockSignals(false);
@@ -5560,7 +5560,7 @@ void ExceptionsTable::delete_row(int row)
 
     if (row == (n - 1)) {
         // the last line : empty it
-        setItem(0, 0, new ComboItem(this, QString(), types));
+        setItem(0, 0, new ComboItem(QString(), types));
         setText(0, 1, QString());
     }
     else {
@@ -5736,13 +5736,13 @@ CppParamsTable::CppParamsTable(ParamsTable * p, MultiLineEdit * f,
 void CppParamsTable::init_row(int row)
 {
     setItem(row, 0, new QTableWidgetItem(/*this, TableItem::Never,*/ QString()));
-    setItem(row, 1, new ComboItem(this, QString(), SpecifierList));
-    setItem(row, 2, new ComboItem(this, QString(), TypeRankList));
-    setItem(row, 3, new ComboItem(this, QString(), PtrList));
-    setItem(row, 4, new ComboItem(this, QString(), ParamRankList));
+    setItem(row, 1, new ComboItem(QString(), SpecifierList));
+    setItem(row, 2, new ComboItem(QString(), TypeRankList));
+    setItem(row, 3, new ComboItem(QString(), PtrList));
+    setItem(row, 4, new ComboItem(QString(), ParamRankList));
 
     if (dcl) {
-        setItem(row, 5, new ComboItem(this, QString(), ValueRankList));
+        setItem(row, 5, new ComboItem(QString(), ValueRankList));
         setText(row, 6, QString());
         setText(row, 7, QString());
     }
@@ -5838,10 +5838,10 @@ bool CppParamsTable::extract(int tblindex, int & strindex, QString s)
 
     setRowCount(tblindex + 1);
 
-    setItem(tblindex, 1, new ComboItem(this, specifier, SpecifierList));
-    setItem(tblindex, 2, new ComboItem(this, t_i, TypeRankList));
-    setItem(tblindex, 3, new ComboItem(this, ptr, PtrList));
-    setItem(tblindex, 4, new ComboItem(this, p_i, ParamRankList));
+    setItem(tblindex, 1, new ComboItem(specifier, SpecifierList));
+    setItem(tblindex, 2, new ComboItem(t_i, TypeRankList));
+    setItem(tblindex, 3, new ComboItem(ptr, PtrList));
+    setItem(tblindex, 4, new ComboItem(p_i, ParamRankList));
 
     if (dcl) {
         QString v_i;
@@ -5856,7 +5856,7 @@ bool CppParamsTable::extract(int tblindex, int & strindex, QString s)
             }
         }
 
-        setItem(tblindex, 5, new ComboItem(this, v_i, ValueRankList));
+        setItem(tblindex, 5, new ComboItem(v_i, ValueRankList));
         setText(tblindex, 6, modifier);
     }
     else
@@ -6017,17 +6017,17 @@ void CppParamsTable::button_pressed(const QModelIndex &index)
 
                     if (t_i != -1) {
                         sprintf(s, "${t%d}", rank - 100);
-                        setItem(row, 2, new ComboItem(this, s, TypeRankList));
+                        setItem(row, 2, new ComboItem(s, TypeRankList));
                     }
 
                     if (p_i != -1) {
                         sprintf(s, "${p%d}", rank - 100);
-                        setItem(row, 4, new ComboItem(this, s, ParamRankList));
+                        setItem(row, 4, new ComboItem(s, ParamRankList));
                     }
 
                     if (v_i != -1) {
                         sprintf(s, "${v%d}", rank - 100);
-                        setItem(row, 5, new ComboItem(this, s, ParamRankList));
+                        setItem(row, 5, new ComboItem(s, ParamRankList));
                     }
                 }
                 else if (rank >= 10)
@@ -6366,10 +6366,10 @@ PhpParamsTable::PhpParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit 
 void PhpParamsTable::init_row(int row)
 {
     setItem(row, 0, new QTableWidgetItem(/*this, TableItem::Never,*/ QString()));
-    setItem(row, 1, new ComboItem(this, QString(), PhpTypeRankList));
-    setItem(row, 2, new ComboItem(this, QString(), PhpRefList));
-    setItem(row, 3, new ComboItem(this, QString(), PhpParamRankList));
-    setItem(row, 4, new ComboItem(this, QString(), PhpValueRankList));
+    setItem(row, 1, new ComboItem(QString(), PhpTypeRankList));
+    setItem(row, 2, new ComboItem(QString(), PhpRefList));
+    setItem(row, 3, new ComboItem(QString(), PhpParamRankList));
+    setItem(row, 4, new ComboItem(QString(), PhpValueRankList));
     setText(row, 5, QString());
 }
 
@@ -6449,10 +6449,10 @@ bool PhpParamsTable::extract(int tblindex, int & strindex, QString s)
 
     setRowCount(tblindex + 1);
 
-    setItem(tblindex, 1, new ComboItem(this, t_i, PhpTypeRankList));
-    setItem(tblindex, 2, new ComboItem(this, ptr, PhpRefList));
-    setItem(tblindex, 3, new ComboItem(this, p_i, PhpParamRankList));
-    setItem(tblindex, 4, new ComboItem(this, v_i, PhpValueRankList));
+    setItem(tblindex, 1, new ComboItem(t_i, PhpTypeRankList));
+    setItem(tblindex, 2, new ComboItem(ptr, PhpRefList));
+    setItem(tblindex, 3, new ComboItem(p_i, PhpParamRankList));
+    setItem(tblindex, 4, new ComboItem(v_i, PhpValueRankList));
 
     strindex = (s.at(sup) == QChar(',')) ? sup + 1 : sup;
 
@@ -6608,17 +6608,17 @@ void PhpParamsTable::button_pressed(const QModelIndex &index)
 
                     if (t_i != -1) {
                         sprintf(s, "${t%d}", rank - 100);
-                        setItem(row, 1, new ComboItem(this, s, PhpTypeRankList));
+                        setItem(row, 1, new ComboItem(s, PhpTypeRankList));
                     }
 
                     if (p_i != -1) {
                         sprintf(s, "${p%d}", rank - 100);
-                        setItem(row, 3, new ComboItem(this, s, PhpParamRankList));
+                        setItem(row, 3, new ComboItem(s, PhpParamRankList));
                     }
 
                     if (v_i != -1) {
                         sprintf(s, "${v%d}", rank - 100);
-                        setItem(row, 4, new ComboItem(this, s, PhpValueRankList));
+                        setItem(row, 4, new ComboItem(s, PhpValueRankList));
                     }
                 }
                 else if (rank >= 10)
@@ -6940,10 +6940,10 @@ PythonParamsTable::PythonParamsTable(QWidget * parent, ParamsTable * p, MultiLin
 void PythonParamsTable::init_row(int row)
 {
     setItem(row, 0, new QTableWidgetItem(/*this, TableItem::Never,*/ QString()));
-    setItem(row, 1, new ComboItem(this, QString(), PythonModList));
-    setItem(row, 2, new ComboItem(this, QString(), PythonParamRankList));
-    setItem(row, 3, new ComboItem(this, QString(), PythonTypeRankList));
-    setItem(row, 4, new ComboItem(this, QString(), PythonValueRankList));
+    setItem(row, 1, new ComboItem(QString(), PythonModList));
+    setItem(row, 2, new ComboItem(QString(), PythonParamRankList));
+    setItem(row, 3, new ComboItem(QString(), PythonTypeRankList));
+    setItem(row, 4, new ComboItem(QString(), PythonValueRankList));
     setText(row, 5, QString());
 }
 
@@ -7011,10 +7011,10 @@ bool PythonParamsTable::extract(int tblindex, int & strindex, QString s)
 
     setRowCount(tblindex + 1);
 
-    setItem(tblindex, 1, new ComboItem(this, m_i, PythonModList));
-    setItem(tblindex, 2, new ComboItem(this, p_i, PythonParamRankList));
-    setItem(tblindex, 3, new ComboItem(this, t_i, PythonTypeRankList));
-    setItem(tblindex, 4, new ComboItem(this, v_i, PythonValueRankList));
+    setItem(tblindex, 1, new ComboItem(m_i, PythonModList));
+    setItem(tblindex, 2, new ComboItem(p_i, PythonParamRankList));
+    setItem(tblindex, 3, new ComboItem(t_i, PythonTypeRankList));
+    setItem(tblindex, 4, new ComboItem(v_i, PythonValueRankList));
 
     strindex = (s.at(sup) == QChar(',')) ? sup + 1 : sup;
 
@@ -7148,17 +7148,17 @@ void PythonParamsTable::button_pressed(const QModelIndex &index)
 
                     if (p_i != -1) {
                         sprintf(s, "${p%d}", rank - 100);
-                        setItem(row, 2, new ComboItem(this, s, PythonParamRankList));
+                        setItem(row, 2, new ComboItem(s, PythonParamRankList));
                     }
 
                     if (v_i != -1) {
                         sprintf(s, "${t%d}", rank - 100);
-                        setItem(row, 3, new ComboItem(this, s, PythonTypeRankList));
+                        setItem(row, 3, new ComboItem(s, PythonTypeRankList));
                     }
 
                     if (v_i != -1) {
                         sprintf(s, "${v%d}", rank - 100);
-                        setItem(row, 4, new ComboItem(this, s, PythonValueRankList));
+                        setItem(row, 4, new ComboItem(s, PythonValueRankList));
                     }
                 }
                 else if (rank >= 10)

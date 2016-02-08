@@ -207,14 +207,14 @@ ShortcutTable::ShortcutTable(QWidget * parent, bool tool, int n)
 
             if (alt) setText(row, 2, QObject::tr("yes"));
 
-            setItem(row, 3, new ComboItem(this, key, keys, FALSE));
-            setItem(row, 4, new ComboItem(this, (tool) ? iter.value() : iter.value(), values, FALSE));
+            setItem(row, 3, new ComboItem(key, keys, FALSE));
+            setItem(row, 4, new ComboItem((tool) ? iter.value() : iter.value(), values, FALSE));
             row += 1;
         }
     }
     sortByColumn(3);
-    setItem(row, 3, new ComboItem(this, QString(), Shortcut::keys(), FALSE));
-    setItem(row, 4, new ComboItem(this, QString(), values, FALSE));
+    setItem(row, 3, new ComboItem(QString(), Shortcut::keys(), FALSE));
+    setItem(row, 4, new ComboItem(QString(), values, FALSE));
     adjustColumn(0);
     adjustColumn(1);
     adjustColumn(2);
@@ -327,8 +327,8 @@ void ShortcutTable::insert_row_before(int row)
     setText(row, 0, QString());
     setText(row, 1, QString());
     setText(row, 2, QString());
-    setItem(row, 3, new ComboItem(this, QString(), Shortcut::keys(), FALSE));
-    setItem(row, 4, new ComboItem(this, QString(), values, FALSE));
+    setItem(row, 3, new ComboItem(QString(), Shortcut::keys(), FALSE));
+    setItem(row, 4, new ComboItem(QString(), values, FALSE));
     ENABLESORTINGMYTABLE;
     blockSignals(false);
 }
@@ -360,8 +360,8 @@ void ShortcutTable::insert_row_after(int row)
     setText(row + 1, 0, QString());
     setText(row + 1, 1, QString());
     setText(row + 1, 2, QString());
-    setItem(row + 1, 3, new ComboItem(this, QString(), Shortcut::keys(), FALSE));
-    setItem(row + 1, 4, new ComboItem(this, QString(), values, FALSE));
+    setItem(row + 1, 3, new ComboItem(QString(), Shortcut::keys(), FALSE));
+    setItem(row + 1, 4, new ComboItem(QString(), values, FALSE));
     ENABLESORTINGMYTABLE;
     blockSignals(false);
 }
