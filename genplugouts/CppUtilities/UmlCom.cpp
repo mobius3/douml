@@ -556,7 +556,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, con
 
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, const char * arg2, const char * arg3, const UmlTypeSpec & arg4, const UmlTypeSpec & arg5)
 {
-#ifdef DEBUGBOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "UmlCom::send_cmd(id, " << cmd << ", " << arg1 << \", \"" << arg2 << "\", \"" << arg3 << "\", " << ", UmlTypeSpec, UmlTypeSpec)\n";
 #endif
 
@@ -714,8 +714,9 @@ bool UmlCom::read_bool()
 {
     read_if_needed();
     QLOG_INFO() << "read bool" << *p_buffer_in;
-    if(*p_buffer_in != 0 && *p_buffer_in != 1)
+    if (*p_buffer_in != 0 && *p_buffer_in != 1) {
         QLOG_INFO() << "read bool" << QString(p_buffer_in);
+    }
     return *p_buffer_in++ != 0;
 }
 
@@ -754,12 +755,12 @@ void UmlCom::read_item_list(QVector<UmlItem*> & v)
 }
 
 void UmlCom::fatal_error(const QByteArray &
-                         #ifdef DEBUG_BOUML
+                         #ifdef DEBUG_DOUML
                          msg
                          #endif
                          )
 {
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << msg << '\n';
 #endif
 

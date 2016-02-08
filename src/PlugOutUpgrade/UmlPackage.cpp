@@ -957,7 +957,7 @@ void upgrade_jdk5(UmlClass * javasettings)
                 op1->set_CppDecl("    ${comment}${friend}${static}${virtual}${type} ${name}${(}const ${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, const ${t3} ${p3}, const ${t4} ${p4}, const ${t5} & ${p5}, const ${t6} & ${p6}${)}${const}${volatile}${abstract}${final}${default}${delete}${override};");
                 op1->set_CppDef("${inline}${type} ${class}::${name}${(}const ${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, const ${t3} ${p3}, const ${t4} ${p4}, const ${t5} & ${p5}, const ${t6} & ${p6}${)}${const}${volatile}${staticnl}{\n${body}}");
                 op1->set_JavaDef("  ${comment}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}, ${t5} ${p5}, ${t6} ${p6}${)}${throws}${staticnl}{\n${body}}");
-                op1->set_CppBody("#ifdef DEBUGBOUML\n"
+                op1->set_CppBody("#ifdef DEBUG_DOUML\n"
                                  "  QLOG_INFO() <<\"UmlCom::send_cmd(id, \" << cmd << \", \" << arg1 << \\\", \\\"\" << arg2 << \"\\\", \\\"\" << arg3 << \"\\\", \" << \", UmlTypeSpec, UmlTypeSpec)\\n\";\n"
                                  "#endif\n"
                                  "  \n"
