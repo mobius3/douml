@@ -10,6 +10,7 @@ BButtonGroup::BButtonGroup(QWidget *parent) :
     this->setLayout(m_hLayout);
     m_hLayout->setSpacing(3);
     m_hLayout->setMargin(3);
+    m_buttonGroup.setExclusive(false);
     connect(&m_buttonGroup, SIGNAL(buttonClicked(int)), this, SIGNAL(clicked(int)));
 }
 
@@ -23,6 +24,7 @@ BButtonGroup::BButtonGroup(const QString &title, QWidget *parent):
     this->setLayout(m_hLayout);
     m_hLayout->setSpacing(3);
     m_hLayout->setMargin(3);
+    m_buttonGroup.setExclusive(false);
 }
 
 BButtonGroup::BButtonGroup(int strips, Qt::Orientation orientation, const QString &title, QWidget *parent, QString):
@@ -32,6 +34,7 @@ QGroupBox(title, parent)
     m_hLayout = 0;
     m_vLayout = 0;
     m_orientation = orientation;
+    m_buttonGroup.setExclusive(false);
     if(orientation == Qt::Horizontal)
     {
         m_hLayout = new QHBoxLayout(this);
