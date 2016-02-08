@@ -216,7 +216,7 @@ bool ActivityActionCanvas::force_inside()
             if ((di != 0) &&
                 IsaActivityContainer(di->typeUmlCode()) &&
                 (((ActivityContainerCanvas *) di)->get_bn() == parent)) {
-                ((ActivityContainerCanvas *) di)->force_inside(this, this);
+                ((ActivityContainerCanvas *) di)->force_inside(this, TRUE);
                 return TRUE;
             }
         }
