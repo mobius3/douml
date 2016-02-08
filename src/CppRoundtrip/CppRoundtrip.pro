@@ -160,6 +160,7 @@ SOURCES          = main.cpp Statistic.cpp \
 
 TARGET          = cpp_roundtrip
 DEFINES          = WITHCPP REVERSE ROUNDTRIP BooL=bool FALSE=false TRUE=true
+#DEFINES += _RUN_PLUGOUT_EXTERNAL_
 INCLUDEPATH   = ../Tools ../CppRoundtrip ../CppReverse
 
 #The following line was inserted by qt3to4

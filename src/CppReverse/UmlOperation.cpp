@@ -316,7 +316,7 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
                 (decl.find("${name}", index + 7) == -1) ||
                 (decl.find("${abstract}", index + 7) == -1)) {
             // throw is not mandatory
-            decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};";
+            decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${final}${override}${volatile}${abstract}${default}${delete};";
             index = decl.find("${type}");
         }
 
@@ -523,50 +523,121 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
 #endif
             op->set_ReturnType(return_type);
     }
-
-    // const may be before volatile
-    bool is_const;
-
-    if ((s = Lex::read_word()) == "const") {
-        is_const = TRUE;
+    bool is_const = false;
+    bool is_volatile = false;
+    bool is_final = false;
+    bool is_override = false;
+    while(1)
+    {
         s = Lex::read_word();
-    }
-    else
-        is_const = FALSE;
+        if(s ==  "const"||
+                s ==  "throw"||
+                s ==  "volatile"||
+                s ==  "final"||
+                s ==  "override"
+                )
+        {
+            if ( s == "const") {
+                is_const = TRUE;
+            }
+            else if(s == "volatile")
+            {
+                is_volatile = true;
+                if (op != 0) {
+        #ifdef ROUNDTRIP
 
-    // volatile
-    if (s == "volatile") {
-        if (op != 0) {
-#ifdef ROUNDTRIP
-
-            if (may_roundtrip) {
-                if (!op->isVolatile()) {
-                    cl->set_updated();
-                    op->set_isVolatile(TRUE);
+                    if (may_roundtrip) {
+                        if (!op->isVolatile()) {
+                            cl->set_updated();
+                            op->set_isVolatile(TRUE);
+                        }
+                    }
+                    else
+        #endif
+                        op->set_isVolatile(TRUE);
                 }
             }
-            else
-#endif
-                op->set_isVolatile(TRUE);
+            // throw
+
+            else if (s == "throw") {
+                if ((s = Lex::read_word()) != "(") {
+                    Lex::error_near("throw");
+                    skip_body((s == "{") ? 1 : 0);
+                    return FALSE;
+                }
+
+                rank = 0;
+
+                if (op == 0)
+                    skip_expr(")");
+                else {
+                    UmlTypeSpec excpt;
+
+        #ifdef ROUNDTRIP
+
+                    if (may_roundtrip) {
+                        const QList<UmlTypeSpec> old_exceptions = op->exceptions();
+                        QList<UmlTypeSpec>::ConstIterator it_old;
+                        bool has;
+
+                        for (it_old = old_exceptions.begin();
+                             ((has = read_throw_elt(cl, excpt, tmplts)) != FALSE) &&
+                             (it_old != old_exceptions.end());
+                             ++it_old, rank += 1) {
+                            if (!excpt.equal(*it_old)) {
+                                op->replaceException(rank, excpt);
+                                cl->set_updated();
+                            }
+                        }
+
+                        if (has) {
+                            // have missing exceptions
+                            cl->set_updated();
+
+                            do {
+                                op->addException(rank++, excpt);
+                            }
+                            while (read_throw_elt(cl, excpt, tmplts));
+                        }
+                        else if (it_old != old_exceptions.end()) {
+                            // have extra exceptions
+                            cl->set_updated();
+
+                            do {
+                                op->removeException(rank);
+                                it_old++;
+                            }
+                            while (it_old != old_exceptions.end());
+                        }
+                    }
+                    else
+        #endif
+                        while (read_throw_elt(cl, excpt, tmplts))
+                            op->addException(rank++, excpt);
+                }
+
+                if ((rank != 0) && (decl.find("${throw}") == -1))
+                    decl.insert(decl.find("${abstract}"), "${throw}");
+            }
+            else if ( s == "final") {
+                is_final = true;
+                }
+            else if ( s == "override") {
+                is_override = true;
+                }
+        }
+        else
+        {
+            break;
+        }
+    }
+    #ifdef ROUNDTRIP
+        if (!is_volatile &&may_roundtrip && op->isVolatile()) {
+            cl->set_updated();
+            op->set_isVolatile(FALSE);
         }
 
-        s = Lex::read_word();
-    }
-
-#ifdef ROUNDTRIP
-    else if (may_roundtrip && op->isVolatile()) {
-        cl->set_updated();
-        op->set_isVolatile(FALSE);
-    }
-
-#endif
-
-    // const may be after volatile
-    if (s == "const") {
-        is_const = TRUE;
-        s = Lex::read_word();
-    }
-
+    #endif
     if (op != 0) {
 #ifdef ROUNDTRIP
 
@@ -580,73 +651,33 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
 #endif
             if (is_const)
                 op->set_isCppConst(TRUE);
-    }
-
-    // throw
-
-    if (s == "throw") {
-        if ((s = Lex::read_word()) != "(") {
-            Lex::error_near("throw");
-            skip_body((s == "{") ? 1 : 0);
-            return FALSE;
-        }
-
-        rank = 0;
-
-        if (op == 0)
-            skip_expr(")");
-        else {
-            UmlTypeSpec excpt;
 
 #ifdef ROUNDTRIP
 
-            if (may_roundtrip) {
-                const QList<UmlTypeSpec> old_exceptions = op->exceptions();
-                QList<UmlTypeSpec>::ConstIterator it_old;
-                bool has;
-
-                for (it_old = old_exceptions.begin();
-                     ((has = read_throw_elt(cl, excpt, tmplts)) != FALSE) &&
-                     (it_old != old_exceptions.end());
-                     ++it_old, rank += 1) {
-                    if (!excpt.equal(*it_old)) {
-                        op->replaceException(rank, excpt);
-                        cl->set_updated();
-                    }
-                }
-
-                if (has) {
-                    // have missing exceptions
-                    cl->set_updated();
-
-                    do {
-                        op->addException(rank++, excpt);
-                    }
-                    while (read_throw_elt(cl, excpt, tmplts));
-                }
-                else if (it_old != old_exceptions.end()) {
-                    // have extra exceptions
-                    cl->set_updated();
-
-                    do {
-                        op->removeException(rank);
-                        it_old++;
-                    }
-                    while (it_old != old_exceptions.end());
-                }
+        if (may_roundtrip) {
+            if (op->isCppFinal() != is_final) {
+                cl->set_updated();
+                op->set_isCppFinal(is_final);
             }
-            else
-#endif
-                while (read_throw_elt(cl, excpt, tmplts))
-                    op->addException(rank++, excpt);
         }
+        else
+#endif
+            if (is_final)
+                op->set_isCppFinal(TRUE);
 
-        if ((rank != 0) && (decl.find("${throw}") == -1))
-            decl.insert(decl.find("${abstract}"), "${throw}");
+#ifdef ROUNDTRIP
 
-        s = Lex::read_word();
+        if (may_roundtrip) {
+            if (op->isCppOverride() != is_override) {
+                cl->set_updated();
+                op->set_isCppOverride(is_override);
+            }
+        }
+        else
+#endif
+            if (is_override)
+                op->set_isCppOverride(TRUE);
     }
-
     if ((index = cl_name.find('<')) != -1)
         cl_name.truncate(index);
 
@@ -671,24 +702,64 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
     }
 
     bool defined_in_decl = FALSE;
-
-    // abstract
+    // abstract, default or delete
     if (s == "=") {
-        if (Lex::read_word() != "0")
-            return FALSE;
 
-        if (op != 0) {
-#ifdef ROUNDTRIP
+        s = Lex::read_word();
+        //default and delete
+        if (s == "0")
+        {
 
-            if (may_roundtrip) {
-                if (!op->isAbstract()) {
-                    cl->set_updated();
-                    op->set_isAbstract(TRUE);
+            if (op != 0) {
+    #ifdef ROUNDTRIP
+
+                if (may_roundtrip) {
+                    if (!op->isAbstract()) {
+                        cl->set_updated();
+                        op->set_isAbstract(TRUE);
+                    }
                 }
+                else
+    #endif
+                    op->set_isAbstract(TRUE);
             }
-            else
-#endif
-                op->set_isAbstract(TRUE);
+        }
+        else if (s == "default")
+        {
+            if (op != 0) {
+    #ifdef ROUNDTRIP
+
+                if (may_roundtrip) {
+                    if (!op->isCppDefault()) {
+                        cl->set_updated();
+                        op->set_isCppDefault(TRUE);
+                    }
+                }
+                else
+    #endif
+                    op->set_isCppDefault(TRUE);
+            }
+        }
+        else if (s == "delete")
+        {
+            if (op != 0) {
+    #ifdef ROUNDTRIP
+
+                if (may_roundtrip) {
+                    if (!op->isCppDelete()) {
+                        cl->set_updated();
+                        op->set_isCppDelete(TRUE);
+                    }
+                }
+                else
+    #endif
+                     op->set_isCppDelete(TRUE);
+            }
+            printf("delete\r\n");
+        }
+        else
+        {
+            return FALSE;
         }
 
         s = Lex::read_word();
@@ -699,6 +770,14 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
         if (may_roundtrip && op->isAbstract()) {
             cl->set_updated();
             op->set_isAbstract(FALSE);
+        }
+        if (may_roundtrip && op->isCppDelete()) {
+            cl->set_updated();
+            op->set_isCppDelete(false);
+        }
+        if (may_roundtrip && op->isCppDefault()) {
+            cl->set_updated();
+            op->set_isCppDefault(false);
         }
 
 #endif

@@ -43,10 +43,13 @@
 
 int main(int argc, char ** argv)
 {
+#ifndef _RUN_PLUGOUT_EXTERNAL_
     if (argc != 2)
         return 0;
-
     if (UmlCom::connect(WrapperStr(argv[1]).operator QString().toUInt())) {
+#else
+    if (UmlCom::connect(5000)){
+#endif
         bool aborted = TRUE;
 
         try {
