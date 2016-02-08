@@ -334,6 +334,7 @@ UmlItem * UmlBaseItem::create_(anItemKind k, const char * s)
     if(!garbageData.isEmpty())
     {
         int garbageCount = garbageData.count();
+        Q_UNUSED(garbageCount);
         printf("!!!!garbage data\r\n");
     }
     UmlCom::send_cmd(_identifier, createCmd, k, s);
