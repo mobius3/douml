@@ -185,8 +185,7 @@ void UmlOperation::roundtrip(const char * path, aLanguage who)
                                 UmlBaseItem::from_id((unsigned) id, anOperation);
 
             if (op == 0) {
-                QString n("%1");
-                n.arg(QString::number((unsigned) id));
+                QString n = QString::number((unsigned) id);
                 UmlCom::trace(WrapperStr("<font  color =\"red\"> Error in ") + path +
                               linenumber(s, p2 - BodyPrefixLength) +
                               " : invalid operation id " + n + "</font><br>");

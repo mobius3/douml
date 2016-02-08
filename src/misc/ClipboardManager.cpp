@@ -107,8 +107,7 @@ void ClipboardManager::FillClipboardMenu(QMenu * clipboardMenu, int base)
         if (text.length() < 15)
             itemText = text;
         else {
-            text.left(15);
-            itemText = text  + "...";
+            itemText = text.left(15) + "...";
         }
 
         QAction * action = new QAction(itemText, clipboardMenu);

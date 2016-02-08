@@ -737,7 +737,9 @@ static void cpp_generate_inlines(BrowserNode * cl, const QString & cl_name,
             const char * def = d->get_cpp_def();
 
             if ((templp || d->get_cpp_inline()) && def[0]) {
-                s += '\n' + def + '\n';
+                s += "\n";
+                s += def;
+                s += "\n";
             }
         }
         }

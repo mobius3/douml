@@ -88,7 +88,7 @@ void Lex::defines(const WrapperStr & f)
                 v = strdup(p + 1);
             }
             else
-                v = "";
+                v = strdup("");
 
             _defines.insert(strdup(l), v);
         }

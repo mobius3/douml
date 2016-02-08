@@ -1938,10 +1938,10 @@ void GenerationSettingsDialog::follow_idl_set_name()
 static const char * get_indent(QComboBox * cb)
 {
     int n = cb->currentIndex();
-
+    Q_ASSERT(n <= 9);
     return (n == 9)
             ? "\t"
-            : "        " + (8 - n);
+            : &"        " [ (8 - n)];
 }
 
 void GenerationSettingsDialog::accept()
