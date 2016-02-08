@@ -1,16 +1,9 @@
 #ok
 TEMPLATE    = app
 TARGET        = cpp_util
-CONFIG(Debug, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt warn_on Debug
-    QMAKE_POST_LINK = " "
-}
-CONFIG(Release, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt Release
-    QMAKE_POST_LINK = " "
-}
+CONFIG -= app_bundle
+CONFIG += qt warn_on c++11
+QMAKE_POST_LINK = " "
 DEFINES        += WITHCPP TRACE
 INCLUDEPATH += ../../src
 HEADERS        = ./UmlBasePackage.h \
@@ -426,19 +419,18 @@ SOURCES        = ./UmlBasePackage.cpp \
     vvbox.cpp
 
 QT += network widgets
-DEFINES += TRUE=true FALSE=false DEBUG
+DEFINES += TRUE=true FALSE=false
 DESTDIR = ../../bin
-Release {
+Debug { CONFIG += debug }
+Release { CONFIG += release }
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/cpp_util
     OBJECTS_DIR = $${DESTDIR}/obj_release/cpp_util
 }
-
-Debug {
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
     MOC_DIR = $${DESTDIR}/moc_debug/cpp_util
     OBJECTS_DIR = $${DESTDIR}/obj_debug/cpp_util
 }
 UI_DIR = src/ui
-
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
-

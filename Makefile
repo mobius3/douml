@@ -28,6 +28,9 @@ DOUML_ICONS_PREFIX_DIR = /usr/share/icons/hicolor
 # The copy is done if you uncomment the definition.
 DOUML_UNIX_PIXMAPS_DIR = /usr/share/pixmaps
 
+# Using uname to detect the platform
+uname_S := $(shell sh -c 'uname -s 2>/dev/null || echo not')
+
 # If not defined (local install), DoUML will be install into LOCAL_DESTDIR or "./install" directory
 # Else (packaging) desktop and executable script are copied into DESTDIR but reference are /
 ifndef DESTDIR
@@ -78,7 +81,11 @@ PLUGOUT_DIRS=genplugouts/BrowserSort  \
 	genplugouts/Xmi2Generator  \
 	genplugouts/xmi2import
 
-PROGS=douml \
+# the main program (built as a .app bundle on OS X)
+MAINPROG=douml
+
+# all the other side programs (NOT built as .app bundle on OS X)
+SIDEPROGS= \
 	browsersort  \
 	cpp_generator  \
 	cpp_reverse  \
@@ -103,12 +110,16 @@ PROGS=douml \
 	roundtrip_body  \
 	usecasewizard
 
+# all the programs
+PROGS = $(MAINPROG) $(SIDEPROGS)
+
 compile:
 	( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${config} L_UniversalModels.pro; ) || exit 1 ; $(MAKE) -C src/Libs/L_UniversalModels || exit 1
 	( cd src ; $(QMAKE) -config ${config} douml.pro; ) || exit 1 ; $(MAKE) -C src || exit 1
 	for i in $(SRC_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config}; ) || exit 1 ; $(MAKE) -C $$i || exit 1 ; fi; done
 	for i in $(PLUGOUT_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config}; ) || exit 1 ; $(MAKE) -C $$i || exit 1 ; fi; done
 
+# Useful for debugging on OS X with XCode, this target will generate appropriate xcode projects files
 xcodeprojects: $(QTPROJECTFILES)
 	( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${config} -spec macx-xcode L_UniversalModels.pro; ) || exit 1
 	( cd src ; $(QMAKE) -config ${config} -spec macx-xcode douml.pro; ) || exit 1
@@ -133,7 +144,20 @@ install:
 	mkdir -p "$(DESTDIR)$(DOUML_DOC_DIR)"
 	mkdir -p "$(DESTDIR)$(DOUML_LOCALE_DIR)"
 	cp -p *.lang "$(DESTDIR)$(DOUML_LOCALE_DIR)"
+# If on Darwin/Mac OS X, we are building a .dmg for deployment of a .app bundle
+ifeq ($(uname_S),Darwin)
+# First we copy the douml.app bundle directory that only contains the douml executable
+	cp -pR bin/$(MAINPROG).app "$(DESTDIR)$(DOUML_LIB)"
+# We then copy all the other side programs (executables built with qt no app bundle option)
+# inside the bundle's Contents/MacOS subfolder.
+	for i in $(SIDEPROGS); do cp -p bin/$$i "$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app/Contents/MacOS" ; done
+# Finally we run the macdeployqt tool to add the appropriate frameworks and
+# configuration files to the bundle and to create a .dmg disk image file.
+	macdeployqt "$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app" -verbose=2 -dmg \
+		$(patsubst %,-executable="$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app/Contents/MacOS/%",$(SIDEPROGS))
+else
 	for i in $(PROGS); do cp -p bin/$$i "$(DESTDIR)$(DOUML_LIB)" ; done
+endif
 	echo "#!/bin/sh" >$(DESTDIR)$(DOUML_DIR)/douml
 	echo "PATH=$(LOCAL_DESTDIR)$(DOUML_LIB):$$"PATH >>$(DESTDIR)$(DOUML_DIR)/douml
 	echo "DOUML_LIB_DIR=$(LOCAL_DESTDIR)$(DOUML_LIB)" >>$(DESTDIR)$(DOUML_DIR)/douml
@@ -167,7 +191,14 @@ uninstall:
 clean:
 	for i in $(SRC_DIRS) $(PLUGOUT_DIRS); do if [ -d $$i ]; then (cd $$i; $(QMAKE) -config ${config}; $(MAKE) clean; rm -f Makefile; ) || exit 1 ; fi; done
 	( cd src ; $(QMAKE) -config ${config} douml.pro; ) || exit 1 ; (cd src; $(MAKE) clean; rm -f Makefile; ) || exit 1
+	( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${config} L_UniversalModels.pro; ) || exit 1 ; (cd src/Libs/L_UniversalModels; $(MAKE) clean; rm -f Makefile; ) || exit 1
+# If on Darwin/Mac OS X we are removing the douml .app bundle
+ifeq ($(uname_S),Darwin)
+	rm -rf "bin/$(MAINPROG).app"
+	for i in $(SIDEPROGS); do rm -f bin/$$i; done
+else
 	for i in $(PROGS); do rm -f bin/$$i; done
+endif
 	rm -rf bin/moc_release bin/moc_debug
 	rm -rf bin/obj_release bin/obj_debug
 

@@ -1,7 +1,8 @@
 TEMPLATE    = app
 TARGET        = irose
-CONFIG        += warn_on qt
-DEFINES        = WITHCPP WITHJAVA WITHIDL  WITHPHP WITHPYTHON TRUE=true FALSE=false
+CONFIG -= app_bundle
+CONFIG        += warn_on qt c++11
+DEFINES        += WITHCPP WITHJAVA WITHIDL  WITHPHP WITHPYTHON TRUE=true FALSE=false
 HEADERS        = ./UmlDeploymentView.h \
           ./UmlTypeSpec.h \
           ./UmlBaseArtifact.h \
@@ -164,21 +165,21 @@ QT += network  widgets
 
 INCLUDEPATH += ../../src
 QT += testlib
-Release{
 
-
-    MOC_DIR = bin/douml/rose/MOC_release
-    OBJECTS_DIR = bin/douml/rose/Obj_release
-}
-
-Debug{
-    MOC_DIR = bin/douml/rose/MOC_Debug
-    OBJECTS_DIR = bin/douml/rose/Obj_Debug
-
-}
     UI_DIR = src/ui
     DESTDIR = ../../bin
 
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+Debug { CONFIG += debug }
+Release { CONFIG += release }
 
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
+    MOC_DIR = $${DESTDIR}/moc_release/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_release/$${TARGET}
+}
+
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
+    MOC_DIR = $${DESTDIR}/moc_debug/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_debug/$${TARGET}
+}

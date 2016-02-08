@@ -1,15 +1,8 @@
 TEMPLATE	= app
 TARGET		= deplcl
-CONFIG(Debug, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt warn_on Debug qxt
-    QMAKE_POST_LINK = " "
-}
-CONFIG(Release, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt Release qxt
-    QMAKE_POST_LINK = " "
-}
+CONFIG -= app_bundle
+CONFIG += qt warn_on qxt c++11
+QMAKE_POST_LINK = " "
 QXT += core
 DEFINES		+= WITHCPP WITHJAVA WITHPHP WITHPYTHON WITHIDL TRACE BooL=bool
 HEADERS		= ./UmlBaseExpansionRegion.h \
@@ -417,17 +410,16 @@ DEFINES += TRUE=true FALSE=false
 INCLUDEPATH += ../../src
 QT += testlib
 DESTDIR = ../../bin
-Release {
+Debug { CONFIG += debug }
+Release { CONFIG += release }
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/deplcl
     OBJECTS_DIR = $${DESTDIR}/obj_release/deplcl
 }
-
-Debug {
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
     MOC_DIR = $${DESTDIR}/moc_debug/deplcl
     OBJECTS_DIR = $${DESTDIR}/obj_debug/deplcl
 }
 UI_DIR = src/ui
-
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
-

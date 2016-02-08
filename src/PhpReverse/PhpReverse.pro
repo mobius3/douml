@@ -1,15 +1,7 @@
 TEMPLATE      = app
-CONFIG(Debug, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt warn_on Debug
-    QMAKE_POST_LINK = " "
-}
-CONFIG(Release, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt Release
-    QMAKE_POST_LINK = " "
-}
-HEADERS          = 
+CONFIG -= app_bundle
+CONFIG += qt warn_on c++11
+HEADERS          =
 SOURCES          = main.cpp \
         UmlClassItem.cpp UmlArtifact.cpp \
         UmlAttribute.cpp UmlClass.cpp \
@@ -111,8 +103,8 @@ SOURCES          = main.cpp \
     ../Logging/QsDebugOutput.cpp
 
 TARGET          = php_reverse
-DEFINES          = WITHPHP REVERSE TRUE=true FALSE=false
-INCLUDEPATH   = ../Tools ../PhpReverse
+DEFINES          += WITHPHP REVERSE TRUE=true FALSE=false
+INCLUDEPATH   += ../Tools ../PhpReverse
 
 #The following line was inserted by qt3to4
 QT += network widgets
@@ -121,15 +113,16 @@ QT += network widgets
 INCLUDEPATH += ../../src
 QT += testlib
 DESTDIR = ../../bin
-Release {
+Debug { CONFIG += debug }
+Release { CONFIG += release }
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/php_reverse
     OBJECTS_DIR = $${DESTDIR}/obj_release/php_reverse
 }
-
-Debug {
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
     MOC_DIR = $${DESTDIR}/moc_debug/php_reverse
     OBJECTS_DIR = $${DESTDIR}/obj_debug/php_reverse
 }
 UI_DIR = src/ui
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++

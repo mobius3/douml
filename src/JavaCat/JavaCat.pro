@@ -1,14 +1,7 @@
 TEMPLATE      = app
-CONFIG(Debug, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt warn_on Debug
-    QMAKE_POST_LINK = " "
-}
-CONFIG(Release, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt Release
-    QMAKE_POST_LINK = " "
-}
+CONFIG -= app_bundle
+CONFIG += qt warn_on c++11
+QMAKE_POST_LINK = " "
 HEADERS          = JavaCatWindow.h BrowserView.h BrowserSearchDialog.h ShowFileDialog.h \
         CommentView.h \
     menufactory.h
@@ -112,8 +105,8 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
     menufactory.cpp
 
 TARGET          = java_catalog
-DEFINES          = WITHJAVA TRUE=true FALSE=false
-INCLUDEPATH   = ../Tools ../JavaCat
+DEFINES          += WITHJAVA TRUE=true FALSE=false
+INCLUDEPATH   += ../Tools ../JavaCat
 
 #The following line was inserted by qt3to4
 QT += network widgets
@@ -122,17 +115,16 @@ QT += network widgets
 INCLUDEPATH += ../../src
 QT += testlib
 DESTDIR = ../../bin
-Release {
+Debug { CONFIG += debug }
+Release { CONFIG += release }
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/java_catalog
     OBJECTS_DIR = $${DESTDIR}/obj_release/java_catalog
 }
-
-Debug {
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
     MOC_DIR = $${DESTDIR}/moc_debug/java_catalog
     OBJECTS_DIR = $${DESTDIR}/obj_debug/java_catalog
 }
 UI_DIR = src/ui
-
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
-

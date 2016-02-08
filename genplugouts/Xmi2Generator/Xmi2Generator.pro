@@ -1,19 +1,10 @@
 TEMPLATE    = app
 TARGET        = gxmi2
-CONFIG(Debug, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt warn_on Debug
-    QMAKE_POST_LINK = " "
-}
-CONFIG(Release, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt Release
-    QMAKE_POST_LINK = " "
-}
+CONFIG -= app_bundle
+CONFIG += qt warn_on c++11
+QMAKE_POST_LINK = " "
 CONFIG += precompile_header
 DEFINES        += WITHCPP WITHJAVA WITHIDL WITHPYTHON WITHPHP
-QMAKE_CXXFLAGS += -std=c++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
 
 PRECOMPILED_HEADER += ../../src/misc/mystr.h
 HEADERS        = ./UmlBaseClassDiagram.h \
@@ -436,18 +427,20 @@ DEFINES += TRUE=true FALSE=false
 
 INCLUDEPATH += ../../src
 QT += testlib
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
-mac:LIBS += -lc++
 UI_DIR = src/ui
 DESTDIR = ../../bin
 
-Release {
+Debug { CONFIG += debug }
+Release { CONFIG += release }
+
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/$${TARGET}
     OBJECTS_DIR = $${DESTDIR}/obj_release/$${TARGET}
 }
 
-Debug {
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
     MOC_DIR = $${DESTDIR}/moc_debug/$${TARGET}
     OBJECTS_DIR = $${DESTDIR}/obj_debug/$${TARGET}
 }

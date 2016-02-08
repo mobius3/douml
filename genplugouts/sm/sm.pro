@@ -1,7 +1,8 @@
 TEMPLATE	= app
 TARGET		= stmgen
-CONFIG		+= warn_on qt
-DEFINES		= WITHCPP FALSE=false TRUE=true TRACE
+CONFIG -= app_bundle
+CONFIG		+= warn_on qt c++11
+DEFINES		+= WITHCPP FALSE=false TRUE=true TRACE
 HEADERS		= ./UmlBaseRelation.h \
 		  ./UmlStateAction.h \
 		  ./anExpansionKind.h \
@@ -348,21 +349,22 @@ QT += network  widgets
 
 INCLUDEPATH += ../../src
 QT += testlib
-Release{
 
-
-    MOC_DIR = bin/douml/sm/MOC_release
-    OBJECTS_DIR = bin/douml/sm/Obj_release
-}
-
-Debug{
-    MOC_DIR = bin/douml/sm/MOC_Debug
-    OBJECTS_DIR = bin/douml/sm/Obj_Debug
-
-}
-    UI_DIR = src/ui
 DESTDIR = ../../bin
 
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+Debug { CONFIG += debug }
+Release { CONFIG += release }
 
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
+    MOC_DIR = $${DESTDIR}/moc_release/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_release/$${TARGET}
+}
+
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
+    MOC_DIR = $${DESTDIR}/moc_debug/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_debug/$${TARGET}
+}
+
+UI_DIR = src/ui
