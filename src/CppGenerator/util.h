@@ -26,7 +26,7 @@
 // *************************************************************************
 
 #ifndef _UTIL_H
-#define _UTIL_h
+#define _UTIL_H
 
 #include "misc/mystr.h"
 #include "misc/codec.h"
@@ -47,4 +47,5 @@ extern void incr_error();
 extern void incr_warning();
 extern int n_errors();
 extern int n_warnings();
+
 #endif

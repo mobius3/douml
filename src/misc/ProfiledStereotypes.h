@@ -26,7 +26,7 @@
 // *************************************************************************
 
 #ifndef PROFILEDSTEREOTYPES_H
-#define ProfiledSTEREOTYPES_H
+#define PROFILEDSTEREOTYPES_H
 
 #include <qstringlist.h>
 //Added by qt3to4:
