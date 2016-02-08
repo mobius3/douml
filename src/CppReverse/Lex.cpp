@@ -26,7 +26,7 @@
 // *************************************************************************
 
 // lexer written by hand rather than using [f]lex as usual,
-// BOUML is also my first development including a source code
+// DOUML is also my first development including a source code
 // reader where I do not use yacc/bison, to see how it is
 // without ... (comment by Bruno)
 
