@@ -2,6 +2,7 @@ TEMPLATE    = app
 TARGET        = irose
 CONFIG -= app_bundle
 CONFIG        += warn_on qt c++11
+DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES        += WITHCPP WITHJAVA WITHIDL  WITHPHP WITHPYTHON TRUE=true FALSE=false
 HEADERS        = ./UmlDeploymentView.h \
           ./UmlTypeSpec.h \

@@ -2,6 +2,7 @@ TEMPLATE	= app
 TARGET		= uml_proj
 CONFIG -= app_bundle
 CONFIG		+= warn_on qt c++11
+DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES		+= WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON BooL=bool FALSE=false  TRUE=true
 HEADERS		= ./UmlBaseExpansionNode.h \
 		  ./UmlChoicePseudoState.h \

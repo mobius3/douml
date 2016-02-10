@@ -3,6 +3,7 @@ TARGET        = file_control
 CONFIG -= app_bundle
 CONFIG += qt warn_on c++11
 QMAKE_POST_LINK = " "
+DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES        += BooL=bool
 HEADERS        = ./aVisibility.h \
           ./UmlBaseExtraClassMember.h \

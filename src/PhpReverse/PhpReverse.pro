@@ -1,6 +1,7 @@
 TEMPLATE      = app
 CONFIG -= app_bundle
 CONFIG += qt warn_on c++11
+DEFINES += QT_DEPRECATED_WARNINGS
 HEADERS          =
 SOURCES          = main.cpp \
         UmlClassItem.cpp UmlArtifact.cpp \

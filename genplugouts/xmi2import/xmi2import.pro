@@ -3,6 +3,7 @@ TARGET        = ixmi2
 CONFIG -= app_bundle
 CONFIG += qt warn_on c++11
 QMAKE_POST_LINK = " "
+DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES        += WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON BooL=bool
 PRECOMPILED_HEADER += ../../src/misc/mystr.h
 CONFIG += precompile_header

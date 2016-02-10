@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG += qt warn_on qxt c++11
 QMAKE_POST_LINK = " "
 QXT += core
+DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES		+= WITHCPP WITHJAVA WITHPHP WITHPYTHON WITHIDL TRACE BooL=bool
 HEADERS		= ./UmlBaseExpansionRegion.h \
 		  ./UmlBaseUseCaseDiagramDefinition.h \

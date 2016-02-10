@@ -2,6 +2,7 @@ TEMPLATE    = app
 TARGET        = gxmi
 CONFIG -= app_bundle
 CONFIG        += warn_on qt c++11
+DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES       += WITHCPP WITHJAVA WITHIDL TRUE=true FALSE=false
 HEADERS        = ./UmlBaseFinalState.h \
           ./UmlBaseAttribute.h \

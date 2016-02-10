@@ -2,6 +2,7 @@ TEMPLATE      = app
 CONFIG -= app_bundle
 CONFIG += qt warn_on c++11
 QMAKE_POST_LINK = " "
+DEFINES += QT_DEPRECATED_WARNINGS
 HEADERS          = JavaCatWindow.h BrowserView.h BrowserSearchDialog.h ShowFileDialog.h \
         CommentView.h \
     menufactory.h

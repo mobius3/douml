@@ -1,6 +1,7 @@
 TEMPLATE      = app
 CONFIG -= app_bundle
 CONFIG          += qt warn_on c++11
+DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES          = util.cpp activity.cpp state.cpp instance.cpp \
         insertbase.cpp php.cpp python.cpp diagdef.cpp \
         UmlClassItem.cpp UmlAttribute.cpp \

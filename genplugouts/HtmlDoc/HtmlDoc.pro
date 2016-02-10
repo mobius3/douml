@@ -3,6 +3,7 @@ TARGET		= ghtml
 CONFIG -= app_bundle
 CONFIG += qt warn_on c++11
 QMAKE_POST_LINK = " "
+DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES		+= WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON
 HEADERS		= ./UmlBaseRelation.h \
 		  ./UmlFormalParameter.h \

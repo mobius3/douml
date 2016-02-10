@@ -2,6 +2,7 @@ TEMPLATE	= app
 TARGET		= singleton
 CONFIG -= app_bundle
 CONFIG		+= warn_on qt c++11
+DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES		+= WITHCPP WITHJAVA WITHIDL FALSE=false TRUE=true
 HEADERS		= ./UmlBaseOperation.h \
 		  ./JavaSettings.h \

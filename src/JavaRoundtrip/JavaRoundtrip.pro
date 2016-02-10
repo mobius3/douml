@@ -2,6 +2,7 @@ TEMPLATE      = app
 CONFIG -= app_bundle
 CONFIG += qt warn_on c++11
 QMAKE_POST_LINK = " "
+DEFINES += QT_DEPRECATED_WARNINGS
 HEADERS          =
 SOURCES          = main.cpp BrowserNode.cpp Statistic.cpp \
         ../JavaCat/UmlClassItem.cpp ../JavaCat/UmlArtifact.cpp \

@@ -5,6 +5,8 @@ INCLUDEPATH += boost src ui ..  Libs/L_UniversalModels
 CONFIG += qt warn_on c++11
 QMAKE_POST_LINK = " "
 
+DEFINES += QT_DEPRECATED_WARNINGS
+
 HEADERS        = \
     browser/BrowserActivityAction.h \
     browser/BrowserActivityDiagram.h \

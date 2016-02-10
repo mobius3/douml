@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG += qt warn_on c++11
 QMAKE_POST_LINK = " "
 CONFIG += precompile_header
+DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES        += WITHCPP WITHJAVA WITHIDL WITHPYTHON WITHPHP
 
 PRECOMPILED_HEADER += ../../src/misc/mystr.h
