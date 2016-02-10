@@ -85,11 +85,6 @@ ShortcutDialog::ShortcutDialog() : TabDialog(0, 0, TRUE)
 
     vtab->addWidget((new QLabel(tr("Here are the shortcuts to do a command (menu entry)"), vtab)));
 
-#ifdef __APPLE__
-    (new QLabel(tr("Note : sometimes the key 'Alt' is named 'Option'"), vtab))
-            ->setAlignment(::Qt::AlignHCenter);
-#endif
-
     vtab->addWidget(cmd_table = new ShortcutTable(vtab, FALSE, ncmds));
 
     addTab(vtab, QObject::tr("Command"));
@@ -104,11 +99,6 @@ ShortcutDialog::ShortcutDialog() : TabDialog(0, 0, TRUE)
     vtab->addWidget((label = new QLabel(tr("Here are the shortcuts to call a tool (plug-out)"), vtab)));
     label->setAlignment(::Qt::AlignHCenter);
 
-#ifdef __APPLE__
-    (new QLabel(tr("Note : sometimes the key 'Alt' is named 'Option'"), vtab))
-            ->setAlignment(::Qt::AlignHCenter);
-
-#endif
     vtab->addWidget(tool_table = new ShortcutTable(vtab, TRUE, ntools));
 
     addTab(vtab, QObject::tr("Tool"));
