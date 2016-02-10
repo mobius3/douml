@@ -69,7 +69,7 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
     hbox = new QHBoxLayout();
     vbox->addLayout(hbox);
     hbox->setMargin(10);
-    QLabel * label1 = new QLabel(tr("Add message to %1") + to->get_full_name(), this);
+    QLabel * label1 = new QLabel(tr("Add message to %1").arg(to->get_full_name()), this);
     label1->setAlignment(Qt::AlignCenter);
     hbox->addWidget(label1);
 

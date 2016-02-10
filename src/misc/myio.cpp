@@ -2031,8 +2031,7 @@ char * read_string(char *& st)
 
     if (*st != '"') {
         msg_critical(QObject::tr("Error"),
-                     where() + QObject::tr("string expected after '%1'",
-                                           Context.previous_word));
+                     where() + QObject::tr("string expected after '%1'").arg(Context.previous_word));
         THROW_ERROR 0;
     }
 
@@ -2096,8 +2095,7 @@ char * read_keyword(char *& st)
     if (*st == '"') {
         msg_critical(QObject::tr("Error"),
                      where() +
-                     QObject::tr("keyword expected after '%1'",
-                                 Context.previous_word));
+                     QObject::tr("keyword expected after '%1'").arg(Context.previous_word));
         THROW_ERROR 0;
     }
 
@@ -2166,8 +2164,7 @@ char * read_keyword(char *& st, const char * expected1,
     if (*st == 0) {
         msg_critical("Error",
                      where() +
-                     QObject::tr("premature end of file, '%1' expected" ,
-                                 expected1));
+                     QObject::tr("premature end of file, '%1' expected").arg(expected1));
         THROW_ERROR 0;
     }
 
@@ -2224,7 +2221,7 @@ int read_id(char *& st)
 
     if (*st == '"') {
         msg_critical("Error",
-                     where() + QObject::tr("id expected after '%1'", Context.previous_word));
+                     where() + QObject::tr("id expected after '%1'").arg(Context.previous_word));
         THROW_ERROR 0;
     }
 
@@ -2233,7 +2230,7 @@ int read_id(char *& st)
 
     if (st == r) {
         msg_critical(QObject::tr("Error"),
-                     where() + QObject::tr("id expected after '%1'", Context.previous_word));
+                     where() + QObject::tr("id expected after '%1'").arg(Context.previous_word));
         THROW_ERROR 0;
     }
 
@@ -2256,7 +2253,7 @@ unsigned read_unsigned(char *& st)
 
     if (*st == '"') {
         msg_critical(QObject::tr("Error"),
-                     where() + QObject::tr("unsigned expected after '%1'", Context.previous_word));
+                     where() + QObject::tr("unsigned expected after '%1'").arg(Context.previous_word));
         THROW_ERROR 0;
     }
 
@@ -2269,7 +2266,7 @@ unsigned read_unsigned(char *& st)
 
     if (st == r + 1) {
         msg_critical(QObject::tr("Error"),
-                     where() + QObject::tr("unsigned expected after '%1'", Context.previous_word));
+                     where() + QObject::tr("unsigned expected after '%1'").arg(Context.previous_word));
         THROW_ERROR 0;
     }
 
@@ -2292,7 +2289,7 @@ double read_double(char *& st)
 
     if (*st == '"') {
         msg_critical(QObject::tr("Error"),
-                     where() + QObject::tr("float expected after '%1'", Context.previous_word));
+                     where() + QObject::tr("float expected after '%1'").arg(Context.previous_word));
         THROW_ERROR 0;
     }
 
@@ -2384,7 +2381,7 @@ void wrong_keyword(const char * k, const char * expected)
 void unknown_keyword(const char * k)
 {
     msg_critical(QObject::tr("Error"),
-                 where() + QObject::tr("unknown or unexpected keyword '%1'", k));
+                 where() + QObject::tr("unknown or unexpected keyword '%1'").arg(k));
     THROW_ERROR 0;
 }
 

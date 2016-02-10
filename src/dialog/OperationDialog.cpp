@@ -5006,7 +5006,7 @@ void ParamsTable::button_pressed(const QModelIndex &index)
         QMenu m;
 
         sprintf(s, "%d", row + 1);
-        MenuFactory::addItem(m, tr("param %1", s), -1);
+        MenuFactory::addItem(m, tr("param %1").arg(s), -1);
         m.addSeparator();
 
         if (row < n) {
@@ -5370,8 +5370,15 @@ void ExceptionsTable::Reinitialize(OperationData *o, QStringList &list, bool isW
 
         setItem(index, 0, new ComboItem(this, QString(), types));
         setText(index, 1, QString());
+
+        //disconnect if already connected
+        disconnect(this, SIGNAL(pressed(QModelIndex)),
+                this, SLOT(button_pressed(QModelIndex)));
         connect(this, SIGNAL(pressed(QModelIndex)),
                 this, SLOT(button_pressed(QModelIndex)));
+        //disconnect if already connected
+        disconnect(this, SIGNAL(cellChanged(int, int)),
+                this, SLOT(value_changed(int, int)));
         connect(this, SIGNAL(cellChanged(int, int)),
                 this, SLOT(value_changed(int, int)));
 
@@ -5430,6 +5437,8 @@ void ExceptionsTable::value_changed(int row, int col)
 
 void ExceptionsTable::button_pressed(const QModelIndex &index)
 {
+    if(!index.isValid())
+        return;
     int row = index.row();
     int col = index.column();
     if (col == 1) {
@@ -5438,7 +5447,7 @@ void ExceptionsTable::button_pressed(const QModelIndex &index)
         QMenu m;
 
         sprintf(s, "%d", row + 1);
-        MenuFactory::addItem(m, tr("exception %1", s), -1);
+        MenuFactory::addItem(m, tr("exception %1").arg(s), -1);
         m.addSeparator();
 
         if (row < n) {
@@ -5937,7 +5946,7 @@ void CppParamsTable::button_pressed(const QModelIndex &index)
         QMenu m;
 
         sprintf(s, "%d", row + 1);
-        MenuFactory::addItem(m, tr("param %1", s), -1);
+        MenuFactory::addItem(m, tr("param %1").arg(s), -1);
         m.addSeparator();
         MenuFactory::addItem(m, tr("Insert param before"), 0);
         MenuFactory::addItem(m, tr("Insert param after"), 1);
@@ -6529,7 +6538,7 @@ void PhpParamsTable::button_pressed(const QModelIndex &index)
         QMenu m;
 
         sprintf(s, "%d", row + 1);
-        MenuFactory::addItem(m, tr("param %1", s), -1);
+        MenuFactory::addItem(m, tr("param %1").arg(s), -1);
         m.addSeparator();
         MenuFactory::addItem(m, tr("Insert param before"), 0);
         MenuFactory::addItem(m, tr("Insert param after"), 1);
@@ -7070,7 +7079,7 @@ void PythonParamsTable::button_pressed(const QModelIndex &index)
         QMenu m;
 
         sprintf(s, "%d", row + 1);
-        MenuFactory::addItem(m, tr("param %1", s), -1);
+        MenuFactory::addItem(m, tr("param %1").arg(s), -1);
         m.addSeparator();
         MenuFactory::addItem(m, tr("Insert param before"), 0);
         MenuFactory::addItem(m, tr("Insert param after"), 1);

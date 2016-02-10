@@ -132,7 +132,7 @@ int main(int argc, char ** argv)
                      "but saving is done in the format of Bouml 4.22 "
                      "which loses all new c++11 and hierarchy specifiers\n\n"
                      "To suppress this warning place empty file override_transition.txt into the application folder\n"
-                     "To disable the mode - change compatibility_save parameter to 0 in settings.ini\n"));
+                     "To disable the mode - change compatibility_save parameter to 0 in %1\n").arg(settings.fileName()));
     }
     if (conv_env)
        EnvDialog::edit(TRUE);

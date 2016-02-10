@@ -54,7 +54,7 @@ BButtonGroup * VisibilityGroup::init(QWidget * parent, UmlVisibility v, bool pac
         bgroup->addWidget(default_visibility_rb);
     }
 
-    //bgroup->setExclusive(TRUE);
+    bgroup->setExclusive(TRUE);
 
     if (default_prefix != 0) {
         default_pfix = default_prefix;

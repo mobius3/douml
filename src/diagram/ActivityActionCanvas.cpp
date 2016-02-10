@@ -873,7 +873,7 @@ void ActivityActionCanvas::menu(const QPoint &)
     BrowserNode * diag = 0;
 
     if (who != 0)
-        MenuFactory::addItem(m, tr("Select %1 in browser", what), 10);
+        MenuFactory::addItem(m, tr("Select %1 in browser").arg(what), 10);
 
     if (linked())
         MenuFactory::addItem(m, tr("Select linked items"), 5);

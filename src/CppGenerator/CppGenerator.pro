@@ -141,6 +141,7 @@ SOURCES          = \
         
 TARGET          = cpp_generator
 DEFINES          = WITHCPP BooL=bool TRACE DEBUG TRUE=true FALSE=false
+#DEFINES += _RUN_PLUGOUT_EXTERNAL_
 INCLUDEPATH   = ../Tools ../CppGenerator ../
 
 

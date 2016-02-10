@@ -127,7 +127,7 @@ protected:
     QString img_root_dir;
     QSplitter * spl1;
     QSplitter * spl2;
-    char style;	// '?' unknown, 'm' = motif, '+' = motif+, 'w' = windows
+    QString style;
     QToolButton * prev;
     QToolButton * next;
     QToolButton * tbClipboard = nullptr;
@@ -213,16 +213,7 @@ private slots:
     bool using_python();
     bool using_idl();
     void edit_env();
-    void motif_style();
-    void motifplus_style();
-    //void sgi_style();
-    //void cde_style();
-    void windows_style();
-
-
-
-
-
+    void setApplicationStyleSlot();
     void show_stereotypes();
     void about();
     void aboutQt();
@@ -285,6 +276,8 @@ public slots:
     void OnChooseQuickEditMode(QTreeWidgetItem *item, QTreeWidgetItem *old);
     void OnShowQuickEdit();
     void OnCallClipboardMenu();
+private:
+    void setApplicationStyle(QString s);
     //void OnCallQuickEdit();
 
 };
