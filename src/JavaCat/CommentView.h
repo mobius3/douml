@@ -38,10 +38,10 @@ class CommentView : public QTextBrowser/*QTextView*/
 public:
     CommentView(QWidget * parent);
 
-    virtual void setSource(const QString & name);
+    virtual void setSource(const QUrl & name) override;
 
 signals:
-    void refer(const QString & name);
+    void refer(const QUrl & name);
 };
 
 #endif
