@@ -500,15 +500,17 @@ void PhpSettings::read_()
     _rel_decl = UmlCom::read_string();
     _oper_def = UmlCom::read_string();
 #ifndef WITHJAVA
-    _get_visibility =
+    _get_visibility = (aVisibility) UmlCom::read_char();
+#else
+    UmlCom::read_char();
 #endif
-        (aVisibility) UmlCom::read_char();
     _get_name = UmlCom::read_string();
     _is_get_final = UmlCom::read_bool();
 #ifndef WITHJAVA
-    _set_visibility =
+    _set_visibility = (aVisibility) UmlCom::read_char();
+#else
+    UmlCom::read_char();
 #endif
-        (aVisibility) UmlCom::read_char();
     _set_name = UmlCom::read_string();
     _is_set_final = UmlCom::read_bool();
     _is_generate_javadoc_comment = UmlCom::read_bool();

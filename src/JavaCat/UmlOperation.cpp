@@ -90,9 +90,13 @@ bool UmlOperation::new_one(Class * container, const WrapperStr & name,
 #else
     if (
 # ifdef REVERSE
-        container->from_libp() &&
+        container->from_libp() && (
 # endif
-        (visibility == PrivateVisibility))
+                                   visibility == PrivateVisibility
+# ifdef REVERSE
+                                   )
+# endif
+        )
 #endif
         op = 0;
     else {
