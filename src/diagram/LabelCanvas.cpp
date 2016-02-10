@@ -284,10 +284,10 @@ void LabelCanvas::draw(QPainter & p)
 
         if (fp != 0) {
             fprintf(fp, "\t<polyline fill=\"none\" stroke=\"black\" stroke-opacity=\"1\""
-                    " points=\"%d,%d %d,%d %d,%d %d,%d %d,%d\" />\n",
+                    " points=\"%f,%d %f,%d %f,%d %f,%d %d,%f\" />\n",
                     r.left(), t, r.right(), t, r.left(), yb, r.right(), yb, xr, r.bottom() - h / 2);
             fprintf(fp, "\t<line stroke=\"black\" stroke-opacity=\"1\""
-                    " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
+                    " x1=\"%f\" y1=\"%d\" x2=\"%d\" y2=\"%f\" />\n",
                     r.right(), yb, xr, r.bottom());
         }
     }
