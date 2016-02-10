@@ -1,3 +1,27 @@
+// *************************************************************************
+//
+//
+//
+// This file is part of the Douml Uml Toolkit.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License Version 3.0 as published by
+// the Free Software Foundation and appearing in the file LICENSE.GPL included in the
+//  packaging of this file.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License Version 3.0 for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// e-mail : doumleditor@gmail.com
+//
+// *************************************************************************
+
 #ifndef QUICKEDIT_H
 #define QUICKEDIT_H
 
@@ -39,7 +63,7 @@ public:
     void Show(BrowserNode*);
     bool ValidType(BrowserNode*);
 protected:
-    void closeEvent(QCloseEvent *) override;
+    virtual void closeEvent(QCloseEvent *) override;
 
 private:
     Ui::QuickEdit *ui = nullptr;
@@ -51,34 +75,20 @@ private:
     QList<UmlCode> validTypes;
 
     QList<QSharedPointer<BrowserNode> > localNodeHolder;
-    QHash<UmlCode, std::function<void(QSharedPointer<TreeItemInterface>, BrowserNode*) > > itemCreators;
+    QHash<UmlCode, std::function<void(QSharedPointer<TreeItemInterface>, BrowserNode*)>> itemCreators;
     TreeModel* treeModel = nullptr;
     bool isFiltered = false;
     QStringList expandedNodes;
     QSharedPointer<TreeItemInterface> rootInterface;
     QSharedPointer<BrowserNode> modelRoot;
 
-    QSharedPointer<ItemController<BrowserNode> > nullController;
-    QSharedPointer<ItemController<BrowserNode> > classController;
-    QSharedPointer<ItemController<BrowserNode> > operationController;
-    QSharedPointer<ItemController<BrowserNode> > attributeController;
-    QSharedPointer<ItemController<BrowserNode> > operationReturnTypeController;
-    QSharedPointer<ItemController<BrowserNode> > operationAttributeController;
-    QSharedPointer<ItemController<BrowserNode> > relationController;
-    QSharedPointer<ItemController<BrowserNode> > extraNodeController;
-    QSharedPointer<ItemController<BrowserNode> > classviewController;
-    QSharedPointer<ItemController<BrowserNode> > packageController;
-
-    QSharedPointer<TreeItemInterface > classInterface;
-    QSharedPointer<TreeItemInterface > operationInterface;
-    QSharedPointer<TreeItemInterface > attributeInterface;
-    QSharedPointer<TreeItemInterface > operationReturnTypeInterface;
-    QSharedPointer<TreeItemInterface> operationAttributeInterface;
-    QSharedPointer<TreeItemInterface > relationInterface;
-    QSharedPointer<TreeItemInterface > extraNodeInterface;
-    QSharedPointer<TreeItemInterface> classviewInterface;
-    QSharedPointer<TreeItemInterface > packageInterface;
-
+    QSharedPointer<ItemController<BrowserNode>> nullController;
+    QSharedPointer<ItemController<BrowserNode>> classController;
+    QSharedPointer<ItemController<BrowserNode>> operationController;
+    QSharedPointer<ItemController<BrowserNode>> attributeController;
+    QSharedPointer<ItemController<BrowserNode>> operationAttributeController;
+    QSharedPointer<ItemController<BrowserNode>> relationController;
+    QSharedPointer<ItemController<BrowserNode>> extraNodeController;
 
     QAction* actBefore = nullptr;
     QAction* actAfter = nullptr;
@@ -90,11 +100,11 @@ private:
     //QModelIndex current;
     BrowserNode* currentNode = nullptr;
 
-    void SetupTreeModel(TreeModel*& , QTreeView*,
+    void SetupTreeModel(TreeModel*&,
+                        QTreeView*,
                         QSharedPointer<TreeItemInterface>&,
-                        QSharedPointer<ItemController<BrowserNode> >&,
+                        QSharedPointer<ItemController<BrowserNode>>&,
                         QSharedPointer<BrowserNode>&);
-
 
     void SetupClassController();
     void SetupOperationController();
@@ -105,7 +115,7 @@ private:
     void SetupControllers();
     void SetupDelegates();
     void PerformFiltering(QStringList, QTreeView*, TreeModel*, QSharedPointer<TreeItemInterface>);
-    QList<std::function<bool (TreeItemInterface *)> > CreateCheckList();
+    QList<std::function<bool(TreeItemInterface*)>> CreateCheckList();
     void CreateMenu();
     void SetupMenu(TreeItemInterface *);
     void VisibilityDelegateSetup();
@@ -128,17 +138,21 @@ private:
     BrowserNode* GetCurrentNode();
     QSharedPointer<TreeItemInterface> GetSharedOfOperation(const QModelIndex& );
 
-    QSharedPointer<TreeItemInterface > CreateInterfaceNode(QSharedPointer<TreeItemInterface> root, QSharedPointer<ItemController<BrowserNode> > controller, BrowserNode *node);
-    void AssignItemsForOperation(QSharedPointer<TreeItemInterface> root,BrowserNode*);
-    void AssignItemsForClass(QSharedPointer<TreeItemInterface> root,BrowserNode*);
-    void AssignItemsForAttribute(QSharedPointer<TreeItemInterface> root,BrowserNode*);
-    void AssignItemsForRelation(QSharedPointer<TreeItemInterface> root,  BrowserNode *);
-    void AssignItemsForExtraNode(QSharedPointer<TreeItemInterface> root,BrowserNode*);
-    void AssignItemsForClassView(QSharedPointer<TreeItemInterface> root,BrowserNode*);
-    void AssignItemsForPackage(QSharedPointer<TreeItemInterface> root,BrowserNode*);
+    QSharedPointer<TreeItemInterface> CreateInterfaceNode(QSharedPointer<TreeItemInterface> root,
+                                                          QSharedPointer<ItemController<BrowserNode>> controller,
+                                                          BrowserNode* node);
+
+    void AssignItemsForOperation(QSharedPointer<TreeItemInterface> root, BrowserNode*);
+    void AssignItemsForClass(QSharedPointer<TreeItemInterface> root, BrowserNode*);
+    void AssignItemsForAttribute(QSharedPointer<TreeItemInterface> root, BrowserNode*);
+    void AssignItemsForRelation(QSharedPointer<TreeItemInterface> root, BrowserNode *);
+    void AssignItemsForExtraNode(QSharedPointer<TreeItemInterface> root, BrowserNode*);
+    void AssignItemsForClassView(QSharedPointer<TreeItemInterface> root, BrowserNode*);
+    void AssignItemsForPackage(QSharedPointer<TreeItemInterface> root, BrowserNode*);
+
     void MoveMarked(bool);
 
-    public slots:
+public slots:
     void OnContextMenu(QPoint);
     void OnShow();
     void OnAddParameter();
