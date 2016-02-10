@@ -21,8 +21,10 @@
 // e-mail : doumleditor@gmail.com
 //
 // *************************************************************************
+
 #ifndef TREEVIEWTEMPLATEFUNCTIONS_H
 #define TREEVIEWTEMPLATEFUNCTIONS_H
+
 #include <QAbstractItemView>
 #include <QTreeView>
 #include "include/TreeModel.h"
@@ -30,15 +32,18 @@
 #include "include/treeviewfunctions.h"
 #include "include/treeitemfunctions.h"
 #include "include/l_tree_controller_global.h"
+
 //class QAbstractItemView;
+
 namespace TreeFunctions
 {
 
-/* Создаёт структуру интерфейса дерева из предварительно созданного объекта данных
+/** Создаёт структуру интерфейса дерева из предварительно созданного объекта данных
  * @parentItem объект к которому следует прицепить данный интерфейс как потомка
  * @data готовая к обработке структура с данными
  * @controller указатель на структуру доступа к данным из модели
  **/
+
 template<typename DataType, typename InterfaceType, template <typename> class ItemType, template <typename> class ControllerType>
 QSharedPointer<InterfaceType>  CreateInterfaceFromData(QSharedPointer<InterfaceType> parentItem, DataType& data,
                                                        QSharedPointer<ControllerType<DataType> > controller)
@@ -52,9 +57,11 @@ QSharedPointer<InterfaceType>  CreateInterfaceFromData(QSharedPointer<InterfaceT
     data.SetInterfacePointer(newItem.data());
     return newItem;
 }
-/* Возвращет из отображения указатель на текущий интерфейс
+
+/** Возвращет из отображения указатель на текущий интерфейс
  * @view указатель на отображение из которого извлекается интерфейс
  **/
+
 template<typename InterfaceType>
 InterfaceType* GetCurrentInterface(QAbstractItemView* view)
 {
@@ -64,9 +71,11 @@ InterfaceType* GetCurrentInterface(QAbstractItemView* view)
     auto pointer = static_cast<InterfaceType*>(currentIndex.internalPointer());
     return pointer;
 }
-/* Возвращет из отображения указатель на текущие данные
+
+/** Возвращет из отображения указатель на текущие данные
  * @view указатель на отображение из которого извлекаются данные
  **/
+
 template<template<typename> class TreeItemType, typename DataType, typename InterfaceType>
 DataType* GetCurrentDataPointer(QAbstractItemView* view)
 {
@@ -75,13 +84,12 @@ DataType* GetCurrentDataPointer(QAbstractItemView* view)
     return data;
 }
 
-
-
-/* Возвращает родителя для создаваемого потомка на основании режима вставки
+/** Возвращает родителя для создаваемого потомка на основании режима вставки
  * @insertionMode Информация о том как именно вставляется потомок. Нодой или папкой
  * @current указатель на интерфейс являющийся текущим в модели
  * @root указатель на корневую ноду (для сличения с корнем дерева)
  **/
+
 template<template<typename> class TreeItemType, typename DataType, typename InterfaceType>
 QSharedPointer<InterfaceType> GetParent(ENodeInsertionMode insertionMode, InterfaceType* current, QSharedPointer<InterfaceType> root)
 {
@@ -106,11 +114,12 @@ QSharedPointer<InterfaceType> GetParent(ENodeInsertionMode insertionMode, Interf
 
 }
 
-/* Возвращает индекс строки для создания нового потомка в модели
+/** Возвращает индекс строки для создания нового потомка в модели
  * @view указатель на отображение из которого извлекаются данные
  * @insertionMode Информация о том как именно вставляется потомок. Нодой или папкой
  * @addBelow указывает вставить потомка перед текущим индексом или после него
  **/
+
 static inline int GetChildInsertionIndex(QAbstractItemView* view, ENodeInsertionMode insertionMode, bool addBelow)
 {
     if(insertionMode == ENodeInsertionMode::child)
@@ -130,13 +139,14 @@ static inline int GetChildInsertionIndex(QAbstractItemView* view, ENodeInsertion
     return indexToInsert;
 }
 
-/* Создаёт потомка или сиблинга для текущей ноды в дереве (берется из view)
+/** Создаёт потомка или сиблинга для текущей ноды в дереве (берется из view)
  * @dataGenerator генератор для создания данных для помещения в интерфейс
  * @view указатель на отображение
  * @root указатель на корневую ноду (для сличения с корнем дерева)
  * @insertionMode Информация о том как именно вставляется потомок. Нодой или папкой
  * @addBelow указывает вставить потомка перед текущим индексом или после него
  **/
+
 template<template<typename> class TreeItemType, typename DataType, typename InterfaceType>
 TreeItemType<DataType>* AddItem(std::function<DataType(DataType*)> dataGenerator, QAbstractItemView* view,
                                 QSharedPointer<InterfaceType> root, ENodeInsertionMode insertionMode, bool addBelow = true)
@@ -168,8 +178,7 @@ TreeItemType<DataType>* AddItem(std::function<DataType(DataType*)> dataGenerator
     return dynamic_cast<TreeItemType<DataType>*>(newItem.data());
 }
 
-
-/* Производит фильтрацию в дереве и устанавливает результат в качестве корневой ноды
+/** Производит фильтрацию в дереве и устанавливает результат в качестве корневой ноды
  * @dataGenerator генератор для создания данных для помещения в интерфейс
  * @treeView указатель на дерево-отображение
  * @rootItem указатель на корневую ноду (для сличения с корнем дерева)
@@ -181,7 +190,9 @@ TreeItemType<DataType>* AddItem(std::function<DataType(DataType*)> dataGenerator
 template<typename InterfaceType, template <typename> class ItemType, typename DataType>
 bool PerformFiltering(TreeModel* treeModel,
                       QSharedPointer<InterfaceType > rootItem,
-                      std::function<QList<std::function<bool (InterfaceType *)> > ()> createCheckListFunc,bool forceRoot = false,  bool forceChildren = true)
+                      std::function<QList<std::function<bool (InterfaceType *)> > ()> createCheckListFunc,
+                      bool forceRoot = false,
+                      bool forceChildren = true)
 {
     QSharedPointer<InterfaceType > item;
     QList<std::function<bool (InterfaceType *)> > checkList = createCheckListFunc();
@@ -226,8 +237,7 @@ static inline QString GetFullPathFromIndex(std::function<QVariant(DataType*)> da
     return result + GetPathFromIndex<InterfaceType,ItemType,DataType>(dataAccessor, startIndex);
 }
 
-
-/* Рекурсивно восстанавливает состояние нод дерева
+/** Рекурсивно восстанавливает состояние нод дерева
  * @nodes список открытых нод. Заполняется как послеовательная строка строка-колонка...
  * @view отображение в котором требуется восстановить состояние
  * @model указатель на модель
@@ -258,7 +268,8 @@ void ApplyNodePathExpandState(std::function<QVariant(DataType*)> dataAccessor,
     if(nodes.contains(path))
         view->setExpanded( startIndex.sibling(startIndex.row(), 0), true );
 }
-/* Рекурсивно сохраняет состояние нод дерева
+
+/** Рекурсивно сохраняет состояние нод дерева
  * @nodes список открытых нод. Заполняется как последовательная строка строка-колонка...
  * @view отображение в котором требуется сохранить состояние
  * @model указатель на модель
@@ -298,12 +309,11 @@ void StoreNodePathExpandState(std::function<QVariant(DataType*)> dataAccessor,
     // Bouml preserved body end 002020AA
 }
 
-
 template<typename InterfaceType>
 bool ExpandAllSatisfying(std::function<bool(InterfaceType*)> check,
-                              QTreeView * view,
-                              QAbstractItemModel * model,
-                              const QModelIndex startIndex)
+                         QTreeView * view,
+                         QAbstractItemModel * model,
+                         const QModelIndex startIndex)
 {
     bool returnResult = false;
     for(int i(0); i < model->rowCount(startIndex); ++i)
@@ -321,8 +331,7 @@ bool ExpandAllSatisfying(std::function<bool(InterfaceType*)> check,
     return returnResult;
 }
 
-
-static int MaxOpenLevel(QTreeView * view, QAbstractItemModel * model,const QModelIndex startIndex, int level = -1, bool isFirst = true)
+static inline int MaxOpenLevel(QTreeView * view, QAbstractItemModel * model,const QModelIndex startIndex, int level = -1, bool isFirst = true)
 {
     static int result = 0;
     level++;
@@ -344,7 +353,7 @@ static int MaxOpenLevel(QTreeView * view, QAbstractItemModel * model,const QMode
     return result;
 }
 
-static void ExpandUpToLevel(QTreeView * view,QAbstractItemModel * model, const QModelIndex startIndex,int maxLevel, int level = -1)
+static inline void ExpandUpToLevel(QTreeView * view,QAbstractItemModel * model, const QModelIndex startIndex,int maxLevel, int level = -1)
 {
     int currentLevel = level+1;
     for(int i(0); i < model->rowCount(startIndex); ++i)
@@ -359,7 +368,6 @@ static void ExpandUpToLevel(QTreeView * view,QAbstractItemModel * model, const Q
     }
 }
 
-
 template<typename InterfaceType, template <typename> class ItemType, typename DataType>
 void FilterTreeAndRestoreNodes(std::function<QVariant(DataType*)> dataAccessor,
                                std::function<QList<std::function<bool (InterfaceType *)> > ()> createCheckListFunc,
@@ -372,5 +380,7 @@ void FilterTreeAndRestoreNodes(std::function<QVariant(DataType*)> dataAccessor,
     PerformFiltering<InterfaceType,ItemType,DataType>(model,startIndex,createCheckListFunc, forceRoot, forceChildren);
     TreeFunctions::ApplyNodePathExpandState<InterfaceType,ItemType,DataType>(dataAccessor, nodes, view, model, QModelIndex());
 }
-}
+
+} // namespace TreeFunctions
+
 #endif // TREEVIEWTEMPLATEFUNCTIONS_H

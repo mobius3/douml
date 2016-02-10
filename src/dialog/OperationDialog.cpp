@@ -2164,7 +2164,7 @@ void OperationDialog::cpp_def_from_decl()
     }
 
     QList<UserTag> failedTags;
-    for(auto tag : tags)
+    for (const auto& tag : tags)
     {
         //we remove all instances of the tag that might have been left
         def = def.replace(QString("@{") + tag.tag + QString("}"), "");
@@ -2187,12 +2187,12 @@ void OperationDialog::cpp_def_from_decl()
         }
         failedTags.append(tag);
     }
-    if(failedTags.size() > 0)
+    if (failedTags.size() > 0)
     {
         QString tagString;
-        for(auto tag : failedTags)
+        for (const auto& tag : failedTags)
             tagString.append(tag.tag + tr(","));
-        if(tagString.length() > 0)
+        if (tagString.length() > 0)
             tagString.chop(1);
         QMessageBox::critical(0, tr("Warning!"), tr("Could not find correct place for these tags: ").arg(tagString), QMessageBox::Ok);
     }

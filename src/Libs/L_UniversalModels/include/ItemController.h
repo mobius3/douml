@@ -21,9 +21,9 @@
 // e-mail : doumleditor@gmail.com
 //
 // *************************************************************************
+
 #ifndef _ITEMCONTROLLER_H
 #define _ITEMCONTROLLER_H
-
 
 #include <QStringList>
 #include <QVariant>
@@ -38,45 +38,31 @@
 template<class T>
 class ItemController  
 {
-  public:
+public:
     inline QStringList GetColumns() const;
-
     void SetColumns(QStringList value);
-
     QVariant GetValue(const T * item, const QModelIndex & index, int role);
-
     bool SetValue(T * item, const QModelIndex & index, const QVariant & value, int role);
-
     void AddGetter(const QPair<int,int> & index, std::function<QVariant(const T*, QModelIndex)> function);
-
     void AddGetter(int row, const QVector<int> & roles, std::function<QVariant(const T*, QModelIndex)> function);
-
     void AddSetter(const QPair<int,int> & index, std::function<bool(T*, QVariant, QModelIndex)> function);
-
     void AddSetter(int row, const QVector<int> & roles, std::function<bool(T*, QVariant, QModelIndex)> function);
-
-    void AddPostProcessor(int column, int role, std::function<void(T*, const QModelIndex&)> & _postProcessor);
-
-    void AddPostProcessors(int column, const QVector<int> & roles, std::function<void(T*,const QModelIndex&)> & _postProcessor);
-
+    void AddPostProcessor(int column, int role, const std::function<void(T*, const QModelIndex&)> & _postProcessor);
+    void AddPostProcessors(int column, const QVector<int> & roles, const std::function<void(T*,const QModelIndex&)> & _postProcessor);
     Qt::ItemFlags flags(const QModelIndex & index) const;
-
     inline QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > GetFlagsFunctors();
-
     void SetFlagsFunctors(QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > value);
-
     void AddFlagsFunctor(std::function<Qt::ItemFlags(const QModelIndex&)> functor);
-
     void SetDefaultTreeFunctor();
 
-
-  private:
-     QStringList columns;
-     QHash<QPair<int, int>, std::function<QVariant(const T*, QModelIndex)> > getters;
-     QHash<QPair<int,int>, std::function<bool(T*, QVariant, QModelIndex)> > setters;
-     QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > flagsFunctors;
-     QHash<QPair<int, int> , std::function<void(T*, const QModelIndex&)> > postProcessors;
+private:
+    QStringList columns;
+    QHash<QPair<int,int>, std::function<QVariant(const T*, QModelIndex)> > getters;
+    QHash<QPair<int,int>, std::function<bool(T*, QVariant, QModelIndex)> > setters;
+    QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > flagsFunctors;
+    QHash<QPair<int,int>, std::function<void(T*, const QModelIndex&)> > postProcessors;
 };
+
 template<class T>
 inline QStringList ItemController<T>::GetColumns() const 
 {
@@ -94,7 +80,7 @@ QVariant ItemController<T>::GetValue(const T * item, const QModelIndex & index, 
 {
     // Bouml preserved body begin 00203B2A
     //return QVariant();
-    if(!getters.contains(QPair<int,int>(index.column(), role)))
+    if (!getters.contains(QPair<int,int>(index.column(), role)))
         return QVariant();
     QVariant ret = getters[QPair<int,int>(index.column(), role)](item, index);
     return ret;
@@ -105,10 +91,10 @@ template<class T>
 bool ItemController<T>::SetValue(T * item, const QModelIndex & index, const QVariant & value, int role) 
 {
     // Bouml preserved body begin 00203BAA
-    if(!setters.contains(QPair<int,int>(index.column(), role)))
+    if (!setters.contains(QPair<int,int>(index.column(), role)))
         return false;
     bool result = setters[QPair<int,int>(index.column(), role)](item, value, index);
-    if(postProcessors.contains(QPair<int,int>(index.column(), role)) && postProcessors[QPair<int,int>(index.column(), role)] != 0)
+    if (postProcessors.contains(QPair<int,int>(index.column(), role)) && postProcessors[QPair<int,int>(index.column(), role)] != 0)
         postProcessors[QPair<int,int>(index.column(), role)](item, index);
     return result;
     // Bouml preserved body end 00203BAA
@@ -118,6 +104,12 @@ template<class T>
 void ItemController<T>::AddGetter(const QPair<int,int> & index, std::function<QVariant(const T*, QModelIndex)> function) 
 {
     // Bouml preserved body begin 002117AA
+
+    Q_ASSERT(!getters.contains(index)); // do we mean to replace the current one,
+                                        // or should we use insertMulti here and
+                                        // then 'values' instead of 'operator[]'
+                                        // when accessing the hash?
+
     getters.insert(index, function);
     // Bouml preserved body end 002117AA
 }
@@ -126,7 +118,7 @@ template<class T>
 void ItemController<T>::AddGetter(int row, const QVector<int> & roles, std::function<QVariant(const T*, QModelIndex)> function) 
 {
     // Bouml preserved body begin 00230DAA
-    for(int role : roles)
+    for (int role : roles)
     {
         AddGetter(QPair<int,int>(row, role), function);
     }
@@ -137,6 +129,12 @@ template<class T>
 void ItemController<T>::AddSetter(const QPair<int,int> & index, std::function<bool(T*, QVariant, QModelIndex)> function) 
 {
     // Bouml preserved body begin 0021182A
+
+    Q_ASSERT(!setters.contains(index)); // do we mean to replace the current one,
+                                        // or should we use insertMulti here and
+                                        // then 'values' instead of 'operator[]'
+                                        // when accessing the hash?
+
     setters.insert(index, function);
     // Bouml preserved body end 0021182A
 }
@@ -145,7 +143,7 @@ template<class T>
 void ItemController<T>::AddSetter(int row, const QVector<int> & roles, std::function<bool(T*, QVariant, QModelIndex)> function) 
 {
     // Bouml preserved body begin 00230D2A
-    for(int role : roles)
+    for (int role : roles)
     {
         AddSetter(QPair<int,int>(row, role), function);
     }
@@ -153,18 +151,24 @@ void ItemController<T>::AddSetter(int row, const QVector<int> & roles, std::func
 }
 
 template<class T>
-void ItemController<T>::AddPostProcessor(int column, int role, std::function<void(T*, const QModelIndex&)> & _postProcessor) 
+void ItemController<T>::AddPostProcessor(int column, int role, const std::function<void(T*, const QModelIndex&)> & _postProcessor)
 {
     // Bouml preserved body begin 002327AA
+
+    Q_ASSERT(!postProcessors.contains(QPair<int,int>(column,role))); // do we mean to replace the current one,
+                                                                     // or should we use insertMulti here and
+                                                                     // then 'values' instead of 'operator[]'
+                                                                     // when accessing the hash?
+
     postProcessors.insert(QPair<int,int>(column,role), _postProcessor);
     // Bouml preserved body end 002327AA
 }
 
 template<class T>
-void ItemController<T>::AddPostProcessors(int column, const QVector<int> & roles, std::function<void(T*,const QModelIndex&)> & _postProcessor) 
+void ItemController<T>::AddPostProcessors(int column, const QVector<int> & roles, const std::function<void(T*,const QModelIndex&)> & _postProcessor)
 {
     // Bouml preserved body begin 0023272A
-    for(int role : roles)
+    for (int role : roles)
     {
         AddPostProcessor(column, role, _postProcessor);
     }
@@ -176,7 +180,7 @@ Qt::ItemFlags ItemController<T>::flags(const QModelIndex & index) const
 {
     // Bouml preserved body begin 0021AFAA
     Qt::ItemFlags result;
-    for(auto func: flagsFunctors)
+    for (const auto& func: flagsFunctors)
     {
         result |= func(index);
     }
@@ -211,7 +215,7 @@ void ItemController<T>::SetDefaultTreeFunctor()
     AddFlagsFunctor([](const QModelIndex& index)
     {
         Qt::ItemFlags flags;
-        if ( index.column() == 0 )
+        if (index.column() == 0)
             flags |= Qt::ItemIsUserCheckable;
         return flags;
     }
