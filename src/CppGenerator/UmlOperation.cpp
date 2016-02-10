@@ -45,7 +45,8 @@
 #include "util.h"
 #include "Logging/QsLog.h"
 
-// to manage preserved bodies, the key is the id under bouml
+// to manage preserved bodies, the key is the id under douml
+// or bouml in compatibility save mode
 QHash<long, WrapperStr> UmlOperation::bodies;
 static const char * BodyPrefix = "// Bouml preserved body begin ";
 static const char * BodyPrefix2 = "// Douml preserved body begin ";

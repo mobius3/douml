@@ -11,7 +11,7 @@ class UmlUseCase;
 
 //Only for C++
 //don't colapse the C++ & Java definition in only one class because this is too artificial
-//note : the stereotype doesn't have special meaning for Bouml, I use it just to inform
+//note : the stereotype doesn't have special meaning for DoUML, I use it just to inform
 class TabDialog : public TabDialogWrapper
 {
     Q_OBJECT

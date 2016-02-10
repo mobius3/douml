@@ -547,7 +547,7 @@ void * UmlCom::read_id()
 
     void * a;
 
-    // sizeof(void *) must be the same for bouml and
+    // sizeof(void *) must be the same for douml and
     // the plug-out, bypass it
     memcpy((char *) &a, p_buffer_in + 1, sizeof(void *));
     p_buffer_in += sizeof(void *) + 1;

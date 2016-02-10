@@ -86,7 +86,7 @@ QHash<WrapperStr,Class*> Package::classes;
 // the java classes, the key are just the name without package
 QHash<WrapperStr,Class*> Package::java_classes;
 
-// all the classes defined in bouml, not known through a .cat
+// all the classes defined in douml, not known through a .cat
 // nor reversed, the key is the full name including package
 QHash<WrapperStr,UmlClass*> Package::user_classes;
 
@@ -94,11 +94,11 @@ QHash<WrapperStr,UmlClass*> Package::user_classes;
 // Java package spec
 QHash<WrapperStr,Package*> Package::known_packages;
 
-// all the packages defined in bouml, not known through a .cat
+// all the packages defined in douml, not known through a .cat
 // nor reversed (except roundtrip), the key is the java package spec
 QHash<WrapperStr,UmlPackage*> Package::user_packages;
 
-// package which does not exist even in bouml
+// package which does not exist even in douml
 QStringList Package::unknown_packages;
 
 // to know if java.lang. was artificialy added in Package::imports
@@ -954,7 +954,7 @@ void Package::update_package_list(WrapperStr name)
         (classes[name] == 0) &&
         (user_classes[name] == 0) &&
         (unknown_packages.indexOf(name) == -1)) {
-        // try to find the package in bouml
+        // try to find the package in douml
         UmlPackage * up = UmlPackage::getProject()->findJavaPackage(name);
 
         if (up == 0) {

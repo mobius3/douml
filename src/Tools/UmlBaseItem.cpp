@@ -786,7 +786,7 @@ UmlBaseItem::~UmlBaseItem()
 }
 
 
-// not in plug-outs managed through bouml
+// not in plug-outs managed through douml
 
 // warning : operation bodies are lost
 bool UmlBaseItem::moveIn(UmlItem * x)
