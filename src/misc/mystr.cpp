@@ -124,6 +124,12 @@ QTextStream & operator<<(QTextStream & ds, const WrapperStr &str)
     ds << QTextCodec::codecForLocale()->toUnicode(str.operator const char *());
     return ds;
 }
+QDebug operator<<(QDebug dbg, const WrapperStr& str)
+{
+    QDebugStateSaver saver(dbg);
+    dbg << str.wrappedString;
+    return dbg;
+}
 //
 bool neq(const WrapperStr & s1, const WrapperStr & s2)
 {

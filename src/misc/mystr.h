@@ -156,6 +156,7 @@ public:
     friend WrapperStr operator+(const WrapperStr & s1, const QString & s2);
     friend WrapperStr operator+(const QString & s1, const WrapperStr & s2);
     friend QTextStream & operator<<(QTextStream & ds, const WrapperStr &str);
+    friend QDebug operator<<(QDebug dbg, const WrapperStr& str);
 
     void assign(const char * c, int len) {
         Q_UNUSED(len);
@@ -293,6 +294,7 @@ WrapperStr operator+(const char * s1, const WrapperStr & s2);
 WrapperStr operator+(const WrapperStr & s1, const QString & s2);
 WrapperStr operator+(const QString & s1, const WrapperStr & s2);
 QTextStream & operator<<(QTextStream & ds, const WrapperStr &str);
+QDebug operator<<(QDebug dbg, const WrapperStr& str);
 bool neq(const WrapperStr & s1, const WrapperStr & s2);
 
 #endif
