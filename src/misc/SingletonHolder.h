@@ -48,6 +48,7 @@ private:
 template<typename T>
 inline void anFill(An<T> & a)
 {
+    Q_UNUSED(a);
     throw std::runtime_error(std::string("Cannot find implementation for interface: ")
                              + typeid(T).name());
 }
