@@ -167,7 +167,7 @@ int main(int argc, char ** argv)
                 !strcmp(argv[2], "-root") &&
                 (msg_critical(QObject::tr("DO NOT CONFIRM"),
                               QObject::tr("Root mode protection\n\n"
-                                 "This mode allows me to develop BOUML\n\n"
+                                 "This mode allows us to develop DoUML\n\n"
                                  "do NOT confirm to avoid a disaster !!!\n\n"
                                  "confirm ?"),
                               QMessageBox::Yes, QMessageBox::No)
@@ -208,7 +208,7 @@ int main(int argc, char ** argv)
             }
             else
             {
-                msg_warning(QObject::tr("Error"), QObject::tr("Bouml was called with wrong parameters, ignore them"));
+                msg_warning(QObject::tr("Error"), QObject::tr("DoUML was called with wrong parameters, ignore them"));
             }
         }
 

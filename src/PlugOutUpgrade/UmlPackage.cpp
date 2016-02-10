@@ -3362,7 +3362,7 @@ void add_missing_opers()
         op->set_java("void", "${t0} ${p0}",
                      "  UmlCom.send_cmd(CmdFamily.miscGlobalCmd, MiscGlobalCmd._loadCmd, p);\n",
                      FALSE);
-        op->set_Description("Does nothing in case an edition is on going under BOUML. Else :\n"
+        op->set_Description("Does nothing in case an edition is on going under DoUML. Else :\n"
                             "close the current project (in case it is not saved the last modifications are lost),\n"
                             "load the specified one, and all the communications with the plug-outs including the\n"
                             "current one are closed.\n");

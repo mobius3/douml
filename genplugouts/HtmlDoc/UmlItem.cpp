@@ -250,7 +250,7 @@ void UmlItem::start_file(QByteArray f, QByteArray s, bool withrefs)
         throw 0;
 
     fw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    fw.write("<!-- Documentation produced by the Html generator of Bouml (http://bouml.free.fr) -->\n");
+    fw.write("<!-- Documentation produced by the Html generator of DoUML (https://github.com/DoUML) -->\n");
     fw.write((is_frame)
              ? "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd\">\n"
              : "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n");

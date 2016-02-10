@@ -1093,7 +1093,7 @@ void UmlWindow::load()
 
         if (browser->get_project() == 0) {
             QString fn = QFileDialog::getOpenFileName(
-                        this, tr("Select BoUML project file"), last_used_directory(), QLatin1String("*.prj"));
+                        this, tr("Select DoUML project file"), last_used_directory(), QLatin1String("*.prj"));
 
             if (!fn.isEmpty()) {
                 set_last_used_directory(fn);

@@ -77,7 +77,7 @@ HelpDialog * HelpDialog::the;
 HelpDialog::HelpDialog()
     : QDialog(0, Qt::Dialog)
 {
-    setWindowTitle(tr("BOUML Help"));
+    setWindowTitle(tr("DoUML Help"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     QHBoxLayout * hbox;
