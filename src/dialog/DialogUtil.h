@@ -63,8 +63,8 @@ class MultiLineEdit : public QPlainTextEdit
 public:
     MultiLineEdit(QWidget * w, const char * name = 0);
 
-    virtual void setText(const QString &);
-    virtual QString text() const;
+    void setText(const QString &);
+    QString text() const;
 
     QString trimmedText() const;
 
@@ -80,13 +80,14 @@ public:
     LineEdit(QWidget * w);
     LineEdit(const QString & s, QWidget * parent, const char * name = 0);
 
-    virtual void setText(const QString &);
-    virtual QString text() const;
+    void setText(const QString &);
+    QString text() const;
 
     void setTheText(const QString & s);
 
     QString theText() const;
 };
+
 extern void init_font_menu(QMenu & fontsubm, UmlCanvas * the_canvas,
                            int index);
 extern void same_width(QWidget *, QWidget *);
