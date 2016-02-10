@@ -84,7 +84,7 @@ void UmlItem::write_description_properties(FileOut & out)
         }
     }
 
-    if (ste.operator QString().contains(':') == 1)
+    if (ste.operator QString().count(':') == 1)
         // probably a stereotype part of profile
         _stereotypes[ste].append(this);
 }
@@ -217,7 +217,7 @@ void UmlItem::write_stereotyped(FileOut & out)
                     itp.next();
                     QString k = itp.key();
 
-                    if (k.contains(':') == 2) {
+                    if (k.count(':') == 2) {
                         out << " ";
                         out.quote(k.mid(k.lastIndexOf(':') + 1)); //[jasa] ambiguous call
                         out << "=\"";
