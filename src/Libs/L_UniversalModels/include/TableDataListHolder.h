@@ -232,7 +232,7 @@ template<class T>
 void TableDataListHolder<T>::sort() 
 {
     // Bouml preserved body begin 0022A42A
-    qSort(m_data.begin(), m_data.end(), sortFunction);
+    std::sort(m_data.begin(), m_data.end(), sortFunction);
     // Bouml preserved body end 0022A42A
 }
 

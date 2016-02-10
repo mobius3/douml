@@ -422,7 +422,7 @@ DiagramItemList::~DiagramItemList()
 
 void DiagramItemList::sort()
 {
-    qSort(begin(), end(), lessThan);
+    std::sort(begin(), end(), lessThan);
 }
 
 bool DiagramItemList::lessThan(DiagramItem *a, DiagramItem *b)

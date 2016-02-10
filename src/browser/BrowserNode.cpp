@@ -2275,7 +2275,7 @@ void BrowserNodeList::sort_it()
 
     BrowserPackage::prepare_for_sort();
 
-    qSort(begin(), end(), lessThan);
+    sort();
 
     //SynonymousPath.setAutoDelete(TRUE);
     QList<QString*> strs = SynonymousPath.values();
@@ -2287,7 +2287,7 @@ void BrowserNodeList::sort_it()
 
 void BrowserNodeList::sort()
 {
-    qSort(begin(), end(), lessThan);
+    std::sort(begin(), end(), lessThan);
 }
 
 bool BrowserNodeList::lessThan(BrowserNode *a, BrowserNode *b)

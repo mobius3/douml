@@ -51,7 +51,7 @@ unsigned int ClosestEdge(QWidget * widget, QPoint position)
     minDistance = qMin(minDistance, distances[2]);
     minDistance = qMin(minDistance, distances[3]);
 
-    auto it = qFind(distances.begin(), distances.end(), minDistance);
+    auto it = std::find(distances.begin(), distances.end(), minDistance);
 
     return it - distances.begin();
 }
