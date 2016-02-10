@@ -34,6 +34,7 @@
 
 class AssocContainCanvas : public ArrowCanvas
 {
+    Q_OBJECT
 public:
     AssocContainCanvas(UmlCanvas * canvas, DiagramItem * b,
                        DiagramItem * e, int id, float d_start, float d_end);

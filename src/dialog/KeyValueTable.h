@@ -35,6 +35,8 @@ class HaveKeyValueData;
 class TableWidgetItemDelegate;
 class KeyValuesTable : public StringTable
 {
+    Q_OBJECT
+
 public:
     KeyValuesTable(HaveKeyValueData * h, QWidget * parent, bool visit);
 

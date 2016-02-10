@@ -559,7 +559,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     help->addAction(action);
 
     action =
-            new QAction(tr("What's This"), this);
+            new QAction(tr("What's This?"), this);
     connect(action, SIGNAL(triggered()), this,SLOT(whats_this()));
     action->setShortcut(::Qt::SHIFT + ::Qt::Key_F1);
     help->addAction(action);

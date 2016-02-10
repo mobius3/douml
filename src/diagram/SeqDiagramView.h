@@ -43,6 +43,7 @@ class ToolCom;
 
 class SeqDiagramView : public DiagramView
 {
+    Q_OBJECT
 public:
     SeqDiagramView(QWidget * parent, UmlCanvas * canvas, int id);
 

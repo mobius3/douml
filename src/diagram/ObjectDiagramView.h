@@ -42,6 +42,8 @@ class OperationData;
 
 class ObjectDiagramView : public DiagramView
 {
+    Q_OBJECT
+    
 public:
     ObjectDiagramView(QWidget * parent, UmlCanvas * canvas, int is);
 

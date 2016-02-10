@@ -44,6 +44,7 @@ class BrowserNode;
 class BasicData;
 class ClassDiagramView : public DiagramView
 {
+    Q_OBJECT
 public:
     ClassDiagramView(QWidget * parent, UmlCanvas * canvas, int id);
 

@@ -34,6 +34,7 @@
 
 class SdSelfMsgCanvas : public SdMsgBaseCanvas
 {
+    Q_OBJECT
 public:
     SdSelfMsgCanvas(UmlCanvas * canvas, SdMsgSupport * d,
                     UmlCode l, int v, int id);

@@ -36,6 +36,7 @@
 
 class SdMsgCanvas : public SdMsgBaseCanvas
 {
+    Q_OBJECT
 protected:
     SdMsgSupport * start;
 

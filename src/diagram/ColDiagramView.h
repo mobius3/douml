@@ -44,6 +44,7 @@ class ToolCom;
 
 class ColDiagramView : public DiagramView
 {
+    Q_OBJECT
 protected:
     ColMsgList msgs;
 

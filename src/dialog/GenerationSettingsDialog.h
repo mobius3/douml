@@ -284,6 +284,8 @@ protected slots:
 
 class StereotypesTable : public StringTable
 {
+    Q_OBJECT
+
 protected:
     bool with_php;
 public:
@@ -296,6 +298,8 @@ public:
 
 class IncludeTable : public StringTable
 {
+    Q_OBJECT
+    
 protected:
     IncludesSpec & spec;
     const char * dflt;

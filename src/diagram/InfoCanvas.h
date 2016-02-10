@@ -36,6 +36,8 @@ class DiagramItem;
 
 class InfoCanvas : public NoteCanvas
 {
+    Q_OBJECT
+    
 protected:
     DiagramItem * who;
 

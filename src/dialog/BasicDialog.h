@@ -47,7 +47,7 @@ class BodyDialog;
 
 class BasicDialog : public TabDialog
 {
-    //Q_OBJECT
+    Q_OBJECT
 
 protected:
     BasicData * data;

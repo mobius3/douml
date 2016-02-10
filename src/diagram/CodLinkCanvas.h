@@ -41,6 +41,7 @@ class ColMsg;
 
 class CodLinkCanvas : public ArrowCanvas
 {
+    Q_OBJECT
 protected:
     CodDirsCanvas * dirs;
 

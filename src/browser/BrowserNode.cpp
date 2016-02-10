@@ -1048,7 +1048,7 @@ void BrowserNode::mark_menu(QMenu & m, const char * s, int bias) const
 #ifndef SIMPLE_DUPLICATION
 
                 if (rec && !parents_marked)
-                    MenuFactory::addItem(m,("Duplicate recursivelly marked into"), bias + 6),
+                    MenuFactory::addItem(m,("Duplicate recursivelly marked into"), bias + 6,
                             QObject::tr("to recurcivelly duplicate the marked items into %1", s).toLatin1().constData());
 
 #endif
@@ -1060,7 +1060,7 @@ void BrowserNode::mark_menu(QMenu & m, const char * s, int bias) const
 #ifndef SIMPLE_DUPLICATION
 
                 if (rec && !parents_marked)
-                    MenuFactory::addItem(m,("Duplicate marked recursivelly after"), bias + 8),
+                    MenuFactory::addItem(m,("Duplicate marked recursivelly after"), bias + 8,
                             QObject::tr("to recurcivelly duplicate the marked items after %1", s));
 
 #endif
@@ -1140,31 +1140,24 @@ void BrowserNode::mark_management(int choice)
 
         for (int i = marked_list.size() - 1; i >= 0; --i) {
             bn = marked_list[i];
-            //BrowserView::removeItem(p->get_)
-            //            BrowserAttribute* asAttribute = ((BrowserAttribute *) bn);
-            //            if(p != (BrowserNode *) bn->parent() && asAttribute != 0)
-            //            {
-            //                p->move(((BrowserNode *) asAttribute->get_get_oper()), this);
-            //                p->move(((BrowserNode *) asAttribute->get_set_oper()), this);
-            //            }
 
             if(p != (BrowserNode *) bn->parent())
             {
                 if (bn->get_type() == UmlAttribute )
                 {
                     BrowserAttribute* asAttribute =  dynamic_cast<BrowserAttribute*>(bn);
-                    if(((BrowserNode *) asAttribute->get_get_oper()))
-                        p->move(((BrowserNode *) asAttribute->get_get_oper()), this);
-                    if(((BrowserNode *) asAttribute->get_set_oper()))
-                        p->move(((BrowserNode *) asAttribute->get_set_oper()), this);
+                    if ((BrowserNode *) asAttribute->get_get_oper())
+                        p->move((BrowserNode *) asAttribute->get_get_oper(), this);
+                    if ((BrowserNode *) asAttribute->get_set_oper())
+                        p->move((BrowserNode *) asAttribute->get_set_oper(), this);
                 }
                 else if (bn->get_type() >= UmlAggregation &&  bn->get_type() <= UmlDirectionalAggregationByValue)
                 {
                     BrowserRelation* asRelation =  dynamic_cast<BrowserRelation*>(bn);
-                    if(((BrowserNode *) asRelation->get_get_oper()))
-                        p->move(((BrowserNode *) asRelation->get_get_oper()), this);
-                    if(((BrowserNode *) asRelation->get_set_oper()))
-                        p->move(((BrowserNode *) asRelation->get_set_oper()), this);
+                    if ((BrowserNode *) asRelation->get_get_oper())
+                        p->move((BrowserNode *) asRelation->get_get_oper(), this);
+                    if ((BrowserNode *) asRelation->get_set_oper())
+                        p->move((BrowserNode *) asRelation->get_set_oper(), this);
                 }
             }
 
