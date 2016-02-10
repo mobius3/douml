@@ -5,8 +5,8 @@ VVBox::VVBox(QWidget *parent) :
 {
     m_layout = new QVBoxLayout(this);
     this->setLayout(m_layout);
-    m_layout->setSpacing(0);
-    m_layout->setMargin(0);
+    m_layout->setSpacing(2);
+    m_layout->setMargin(2);
 }
 
 void VVBox::addWidget(QWidget *widget)

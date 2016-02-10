@@ -372,7 +372,7 @@ void GenerationSettings::init()
 
       nbuiltins = 15;
       //builtins = new Builtin[nbuiltins];
-
+      builtins.clear();
       builtins.append(Builtin("void", "void", "void", "void"));
       builtins.append(Builtin("any", "void *", "Object", "any"));
 

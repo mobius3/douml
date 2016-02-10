@@ -1,5 +1,15 @@
+
+
 # Next release
-* Fixed compilation on OS X El Capitan [#155](https://github.com/DoUML/douml/pull/155)
+[#155]: https://github.com/DoUML/douml/pull/155
+[#161]: https://github.com/DoUML/douml/pull/161
+* Fixed compilation on OS X El Capitan [#155]
+* Fixed warning about duplicated uml entities showing up needlessly [#161]
+* Build date and time automated [#161]
+* Fixed mutually exclusive attribute menus when they should not be [#161]
+* Fixed some keywords not being parsed by cpp reverse and roundtrip [#161]
+* Some UI improvements [#161]
+* Version bump [#161]
 
 # v1.0.8
 * Numerous bugfixes

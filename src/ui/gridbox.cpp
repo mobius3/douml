@@ -7,8 +7,8 @@ GridBox::GridBox(int n, QWidget * parent, QString name) :
     setLayout(m_layout);
     m_numCols = n;
     currentIndex = 0;
-    setSpacing(0);
-    setMargin(0);
+    setSpacing(2);
+    setMargin(2);
     if(!name.isEmpty())
         this->setObjectName(name);
 }
