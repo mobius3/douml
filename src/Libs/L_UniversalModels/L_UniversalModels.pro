@@ -48,9 +48,6 @@ SOURCES += src/AdaptingTableModel.cpp \
 
 DESTDIR = ../../../bin
 
-Release { CONFIG += release }
-Debug { CONFIG += debug }
-
 CONFIG(release, debug|release) {
     DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/UniversalModels

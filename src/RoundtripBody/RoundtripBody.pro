@@ -107,8 +107,6 @@ QT += network
 INCLUDEPATH += ../../src
 QT += testlib
 DESTDIR = ../../bin
-Debug { CONFIG += debug }
-Release { CONFIG += release }
 CONFIG(release, debug|release) {
     DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/roundtrip_body

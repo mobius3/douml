@@ -143,8 +143,6 @@ QT += network  testlib
 
 
 DESTDIR = ../../bin
-Debug { CONFIG += debug }
-Release { CONFIG += release }
 CONFIG(release, debug|release) {
     DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/cpp_generator

@@ -44,8 +44,9 @@ QMAKE=qmake
 
 MAKE=make
 
-ifndef config
-  config=Release
+# using CONFIG variable for 'release' or 'debug' and it's case sensitive!
+ifndef CONFIG
+  CONFIG=release
 endif
 
 SRC_DIRS=\
@@ -114,17 +115,17 @@ SIDEPROGS= \
 PROGS = $(MAINPROG) $(SIDEPROGS)
 
 compile:
-	( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${config} L_UniversalModels.pro; ) || exit 1 ; $(MAKE) -C src/Libs/L_UniversalModels || exit 1
-	( cd src ; $(QMAKE) -config ${config} douml.pro; ) || exit 1 ; $(MAKE) -C src || exit 1
-	for i in $(SRC_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config}; ) || exit 1 ; $(MAKE) -C $$i || exit 1 ; fi; done
-	for i in $(PLUGOUT_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config}; ) || exit 1 ; $(MAKE) -C $$i || exit 1 ; fi; done
+	( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${CONFIG} L_UniversalModels.pro; ) || exit 1 ; $(MAKE) -C src/Libs/L_UniversalModels || exit 1
+	( cd src ; $(QMAKE) -config ${CONFIG} douml.pro; ) || exit 1 ; $(MAKE) -C src || exit 1
+	for i in $(SRC_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${CONFIG}; ) || exit 1 ; $(MAKE) -C $$i || exit 1 ; fi; done
+	for i in $(PLUGOUT_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${CONFIG}; ) || exit 1 ; $(MAKE) -C $$i || exit 1 ; fi; done
 
 # Useful for debugging on OS X with XCode, this target will generate appropriate xcode projects files
 xcodeprojects: $(QTPROJECTFILES)
-	( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${config} -spec macx-xcode L_UniversalModels.pro; ) || exit 1
-	( cd src ; $(QMAKE) -config ${config} -spec macx-xcode douml.pro; ) || exit 1
-	for i in $(SRC_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config} -spec macx-xcode; ) || exit 1 ; fi; done
-	for i in $(PLUGOUT_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config} -spec macx-xcode; ) || exit 1 ; fi; done
+	( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${CONFIG} -spec macx-xcode L_UniversalModels.pro; ) || exit 1
+	( cd src ; $(QMAKE) -config ${CONFIG} -spec macx-xcode douml.pro; ) || exit 1
+	for i in $(SRC_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${CONFIG} -spec macx-xcode; ) || exit 1 ; fi; done
+	for i in $(PLUGOUT_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${CONFIG} -spec macx-xcode; ) || exit 1 ; fi; done
 
 install:
 	mkdir -p "$(DESTDIR)$(DOUML_DIR)"
@@ -189,9 +190,9 @@ uninstall:
 	rm -f "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop"
 
 clean:
-	for i in $(SRC_DIRS) $(PLUGOUT_DIRS); do if [ -d $$i ]; then (cd $$i; $(QMAKE) -config ${config}; $(MAKE) clean; rm -f Makefile; ) || exit 1 ; fi; done
-	( cd src ; $(QMAKE) -config ${config} douml.pro; ) || exit 1 ; (cd src; $(MAKE) clean; rm -f Makefile; ) || exit 1
-	( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${config} L_UniversalModels.pro; ) || exit 1 ; (cd src/Libs/L_UniversalModels; $(MAKE) clean; rm -f Makefile; ) || exit 1
+	for i in $(SRC_DIRS) $(PLUGOUT_DIRS); do if [ -d $$i ]; then (cd $$i; $(QMAKE) -config ${CONFIG}; $(MAKE) clean; rm -f Makefile; ) || exit 1 ; fi; done
+	( cd src ; $(QMAKE) -config ${CONFIG} douml.pro; ) || exit 1 ; (cd src; $(MAKE) clean; rm -f Makefile; ) || exit 1
+	( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${CONFIG} L_UniversalModels.pro; ) || exit 1 ; (cd src/Libs/L_UniversalModels; $(MAKE) clean; rm -f Makefile; ) || exit 1
 # If on Darwin/Mac OS X we are removing the douml .app bundle
 ifeq ($(uname_S),Darwin)
 	rm -rf "bin/$(MAINPROG).app"

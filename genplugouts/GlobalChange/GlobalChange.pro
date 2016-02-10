@@ -417,8 +417,6 @@ DEFINES += TRUE=true FALSE=false
 INCLUDEPATH += ../../src
 QT += testlib
 DESTDIR = ../../bin
-Debug { CONFIG += debug }
-Release { CONFIG += release }
 CONFIG(release, debug|release) {
     DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/global_change

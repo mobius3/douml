@@ -627,9 +627,6 @@ QT += core gui network  widgets printsupport
 UI_DIR = ui
 DESTDIR = ../bin
 
-Debug { CONFIG += debug }
-Release { CONFIG += release }
-
 CONFIG(release, debug|release) {
     DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/douml
