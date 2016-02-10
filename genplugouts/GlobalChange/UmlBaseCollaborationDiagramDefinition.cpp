@@ -15,7 +15,7 @@ void UmlBaseCollaborationDiagramDefinition::read_()
         UmlClassInstanceReference * i = new UmlClassInstanceReference();
 
         _instances.insert(rank, i);
-        instances.insert((void *) UmlCom::read_unsigned(), i);
+        instances.insert(reinterpret_cast<void*>(uintptr_t(UmlCom::read_unsigned())), i);
         i->read_();
     }
 
