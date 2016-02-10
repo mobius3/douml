@@ -654,6 +654,7 @@ FORMS += \
     ui/catalogwidget.ui \
     ui/quickedit.ui
 win32:RC_ICONS += ../douml.ico
+mac:ICON = ../douml.icns
 
 TRANSLATIONS += translations/frFR.ts\
                 translations/deDE.ts\
