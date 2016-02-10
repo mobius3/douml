@@ -69,6 +69,7 @@ public:
 
 protected:
     void read(char *& st, const char * k);
+    using DiagramCanvas::save;
     void save(QTextStream & st) const;
 };
 

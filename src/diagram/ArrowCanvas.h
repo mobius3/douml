@@ -128,10 +128,11 @@ public:
     virtual void delete_available(BooL & in_model, BooL & out_model) const override;
     virtual void remove(bool) override;
     virtual int rtti() const;
-    virtual QPoint center() const;
-    virtual QRect rect() const;
-    virtual QRect sceneRect() const;
-    virtual bool contains(int, int) const;
+    virtual QPoint center() const override;
+    virtual QRect rect() const override;
+    virtual QRect sceneRect() const override;
+    using QGraphicsPolygonItem::contains;
+    virtual bool contains(int, int) const override;
     QPoint get_point(int i) {
         return arrow[i];
     }

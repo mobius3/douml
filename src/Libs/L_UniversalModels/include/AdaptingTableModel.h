@@ -59,6 +59,7 @@ public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     int RowForValue(void* value);
 
+    using QAbstractTableModel::sort;
     void sort();
 
     void RemoveRow(const QModelIndex & index);

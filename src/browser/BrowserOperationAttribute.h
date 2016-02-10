@@ -58,7 +58,8 @@ public:
     virtual const QPixmap * pixmap(int) const override;
     virtual uint TypeID() override;
     bool deletedp() const;
-    void set_deleted(bool, int position = 0);
+    using BrowserNodeAbstractRemove::set_deleted;
+    void set_deleted(bool value, int position = 0);
     std::shared_ptr<ParamData> get_param() {return param;}
 
     QString get_specifier(int position) const;

@@ -97,7 +97,8 @@ public:
 
     virtual void apply_shortcut(const QString & s) override;
     void draw_all_relations(OdClassInstCanvas * end = 0);
-    bool has_relation_slot(const SlotRel &) const;
+    using DiagramCanvas::has_relation;
+    bool has_relation(const SlotRel &) const;
     bool is_duplicated(ObjectLinkCanvas * lnk,
                        OdClassInstCanvas * other) const;
 

@@ -93,7 +93,8 @@ public:
 protected:
     void internal_set_relation(RelationData * d);
     void set_relation(RelationData * d);
-    void update_object_link_canvas(bool updatepos);
+    using DiagramItem::update;
+    void update(bool updatepos);
 
 private slots:
     void modified();	// canvas must be updated

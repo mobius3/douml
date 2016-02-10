@@ -94,6 +94,7 @@ public:
     virtual bool deletedp() const override;
     virtual void set_deletedp(bool y) override;
 
+    using ClassMemberData::set_browser_node;
     void set_browser_node(BrowserAttribute *, bool update, bool enum_item);
 
     virtual QString definition(bool full, bool with_kind) const override;

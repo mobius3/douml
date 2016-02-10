@@ -101,6 +101,7 @@ public:
 
 protected:
     BrowserNode * update_begin(DiagramItem * cnend);
+    using DiagramItem::update;
     void update(bool updatepos);
     void propagate_drawing_settings();
 

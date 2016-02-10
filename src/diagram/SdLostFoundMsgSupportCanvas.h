@@ -47,25 +47,25 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode typeUmlCode() const;
-    virtual void delete_available(BooL &, BooL & out_model) const;
-    virtual void delete_it();
-    virtual void change_scale();
-    virtual void open();
-    virtual void menu(const QPoint &);
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual bool alignable() const;
-    virtual bool copyable() const;
-    virtual void add(SdMsgBaseCanvas *);
-    virtual void remove(SdMsgBaseCanvas *);
-    virtual double min_y() const;
-    virtual void update_v_to_contain(const QRect re);
-    virtual void moveBy(double dx, double dy);
-    virtual void set_z(double);
-    virtual bool isaDuration() const;
-    virtual bool isOverlappingDuration() const;
-    virtual void save(QTextStream & st, bool ref, QString & warning) const;
+    virtual UmlCode typeUmlCode() const override;
+    virtual void delete_available(BooL &, BooL & out_model) const override;
+    virtual void delete_it() override;
+    virtual void change_scale() override;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual bool alignable() const override;
+    virtual bool copyable() const override;
+    virtual void add(SdMsgBaseCanvas *) override;
+    virtual void remove(SdMsgBaseCanvas *) override;
+    virtual double min_y() const override;
+    virtual void update_v_to_contain(const QRect re) override;
+    virtual void moveBy(double dx, double dy) override;
+    virtual void set_z(double) override;
+    virtual bool isaDuration() const override;
+    virtual bool isOverlappingDuration() const override;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const override;
     static SdLostFoundMsgSupportCanvas * read(char *& st, UmlCanvas * canvas, char * k);
 protected:
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;

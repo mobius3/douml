@@ -41,8 +41,9 @@ public:
     UmlAttribute(void * id, const WrapperStr & n)
         :  UmlBaseAttribute(id, n) {};
 
+    using UmlBaseAttribute::generate;
     virtual void generate(QTextStream & f, const WrapperStr & cl_stereotype,
-                          WrapperStr indent);
+                          WrapperStr indent) override;
     virtual void generate_enum_pattern_item(QTextStream & f, int & current_value,
                                             const WrapperStr & class_name,
                                             WrapperStr indent) override;

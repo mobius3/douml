@@ -79,7 +79,8 @@ public:
     };
     void update_pos(const QPoint & link_start, const QPoint & link_end);
     void update_label_pos(LabelCanvas *, bool forward);
-    virtual void update_msgs();
+    virtual void update_msgs() override;
+    using DiagramCanvas::edit_drawing_settings;
     bool edit_drawing_settings();
     virtual void draw(QPainter & p);
     virtual void setVisible(bool yes) override;

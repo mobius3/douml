@@ -270,6 +270,9 @@ public:
     void save(QTextStream &) const;
     static void save_progress_closed();
     virtual void init_save_counter();
+#ifndef QT_NO_DATASTREAM
+    using QTreeWidgetItem::read;
+#endif
     void read(char *& , char *& k, int id);
     static BrowserNode * read_any_ref(char *& , char *);
     static void save_stereotypes(QTextStream & st,

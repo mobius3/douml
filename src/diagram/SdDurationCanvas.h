@@ -73,20 +73,22 @@ public:
                      int v, bool isdest);
     virtual ~SdDurationCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
-    virtual void add(SdMsgBaseCanvas *);
-    virtual void remove(SdMsgBaseCanvas *);
-    virtual void add(SdDurationCanvas *);
-    virtual void remove(SdDurationCanvas *);
-    virtual void update_instance_dead();
-    virtual void update_v_to_contain(SdDurationCanvas *, bool force);
-    virtual int sub_x(int sub_w) const;
-    virtual double min_y() const;
-    virtual SdLifeLineCanvas * get_line() const;
-    virtual bool isaDuration() const;
-    virtual bool isOverlappingDuration() const;
-    virtual double getZ() const;
+    virtual void add(SdMsgBaseCanvas *) override;
+    virtual void remove(SdMsgBaseCanvas *) override;
+    virtual void add(SdDurationCanvas *) override;
+    using SdDurationSupport::remove;
+    using SdMsgSupport::remove;
+    virtual void remove(SdDurationCanvas *) override;
+    virtual void update_instance_dead() override;
+    virtual void update_v_to_contain(SdDurationCanvas *, bool force) override;
+    virtual int sub_x(int sub_w) const override;
+    virtual double min_y() const override;
+    virtual SdLifeLineCanvas * get_line() const override;
+    virtual bool isaDuration() const override;
+    virtual bool isOverlappingDuration() const override;
+    virtual double getZ() const override;
     void go_up(SdMsgBaseCanvas *, bool isdest);
     void go_down(SdMsgBaseCanvas *);
     void update_hpos();
@@ -105,7 +107,7 @@ public:
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
     virtual bool may_connect(UmlCode l) const override;
     virtual aCorner on_resize_point(const QPoint &) override;
-    virtual void resize(int w, int h);
+    virtual void resize(int w, int h) override;
     virtual void resize(aCorner c, int dx, int dy, QPoint &) override;
     virtual void resize(const QSize & sz, bool w, bool h) override;
     virtual void change_scale() override;

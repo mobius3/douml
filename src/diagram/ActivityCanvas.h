@@ -100,6 +100,7 @@ public:
     virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &) override;
     virtual void set_z(double z) override;
     virtual aCorner on_resize_point(const QPoint & p) override;
+    using ActivityContainerCanvas::resize;
     virtual void resize(aCorner c, int dx, int dy, QPoint &) override;
     virtual void resize(const QSize & sz, bool w, bool h) override;
     virtual bool move_with_its_package() const override;

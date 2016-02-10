@@ -52,7 +52,7 @@ public:
     BrowserDiagram(const QString & s, BrowserNode * parent, int id);
     virtual ~BrowserDiagram();
     void set_window_destroyed(){ windowDestroyed = true;}
-    virtual void package_modified();
+    virtual void package_modified() override;
     virtual void set_diagram_window(DiagramWindow*)
     {
     };
@@ -78,6 +78,7 @@ public:
 
     static BrowserNodeList & instances(BrowserNodeList &, bool sort);
 
+    using BrowserNode::save;
     void save();
     static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
@@ -85,8 +86,8 @@ public:
     static void clear(bool old);
     static void update_idmax_for_root();
     static void import();
-    virtual void prepare_update_lib() const;
-    virtual void support_file(QHash<QString,char*> & files, bool add) const;
+    virtual void prepare_update_lib() const override;
+    virtual void support_file(QHash<QString,char*> & files, bool add) const override;
 
     static BrowserNode * read_diagram_ref(char *& st);
     static BrowserNode * read_any_ref(char *& st, char * k);

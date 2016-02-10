@@ -169,6 +169,7 @@ public:
     void remove_param(std::shared_ptr<ParamData>);
     void insert_param(int position, std::shared_ptr<ParamData> param);
 
+    using ClassMemberData::set_browser_node;
     void set_browser_node(BrowserOperation *, bool update);
 
     virtual QString definition(bool full, bool with_kind) const override;

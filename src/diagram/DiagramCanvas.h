@@ -89,15 +89,17 @@ public:
     virtual QRect sceneRect() const override;
     void recenter();
     void set_center100();
-    virtual bool contains(int, int) const;
+    using QGraphicsRectItem::contains;
+    virtual bool contains(int, int) const override;
 
+    using DiagramItem::resize;
     void resize(aCorner c, int dx, int dy, QPoint &, int min_width, int min_height,
                 bool odd = FALSE, bool stay_centered = FALSE);
     bool resize(const QSize & sz, bool w, bool h,
                 int min_width, int min_height,
                 bool odd = FALSE, bool stay_centered = FALSE);
     virtual void resize(int w, int h);
-    virtual UmlCanvas * the_canvas() const;
+    virtual UmlCanvas * the_canvas() const override;
     void package_modified() const;
 
     bool has_simple_relation(BasicData * def) const;

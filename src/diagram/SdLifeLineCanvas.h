@@ -60,8 +60,10 @@ public:
     SdObjCanvas * get_obj() const {
         return obj;
     };
-    virtual void add(SdDurationCanvas *);
-    virtual void remove(SdDurationCanvas *);
+    virtual void add(SdDurationCanvas *) override;
+    using SdDurationSupport::remove;
+    using DiagramCanvas::remove;
+    virtual void remove(SdDurationCanvas *) override;
     void toFlat();
     void toOverlapping();
     double instance_max_y() const;

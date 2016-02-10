@@ -82,6 +82,7 @@ public:
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
     virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &) override;
     virtual aCorner on_resize_point(const QPoint & p) override;
+    using DiagramCanvas::resize;
     virtual void resize(aCorner c, int dx, int dy, QPoint &) override;
     virtual void resize(const QSize & sz, bool w, bool h) override;
 

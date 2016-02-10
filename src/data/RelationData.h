@@ -107,6 +107,12 @@ protected:
 
     QHash<QString, RoleData*> dataForClass;
 
+    using ClassMemberData::send_uml_def;
+    using ClassMemberData::send_cpp_def;
+    using ClassMemberData::send_java_def;
+    using ClassMemberData::send_php_def;
+    using ClassMemberData::send_python_def;
+    using ClassMemberData::send_idl_def;
     virtual void send_uml_def(ToolCom * com, BrowserRelation * rel);
     virtual void send_cpp_def(ToolCom * com, BrowserRelation * rel);
     virtual void send_java_def(ToolCom * com, BrowserRelation * rel);
@@ -335,6 +341,7 @@ public:
     static bool isa_association(UmlCode e);
     static bool isa_inherit(UmlCode e);
 
+    using ClassMemberData::tool_cmd;
     bool tool_cmd(ToolCom * com, BrowserRelation * rel, const char * args);
 
     static void clear(bool old);

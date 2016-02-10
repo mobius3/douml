@@ -1186,7 +1186,7 @@ BrowserActivityAction * BrowserActivityAction::read(char *& st, char * k,
             k = read_keyword(st);
         }
 
-        result->read_browser_node(st, k, id);
+        result->BrowserNode::read(st, k, id);
 
         // was not done because of internal action not read soon
         result->update_stereotype(FALSE);

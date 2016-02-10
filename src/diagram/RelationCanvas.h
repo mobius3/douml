@@ -111,6 +111,7 @@ public:
 
 protected:
     BrowserClass * update_begin(DiagramItem * cnend);
+    using DiagramItem::update;
     void update(bool updatepos);
     void update_actuals(RelationCanvas * plabel);
 

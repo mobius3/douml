@@ -89,18 +89,19 @@ public:
     virtual QPoint center() const override;
     void recenter();
     void set_center100();
-    virtual bool contains(int, int) const;
-    virtual void change_scale();
-    virtual void open();
-    void menu(const QPoint &);
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
-    virtual double get_z() const;
-    virtual void set_z(double z);	// only called by upper() & lower()
-    virtual UmlCanvas * the_canvas() const;
-    virtual bool isSelected() const;
-    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
+    using QGraphicsSimpleTextItem::contains;
+    virtual bool contains(int, int) const override;
+    virtual void change_scale() override;
+    virtual void open() override;
+    void menu(const QPoint &) override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &) override;
+    virtual double get_z() const override;
+    virtual void set_z(double z) override;	// only called by upper() & lower()
+    virtual UmlCanvas * the_canvas() const override;
+    virtual bool isSelected() const override;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const override;
     static LabelCanvas * read(char *& st, UmlCanvas * canvas, char *);
     virtual void history_save(QBuffer &) const override;
     virtual void history_load(QBuffer &) override;

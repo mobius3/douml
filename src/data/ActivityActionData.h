@@ -116,7 +116,9 @@ struct AccessVariableValueAction : public AnyAction {
 
     AccessVariableValueAction();
     virtual ~AccessVariableValueAction();
+    using AnyAction::duplicate;
     AnyAction * duplicate(AccessVariableValueAction * r) const;
+    using AnyAction::pins;
     QList<PinDescr> pins(UmlParamDirection, const char * str) const;
     // [in/out] <str> : le type de la variable
     virtual BasicData * depend_on() override;
@@ -171,15 +173,19 @@ struct ChangeVariableValueAction : public AccessVariableValueAction {
 
     ChangeVariableValueAction();
     virtual ~ChangeVariableValueAction();
+    using AccessVariableValueAction::duplicate;
     AnyAction * duplicate(ChangeVariableValueAction * r) const;
+    using AccessVariableValueAction::pins;
     QList<PinDescr> pins(const char * str) const;
     // [in] "value" : le type de la variable
     // [in] <str>: UnlimitedNatural / uint
 
+    using AccessVariableValueAction::save;
     void save(QTextStream & st, QString & warning, const char * str) const;
+    using AccessVariableValueAction::read;
     void read(char *& st, char *& k, const char * str);
-    void send_def(ToolCom * com, DrawingLanguage);
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    void send_def(ToolCom * com, DrawingLanguage) override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 };
 
 struct AddVariableValueAction : public ChangeVariableValueAction {
