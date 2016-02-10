@@ -152,6 +152,8 @@ ifeq ($(uname_S),Darwin)
 # We then copy all the other side programs (executables built with qt no app bundle option)
 # inside the bundle's Contents/MacOS subfolder.
 	for i in $(SIDEPROGS); do cp -p bin/$$i "$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app/Contents/MacOS" ; done
+# We also copy the douml icon for OS X in the Resources subfolder
+	cp ./douml.icns "$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app/Contents/Resources/"
 # Finally we run the macdeployqt tool to add the appropriate frameworks and
 # configuration files to the bundle and to create a .dmg disk image file.
 	macdeployqt "$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app" -verbose=2 -dmg \
