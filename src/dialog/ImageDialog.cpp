@@ -74,10 +74,10 @@ ImageDialog::ImageDialog(QString & p)
 
     hbox->addWidget(new QLabel("", this));
 
-    QPushButton * b = new SmallPushButton(tr("Browse"), this);
+    QPushButton * browse = new QPushButton(tr("Browse"), this);
 
-    hbox->addWidget(b);
-    connect(b, SIGNAL(clicked()), this, SLOT(browse()));
+    hbox->addWidget(browse);
+    connect(browse, SIGNAL(clicked()), this, SLOT(browse()));
     hbox->addWidget(new QLabel("", this));
 
     VVBox * vtab = new VVBox(this);
@@ -112,7 +112,7 @@ ImageDialog::ImageDialog(QString & p)
     connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
     connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
 
-    UmlDesktop::setsize_center(this, previous_size, 0.7, 0.01);
+    UmlDesktop::setsize_center(this, previous_size, 0.3, 0.01);
 }
 
 ImageDialog::~ImageDialog()
