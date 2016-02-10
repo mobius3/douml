@@ -62,13 +62,11 @@ File::File(QString s, QString here)
 
 }
 
-bool File::open(int m)
+bool File::open(OpenMode flags)
 {
     line_number = 1;
 
-    //[jasa] Possible QFile problem here.
-    //return QFile::open(m);//[jasa] original line.
-    return QFile::open((QIODevice::OpenModeFlag)m);//[jasa] fix ambiguous enum/int call
+    return QFile::open(flags);
 }
 
 int File::read(QByteArray & s)
