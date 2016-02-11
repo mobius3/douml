@@ -8,7 +8,7 @@
 #include "SmallPushButton.h"
 
 #include <qlineedit.h>
-#include <QTextEdit.h>
+#include <QTextEdit>
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qlayout.h>
