@@ -510,7 +510,7 @@ ${module_end}\n\
       cpp_rel_decl[1][0] = "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};\n";
       cpp_rel_decl[1][1] = "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};\n";
       cpp_rel_decl[1][2] = "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};\n";
-      cpp_oper_decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};\n";
+      cpp_oper_decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${final}${override}${volatile}${throw}${abstract}${default}${delete};\n";
       cpp_oper_def = "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{\n  ${body}}\n";
       cpp_force_throw = FALSE;
       cpp_get_visibility = UmlPublic;

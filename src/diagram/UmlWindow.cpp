@@ -30,39 +30,26 @@
 
 #include "Labeled.h"
 #include <qcursor.h>
-//#include <qworkspace.h>
 #include <qsplitter.h>
-//#include <q3vbox.h>
-//#include <q3hbox.h>
-//#include <Q3TextEdit>
 #include <qstatusbar.h>
 #include <qpixmap.h>
 #include <QToolBar>
 #include <qtoolbutton.h>
-//#include <q3popupmenu.h>
 #include <qmenubar.h>
 #ifndef QT_NO_PRINTER
 #include <qprinter.h>
 #include <QLineEdit>
 #endif
-//#include <q3whatsthis.h>
 #include <qapplication.h>
 #include <qfileinfo.h>
-//#include <qwindowsstyle.h>
-//#include <qmotifstyle.h>
 #include <QVBoxLayout>
-//#include <qmotifplusstyle.h> [lgfreitas] this does not exists anymore
-//Added by qt3to4:
 #include <QCloseEvent>
-//#include <QList>
 #include <QTextStream>
 #include <QLabel>
 #include <QKeyEvent>
 #include <QStyle>
 #include <QFileDialog>
-//#include <qcdestyle.h>
-//#include <qsgistyle.h>
-
+#include <QStyleFactory>
 #include "UmlWindow.h"
 #include "UmlDesktop.h"
 #include "BrowserView.h"
@@ -462,34 +449,14 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
 
 
     QMenu * pmstyle = new QMenu(tr("Style"),this);
-    bool used = FALSE;
-#ifndef QT_NO_STYLE_MOTIF
     QAction *action;
-    action = new QAction("Motif", this);
-    connect(action, SIGNAL(triggered()), this, SLOT(motif_style()));
-    pmstyle->addAction(action);
-    used = TRUE;
-#endif
-#ifndef QT_NO_STYLE_MOTIFPLUS
-    action = new QAction("MotifPlus", this);
-    connect(action, SIGNAL(triggered()), this, SLOT(motifplus_style()));
-    pmstyle->addAction(action);
-    used = TRUE;
-#endif
-    //pmstyle->insertItem("Sgi", this, SLOT(sgi_style()));
-    //pmstyle->insertItem("Cde", this, SLOT(cde_style()));
-#ifndef QT_NO_STYLE_WINDOWS
-    action = new QAction("Windows", this);
-    connect(action, SIGNAL(triggered()), this, SLOT(windows_style()));
-    pmstyle->addAction(action);
-    used = TRUE;
-#endif
-
-    if (used)
+    QStringList styles = QStyleFactory::keys();
+    foreach (QString currentStyle, styles) {
+        action = pmstyle->addAction(currentStyle);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(setApplicationStyleSlot()));
+    }
+    if(styles.count())
         miscMenu->addMenu(pmstyle);
-
-    style = '?';
-
     fontSizeMenu = new QMenu(tr("Font size"),this);
     //fontSizeMenu->setCheckable(TRUE);
     connect(fontSizeMenu, SIGNAL(aboutToShow()),
@@ -1536,22 +1503,8 @@ void UmlWindow::save_session()
            << spl1->sizes().first() << " " << spl1->sizes().last() << " "
            << spl2->sizes().first() << " " << spl2->sizes().last() << '\n';
 
-        switch (style) {
-        case 'w':
-            st << "windows_style\n";
-            break;
-
-        case 'm' :
-            st << "motif_style\n";
-            break;
-
-        case '+' :
-            st << "motifplus_style\n";
-            break;
-
-        default:
-            break;
-        }
+        if(!style.isEmpty())
+            st << style + "_style\n";
 
         QList<QMdiSubWindow *> windows = ws->subWindowList();
 
@@ -1631,17 +1584,10 @@ void UmlWindow::read_session()
                 }
 
                 const char * k = read_keyword(st);
-
-                if (!strcmp(k, "windows_style")) {
-                    windows_style();
-                    k = read_keyword(st);
-                }
-                else if (!strcmp(k, "motif_style")) {
-                    motif_style();
-                    k = read_keyword(st);
-                }
-                else if (!strcmp(k, "motifplus_style")) {
-                    motifplus_style();
+                QString styleDetected(k);
+                if(styleDetected.endsWith("_style"))
+                {
+                    setApplicationStyle(styleDetected.remove("_style"));
                     k = read_keyword(st);
                 }
 
@@ -2134,37 +2080,16 @@ void UmlWindow::do_completion()
     set_completion(cmpltn);
 }
 
-void UmlWindow::motif_style()
+void UmlWindow::setApplicationStyleSlot()
 {
-#ifndef QT_NO_STYLE_MOTIF
-    QApplication::setStyle("fusion");
-    style = 'm';
-#endif
+    QAction *action = static_cast<QAction*>(sender());
+    setApplicationStyle(action->text());
 }
 
-void UmlWindow::motifplus_style()
+void UmlWindow::setApplicationStyle(QString s)
 {
-#define QT_NO_STYLE_MOTIFPLUS
-#ifndef QT_NO_STYLE_MOTIFPLUS
-    QApplication::setStyle(new QMotifPlusStyle);
-    style = '+';
-#endif
-}
-
-//void UmlWindow::sgi_style() {
-//  QApplication::setStyle(new QSGIStyle);
-//}
-//
-//void UmlWindow::cde_style() {
-//  QApplication::setStyle(new QCDEStyle);
-//}
-
-void UmlWindow::windows_style()
-{
-#ifndef QT_NO_STYLE_WINDOWS
-    QApplication::setStyle("windows");
-    style = 'w';
-#endif
+    QApplication::setStyle(s);
+    style = s;
 }
 
 

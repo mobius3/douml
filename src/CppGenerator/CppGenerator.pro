@@ -136,6 +136,7 @@ SOURCES          = \
 TARGET          = cpp_generator
 DEFINES          += WITHCPP BooL=bool TRUE=true FALSE=false
 INCLUDEPATH   += ../Tools ../CppGenerator ../
+#DEFINES += _RUN_PLUGOUT_EXTERNAL_
 
 
 #The following line was inserted by qt3to4

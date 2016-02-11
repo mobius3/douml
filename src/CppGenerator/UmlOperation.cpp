@@ -535,13 +535,13 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
                 p += currentTag.length() + 3;
 
                 if (isCppDefault())
-                    f_h << " " + currentTag;
+                    f_h << " = " + currentTag;
             }
             else if (compareTagToBuffer("delete")) {
                 p += currentTag.length() + 3;
 
                 if (isCppDelete())
-                    f_h << " " + currentTag;
+                    f_h << " = " + currentTag;
             }
             else if (compareTagToBuffer("override")) {
                 p += currentTag.length() + 3;

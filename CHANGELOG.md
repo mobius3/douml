@@ -3,13 +3,19 @@
 # Next release
 [#155]: https://github.com/DoUML/douml/pull/155
 [#161]: https://github.com/DoUML/douml/pull/161
+[#167]: https://github.com/DoUML/douml/pull/167
+
 * Fixed compilation on OS X El Capitan [#155]
 * Fixed warning about duplicated uml entities showing up needlessly [#161]
 * Build date and time automated [#161]
-* Fixed mutually exclusive attribute menus when they should not be [#161]
+* Fixed mutually exclusive attribute menus when they should not be [#161] [#167]
 * Fixed some keywords not being parsed by cpp reverse and roundtrip [#161]
 * Some UI improvements [#161]
 * Version bump [#161]
+* Improvements regarding Qt5 style handling [#167]
+* Crash fix and code improvements [#167]
+* Missing specifiers of c++ operation added to CppReverse and CppRoundtrip [#167]
+* Fix missing = sign in default and delete specifiers [#167]
 
 # v1.0.8
 * Numerous bugfixes

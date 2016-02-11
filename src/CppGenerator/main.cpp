@@ -60,7 +60,7 @@ int main(int argc, char ** argv)
 #endif
     //QTest::qSleep(7000);
     int port_index;
-
+#ifndef _RUN_PLUGOUT_EXTERNAL_
     if (argc == 2) {
         port_index = 1;
         QLOG_INFO() << "Got two arguments from Douml as argv";
@@ -93,7 +93,10 @@ int main(int argc, char ** argv)
         return 0;
     }
     if (UmlCom::connect(QString(argv[port_index]).toUInt())) {
-
+#else
+    port_index = 1;
+    if (UmlCom::connect(5000)) {
+#endif
         try {
 
             UmlCom::trace("<b>C++ generator</b> release 2.18<br>");

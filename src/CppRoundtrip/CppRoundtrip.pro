@@ -155,6 +155,7 @@ SOURCES          = main.cpp Statistic.cpp \
 TARGET          = cpp_roundtrip
 DEFINES          += WITHCPP REVERSE ROUNDTRIP BooL=bool FALSE=false TRUE=true
 INCLUDEPATH   += ../Tools ../CppRoundtrip ../CppReverse
+#DEFINES += _RUN_PLUGOUT_EXTERNAL_
 
 #The following line was inserted by qt3to4
 QT += network widgets
