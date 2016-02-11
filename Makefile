@@ -157,8 +157,13 @@ ifeq ($(uname_S),Darwin)
 	cp ./douml.icns "$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app/Contents/Resources/"
 # We run the macdeployqt tool to add the appropriate frameworks and
 # configuration files to the bundle and to create a .dmg disk image file.
+ifeq ($(CONFIG),debug)
+	macdeployqt "$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app" -verbose=2 -use-debug-libs \
+		$(patsubst %,-executable="$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app/Contents/MacOS/%",$(SIDEPROGS))
+else
 	macdeployqt "$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app" -verbose=2 -dmg \
 		$(patsubst %,-executable="$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app/Contents/MacOS/%",$(SIDEPROGS))
+endif
 else
 	for i in $(PROGS); do cp -p bin/$$i "$(DESTDIR)$(DOUML_LIB)" ; done
 endif
