@@ -46,9 +46,9 @@ class StateDiagramView : public DiagramView
 public:
     StateDiagramView(QWidget * parent, UmlCanvas * canvas, int id);
 
-    virtual void menu(const QPoint &);
-    virtual void read(char *, char * k);
-    virtual void save(QTextStream & st, QString & warning, bool copy) const;
+    virtual void menu(const QPoint &) override;
+    virtual void read(char *, char * k) override;
+    virtual void save(QTextStream & st, QString & warning, bool copy) const override;
 
 private:
     StateDiagramWindow * window() {
@@ -56,10 +56,10 @@ private:
     };
 
 protected:
-    virtual void mousePressEvent(QMouseEvent *);
-    virtual void dragEnterEvent(QDragEnterEvent *);
-    virtual void dropEvent(QDropEvent *);
-    virtual void dragMoveEvent(QDragMoveEvent *e);
+    virtual void mousePressEvent(QMouseEvent *) override;
+    virtual void dragEnterEvent(QDragEnterEvent *) override;
+    virtual void dropEvent(QDropEvent *) override;
+    virtual void dragMoveEvent(QDragMoveEvent *e) override;
 };
 
 #endif

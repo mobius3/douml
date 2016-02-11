@@ -104,8 +104,12 @@ void TextCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, r);
 }
+
 void TextCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
 
@@ -274,7 +278,7 @@ void TextCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void TextCanvas::apply_shortcut(QString s)
+void TextCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

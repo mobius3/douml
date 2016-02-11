@@ -96,15 +96,15 @@ public:
                 UmlCode t, int id, bool own_brk, float d_start, float d_end);
     virtual ~ArrowCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
     virtual void unconnect();
 
     virtual void setVisible(bool yes);
-    virtual void moveBy(double dx, double dy);
+    virtual void moveBy(double dx, double dy) override;
     void move_self_points(double dx, double dy);
-    virtual void select_associated();
-    virtual bool isSelected() const;
-    virtual void prepare_for_move(bool on_resize);
+    virtual void select_associated() override;
+    virtual bool isSelected() const override;
+    virtual void prepare_for_move(bool on_resize) override;
 
     virtual void update_pos();
     void move_outside(QRect r);
@@ -124,36 +124,37 @@ public:
     void reverse();
     virtual BasicData * get_data() const;
 
-    virtual UmlCode typeUmlCode() const;
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual void remove(bool);
+    virtual UmlCode typeUmlCode() const override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual void remove(bool) override;
     virtual int rtti() const;
-    virtual QPoint center() const;
-    virtual QRect rect() const;
-    virtual QRect sceneRect() const;
-    virtual bool contains(int, int) const;
+    virtual QPoint center() const override;
+    virtual QRect rect() const override;
+    virtual QRect sceneRect() const override;
+    using QGraphicsPolygonItem::contains;
+    virtual bool contains(int, int) const override;
     QPoint get_point(int i) {
         return arrow[i];
     }
-    virtual void change_scale();
-    virtual void open();
+    virtual void change_scale() override;
+    virtual void open() override;
     bool edit(const QStringList & defaults, ArrowCanvas * plabel,
               ArrowCanvas * pstereotype);
-    virtual void menu(const QPoint &);
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
-    virtual double get_z() const;
-    virtual void set_z(double z);	// only called by upper() & lower()
+    virtual void menu(const QPoint &) override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &) override;
+    virtual double get_z() const override;
+    virtual void set_z(double z) override;	// only called by upper() & lower()
     void go_up(double nz);	// only called by upper(TRUE)
-    virtual bool copyable() const;
-    virtual UmlCanvas * the_canvas() const;
+    virtual bool copyable() const override;
+    virtual UmlCanvas * the_canvas() const override;
     ArrowCanvas * next_geometry();
     void update_geometry();
 
     void package_modified() const;
 
-    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const override;
     const ArrowCanvas * save_lines(QTextStream  & st, bool with_label, bool with_stereotype, QString & warning) const;
     static ArrowCanvas * read(char *& st, UmlCanvas * canvas, char * k);
     static ArrowCanvas * read_list(char *& st, UmlCanvas * canvas,
@@ -162,17 +163,17 @@ public:
                                    ArrowCanvas * (*pf)(UmlCanvas * canvas, DiagramItem * b,
                                            DiagramItem * e, UmlCode t,
                                            float dbegin, float dend, int id));
-    virtual void history_save(QBuffer &) const;
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
+    virtual void history_save(QBuffer &) const override;
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
 
     static void remove_redondant_rels();
     static void post_load();
 
     void write_uc_rel(ToolCom * com) const;
 
-    virtual void check_stereotypeproperties();
-    virtual int type() const;
+    virtual void check_stereotypeproperties() override;
+    virtual int type() const override;
     QGraphicsScene* canvas() const
     {
         return scene();
@@ -189,7 +190,7 @@ protected:
 
     virtual void drawShape(QPainter & p);
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 protected slots:
     void modified();
     void drawing_settings_modified();

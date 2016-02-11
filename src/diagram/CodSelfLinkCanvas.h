@@ -51,7 +51,7 @@ protected:
     double angle;
     CodObjCanvas * obj;
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     CodSelfLinkCanvas(UmlCanvas * canvas, CodObjCanvas * o,
                       const QPoint & p, int id);
@@ -60,29 +60,29 @@ public:
     void update_pos();
     void compute_pos(QPoint p);
     void update_label_pos();
-    virtual void update_msgs();
+    virtual void update_msgs() override;
     virtual void get_from_to(CodObjCanvas *& from, CodObjCanvas *& to,
-                             bool forward);
-    virtual bool copyable() const;
+                             bool forward) override;
+    virtual bool copyable() const override;
 
-    virtual void delete_it();
-    virtual void remove_it(ColMsg * msg);
+    virtual void delete_it() override;
+    virtual void remove_it(ColMsg * msg) override;
 
     virtual void draw(QPainter & p);
-    virtual void moveBy(double dx, double dy);
+    virtual void moveBy(double dx, double dy) override;
 
-    virtual UmlCode typeUmlCode() const;
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual void open();
-    virtual void menu(const QPoint &);
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual bool represents(BrowserNode *);
-    virtual void save(QTextStream & st, bool ref, QString & warning) const;
+    virtual UmlCode typeUmlCode() const override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual bool represents(BrowserNode *) override;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const override;
     static CodSelfLinkCanvas * read(char *& st, UmlCanvas * canvas, char *& k);
-    virtual void history_save(QBuffer &) const;
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
+    virtual void history_save(QBuffer &) const override;
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
 
 protected slots:
     void modified();

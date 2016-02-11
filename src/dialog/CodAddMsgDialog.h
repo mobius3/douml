@@ -64,7 +64,7 @@ public:
 protected slots:
     void menu_op();
     virtual void polish();
-    void accept();
+    virtual void accept() override;
 };
 
 #endif

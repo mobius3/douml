@@ -54,7 +54,7 @@ private:
     static QSize previous_size;
 
 protected slots:
-    virtual void accept();
+    virtual void accept() override;
     virtual void polish();
 };
 
@@ -68,13 +68,13 @@ private:
 public:
     ToolTable(QWidget * parent, const ToolColumnDef * tcd, unsigned ncols);
 
-    virtual void init_row(int r);
+    virtual void init_row(int r) override;
 
     unsigned ntools();
     unsigned update(unsigned rank);
 
 protected slots:
-    virtual void button_pressed(const QModelIndex &index);
+    virtual void button_pressed(const QModelIndex &index) override;
 };
 
 #endif

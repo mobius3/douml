@@ -201,10 +201,15 @@ void SdMsgCanvas::draw(QPainter & p)
     if (isSelected())
         show_mark(p, r);
 }
+
 void SdMsgCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 void SdMsgCanvas::update()
 {
     SdMsgBaseCanvas::update_after_move(start);
@@ -385,7 +390,7 @@ void SdMsgCanvas::menu(const QPoint &)
     canvas()->update();
 }
 
-void SdMsgCanvas::apply_shortcut(QString s)
+void SdMsgCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

@@ -26,7 +26,7 @@
 // *************************************************************************
 
 #ifndef STATEDIAGRAMWINDOW_H
-#define STATEDISGRAMWINDOW_H
+#define STATEDIAGRAMWINDOW_H
 
 #include "DiagramWindow.h"
 
@@ -71,9 +71,9 @@ public:
     StateDiagramWindow(const QString & s, BrowserStateDiagram * b, int id = -1);
     virtual ~StateDiagramWindow();
 
-    virtual DiagramView * get_view() const;
+    virtual DiagramView * get_view() const override;
 
-    virtual void hit_button(UmlCode, QToolButton *);
+    virtual void hit_button(UmlCode, QToolButton *) override;
 
 protected slots:
     void hit_state();

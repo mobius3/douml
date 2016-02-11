@@ -41,6 +41,7 @@
 
 #include <QList>
 #include <QString>
+#include <QVariant>
 
 class TreeItem
 {
@@ -68,6 +69,8 @@ public:
     const QList<TreeItem *> &children() const {
         return its_children;
     }
+    
+    virtual QVariant data(int column, int role) const = 0;
 };
 
 #endif

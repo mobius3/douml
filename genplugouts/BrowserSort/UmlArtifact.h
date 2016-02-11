@@ -13,7 +13,7 @@ class UmlArtifact : public UmlBaseArtifact
 public:
     UmlArtifact(void * id, const QByteArray & n) : UmlBaseArtifact(id, n) {};
 
-    virtual int orderWeight();
+    virtual int orderWeight() override;
 
 };
 

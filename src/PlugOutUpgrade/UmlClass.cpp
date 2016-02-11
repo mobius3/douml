@@ -585,7 +585,7 @@ UmlOperation * UmlClass::get_operation(const char * who)
 {
     const QVector<UmlItem*> ch = children();
 
-    for (unsigned i = 0; i != ch.size(); i += 1)
+    for (int i = 0; i != ch.size(); i += 1)
         if ((ch[i]->kind() == anOperation) &&
             (ch[i]->name() == who))
             return (UmlOperation *) ch[i];
@@ -597,7 +597,7 @@ UmlAttribute * UmlClass::get_attribute(const char * who)
 {
     const QVector<UmlItem*> ch = children();
 
-    for (unsigned i = 0; i != ch.size(); i += 1)
+    for (int i = 0; i != ch.size(); i += 1)
         if ((ch[i]->kind() == anAttribute) &&
             (ch[i]->name() == who))
             return (UmlAttribute *) ch[i];
@@ -609,7 +609,7 @@ UmlRelation * UmlClass::get_relation(aRelationKind k, const char * who)
 {
     const QVector<UmlItem*> ch = children();
 
-    for (unsigned i = 0; i != ch.size(); i += 1) {
+    for (int i = 0; i != ch.size(); i += 1) {
         if (ch[i]->kind() == aRelation) {
             UmlRelation * rel = (UmlRelation *) ch[i];
 
@@ -626,7 +626,7 @@ UmlRelation * UmlClass::get_relation(const char * who)
 {
     const QVector<UmlItem*> ch = children();
 
-    for (unsigned i = 0; i != ch.size(); i += 1) {
+    for (int i = 0; i != ch.size(); i += 1) {
         if (ch[i]->kind() == aRelation) {
             UmlRelation * rel = (UmlRelation *) ch[i];
 

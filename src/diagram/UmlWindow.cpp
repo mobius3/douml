@@ -559,7 +559,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     help->addAction(action);
 
     action =
-            new QAction(tr("What's This"), this);
+            new QAction(tr("What's This?"), this);
     connect(action, SIGNAL(triggered()), this,SLOT(whats_this()));
     action->setShortcut(::Qt::SHIFT + ::Qt::Key_F1);
     help->addAction(action);
@@ -1093,7 +1093,7 @@ void UmlWindow::load()
 
         if (browser->get_project() == 0) {
             QString fn = QFileDialog::getOpenFileName(
-                        this, tr("Select BoUML project file"), last_used_directory(), QLatin1String("*.prj"));
+                        this, tr("Select DoUML project file"), last_used_directory(), QLatin1String("*.prj"));
 
             if (!fn.isEmpty()) {
                 set_last_used_directory(fn);
@@ -1588,7 +1588,7 @@ void UmlWindow::read_session()
     sprintf(fn, "%d.session", user_id());
 
     QFile fp(d.absoluteFilePath(fn));
-    int size;
+    qint64 size;
 
     if ((size = open_file(fp, QIODevice::ReadOnly, TRUE)) != -1) {
         char * s = new char[size + 1];
@@ -2054,7 +2054,7 @@ void UmlWindow::formatMenuAboutToShow()
 {
     abort_line_construction();
 
-    int i = IsoA0;
+    //int i = IsoA0;
 
     foreach(QAction* action,formatMenu->actions())
     {
@@ -2564,11 +2564,11 @@ void UmlWindow::OnPickSelectionFromItem(const QModelIndex & current, const QMode
 
 void UmlWindow::OnChooseQuickEditMode(QTreeWidgetItem* item, QTreeWidgetItem* old)
 {
-    if(!item)
+    Q_UNUSED(old);
+
+    if (!item)
         return;
-    //TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
-    //    if(!itemAsInterface)
-    //        return;
+
     BrowserNode* itemAsNode = static_cast<BrowserNode*>(item);
     if(!itemAsNode)
         return;

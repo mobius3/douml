@@ -46,7 +46,7 @@
 
 void ColMsgList::sort()
 {
-    qSort(begin(), end(), compareItems);
+    std::sort(begin(), end(), compareItems);
 }
 
 bool ColMsgList::compareItems(ColMsg *a,

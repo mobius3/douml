@@ -81,10 +81,10 @@ bool Context::match(QByteArray s)
         return match(s, _filter1, _with1) && match(s, _filter2, _with2) && match(s, _filter3, _with3);
 
     case And12_Or23:
-        return match(s, _filter1, _with1) && match(s, _filter2, _with2) || match(s, _filter3, _with3);
+        return (match(s, _filter1, _with1) && match(s, _filter2, _with2)) || match(s, _filter3, _with3);
 
     case Or12_And23:
-        return match(s, _filter1, _with1) || match(s, _filter2, _with2) && match(s, _filter3, _with3);
+        return match(s, _filter1, _with1) || (match(s, _filter2, _with2) && match(s, _filter3, _with3));
 
     default:
         //Or12_Or23:

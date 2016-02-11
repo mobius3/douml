@@ -1,15 +1,9 @@
 TEMPLATE    = app
 TARGET        = ixmi2
-CONFIG(Debug, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt warn_on Debug
-    QMAKE_POST_LINK = " "
-}
-CONFIG(Release, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt Release
-    QMAKE_POST_LINK = " "
-}
+CONFIG -= app_bundle
+CONFIG += qt warn_on c++11
+QMAKE_POST_LINK = " "
+DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES        += WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON BooL=bool
 PRECOMPILED_HEADER += ../../src/misc/mystr.h
 CONFIG += precompile_header
@@ -433,17 +427,17 @@ DEFINES += TRUE=true FALSE=false
 
 INCLUDEPATH += ../../src
 QT += testlib
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
 UI_DIR = src/ui
 DESTDIR = ../../bin
 
-Release {
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/$${TARGET}
     OBJECTS_DIR = $${DESTDIR}/obj_release/$${TARGET}
 }
 
-Debug {
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
     MOC_DIR = $${DESTDIR}/moc_debug/$${TARGET}
     OBJECTS_DIR = $${DESTDIR}/obj_debug/$${TARGET}
 }

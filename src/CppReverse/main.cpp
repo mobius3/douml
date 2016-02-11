@@ -42,7 +42,7 @@
 
 int main(int argc, char ** argv)
 {
-#if 1
+#ifndef _RUN_PLUGOUT_EXTERNAL_
     if (argc != 2)
         return 0;
 #endif
@@ -62,7 +62,7 @@ int main(int argc, char ** argv)
     QLOG_INFO() << "Starting the log";
 #endif
     //QTest::qSleep(7000);
-#if 1
+#ifndef _RUN_PLUGOUT_EXTERNAL_
     if (UmlCom::connect(WrapperStr(argv[1]).operator QString().toUInt())) {
 #else
     if (UmlCom::connect(5000)) {

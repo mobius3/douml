@@ -804,11 +804,15 @@ void ArrowCanvas::drawShape(QPainter & p)
                    SELECT_SQUARE_SIZE, SELECT_SQUARE_SIZE, ::Qt::black);
     }
 }
+
 void ArrowCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    //QGraphicsPolygonItem::paint(painter, option, widget);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     drawShape(*painter);
 }
+
 UmlCode ArrowCanvas::typeUmlCode() const
 {
     return itstype;
@@ -1131,7 +1135,6 @@ void ArrowCanvas::menu(const QPoint &)
 
 void ArrowCanvas::init_geometry_menu(QMenu & m, int first)
 {
-    QAction *currentAction;
     QPixmap hv((const char **) geometry_hv);
     QPixmap vh((const char **) geometry_vh);
     QPixmap hvh((const char **) geometry_hvh);

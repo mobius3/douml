@@ -56,7 +56,7 @@
 IdDict<BrowserParameterSet> BrowserParameterSet::all(257, __FILE__);
 QStringList BrowserParameterSet::its_default_stereotypes;	// unicode
 
-BrowserParameterSet::BrowserParameterSet(QString s, BrowserNode * p, ParameterSetData * d, int id)
+BrowserParameterSet::BrowserParameterSet(const QString & s, BrowserNode * p, ParameterSetData * d, int id)
     : BrowserNode(s, p), Labeled<BrowserParameterSet>(all, id), def(d)
 {
 }
@@ -87,7 +87,7 @@ BrowserParameterSet * BrowserParameterSet::new_one(const char * s,
     return result;
 }
 
-BrowserNode * BrowserParameterSet::duplicate(BrowserNode * p, QString)
+BrowserNode * BrowserParameterSet::duplicate(BrowserNode * p, const QString &)
 {
     BrowserNode * result = new BrowserParameterSet(this, p);
 
@@ -229,7 +229,7 @@ void BrowserParameterSet::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserParameterSet::apply_shortcut(QString s)
+void BrowserParameterSet::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

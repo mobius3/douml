@@ -79,28 +79,29 @@ protected:
     WrapperStr idl_decl;
 
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-                              const QString & comment);
-    virtual void send_cpp_def(ToolCom * com);
-    virtual void send_java_def(ToolCom * com);
-    virtual void send_php_def(ToolCom * com);
-    virtual void send_python_def(ToolCom * com);
-    virtual void send_idl_def(ToolCom * com);
+                              const QString & comment) override;
+    virtual void send_cpp_def(ToolCom * com) override;
+    virtual void send_java_def(ToolCom * com) override;
+    virtual void send_php_def(ToolCom * com) override;
+    virtual void send_python_def(ToolCom * com) override;
+    virtual void send_idl_def(ToolCom * com) override;
 
 public:
     AttributeData();
     AttributeData(const AttributeData * model, BrowserNode *);
     virtual ~AttributeData();
 
-    virtual bool deletedp() const;
-    virtual void set_deletedp(bool y);
+    virtual bool deletedp() const override;
+    virtual void set_deletedp(bool y) override;
 
+    using ClassMemberData::set_browser_node;
     void set_browser_node(BrowserAttribute *, bool update, bool enum_item);
 
-    virtual QString definition(bool full, bool with_kind) const;
+    virtual QString definition(bool full, bool with_kind) const override;
     QString definition(bool full, bool mult, bool init, bool modif,
                        DrawingLanguage language, ShowContextMode mode = noContext) const;
 
-    virtual bool decldefbody_contain(const QString & s, bool cs, BrowserNode *);
+    virtual bool decldefbody_contain(const QString & s, bool cs, BrowserNode *) override;
 
     const char * get_constraint() const {
         return constraint;
@@ -140,7 +141,7 @@ public:
     UmlVisibility get_uml_visibility() const {
         return uml_visibility;
     }
-    virtual UmlVisibility get_visibility(BrowserNode *);
+    virtual UmlVisibility get_visibility(BrowserNode *) override;
     UmlVisibility get_cpp_visibility() const {
         return cpp_visibility;
     }
@@ -188,7 +189,7 @@ public:
     void edit(bool new_st_attr);
 
     virtual bool tool_cmd(ToolCom * com, const char * args,
-                          BrowserNode * bn, const QString & comment);
+                          BrowserNode * bn, const QString & comment) override;
 
     void save(QTextStream &, QString & warning) const;
     void read(char *& st, char *& k);

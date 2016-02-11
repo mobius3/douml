@@ -68,7 +68,7 @@ public:
     virtual QString get_path() const = 0;
 #endif
     BrowserNode* nextSibling();
-    virtual QVariant	data(int column, int role) const{ return QVariant(); };
+    virtual QVariant data(int column, int role) const override { Q_UNUSED(column); Q_UNUSED(role); return QVariant(); }
 };
 
 

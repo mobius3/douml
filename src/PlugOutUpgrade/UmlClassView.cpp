@@ -3,7 +3,7 @@
 void UmlClassView::replace_friend()
 {
     const QVector<UmlItem*> ch = children();
-    unsigned i;
+    int i;
 
     for (i = 0; i != ch.size(); i += 1)
         ch[i]->replace_friend();

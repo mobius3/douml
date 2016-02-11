@@ -104,11 +104,6 @@ bool UseCaseData::tool_cmd(ToolCom * com, const char * args,
             default:
                 return BasicData::tool_cmd(com, args, bn, comment);
             }
-
-            // ok case
-            bn->modified();
-            modified();
-            com->write_ack(TRUE);
         }
     }
     else

@@ -99,7 +99,7 @@ public:
 
 protected slots:
     virtual void polish();
-    virtual void accept();
+    virtual void accept() override;
     void edit_description();
     void rq_stereotypeFilterActivated(const QString & st);
     void pr_stereotypeFilterActivated(const QString & st);

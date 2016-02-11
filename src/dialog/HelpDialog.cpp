@@ -77,7 +77,7 @@ HelpDialog * HelpDialog::the;
 HelpDialog::HelpDialog()
     : QDialog(0, Qt::Dialog)
 {
-    setWindowTitle(tr("BOUML Help"));
+    setWindowTitle(tr("DoUML Help"));
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     QHBoxLayout * hbox;
@@ -157,7 +157,6 @@ void HelpDialog::show(QString topic)
                 else
                     topic = dir.absoluteFilePath(topic + ".html");
 
-                int index = 0;
 
                 QString navPath = QDir::toNativeSeparators(NavigatorPath);
                 navPath.prepend("\"");

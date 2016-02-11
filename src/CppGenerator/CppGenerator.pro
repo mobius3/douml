@@ -1,14 +1,8 @@
 TEMPLATE      = app
-CONFIG(Debug, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt warn_on Debug
-    QMAKE_POST_LINK = " "
-}
-CONFIG(Release, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt Release
-    QMAKE_POST_LINK = " "
-}
+CONFIG -= app_bundle
+CONFIG += qt warn_on c++11
+QMAKE_POST_LINK = " "
+DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES          = \
         UmlClassItem.cpp\
         CppRefType.cpp\
@@ -140,22 +134,23 @@ SOURCES          = \
 
         
 TARGET          = cpp_generator
-DEFINES          = WITHCPP BooL=bool TRACE DEBUG TRUE=true FALSE=false
-INCLUDEPATH   = ../Tools ../CppGenerator ../
+DEFINES          += WITHCPP BooL=bool TRUE=true FALSE=false
+INCLUDEPATH   += ../Tools ../CppGenerator ../
 
 
 #The following line was inserted by qt3to4
 QT += network  testlib
 #QT += qt3support
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+
+
 DESTDIR = ../../bin
-Release {
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/cpp_generator
     OBJECTS_DIR = $${DESTDIR}/obj_release/cpp_generator
 }
-
-Debug {
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
     MOC_DIR = $${DESTDIR}/moc_debug/cpp_generator
     OBJECTS_DIR = $${DESTDIR}/obj_debug/cpp_generator
 }

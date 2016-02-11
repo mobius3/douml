@@ -864,7 +864,7 @@ void associate_php_artifacts(UmlArtifact * phpsettingsart,
                              UmlClass::get("UmlArtifact", 0)->associatedArtifact()->parent();
     const QVector<UmlItem*> ch = dv->children();
 
-    for (unsigned i = 0; i != ch.size(); i += 1) {
+    for (int i = 0; i != ch.size(); i += 1) {
         if ((ch[i]->kind() == anArtifact) && (ch[i]->name() == "executable")) {
             ((UmlArtifact *) ch[i])->addAssociatedArtifact(phpsettingsart);
             ((UmlArtifact *) ch[i])->addAssociatedArtifact(phpsettingscmdart);

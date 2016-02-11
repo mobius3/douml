@@ -412,10 +412,15 @@ void ExpansionRegionCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
+
 void ExpansionRegionCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode ExpansionRegionCanvas::typeUmlCode() const
 {
     return UmlExpansionRegion;
@@ -571,7 +576,7 @@ void ExpansionRegionCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void ExpansionRegionCanvas::apply_shortcut(QString s)
+void ExpansionRegionCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

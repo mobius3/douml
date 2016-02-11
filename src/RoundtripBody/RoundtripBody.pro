@@ -1,14 +1,8 @@
 TEMPLATE      = app
-CONFIG(Debug, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt warn_on Debug
-    QMAKE_POST_LINK = " "
-}
-CONFIG(Release, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt Release
-    QMAKE_POST_LINK = " "
-}
+CONFIG -= app_bundle
+CONFIG += qt warn_on c++11
+QMAKE_POST_LINK = " "
+DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES          = main.cpp util.cpp \
         UmlClassItem.cpp UmlAttribute.cpp \
         UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
@@ -106,24 +100,22 @@ SOURCES          = main.cpp util.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
 TARGET          = roundtrip_body
-DEFINES          = WITHCPP WITHJAVA WITHPHP WITHIDL WITHPYTHON FALSE=false TRUE=true
-INCLUDEPATH   = ../Tools ../RoundtripBody
+DEFINES          += WITHCPP WITHJAVA WITHPHP WITHIDL WITHPYTHON FALSE=false TRUE=true
+INCLUDEPATH   += ../Tools ../RoundtripBody
 #The following line was inserted by qt3to4
 QT += network
 #qt3support
 INCLUDEPATH += ../../src
 QT += testlib
 DESTDIR = ../../bin
-Release {
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/roundtrip_body
     OBJECTS_DIR = $${DESTDIR}/obj_release/roundtrip_body
 }
-
-Debug {
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
     MOC_DIR = $${DESTDIR}/moc_debug/roundtrip_body
     OBJECTS_DIR = $${DESTDIR}/obj_debug/roundtrip_body
 }
 UI_DIR = src/ui
-
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++

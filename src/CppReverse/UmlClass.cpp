@@ -176,9 +176,14 @@ bool UmlClass::manage_inherit(ClassContainer * container,
                 // must add inheritance before setting actuals
                 if (
 #ifdef ROUNDTRIP
-                    is_new &&
+                    is_new && (
 #endif
-                    ((rel = UmlBaseRelation::create(aRealization, this, mother.type)) == 0)) {
+                               (rel = UmlBaseRelation::create(aRealization, this, mother.type)) == 0
+#ifdef ROUNDTRIP
+                               )
+#endif
+                    )
+                {
                     Lex::warn("cannot inherit <font color =\"red\">" +
                               Lex::quote(mother_name) + " </font>");
 #ifdef DEBUG_DOUML

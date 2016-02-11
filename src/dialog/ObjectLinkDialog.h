@@ -68,7 +68,7 @@ protected:
 
 protected slots:
     virtual void polish();
-    virtual void accept();
+    virtual void accept() override;
     virtual void unselect();
     virtual void create();
 };

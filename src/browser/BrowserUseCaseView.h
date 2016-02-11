@@ -82,16 +82,16 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserUseCaseView(QString s, BrowserNode * p, int id = 0);
+    BrowserUseCaseView(const QString & s, BrowserNode * p, int id = 0);
     BrowserUseCaseView(const BrowserUseCaseView * model, BrowserNode * p);
     virtual ~BrowserUseCaseView();
 
     virtual const QPixmap * pixmap(int) const;
 
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;

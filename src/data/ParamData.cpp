@@ -55,7 +55,7 @@ void ParamData::set_type(const AType & t)
     type = t;
 }
 
-void ParamData::set_default_value(WrapperStr str)
+void ParamData::set_default_value(const WrapperStr & str)
 {
     default_value = str;
 }

@@ -56,9 +56,9 @@ public:
     ObjectDiagramWindow(const QString & s, BrowserObjectDiagram *, int id = -1);
     virtual ~ObjectDiagramWindow();
 
-    virtual DiagramView * get_view() const;
+    virtual DiagramView * get_view() const override;
 
-    virtual void hit_button(UmlCode, QToolButton *);
+    virtual void hit_button(UmlCode, QToolButton *) override;
 
 protected slots:
     void hit_class();

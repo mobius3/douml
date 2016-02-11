@@ -8,7 +8,7 @@ void UmlClassView::deploy()
     // deployment needed ?
 
     const QVector<UmlItem*> ch = children();
-    unsigned i;
+    int i;
     bool need = FALSE;
 
     for (i = 0; i != ch.size(); i += 1) {

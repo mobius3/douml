@@ -37,8 +37,8 @@
 #include "DialogUtil.h"
 
 
-MLinesItem::MLinesItem(QTableWidget * ta, const QString & s, bool editable)
-    : TableItem(ta, editable ? TableItem::WhenCurrent : TableItem::Never, s, TableItem::MLinesType)
+MLinesItem::MLinesItem(const QString & s, bool editable)
+    : TableItem(editable ? TableItem::WhenCurrent : TableItem::Never, s, TableItem::MLinesType)
 {
 }
 

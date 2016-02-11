@@ -1,5 +1,7 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on
+CONFIG -= app_bundle
+CONFIG          += qt warn_on c++11
+DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES          = util.cpp activity.cpp state.cpp instance.cpp \
         insertbase.cpp php.cpp python.cpp diagdef.cpp \
         UmlClassItem.cpp UmlAttribute.cpp \
@@ -99,8 +101,8 @@ SOURCES          = util.cpp activity.cpp state.cpp instance.cpp \
     ../Logging/QsDebugOutput.cpp
 
 TARGET          = plug_out_upgrade
-DEFINES          = WITHCPP WITHJAVA WITHPHP WITHIDL WITHPYTHON FALSE=false TRUE=true
-INCLUDEPATH   = ../Tools ../PlugOutUpgrade ../
+DEFINES         += WITHCPP WITHJAVA WITHPHP WITHIDL WITHPYTHON FALSE=false TRUE=true
+INCLUDEPATH   += ../Tools ../PlugOutUpgrade ../
 #The following line was inserted by qt3to4
 QT += network  widgets
 
@@ -111,20 +113,17 @@ HEADERS += \
 
 INCLUDEPATH += ../../src
 #CONFIG += qtestlib
-Release{
-
-
-    MOC_DIR = bin/douml/plug_upg/MOC_release
-    OBJECTS_DIR = bin/douml/plug_upg/Obj_release
-}
-
-CONFIG(declarative_debug){
-    MOC_DIR = bin/douml/plug_upg/MOC_Debug
-    OBJECTS_DIR = bin/douml/plug_upg/Obj_Debug
-
-}
     UI_DIR = src/ui
     DESTDIR = ../../bin
 
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
+    MOC_DIR = $${DESTDIR}/moc_release/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_release/$${TARGET}
+}
+
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
+    MOC_DIR = $${DESTDIR}/moc_debug/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_debug/$${TARGET}
+}

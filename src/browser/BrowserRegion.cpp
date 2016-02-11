@@ -58,7 +58,7 @@
 IdDict<BrowserRegion> BrowserRegion::all(__FILE__);
 QStringList BrowserRegion::its_default_stereotypes;	// unicode
 
-BrowserRegion::BrowserRegion(QString s, BrowserNode * p, BasicData * d, int id)
+BrowserRegion::BrowserRegion(const QString & s, BrowserNode * p, BasicData * d, int id)
     : BrowserNode(s, p), Labeled<BrowserRegion>(all, id), def(d)
 {
     def->set_browser_node(this);
@@ -95,7 +95,7 @@ void BrowserRegion::delete_it()
     BrowserNode::delete_it();
 }
 
-BrowserNode * BrowserRegion::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserRegion::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserRegion * result = new BrowserRegion(this, p);
 
@@ -251,7 +251,7 @@ void BrowserRegion::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserRegion::apply_shortcut(QString s)
+void BrowserRegion::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

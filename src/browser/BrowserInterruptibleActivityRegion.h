@@ -58,14 +58,14 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserInterruptibleActivityRegion(QString s, BrowserNode * p, int id = 0);
+    BrowserInterruptibleActivityRegion(const QString & s, BrowserNode * p, int id = 0);
     BrowserInterruptibleActivityRegion(const BrowserInterruptibleActivityRegion * model, BrowserNode * p);
     virtual ~BrowserInterruptibleActivityRegion();
 
     virtual bool may_contains_them(const QList<BrowserNode *> & l,
                                    BooL & duplicable) const;
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     static BrowserInterruptibleActivityRegion * add_interruptibleactivityregion(BrowserNode * future_parent);
     static BrowserInterruptibleActivityRegion * add_interruptibleactivityregion(BrowserNode * future_parent, const char * name);
     static BrowserInterruptibleActivityRegion * get_interruptibleactivityregion(BrowserNode * parent);
@@ -73,7 +73,7 @@ public:
     virtual const QPixmap * pixmap(int) const;
 
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;

@@ -132,7 +132,6 @@ void SynchroWindow::load(QString path)
     }
 
     QDir dir(fi.path());
-    BrowserView * browser;
 
     path = dir.canonicalPath();
     foreach (BrowserView * browser, browsers) {

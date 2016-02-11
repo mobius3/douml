@@ -85,11 +85,6 @@ ShortcutDialog::ShortcutDialog() : TabDialog(0, 0, TRUE)
 
     vtab->addWidget((new QLabel(tr("Here are the shortcuts to do a command (menu entry)"), vtab)));
 
-#ifdef __APPLE__
-    (new QLabel(tr("Note : sometimes the key 'Alt' is named 'Option'"), vtab))
-            ->setAlignment(::Qt::AlignHCenter);
-#endif
-
     vtab->addWidget(cmd_table = new ShortcutTable(vtab, FALSE, ncmds));
 
     addTab(vtab, QObject::tr("Command"));
@@ -104,11 +99,6 @@ ShortcutDialog::ShortcutDialog() : TabDialog(0, 0, TRUE)
     vtab->addWidget((label = new QLabel(tr("Here are the shortcuts to call a tool (plug-out)"), vtab)));
     label->setAlignment(::Qt::AlignHCenter);
 
-#ifdef __APPLE__
-    (new QLabel(tr("Note : sometimes the key 'Alt' is named 'Option'"), vtab))
-            ->setAlignment(::Qt::AlignHCenter);
-
-#endif
     vtab->addWidget(tool_table = new ShortcutTable(vtab, TRUE, ntools));
 
     addTab(vtab, QObject::tr("Tool"));
@@ -207,14 +197,14 @@ ShortcutTable::ShortcutTable(QWidget * parent, bool tool, int n)
 
             if (alt) setText(row, 2, QObject::tr("yes"));
 
-            setItem(row, 3, new ComboItem(this, key, keys, FALSE));
-            setItem(row, 4, new ComboItem(this, (tool) ? iter.value() : iter.value(), values, FALSE));
+            setItem(row, 3, new ComboItem(key, keys, FALSE));
+            setItem(row, 4, new ComboItem((tool) ? iter.value() : iter.value(), values, FALSE));
             row += 1;
         }
     }
     sortByColumn(3);
-    setItem(row, 3, new ComboItem(this, QString(), Shortcut::keys(), FALSE));
-    setItem(row, 4, new ComboItem(this, QString(), values, FALSE));
+    setItem(row, 3, new ComboItem(QString(), Shortcut::keys(), FALSE));
+    setItem(row, 4, new ComboItem(QString(), values, FALSE));
     adjustColumn(0);
     adjustColumn(1);
     adjustColumn(2);
@@ -327,8 +317,8 @@ void ShortcutTable::insert_row_before(int row)
     setText(row, 0, QString());
     setText(row, 1, QString());
     setText(row, 2, QString());
-    setItem(row, 3, new ComboItem(this, QString(), Shortcut::keys(), FALSE));
-    setItem(row, 4, new ComboItem(this, QString(), values, FALSE));
+    setItem(row, 3, new ComboItem(QString(), Shortcut::keys(), FALSE));
+    setItem(row, 4, new ComboItem(QString(), values, FALSE));
     ENABLESORTINGMYTABLE;
     blockSignals(false);
 }
@@ -360,47 +350,16 @@ void ShortcutTable::insert_row_after(int row)
     setText(row + 1, 0, QString());
     setText(row + 1, 1, QString());
     setText(row + 1, 2, QString());
-    setItem(row + 1, 3, new ComboItem(this, QString(), Shortcut::keys(), FALSE));
-    setItem(row + 1, 4, new ComboItem(this, QString(), values, FALSE));
+    setItem(row + 1, 3, new ComboItem(QString(), Shortcut::keys(), FALSE));
+    setItem(row + 1, 4, new ComboItem(QString(), values, FALSE));
     ENABLESORTINGMYTABLE;
     blockSignals(false);
 }
 
 void ShortcutTable::delete_row(int row)
 {
-    int n = rowCount();
-    int index;
-
-
     removeCellWidget(row, 1);
     removeRow(row);
-    return;
-
-    if (row == (n - 1)) {
-        // the last line : empty it
-        setText(row, 0, QString());
-        setText(row, 1, QString());
-        setText(row, 2, QString());
-        setItem(row, 3, new ComboItem(this, QString(), Shortcut::keys(), FALSE));
-        setItem(row, 4, new ComboItem(this, QString(), values, FALSE));
-    }
-    else {
-        for (index = row; index != n - 1; index += 1) {
-            QTableWidgetItem * it;
-
-            setText(index, 0, text(index + 1, 0));;
-            setText(index, 1, text(index + 1, 1));;
-            setText(index, 2, text(index + 1, 2));;
-            it = item(index + 1, 3);
-            takeItem(it->row(), it->column());
-            setItem(index, 3, it);
-            it = item(index + 1, 4);
-            takeItem(it->row(), it->column());
-            setItem(index, 4, it);
-        }
-
-        setRowCount(n - 1);
-    }
 }
 
 void ShortcutTable::copy_row(int row)

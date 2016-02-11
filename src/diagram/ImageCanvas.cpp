@@ -83,8 +83,12 @@ void ImageCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
+
 void ImageCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
 
@@ -237,7 +241,7 @@ void ImageCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void ImageCanvas::apply_shortcut(QString s)
+void ImageCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

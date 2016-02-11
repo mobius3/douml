@@ -119,7 +119,7 @@ bool ActivityNodeCanvas::force_inside()
             if ((di != 0) &&
                     IsaActivityContainer(di->typeUmlCode()) &&
                     (((ActivityContainerCanvas *) di)->get_bn() == parent)) {
-                ((ActivityContainerCanvas *) di)->force_inside(this, this);
+                ((ActivityContainerCanvas *) di)->force_inside(this, TRUE);
                 return TRUE;
             }
         }
@@ -435,10 +435,15 @@ void ActivityNodeCanvas::draw(QPainter & p)
         }
     }
 }
+
 void ActivityNodeCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode ActivityNodeCanvas::typeUmlCode() const
 {
     return browser_node->get_type();
@@ -586,7 +591,7 @@ void ActivityNodeCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void ActivityNodeCanvas::apply_shortcut(QString s)
+void ActivityNodeCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

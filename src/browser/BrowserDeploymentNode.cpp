@@ -56,7 +56,7 @@
 IdDict<BrowserDeploymentNode> BrowserDeploymentNode::all(__FILE__);
 QStringList BrowserDeploymentNode::its_default_stereotypes;	// unicode
 
-BrowserDeploymentNode::BrowserDeploymentNode(QString s, BrowserNode * p, int id)
+BrowserDeploymentNode::BrowserDeploymentNode(const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserDeploymentNode>(all, id)
 {
     def = new SimpleData;
@@ -90,7 +90,7 @@ BrowserDeploymentNode::~BrowserDeploymentNode()
     delete def;
 }
 
-BrowserNode * BrowserDeploymentNode::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserDeploymentNode::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserDeploymentNode * result = new BrowserDeploymentNode(this, p);
 
@@ -231,7 +231,7 @@ void BrowserDeploymentNode::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserDeploymentNode::apply_shortcut(QString s)
+void BrowserDeploymentNode::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

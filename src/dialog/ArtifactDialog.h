@@ -133,7 +133,7 @@ protected:
     static void post_python_edit(ArtifactDialog * d, QString s);
     static void post_idl_edit(ArtifactDialog * d, QString s);
 
-    virtual uint TypeID();
+    virtual uint TypeID() override;
 
 
 public:
@@ -143,8 +143,8 @@ public:
 
 protected slots:
     virtual void polish();
-    virtual void accept();
-    virtual void reject();
+    virtual void accept() override;
+    virtual void reject() override;
     void default_description();
     void edit_description();
     void edStereotypeActivated(const QString &);

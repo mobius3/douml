@@ -393,7 +393,7 @@ void StateBehavior::save(QTextStream & st, const char * lang) const
 
 void StateBehavior::read(char *& st, char *& k, const char * lang)
 {
-    int ln = strlen(lang);
+    size_t ln = strlen(lang);
 
     if (!strncmp(k, lang, ln) && !strcmp(k + ln, "_on_entry")) {
         on_entry = read_string(st);

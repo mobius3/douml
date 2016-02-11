@@ -1,7 +1,9 @@
 TEMPLATE	= app
 TARGET		= singleton
-CONFIG		+= warn_on qt
-DEFINES		= WITHCPP WITHJAVA WITHIDL FALSE=false TRUE=true
+CONFIG -= app_bundle
+CONFIG		+= warn_on qt c++11
+DEFINES += QT_DEPRECATED_WARNINGS
+DEFINES		+= WITHCPP WITHJAVA WITHIDL FALSE=false TRUE=true
 HEADERS		= ./UmlBaseOperation.h \
 		  ./JavaSettings.h \
 		  ./UmlBaseClassView.h \
@@ -157,20 +159,18 @@ QT += network widgets
 
 INCLUDEPATH += ../../src
 QT += testlib
-Release{
 
-
-    MOC_DIR = bin/douml/singleton/MOC_release
-    OBJECTS_DIR = bin/douml/singleton/Obj_release
-}
-
-Debug{
-    MOC_DIR = bin/douml/singleton/MOC_Debug
-    OBJECTS_DIR = bin/douml/singleton/Obj_Debug
-
-}
     UI_DIR = src/ui
     DESTDIR = ../../bin
 
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
+    MOC_DIR = $${DESTDIR}/moc_release/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_release/$${TARGET}
+}
+
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
+    MOC_DIR = $${DESTDIR}/moc_debug/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_debug/$${TARGET}
+}

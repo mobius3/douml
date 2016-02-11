@@ -21,9 +21,12 @@
 // e-mail : doumleditor@gmail.com
 //
 // *************************************************************************
+
 #ifndef TREEITEMFUNCTIONS_H
 #define TREEITEMFUNCTIONS_H
+
 #include "include/TreeItemInterface.h"
+
 namespace TreeFunctions
 {
 template<typename K>
@@ -34,13 +37,17 @@ template<typename K>
 using ModifierFunctions = QList<ModifierFunction<K> >;
 
 
-/* Отфильтровывает из дерева ноды которые удовлетворяют условиям проверок
+/** Отфильтровывает из дерева ноды которые удовлетворяют условиям проверок
  * @rootItem верхний уровень дерева от которого производится фильтрация
  * @filterFunctions список проверок которым должна удовлетворять нода
  * @forcePick говорит о том, что ноду нужно зацепить в любом случае(когда нода-папка удовлетворяет условию)
  **/
+
 template<typename InterfaceType, typename ConcreteItemType>
-QSharedPointer<InterfaceType> RecursiveGetSubset(InterfaceType* rootItem, RootChecks<InterfaceType> filterFunctions, bool forcePick = false, bool forceChildren = true)
+QSharedPointer<InterfaceType> RecursiveGetSubset(InterfaceType* rootItem,
+                                                 RootChecks<InterfaceType> filterFunctions,
+                                                 bool forcePick = false,
+                                                 bool forceChildren = true)
 {
     QList<QSharedPointer<InterfaceType>> newChildren;
     bool nodeValid = true;
@@ -117,8 +124,11 @@ void ModifyNode(InterfaceType* node, ModifierFunctions<InterfaceType> modifierFu
 }
 
 template<typename InterfaceType>
-bool RecursiveModify(InterfaceType* rootItem, RootChecks<InterfaceType> filterFunctions, ModifierFunctions<InterfaceType> modifierFunctions,
-                     bool parentsFirst = true, bool stopAtFirstMatch = true )
+bool RecursiveModify(InterfaceType* rootItem,
+                     RootChecks<InterfaceType> filterFunctions,
+                     ModifierFunctions<InterfaceType> modifierFunctions,
+                     bool parentsFirst = true,
+                     bool stopAtFirstMatch = true)
 {
     bool result = false;
     bool nodeValid = true;
@@ -157,13 +167,11 @@ bool RecursiveModify(InterfaceType* rootItem, RootChecks<InterfaceType> filterFu
     return result;
 }
 
-
-
-
-/* Отфильтровывает из дерева список свойств по переданному аксессору
+/** Отфильтровывает из дерева список свойств по переданному аксессору
  * @rootItem верхний уровень дерева от которого производится фильтрация
  * @accessor функция для доступа к конкретному члену структуры который надо выцепить
  **/
+
 template<typename K, typename T>
 QList<K> RecursiveGet(T* rootItem, std::function<K(T*)> accessor)
 {
@@ -179,14 +187,19 @@ QList<K> RecursiveGet(T* rootItem, std::function<K(T*)> accessor)
     return result;
 
 }
-/* Отфильтровывает из дерева ноды которые удовлетворяют условиям проверок
+
+/** Отфильтровывает из дерева ноды которые удовлетворяют условиям проверок
  * и помещает их в интерфейс для последующего запихивания в дерево
  *
  * @rootItem верхний уровень дерева от которого производится фильтрация
  * @filterFunctions список проверок которым должна удовлетворять нода
  **/
+
 template<typename InterfaceType, template <typename> class ItemType, typename DataType>
-QSharedPointer<InterfaceType > FilterSubset(QSharedPointer<InterfaceType> rootItem, QList<std::function<bool(InterfaceType*)> > filterFunctions, bool forceRoot = false, bool forceChildren = true)
+QSharedPointer<InterfaceType > FilterSubset(QSharedPointer<InterfaceType> rootItem,
+                                            QList<std::function<bool(InterfaceType*)> > filterFunctions,
+                                            bool forceRoot = false,
+                                            bool forceChildren = true)
 {
     QSharedPointer<InterfaceType > item;
     ItemType<DataType>* newRoot = new ItemType<DataType>(0);
@@ -196,5 +209,6 @@ QSharedPointer<InterfaceType > FilterSubset(QSharedPointer<InterfaceType> rootIt
     return item;
 }
 
-};
+} // namespace TreeFunctions
+
 #endif // TREEITEMFUNCTIONS_H

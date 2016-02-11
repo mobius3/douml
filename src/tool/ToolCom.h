@@ -67,19 +67,19 @@ protected:
     char * cmd;
     unsigned api_version;
     int id;		// for UmlBaseItem::isToolRunning
-    unsigned wanted;
-    int already_read;
+    size_t wanted;
+    size_t already_read;
     char * buffer_in;
-    unsigned buffer_in_size;
+    size_t buffer_in_size;
     char * buffer_out;
     char * p_buffer_out;
-    unsigned buffer_out_size;
+    size_t buffer_out_size;
     QProcess * externalProcess;
     ToolCom();
 
 
     void DisconnectExternalProcess();
-    void check_size_out(unsigned n);
+    void check_size_out(size_t n);
     const char * read_buffer();
 
     unsigned bind(unsigned port);
@@ -131,7 +131,7 @@ public:
 
     static void close_all();
 
-    bool write_block(char *data, unsigned int len);
+    bool write_block(char *data, size_t len);
 signals:
     void closed();
 

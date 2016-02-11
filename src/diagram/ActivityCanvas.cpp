@@ -580,10 +580,15 @@ void ActivityCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, r);
 }
+
 void ActivityCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode ActivityCanvas::typeUmlCode() const
 {
     return UmlActivity;
@@ -737,7 +742,7 @@ void ActivityCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void ActivityCanvas::apply_shortcut(QString s)
+void ActivityCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

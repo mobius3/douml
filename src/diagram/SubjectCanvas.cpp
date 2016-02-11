@@ -117,10 +117,15 @@ void SubjectCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
+
 void SubjectCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode SubjectCanvas::typeUmlCode() const
 {
     return UmlSubject;
@@ -280,7 +285,7 @@ void SubjectCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void SubjectCanvas::apply_shortcut(QString s)
+void SubjectCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

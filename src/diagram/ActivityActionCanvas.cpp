@@ -216,7 +216,7 @@ bool ActivityActionCanvas::force_inside()
             if ((di != 0) &&
                 IsaActivityContainer(di->typeUmlCode()) &&
                 (((ActivityContainerCanvas *) di)->get_bn() == parent)) {
-                ((ActivityContainerCanvas *) di)->force_inside(this, this);
+                ((ActivityContainerCanvas *) di)->force_inside(this, TRUE);
                 return TRUE;
             }
         }
@@ -813,10 +813,15 @@ void ActivityActionCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
+
 void ActivityActionCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode ActivityActionCanvas::typeUmlCode() const
 {
     return UmlActivityAction;
@@ -998,7 +1003,7 @@ void ActivityActionCanvas::menu(const QPoint &)
     }
 }
 
-void ActivityActionCanvas::apply_shortcut(QString s)
+void ActivityActionCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

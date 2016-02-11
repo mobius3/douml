@@ -16,7 +16,7 @@ class File : public QFile
 public:
     File(QString s, QString here);
 
-    bool open(int m);
+    virtual bool open(OpenMode flags) override;
 
     //// read a token in 's', returns its kind
 

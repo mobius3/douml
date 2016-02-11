@@ -175,7 +175,7 @@ void UmlRelation::import(File & f)
         role_2.is_aggregate |= role_2.is_byvalue;
 
         if (bidir && role_2.is_aggregate) {
-            // manage bouml limitation : only role1 may be an aggregate
+            // manage douml limitation : only role1 may be an aggregate
             if (role_1.is_aggregate)
                 bidir = FALSE;
             else {

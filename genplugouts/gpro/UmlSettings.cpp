@@ -22,8 +22,8 @@ UmlStereotype * UmlSettings::_class_stereotypes;
 
 void UmlSettings::read_()
 {
-    unsigned n;
-    unsigned index;
+    int n;
+    int index;
 
     n = UmlCom::read_unsigned();
 
@@ -119,8 +119,8 @@ QByteArray UmlSettings::uml_class_stereotype(const QByteArray & t, QByteArray Um
 
 UmlBuiltin * UmlSettings::add_type(const QByteArray & s)
 {
-    unsigned n = _map_builtins.count();
-    unsigned index;
+    int n = _map_builtins.count();
+    int index;
 
     UmlBuiltin * builtins = new UmlBuiltin[n + 1];
 
@@ -155,8 +155,8 @@ UmlBuiltin * UmlSettings::add_type(const QByteArray & s)
 
 UmlStereotype * UmlSettings::add_rel_stereotype(const QByteArray & s)
 {
-    unsigned n = _map_relation_stereotypes.count();
-    unsigned index;
+    int n = _map_relation_stereotypes.count();
+    int index;
 
     UmlStereotype * relation_stereotypes = new UmlStereotype[n + 1];
 
@@ -188,8 +188,8 @@ UmlStereotype * UmlSettings::add_rel_stereotype(const QByteArray & s)
 
 UmlStereotype * UmlSettings::add_class_stereotype(const QByteArray & s)
 {
-    unsigned n = _map_class_stereotypes.count();
-    unsigned index;
+    int n = _map_class_stereotypes.count();
+    int index;
 
     UmlStereotype * class_stereotypes = new UmlStereotype[n + 1];
 

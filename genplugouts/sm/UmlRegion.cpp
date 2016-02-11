@@ -9,7 +9,7 @@
 void UmlRegion::init(UmlClass * mother, QByteArray path, QByteArray pretty_path, UmlState *)
 {
     const QVector<UmlItem*> ch = children();
-    unsigned index;
+    int index;
 
     pretty_path = pretty_path + "." + name();
 

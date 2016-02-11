@@ -99,7 +99,7 @@ bool BrowserRelation::is_undefined() const
     return ((BrowserNode *) parent())->is_undefined();
 }
 
-BrowserNode * BrowserRelation::duplicate(BrowserNode * p, QString)
+BrowserNode * BrowserRelation::duplicate(BrowserNode * p, const QString &)
 {
     BrowserRelation * result = new BrowserRelation(this, p);
 
@@ -200,7 +200,7 @@ const char * BrowserRelation::get_comment() const
             : def->get_comment_b();
 }
 
-void BrowserRelation::set_comment(const char * c)
+void BrowserRelation::set_comment(const QString & c)
 {
     if (def->is_a(this))
         def->set_comment_a(c);
@@ -472,33 +472,6 @@ const QPixmap * BrowserRelation::pixmap(int) const
     }
 }
 
-void BrowserRelation::paintCell(QPainter * p, const QPalette & cg, int column,
-                                int width, int alignment)
-{
-    /* BrowserRelation::data used instead
-    bool class_relation = def->is_a(this)
-            ? def->get_isa_class_relation_a() : def->get_isa_class_relation_b();
-
-    const QColor & bg = p->background().color();
-    QBrush backColor = p->background();
-
-    if (is_marked) {
-        p->setBackgroundMode(Qt::OpaqueMode);
-        backColor.setColor(UmlRedColor);
-        p->setBackground(backColor);
-    }
-    p->setFont((class_relation)
-               ? ((is_writable()) ? BoldUnderlineFont : UnderlineFont)
-               : ((is_writable()) ? BoldFont : NormalFont));
-    BrowserNode::paintCell(p, cg, column, width, alignment);
-
-    if (is_marked) {
-        p->setBackgroundMode(Qt::TransparentMode);
-        backColor.setColor(bg);
-        p->setBackground(backColor);
-    }
-    */
-}
 QVariant BrowserRelation::data(int column, int role) const
 {
     if(role == Qt::FontRole)
@@ -671,7 +644,7 @@ void BrowserRelation::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserRelation::apply_shortcut(QString s)
+void BrowserRelation::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

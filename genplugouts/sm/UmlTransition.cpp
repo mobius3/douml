@@ -79,7 +79,7 @@ void UmlTransition::generate(UmlClass * machine, UmlClass * anystate, UmlState *
 
     // group transitions having the same trigger
     const QVector<UmlItem*> ch = parent()->children();
-    unsigned index = ch.indexOf(this);
+    int index = ch.indexOf(this);
     QList<UmlTransition*> trs;
     UmlTransition * tr_no_guard = 0;
 

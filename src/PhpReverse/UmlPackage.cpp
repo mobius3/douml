@@ -104,7 +104,7 @@ UmlClassView * UmlPackage::get_classview(const WrapperStr & nmsp)
     if (pack->classview == 0) {
         QVector<UmlItem*> ch = pack->children();
 
-        for (unsigned index = 0; index != ch.size(); index += 1)
+        for (int index = 0; index != ch.size(); index += 1)
 
             // return the first class view find
             if (ch[index]->kind() == aClassView)
@@ -187,7 +187,7 @@ UmlDeploymentView * UmlPackage::get_deploymentview(const WrapperStr & nmsp)
     if (pack->deploymentview == 0) {
         QVector<UmlItem*> ch = pack->children();
 
-        for (unsigned index = 0; index != ch.size(); index += 1)
+        for (int index = 0; index != ch.size(); index += 1)
 
             // return the first class view find
             if (ch[index]->kind() == aDeploymentView)

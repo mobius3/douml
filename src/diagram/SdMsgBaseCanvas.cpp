@@ -369,8 +369,6 @@ void SdMsgBaseCanvas::setVisible(bool yes)
 
 void SdMsgBaseCanvas::moveBy(double dx, double dy)
 {
-    int itsY = y();
-    int minY= min_y();
     if (dy > 80000) {
         // horizontal moving due to the life line moving
         DiagramCanvas::moveBy(dx, 0);

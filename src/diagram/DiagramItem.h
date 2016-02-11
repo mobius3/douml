@@ -136,7 +136,7 @@ public:
     virtual void edit_drawing_settings(QList<DiagramItem *> &);
     virtual void clone_drawing_settings(const DiagramItem *src);
 
-    virtual void apply_shortcut(QString);
+    virtual void apply_shortcut(const QString &);
 
     virtual void check_stereotypeproperties() = 0;
 

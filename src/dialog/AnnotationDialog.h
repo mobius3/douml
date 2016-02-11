@@ -53,7 +53,7 @@ public:
     virtual ~AnnotationDialog();
 
 protected slots:
-    virtual void accept();
+    virtual void accept() override;
     void add_annotation();
 
 

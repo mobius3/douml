@@ -213,10 +213,15 @@ void InterruptibleActivityRegionCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, r);
 }
+
 void InterruptibleActivityRegionCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode InterruptibleActivityRegionCanvas::typeUmlCode() const
 {
     return UmlInterruptibleActivityRegion;
@@ -360,7 +365,7 @@ void InterruptibleActivityRegionCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void InterruptibleActivityRegionCanvas::apply_shortcut(QString s)
+void InterruptibleActivityRegionCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

@@ -55,7 +55,7 @@ KeyValuesTable::KeyValuesTable(HaveKeyValueData * kvData, QWidget * parent, bool
 void KeyValuesTable::init_row(int index)
 {
     setText(index, 0, QString());
-    setItem(index, 1, new MLinesItem(this, QString()));
+    setItem(index, 1, new MLinesItem(QString()));
     setText(index, 2, QString());
     setRowStretchable(index, TRUE);
 }
@@ -199,23 +199,23 @@ void KeyValuesTable::SetupTableText(HaveKeyValueData *kvData,  bool isReadOnly)
         QString v = toUnicode(kvData->get_value(index));
 
         TableItem * tiKey = nullptr;
-        tiKey =  new MLinesItem(this, k, !isReadOnly);
+        tiKey =  new MLinesItem(k, !isReadOnly);
 
         setItem(index, 0, tiKey);
 
         if (props.contains(k))
-            setItem(index, 1, new ComboItem(this, v, props[k], FALSE));
+            setItem(index, 1, new ComboItem(v, props[k], FALSE));
 
         if ((k.count(':') == 2) &&
                 ProfiledStereotypes::enumerated(k, items))
         {
             props.insert(k, items);
-            setItem(index, 1, new ComboItem(this, v, props[k], FALSE));
+            setItem(index, 1, new ComboItem(v, props[k], FALSE));
         }
         else
-            setItem(index, 1, new MLinesItem(this, v, !isReadOnly));
+            setItem(index, 1, new MLinesItem(v, !isReadOnly));
 
-        setItem(index, 2, new TableItem(this, TableItem::Never,"", TableItem::TableItemType));
+        setItem(index, 2, new TableItem(TableItem::Never,"", TableItem::TableItemType));
         setRowStretchable(index, true);
         int crCount = v.count('\n');
         if (crCount != 0)
@@ -224,10 +224,10 @@ void KeyValuesTable::SetupTableText(HaveKeyValueData *kvData,  bool isReadOnly)
 
     }
 
-    setItem(index, 0, new MLinesItem(this, QString()));
-    setItem(index, 1, new MLinesItem(this, QString()));
+    setItem(index, 0, new MLinesItem(QString()));
+    setItem(index, 1, new MLinesItem(QString()));
     if(!isReadOnly)
-        setItem(index, 2, new TableItem(this, TableItem::Never,"", TableItem::TableItemType));
+        setItem(index, 2, new TableItem(TableItem::Never,"", TableItem::TableItemType));
     setRowStretchable(index, TRUE);
 }
 

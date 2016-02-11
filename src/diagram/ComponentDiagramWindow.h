@@ -26,7 +26,7 @@
 // *************************************************************************
 
 #ifndef COMPONENTDIAGRAMWINDOW_H
-#define COMPONENTDISGRAMWINDOW_H
+#define COMPONENTDIAGRAMWINDOW_H
 
 #include "DiagramWindow.h"
 
@@ -58,9 +58,9 @@ public:
     ComponentDiagramWindow(const QString & s, BrowserComponentDiagram * b, int id = -1);
     virtual ~ComponentDiagramWindow();
 
-    virtual DiagramView * get_view() const;
+    virtual DiagramView * get_view() const override;
 
-    virtual void hit_button(UmlCode, QToolButton *);
+    virtual void hit_button(UmlCode, QToolButton *) override;
 
 protected slots:
     void hit_component();

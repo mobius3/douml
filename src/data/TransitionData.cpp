@@ -297,7 +297,7 @@ void TransDef::save(QTextStream & st, const char * lang) const
 
 void TransDef::read(char *& st, char *& k, const char * lang)
 {
-    int ln = strlen(lang);
+    size_t ln = strlen(lang);
 
     if (!strncmp(k, lang, ln) && !strcmp(k + ln, "_trigger")) {
         trigger = read_string(st);

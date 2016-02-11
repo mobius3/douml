@@ -45,7 +45,8 @@
 #include "util.h"
 #include "Logging/QsLog.h"
 
-// to manage preserved bodies, the key is the id under bouml
+// to manage preserved bodies, the key is the id under douml
+// or bouml in compatibility save mode
 QHash<long, WrapperStr> UmlOperation::bodies;
 static const char * BodyPrefix = "// Bouml preserved body begin ";
 static const char * BodyPrefix2 = "// Douml preserved body begin ";
@@ -930,7 +931,7 @@ static char * read_file(const char * filename)
 
     if (fp.open(QIODevice::ReadOnly)) {
         QFileInfo fi(fp);
-        int size = fi.size();
+        qint64 size = fi.size();
         char * s = new char[size + 1];
 
         if (fp.read(s, size) == -1) {

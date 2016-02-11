@@ -70,7 +70,7 @@ protected:
     void check_params();
     void check_constraint();
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     ActivityCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ActivityCanvas();
@@ -80,45 +80,46 @@ public:
     }
     void force_sub_inside(bool rz);
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     void compute_size();
     void deleted(ParameterCanvas *);
 
     virtual void draw(QPainter & p);
-    virtual void change_scale();
+    virtual void change_scale() override;
 
-    virtual UmlCode typeUmlCode() const;
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual bool alignable() const;
-    virtual bool copyable() const;
-    virtual void remove(bool from_model);
-    virtual void open();
-    virtual void menu(const QPoint &);
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
-    virtual void set_z(double z);
-    virtual aCorner on_resize_point(const QPoint & p);
-    virtual void resize(aCorner c, int dx, int dy, QPoint &);
-    virtual void resize(const QSize & sz, bool w, bool h);
-    virtual bool move_with_its_package() const;
-    virtual void moveBy(double dx, double dy);
+    virtual UmlCode typeUmlCode() const override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual bool alignable() const override;
+    virtual bool copyable() const override;
+    virtual void remove(bool from_model) override;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &) override;
+    virtual void set_z(double z) override;
+    virtual aCorner on_resize_point(const QPoint & p) override;
+    using ActivityContainerCanvas::resize;
+    virtual void resize(aCorner c, int dx, int dy, QPoint &) override;
+    virtual void resize(const QSize & sz, bool w, bool h) override;
+    virtual bool move_with_its_package() const override;
+    virtual void moveBy(double dx, double dy) override;
 
-    virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(QList<DiagramItem *> &);
-    virtual void clone_drawing_settings(const DiagramItem *src);
+    virtual bool has_drawing_settings() const override;
+    virtual void edit_drawing_settings(QList<DiagramItem *> &) override;
+    virtual void clone_drawing_settings(const DiagramItem *src) override;
 
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s) override;
     void edit_drawing_settings();
-    virtual bool get_show_stereotype_properties() const;
+    virtual bool get_show_stereotype_properties() const override;
 
-    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const override;
     static ActivityCanvas * read(char *& , UmlCanvas *, char *);
 
-    virtual void history_save(QBuffer &) const;
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
+    virtual void history_save(QBuffer &) const override;
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
 
 private slots:
     void modified();	// canvas must be updated

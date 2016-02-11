@@ -85,7 +85,7 @@ BrowserOperation::BrowserOperation(int id)
     // not yet read
 }
 
-BrowserOperation::BrowserOperation(QString s, BrowserNode * p, OperationData * d, int id)
+BrowserOperation::BrowserOperation(const QString & s, BrowserNode * p, OperationData * d, int id)
     : BrowserNode(s, p), Labeled<BrowserOperation>(all, id), def(d),
       get_of(0), set_of(0)
 {
@@ -121,10 +121,11 @@ BrowserOperation::BrowserOperation(const BrowserOperation * model, BrowserNode *
         def->new_body(b, 'y');
 }
 
-BrowserNode * BrowserOperation::duplicate(BrowserNode * p, QString n)
+BrowserNode * BrowserOperation::duplicate(BrowserNode * p, const QString & nInit)
 {
     BrowserOperation * result = new BrowserOperation(this, p);
 
+    QString n = nInit;
     if (n.isEmpty()) {
         if (get_name()[0] == '~')
             // destructor, change the name
@@ -588,35 +589,6 @@ const QPixmap * BrowserOperation::pixmap(int) const
     }
 }
 
-void BrowserOperation::paintCell(QPainter * p, const QPalette & cg, int column,
-                                 int width, int alignment)
-{
-
-    /* BrowserOperation::data is used instead
-    const QColor & bg = p->background().color();
-
-    QBrush backColor = p->background();
-    if (is_marked) {
-        p->setBackgroundMode(Qt::OpaqueMode);
-        backColor.setColor(UmlRedColor);
-        p->setBackground(backColor);
-    }
-
-    if (def->get_isa_class_operation())
-        p->setFont((is_writable()) ? BoldUnderlineFont : UnderlineFont);
-    else if (def->get_is_abstract())
-        p->setFont((is_writable()) ? BoldItalicFont : ItalicFont);
-    else
-        p->setFont((is_writable()) ? BoldFont : NormalFont);
-    BrowserNode::paintCell(p, cg, column, width, alignment);
-
-    if (is_marked) {
-        p->setBackgroundMode(Qt::TransparentMode);
-        backColor.setColor(bg);
-        p->setBackground(backColor);
-    }
-    */
-}
 QVariant BrowserOperation::data(int column, int role) const
 {
     if(role == Qt::FontRole)
@@ -855,10 +827,6 @@ void BrowserOperation::exec_menu_choice(int rank)
         return;
     }
 
-
-        ImplBy.clear();
-        return;
-
     default:
         if (rank >= 99990)
             ProfiledStereotypes::choiceManagement(this, rank - 99990);
@@ -879,7 +847,7 @@ void BrowserOperation::exec_menu_choice(int rank)
     ImplBy.clear();
 }
 
-void BrowserOperation::apply_shortcut(QString s)
+void BrowserOperation::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

@@ -148,7 +148,7 @@ void UmlPackage::roundtrip_cpp()
 {
     QVector<UmlItem*> ch = UmlItem::children();
 
-    for (unsigned index = 0; index != ch.size(); index += 1)
+    for (int index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_cpp();
 }
 
@@ -243,7 +243,7 @@ void UmlPackage::roundtrip_java()
 {
     QVector<UmlItem*> ch = UmlItem::children();
 
-    for (unsigned index = 0; index != ch.size(); index += 1)
+    for (int index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_java();
 }
 
@@ -251,7 +251,7 @@ void UmlPackage::roundtrip_php()
 {
     QVector<UmlItem*> ch = UmlItem::children();
 
-    for (unsigned index = 0; index != ch.size(); index += 1)
+    for (int index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_php();
 }
 
@@ -259,7 +259,7 @@ void UmlPackage::roundtrip_python()
 {
     QVector<UmlItem*> ch = UmlItem::children();
 
-    for (unsigned index = 0; index != ch.size(); index += 1)
+    for (int index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_python();
 }
 

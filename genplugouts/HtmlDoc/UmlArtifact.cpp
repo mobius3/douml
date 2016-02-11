@@ -19,7 +19,7 @@ void UmlArtifact::html(QByteArray, unsigned int, unsigned int)
 
         const QVector<UmlClass*> l = associatedClasses();
 
-        for (unsigned i = 0; i != l.size(); i += 1) {
+        for (int i = 0; i != l.size(); i += 1) {
             fw.write(sep);
             l[i]->write();
             sep = ", ";
@@ -32,7 +32,7 @@ void UmlArtifact::html(QByteArray, unsigned int, unsigned int)
 
         const QVector<UmlArtifact*> l = associatedArtifacts();
 
-        for (unsigned i = 0; i != l.size(); i += 1) {
+        for (int i = 0; i != l.size(); i += 1) {
             fw.write(sep);
             l[i]->write();
             sep = ", ";

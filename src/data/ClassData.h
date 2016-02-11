@@ -97,12 +97,12 @@ protected:
     //
 
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-                              const QString & comment);
-    virtual void send_cpp_def(ToolCom * com);
-    virtual void send_java_def(ToolCom * com);
-    virtual void send_php_def(ToolCom * com);
-    virtual void send_python_def(ToolCom * com);
-    virtual void send_idl_def(ToolCom * com);
+                              const QString & comment) override;
+    virtual void send_cpp_def(ToolCom * com) override;
+    virtual void send_java_def(ToolCom * com) override;
+    virtual void send_php_def(ToolCom * com) override;
+    virtual void send_python_def(ToolCom * com) override;
+    virtual void send_idl_def(ToolCom * com) override;
 
     void update_actuals(BrowserClass *,
                         QList<ActualParamData *> & new_actuals,
@@ -114,8 +114,8 @@ public:
     ClassData(const ClassData * model, BrowserNode * bn);
     virtual ~ClassData();
 
-    virtual bool deletedp() const;
-    virtual void set_deletedp(bool y);
+    virtual bool deletedp() const override;
+    virtual void set_deletedp(bool y) override;
 
     void edit();
 
@@ -123,7 +123,7 @@ public:
         return constraint;
     }
 
-    virtual bool decldefbody_contain(const QString & s, bool cs, BrowserNode *);
+    virtual bool decldefbody_contain(const QString & s, bool cs, BrowserNode *) override;
 
     bool get_is_abstract() const {
         return is_abstract;
@@ -238,7 +238,7 @@ public:
     bool reference(BrowserClass *) const;
 
     virtual bool tool_cmd(ToolCom * com, const char * args,
-                          BrowserNode * bn, const QString & comment);
+                          BrowserNode * bn, const QString & comment) override;
 
     void save(QTextStream &, QString & warning) const;
     void read(char *& st, char *& k);

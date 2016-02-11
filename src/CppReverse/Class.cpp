@@ -793,15 +793,15 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
     hashBased.insert("short", typeProcessor);hashBased.insert("int", typeProcessor);hashBased.insert("long", typeProcessor);
     hashBased.insert("float", typeProcessor); hashBased.insert("double", typeProcessor);
     //modifier block
-    hashBased.insert("static", std::bind(basicProcessor, staticp));
-    hashBased.insert("virtual", std::bind(basicProcessor, virtualp));
-    hashBased.insert("inline", std::bind(basicProcessor, inlinep));
-    hashBased.insert("explicit", std::bind(basicProcessor, explicitp));
-    hashBased.insert("const", std::bind(modifierProcessor, constp));
-    hashBased.insert("mutable", std::bind(modifierProcessor, mutablep));
+    hashBased.insert("static", std::bind(basicProcessor, std::ref(staticp)));
+    hashBased.insert("virtual", std::bind(basicProcessor, std::ref(virtualp)));
+    hashBased.insert("inline", std::bind(basicProcessor, std::ref(inlinep)));
+    hashBased.insert("explicit", std::bind(basicProcessor, std::ref(explicitp)));
+    hashBased.insert("const", std::bind(modifierProcessor, std::ref(constp)));
+    hashBased.insert("mutable", std::bind(modifierProcessor, std::ref(mutablep)));
     //volatile seemed to have unaccessible second else if in the original. need to cehck
-    hashBased.insert("volatile", std::bind(modifierProcessor, volatilep));
-    hashBased.insert("typename", std::bind(modifierProcessor, typenamep));
+    hashBased.insert("volatile", std::bind(modifierProcessor, std::ref(volatilep)));
+    hashBased.insert("typename", std::bind(modifierProcessor, std::ref(typenamep)));
 
     // pass block
     hashBased.insert("star", starProcessor);
@@ -2146,7 +2146,7 @@ Class * Class::reverse_enum(ClassContainer * container,
                 QVector<UmlItem*> ch = p->children();
                 UmlItem * x;
 
-                for (unsigned chindex = 0; chindex != ch.size(); chindex += 1) {
+                for (int chindex = 0; chindex != ch.size(); chindex += 1) {
                     if (((x = ch[chindex])->kind() == aClass) && (x->name() == str)) {
                         uml = (UmlClass *) x;
 
@@ -2299,7 +2299,7 @@ bool Class::already_in_bouml()
 {
     QVector<UmlItem*> ch = get_uml()->children();
 
-    for (unsigned index = 0; index != ch.size(); index += 1)
+    for (int index = 0; index != ch.size(); index += 1)
         if (ch[index]->kind() != aClass)
             return TRUE;
 

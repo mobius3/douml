@@ -97,7 +97,7 @@ public:
 
 
 protected:
-    void keyPressEvent(QKeyEvent * e);
+    virtual void keyPressEvent(QKeyEvent * e) override;
 
 protected slots:
     void onItemSelected();
@@ -108,18 +108,18 @@ protected slots:
 
     void menu();
 
-    void dragMoveEvent(QDragMoveEvent * e);
-    void dropEvent(QDropEvent * e);
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dragLeaveEvent(QDragLeaveEvent *event);
-    virtual void startDrag(Qt::DropActions supportedActions);
+    virtual void dragMoveEvent(QDragMoveEvent * e) override;
+    virtual void dropEvent(QDropEvent * e) override;
+    virtual void dragEnterEvent(QDragEnterEvent *event) override;
+    virtual void dragLeaveEvent(QDragLeaveEvent *event) override;
+    virtual void startDrag(Qt::DropActions supportedActions) override;
 
 
 
 
-    void mouseMoveEvent(QMouseEvent * e);
-    void mousePressEvent(QMouseEvent * e);
-    void mouseReleaseEvent(QMouseEvent * e);
+    virtual void mouseMoveEvent(QMouseEvent * e) override;
+    virtual void mousePressEvent(QMouseEvent * e) override;
+    virtual void mouseReleaseEvent(QMouseEvent * e) override;
 
 public slots:
     void OnGenerateCpp();

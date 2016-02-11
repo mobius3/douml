@@ -51,7 +51,7 @@ public:
     void force_sub_inside(QList<QGraphicsItem*> & all, BooL & need_sub_upper);
     void resize_to_contain(QList<QGraphicsItem*> & all, BooL & need_sub_upper);
     void force_sub_upper(QList<QGraphicsItem*> & all);
-    virtual void prepare_for_move(bool on_resize);
+    virtual void prepare_for_move(bool on_resize) override;
     static bool force_inside(DiagramCanvas * elt, bool part);
 };
 

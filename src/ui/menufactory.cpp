@@ -115,10 +115,10 @@ void MenuFactory::addItem(
     const char * const name,
     QMenu * const      subMenu)
 {
-    //m_menu.insertItem(name, subMenu);
+    Q_UNUSED(name);
+
     m_menu.addMenu(subMenu);
 }
-
 
 void MenuFactory::insertSeparator()
 {

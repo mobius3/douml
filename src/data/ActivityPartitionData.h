@@ -26,7 +26,7 @@
 // *************************************************************************
 
 #ifndef ACTIVITYPARTITIONDATA_H
-#define ACTIVITIPARTITIONDATA_H
+#define ACTIVITYPARTITIONDATA_H
 
 #include "SimpleData.h"
 #include "InfoData.h"
@@ -48,7 +48,7 @@ protected:
     BrowserNode * represents;
 
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-                              const QString & comment);
+                              const QString & comment) override;
 
 public:
     ActivityPartitionData();
@@ -66,7 +66,7 @@ public:
     }
 
     virtual bool tool_cmd(ToolCom * com, const char * args,
-                          BrowserNode * bn, const QString & comment);
+                          BrowserNode * bn, const QString & comment) override;
 
     void save(QTextStream &, QString & warning) const;
     void read(char *& st, char *& k);

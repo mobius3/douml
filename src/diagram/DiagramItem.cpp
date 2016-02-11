@@ -395,7 +395,7 @@ void DiagramItem::clone_drawing_settings(const DiagramItem *src)
 
 //
 
-void DiagramItem::apply_shortcut(QString)
+void DiagramItem::apply_shortcut(const QString &)
 {
     // do nothing
 }
@@ -422,7 +422,7 @@ DiagramItemList::~DiagramItemList()
 
 void DiagramItemList::sort()
 {
-    qSort(begin(), end(), lessThan);
+    std::sort(begin(), end(), lessThan);
 }
 
 bool DiagramItemList::lessThan(DiagramItem *a, DiagramItem *b)

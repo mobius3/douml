@@ -348,10 +348,15 @@ void PinCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, r);
 }
+
 void PinCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode PinCanvas::typeUmlCode() const
 {
     return UmlActivityPin;
@@ -470,7 +475,7 @@ void PinCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void PinCanvas::apply_shortcut(QString s)
+void PinCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

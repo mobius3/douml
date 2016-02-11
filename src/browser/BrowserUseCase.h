@@ -83,7 +83,7 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserUseCase(QString s, BrowserNode * p, int id = 0);
+    BrowserUseCase(const QString & s, BrowserNode * p, int id = 0);
     BrowserUseCase(const BrowserUseCase * model, BrowserNode * p);
     virtual ~BrowserUseCase();
 
@@ -91,10 +91,10 @@ public:
     void set_associated_diagram(BrowserUseCaseDiagram *, bool on_read = FALSE);
 
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool force_edit);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;

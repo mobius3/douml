@@ -53,7 +53,7 @@
 
 IdDict<BrowserExtraMember> BrowserExtraMember::all(__FILE__);
 
-BrowserExtraMember::BrowserExtraMember(QString s, BrowserNode * p, ExtraMemberData * d, int id)
+BrowserExtraMember::BrowserExtraMember(const QString & s, BrowserNode * p, ExtraMemberData * d, int id)
     : BrowserNode(s, p), Labeled<BrowserExtraMember>(all, id), def(d)
 {
 }
@@ -73,7 +73,7 @@ BrowserExtraMember::BrowserExtraMember(const BrowserExtraMember * model, Browser
     comment = model->comment;
 }
 
-BrowserExtraMember * BrowserExtraMember::new_one(QString s, BrowserNode * p)
+BrowserExtraMember * BrowserExtraMember::new_one(const QString & s, BrowserNode * p)
 {
     ExtraMemberData * d = new ExtraMemberData();
     BrowserExtraMember * result = new BrowserExtraMember(s, p, d);
@@ -83,7 +83,7 @@ BrowserExtraMember * BrowserExtraMember::new_one(QString s, BrowserNode * p)
     return result;
 }
 
-BrowserNode * BrowserExtraMember::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserExtraMember::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserNode * result = new BrowserExtraMember(this, p);
 
@@ -221,7 +221,7 @@ void BrowserExtraMember::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserExtraMember::apply_shortcut(QString s)
+void BrowserExtraMember::apply_shortcut(const QString & s)
 {
     int choice = -1;
 
@@ -289,7 +289,7 @@ BasicData * BrowserExtraMember::get_data() const
     return def;
 }
 
-void BrowserExtraMember::set_name(const char * s)
+void BrowserExtraMember::set_name(const QString & s)
 {
     if (name != s) {
         name = s;

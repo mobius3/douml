@@ -159,7 +159,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
         //
 
         grid->addWidget(new QLabel(),9,0);
-        grid->addWidget(new QLabel(tr("\nOptional, to indicate a text editor (it must creates an own window). Else Bouml will use an internal editor")),9,1);
+        grid->addWidget(new QLabel(tr("\nOptional, to indicate a text editor (it must creates an own window). Else DoUML will use an internal editor")),9,1);
         grid->addWidget(new QLabel(tr("Editor path ") ),10,0);
         htab = new QHBoxLayout();
         grid->addLayout(htab,10,1);
@@ -232,7 +232,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
                 cb_charset->setCurrentIndex(i);
 
         grid->addWidget(new QLabel(),15,0);
-        grid->addWidget(new QLabel(tr("\nIn case you have a multiple screens configuration the best for you is to ask Bouml to place by default the dialogs in one of these\n"
+        grid->addWidget(new QLabel(tr("\nIn case you have a multiple screens configuration the best for you is to ask DoUML to place by default the dialogs in one of these\n"
                                       "screens giving the area, else the dialogs will be shown on the center of the virtual screen.")),15,1);
         grid->addWidget(new QLabel(tr("Default screen ")),16,0);
 

@@ -103,6 +103,8 @@ void MenuFactory::addItem(
     const char * const name,
     QMenu * const      subMenu)
 {
+    Q_UNUSED(name);
+    
     //m_menu.insertItem(name, subMenu);
     m_menu.addMenu(subMenu);
 }

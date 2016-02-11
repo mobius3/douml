@@ -90,6 +90,8 @@ void BrowserView::select(QTreeWidgetItem *b, QTreeWidgetItem *previous)
 {
     static bool ongoing = FALSE;
 
+    Q_UNUSED(previous);
+
     if(!b)
         return;
     if (!ongoing) {

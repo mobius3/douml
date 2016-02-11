@@ -352,7 +352,7 @@ UmlOperation * UmlOperation::java2Php(UmlClass * php, UmlClass * java,
     to->set_CppVisibility(from->cppVisibility());
 
     const QList<UmlParameter> params = from->params();
-    unsigned index;
+    int index;
 
     for (index = 0; index != params.count(); index += 1)
         to->addParameter(index, params[index]);
@@ -416,7 +416,7 @@ UmlOperation * UmlOperation::java2Python(UmlClass * python, UmlClass * java,
     to->set_CppVisibility(from->cppVisibility());
 
     const QList<UmlParameter> params = from->params();
-    unsigned index;
+    int index;
 
     for (index = 0; index != params.count(); index += 1)
         to->addParameter(index, params[index]);
@@ -480,7 +480,7 @@ UmlOperation * UmlOperation::cpp2Python(UmlClass * python, UmlClass * cpp,
     to->set_CppVisibility(from->cppVisibility());
 
     const QList<UmlParameter> params = from->params();
-    unsigned index;
+    int index;
 
     for (index = 0; index != params.count(); index += 1)
         to->addParameter(index, params[index]);

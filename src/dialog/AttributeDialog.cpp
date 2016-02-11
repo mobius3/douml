@@ -121,8 +121,8 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 
     grid = new GridBox(2, this);
     umltab = grid;
-    grid->setMargin(0);
-    grid->setSpacing(0);
+    grid->setMargin(2);
+    grid->setSpacing(2);
 
     grid->addWidget(new QLabel(tr("class : "), grid));
     grid->addWidget(new QLabel(((BrowserNode *) a->get_browser_node()->parent())->full_name(TRUE),

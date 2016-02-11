@@ -69,7 +69,7 @@ protected:
                           QString python_path, QString idl_path);
 
 public:
-    BrowserArtifact(QString s, BrowserNode * p, int id = 0);
+    BrowserArtifact(const QString & s, BrowserNode * p, int id = 0);
     BrowserArtifact(const BrowserArtifact * model, BrowserNode * p);
     BrowserArtifact(int id);
 
@@ -86,10 +86,10 @@ public:
 
     virtual void delete_it();
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool force_edit);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;
@@ -140,7 +140,7 @@ protected:
     void get_paths(QString & cpp_h_path, QString & cpp_src_path,
                    QString & java_path, QString & php_path,
                    QString & python_path, QString & idl_path) const;
-    QString get_path(QString path, QString root,
+    QString get_path(const QString & path, const QString & root,
                      const char * ext) const;
 };
 

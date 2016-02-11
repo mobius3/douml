@@ -45,7 +45,7 @@ public:
     NumberedMultiLineEdit(QWidget * w) : MultiLineEdit(w) { };
 
 protected:
-    virtual bool event(QEvent * e);
+    virtual bool event(QEvent * e) override;
 
 signals:
     void cursorMoved(int l, int c);

@@ -453,8 +453,8 @@ bool is_referenced(const char * s, int id, const char * kc, const char * kr)
     if (s != 0) {
         if (kc != 0) {
             // search a form kc <n> kr id
-            int lkc = strlen(kc);
-            int lkr = strlen(kr);
+            size_t lkc = strlen(kc);
+            size_t lkr = strlen(kr);
 
             while ((s = strstr(s, kc)) != 0) {
                 s += lkc;
@@ -477,7 +477,7 @@ bool is_referenced(const char * s, int id, const char * kc, const char * kr)
         }
         else {
             // search a form  kr id
-            int lkr = strlen(kr);
+            size_t lkr = strlen(kr);
 
             while ((s = strstr(s, kr)) != 0) {
                 s += lkr;

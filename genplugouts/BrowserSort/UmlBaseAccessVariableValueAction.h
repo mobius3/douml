@@ -30,7 +30,7 @@ private:
 
 
 protected:
-    virtual void read_uml_();
+    virtual void read_uml_() override;
 
 };
 

@@ -1,15 +1,8 @@
 TEMPLATE	= app
 TARGET		= browsersort
-CONFIG(Debug, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt warn_on Debug
-    QMAKE_POST_LINK = " "
-}
-CONFIG(Release, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt Release
-    QMAKE_POST_LINK = " "
-}
+CONFIG -= app_bundle
+CONFIG += qt warn_on c++11
+DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH += ../../src
 HEADERS		= ./UmlActivityPin.h \
 		  ./TransitionBehavior.h \
@@ -330,15 +323,14 @@ SOURCES		= ./UmlActivityPin.cpp \
 		  ./UmlBaseShallowHistoryPseudoState.cpp
 DEFINES += TRUE=true FALSE=false
 QT += network
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
 DESTDIR = ../../bin
-Release {
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/browsersort
     OBJECTS_DIR = $${DESTDIR}/obj_release/browsersort
 }
-
-Debug {
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
     MOC_DIR = $${DESTDIR}/moc_debug/browsersort
     OBJECTS_DIR = $${DESTDIR}/obj_debug/browsersort
 }

@@ -32,7 +32,7 @@ void UmlClass::memo_ref()
     if (inherited_opers == 0)
         add_inherited_opers(0);
 
-    for (unsigned i = 0; i != ch.size(); i += 1) {
+    for (int i = 0; i != ch.size(); i += 1) {
         if (ch[i]->kind() == aRelation) {
             UmlRelation * rel = (UmlRelation *) ch[i];
             aRelationKind k = rel->relationKind();
@@ -197,7 +197,7 @@ void UmlClass::gen_html(QByteArray pfix, unsigned int rank, unsigned int level)
             fw.write("<p>Component(s) :");
         }
 
-        for (unsigned i = 0; i != comps.size(); i += 1) {
+        for (int i = 0; i != comps.size(); i += 1) {
             fw.write(' ');
             comps[i]->write();
         }
@@ -233,7 +233,7 @@ void UmlClass::gen_html(QByteArray pfix, unsigned int rank, unsigned int level)
         if (stereotype() == "enum_pattern") {
             p = FALSE;
 
-            for (unsigned i = 0; i != ch.size(); i += 1) {
+            for (int i = 0; i != ch.size(); i += 1) {
                 if (ch[i]->kind() == anAttribute) {
                     if (!p) {
                         p = TRUE;
@@ -253,7 +253,7 @@ void UmlClass::gen_html(QByteArray pfix, unsigned int rank, unsigned int level)
             fw.write("<div class=\"sub\">\n");
 
             if (stereotype() == "enum") {
-                unsigned i;
+                int i;
 
                 p = FALSE;
 
@@ -287,7 +287,7 @@ void UmlClass::gen_html(QByteArray pfix, unsigned int rank, unsigned int level)
                 // non flat
                 s = "";
 
-                for (unsigned i = 0; i != ch.size(); i += 1)
+                for (int i = 0; i != ch.size(); i += 1)
                     ch[i]->html(s, 0, 0);
             }
 
@@ -402,7 +402,7 @@ void UmlClass::add_inherited_opers(Vector * ops)
 
         inherited_opers = new Vector;
 
-        for (unsigned i = 0; i != ch.size(); i += 1) {
+        for (int i = 0; i != ch.size(); i += 1) {
             switch (ch[i]->kind()) {
             case aRelation: {
                 UmlRelation * rel = (UmlRelation *) ch[i];
@@ -457,7 +457,7 @@ void UmlClass::gen_cpp_decl(QByteArray s, bool descr)
                 UmlClass * mother = baseType().type;
                 const QVector<UmlItem*> ch = children();
 
-                for (unsigned i = 0; i != ch.size(); i += 1) {
+                for (int i = 0; i != ch.size(); i += 1) {
                     if (ch[i]->kind() == aRelation) {
                         UmlRelation * rel = (UmlRelation *) ch[i];
                         aRelationKind k = rel->relationKind();
@@ -491,7 +491,7 @@ void UmlClass::gen_cpp_decl(QByteArray s, bool descr)
             const QVector<UmlItem*> ch = children();
             const char * sep = " : ";
 
-            for (unsigned i = 0; i != ch.size(); i += 1) {
+            for (int i = 0; i != ch.size(); i += 1) {
                 if (ch[i]->kind() == aRelation) {
                     UmlRelation * rel = (UmlRelation *) ch[i];
                     aRelationKind k = rel->relationKind();
@@ -585,7 +585,7 @@ void UmlClass::gen_java_decl(QByteArray s, bool descr)
 
             const QVector<UmlItem*> ch = children();
 
-            for (unsigned i = 0; i != ch.size(); i += 1) {
+            for (int i = 0; i != ch.size(); i += 1) {
                 if (ch[i]->kind() == aRelation) {
                     UmlRelation * rel = (UmlRelation *) ch[i];
                     aRelationKind k = rel->relationKind();
@@ -610,7 +610,7 @@ void UmlClass::gen_java_decl(QByteArray s, bool descr)
             const QVector<UmlItem*> ch = children();
             const char * sep = " implements ";
 
-            for (unsigned i = 0; i != ch.size(); i += 1) {
+            for (int i = 0; i != ch.size(); i += 1) {
                 if (ch[i]->kind() == aRelation) {
                     UmlRelation * rel = (UmlRelation *) ch[i];
                     aRelationKind k = rel->relationKind();
@@ -700,7 +700,7 @@ void UmlClass::gen_php_decl(QByteArray s, bool descr)
 
             const QVector<UmlItem*> ch = children();
 
-            for (unsigned i = 0; i != ch.size(); i += 1) {
+            for (int i = 0; i != ch.size(); i += 1) {
                 if (ch[i]->kind() == aRelation) {
                     UmlRelation * rel = (UmlRelation *) ch[i];
                     aRelationKind k = rel->relationKind();
@@ -724,7 +724,7 @@ void UmlClass::gen_php_decl(QByteArray s, bool descr)
             const QVector<UmlItem*> ch = children();
             const char * sep = " implements ";
 
-            for (unsigned i = 0; i != ch.size(); i += 1) {
+            for (int i = 0; i != ch.size(); i += 1) {
                 if (ch[i]->kind() == aRelation) {
                     UmlRelation * rel = (UmlRelation *) ch[i];
                     aRelationKind k = rel->relationKind();
@@ -795,7 +795,7 @@ void UmlClass::gen_python_decl(QByteArray s, bool descr)
             const QVector<UmlItem*> ch = children();
             bool inh = FALSE;
 
-            for (unsigned i = 0; i != ch.size(); i += 1) {
+            for (int i = 0; i != ch.size(); i += 1) {
                 if (ch[i]->kind() == aRelation) {
                     UmlRelation * rel = (UmlRelation *) ch[i];
                     aRelationKind k = rel->relationKind();

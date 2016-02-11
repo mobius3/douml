@@ -217,7 +217,7 @@ public:
 
 protected slots:
     virtual void polish();
-    virtual void accept();
+    virtual void accept() override;
 
     void default_description_a();
     void default_description_b();

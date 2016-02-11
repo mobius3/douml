@@ -67,8 +67,8 @@ void BrowserView::rightPressed(QTreeWidgetItem * item)
 
 void BrowserView::refer(const QString & href)
 {
-    BrowserNode * bn;// = (BrowserNode *) selectedItem();
-    if(selectedItems().count())
+    BrowserNode * bn = nullptr;// = (BrowserNode *) selectedItem();
+    if (selectedItems().count())
         bn = (BrowserNode *)selectedItems().at(0);
 
     if (bn != 0)

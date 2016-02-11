@@ -143,7 +143,7 @@ char * read_token(char *& st)
 
 //
 
-static int open_file(QFile & fp, BooL & ro)
+static qint64 open_file(QFile & fp, BooL & ro)
 {
     QString filename = fp.fileName();
 
@@ -165,7 +165,7 @@ char * read_file(QDir & dir, QString fn, BooL & ro)
 {
     QString filename = dir.absoluteFilePath(fn);
     QFile fp(filename);
-    int size;
+    qint64 size;
 
     if ((size = open_file(fp, ro)) != -1) {
         char * s = new char[size + 1];
@@ -363,7 +363,7 @@ void set_user_id(int id, QString s)
 
 void remove_crlf(char * s)
 {
-    int len = strlen(s);
+    size_t len = strlen(s);
 
     if (len != 0) {
         if (s[len - 1] == '\n')

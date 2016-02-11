@@ -199,13 +199,13 @@ ConstraintTable::ConstraintTable(QWidget * parent, ConstraintCanvas * c)
 
         TableItem * ti;
 
-        ti = new TableItem(this, TableItem::Never, bn->full_name(TRUE), TableItem::TableItemType);
+        ti = new TableItem(TableItem::Never, bn->full_name(TRUE), TableItem::TableItemType);
         setItem(row, 2, ti);
 
         QString s = toUnicode(bn->constraint());
         int n = s.count('\n');
 
-        ti = new TableItem(this, TableItem::Never, s, TableItem::TableItemType);
+        ti = new TableItem(TableItem::Never, s, TableItem::TableItemType);
         setItem(row, 3, ti);
 
         if (n != 0) {

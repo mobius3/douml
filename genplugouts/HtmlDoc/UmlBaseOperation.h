@@ -144,7 +144,7 @@ public:
     bool set_CppDef(const char * s);
 
     // returns the operation's body in C++, useless if the def does not
-    // contains ${body}. Note that the body is get each time from BOUML
+    // contains ${body}. Note that the body is get each time from DOUML
     // for memory size reason
     QByteArray cppBody();
 
@@ -213,7 +213,7 @@ public:
     bool set_JavaDef(const char * s);
 
     // returns the operation's body in Java++, useless if the def does
-    // not contains ${body} Note that the body is get each time from BOUML
+    // not contains ${body} Note that the body is get each time from DOUML
     // for memory size reason
     QByteArray javaBody();
 
@@ -274,7 +274,7 @@ public:
     bool set_PhpDef(const char * s);
 
     // returns the operation's body in Php++, useless if the def does
-    // not contains ${body} Note that the body is get each time from BOUML
+    // not contains ${body} Note that the body is get each time from DOUML
     // for memory size reason
     QByteArray phpBody();
 
@@ -327,7 +327,7 @@ public:
     bool set_PythonDef(const char * s);
 
     // returns the operation's body in Python++, useless if the def does
-    // not contains ${body} Note that the body is get each time from BOUML
+    // not contains ${body} Note that the body is get each time from DOUML
     // for memory size reason
     QByteArray pythonBody();
 

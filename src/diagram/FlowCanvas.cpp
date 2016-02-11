@@ -366,11 +366,10 @@ void FlowCanvas::menu(const QPoint &)
     }
 }
 
-void FlowCanvas::apply_shortcut(QString s)
+void FlowCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         data->get_start()->select_in_browser();
-        return;
     }
     else if (s == "Edit drawing settings") {
         ArrowCanvas * aplabel;
@@ -380,16 +379,10 @@ void FlowCanvas::apply_shortcut(QString s)
 
         if ((aplabel != 0) || (apstereotype != 0))
             edit_drawing_settings();
-
-        return;
     }
     else {
         data->get_start()->apply_shortcut(s);
-        return;
     }
-
-    modified();
-    package_modified();
 }
 
 void FlowCanvas::edit_drawing_settings()
@@ -868,7 +861,7 @@ void FlowCanvas::save(QTextStream & st, bool ref, QString & warning) const
         }
 
         nl_indent(st);
-        (const FlowCanvas *) ArrowCanvas::save_lines(st, TRUE, TRUE, warning);
+        save_lines(st, TRUE, TRUE, warning);
         settings.save(st);
         st << " write_horizontally " << stringify(write_horizontally);
 

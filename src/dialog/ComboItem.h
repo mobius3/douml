@@ -41,7 +41,7 @@ protected:
     const QStringList & types;
 
 public:
-    ComboItem(QTableWidget * t, const QString & s,
+    ComboItem(const QString & s,
               const QStringList & list, bool edit = TRUE);
     bool getEditable() const;
     void setEditable(bool value);

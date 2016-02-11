@@ -1,14 +1,8 @@
 TEMPLATE      = app
-CONFIG(Debug, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt warn_on Debug
-    QMAKE_POST_LINK = " "
-}
-CONFIG(Release, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt Release
-    QMAKE_POST_LINK = " "
-}
+CONFIG -= app_bundle
+CONFIG += qt warn_on c++11
+QMAKE_POST_LINK = " "
+DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
         UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
         UmlExtraClassMember.cpp \
@@ -107,9 +101,10 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
 
 
 TARGET          = cpp_reverse
-DEFINES          = WITHCPP REVERSE BooL=bool DEBUG_BOUML FALSE=false TRUE=true
+DEFINES          += WITHCPP REVERSE BooL=bool FALSE=false TRUE=true
+#DEFINES += _RUN_PLUGOUT_EXTERNAL_
 
-INCLUDEPATH   = ../Tools ../CppReverse ../
+INCLUDEPATH   += ../Tools ../CppReverse ../
 QT += testlib
 
 
@@ -118,19 +113,18 @@ QT += network widgets
 #qt3support
 
 DESTDIR = ../../bin
-Release {
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/cpp_reverse
     OBJECTS_DIR = $${DESTDIR}/obj_release/cpp_reverse
 }
-
-Debug {
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
     MOC_DIR = $${DESTDIR}/moc_debug/cpp_reverse
     OBJECTS_DIR = $${DESTDIR}/obj_debug/cpp_reverse
 }
 UI_DIR = src/ui
 
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
 HEADERS += \
     ../Logging/QsLogDest.h \
     ../Logging/QsLog.h \

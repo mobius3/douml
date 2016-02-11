@@ -41,7 +41,7 @@ protected:
 
     void modified();
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     ImageCanvas(UmlCanvas * canvas, int x, int y, QString pa, int id);
     virtual ~ImageCanvas();
@@ -50,22 +50,22 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode typeUmlCode() const;
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual bool alignable() const;
-    virtual bool copyable() const;
-    virtual void open();
-    virtual void change_scale();
-    virtual void menu(const QPoint &);
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual void history_save(QBuffer &) const;
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
+    virtual UmlCode typeUmlCode() const override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual bool alignable() const override;
+    virtual bool copyable() const override;
+    virtual void open() override;
+    virtual void change_scale() override;
+    virtual void menu(const QPoint &) override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual void history_save(QBuffer &) const override;
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
 
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s) override;
 
-    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const override;
     static ImageCanvas * read(char *& , UmlCanvas *, char *);
 
     static ImageCanvas * add(UmlCanvas *, int x, int y);
