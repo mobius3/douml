@@ -243,6 +243,7 @@ CreateToolButton(
 
 UmlWindow::UmlWindow(bool ) : QMainWindow(0)
 	, isToolMenuLoaded(false)
+    , quitConfirmed(false)
 {
     setAttribute(Qt::WA_QuitOnClose);
     setWindowTitle("DoUML");
@@ -1382,10 +1383,19 @@ void UmlWindow::close()
 {
     abort_line_construction();
     bool editionActive = !BrowserNode::edition_active();
-    bool canClose = can_close();
-    if (editionActive && canClose)
+    if (quitConfirmed || // if we already confirmed then it must be because the window
+         // is being closed by the quit command, not the close project command,
+         // so don't ask again to safe if modified, the user already answered the question
+         (can_close() && editionActive))
     {
         close_it();
+    }
+    else
+    {
+        // reset the quitConfirmed flag so that if for some reason the project did not
+        // close, then the user will, on a future close project command, be appropriately
+        // warned to save if modified.
+        quitConfirmed = false;
     }
 }
 
@@ -1461,6 +1471,9 @@ void UmlWindow::quit()
 
     bool canClose = true;
     bool editionActive = false;
+
+    Q_ASSERT(!quitConfirmed); // if this happens, then probably it was not initialized by the contructor
+
     if ((editionActive = BrowserNode::edition_active() == false) && (canClose = can_close()) == true)
     {
         if (browser->get_project() != 0) {
@@ -1470,6 +1483,15 @@ void UmlWindow::quit()
             set_user_id(-1);
         }
         quitConfirmed = true;
+
+        // Call the close project command now to prevent a segmentation fault
+        // if the project was not manually closed by the user before quitting douml,
+        // i.e. if the user used the quit command with a project currently opened.
+        // (note: the segmentation fault was due to the static object 'BasicParent BasicParent::the'
+        // which is declared in 'BasicData.cpp' that still had invalid references to child items and
+        // tried to delete them in its destructor.
+        close();
+
         QApplication::exit(0);
         return;
     }
