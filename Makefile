@@ -158,6 +158,11 @@ ifeq ($(uname_S),Darwin)
 # We run the macdeployqt tool to add the appropriate frameworks and
 # configuration files to the bundle and to create a .dmg disk image file.
 ifeq ($(CONFIG),debug)
+# In debug mode we don't create the dmg file. Instead we tell macdeployqt to add the debug versions of
+# the Qt frameworks, and we edit the bundle's Info.plist to set the environment variable
+# DYLD_IMAGE_SUFFIX=_debug so that the app will load the debug versions of Qt libraries
+	/usr/libexec/PlistBuddy -c "Add :LS_Environment dict" "$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app/Contents/Info.plist"
+	/usr/libexec/PlistBuddy -c "Add :LS_Environment:DYLD_IMAGE_SUFFIX string '_debug'" "$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app/Contents/Info.plist"
 	macdeployqt "$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app" -verbose=2 -use-debug-libs \
 		$(patsubst %,-executable="$(DESTDIR)$(DOUML_LIB)/$(MAINPROG).app/Contents/MacOS/%",$(SIDEPROGS))
 else
