@@ -11,6 +11,9 @@
       location = "container:"
       name = "Libs">
       <FileRef
+         location = "group:src/Libs/L_UniversalModels/UniversalModels_debug.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:src/Libs/L_UniversalModels/UniversalModels.xcodeproj">
       </FileRef>
    </Group>
