@@ -1583,8 +1583,7 @@ void UmlWindow::read_session()
 
                 resize(w, h);
                 {
-                    extern QApplication * theApp;
-                    theApp->processEvents(/*500*/);
+                    qApp->processEvents(/*500*/);
                 }
 
                 QList<int> lsz = spl1->sizes();
@@ -1601,8 +1600,7 @@ void UmlWindow::read_session()
 
                 spl2->setSizes(lsz);
                 {
-                    extern QApplication * theApp;
-                    theApp->processEvents(/*500*/);
+                    qApp->processEvents(/*500*/);
                 }
 
                 const char * k = read_keyword(st);

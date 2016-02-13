@@ -2723,15 +2723,13 @@ void DiagramView::read_session(char *& st)
     canvas()->update();
     (void) read_unsigned(st); // set_format((int) read_unsigned(st));
     {
-        extern QApplication * theApp;
-        theApp->processEvents(/*500*/);
+        qApp->processEvents(/*500*/);
     }
     verticalScrollBar()->setValue(read_unsigned(st));
     horizontalScrollBar()->setValue(read_unsigned(st));
     canvas()->update();
     {
-        extern QApplication * theApp;
-        theApp->processEvents(/*500*/);
+        qApp->processEvents(/*500*/);
     }
 }
 
