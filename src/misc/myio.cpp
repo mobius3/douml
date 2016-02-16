@@ -1496,7 +1496,7 @@ static void set_previous_word(char * s)
     Context.previous_word = s;
 }
 
-void backup(QDir & d, QString fn)
+void backup(QDir & d, const QString & fn)
 {
     QString s;
 
@@ -1513,27 +1513,22 @@ void backup(QDir & d, QString fn)
         ;
 }
 
-void delete_backup(QDir & d)
+void delete_backup(const QDir & d)
 {
     QStringList s;
 
-    //s.sprintf("*_%u.bak", user_id());
     s.append(QString("*_%1.bak").arg(user_id()));
     //[lgfreitas] entryInfoList des not return a pointer anymore
     QFileInfoList l = d.entryInfoList(s);
 
     if (!l.empty()) {
-        QFileInfoList::iterator it = l.begin(); //[lgfreitas] above iterator was not working.
-        //QFileInfo fi;
-
-        while (it != l.end())  {
-            QFile::remove((*it).absoluteFilePath());
-            it++;
+        for (const auto& fileInfo : l) {
+            QFile::remove(fileInfo.absoluteFilePath());
         }
     }
 }
 
-int open_file(QFile & fp, int mode, bool silent)
+qint64 open_file(QFile & fp, int mode, bool silent)
 {
     Context.filename = fp.fileName();
 
@@ -1653,7 +1648,7 @@ char * read_file(QString filename)
             : BrowserView::get_dir().absoluteFilePath(filename);
 
     QFile fp(filename);
-    int size;
+    qint64 size;
 
     if ((size = open_file(fp, QIODevice::ReadOnly, TRUE)) != -1) {
         char * s = new char[size + 1];
@@ -1710,7 +1705,7 @@ char * read_definition(int id, const char * ext)
     return read_file(s);
 }
 
-char * read_file(QString filename, int offset, int len)
+char * read_file(QString filename, qint64 offset, qint64 len)
 {
     filename = BrowserView::get_dir().absoluteFilePath(filename);
 
@@ -1736,7 +1731,7 @@ char * read_file(QString filename, int offset, int len)
         return 0;
 }
 
-char * read_definition(int id, const char * ext, int offset, int len)
+char * read_definition(int id, const char * ext, qint64 offset, qint64 len)
 {
     if (len == 0)
         return 0;
@@ -1841,32 +1836,26 @@ void save_string(QString p, QTextStream & st)
     toWrite.replace('\\',"\\\\");
     toWrite.replace('"',"\\\"");
         st << '"';
-        //for (int i = 0; i< toWrite.size(); i++)
-          //  st << toWrite.at(i);
         st << toWrite;
         st << '"';
 }
 
-void save_string_list(QStringList & list, QTextStream & st)
+void save_string_list(const QStringList & list, QTextStream & st)
 {
     st << " " << list.count();
 
-    for (QStringList::Iterator it = list.begin();
-         it != list.end();
-         ++it) {
+    for (const auto& s : list) {
         st << " ";
-        save_string((*it), st);
+        save_string(s, st);
     }
 }
 
-void save_unicode_string_list(QStringList & list, QTextStream & st)
+void save_unicode_string_list(const QStringList & list, QTextStream & st)
 {
     st << " " << list.count();
-    for (QStringList::Iterator it = list.begin();
-         it != list.end();
-         ++it) {
+    for (const auto& s : list) {
         st << " ";
-        save_string((*it), st);
+        save_string(s, st);
     }
 }
 
@@ -2678,13 +2667,13 @@ void draw_shadow(FILE * fp, QPolygon & poly)
     (void) fputs("\" />\n", fp);
 }
 
-void draw_text(const QRect & r, int align, QString s, const QFont & fn, FILE * fp)
+void draw_text(const QRect & r, int align, const QString & s, const QFont & fn, FILE * fp)
 {
     draw_text(r.left(), r.top(), r.width(), r.height(),
               align, s, fn, fp);
 }
 
-static void xml_text(FILE * fp, QString s)
+static void xml_text(FILE * fp, const QString & s)
 {
     WrapperStr cs = s.toUtf8();
     const char * p = cs;
@@ -2721,9 +2710,11 @@ static void xml_text(FILE * fp, QString s)
 }
 
 void draw_text(int x, int y, int w, int h, int align,
-               QString s, const QFont & fn, FILE * fp,
+               const QString & sInit, const QFont & fn, FILE * fp,
                UmlColor fg, UmlColor bg)
 {
+    QString s = sInit;
+    
     if (s.isEmpty())
         return;
 
@@ -2880,7 +2871,7 @@ void draw_text(int x, int y, int w, int h, int align,
     }
 }
 
-void draw_rotate_text(int cx, int cy, int angle, QString s,
+void draw_rotate_text(int cx, int cy, int angle, const QString & s,
                       const QFont & fn, FILE * fp, UmlColor fg)
 {
     if (s.isEmpty())
@@ -2929,7 +2920,7 @@ QString last_used_directory()
     return Last_Used_Directory;
 }
 
-void set_last_used_directory(QString s)
+void set_last_used_directory(const QString & s)
 {
     QFileInfo fi(s);
 

@@ -1,3 +1,4 @@
+
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -77,32 +78,32 @@ extern void force_read_only(bool y);
 extern bool on_load_diagram();
 extern void set_on_load_diagram(bool);
 
-extern void backup(QDir & d, QString fn);
-extern void delete_backup(QDir & d);
+extern void backup(QDir & d, const QString & fn);
+extern void delete_backup(const QDir & d);
 
-extern int open_file(QFile & fp, int mode, bool silent = FALSE);
+extern qint64 open_file(QFile & fp, int mode, bool silent = FALSE);
 extern void read_in(const QString &);
 extern bool copy_file(QFileInfo * src, const QDir & dest);
 extern void save_if_needed(const char * filename, QString& newdef);
 
 extern char * read_file(QString filename);
-extern char * read_file(QString filename, int offset, int len);
+extern char * read_file(QString filename, qint64 offset, qint64 len);
 
 extern QString last_used_directory();
-extern void set_last_used_directory(QString);
+extern void set_last_used_directory(const QString &);
 
 extern void set_read_file_format(unsigned);
 extern unsigned read_file_format();
 
 extern QString abs_file_path(int id, const char * ext);
 extern char * read_definition(int id, const char * ext);
-char * read_definition(int id, const char * ext, int offset, int len);
+char * read_definition(int id, const char * ext, qint64 offset, qint64 len);
 extern void save_definition(int id, const char * ext, QString def, BooL & is_new);
 extern void delete_definition(int id, const char * ext);
 
 extern void save_string(QString, QTextStream & st);
-extern void save_string_list(QStringList & list, QTextStream & st);
-extern void save_unicode_string_list(QStringList & list, QTextStream & st);
+extern void save_string_list(const QStringList & list, QTextStream & st);
+extern void save_unicode_string_list(const QStringList & list, QTextStream & st);
 extern void nl_indent(QTextStream & st);
 extern void indent(int);
 extern int indent();
@@ -179,11 +180,11 @@ extern const char * svg_color(UmlColor);
 extern void draw_shadow(FILE * fp, QPolygon & poly);
 extern void draw_poly(FILE * fp, QPolygon & poly,
                       UmlColor color, bool stroke = TRUE);
-extern void draw_text(const QRect & r, int align, QString s, const QFont &, FILE *);
-extern void draw_text(int x, int y, int w, int h, int align, QString s,
+extern void draw_text(const QRect & r, int align, const QString & s, const QFont &, FILE *);
+extern void draw_text(int x, int y, int w, int h, int align, const QString & s,
                       const QFont &, FILE *, UmlColor fg = UmlBlack,
                       UmlColor bg = UmlTransparent);
-extern void draw_rotate_text(int cx, int cy, int angle, QString s,
+extern void draw_rotate_text(int cx, int cy, int angle, const QString & s,
                              const QFont &, FILE *, UmlColor fg = UmlBlack);
 
 // windows wrong home dir
