@@ -56,7 +56,7 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserDeploymentNode(QString s, BrowserNode * p, int id = 0);
+    BrowserDeploymentNode(const QString & s, BrowserNode * p, int id = 0);
     BrowserDeploymentNode(const BrowserDeploymentNode * model, BrowserNode * p);
     BrowserDeploymentNode(int id);
     virtual ~BrowserDeploymentNode();
@@ -65,10 +65,10 @@ public:
     void set_associated_diagram(BrowserDeploymentDiagram *, bool on_read = FALSE);
 
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool force_edit);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;

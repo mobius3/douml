@@ -654,8 +654,8 @@ void IdlSettings::read_()
 {
     _root = UmlCom::read_string();
 
-    unsigned n;
-    unsigned index;
+    int n;
+    int index;
 
     n = UmlCom::read_unsigned();
 

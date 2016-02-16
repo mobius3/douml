@@ -53,7 +53,7 @@ void MyTable::setText(int row, int col, const QString & text)
     }
     else
     {
-        setItem(row, col, new TableItem(this, TableItem::OnTyping, text, TableItem::TableItemType));
+        setItem(row, col, new TableItem(TableItem::OnTyping, text, TableItem::TableItemType));
     }
 }
 
@@ -144,5 +144,7 @@ void MyTable::setRowStretchable(int column, bool state)
 
 void MyTable::adjustColumn(int col)
 {
+    Q_UNUSED(col);
+    
     horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 }

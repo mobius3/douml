@@ -45,7 +45,7 @@ public:
     GreetingsDialog();
 
 protected slots:
-    virtual void closeEvent(QCloseEvent * e);
+    virtual void closeEvent(QCloseEvent * e) override;
     void valid_ok();
 };
 

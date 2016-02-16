@@ -1,10 +1,10 @@
-#include "QByteArray.h"
+#include <QByteArray>
 
 #include "util.h"
 
 QByteArray legalName(QByteArray s)
 {
-    for (unsigned index = 0; index != s.length(); index += 1) {
+    for (int index = 0; index != s.length(); index += 1) {
         char c = s.at(index);
 
         if ((c != '_') &&

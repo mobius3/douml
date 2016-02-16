@@ -60,21 +60,21 @@ protected:
     // Idl
     WrapperStr idl_decl;
 
-    virtual void send_cpp_def(ToolCom * com);
-    virtual void send_java_def(ToolCom * com);
-    virtual void send_php_def(ToolCom * com);
-    virtual void send_python_def(ToolCom * com);
-    virtual void send_idl_def(ToolCom * com);
+    virtual void send_cpp_def(ToolCom * com) override;
+    virtual void send_java_def(ToolCom * com) override;
+    virtual void send_php_def(ToolCom * com) override;
+    virtual void send_python_def(ToolCom * com) override;
+    virtual void send_idl_def(ToolCom * com) override;
 
 public:
     ExtraMemberData();
     ExtraMemberData(const ExtraMemberData * model, BrowserNode *);
     virtual ~ExtraMemberData();
 
-    virtual bool deletedp() const;
-    virtual void set_deletedp(bool y);
+    virtual bool deletedp() const override;
+    virtual void set_deletedp(bool y) override;
 
-    virtual QString definition(bool full, bool with_kind) const;
+    virtual QString definition(bool full, bool with_kind) const override;
 
     const char * get_cpp_decl() const {
         return cpp_decl;
@@ -105,7 +105,7 @@ public:
     void edit();
 
     virtual bool tool_cmd(ToolCom * com, const char * args,
-                          BrowserNode * bn, const QString & comment);
+                          BrowserNode * bn, const QString & comment) override;
 
     void save(QTextStream &, QString & warning) const;
     void read(char *& st, char *& k);

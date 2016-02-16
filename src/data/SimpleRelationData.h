@@ -49,14 +49,14 @@ protected:
     BrowserNode * end;
 
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-                              const QString & comment);
+                              const QString & comment) override;
 
 public:
     SimpleRelationData(UmlCode e);
     SimpleRelationData(const BrowserSimpleRelation * model, BrowserSimpleRelation * r);
     virtual ~SimpleRelationData();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     void set_start_end(BrowserSimpleRelation * s, BrowserNode * e);
     void edit();
@@ -73,7 +73,7 @@ public:
     }
     void set_type(UmlCode e);
 
-    virtual QString definition(bool full, bool with_kind) const;
+    virtual QString definition(bool full, bool with_kind) const override;
 
     void save(QTextStream &, QString & warning) const;
     static SimpleRelationData * read(char *&);

@@ -104,7 +104,7 @@ void UmlClass::compute_dependency(QList<CppRefType *> & dependencies,
         // template class, force depend in h
         all_in_h = TRUE;
 
-    for (unsigned index = 0; index != ch.size(); index += 1) {
+    for (int index = 0; index != ch.size(); index += 1) {
         if (ch[index]->kind() != aNcRelation) {
             UmlClassItem * it = (UmlClassItem *) ch[index];
 
@@ -415,7 +415,7 @@ void UmlClass::generate_def(QTextStream & f, WrapperStr indent, bool h)
 
         spec(templates, cl_names, templates_tmplop, cl_names_tmplop);
 
-        for (unsigned index = 0; index != ch.size(); index += 1)
+        for (int index = 0; index != ch.size(); index += 1)
             if (ch[index]->kind() != aNcRelation)
                 ((UmlClassItem *) ch[index])
                 ->generate_def(f, indent, h, templates, cl_names,
@@ -444,7 +444,7 @@ void UmlClass::generate_def(QTextStream & f, WrapperStr indent, bool h,
 
         QVector<UmlItem*> ch = children();
 
-        for (unsigned index = 0; index != ch.size(); index += 1)
+        for (int index = 0; index != ch.size(); index += 1)
             if (ch[index]->kind() != aNcRelation)
                 ((UmlClassItem *) ch[index])
                 ->generate_def(f, indent, h, templates, cl_names,

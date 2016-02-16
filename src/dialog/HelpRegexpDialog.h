@@ -33,6 +33,8 @@
 
 class HelpRegexpDialog : public QDialog
 {
+    Q_OBJECT
+    
 protected:
     static QSize previous_size;
 

@@ -96,7 +96,7 @@ protected:
                   const char * sl_transformation, bool enabled);
 protected slots:
     virtual void polish();
-    virtual void accept();
+    virtual void accept() override;
 
     void edit_description();
     void edit_uml_guard();

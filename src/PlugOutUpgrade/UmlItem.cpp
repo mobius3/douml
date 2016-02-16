@@ -8,14 +8,14 @@ void UmlItem::rename_jdk5()
 {
     const QVector<UmlItem*> ch = children();
 
-    for (unsigned i = 0; i != ch.size(); i += 1)
+    for (int i = 0; i != ch.size(); i += 1)
         ch[i]->rename_jdk5();
 }
 
 void UmlItem::move_after(anItemKind k, const char * name)
 {
     const QVector<UmlItem*> ch = parent()->children();
-    unsigned i;
+    int i;
 
     for (i = 0; i != ch.size(); i += 1) {
         if ((ch[i]->kind() == k) &&

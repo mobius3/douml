@@ -50,18 +50,20 @@ protected:
 
     void exec_menu(int rank);
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     SdLifeLineCanvas(UmlCanvas * canvas, SdObjCanvas * o);
     virtual ~SdLifeLineCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     SdObjCanvas * get_obj() const {
         return obj;
     };
-    virtual void add(SdDurationCanvas *);
-    virtual void remove(SdDurationCanvas *);
+    virtual void add(SdDurationCanvas *) override;
+    using SdDurationSupport::remove;
+    using DiagramCanvas::remove;
+    virtual void remove(SdDurationCanvas *) override;
     void toFlat();
     void toOverlapping();
     double instance_max_y() const;
@@ -73,35 +75,35 @@ public:
         return end == 0;
     }
     void set_masked(bool y);
-    virtual void update_instance_dead();
-    virtual void update_v_to_contain(SdDurationCanvas *, bool);
-    virtual int sub_x(int sub_w) const;
-    virtual double min_y() const;
-    virtual SdLifeLineCanvas * get_line() const;
-    virtual bool isaDuration() const;
-    virtual double getZ() const;
+    virtual void update_instance_dead() override;
+    virtual void update_v_to_contain(SdDurationCanvas *, bool) override;
+    virtual int sub_x(int sub_w) const override;
+    virtual double min_y() const override;
+    virtual SdLifeLineCanvas * get_line() const override;
+    virtual bool isaDuration() const override;
+    virtual double getZ() const override;
 
     virtual bool is_decenter(const QPoint &, BooL &) const;
 
     virtual void drawShape(QPainter & p);
-    virtual void moveBy(double dx, double dy);
+    virtual void moveBy(double dx, double dy) override;
 
-    virtual UmlCode typeUmlCode() const;
-    virtual void open();
-    virtual void menu(const QPoint &);
-    virtual void change_scale();
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual bool may_connect(UmlCode l) const;
-    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
-    virtual bool connexion(UmlCode, const QPoint &, const QPoint &);
-    virtual LineDirection allowed_direction(UmlCode);
-    virtual bool copyable() const;
-    virtual void apply_shortcut(QString s);
+    virtual UmlCode typeUmlCode() const override;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
+    virtual void change_scale() override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual bool may_connect(UmlCode l) const override;
+    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &) override;
+    virtual bool connexion(UmlCode, const QPoint &, const QPoint &) override;
+    virtual LineDirection allowed_direction(UmlCode) override;
+    virtual bool copyable() const override;
+    virtual void apply_shortcut(const QString & s) override;
 
-    virtual void save(QTextStream &, bool ref, QString & warning) const;
-    virtual void history_save(QBuffer &) const;
-    virtual void history_load(QBuffer &);
+    virtual void save(QTextStream &, bool ref, QString & warning) const override;
+    virtual void history_save(QBuffer &) const override;
+    virtual void history_load(QBuffer &) override;
 
     static void send(ToolCom * com, const QList<QGraphicsItem*> & l,
                      QList<FragmentCanvas *> & fragments,

@@ -60,7 +60,7 @@ public:
 
     virtual bool undelete(bool rec, QString & warning, QString & renamed);
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
 
     virtual const QPixmap * pixmap(int) const;
 
@@ -68,7 +68,7 @@ public:
     virtual bool same_name(const QString & s, UmlCode type) const;
 
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool);
     virtual bool in_edition() const;
     virtual UmlCode get_type() const;

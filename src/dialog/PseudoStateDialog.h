@@ -68,7 +68,7 @@ public:
 
 protected slots:
     virtual void polish();
-    virtual void accept();
+    virtual void accept() override;
     void menu_reference();
     void edit_description();
 };

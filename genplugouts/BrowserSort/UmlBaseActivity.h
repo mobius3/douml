@@ -21,7 +21,7 @@ public:
     static UmlActivity * create(UmlClassView * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -113,7 +113,7 @@ public:
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
     // you will have to call Children() to re-access to them
-    virtual void unload(bool = FALSE, bool = FALSE);
+    virtual void unload(bool = FALSE, bool = FALSE) override;
 
 
 private:
@@ -141,7 +141,7 @@ private:
 
 
 protected:
-    virtual void read_uml_();
+    virtual void read_uml_() override;
 
 #ifdef WITHCPP
     virtual void read_cpp_();

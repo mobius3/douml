@@ -115,3 +115,11 @@ src/CppReverse/cpp_reverse
 /install/
 .DS_Store
 .qmake.stash
+xcuserdata/
+Info.plist
+*.xcodeproj
+project.pbxproj
+project.xcworkspace
+qt_makeqmake.mak
+qt_preprocess.mak
+xcshareddata/

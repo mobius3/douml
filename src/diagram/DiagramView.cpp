@@ -582,7 +582,6 @@ void DiagramView::mouseReleaseEvent(QMouseEvent * e)
 
             for (it = l.begin(); it != l.end(); ++it)
             {
-                QRectF bound = (*it)->sceneBoundingRect();
                 if (r.contains((*it)->sceneBoundingRect()/*, TRUE*/) && // completement inclus
                         !isa_alien(*it) &&		// DiagramItem
                         (*it)->isVisible() &&		// pas en attente de destruction
@@ -2424,8 +2423,8 @@ bool DiagramView::save_in(const char * f, bool optimal, bool temporary)
 
     bool r;
     if (optimal) {
-        int x0 = 0;//center();
-        int y0 = 0; //contentsY();
+        //int x0 = 0;//center();
+        //int y0 = 0; //contentsY();
 
         //setContentsPos(0, 0);
 
@@ -2476,8 +2475,8 @@ bool DiagramView::svg_save_in(const char * f, bool optimal, bool temporary)
     bool result = FALSE;
     the_canvas()->show_limits(FALSE);
     if (optimal) {
-        int x0 = 0; //contentsX();
-        int y0 = 0;//contentsY();
+        //int x0 = 0; //contentsX();
+        //int y0 = 0;//contentsY();
 
         //setContentsPos(0, 0);
 
@@ -2561,8 +2560,8 @@ void DiagramView::copy_in_clipboard(bool optimal, bool temporary)
     the_canvas()->show_limits(FALSE);
 
     if (optimal) {
-        int x0 = 0;// contentsX();
-        int y0 = 0; //contentsY();
+        //int x0 = 0;// contentsX();
+        //int y0 = 0; //contentsY();
 
         //setContentsPos(0, 0);
 
@@ -2724,15 +2723,13 @@ void DiagramView::read_session(char *& st)
     canvas()->update();
     (void) read_unsigned(st); // set_format((int) read_unsigned(st));
     {
-        extern QApplication * theApp;
-        theApp->processEvents(/*500*/);
+        qApp->processEvents(/*500*/);
     }
     verticalScrollBar()->setValue(read_unsigned(st));
     horizontalScrollBar()->setValue(read_unsigned(st));
     canvas()->update();
     {
-        extern QApplication * theApp;
-        theApp->processEvents(/*500*/);
+        qApp->processEvents(/*500*/);
     }
 }
 

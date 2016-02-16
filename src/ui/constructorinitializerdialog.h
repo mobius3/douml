@@ -41,11 +41,11 @@ public:
     Ui::ConstructorInitializerDialog *ui;
     void Init(OperationData*);
 
-    void reject() override;
-    void accept() override;
+    virtual void reject() override;
+    virtual void accept() override;
     //! return unique TypeId associated with each classs
     //! crc on PRETTY_FUNCTION is basically used to create one
-    virtual uint TypeID() ;
+    virtual uint TypeID() override;
 private:
     OperationData* oper = nullptr;
     QString initializerCopy;

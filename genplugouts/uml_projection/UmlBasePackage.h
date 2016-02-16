@@ -178,7 +178,7 @@ public:
     //save the project if needed
     static void saveProject();
 
-    //Does nothing in case an edition is on going under BOUML. Else :
+    //Does nothing in case an edition is on going under DOUML. Else :
     //close the current project (in case it is not saved the last modifications are lost),
     //load the specified one, and all the communications with the plug-outs including the
     //current one are closed.

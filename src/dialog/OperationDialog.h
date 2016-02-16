@@ -66,7 +66,7 @@ class OperationDialog : public EdgeMenuDialog
     Q_OBJECT
 
 protected:
-    virtual void closeEvent(QCloseEvent *);
+    virtual void closeEvent(QCloseEvent *) override;
     bool visit;
     OperationData * oper;
     ClassData * cl;
@@ -226,10 +226,10 @@ protected:
     QPushButton * pbDefaultDeclarationIdl;
     QPushButton * pbNotGeneratedInIdl;
 
-    virtual void InitGui();
+    virtual void InitGui() override;
     virtual void FillGuiElements(OperationData *);
-    virtual void FillGuiElements(BrowserNode *);
-    virtual uint TypeID();
+    virtual void FillGuiElements(BrowserNode *) override;
+    virtual uint TypeID() override;
 
     DrawingLanguage drawingLanguage;
 
@@ -283,7 +283,7 @@ protected:
     static void post_python_edit_body(OperationDialog * d, QString s);
     static void post_php_edit_body(OperationDialog * d, QString s);
 
-    bool SaveData() override;
+    virtual bool SaveData() override;
     bool SaveData(OperationData* oper);
 
 public:
@@ -309,7 +309,7 @@ public:
 
 protected slots:
     virtual void polish();
-    virtual void accept();
+    virtual void accept() override;
     void default_description();
     void edit_description();
     void edit_constraint();

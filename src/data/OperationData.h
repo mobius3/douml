@@ -52,8 +52,8 @@ class QuickEdit;
 class OperationBody
 {
 public:
-    int offset;	// offset in the file
-    int length;	// body length, 0 if empty, -1 if unknown (file not yet read)
+    qint64 offset;	// offset in the file
+    qint64 length;	// body length, 0 if empty, -1 if unknown (file not yet read)
 
     OperationBody() : offset(0), length(0) {};
 };
@@ -146,12 +146,12 @@ protected:
     void no_longer_depend_on(BrowserClass * cl);
 
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-                              const QString & comment);
-    virtual void send_cpp_def(ToolCom * com);
-    virtual void send_java_def(ToolCom * com);
-    virtual void send_php_def(ToolCom * com);
-    virtual void send_python_def(ToolCom * com);
-    virtual void send_idl_def(ToolCom * com);
+                              const QString & comment) override;
+    virtual void send_cpp_def(ToolCom * com) override;
+    virtual void send_java_def(ToolCom * com) override;
+    virtual void send_php_def(ToolCom * com) override;
+    virtual void send_python_def(ToolCom * com) override;
+    virtual void send_idl_def(ToolCom * com) override;
 
     void set_bodies_info();
     static char * set_bodies_info(BrowserClass * cl, int id);
@@ -163,22 +163,23 @@ public:
     virtual ~OperationData();
     void PropagateFrom(const OperationData*, bool goBack = true, QList<const OperationData *> passed = QList<const OperationData *>());
 
-    virtual bool deletedp() const;
-    virtual void set_deletedp(bool y);
+    virtual bool deletedp() const override;
+    virtual void set_deletedp(bool y) override;
 
     void remove_param(std::shared_ptr<ParamData>);
     void insert_param(int position, std::shared_ptr<ParamData> param);
 
+    using ClassMemberData::set_browser_node;
     void set_browser_node(BrowserOperation *, bool update);
 
-    virtual QString definition(bool full, bool with_kind) const;
+    virtual QString definition(bool full, bool with_kind) const override;
     QString definition(bool full, bool withdir, bool withname,
                        ShowContextMode mode = noContext) const;
     QString definition(bool full, DrawingLanguage language,
                        bool withdir, bool withname,
                        ShowContextMode mode = noContext) const;
 
-    virtual bool decldefbody_contain(const QString & s, bool cs, BrowserNode *);
+    virtual bool decldefbody_contain(const QString & s, bool cs, BrowserNode *) override;
 
     const char * get_constraint() const {
         return constraint;
@@ -297,7 +298,7 @@ public:
     UmlVisibility get_uml_visibility() const {
         return uml_visibility;
     };
-    virtual UmlVisibility get_visibility(BrowserNode *);
+    virtual UmlVisibility get_visibility(BrowserNode *) override;
     UmlVisibility get_cpp_visibility() const {
         return cpp_visibility;
     };
@@ -396,7 +397,7 @@ public:
     void copy_getset(const OperationData * model);
 
     virtual bool tool_cmd(ToolCom * com, const char * args,
-                          BrowserNode * bn, const QString & comment);
+                          BrowserNode * bn, const QString & comment) override;
 
     bool reference(BrowserClass *) const;
 

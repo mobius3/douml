@@ -170,7 +170,7 @@ HideShowDialog::~HideShowDialog()
 
 void HideShowDialog::hide_them()
 {
-    unsigned int i = 0;
+    int i = 0;
 
     while (i < lb_visible->count()) {
         QListWidgetItem * item = lb_visible->item(i);
@@ -186,7 +186,7 @@ void HideShowDialog::hide_them()
 
 void HideShowDialog::show_them()
 {
-    unsigned int i = 0;
+    int i = 0;
 
     while (i < lb_hidden->count()) {
         QListWidgetItem * item = lb_hidden->item(i);
@@ -265,7 +265,7 @@ void HideShowDialog::accept()
 
     QListWidget * lb = (on_visible) ? lb_visible : lb_hidden;
 
-    for (unsigned int i = 0; i != lb->count(); i += 1)
+    for (int i = 0; i != lb->count(); i += 1)
         hidden_visible.append(((ListBoxBrowserNode *) lb->item(i))->browser_node);
 
     QDialog::accept();

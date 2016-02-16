@@ -70,7 +70,7 @@ QTcpSocket * UmlCom::sock;
 
 char * UmlCom::buffer_in;
 
-unsigned int UmlCom::buffer_in_size;
+size_t UmlCom::buffer_in_size;
 
 char * UmlCom::p_buffer_in;
 
@@ -80,11 +80,11 @@ char * UmlCom::buffer_out;
 
 char * UmlCom::p_buffer_out;
 
-unsigned int UmlCom::buffer_out_size;
+size_t UmlCom::buffer_out_size;
 
-void UmlCom::check_size_out(unsigned int len)
+void UmlCom::check_size_out(size_t len)
 {
-    unsigned used = p_buffer_out - buffer_out;
+    ptrdiff_t used = p_buffer_out - buffer_out;
 
     if ((used + len) >= buffer_out_size) {
         buffer_out_size = used + len + 1024;
@@ -101,13 +101,13 @@ void UmlCom::check_size_out(unsigned int len)
 void UmlCom::read_if_needed()
 {
 #ifdef TRACE
-    //cout << "UmlCom::read_if_needed " << buffer_in_end - p_buffer_in << '\n';
+    //qDebug() << "UmlCom::read_if_needed " << buffer_in_end - p_buffer_in << '\n';
 #endif
 
     if (p_buffer_in == buffer_in_end) {
         read_buffer(4);
 #ifdef TRACE
-        cout << "UmlCom::read " << ((((unsigned char *) buffer_in)[0] << 24) + (((unsigned char *) buffer_in)[1] << 16) + (((unsigned char *) buffer_in)[2] << 8) + ((unsigned char *) buffer_in)[3]) << " bytes\n";
+        qDebug() << "UmlCom::read " << ((((unsigned char *) buffer_in)[0] << 24) + (((unsigned char *) buffer_in)[1] << 16) + (((unsigned char *) buffer_in)[2] << 8) + ((unsigned char *) buffer_in)[3]) << " bytes\n";
 #endif
         read_buffer((((unsigned char *) buffer_in)[0] << 24) +
                 (((unsigned char *) buffer_in)[1] << 16) +
@@ -116,10 +116,10 @@ void UmlCom::read_if_needed()
     }
 }
 
-void UmlCom::read_buffer(unsigned int len)
+void UmlCom::read_buffer(size_t len)
 {
 #ifdef TRACE
-    //cout << "enter UmlCom::read_buffer(" << len << ")\n";
+    //qDebug() << "enter UmlCom::read_buffer(" << len << ")\n";
 #endif
 
     if (buffer_in_size < len) {
@@ -128,16 +128,16 @@ void UmlCom::read_buffer(unsigned int len)
         buffer_in = new char[buffer_in_size];
     }
 
-    int remainder = (int) len;
-    int nread;
+    qint64 remainder = len;
+    qint64 nread;
     char * p = buffer_in;
 
     for (;;) {
         if ((nread = sock->read(p, remainder)) == -1) {
             if (sock->error() != 0) {
 #ifdef TRACE
-                cout << "UmlCom::read_buffer ERROR, already " << p - buffer_in
-                     << " remainder " << remainder << '\n';
+                qDebug() << "UmlCom::read_buffer ERROR, already " << p - buffer_in
+                         << " remainder " << remainder << '\n';
 #endif
                 fatal_error("UmlCom read error");
             }
@@ -146,7 +146,7 @@ void UmlCom::read_buffer(unsigned int len)
         }
 
 #ifdef TRACE
-        //cout << "UmlCom a lu " << nread << '\n';
+        //qDebug() << "UmlCom a lu " << nread << '\n';
 #endif
 
         if ((remainder -= nread) == 0)
@@ -157,7 +157,7 @@ void UmlCom::read_buffer(unsigned int len)
     }
 
 #ifdef TRACE
-    //cout << "exit UmlCom::read_buffer()\n";
+    //qDebug() << "exit UmlCom::read_buffer()\n";
 #endif
 
     p_buffer_in = buffer_in;
@@ -203,7 +203,7 @@ void UmlCom::write_string(const char * p)
     if (p == 0)
         p = "";
 
-    unsigned len = strlen(p) + 1;
+    size_t len = strlen(p) + 1;
 
     check_size_out(len);
     memcpy(p_buffer_out, p, len);
@@ -213,7 +213,7 @@ void UmlCom::write_string(const char * p)
 void UmlCom::send_cmd(CmdFamily f, unsigned int cmd)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd((CmdFamily) " << f << ", " << cmd << ")\n";
+    qDebug() << "UmlCom::send_cmd((CmdFamily) " << f << ", " << cmd << ")\n";
 #endif
 
     write_char(f);
@@ -224,7 +224,7 @@ void UmlCom::send_cmd(CmdFamily f, unsigned int cmd)
 void UmlCom::send_cmd(CmdFamily f, unsigned int cmd, char arg)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd((CmdFamily) " << f << ", " << cmd << ", " << (int) arg << ")\n";
+    qDebug() << "UmlCom::send_cmd((CmdFamily) " << f << ", " << cmd << ", " << (int) arg << ")\n";
 #endif
 
     write_char(f);
@@ -236,7 +236,7 @@ void UmlCom::send_cmd(CmdFamily f, unsigned int cmd, char arg)
 void UmlCom::send_cmd(CmdFamily f, unsigned int cmd, void * id)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd((CmdFamily) " << f << ", " << cmd << ", " << id << ")\n";
+    qDebug() << "UmlCom::send_cmd((CmdFamily) " << f << ", " << cmd << ", " << id << ")\n";
 #endif
 
     write_char(f);
@@ -248,7 +248,7 @@ void UmlCom::send_cmd(CmdFamily f, unsigned int cmd, void * id)
 void UmlCom::send_cmd(CmdFamily f, unsigned int cmd, const char * s)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd((CmdFamily) " << f << ", " << cmd << ", " << ((s) ? s : "") << ")\n";
+    qDebug() << "UmlCom::send_cmd((CmdFamily) " << f << ", " << cmd << ", " << ((s) ? s : "") << ")\n";
 #endif
 
     write_char(f);
@@ -260,7 +260,7 @@ void UmlCom::send_cmd(CmdFamily f, unsigned int cmd, const char * s)
 void UmlCom::send_cmd(CmdFamily f, unsigned int cmd, void * id, const char * n)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd((CmdFamily) " << f << ", " << cmd << ", " << id << ", " << ((n) ? n : "") << ")\n";
+    qDebug() << "UmlCom::send_cmd((CmdFamily) " << f << ", " << cmd << ", " << id << ", " << ((n) ? n : "") << ")\n";
 #endif
 
     write_char(f);
@@ -273,7 +273,7 @@ void UmlCom::send_cmd(CmdFamily f, unsigned int cmd, void * id, const char * n)
 void UmlCom::send_cmd(CmdFamily f, unsigned int cmd, const char * s, const char * v)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd((CmdFamily) " << f << ", " << cmd << ", " << ((s) ? s : "") << ", " << ((v) ? v : "") << ")\n";
+    qDebug() << "UmlCom::send_cmd((CmdFamily) " << f << ", " << cmd << ", " << ((s) ? s : "") << ", " << ((v) ? v : "") << ")\n";
 #endif
 
     write_char(f);
@@ -286,7 +286,7 @@ void UmlCom::send_cmd(CmdFamily f, unsigned int cmd, const char * s, const char 
 void UmlCom::send_cmd(CmdFamily f, unsigned int cmd, bool b, const char * s, const char * v)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd((CmdFamily) " << f << ", " << cmd << ", " << b << ", " << ((s) ? s : "") << ", " << ((v) ? v : "") << ")\n";
+    qDebug() << "UmlCom::send_cmd((CmdFamily) " << f << ", " << cmd << ", " << b << ", " << ((s) ? s : "") << ", " << ((v) ? v : "") << ")\n";
 #endif
 
     write_char(f);
@@ -300,7 +300,7 @@ void UmlCom::send_cmd(CmdFamily f, unsigned int cmd, bool b, const char * s, con
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ")\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ")\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -312,7 +312,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd)
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const char * arg)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", " << ((arg) ? arg : "") << ")\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", " << ((arg) ? arg : "") << ")\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -325,7 +325,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const char * arg)
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, char arg)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", " << ((int) arg) << '\n';
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", " << ((int) arg) << '\n';
 #endif
 
     write_char(onInstanceCmd);
@@ -338,7 +338,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, char arg)
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", " << arg << '\n';
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", " << arg << '\n';
 #endif
 
     write_char(onInstanceCmd);
@@ -351,7 +351,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg)
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const UmlTypeSpec & arg)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", UmlTypeSpec)\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", UmlTypeSpec)\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -373,7 +373,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const UmlTypeSpec & ar
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const char * arg1, const char * arg2)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", " << ((arg1) ? arg1 : "") << ", " << ((arg2) ? arg2 : "") << ")\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", " << ((arg1) ? arg1 : "") << ", " << ((arg2) ? arg2 : "") << ")\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -387,7 +387,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const char * arg1, con
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, anItemKind arg1, const char * arg2)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", " << arg1 << ", " << ((arg2) ? arg2 : "") << ")\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", " << arg1 << ", " << ((arg2) ? arg2 : "") << ")\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -401,7 +401,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, anItemKind arg1, const
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, anItemKind arg1, aRelationKind arg2, const void * id2)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", " << arg1 << ", " << arg2 << ", " << id2 << ")\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", " << arg1 << ", " << arg2 << ", " << id2 << ")\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -416,7 +416,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, anItemKind arg1, aRela
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const void * id1)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", id1)\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", id1)\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -429,7 +429,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const void * id1)
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const void * id1, const char * arg2)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", id1, " << ((arg2) ? arg2 : "") << ")\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", id1, " << ((arg2) ? arg2 : "") << ")\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -443,7 +443,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const void * id1, cons
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, const UmlTypeSpec & arg2)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", " << arg1 << ", UmlTypeSpec)\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", " << arg1 << ", UmlTypeSpec)\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -466,7 +466,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, con
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, const char * arg2, const char * arg3, const UmlTypeSpec & arg4)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", " << arg1 << ", " << ((arg2) ? arg2 : "") << ", " << ((arg3) ? arg3 : "") << ", " << ", UmlTypeSpec)\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", " << arg1 << ", " << ((arg2) ? arg2 : "") << ", " << ((arg3) ? arg3 : "") << ", " << ", UmlTypeSpec)\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -491,7 +491,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, con
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, char arg2, const char * arg3, const char * arg4, const UmlTypeSpec & arg5)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", " << arg1 << ", " << (int) arg2 << ", " << ((arg3) ? arg3 : "") << ", " << ((arg4) ? arg4 : "") << ", UmlTypeSpec)\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", " << arg1 << ", " << (int) arg2 << ", " << ((arg3) ? arg3 : "") << ", " << ((arg4) ? arg4 : "") << ", UmlTypeSpec)\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -517,7 +517,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, cha
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlClass*> & l)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", const QVector<UmlClass*> & l)\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", const QVector<UmlClass*> & l)\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -537,7 +537,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlClass
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlClass*> & l1, const QVector<UmlClass*> & l2, const QVector<UmlClass*> & l3)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", const QVector<UmlClass*> & l1, const QVector<UmlClass*> & l2, const QVector<UmlClass*> & l3)\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", const QVector<UmlClass*> & l1, const QVector<UmlClass*> & l2, const QVector<UmlClass*> & l3)\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -571,7 +571,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlClass
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, anItemKind arg, const void * id2)
 {
 #ifdef TRACE
-    cout << "UmlCom::send_cmd(id, " << cmd << ", " << arg << ", " << id2 << ")\n";
+    qDebug() << "UmlCom::send_cmd(id, " << cmd << ", " << arg << ", " << id2 << ")\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -588,7 +588,7 @@ void * UmlCom::read_id()
 
     void * a;
 
-    // sizeof(void *) must be the same for bouml and
+    // sizeof(void *) must be the same for douml and
     // the plug-out, bypass it
     memcpy((char *) &a, p_buffer_in + 1, sizeof(void *));
     p_buffer_in += sizeof(void *) + 1;
@@ -599,12 +599,12 @@ const char * UmlCom::read_string()
 {
     read_if_needed();
 
-    unsigned len = strlen(p_buffer_in) + 1;
+    size_t len = strlen(p_buffer_in) + 1;
 
     p_buffer_in += len;
 
 #ifdef TRACE
-    //cout << "UmlCom::read_string : \"" << p_buffer_in - len << "\"\n";
+    //qDebug() << "UmlCom::read_string : \"" << p_buffer_in - len << "\"\n";
 #endif
 
     return p_buffer_in - len;
@@ -643,7 +643,7 @@ void UmlCom::read_item_list(QVector<UmlItem*> & v)
     v.resize(n);
 
 #ifdef TRACE
-    //cout << "UmlCom::read_item_list " << n << " items\n";
+    //qDebug() << "UmlCom::read_item_list " << n << " items\n";
 #endif
 
     for (unsigned index = 0; index != n; index += 1)
@@ -652,13 +652,13 @@ void UmlCom::read_item_list(QVector<UmlItem*> & v)
 }
 
 void UmlCom::fatal_error(const QByteArray &
-                         #ifdef DEBUG_BOUML
+                         #ifdef DEBUG_DOUML
                          msg
                          #endif
                          )
 {
-#ifdef DEBUG_BOUML
-    cout << msg << '\n';
+#ifdef DEBUG_DOUML
+    qDebug() << msg << '\n';
 #endif
 
     throw 0;
@@ -667,7 +667,7 @@ void UmlCom::fatal_error(const QByteArray &
 void UmlCom::flush()
 {
     if (sock != 0) {
-        int len = p_buffer_out - buffer_out - 4;
+        ptrdiff_t len = p_buffer_out - buffer_out - 4;
         /* the four first bytes of buffer_out are free to contains the length */
         buffer_out[0] = len >> 24;
         buffer_out[1] = len >> 16;
@@ -678,7 +678,7 @@ void UmlCom::flush()
         p_buffer_out = buffer_out;
 
         for (;;) {
-            int sent = sock->write(p_buffer_out, len);
+            qint64 sent = sock->write(p_buffer_out, len);
 
             if (sent == -1) {
                 close();	// to not try to send "bye" !

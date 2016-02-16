@@ -58,12 +58,12 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserActivityNode(UmlCode c, QString s, BrowserNode * p, int id = 0);
+    BrowserActivityNode(UmlCode c, const QString & s, BrowserNode * p, int id = 0);
     BrowserActivityNode(const BrowserActivityNode * model, BrowserNode * p);
     virtual ~BrowserActivityNode();
 
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     static BrowserActivityNode * add_activitynode(BrowserNode * future_parent,
             UmlCode c, const char * name);
     static BrowserActivityNode * get_activitynode(BrowserNode * future_parent, UmlCode c);
@@ -75,7 +75,7 @@ public:
     virtual const QPixmap * pixmap(int) const;
 
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;

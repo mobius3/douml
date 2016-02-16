@@ -68,7 +68,7 @@ IdDict<BrowserArtifact> BrowserArtifact::all(257, __FILE__);
 QStringList BrowserArtifact::its_default_stereotypes;	// unicode
 QStringList BrowserArtifact::relation_default_stereotypes;	// unicode
 
-BrowserArtifact::BrowserArtifact(QString s, BrowserNode * p, int id)
+BrowserArtifact::BrowserArtifact(const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserArtifact>(all, id),
       cpp_h_edited(FALSE), cpp_src_edited(FALSE),
       java_edited(FALSE), php_edited(FALSE),
@@ -123,7 +123,7 @@ void BrowserArtifact::delete_it()
     associated_classes.clear();
 }
 
-BrowserNode * BrowserArtifact::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserArtifact::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserArtifact * result = new BrowserArtifact(this, p);
 
@@ -221,13 +221,17 @@ QString BrowserArtifact::full_name(bool rev, bool) const
     return fullname(rev);
 }
 
-QString BrowserArtifact::get_path(QString path, QString root,
+QString BrowserArtifact::get_path(const QString & pathInit, const QString & rootInit,
                                   const char * ext) const
 {
+    QString root = rootInit;
+    
     if (QDir::isRelativePath(root))
         root = BrowserView::get_dir().filePath(root);
 
     QDir d_root(root);
+
+    QString path = pathInit;
 
     if (path.isEmpty())
         path = root;
@@ -653,7 +657,7 @@ void BrowserArtifact::exec_menu_choice(int rank,
     package_modified();
 }
 
-void BrowserArtifact::apply_shortcut(QString s)
+void BrowserArtifact::apply_shortcut(const QString & s)
 {
     int choice = -1;
     QString cpp_h_path;

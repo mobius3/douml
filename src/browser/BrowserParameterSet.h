@@ -54,17 +54,17 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserParameterSet(QString s, BrowserNode * p, ParameterSetData * d, int id = 0);
+    BrowserParameterSet(const QString & s, BrowserNode * p, ParameterSetData * d, int id = 0);
     BrowserParameterSet(const BrowserParameterSet * model, BrowserNode * p);
     virtual ~BrowserParameterSet();
 
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
 
     virtual const QPixmap * pixmap(int) const;
 
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;

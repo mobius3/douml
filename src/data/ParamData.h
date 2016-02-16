@@ -59,7 +59,7 @@ public:
     WrapperStr get_default_value() const {
         return default_value;
     };
-    void set_default_value(WrapperStr s);
+    void set_default_value(const WrapperStr & s);
 
     QString definition(bool withdir, bool withname,
                        ShowContextMode mode = noContext) const;

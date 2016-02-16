@@ -132,7 +132,7 @@ public:
         old_diagram = y;
     }
 
-    void memo_id_oid(intptr_t id, int oid) {
+    void memo_id_oid(int id, int oid) {
         dict[0].remove(id);
         dictlib.insert(oid, reinterpret_cast<char *>(id));
     }

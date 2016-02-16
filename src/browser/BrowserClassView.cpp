@@ -68,7 +68,7 @@
 IdDict<BrowserClassView> BrowserClassView::all(__FILE__);
 QStringList BrowserClassView::its_default_stereotypes;	// unicode
 
-BrowserClassView::BrowserClassView(QString s, BrowserNode * p, int id)
+BrowserClassView::BrowserClassView(const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserClassView>(all, id),
       associated_deployment_view(0)
 {
@@ -125,7 +125,7 @@ BrowserClassView::~BrowserClassView()
     delete def;
 }
 
-BrowserNode * BrowserClassView::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserClassView::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserClassView * result = new BrowserClassView(this, p);
 
@@ -595,7 +595,7 @@ void BrowserClassView::exec_menu_choice(int rank)
 
 }
 
-void BrowserClassView::apply_shortcut(QString s)
+void BrowserClassView::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

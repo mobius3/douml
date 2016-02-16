@@ -64,7 +64,7 @@
 IdDict<BrowserExpansionRegion> BrowserExpansionRegion::all(__FILE__);
 QStringList BrowserExpansionRegion::its_default_stereotypes;	// unicode
 
-BrowserExpansionRegion::BrowserExpansionRegion(QString s, BrowserNode * p, int id)
+BrowserExpansionRegion::BrowserExpansionRegion(const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserExpansionRegion>(all, id),
       def(new ExpansionRegionData), associated_diagram(0)
 {
@@ -88,7 +88,7 @@ BrowserExpansionRegion::BrowserExpansionRegion(const BrowserExpansionRegion * mo
     comment = model->comment;
 }
 
-BrowserNode * BrowserExpansionRegion::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserExpansionRegion::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserNode * result = new BrowserExpansionRegion(this, p);
 
@@ -357,7 +357,7 @@ void BrowserExpansionRegion::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserExpansionRegion::apply_shortcut(QString s)
+void BrowserExpansionRegion::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

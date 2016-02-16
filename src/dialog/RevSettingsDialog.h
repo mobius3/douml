@@ -66,7 +66,7 @@ public:
 
 protected slots:
     virtual void polish();
-    void accept();
+    virtual void accept() override;
     void show_regexp_help();
 };
 

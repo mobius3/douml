@@ -8,6 +8,8 @@
 class UmlActivityAction : public UmlBaseActivityAction
 {
 public:
+    using UmlBaseActivityAction::html;
+
     //entry to produce the html code receiving chapter number
     //path, rank in the mother and level in the browser tree
     virtual void html();

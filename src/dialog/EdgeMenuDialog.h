@@ -47,21 +47,21 @@ public:
 protected:
 
     //! called when user leaves the window
-    void leaveEvent(QEvent * event);
+    virtual void leaveEvent(QEvent * event) override;
 
     //! called when user enters the window
-    void enterEvent(QEvent * event) ;
+    virtual void enterEvent(QEvent * event) override;
 
-    void closeEvent(QCloseEvent *) ;
+    virtual void closeEvent(QCloseEvent *) override;
 
-    void hideEvent(QHideEvent *) ;
+    virtual void hideEvent(QHideEvent *) override;
 
-    void moveEvent(QMoveEvent *) ;
+    virtual void moveEvent(QMoveEvent *) override;
 
-    void focusOutEvent(QFocusEvent *) ;
+    virtual void focusOutEvent(QFocusEvent *) override;
 
     //! called on window show()
-    void showEvent(QShowEvent * event);
+    virtual void showEvent(QShowEvent * event) override;
     //! called when user srolls with mouse wheel
 
 
@@ -81,9 +81,9 @@ protected:
     void MoveThis(QPoint, QPoint);
     void ChangeTab(int);
 
-    virtual void IntitiateMove(QPoint);
-    void InitiateResize(QPoint);
-    virtual void ResizeThis(QPoint, QPoint);
+    virtual void IntitiateMove(QPoint) override;
+    virtual void InitiateResize(QPoint) override;
+    virtual void ResizeThis(QPoint, QPoint) override;
 
     bool isWritable;
 

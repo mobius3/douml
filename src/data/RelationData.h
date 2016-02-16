@@ -107,6 +107,12 @@ protected:
 
     QHash<QString, RoleData*> dataForClass;
 
+    using ClassMemberData::send_uml_def;
+    using ClassMemberData::send_cpp_def;
+    using ClassMemberData::send_java_def;
+    using ClassMemberData::send_php_def;
+    using ClassMemberData::send_python_def;
+    using ClassMemberData::send_idl_def;
     virtual void send_uml_def(ToolCom * com, BrowserRelation * rel);
     virtual void send_cpp_def(ToolCom * com, BrowserRelation * rel);
     virtual void send_java_def(ToolCom * com, BrowserRelation * rel);
@@ -122,19 +128,21 @@ public:
 
     void SetStart(BrowserRelation*);
     void SetEnd(BrowserRelation*);
-    RoleData* GetDataForClass(QString node)
+    RoleData* GetDataForClass(const QString & node)
     {
-        if(dataForClass.contains(node))
-                return dataForClass[node];
+        if (dataForClass.contains(node))
+            return dataForClass[node];
+
+        return NULL;
     }
 
     void garbage(BrowserRelation * r);
     void copy(RelationData * model);
 
-    virtual bool deletedp() const;
-    virtual void set_deletedp(bool y);
-    virtual void delete_it();
-    virtual void undelete(QString & warning, QString & renamed);
+    virtual bool deletedp() const override;
+    virtual void set_deletedp(bool y) override;
+    virtual void delete_it() override;
+    virtual void undelete(QString & warning, QString & renamed) override;
     bool undelete(QString & warning, QString & renamed,
                   BrowserRelation * rel, BooL & br_deleted);
 
@@ -162,12 +170,12 @@ public:
     }
     QString get_name(BrowserRelation *) const;
     void set_name(const QString &);
-    virtual QString definition(bool full, bool with_kind) const;
-    virtual bool set_stereotype(const QString &);
-    virtual bool set_stereotype(const WrapperStr &);
-    virtual bool set_stereotype(const char *);
+    virtual QString definition(bool full, bool with_kind) const override;
+    virtual bool set_stereotype(const QString &) override;
+    virtual bool set_stereotype(const WrapperStr &) override;
+    virtual bool set_stereotype(const char *) override;
 
-    virtual bool decldefbody_contain(const QString & s, bool cs, BrowserNode *);
+    virtual bool decldefbody_contain(const QString & s, bool cs, BrowserNode *) override;
 
     bool is_a(const BrowserRelation * br) const {
         return br == start;
@@ -242,7 +250,7 @@ public:
     UmlVisibility get_uml_visibility_b() const {
         return b.uml_visibility;
     }
-    virtual UmlVisibility get_visibility(BrowserNode *);
+    virtual UmlVisibility get_visibility(BrowserNode *) override;
 
     const char * get_comment_a() const {
         return a.comment;
@@ -250,10 +258,10 @@ public:
     const char * get_comment_b() const {
         return b.comment;
     }
-    void  set_comment_a(const char * s) {
+    void  set_comment_a(const WrapperStr & s) {
         a.comment = s;
     }
-    void set_comment_b(const char * s) {
+    void set_comment_b(const WrapperStr & s) {
         b.comment = s;
     }
 
@@ -263,10 +271,10 @@ public:
     const char * get_constraint_b() const {
         return b.constraint;
     }
-    void  set_constraint_a(const char * s) {
+    void  set_constraint_a(const WrapperStr & s) {
         a.constraint = s;
     }
-    void set_constraint_b(const char * s) {
+    void set_constraint_b(const WrapperStr & s) {
         b.constraint = s;
     }
 
@@ -333,6 +341,7 @@ public:
     static bool isa_association(UmlCode e);
     static bool isa_inherit(UmlCode e);
 
+    using ClassMemberData::tool_cmd;
     bool tool_cmd(ToolCom * com, BrowserRelation * rel, const char * args);
 
     static void clear(bool old);

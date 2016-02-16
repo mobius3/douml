@@ -41,8 +41,8 @@ public:
     SimpleData() : BasicData(), is_deleted(FALSE) {};
     SimpleData(BasicData * model) : BasicData(model), is_deleted(FALSE) {};
 
-    virtual bool deletedp() const;
-    virtual void set_deletedp(bool y);
+    virtual bool deletedp() const override;
+    virtual void set_deletedp(bool y) override;
 };
 
 #endif

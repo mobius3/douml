@@ -61,15 +61,15 @@ public:
     BrowserRelation(const BrowserRelation * model, BrowserNode * p);
     virtual ~BrowserRelation();
 
-    virtual bool is_undefined() const;
+    virtual bool is_undefined() const override;
 
-    virtual void delete_it();
-    virtual bool undelete(bool rec, QString & warning, QString & renamed);
+    virtual void delete_it() override;
+    virtual bool undelete(bool rec, QString & warning, QString & renamed) override;
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString()) override;
 
-    virtual const char * get_comment() const;
-    virtual void set_comment(const char * c);
+    virtual const char * get_comment() const override;
+    virtual void set_comment(const QString & c) override;
 
     virtual UmlVisibility get_visibility() const override;
 
@@ -86,32 +86,31 @@ public:
     void add_get_oper();
     void add_set_oper();
 
-    virtual const QPixmap * pixmap(int) const;
-    virtual void paintCell(QPainter *, const QPalette &, int, int, int);
+    virtual const QPixmap * pixmap(int) const override;
     BrowserNode * extract();
     static BrowserRelation * reinsert(BrowserNode * p, RelationData * d);
 
-    virtual void menu();
-    virtual void apply_shortcut(QString s);
-    virtual void open(bool);
-    virtual bool in_edition() const;
-    virtual UmlCode get_type() const;
-    virtual QString get_stype() const;
-    virtual int get_identifier() const;
-    virtual const char * help_topic() const;
-    virtual void modified();
-    virtual BasicData * get_data() const;
-    virtual bool same_name(const QString & s, UmlCode type) const;
-    virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
+    virtual void menu() override;
+    virtual void apply_shortcut(const QString & s) override;
+    virtual void open(bool) override;
+    virtual bool in_edition() const override;
+    virtual UmlCode get_type() const override;
+    virtual QString get_stype() const override;
+    virtual int get_identifier() const override;
+    virtual const char * help_topic() const override;
+    virtual void modified() override;
+    virtual BasicData * get_data() const override;
+    virtual bool same_name(const QString & s, UmlCode type) const override;
+    virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const override;
     virtual void member_cpp_def(const QString & prefix, const QString &,
-                                QString & s, bool templ) const;
-    virtual void update_stereotype(bool = FALSE);
-    virtual QString stereotypes_properties() const;
-    virtual AType class_association() const;
-    virtual const char * constraint() const;
+                                QString & s, bool templ) const override;
+    virtual void update_stereotype(bool = FALSE) override;
+    virtual QString stereotypes_properties() const override;
+    virtual AType class_association() const override;
+    virtual const char * constraint() const override;
 
-    virtual void write_id(ToolCom * com);
-    virtual void save(QTextStream &, bool ref, QString & warning);
+    virtual void write_id(ToolCom * com) override;
+    virtual void save(QTextStream &, bool ref, QString & warning) override;
     static BrowserRelation * read(char *& , char *, BrowserNode *, bool force = TRUE);
     static BrowserRelation * read_ref(char *& st);
     static BrowserRelation * read_ref(char *& , char * k);
@@ -122,23 +121,23 @@ public:
 
     static void clear(bool old);
     static void update_idmax_for_root();
-    virtual void renumber(int phase);
-    virtual void prepare_update_lib() const;
+    virtual void renumber(int phase) override;
+    virtual void prepare_update_lib() const override;
 
-    virtual void referenced_by(QList<BrowserNode *> &, bool ondelete = FALSE);
+    virtual void referenced_by(QList<BrowserNode *> &, bool ondelete = FALSE) override;
     static void compute_referenced_by(QList<BrowserNode *> &, BrowserClass *);
 
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 
     static QString drag_key(BrowserNode * p);
-    virtual QString drag_key() const;
-    virtual QString drag_postfix() const;
-    virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
+    virtual QString drag_key() const override;
+    virtual QString drag_postfix() const override;
+    virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after) override;
 
     static void get_relating(BrowserNode *, QHash<BrowserNode *, BrowserNode *> &d,
                              BrowserNodeList & newones,
                              bool inh, bool dep, bool assoc);
-    virtual QVariant	data(int column, int role) const;
+    virtual QVariant data(int column, int role) const override;
 };
 
 #endif

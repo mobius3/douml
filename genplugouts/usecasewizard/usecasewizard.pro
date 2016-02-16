@@ -1,15 +1,9 @@
 TEMPLATE	= app
 TARGET		= usecasewizard
-CONFIG(Debug, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt warn_on Debug
-    QMAKE_POST_LINK = " "
-}
-CONFIG(Release, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt Release
-    QMAKE_POST_LINK = " "
-}
+CONFIG -= app_bundle
+CONFIG += qt warn_on c++11
+QMAKE_POST_LINK = " "
+DEFINES += QT_DEPRECATED_WARNINGS
 HEADERS		= ./UmlFinalState.h \
 		  ./UmlBaseCollaborationDiagram.h \
 		  ./UmlBaseClassView.h \
@@ -247,17 +241,14 @@ DEFINES += TRUE=true FALSE=false
 INCLUDEPATH += ../../src
 QT += testlib
 DESTDIR = ../../bin
-Release {
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/$${TARGET}
     OBJECTS_DIR = $${DESTDIR}/obj_release/$${TARGET}
 }
-
-Debug {
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
     MOC_DIR = $${DESTDIR}/moc_debug/$${TARGET}
     OBJECTS_DIR = $${DESTDIR}/obj_debug/$${TARGET}
 }
 UI_DIR = src/ui
-
-
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++

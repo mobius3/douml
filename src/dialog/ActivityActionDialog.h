@@ -146,18 +146,23 @@ protected slots:
 
 class ClearVariableValueDialog : public AccessVariableValueDialog
 {
+    Q_OBJECT
 };
 
 class ReadVariableValueDialog : public AccessVariableValueDialog
 {
+    Q_OBJECT
 };
 
 class WriteVariableValueDialog : public AccessVariableValueDialog
 {
+    Q_OBJECT
 };
 
 class ChangeVariableValueDialog : public AccessVariableValueDialog
 {
+    Q_OBJECT
+
 private:
     QCheckBox * flag_cb;
 
@@ -170,6 +175,8 @@ public:
 
 class AddVariableValueDialog : public ChangeVariableValueDialog
 {
+    Q_OBJECT
+
 public:
     void init(TabDialog *, ActivityActionData *, AddVariableValueAction *,
               BrowserNodeList & nodes, QStringList &, bool visit);
@@ -177,6 +184,8 @@ public:
 
 class RemoveVariableValueDialog : public ChangeVariableValueDialog
 {
+    Q_OBJECT
+
 public:
     void init(TabDialog *, ActivityActionData *, RemoveVariableValueAction *,
               BrowserNodeList & nodes, QStringList &, bool visit);
@@ -431,7 +440,7 @@ public:
 
 protected slots:
     virtual void polish();
-    virtual void accept();
+    virtual void accept() override;
 
     void edTypeActivated(int);
     void edit_description();

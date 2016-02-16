@@ -31,7 +31,7 @@ CommentView::CommentView(QWidget * parent) : QTextBrowser/*QTextView*/(parent)
 {
 }
 
-void CommentView::setSource(const QString & name)
+void CommentView::setSource(const QUrl & name)
 {
     emit refer(name);
 }

@@ -40,7 +40,7 @@ void UmlBaseUseCaseDiagramDefinition::read_()
         UmlUseCaseReference * uc = new UmlUseCaseReference();
 
         _use_cases.insert(rank, uc);
-        ucrefs.insert((void *) UmlCom::read_unsigned(), uc);
+        ucrefs.insert(reinterpret_cast<void*>(uintptr_t(UmlCom::read_unsigned())), uc);
         uc->read_(_fragments, _subjects);
     }
 

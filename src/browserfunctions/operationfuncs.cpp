@@ -1,18 +1,45 @@
+// *************************************************************************
+//
+//
+//
+// This file is part of the Douml Uml Toolkit.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License Version 3.0 as published by
+// the Free Software Foundation and appearing in the file LICENSE.GPL included in the
+//  packaging of this file.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License Version 3.0 for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// e-mail : doumleditor@gmail.com
+//
+// *************************************************************************
+
 #include "operationfuncs.h"
 #include "BrowserOperation.h"
 #include "BrowserClass.h"
 #include "OperationData.h"
 #include "DialogUtil.h"
 #include "GenerationSettings.h"
+
 namespace OperationFuncs
 {
-void add_param(BrowserOperation* oper, QString & form, int rank, QString s)
+
+void add_param(BrowserOperation* oper, QString& form, int rank, const QString& sInit)
 {
     int index = param_begin(form, rank);
 
     if (index == -1)
         return;
 
+    QString s = sInit;
     if (rank == 0) {
         // first param, index point to '}' ending ${(}
         OperationData* data = static_cast<OperationData*>(oper->get_data());
@@ -28,8 +55,7 @@ void add_param(BrowserOperation* oper, QString & form, int rank, QString s)
     form.insert(index, s);
 }
 
-
-void replace_param( QString & form, int rank, QString s)
+void replace_param(QString& form, int rank, const QString& s)
 {
     int index_start = param_begin(form, rank);
 
@@ -140,7 +166,6 @@ void recompute_param(BrowserOperation* oper, int rank, bool recompute)
             data->set_idldecl(idlDecl);
         }
 }
-
 
 // automatic add / remove param when only one language is set
 
@@ -289,7 +314,7 @@ int supOf(const char * s, int index)
     }
 }
 
-int param_begin(QString s, int rank)
+int param_begin(const QString& s, int rank)
 {
     // return position of ',' or '}' (inside ${(}),
     // or '$' (inside ${)}) or -1 on error
@@ -322,8 +347,8 @@ int param_begin(QString s, int rank)
     return index;
 }
 
-void renumber(QString & form, int rank,
-                     int delta, bool equal )
+void renumber(QString& form, int rank,
+              int delta, bool equal)
 {
     int index = form.indexOf("${(}");
 
@@ -357,8 +382,6 @@ void renumber(QString & form, int rank,
     }
 }
 
-
-
 void delete_param(int rank, OperationData* data)
 {
     // remove and renumber
@@ -370,7 +393,7 @@ void delete_param(int rank, OperationData* data)
     data->set_idldecl(delete_param(rank, data->get_idldecl()));
 }
 
-QString delete_param(int rank, QString text)
+QString delete_param(int rank, const QString& text)
 {
     // remove
     QString form = text;
@@ -442,8 +465,7 @@ QString delete_param(int rank, QString text)
     return form;
 }
 
-
-QString extract_specifier(int position,  QString s)
+QString extract_specifier(int position, const QString& s)
 {
     // s at least contains ${)}
     QRegExp rxStart(QRegExp::escape("${(}"));
@@ -465,7 +487,7 @@ QString extract_specifier(int position,  QString s)
     return specifier;
 }
 
-QString extract_pointer(int position,  QString s)
+QString extract_pointer(int position, const QString& s)
 {
     // s at least contains ${)}
     QRegExp rxStart(QRegExp::escape("${t" + QString::number(position) +  "}"));
@@ -481,7 +503,7 @@ QString extract_pointer(int position,  QString s)
     return ptrType;
 }
 
-QString set_specifier(int position,  QString s, QString newValue)
+QString set_specifier(int position, const QString& s, const QString& newValue)
 {
     // s at least contains ${)}
     QRegExp rxStart(QRegExp::escape("${(}"));
@@ -494,15 +516,12 @@ QString set_specifier(int position,  QString s, QString newValue)
 
     QRegExp rxType(QRegExp::escape("${t" + QString::number(position)));
     int tIndex = rxType.indexIn(s);
-    int length = tIndex -(startIndex + 1);
-    if(length < 0)
-        length = 0;
-    //s = s.replace(startIndex,length,newValue);
-    s = s.left(startIndex) + newValue + s.right(s.length() - tIndex);
-    return s;
+
+    QString sRet = s.left(startIndex) + newValue + s.right(s.length() - tIndex);
+    return sRet;
 }
 
-QString set_pointer(int position,  QString s, QString newValue)
+QString set_pointer(int position, const QString& s, const QString& newValue)
 {
     // s at least contains ${)}
     QRegExp rxStart(QRegExp::escape("${t" + QString::number(position) +  "}"));
@@ -511,14 +530,10 @@ QString set_pointer(int position,  QString s, QString newValue)
 
     QRegExp rxEnd(QRegExp::escape("${p" + QString::number(position)+  "}"));
     int tIndex = rxEnd.indexIn(s);
-    int length = tIndex -(startIndex + 1);
-    if(length < 0)
-        length = 0;
-    //s = s.replace(startIndex,length,newValue);
-    s = s.left(startIndex) + newValue + s.right(s.length() - tIndex);
-    return s;
-}
 
+    QString sRet = s.left(startIndex) + newValue + s.right(s.length() - tIndex);
+    return sRet;
+}
 
 //void move_param(int old_rank, int new_rank)
 //{
@@ -568,4 +583,4 @@ QString set_pointer(int position,  QString s, QString newValue)
 //    ed->setText(form);
 //}
 
-}
+} // namespace OperationFuncs

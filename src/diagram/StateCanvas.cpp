@@ -1087,10 +1087,15 @@ void StateCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
+
 void StateCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 void StateCanvas::compute_regions()
 {
     // code of draw() without drawing
@@ -1212,7 +1217,7 @@ UmlCode StateCanvas::typeUmlCode() const
 BrowserRegion * StateCanvas::pointed_region(const QPoint & p) const
 {
     // warning : without region, region_rect.size() == 1
-    for (unsigned i = 0; i != regions.size(); i += 1)
+    for (int i = 0; i != regions.size(); i += 1)
         if (regions_rect.at(i).contains(p))
             return regions.at(i);
 
@@ -1222,7 +1227,7 @@ BrowserRegion * StateCanvas::pointed_region(const QPoint & p) const
 QRect StateCanvas::region_rect(BrowserRegion * r)
 {
     // warning : without region, region_rect.size() == 1
-    for (unsigned i = 0; i != regions.size(); i += 1)
+    for (int i = 0; i != regions.size(); i += 1)
         if (regions.at(i) == r)
             return regions_rect.at(i);
 
@@ -1390,7 +1395,7 @@ void StateCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void StateCanvas::apply_shortcut(QString s)
+void StateCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();
@@ -1647,7 +1652,7 @@ void StateCanvas::history_save(QBuffer & b) const
 
     //if (r != 0)
     {
-        for (unsigned i = 0; i != regions_rect.size(); i++) {
+        for (int i = 0; i != regions_rect.size(); i++) {
             ::save(regions_rect[i].topLeft(), b);
             ::save(regions_rect[i].bottomRight(), b);
             //r += 1;
@@ -1669,11 +1674,11 @@ void StateCanvas::history_load(QBuffer & b)
     ::load(h, b);
     QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
-    QRect * r = regions_rect.data();
+    //QRect * r = regions_rect.data();
 
     //if (r != 0)
     {
-        for (unsigned i = 0; i != regions_rect.size(); i++) {
+        for (int i = 0; i != regions_rect.size(); i++) {
             QPoint p;
 
             ::load(p, b);

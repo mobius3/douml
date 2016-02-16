@@ -50,7 +50,7 @@
 // use the same extension for all the diagrams : must share dict
 IdDict<BrowserDiagram> BrowserDiagram::all(257, __FILE__);
 
-BrowserDiagram::BrowserDiagram(QString s, BrowserNode * parent, int id)
+BrowserDiagram::BrowserDiagram(const QString & s, BrowserNode * parent, int id)
     : BrowserNode(s, parent), Labeled<BrowserDiagram>(all, id)
 {
     canvas_size = UmlWindow::default_format();

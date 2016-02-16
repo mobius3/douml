@@ -87,7 +87,6 @@ protected:
     bool is_read_only = false;
     bool is_edited = false;
     bool is_marked = false;
-    //bool is_marked_for_move = false;
     bool is_defined = false;	// to indicate unconsistency due to projectSynchro
     // pre condition not followed
 
@@ -112,31 +111,33 @@ protected:
     virtual bool delete_internal(QString & warning);
 
 public:
-    BrowserNode* firstChild() const {return (BrowserNode*)this->child(0);}
-    BrowserNode(QString s, BrowserView * parent);
-    BrowserNode(QString s, BrowserNode * parent);
+    BrowserNode* firstChild() const {
+        return static_cast<BrowserNode*>(child(0));
+    }
+    BrowserNode(const QString & s, BrowserView * parent);
+    BrowserNode(const QString & s, BrowserNode * parent);
     virtual ~BrowserNode();
 
     virtual bool is_undefined() const;
 
-   virtual QString get_name() const {
+    virtual QString get_name() const {
         return name;
     }
-    virtual void set_name(QString s);
+    virtual void set_name(const QString & s);
     virtual void update_stereotype(bool rec = false);
 
     static bool edition_active() {
         return edition_number != 0;
-    };
-    virtual void edit_start();
-    virtual void edit_end();
+    }
+    virtual void edit_start() override;
+    virtual void edit_end() override;
     virtual bool in_edition() const;
 
     void mark_menu(QMenu & m, const char *, int bias) const;
-    void mark_shortcut(QString s, int & index, int bias);
+    void mark_shortcut(const QString & s, int & index, int bias);
     void mark_management(int choice);
     void toggle_mark();
-    void set_marked(bool value);//{is_marked = value;}
+    void set_marked(bool value);
     bool markedp() const {
         return is_marked;
     }
@@ -151,33 +152,29 @@ public:
     static void setup_generatable_types();
     static void unmark_all();
 
-//    bool marked_for_move(){return is_marked_for_move;}
-//    void set_marked_for_move(bool value){ is_marked_for_move = value;}
-
-
     bool is_from_lib() const {
         return original_id != 0;
     }
     virtual void prepare_update_lib() const = 0;
     virtual void support_file(QHash<QString, char *> &files, bool add) const;
 
-    virtual bool is_writable() const;	// file writable & not api base
+    virtual bool is_writable() const override; // file writable & not api base
     virtual void delete_it();
     virtual void set_deleted(bool);
     bool deletedp() const {
         return is_deleted;
-    };
+    }
     void undelete(bool recursive);
     virtual bool undelete(bool rec, QString & warning, QString & renamed);
     void must_be_deleted(); // deleted after load time
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString()) = 0;
+                                    const QString & name = QString()) = 0;
 
     bool nestedp() const {
         return ((BrowserNode *) parent())->get_type() == get_type();
     }
     virtual const char * get_comment() const;
-    virtual void set_comment(QString c);
+    virtual void set_comment(const QString & c);
     const char * get_stereotype() const;
     virtual QString stereotypes_properties() const;
     bool may_contains(BrowserNode *, bool rec) const;
@@ -197,18 +194,18 @@ public:
     virtual bool allow_empty() const;
     virtual bool same_name(const QString & s, UmlCode type) const;
     void select_in_browser();
-    void edit(QString, const QStringList & default_stereotypes);
+    void edit(const QString & s, const QStringList & default_stereotypes);
     void children(BrowserNodeList & nodes,
                   UmlCode kind1, UmlCode kind2 = UmlRelations) const;
     QList<BrowserNode*> children(QList<UmlCode>, bool includeDeleted = true) const;
 
     virtual QString full_name(bool rev = false, bool itself = true) const;
     QString fullname(bool rev) const;
-    QString fullname(QString & s, bool rev) const;
+    QString fullname(const QString & s, bool rev) const;
     virtual void menu() = 0;
-    virtual void apply_shortcut(QString s) = 0;
+    virtual void apply_shortcut(const QString & s) = 0;
     /* Open a Diagram Window */
-    virtual const QPixmap * pixmap(int) const = 0; //{return 0;}
+    virtual const QPixmap * pixmap(int) const = 0;
     virtual void open(bool force_edit);
     virtual void on_close();
     virtual UmlCode get_type() const = 0;
@@ -225,7 +222,7 @@ public:
     }
     bool modifiedp() const {
         return is_modified;
-    };
+    }
     virtual void on_delete();
     virtual BasicData * get_data() const = 0;
     virtual QString drag_key() const;
@@ -243,11 +240,13 @@ public:
     virtual void get_activitydiagramsettings(ActivityDiagramSettings &) const;
     virtual UmlColor get_color(UmlCode) const;
     virtual UmlVisibility get_visibility(UmlCode) const;
-    virtual UmlVisibility get_visibility() const {return UmlDefaultVisibility;}
+    virtual UmlVisibility get_visibility() const {
+        return UmlDefaultVisibility;
+    }
     //stringifies visibility of this node
     QString visibility_as_string() const;
     //converts visibility from string to enum representation
-    static UmlVisibility encode_visibility(QString) ;
+    static UmlVisibility encode_visibility(const QString & val);
 
     virtual void package_settings(BooL & name_in_tab, ShowContextMode & show_context) const;
     virtual const QStringList & default_stereotypes(UmlCode, const BrowserNode *) const; // non class rel
@@ -271,6 +270,9 @@ public:
     void save(QTextStream &) const;
     static void save_progress_closed();
     virtual void init_save_counter();
+#ifndef QT_NO_DATASTREAM
+    using QTreeWidgetItem::read;
+#endif
     void read(char *& , char *& k, int id);
     static BrowserNode * read_any_ref(char *& , char *);
     static void save_stereotypes(QTextStream & st,
@@ -280,8 +282,6 @@ public:
 
     static bool toggle_show_stereotypes();
     virtual void iconChanged();
-    virtual void paintCell(QPainter * p, const QPalette & cg, int column,
-                           int width, int alignment);
 
     void unconsistent_fixed(const char * what, BrowserNode * newone);
     void unconsistent_removed(const char * what, BrowserNode * newone);
@@ -310,7 +310,7 @@ public:
     void setOpen(bool isOpen){this->setExpanded(isOpen);}
     BrowserNode* nextSibling();
     void repaint(){ /*doldurulacak*/}
-    virtual QVariant	data(int column, int role) const;
+    virtual QVariant data(int column, int role) const override;
     BrowserNode * itemAbove();
     BrowserNode * itemBelow ();
     int depth();
@@ -334,7 +334,7 @@ inline QString BrowserNode::fullname(bool rev) const
         return p + (FullPathDotDot + name);
 }
 
-inline QString BrowserNode::fullname(QString & s, bool rev) const
+inline QString BrowserNode::fullname(const QString & s, bool rev) const
 {
     QString p = ((BrowserNode *) parent())->full_name(false, false);
 

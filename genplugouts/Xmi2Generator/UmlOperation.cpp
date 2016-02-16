@@ -402,7 +402,7 @@ const char * UmlOperation::event(bool rec)
 
         n = ++rank;
 
-        SentReceived.insert(this, (char *) n);
+        SentReceived.insert(this, reinterpret_cast<char*>(n));
     }
 
     static char s[24];

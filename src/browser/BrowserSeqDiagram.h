@@ -66,40 +66,40 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserSeqDiagram(QString s, BrowserNode * p, int id = 0);
+    BrowserSeqDiagram(const QString & s, BrowserNode * p, int id = 0);
     virtual ~BrowserSeqDiagram();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString()) override;
 
-    virtual const QPixmap * pixmap(int) const;
-    virtual void draw_svg() const;
+    virtual const QPixmap * pixmap(int) const override;
+    virtual void draw_svg() const override;
 
-    virtual void menu();
-    virtual void apply_shortcut(QString s);
-    virtual void open(bool);
-    virtual void on_close();
-    virtual void read_session(char *& st);
-    virtual UmlCode get_type() const;
-    virtual QString get_stype() const;
-    virtual int get_identifier() const;
-    virtual const char * help_topic() const;
-    virtual BasicData * get_data() const;
-    virtual void set_name(const char * s);
-    virtual void update_drawing_settings();
-    virtual void get_sequencediagramsettings(SequenceDiagramSettings &) const;
+    virtual void menu() override;
+    virtual void apply_shortcut(const QString & s) override;
+    virtual void open(bool) override;
+    virtual void on_close() override;
+    virtual void read_session(char *& st) override;
+    virtual UmlCode get_type() const override;
+    virtual QString get_stype() const override;
+    virtual int get_identifier() const override;
+    virtual const char * help_topic() const override;
+    virtual BasicData * get_data() const override;
+    virtual void set_name(const QString & s) override;
+    virtual void update_drawing_settings() override;
+    virtual void get_sequencediagramsettings(SequenceDiagramSettings &) const override;
     void get_sequencediagramsettings_msg(SequenceDiagramSettings &) const;
-    virtual UmlColor get_color(UmlCode) const;
-    virtual bool get_shadow() const;
-    virtual bool get_draw_all_relations() const;
-    virtual void dont_draw_all_relations();
-    virtual bool get_auto_label_position() const;
-    virtual bool get_show_stereotype_properties() const;
-    virtual bool get_classinstwritehorizontally() const;
-    virtual ShowContextMode get_classinstshowmode() const;
-    virtual bool tool_cmd(ToolCom * com, const char * args);
-    virtual void save(QTextStream &, bool ref, QString & warning);
+    virtual UmlColor get_color(UmlCode) const override;
+    virtual bool get_shadow() const override;
+    virtual bool get_draw_all_relations() const override;
+    virtual void dont_draw_all_relations() override;
+    virtual bool get_auto_label_position() const override;
+    virtual bool get_show_stereotype_properties() const override;
+    virtual bool get_classinstwritehorizontally() const override;
+    virtual ShowContextMode get_classinstshowmode() const override;
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
+    virtual void save(QTextStream &, bool ref, QString & warning) override;
     static BrowserSeqDiagram * read(char *& , char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
 
@@ -118,7 +118,7 @@ public:
     static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
 
-    virtual void renumber(int phase);
+    virtual void renumber(int phase) override;
     static void open_all();
     static void import();
 

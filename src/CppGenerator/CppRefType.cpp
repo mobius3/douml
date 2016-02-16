@@ -89,7 +89,7 @@ bool CppRefType::add(const WrapperStr & t, QList<CppRefType *> & l, bool incl)
     if (t.isEmpty())
         return FALSE;
 
-    static QHash<QString,char*> cpp_builtin_types;
+    static QHash<QString,const char*> cpp_builtin_types;
 
     if (cpp_builtin_types.count() == 0) {
         cpp_builtin_types.insert("unsigned", " ");

@@ -26,7 +26,7 @@
 // *************************************************************************
 
 // lexer written by hand rather than using [f]lex as usual,
-// BOUML is also my first development including a source code
+// DOUML is also my first development including a source code
 // reader where I do not use yacc/bison, to see how it is
 // without ...
 
@@ -104,7 +104,7 @@ bool Lex::open(const QString & f)
     context.mark = 0;
 
     QFile in(f);
-    unsigned sz;
+    qint64 sz;
 
     if (!in.open(QIODevice::ReadOnly) ||
         ((context.buffer = new char[(sz = in.size()) + 1]) == 0))

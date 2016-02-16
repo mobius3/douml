@@ -36,7 +36,7 @@ public:
     SelectAreaCanvas(int x, int y, int width, int height, QGraphicsScene * canvas);
 
 protected:
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 };
 
 #endif

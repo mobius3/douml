@@ -1938,10 +1938,10 @@ void GenerationSettingsDialog::follow_idl_set_name()
 static const char * get_indent(QComboBox * cb)
 {
     int n = cb->currentIndex();
-
+    Q_ASSERT(n <= 9);
     return (n == 9)
             ? "\t"
-            : "        " + (8 - n);
+            : &"        " [ (8 - n)];
 }
 
 void GenerationSettingsDialog::accept()
@@ -2617,14 +2617,14 @@ IncludeTable::IncludeTable(QWidget * parent, IncludesSpec & spc,
     setItemDelegateForColumn(1,m_delegate);
     for (index = 0; index < sup; index += 1, it_type++, it_incl++) {
         setText(index, 0, *it_type);
-        setItem(index, 1, new MLinesItem(this, *it_incl));
+        setItem(index, 1, new MLinesItem(*it_incl));
         setText(index, 2, QString());
         verticalHeader()->setSectionResizeMode(index, QHeaderView::Stretch);
         //adjustRow(index);
     }
 
     setText(index, 0, QString());
-    setItem(index, 1, new MLinesItem(this, dflt));
+    setItem(index, 1, new MLinesItem(dflt));
     setText(index, 2, QString());
     verticalHeader()->setSectionResizeMode(index, QHeaderView::Stretch);
 
@@ -2644,7 +2644,7 @@ IncludeTable::IncludeTable(QWidget * parent, IncludesSpec & spc,
 void IncludeTable::init_row(int index)
 {
     setText(index, 0, QString());
-    setItem(index, 1, new MLinesItem(this, QString()));
+    setItem(index, 1, new MLinesItem(QString()));
     setText(index, 2, QString());
     verticalHeader()->setSectionResizeMode(index, QHeaderView::Stretch);
 }

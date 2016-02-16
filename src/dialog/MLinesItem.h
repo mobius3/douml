@@ -37,7 +37,7 @@ class MLinesItem : public TableItem
 {
 protected:
 public:
-    MLinesItem(QTableWidget * t, const QString & s, bool editable = true);
+    MLinesItem(const QString & s, bool editable = true);
 };
 
 #endif

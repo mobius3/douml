@@ -101,8 +101,8 @@ bool BuiltinTable::ValidateTypes()
         }
         QList<Builtin>& builtins =  GenerationSettings::builtins;
         std::function<bool(const Builtin&)> func = [&](const Builtin& val1){return val1.uml == value.uml;};
-        int count = std::count_if(builtins.begin(), builtins.end(), func);
-        if(count > 1)
+        ptrdiff_t count = std::count_if(builtins.begin(), builtins.end(), func);
+        if (count > 1)
         {
             QMessageBox::critical(0, tr("Error"), tr("Duplicate Uml entries are not allowed"));
             return false;

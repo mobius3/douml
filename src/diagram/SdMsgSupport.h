@@ -41,6 +41,7 @@ public:
     virtual bool isaDuration() const = 0;
     virtual bool isOverlappingDuration() const = 0;
     virtual void add(SdMsgBaseCanvas *) = 0;
+    using DiagramCanvas::remove;
     virtual void remove(SdMsgBaseCanvas *) = 0;
     virtual double min_y() const = 0;
     virtual void update_v_to_contain(const QRect re) = 0;

@@ -55,11 +55,11 @@ protected:
     WrapperStr python_package;
     WrapperStr idl_module;
 
-    virtual void send_cpp_def(ToolCom * com);
-    virtual void send_java_def(ToolCom * com);
-    virtual void send_php_def(ToolCom * com);
-    virtual void send_python_def(ToolCom * com);
-    virtual void send_idl_def(ToolCom * com);
+    virtual void send_cpp_def(ToolCom * com) override;
+    virtual void send_java_def(ToolCom * com) override;
+    virtual void send_php_def(ToolCom * com) override;
+    virtual void send_python_def(ToolCom * com) override;
+    virtual void send_idl_def(ToolCom * com) override;
 
 public:
     PackageData();
@@ -104,7 +104,7 @@ public:
     };
 
     virtual bool tool_cmd(ToolCom * com, const char * args,
-                          BrowserNode * bn, const QString & comment);
+                          BrowserNode * bn, const QString & comment) override;
 
     void save(QTextStream &, QString & warning) const;
     void read(char *& st, char *& k);

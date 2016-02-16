@@ -98,8 +98,8 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserPackage(QString s, BrowserNode * parent, int id = 0);
-    BrowserPackage(QString s, BrowserView * parent, int id = 0);
+    BrowserPackage(const QString & s, BrowserNode * parent, int id = 0);
+    BrowserPackage(const QString & s, BrowserView * parent, int id = 0);
     BrowserPackage(const BrowserPackage * model, BrowserNode * p);
     virtual ~BrowserPackage();
 
@@ -107,10 +107,10 @@ public:
     void set_associated_diagram(BrowserNode *, bool on_read = FALSE);
 
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool force_edit);
     virtual void on_close();
     virtual UmlCode get_type() const;
@@ -164,7 +164,7 @@ public:
 
     void add_package(bool profile);
     unsigned load(bool recursive, int id = -1);
-    BrowserPackage * import_project(QString fn, bool aslib = FALSE, int id = 0);
+    BrowserPackage * import_project(const QString & fn, bool aslib = FALSE, int id = 0);
 
     static BrowserNodeList & instances(BrowserNodeList &);
     static BrowserPackage * get_package();
@@ -181,7 +181,7 @@ public:
     static void save_all(bool modified_only);
     static bool must_be_saved();
     virtual void init_save_counter();
-    static bool load_version(QString fn);
+    static bool load_version(const QString & fn);
 
     static void clear(bool old);
     static void update_idmax_for_root();

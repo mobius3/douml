@@ -297,7 +297,7 @@ void SimpleRelationCanvas::menu(const QPoint &)
     }
 }
 
-void SimpleRelationCanvas::apply_shortcut(QString s)
+void SimpleRelationCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser")
         data->get_start()->select_in_browser();
@@ -595,7 +595,7 @@ void SimpleRelationCanvas::save(QTextStream & st, bool ref, QString & warning) c
             st << "decenter_end " << ((int)(decenter_end * 1000));
         }
 
-        (const SimpleRelationCanvas *) ArrowCanvas::save_lines(st, TRUE, TRUE, warning);
+        save_lines(st, TRUE, TRUE, warning);
 
         if (stereotypeproperties != 0)
             stereotypeproperties->save(st, FALSE, warning);

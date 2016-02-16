@@ -60,13 +60,13 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserOperation(QString s, BrowserNode * p, OperationData * d, int id = 0);
+    BrowserOperation(const QString & s, BrowserNode * p, OperationData * d, int id = 0);
     BrowserOperation(const BrowserOperation * model, BrowserNode * p);
     virtual ~BrowserOperation();
 
     virtual bool undelete(bool rec, QString & warning, QString & renamed);
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     void post_duplicate();
 
     BrowserNode * get_get_of() {
@@ -93,10 +93,9 @@ public:
     QString compute_name(const char * name_spec) const;
 
     virtual const QPixmap * pixmap(int) const;
-    virtual void paintCell(QPainter *, const QPalette &, int, int, int);
 
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool);
     virtual UmlCode get_type() const;
     virtual uint TypeID();
@@ -150,7 +149,7 @@ protected:
 
     void AddConstructorInitalizer();
 };
-extern bool CompareAgainstTag(QString & currentTag, QString tagToCompare, const char * p);
+extern bool CompareAgainstTag(QString & currentTag, const QString & tagToCompare, const char * p);
 extern bool insert_template(const QString & tm, const char *& p, QString & s, const QString & indent);
 #endif
 

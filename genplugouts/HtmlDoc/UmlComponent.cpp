@@ -22,7 +22,7 @@ void UmlComponent::html(QByteArray pfix, unsigned int rank, unsigned int level)
     if (provided.size() != 0) {
         const char * sep = "<p>provided classes : ";
 
-        for (unsigned i = 0; i != provided.size(); i += 1) {
+        for (int i = 0; i != provided.size(); i += 1) {
             fw.write(sep);
             sep = ", ";
             provided[i]->write();
@@ -36,7 +36,7 @@ void UmlComponent::html(QByteArray pfix, unsigned int rank, unsigned int level)
     if (required.size() != 0) {
         const char * sep = "<p>required classes : ";
 
-        for (unsigned i = 0; i != required.size(); i += 1) {
+        for (int i = 0; i != required.size(); i += 1) {
             fw.write(sep);
             sep = ", ";
             required[i]->write();
@@ -50,7 +50,7 @@ void UmlComponent::html(QByteArray pfix, unsigned int rank, unsigned int level)
     if (realizing.size() != 0) {
         const char * sep = "<p>realizing classes : ";
 
-        for (unsigned i = 0; i != realizing.size(); i += 1) {
+        for (int i = 0; i != realizing.size(); i += 1) {
             fw.write(sep);
             sep = ", ";
             realizing[i]->write();

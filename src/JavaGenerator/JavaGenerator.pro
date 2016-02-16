@@ -1,14 +1,8 @@
 TEMPLATE      = app
-CONFIG(Debug, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt warn_on Debug
-    QMAKE_POST_LINK = " "
-}
-CONFIG(Release, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt Release
-    QMAKE_POST_LINK = " "
-}
+CONFIG -= app_bundle
+CONFIG += qt warn_on c++11
+QMAKE_POST_LINK = " "
+DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
         UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
         UmlExtraClassMember.cpp UmlArtifact.cpp \
@@ -104,25 +98,21 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
 TARGET          = java_generator
-DEFINES          = WITHJAVA BooL=bool TRUE=true FALSE=false
-INCLUDEPATH   = ../Tools ../JavaGenerator ../
-
-DESTDIR = ../../bin
+DEFINES          += WITHJAVA BooL=bool TRUE=true FALSE=false
+INCLUDEPATH   += ../Tools ../JavaGenerator ../
 
 #The following line was inserted by qt3to4
 QT += network
 #qt3support
 
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
-
 DESTDIR = ../../bin
-Release {
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/java_generator
     OBJECTS_DIR = $${DESTDIR}/obj_release/java_generator
 }
-
-Debug {
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
     MOC_DIR = $${DESTDIR}/moc_debug/java_generator
     OBJECTS_DIR = $${DESTDIR}/obj_debug/java_generator
 }

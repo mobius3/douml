@@ -744,7 +744,7 @@ bool Class::manage_extends(ClassContainer * container,
 {
     // out of scanning
 #ifdef TRACE
-    QLOG_INFO() << name() << "->manage_extends()\n";
+    QLOG_INFO() << (uml ? uml->name() : "") << "->manage_extends()\n";
 #endif
 
     UmlTypeSpec typespec;
@@ -785,7 +785,7 @@ bool Class::manage_implements(ClassContainer * container, aRelationKind k,
 {
     // out of scanning
 #ifdef TRACE
-    QLOG_INFO() << name() << "->manage_implements()\n";
+    QLOG_INFO() << (uml ? uml->name() : "") << "->manage_implements()\n";
 #endif
 
     for (;;) {
@@ -1617,6 +1617,12 @@ const QPixmap * Class::pixmap(int) const
 void Class::paintCell(QPainter * p, const QColorGroup & cg, int column,
                       int width, int alignment)
 {
+    Q_UNUSED(p);
+    Q_UNUSED(cg);
+    Q_UNUSED(column);
+    Q_UNUSED(width);
+    Q_UNUSED(alignment);
+
     /*
     if (abstractp) {
         QFont fnt = p->font();

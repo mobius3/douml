@@ -80,7 +80,7 @@ void UmlClass::generate(QTextStream & f)
     WrapperStr templ;
     const char * sep;
     WrapperStr indent = "";
-    unsigned index;
+    int index;
 
     while ((*p == ' ') || (*p == '\t'))
         indent += *p++;
@@ -170,7 +170,7 @@ void UmlClass::generate(QTextStream & f)
 
                 // items declaration
 
-                unsigned n = 0;
+                int n = 0;
 
                 for (index = 0; index != ch.size(); index += 1)
                     if ((ch[index]->kind() != aNcRelation) &&

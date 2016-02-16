@@ -52,7 +52,7 @@ QList<BrowserStateDiagram *> BrowserStateDiagram::imported;
 QList<int> BrowserStateDiagram::imported_ids;
 QStringList BrowserStateDiagram::its_default_stereotypes;	// unicode
 
-BrowserStateDiagram::BrowserStateDiagram(QString s, BrowserNode * p, int id)
+BrowserStateDiagram::BrowserStateDiagram(const QString & s, BrowserNode * p, int id)
     : BrowserDiagram(s, p, id), window(0), used_settings(0)
 {
     make();
@@ -134,7 +134,7 @@ BrowserStateDiagram * BrowserStateDiagram::add_state_diagram(BrowserNode * futur
         return 0;
 }
 
-void BrowserStateDiagram::set_name(QString s)
+void BrowserStateDiagram::set_name(const QString & s)
 {
     BrowserDiagram::set_name(s);
 
@@ -174,7 +174,7 @@ void BrowserStateDiagram::delete_it()
     BrowserNode::delete_it();
 }
 
-BrowserNode * BrowserStateDiagram::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserStateDiagram::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserStateDiagram * result = new BrowserStateDiagram(this, p);
 
@@ -310,7 +310,7 @@ void BrowserStateDiagram::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserStateDiagram::apply_shortcut(QString s)
+void BrowserStateDiagram::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

@@ -106,10 +106,15 @@ void IconCanvas::draw(QPainter & p)
         fputs("</g>\n", fp);
     }
 }
+
 void IconCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 void IconCanvas::change_scale()
 {
     // defined to not change size
@@ -213,7 +218,7 @@ void IconCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void IconCanvas::apply_shortcut(QString s)
+void IconCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

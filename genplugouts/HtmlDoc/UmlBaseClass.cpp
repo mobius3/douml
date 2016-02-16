@@ -517,7 +517,7 @@ bool UmlBaseClass::set_Name(const QByteArray & s)
     const QVector<UmlItem*> ch = children();
     QByteArray destr = "~" + name();
 
-    for (unsigned i = 0; i != ch.size(); i += 1) {
+    for (int i = 0; i != ch.size(); i += 1) {
         if (ch[i]->kind() == anOperation) {
             if (ch[i]->name() == name())
                 ch[i]->set_Name(s);

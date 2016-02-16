@@ -40,35 +40,35 @@ protected:
     FragmentCanvas * fragment;
     double vpos;
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 public:
     FragmentSeparatorCanvas(UmlCanvas * canvas, FragmentCanvas * f, double vp = 0.5);
     virtual ~FragmentSeparatorCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     void compute_position();
-    void update();
+    virtual void update() override;
 
     virtual void drawShape(QPainter & p);
-    virtual void moveBy(double dx, double dy);
+    virtual void moveBy(double dx, double dy) override;
 
-    virtual UmlCode typeUmlCode() const;
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual LineDirection allowed_direction(UmlCode);
-    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
-    virtual void open();
-    virtual void menu(const QPoint &);
-    virtual void change_scale();
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode &, const DiagramItem *) const;
+    virtual UmlCode typeUmlCode() const override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual LineDirection allowed_direction(UmlCode) override;
+    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &) override;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
+    virtual void change_scale() override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode &, const DiagramItem *) const override;
 
-    virtual void save(QTextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const override;
     static FragmentSeparatorCanvas * read(char *& , UmlCanvas *,
                                           char * k, FragmentCanvas * f);
 
-    virtual void history_save(QBuffer &) const;
-    virtual void history_load(QBuffer &);
+    virtual void history_save(QBuffer &) const override;
+    virtual void history_load(QBuffer &) override;
 };
 
 #endif

@@ -221,10 +221,15 @@ void UcUseCaseCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
+
 void UcUseCaseCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode UcUseCaseCanvas::typeUmlCode() const
 {
     return UmlUseCase;
@@ -421,7 +426,7 @@ void UcUseCaseCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void UcUseCaseCanvas::apply_shortcut(QString s)
+void UcUseCaseCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

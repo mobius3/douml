@@ -26,7 +26,7 @@
 // *************************************************************************
 
 #ifndef USECASEDIAGRAMWINDOW_H
-#define USECASEDISGRAMWINDOW_H
+#define USECASEDIAGRAMWINDOW_H
 
 #include "DiagramWindow.h"
 
@@ -60,9 +60,9 @@ public:
     UseCaseDiagramWindow(const QString & s, BrowserUseCaseDiagram * b, int id = -1);
     virtual ~UseCaseDiagramWindow();
 
-    virtual DiagramView * get_view() const;
+    virtual DiagramView * get_view() const override;
 
-    virtual void hit_button(UmlCode, QToolButton *);
+    virtual void hit_button(UmlCode, QToolButton *) override;
 
 protected slots:
     void hit_class();

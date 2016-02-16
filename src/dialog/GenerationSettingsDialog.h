@@ -254,8 +254,8 @@ protected:
 
 protected slots:
     virtual void polish();
-    virtual void accept();
-    virtual void reject();
+    virtual void accept() override;
+    virtual void reject() override;
     void cpproot_browse();
     void javaroot_browse();
     void phproot_browse();
@@ -284,6 +284,8 @@ protected slots:
 
 class StereotypesTable : public StringTable
 {
+    Q_OBJECT
+
 protected:
     bool with_php;
 public:
@@ -296,6 +298,8 @@ public:
 
 class IncludeTable : public StringTable
 {
+    Q_OBJECT
+    
 protected:
     IncludesSpec & spec;
     const char * dflt;

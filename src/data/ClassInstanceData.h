@@ -79,7 +79,7 @@ private:
 
 protected:
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-                              const QString & comment);
+                              const QString & comment) override;
     void replace_internal(BrowserClassInstance * other,
                           RelationData * current, RelationData * future,
                           bool current_isa, bool future_isa);
@@ -94,9 +94,9 @@ public:
 
     void edit();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
     virtual bool tool_cmd(ToolCom * com, const char * args,
-                          BrowserNode * bn, const QString & comment);
+                          BrowserNode * bn, const QString & comment) override;
 
     void save(QTextStream &, QString & warning) const;
     void read(char *& st, char *& k);

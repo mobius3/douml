@@ -96,21 +96,21 @@ void RelTable::init_row(const SlotRel & sr, int row, QString a, bool visit)
     QString b = sr.value->get_name() + QString(":") +
             ((ClassInstanceData *) sr.value->get_data())->get_class()->get_name();
 
-    setItem(row, 0, new TableItem(this, TableItem::Never,
+    setItem(row, 0, new TableItem(TableItem::Never,
                                   (sr.is_a) ? a : b, TableItem::TableItemType));
 
     RelationData * d = sr.rel;
     const char * s;
 
     s = d->get_role_b();
-    setItem(row, 1, new TableItem(this, TableItem::Never, (s == 0) ? "" : s, TableItem::TableItemType));
+    setItem(row, 1, new TableItem(TableItem::Never, (s == 0) ? "" : s, TableItem::TableItemType));
 
-    setItem(row, 2, new TableItem(this, TableItem::Never, stringify(d->get_type()), TableItem::TableItemType));
+    setItem(row, 2, new TableItem(TableItem::Never, stringify(d->get_type()), TableItem::TableItemType));
 
     s = d->get_role_a();
-    setItem(row, 3, new TableItem(this, TableItem::Never, (s == 0) ? "" : s, TableItem::TableItemType));
+    setItem(row, 3, new TableItem(TableItem::Never, (s == 0) ? "" : s, TableItem::TableItemType));
 
-    setItem(row, 4, new TableItem(this, TableItem::Never,
+    setItem(row, 4, new TableItem(TableItem::Never,
                                   (sr.is_a) ? b : a, TableItem::TableItemType));
 
     if (! visit)
@@ -393,8 +393,8 @@ void ClassInstanceDialog::type_changed(int i)
 
     int index = 0;
     foreach (BrowserNode * at, attributes) {
-        atbl->setItem(index, 0, new TableItem(atbl, TableItem::Never, at->get_name(), TableItem::TableItemType));
-        atbl->setItem(index, 1, new TableItem(atbl, TableItem::Never, ((BrowserNode *) at->parent())->get_name(), TableItem::TableItemType));
+        atbl->setItem(index, 0, new TableItem(TableItem::Never, at->get_name(), TableItem::TableItemType));
+        atbl->setItem(index, 1, new TableItem(TableItem::Never, ((BrowserNode *) at->parent())->get_name(), TableItem::TableItemType));
 
         QList<SlotAttr>::Iterator it_attr;
 
