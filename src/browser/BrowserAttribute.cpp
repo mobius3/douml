@@ -647,7 +647,7 @@ void BrowserAttribute::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "attribute " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         indent(+1);
         def->save(st, warning);
 

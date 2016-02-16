@@ -752,7 +752,7 @@ void BrowserPseudoState::save(QTextStream & st, bool ref, QString & warning)
         st << "pseudostate " << get_ident() << " " << stringify(kind) << " ";
 
         if (!allow_empty())
-            save_string(name.toLatin1().constData(), st);
+            save_string(name, st);
 
         indent(+1);
         def->save(st, warning);

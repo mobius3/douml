@@ -672,7 +672,7 @@ void SdClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) cons
             st << "  drawing_mode " << stringify(drawing_mode);
 
         st << "  name ";
-        save_string(iname.toLatin1().constData(), st);
+        save_string(iname, st);
         st << " ";
         SdObjCanvas::save(st);
     }

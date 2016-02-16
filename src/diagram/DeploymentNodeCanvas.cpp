@@ -777,7 +777,7 @@ void DeploymentNodeCanvas::save(QTextStream & st, bool ref, QString & warning) c
         if (!iname.isEmpty()) {
             nl_indent(st);
             st << "name ";
-            save_string(iname.toLatin1().constData(), st);
+            save_string(iname, st);
         }
 
         nl_indent(st);

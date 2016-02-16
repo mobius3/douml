@@ -376,7 +376,7 @@ void LabelCanvas::set_z(double z)
 void LabelCanvas::save(QTextStream  & st, bool, QString &) const
 {
     st << "label ";
-    save_string(text().toLatin1().constData(), st);
+    save_string(text(), st);
 
     if (font().bold())
         st << " bold";

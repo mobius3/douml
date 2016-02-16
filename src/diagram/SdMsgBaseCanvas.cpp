@@ -448,7 +448,7 @@ void SdMsgBaseCanvas::save(QTextStream & st, QString & warning) const
             }
             else {
                 st << " explicitmsg ";
-                save_string(msg->get_browser_node()->get_name().toLatin1().constData(), st);
+                save_string(msg->get_browser_node()->get_name(), st);
             }
         }
         else {
@@ -466,7 +466,7 @@ void SdMsgBaseCanvas::save(QTextStream & st, QString & warning) const
     if (stereotype != 0) {
         nl_indent(st);
         st << "stereotype ";
-        save_string(stereotype->get_name().toLatin1().constData(), st);
+        save_string(stereotype->get_name(), st);
         save_xyz(st, stereotype, " xyz");
     }
 

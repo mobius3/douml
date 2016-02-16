@@ -3378,7 +3378,7 @@ void OperationData::save(QTextStream & st, bool ref, QString & warning) const
 {
     if (ref) {
         st << "operation_ref " << get_ident() << " // ";
-        save_string(definition(TRUE, FALSE).toLatin1(), st);
+        save_string(definition(TRUE, FALSE), st);
     }
     else {
         BasicData::save(st, warning);

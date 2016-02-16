@@ -357,20 +357,18 @@ static const struct {
 
 void Tool::save()
 {
-    QSharedPointer<QByteArray> newdef(new QByteArray());
-    QTextStream st(newdef.data(), QIODevice::WriteOnly);
-
-    //st.setEncoding(QTextStream::Latin1);
-    st.setCodec(QTextCodec::codecForName("latin1"));
+    QString newdef;
+    QTextStream st(&newdef, QIODevice::WriteOnly);
+    st.setCodec(QTextCodec::codecForName("UTF-8"));
     st << "// 'tool' \"the executable\" \"displayed string\" {target}+";
 
     for (unsigned rank = 0; rank != ntools; rank += 1) {
         ATool & tool = tools[rank];
 
         st << "\ntool ";
-        save_string(tools[rank].display.toLatin1().constData(), st);
+        save_string(tools[rank].display, st);
         st << " ";
-        save_string(tools[rank].cmd.toLatin1().constData(), st);
+        save_string(tools[rank].cmd, st);
 
         for (int index = 0; index != sizeof(ToolCase) / sizeof(*ToolCase); index += 1) {
             if (tool.applicable[ToolCase[index].kind]) {

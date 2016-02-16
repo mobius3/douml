@@ -1497,7 +1497,7 @@ void UmlWindow::save_session()
     if (open_file(fp, QIODevice::WriteOnly, TRUE) != -1) {
         QTextStream st(&fp);
 
-        st.setCodec("latin1");
+        st.setCodec("UTF-8");
 
         st << "window_sizes " << width() << " " << height() << " "
            << spl1->sizes().first() << " " << spl1->sizes().last() << " "

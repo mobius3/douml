@@ -738,7 +738,7 @@ void ClassInstanceData::save(QTextStream & st, QString & warning) const
         slot_attr.att->save(st, TRUE, warning);
         nl_indent(st);
         st << "    ";
-        save_string(slot_attr.value.toLatin1().constData(), st);
+        save_string(slot_attr.value, st);
         ++it_attr;
     }
 

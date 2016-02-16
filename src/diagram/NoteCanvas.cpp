@@ -192,7 +192,7 @@ void NoteCanvas::open()
     // warning : 'note' is already unicode
     QString s = fromUnicode(note);
     MLEDialog::get(s, QCursor::pos(), sz);
-    note = s.toLatin1().constData();
+    note = s;
     modified();
 }
 
@@ -431,9 +431,7 @@ void NoteCanvas::resize(const QSize & sz, bool w, bool h)
 
 void NoteCanvas::save_internal(QTextStream & st) const
 {
-    QTextCodec* codec = QTextCodec::codecForLocale();
-    QByteArray toWrite = codec->fromUnicode(note);
-    save_string(toWrite, st);
+    save_string(note, st);
 
     //save_string(temp1, st);
     nl_indent(st);
@@ -464,13 +462,6 @@ void NoteCanvas::save(QTextStream & st, bool ref, QString &) const
 
 void NoteCanvas::read_internal(char *& st)
 {
-    const char * p = st;
-    QTextCodec* codec = QTextCodec::codecForLocale();
-    QTextStream stream(p);
-    stream.setCodec(codec);
-    QByteArray ba;
-    stream   >> ba;
-    //QString temp = QString::fromLocal8Bit(ba);
     char* test = read_string(st);
     //Q_UNUSED(test);
     note = test;

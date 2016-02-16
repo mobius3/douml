@@ -395,14 +395,14 @@ void CodDirsCanvas::save(QTextStream & st, bool ref, QString & warning) const
         if (label != 0) {
             nl_indent(st);
             st << "forward_label ";
-            save_string(label->get_name().toLatin1().constData(), st);
+            save_string(label->get_name(), st);
             save_xyz(st, label, " xyz");
         }
 
         if (backward_label != 0) {
             nl_indent(st);
             st << "backward_label ";
-            save_string(backward_label->get_name().toLatin1().constData(), st);
+            save_string(backward_label->get_name(), st);
             save_xyz(st, backward_label, " xyz");
         }
 

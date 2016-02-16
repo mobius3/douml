@@ -2245,15 +2245,13 @@ void BrowserPackage::init()
 void BrowserPackage::save_stereotypes()
 {
 
-    QSharedPointer<QByteArray> newdef(new QByteArray());
-    QTextStream st(newdef.data(), QIODevice::WriteOnly);
-    //  QLOG_INFO() << newdef->data();
-    st.setCodec("latin1");
-    //  QLOG_INFO() << newdef->data();
+    QString newdef;
+    QTextStream st(&newdef, QIODevice::WriteOnly);
+    st.setCodec("UTF-8");
     nl_indent(st);
     st << "package_stereotypes ";
     st.flush();
-    QLOG_INFO() << newdef->data();
+    QLOG_INFO() << newdef;
     save_unicode_string_list(its_default_stereotypes, st);
     nl_indent(st);
     st << "  " << stringify(UmlDependency);
@@ -2290,7 +2288,7 @@ void BrowserPackage::save_stereotypes()
     st << "\nend\n";
     st << '\000';
     st.flush();
-    QLOG_INFO() << newdef->data();
+    QLOG_INFO() << newdef;
     save_if_needed("stereotypes", newdef);
 
 }
@@ -2456,14 +2454,14 @@ void BrowserPackage::save_all(bool modified_only)
 
                 QTextStream st(&fp);
 
-                st.setCodec("latin1"/*QTextStream::Latin1*/);
+                st.setCodec("UTF-8");
 
                 // saves the package own data
 
                 indent0();
                 st << "format " << api_format() << "\n";
 
-                save_string(pack->name.toLatin1().constData(), st);
+                save_string(pack->name, st);
 
                 if (!prj)
                     st << " // " << pack->full_name();

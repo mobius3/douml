@@ -1940,7 +1940,7 @@ const ArrowCanvas * ArrowCanvas::save_lines(QTextStream & st, bool with_label,
 
         if (with_stereotype && ar->stereotype) {
             st << " stereotype ";
-            save_string(ar->stereotype->get_name().toLatin1(), st);
+            save_string(ar->stereotype->get_name(), st);
             save_xyz(st, ar->stereotype, " xyz");
         }
 
@@ -1960,7 +1960,7 @@ const ArrowCanvas * ArrowCanvas::save_lines(QTextStream & st, bool with_label,
 
     if (with_stereotype && ar->stereotype) {
         st << " stereotype ";
-        save_string(ar->stereotype->get_name().toLatin1(), st);
+        save_string(ar->stereotype->get_name(), st);
         save_xyz(st, ar->stereotype, " xyz");
     }
 

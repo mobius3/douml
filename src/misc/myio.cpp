@@ -1604,31 +1604,24 @@ bool copy_file(QFileInfo * src, const QDir & dest)
     return TRUE;
 }
 
-void save_if_needed(const char * filename, QSharedPointer<QByteArray> newdef)
+void save_if_needed(const char * filename, QString& newdef)
 {
     QDir d = BrowserView::get_dir();
     QString path = d.absoluteFilePath(filename);
     FILE * fp = fopen(path.toLatin1().constData(), "rb");
-    bool needed;
+    bool needed = false;
 
     if (fp == 0)
         needed = TRUE;
     else {
-        int c;
-        const char * new_contains = newdef->constData();
-
-        needed = FALSE;
-
-        while ((c = fgetc(fp)) != EOF) {
-            if (c != *new_contains++) {
-                needed = TRUE;
-                break;
-            }
-        }
-
+        QString oldDef;
+        QTextStream st(fp, QIODevice::ReadOnly);
+        st.setCodec("UTF-8");
+        st>>oldDef;
+        st.flush();
+        if(newdef != oldDef)
+            needed = true;
         fclose(fp);
-
-        needed |= (*new_contains != 0);
     }
 
     if (needed) {
@@ -1639,22 +1632,14 @@ void save_if_needed(const char * filename, QSharedPointer<QByteArray> newdef)
                 (void) msg_critical("Error", QObject::tr("Cannot create file\n") + path,
                                     QMessageBox::Retry);
 
-            QLOG_INFO() << newdef.data();
+            QLOG_INFO() << newdef;
 
-            if (!newdef->isEmpty()) {
-                if (fputs(newdef->constData(), fp) < 0) {
-                    fclose(fp);
-                    (void) msg_critical(QObject::tr("Error"),
-                                        QObject::tr("Error while writting in\n%1\nmay be your disk is full").arg(path),
-                                        QMessageBox::Retry);
-                }
-                else
-                    // ok
-                    break;
-            }
-            else
-                // ok
-                break;
+            QTextStream st(fp);
+            st.setCodec("UTF-8");
+            st<<newdef;
+            st.flush();
+            break;
+
         }
 
         fclose(fp);
@@ -1778,7 +1763,7 @@ char * read_definition(int id, const char * ext, int offset, int len)
     return read_file(s, offset, len);
 }
 
-void save_definition(int id, const char * ext, const char * def,
+void save_definition(int id, const char * ext, QString def,
                      BooL & is_new)
 {
     QString s;
@@ -1808,20 +1793,11 @@ void save_definition(int id, const char * ext, const char * def,
                                 QObject::tr("Cannot create file\n") + s,
                                 QMessageBox::Retry);
 
-        if ((def != 0) && *def) {
-            if (fputs(def, fp) < 0) {
-                fclose(fp);
-                (void) msg_critical(QObject::tr("Error"),
-                                    QObject::tr("Cannot save definition in\n%1\nmay be your disk is full").arg(s),
-                                    QMessageBox::Retry);
-            }
-            else
-                // ok
-                break;
-        }
-        else
-            // ok
-            break;
+        QTextStream st(fp);
+        st.setCodec("UTF-8");
+        st<<def;
+        st.flush();
+        break;
     }
 
     fclose(fp);
@@ -1859,70 +1835,16 @@ static QString where()
 
 //
 
-void save_string(const char * p, QTextStream & st)
+void save_string(QString p, QTextStream & st)
 {
-    int zeroCount = 0;
-    if ((p == 0) || (*p == 0))
-        st << "\"\"";
-    else {
+    QString toWrite = p;
+    toWrite.replace('\\',"\\\\");
+    toWrite.replace('"',"\\\"");
         st << '"';
-
-        for (;;) {
-            const char * p2 = strchr(p, '"');
-            const char * p3 = strchr(p, '\\');
-
-            if ((p2 != 0) || (p3 != 0)) {
-                if ((p2 == 0) || ((p3 != 0) && (p3 < p2)))
-                    p2 = p3;
-
-                // do NOT use writeRawBytes !
-                while (p != p2)
-                {
-
-                    QString temp1 = QTextCodec::codecForLocale()->toUnicode(p).left(1);
-                    int size = QTextCodec::codecForLocale()->fromUnicode(temp1).size();
-                    st << temp1;
-                    p+=size;
-                    if(size == 0)
-                    {
-                        zeroCount++;
-                        if(zeroCount > 5)
-                            break;
-                    }
-
-
-                }
-
-                st << '\\';
-                QString temp1 = QTextCodec::codecForLocale()->toUnicode(p).left(1);
-                int size =  QTextCodec::codecForLocale()->fromUnicode(temp1).size();
-                p+=size;
-                st << temp1;
-                if(size == 0)
-                {
-                    zeroCount++;
-                    if(zeroCount > 5)
-                        break;
-                }
-
-
-                if (*p == 0)
-                    break;
-            }
-            else {
-                st << p;
-                break;
-            }
-
-            if(zeroCount > 5)
-            {
-                printf("unicode error\r\n");
-                break;
-            }
-        }
-
+        //for (int i = 0; i< toWrite.size(); i++)
+          //  st << toWrite.at(i);
+        st << toWrite;
         st << '"';
-    }
 }
 
 void save_string_list(QStringList & list, QTextStream & st)
@@ -1933,7 +1855,7 @@ void save_string_list(QStringList & list, QTextStream & st)
          it != list.end();
          ++it) {
         st << " ";
-        save_string((*it).toLatin1().constData(), st);
+        save_string((*it), st);
     }
 }
 
@@ -1944,7 +1866,7 @@ void save_unicode_string_list(QStringList & list, QTextStream & st)
          it != list.end();
          ++it) {
         st << " ";
-        save_string(fromUnicode((*it)), st);
+        save_string((*it), st);
     }
 }
 

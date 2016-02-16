@@ -83,7 +83,7 @@ extern void delete_backup(QDir & d);
 extern int open_file(QFile & fp, int mode, bool silent = FALSE);
 extern void read_in(const QString &);
 extern bool copy_file(QFileInfo * src, const QDir & dest);
-extern void save_if_needed(const char * filename, QSharedPointer<QByteArray>);
+extern void save_if_needed(const char * filename, QString& newdef);
 
 extern char * read_file(QString filename);
 extern char * read_file(QString filename, int offset, int len);
@@ -97,10 +97,10 @@ extern unsigned read_file_format();
 extern QString abs_file_path(int id, const char * ext);
 extern char * read_definition(int id, const char * ext);
 char * read_definition(int id, const char * ext, int offset, int len);
-extern void save_definition(int id, const char * ext, const char * def, BooL & is_new);
+extern void save_definition(int id, const char * ext, QString def, BooL & is_new);
 extern void delete_definition(int id, const char * ext);
 
-extern void save_string(const char *, QTextStream & st);
+extern void save_string(QString, QTextStream & st);
 extern void save_string_list(QStringList & list, QTextStream & st);
 extern void save_unicode_string_list(QStringList & list, QTextStream & st);
 extern void nl_indent(QTextStream & st);

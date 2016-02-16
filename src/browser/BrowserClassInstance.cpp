@@ -622,7 +622,7 @@ void BrowserClassInstance::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "classinstance " << get_ident() << " ";
-        save_string(name.toLatin1(), st);
+        save_string(name, st);
         indent(+1);
         def->save(st, warning);
 
