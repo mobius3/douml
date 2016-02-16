@@ -63,7 +63,7 @@
 IdDict<BrowserState> BrowserState::all(257, __FILE__);
 QStringList BrowserState::its_default_stereotypes;	// unicode
 
-BrowserState::BrowserState(QString s, BrowserNode * p, StateData * d, int id)
+BrowserState::BrowserState(const QString & s, BrowserNode * p, StateData * d, int id)
     : BrowserNode(s, p), Labeled<BrowserState>(all, id),
       def(d), associated_diagram(0)
 {
@@ -85,7 +85,7 @@ BrowserState::BrowserState(const BrowserState * model, BrowserNode * p)
     comment = model->comment;
 }
 
-BrowserNode * BrowserState::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserState::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserNode * result = new BrowserState(this, p);
 
@@ -474,7 +474,7 @@ void BrowserState::exec_menu_choice(int rank,
     package_modified();
 }
 
-void BrowserState::apply_shortcut(QString s)
+void BrowserState::apply_shortcut(const QString & s)
 {
     int choice = -1;
     bool ref = is_ref();

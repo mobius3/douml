@@ -26,7 +26,7 @@
 // *************************************************************************
 
 #ifndef _UTIL_H
-#define _UTIL_h
+#define _UTIL_H
 
 #include <qstring.h>
 //Added by qt3to4:

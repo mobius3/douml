@@ -61,7 +61,7 @@
 IdDict<BrowserExpansionNode> BrowserExpansionNode::all(257, __FILE__);
 QStringList BrowserExpansionNode::its_default_stereotypes;	// unicode
 
-BrowserExpansionNode::BrowserExpansionNode(QString s, BrowserNode * p, int id)
+BrowserExpansionNode::BrowserExpansionNode(const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserExpansionNode>(all, id),
       def(new ActivityObjectData)
 {
@@ -104,7 +104,7 @@ BrowserExpansionNode::get_expansionnode(BrowserNode * future_parent)
     return r;
 }
 
-BrowserNode * BrowserExpansionNode::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserExpansionNode::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserNode * result = new BrowserExpansionNode(this, p);
 
@@ -290,7 +290,7 @@ void BrowserExpansionNode::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserExpansionNode::apply_shortcut(QString s)
+void BrowserExpansionNode::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

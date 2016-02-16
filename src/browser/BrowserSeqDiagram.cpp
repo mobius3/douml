@@ -25,10 +25,6 @@
 //
 // *************************************************************************
 
-
-
-
-
 //#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qfileinfo.h>
@@ -59,7 +55,7 @@ QStringList BrowserSeqDiagram::its_default_stereotypes;	// unicode
 QStringList BrowserSeqDiagram::message_default_stereotypes;	// unicode
 
 
-BrowserSeqDiagram::BrowserSeqDiagram(QString s, BrowserNode * p, int id)
+BrowserSeqDiagram::BrowserSeqDiagram(const QString & s, BrowserNode * p, int id)
     : BrowserDiagram(s, p, id), window(0), used_settings(0)
 {
     make();
@@ -147,7 +143,7 @@ BrowserSeqDiagram * BrowserSeqDiagram::add_sequence_diagram(BrowserNode * future
         return 0;
 }
 
-void BrowserSeqDiagram::set_name(const char * s)
+void BrowserSeqDiagram::set_name(const QString & s)
 {
     BrowserDiagram::set_name(s);
     if (window != 0)
@@ -185,7 +181,7 @@ void BrowserSeqDiagram::delete_it()
     BrowserNode::delete_it();
 }
 
-BrowserNode * BrowserSeqDiagram::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserSeqDiagram::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserSeqDiagram * result = new BrowserSeqDiagram(this, p);
 
@@ -323,7 +319,7 @@ void BrowserSeqDiagram::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserSeqDiagram::apply_shortcut(QString s)
+void BrowserSeqDiagram::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

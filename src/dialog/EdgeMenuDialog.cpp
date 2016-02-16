@@ -51,7 +51,7 @@ unsigned int ClosestEdge(QWidget * widget, QPoint position)
     minDistance = qMin(minDistance, distances[2]);
     minDistance = qMin(minDistance, distances[3]);
 
-    auto it = qFind(distances.begin(), distances.end(), minDistance);
+    auto it = std::find(distances.begin(), distances.end(), minDistance);
 
     return it - distances.begin();
 }
@@ -59,6 +59,8 @@ unsigned int ClosestEdge(QWidget * widget, QPoint position)
 EdgeMenuDialog::EdgeMenuDialog(QWidget * parent, const char * name, bool modal , Qt::WindowFlags f)
     : TabDialog(parent, name, modal/*, f*/)
 {
+    Q_UNUSED(f);
+    
     currentTab = 0;
     currentNode = 0;
     isConnectedToToolBar = false;

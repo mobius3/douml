@@ -36,6 +36,8 @@ class BrowserClass;
 
 class ClassListDialog : public QDialog
 {
+    Q_OBJECT
+    
 protected:
     QComboBox * cb;
 

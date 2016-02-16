@@ -243,6 +243,7 @@ CreateToolButton(
 
 UmlWindow::UmlWindow(bool ) : QMainWindow(0)
 	, isToolMenuLoaded(false)
+    , quitConfirmed(false)
 {
     setAttribute(Qt::WA_QuitOnClose);
     setWindowTitle("DoUML");
@@ -526,7 +527,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     help->addAction(action);
 
     action =
-            new QAction(tr("What's This"), this);
+            new QAction(tr("What's This?"), this);
     connect(action, SIGNAL(triggered()), this,SLOT(whats_this()));
     action->setShortcut(::Qt::SHIFT + ::Qt::Key_F1);
     help->addAction(action);
@@ -1060,7 +1061,7 @@ void UmlWindow::load()
 
         if (browser->get_project() == 0) {
             QString fn = QFileDialog::getOpenFileName(
-                        this, tr("Select BoUML project file"), last_used_directory(), QLatin1String("*.prj"));
+                        this, tr("Select DoUML project file"), last_used_directory(), QLatin1String("*.prj"));
 
             if (!fn.isEmpty()) {
                 set_last_used_directory(fn);
@@ -1382,10 +1383,19 @@ void UmlWindow::close()
 {
     abort_line_construction();
     bool editionActive = !BrowserNode::edition_active();
-    bool canClose = can_close();
-    if (editionActive && canClose)
+    if (quitConfirmed || // if we already confirmed then it must be because the window
+         // is being closed by the quit command, not the close project command,
+         // so don't ask again to safe if modified, the user already answered the question
+         (can_close() && editionActive))
     {
         close_it();
+    }
+    else
+    {
+        // reset the quitConfirmed flag so that if for some reason the project did not
+        // close, then the user will, on a future close project command, be appropriately
+        // warned to save if modified.
+        quitConfirmed = false;
     }
 }
 
@@ -1461,6 +1471,9 @@ void UmlWindow::quit()
 
     bool canClose = true;
     bool editionActive = false;
+
+    Q_ASSERT(!quitConfirmed); // if this happens, then probably it was not initialized by the contructor
+
     if ((editionActive = BrowserNode::edition_active() == false) && (canClose = can_close()) == true)
     {
         if (browser->get_project() != 0) {
@@ -1470,6 +1483,15 @@ void UmlWindow::quit()
             set_user_id(-1);
         }
         quitConfirmed = true;
+
+        // Call the close project command now to prevent a segmentation fault
+        // if the project was not manually closed by the user before quitting douml,
+        // i.e. if the user used the quit command with a project currently opened.
+        // (note: the segmentation fault was due to the static object 'BasicParent BasicParent::the'
+        // which is declared in 'BasicData.cpp' that still had invalid references to child items and
+        // tried to delete them in its destructor.
+        close();
+
         QApplication::exit(0);
         return;
     }
@@ -1541,7 +1563,7 @@ void UmlWindow::read_session()
     sprintf(fn, "%d.session", user_id());
 
     QFile fp(d.absoluteFilePath(fn));
-    int size;
+    qint64 size;
 
     if ((size = open_file(fp, QIODevice::ReadOnly, TRUE)) != -1) {
         char * s = new char[size + 1];
@@ -1561,8 +1583,7 @@ void UmlWindow::read_session()
 
                 resize(w, h);
                 {
-                    extern QApplication * theApp;
-                    theApp->processEvents(/*500*/);
+                    qApp->processEvents(/*500*/);
                 }
 
                 QList<int> lsz = spl1->sizes();
@@ -1579,8 +1600,7 @@ void UmlWindow::read_session()
 
                 spl2->setSizes(lsz);
                 {
-                    extern QApplication * theApp;
-                    theApp->processEvents(/*500*/);
+                    qApp->processEvents(/*500*/);
                 }
 
                 const char * k = read_keyword(st);
@@ -2000,7 +2020,7 @@ void UmlWindow::formatMenuAboutToShow()
 {
     abort_line_construction();
 
-    int i = IsoA0;
+    //int i = IsoA0;
 
     foreach(QAction* action,formatMenu->actions())
     {
@@ -2489,11 +2509,11 @@ void UmlWindow::OnPickSelectionFromItem(const QModelIndex & current, const QMode
 
 void UmlWindow::OnChooseQuickEditMode(QTreeWidgetItem* item, QTreeWidgetItem* old)
 {
-    if(!item)
+    Q_UNUSED(old);
+
+    if (!item)
         return;
-    //TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
-    //    if(!itemAsInterface)
-    //        return;
+
     BrowserNode* itemAsNode = static_cast<BrowserNode*>(item);
     if(!itemAsNode)
         return;

@@ -63,7 +63,7 @@ protected slots:
     void hide_all();
     void hide_private();
     void hide_private_protected();
-    virtual void accept();
+    virtual void accept() override;
 };
 
 #endif

@@ -58,15 +58,15 @@ protected:
     int align;
 
 public:
-    MsgTableItem(QTableWidget * table, const QString & txt, int al = Qt::AlignLeft)
-        : TableItem(table, Never, txt, TableItem::MsgTableItemType), align(al | Qt::AlignVCenter) { };
+    MsgTableItem(const QString & txt, int al = Qt::AlignLeft)
+        : TableItem(Never, txt, TableItem::MsgTableItemType), align(al | Qt::AlignVCenter) { }
 
-    MsgTableItem(QTableWidget * table, unsigned u, int al = Qt::AlignLeft)
-        : TableItem(table, Never, QString::number(u), TableItem::MsgTableItemType), align(al | Qt::AlignVCenter) { };
+    MsgTableItem(unsigned u, int al = Qt::AlignLeft)
+        : TableItem(Never, QString::number(u), TableItem::MsgTableItemType), align(al | Qt::AlignVCenter) { }
 
-    virtual int alignment() const {
+    virtual int alignment() const override {
         return align;
-    };
+    }
 };
 
 //
@@ -79,7 +79,7 @@ public:
     HierarchicalRankValidator(QWidget * parent, const QString & h)
         : QValidator(parent), sub(h + '.') {};
 
-    virtual QValidator::State validate(QString & s, int &) const;
+    virtual QValidator::State validate(QString & s, int &) const override;
 };
 
 QValidator::State HierarchicalRankValidator::validate(QString & s, int &) const
@@ -234,12 +234,12 @@ void ColMsgTable::refresh(ColMsgList & m)
 
         setRowCount(r + 1);
 
-        setItem(r, ABS_RANK_COL, new MsgTableItem(this, msg->absolute_rank));
-        setItem(r, HI_RANK_COL, new MsgTableItem(this, msg->hierarchical_rank));
-        setItem(r, FROM_COL, new MsgTableItem(this, from->get_full_name()));
-        setItem(r, MSG_COL, new MsgTableItem(this, def.mid(def.indexOf(" ") + 1)));
-        setItem(r, TO_COL, new MsgTableItem(this, to->get_full_name()));
-        setItem(r, CMD_COL, new MsgTableItem(this, tr("do"), Qt::AlignHCenter));
+        setItem(r, ABS_RANK_COL, new MsgTableItem(msg->absolute_rank));
+        setItem(r, HI_RANK_COL, new MsgTableItem(msg->hierarchical_rank));
+        setItem(r, FROM_COL, new MsgTableItem(from->get_full_name()));
+        setItem(r, MSG_COL, new MsgTableItem(def.mid(def.indexOf(" ") + 1)));
+        setItem(r, TO_COL, new MsgTableItem(to->get_full_name()));
+        setItem(r, CMD_COL, new MsgTableItem(tr("do"), Qt::AlignHCenter));
 
         flat_msg_list.append(msg);
 

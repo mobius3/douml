@@ -50,9 +50,9 @@ QStringList ComboItem::getTypes()
     return types;
 }
 
-ComboItem::ComboItem(QTableWidget * ta, const QString & s,
+ComboItem::ComboItem(const QString & s,
                      const QStringList & list, bool edit)
-    : TableItem(ta, TableItem::WhenCurrent, s, TableItem::ComboType), editable(edit), cb(0), types(list)
+    : TableItem(TableItem::WhenCurrent, s, TableItem::ComboType), editable(edit), cb(0), types(list)
 {
     //cb->setEditable(false);
 }

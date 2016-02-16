@@ -109,12 +109,13 @@ BrowserView* BrowserNode::viewptr = 0;
 
 class BrowserItemNameValidator: public QValidator{
 public:
-    BrowserItemNameValidator(  BrowserNode* node, UmlCode type,
-                                        bool allow_spaces, bool allow_empty):
-    m_node(node), m_type(type), m_allow_spaces(allow_spaces), m_allow_empty(allow_empty)
-
+    BrowserItemNameValidator(BrowserNode* node, UmlCode type,
+                             bool allow_spaces, bool allow_empty)
+        : m_type(type)
+        , m_allow_spaces(allow_spaces)
+        , m_allow_empty(allow_empty)
+        , m_node(node)
     {
-
     }
 
 private:
@@ -124,12 +125,10 @@ private:
     bool m_allow_empty;
     BrowserNode* m_node;
 
-
-
     // QValidator interface
 public:
-    virtual State validate(QString &str, int &) const;
-    virtual void fixup(QString &) const;
+    virtual State validate(QString &str, int &) const override;
+    virtual void fixup(QString &) const override;
 };
 
 BrowserItemNameValidator::State BrowserItemNameValidator::validate(QString &str, int &) const
@@ -147,7 +146,7 @@ void BrowserItemNameValidator::fixup(QString &str) const
     str = infoMessage;
 }
 
-BrowserNode::BrowserNode(QString s, BrowserView * parent)
+BrowserNode::BrowserNode(const QString & s, BrowserView * parent)
     : QTreeWidgetItem(parent),
       name(s)
 {
@@ -155,7 +154,7 @@ BrowserNode::BrowserNode(QString s, BrowserView * parent)
     viewptr = parent;
 }
 
-BrowserNode::BrowserNode(QString s, BrowserNode * parent)
+BrowserNode::BrowserNode(const QString & s, BrowserNode * parent)
     :      QTreeWidgetItem(parent),
       name(s)
 {
@@ -340,7 +339,7 @@ const char * BrowserNode::get_comment() const
     return comment.operator const char *();
 }
 
-void BrowserNode::set_comment(QString c)
+void BrowserNode::set_comment(const QString & c)
 {
     comment = c;
 }
@@ -462,7 +461,7 @@ bool BrowserNode::is_writable() const
     return !is_read_only;
 }
 
-void BrowserNode::set_name(QString  s)
+void BrowserNode::set_name(const QString & s)
 {
     bool firsttime = name.isEmpty();
     name = s;
@@ -559,29 +558,7 @@ QString BrowserNode::stereotypes_properties() const
     return QString();
 }
 
-void BrowserNode::paintCell(QPainter * p, const QPalette & cg, int column,
-                            int width, int alignment)
-{
-    /*BrowserNode::data used instead
-    const QColor & bg = p->background().color();
-    QBrush backBrush = p->background();
-    if (is_marked) {
-        p->setBackgroundMode(::Qt::OpaqueMode);
-        backBrush.setColor(UmlRedColor);
-        p->setBackground(backBrush);
-    }
-
-    p->setFont((is_writable()) ? BoldFont : NormalFont);
-    QTreeWidgetItem::paintCell(p, cg, column, width, alignment);
-    if (is_marked) {
-        p->setBackgroundMode(::Qt::TransparentMode);
-        backBrush.setColor(bg);
-        p->setBackground(backBrush);
-    }
-    */
-
-}
-QVariant	BrowserNode::data(int column, int role) const
+QVariant BrowserNode::data(int column, int role) const
 {
     if(role == Qt::DecorationRole)
     {
@@ -795,7 +772,7 @@ QString BrowserNode::visibility_as_string() const
     return stringify(get_visibility());
 }
 
-UmlVisibility BrowserNode::encode_visibility(QString val)
+UmlVisibility BrowserNode::encode_visibility(const QString & val)
 {
     return visibility(val.toLatin1().constData());
 }
@@ -902,7 +879,7 @@ BasicData * BrowserNode::add_relation(UmlCode t, BrowserNode * end)
     return d;
 }
 
-void BrowserNode::edit(QString s, const QStringList & default_stereotypes)
+void BrowserNode::edit(const QString & s, const QStringList & default_stereotypes)
 {
 
     if (!is_edited) {
@@ -1071,7 +1048,7 @@ void BrowserNode::mark_menu(QMenu & m, const char * s, int bias) const
 #ifndef SIMPLE_DUPLICATION
 
                 if (rec && !parents_marked)
-                    MenuFactory::addItem(m,("Duplicate recursivelly marked into"), bias + 6),
+                    MenuFactory::addItem(m,("Duplicate recursivelly marked into"), bias + 6,
                             QObject::tr("to recurcivelly duplicate the marked items into %1", s).toLatin1().constData());
 
 #endif
@@ -1083,7 +1060,7 @@ void BrowserNode::mark_menu(QMenu & m, const char * s, int bias) const
 #ifndef SIMPLE_DUPLICATION
 
                 if (rec && !parents_marked)
-                    MenuFactory::addItem(m,("Duplicate marked recursivelly after"), bias + 8),
+                    MenuFactory::addItem(m,("Duplicate marked recursivelly after"), bias + 8,
                             QObject::tr("to recurcivelly duplicate the marked items after %1", s));
 
 #endif
@@ -1102,7 +1079,7 @@ void BrowserNode::mark_menu(QMenu & m, const char * s, int bias) const
 
 }
 
-void BrowserNode::mark_shortcut(QString s, int & index, int bias)
+void BrowserNode::mark_shortcut(const QString & s, int & index, int bias)
 {
     if (! is_marked) {
         if (s == "Mark")
@@ -1163,31 +1140,24 @@ void BrowserNode::mark_management(int choice)
 
         for (int i = marked_list.size() - 1; i >= 0; --i) {
             bn = marked_list[i];
-            //BrowserView::removeItem(p->get_)
-            //            BrowserAttribute* asAttribute = ((BrowserAttribute *) bn);
-            //            if(p != (BrowserNode *) bn->parent() && asAttribute != 0)
-            //            {
-            //                p->move(((BrowserNode *) asAttribute->get_get_oper()), this);
-            //                p->move(((BrowserNode *) asAttribute->get_set_oper()), this);
-            //            }
 
             if(p != (BrowserNode *) bn->parent())
             {
                 if (bn->get_type() == UmlAttribute )
                 {
                     BrowserAttribute* asAttribute =  dynamic_cast<BrowserAttribute*>(bn);
-                    if(((BrowserNode *) asAttribute->get_get_oper()))
-                        p->move(((BrowserNode *) asAttribute->get_get_oper()), this);
-                    if(((BrowserNode *) asAttribute->get_set_oper()))
-                        p->move(((BrowserNode *) asAttribute->get_set_oper()), this);
+                    if ((BrowserNode *) asAttribute->get_get_oper())
+                        p->move((BrowserNode *) asAttribute->get_get_oper(), this);
+                    if ((BrowserNode *) asAttribute->get_set_oper())
+                        p->move((BrowserNode *) asAttribute->get_set_oper(), this);
                 }
                 else if (bn->get_type() >= UmlAggregation &&  bn->get_type() <= UmlDirectionalAggregationByValue)
                 {
                     BrowserRelation* asRelation =  dynamic_cast<BrowserRelation*>(bn);
-                    if(((BrowserNode *) asRelation->get_get_oper()))
-                        p->move(((BrowserNode *) asRelation->get_get_oper()), this);
-                    if(((BrowserNode *) asRelation->get_set_oper()))
-                        p->move(((BrowserNode *) asRelation->get_set_oper()), this);
+                    if ((BrowserNode *) asRelation->get_get_oper())
+                        p->move((BrowserNode *) asRelation->get_get_oper(), this);
+                    if ((BrowserNode *) asRelation->get_set_oper())
+                        p->move((BrowserNode *) asRelation->get_set_oper(), this);
                 }
             }
 
@@ -1207,7 +1177,7 @@ void BrowserNode::mark_management(int choice)
             {
                 BrowserNode* nodeCopy = bn->duplicate(this);
                 nodeCopy->set_n_keys(bn->get_n_keys());
-                for(int i(0); i < bn->get_n_keys(); i++)
+                for(unsigned i = 0; i != bn->get_n_keys(); i++)
                 {
                     nodeCopy->set_key(i, bn->get_key(i));
                     nodeCopy->set_value(i, bn->get_value(i));
@@ -1284,7 +1254,7 @@ void BrowserNode::mark_management(int choice)
             {
                 BrowserNode* nodeCopy = bn->duplicate(p);
                 nodeCopy->set_n_keys(bn->get_n_keys());
-                for(int i(0); i < bn->get_n_keys(); i++)
+                for(unsigned i = 0; i != bn->get_n_keys(); i++)
                 {
                     nodeCopy->set_key(i, bn->get_key(i));
                     nodeCopy->set_value(i, bn->get_value(i));
@@ -2298,7 +2268,7 @@ void BrowserNodeList::sort_it()
 
     BrowserPackage::prepare_for_sort();
 
-    qSort(begin(), end(), lessThan);
+    sort();
 
     //SynonymousPath.setAutoDelete(TRUE);
     QList<QString*> strs = SynonymousPath.values();
@@ -2310,7 +2280,7 @@ void BrowserNodeList::sort_it()
 
 void BrowserNodeList::sort()
 {
-    qSort(begin(), end(), lessThan);
+    std::sort(begin(), end(), lessThan);
 }
 
 bool BrowserNodeList::lessThan(BrowserNode *a, BrowserNode *b)

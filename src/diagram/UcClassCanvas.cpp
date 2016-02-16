@@ -488,8 +488,12 @@ void UcClassCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
+
 void UcClassCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
 
@@ -701,7 +705,7 @@ void UcClassCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void UcClassCanvas::apply_shortcut(QString s)
+void UcClassCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

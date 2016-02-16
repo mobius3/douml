@@ -103,11 +103,15 @@ void ArrowPointCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
+
 void ArrowPointCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    //DiagramCanvas::paint(painter, option, widget);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode ArrowPointCanvas::typeUmlCode() const
 {
     return UmlArrowPoint;

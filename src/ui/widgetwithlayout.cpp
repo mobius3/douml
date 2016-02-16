@@ -1,8 +1,11 @@
 #include "widgetwithlayout.h"
 #include <QGridLayout>
 #include <QVBoxLayout>
+
 QWidget *WidgetWithLayout::gridBox(int nCols, QWidget *parent)
 {
+    Q_UNUSED(nCols);
+    
     QGridLayout *layout = new QGridLayout(parent);
     QWidget *widget = new QWidget(parent);
     widget->setLayout(layout);

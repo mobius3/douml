@@ -1,5 +1,31 @@
+
+
 # Next release
-* Fixed compilation on OS X El Capitan [#155](https://github.com/DoUML/douml/pull/155)
+[#155]: https://github.com/DoUML/douml/pull/155
+[#161]: https://github.com/DoUML/douml/pull/161
+[#167]: https://github.com/DoUML/douml/pull/167
+[#170]: https://github.com/DoUML/douml/pull/170
+
+* Fixed compilation on OS X El Capitan [#155]
+* Fixed warning about duplicated uml entities showing up needlessly [#161]
+* Build date and time automated [#161]
+* Fixed mutually exclusive attribute menus when they should not be [#161] [#167]
+* Fixed some keywords not being parsed by cpp reverse and roundtrip [#161]
+* Some UI improvements [#161]
+* Version bump [#161]
+* Improvements regarding Qt5 style handling [#167]
+* Crash fix and code improvements [#167]
+* Missing specifiers of c++ operation added to CppReverse and CppRoundtrip [#167]
+* Fix missing = sign in default and delete specifiers [#167]
+* Reduce amount of warnings [#170]
+* Warnings about deprecated use of Qt will be shown when compiling. [#170]
+* Various improvements on Makefiles and .pro files [#170]
+* The Makefile 'install' target on OS X now builds a .app bundle with all the executables inside (so that they can be launched from DoUML). For this reason only douml is still build as a bundle. Then macdeployqt adds needed frameworks and makes a .dmg file, but it's still very rough and needs more work (for instance, including all support files, translation, documentation, etc.) [#170]
+* Added to the Makefile the target 'xcodeprojects' to generate Xcode projects. [#170]
+* Changed some remaining "BoUML" text to "DoUML" [#170]
+* Set a better size for the Image dialog box and its Browse button. [#170]
+* Removed a misplaced text only appearing on Mac OS X in the Shortcut dialog. [#170]
+* Fixed segmentation fault when quitting DoUML with opened project. [#170]
 
 # v1.0.8
 * Numerous bugfixes

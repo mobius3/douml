@@ -41,14 +41,15 @@ public:
     UmlAttribute(void * id, const WrapperStr & n)
         :  UmlBaseAttribute(id, n) {};
 
+    using UmlBaseAttribute::generate;
     virtual void generate(QTextStream & f, const WrapperStr & cl_stereotype,
-                          WrapperStr indent);
+                          WrapperStr indent) override;
     virtual void generate_enum_pattern_item(QTextStream & f, int & current_value,
                                             const WrapperStr & class_name,
-                                            WrapperStr indent);
-    virtual void generate_enum_pattern_case(QTextStream & f, WrapperStr indent);
-    virtual void generate_enum_item(QTextStream & f, WrapperStr indent, BooL & first);
-    virtual void generate_enum_member(QTextStream & f, WrapperStr indent);
+                                            WrapperStr indent) override;
+    virtual void generate_enum_pattern_case(QTextStream & f, WrapperStr indent) override;
+    virtual void generate_enum_item(QTextStream & f, WrapperStr indent, BooL & first) override;
+    virtual void generate_enum_member(QTextStream & f, WrapperStr indent) override;
 
 private:
     void generate(QTextStream & f, const WrapperStr & cl_stereotype,

@@ -42,6 +42,9 @@ SelectAreaCanvas::SelectAreaCanvas(int x, int y, int width, int height,
 
 void SelectAreaCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     if (! isVisible()) return;
 
     painter->setRenderHint(QPainter::Antialiasing, true);

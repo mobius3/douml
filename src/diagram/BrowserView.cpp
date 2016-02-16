@@ -285,6 +285,8 @@ void BrowserView::dragLeaveEvent(QDragLeaveEvent *event)
 
 void BrowserView::startDrag(Qt::DropActions supportedActions)
 {
+    Q_UNUSED(supportedActions);
+    
     /*BrowserNode * item = (BrowserNode *)itemAt(e->pos());
 
     if (item) {
@@ -306,9 +308,6 @@ void BrowserView::mousePressEvent(QMouseEvent * e)
     UmlWindow::abort_line_construction();
 
     //QPoint p(contentsToViewport(e->pos()));
-    QModelIndex indexOfItem = indexAt(e->pos());
-    int row = indexOfItem.row();
-    int column = indexOfItem.column();
     BrowserNode * i = (BrowserNode *)itemAt(e->pos());
 
     if (i != 0) {

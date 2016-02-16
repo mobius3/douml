@@ -307,8 +307,12 @@ void CodDirsCanvas::draw(QPainter & p)
 
     p.restore();
 }
+
 void CodDirsCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
 bool CodDirsCanvas::edit_drawing_settings()

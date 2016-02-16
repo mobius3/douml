@@ -63,7 +63,7 @@
 IdDict<BrowserActivityObject> BrowserActivityObject::all(257, __FILE__);
 QStringList BrowserActivityObject::its_default_stereotypes;	// unicode
 
-BrowserActivityObject::BrowserActivityObject(QString s, BrowserNode * p, int id)
+BrowserActivityObject::BrowserActivityObject(const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserActivityObject>(all, id),
       def(new ActivityObjectData), associated_diagram(0)
 {
@@ -85,7 +85,7 @@ BrowserActivityObject::BrowserActivityObject(const BrowserActivityObject * model
     comment = model->comment;
 }
 
-BrowserNode * BrowserActivityObject::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserActivityObject::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserNode * result = new BrowserActivityObject(this, p);
 
@@ -395,7 +395,7 @@ void BrowserActivityObject::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserActivityObject::apply_shortcut(QString s)
+void BrowserActivityObject::apply_shortcut(const QString & s)
 {
     int choice = -1;
 
@@ -614,6 +614,8 @@ bool BrowserActivityObject::tool_cmd(ToolCom * com, const char * args)
 bool BrowserActivityObject::may_contains_them(const QList<BrowserNode *> & l,
                                               BooL & duplicable) const
 {
+    Q_UNUSED(duplicable);
+    
     foreach (BrowserNode *node, l) {
         switch (node->get_type()) {
         case UmlFlow:
@@ -623,11 +625,6 @@ bool BrowserActivityObject::may_contains_them(const QList<BrowserNode *> & l,
         default:
             return FALSE;
         }
-
-        if (! may_contains(node, FALSE))
-            return FALSE;
-
-        duplicable = may_contains_it(node);
     }
 
     return TRUE;

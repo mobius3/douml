@@ -97,7 +97,7 @@ bool BrowserNodeList::lessThan(BrowserNode *a, BrowserNode *b)
 
 void BrowserNodeList::sort()
 {
-    qSort(begin(), end(), lessThan);
+    std::sort(begin(), end(), lessThan);
 }
 BrowserNode *BrowserNode::nextSibling()
 {

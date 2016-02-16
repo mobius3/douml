@@ -162,6 +162,9 @@ void NoteCanvas::draw(QPainter & p)
 
 void NoteCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
 
@@ -319,7 +322,7 @@ void NoteCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void NoteCanvas::apply_shortcut(QString s)
+void NoteCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

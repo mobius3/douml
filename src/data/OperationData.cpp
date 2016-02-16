@@ -3316,7 +3316,7 @@ void OperationData::save_body(QFile & qf, QString & filename,
 
         qf.write(op_header.toLatin1(), op_header.length());
 
-        int new_offset = qf.pos();
+        qint64 new_offset = qf.pos();
 
         qf.write(modified_bodies + body_info->offset,
                       body_info->length);

@@ -20,7 +20,7 @@ void UmlItem::getFiles(QHash<QString, void *> &files, unsigned rec)
         files.insert(fi.fileName(), (void *) 1);
 
     const QVector<UmlItem*> ch = children();
-    unsigned index;
+    int index;
 
     for (index = 0; index != ch.size(); index += 1)
         ch[index]->getFiles(files, rec);

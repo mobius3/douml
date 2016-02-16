@@ -37,7 +37,7 @@ void UmlJunctionPseudoState::generate(UmlClass * machine, UmlClass * anystate, U
     QByteArray body;
     const QVector<UmlItem*> ch = children();
     QList<UmlTransition*> trs;
-    unsigned index;
+    int index;
 
     for (index = 0; index != ch.count(); index += 1)
         if (ch[index]->kind() == aTransition)

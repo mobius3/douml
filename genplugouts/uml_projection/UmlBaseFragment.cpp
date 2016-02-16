@@ -40,13 +40,13 @@ int UmlBaseFragment::vcenter_(int rank) const
 
 void UmlBaseFragment::read_covered_(QHash<void*,UmlClassInstanceReference*> & instances)
 {
-    unsigned n = UmlCom::read_unsigned();
-    unsigned rank;
+    int n = UmlCom::read_unsigned();
+    int rank;
 
     _covered.resize(n);
 
     for (rank = 0; rank != n; rank += 1)
-        _covered.insert(rank, instances[(void *) UmlCom::read_unsigned()]);
+        _covered.insert(rank, instances[reinterpret_cast<void*>(uintptr_t(UmlCom::read_unsigned()))]);
 }
 
 UmlFragmentCompartment * UmlBaseFragment::get_container_(int x, int y, int w, int h, const QVector<UmlFragment*> & fragments)

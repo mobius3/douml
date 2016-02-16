@@ -61,7 +61,7 @@ public:
     virtual ~BrowserStateAction();
 
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     static BrowserStateAction * add_stateaction(BrowserNode * future_parent);
     virtual BasicData * add_relation(UmlCode, BrowserNode * end);
     BrowserTransition * add_transition(BrowserNode * end);
@@ -70,7 +70,7 @@ public:
     virtual void iconChanged();
 
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;

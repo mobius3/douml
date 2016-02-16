@@ -42,16 +42,16 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode typeUmlCode() const;
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual void change_scale();
-    virtual void open();
-    virtual void menu(const QPoint &);
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual bool alignable() const;
-    virtual bool copyable() const;
-    virtual void save(QTextStream & st, bool ref, QString & warning) const;
+    virtual UmlCode typeUmlCode() const override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual void change_scale() override;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual bool alignable() const override;
+    virtual bool copyable() const override;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const override;
     static HubCanvas * read(char *& st, UmlCanvas * canvas, char * k);
 };
 

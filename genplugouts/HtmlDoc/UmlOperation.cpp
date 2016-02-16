@@ -211,8 +211,8 @@ void UmlOperation::gen_cpp_decl(QByteArray s, bool descr)
         p = s;
 
     const QList<UmlParameter> & pa = params();
-    unsigned npa = pa.count();
-    unsigned rank;
+    int npa = pa.count();
+    int rank;
 
     while (*p) {
         if (!strncmp(p, "${comment}", 10))

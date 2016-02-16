@@ -39,7 +39,7 @@ void UmlClass::utilities()
     bool have_assignment = FALSE;
     bool have_const_assignment = FALSE;
 
-    for (unsigned i = 0; i != ch.size(); i += 1) {
+    for (int i = 0; i != ch.size(); i += 1) {
         if (ch[i]->kind() == anOperation) { //[rageek] literal comparison
             QByteArray s = ch[i]->name(); //[rageek]
 

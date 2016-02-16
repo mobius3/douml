@@ -43,7 +43,7 @@ public:
     static UmlSendObjectAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -64,7 +64,7 @@ public:
     static UmlUnmarshallAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -85,7 +85,7 @@ public:
     static UmlSendSignalAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -106,7 +106,7 @@ public:
     static UmlBroadcastSignalAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -127,7 +127,7 @@ public:
     static UmlValueSpecificationAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -171,7 +171,7 @@ public:
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
     // you will have to call Children() to re-access to them
-    virtual void unload(bool = FALSE, bool = FALSE);
+    virtual void unload(bool = FALSE, bool = FALSE) override;
 
 
 private:
@@ -187,14 +187,14 @@ private:
 
 
 protected:
-    virtual void read_uml_();
+    virtual void read_uml_() override;
 
 #ifdef WITHCPP
-    virtual void read_cpp_();
+    virtual void read_cpp_() override;
 #endif
 
 #ifdef WITHJAVA
-    virtual void read_java_();
+    virtual void read_java_() override;
 #endif
 
 };
@@ -210,7 +210,7 @@ public:
     static UmlOpaqueAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -254,7 +254,7 @@ public:
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
     // you will have to call Children() to re-access to them
-    virtual void unload(bool = FALSE, bool = FALSE);
+    virtual void unload(bool = FALSE, bool = FALSE) override;
 
 
 private:
@@ -270,14 +270,14 @@ private:
 
 
 protected:
-    virtual void read_uml_();
+    virtual void read_uml_() override;
 
 #ifdef WITHCPP
-    virtual void read_cpp_();
+    virtual void read_cpp_() override;
 #endif
 
 #ifdef WITHJAVA
-    virtual void read_java_();
+    virtual void read_java_() override;
 #endif
 
 };
@@ -293,7 +293,7 @@ public:
     static UmlAcceptEventAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -353,7 +353,7 @@ public:
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
     // you will have to call Children() to re-access to them
-    virtual void unload(bool = FALSE, bool = FALSE);
+    virtual void unload(bool = FALSE, bool = FALSE) override;
 
 
 private:
@@ -373,14 +373,14 @@ private:
 
 
 protected:
-    virtual void read_uml_();
+    virtual void read_uml_() override;
 
 #ifdef WITHCPP
-    virtual void read_cpp_();
+    virtual void read_cpp_() override;
 #endif
 
 #ifdef WITHJAVA
-    virtual void read_java_();
+    virtual void read_java_() override;
 #endif
 
 };
@@ -396,7 +396,7 @@ public:
     static UmlCallOperationAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -430,7 +430,7 @@ private:
 
 
 protected:
-    virtual void read_uml_();
+    virtual void read_uml_() override;
 
 };
 
@@ -445,7 +445,7 @@ public:
     static UmlCallBehaviorAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -479,7 +479,7 @@ private:
 
 
 protected:
-    virtual void read_uml_();
+    virtual void read_uml_() override;
 
 };
 
@@ -494,7 +494,7 @@ public:
     static UmlClearVariableValueAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -515,7 +515,7 @@ public:
     static UmlReadVariableValueAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -536,7 +536,7 @@ public:
     static UmlWriteVariableValueAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -557,7 +557,7 @@ public:
     static UmlAddVariableValueAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -581,7 +581,7 @@ private:
 
 
 protected:
-    virtual void read_uml_();
+    virtual void read_uml_() override;
 
 };
 
@@ -596,7 +596,7 @@ public:
     static UmlRemoveVariableValueAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -620,7 +620,7 @@ private:
 
 
 protected:
-    virtual void read_uml_();
+    virtual void read_uml_() override;
 
 };
 
@@ -635,7 +635,7 @@ public:
     static UmlAcceptCallAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -679,7 +679,7 @@ public:
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
     // you will have to call Children() to re-access to them
-    virtual void unload(bool = FALSE, bool = FALSE);
+    virtual void unload(bool = FALSE, bool = FALSE) override;
 
 
 private:
@@ -695,14 +695,14 @@ private:
 
 
 protected:
-    virtual void read_uml_();
+    virtual void read_uml_() override;
 
 #ifdef WITHCPP
-    virtual void read_cpp_();
+    virtual void read_cpp_() override;
 #endif
 
 #ifdef WITHJAVA
-    virtual void read_java_();
+    virtual void read_java_() override;
 #endif
 
 };
@@ -718,7 +718,7 @@ public:
     static UmlReplyAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -762,7 +762,7 @@ public:
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
     // you will have to call Children() to re-access to them
-    virtual void unload(bool = FALSE, bool = FALSE);
+    virtual void unload(bool = FALSE, bool = FALSE) override;
 
 
 private:
@@ -778,14 +778,14 @@ private:
 
 
 protected:
-    virtual void read_uml_();
+    virtual void read_uml_() override;
 
 #ifdef WITHCPP
-    virtual void read_cpp_();
+    virtual void read_cpp_() override;
 #endif
 
 #ifdef WITHJAVA
-    virtual void read_java_();
+    virtual void read_java_() override;
 #endif
 
 };
@@ -801,7 +801,7 @@ public:
     static UmlCreateObjectAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -825,7 +825,7 @@ public:
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
     // you will have to call Children() to re-access to them
-    virtual void unload(bool = FALSE, bool = FALSE);
+    virtual void unload(bool = FALSE, bool = FALSE) override;
 
 
 private:
@@ -833,7 +833,7 @@ private:
 
 
 protected:
-    virtual void read_uml_();
+    virtual void read_uml_() override;
 
 };
 
@@ -848,7 +848,7 @@ public:
     static UmlDestroyObjectAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -882,7 +882,7 @@ private:
 
 
 protected:
-    virtual void read_uml_();
+    virtual void read_uml_() override;
 
 };
 
@@ -897,7 +897,7 @@ public:
     static UmlTestIdentityAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -918,7 +918,7 @@ public:
     static UmlRaiseExceptionAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -939,7 +939,7 @@ public:
     static UmlReduceAction * create(UmlItem * parent, const char * s);
 
     // returns the kind of the item
-    virtual anItemKind kind();
+    virtual anItemKind kind() override;
 
 
 protected:
@@ -973,7 +973,7 @@ private:
 
 
 protected:
-    virtual void read_uml_();
+    virtual void read_uml_() override;
 
 };
 

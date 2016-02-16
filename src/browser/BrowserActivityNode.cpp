@@ -62,7 +62,7 @@
 IdDict<BrowserActivityNode> BrowserActivityNode::all(257, __FILE__);
 QStringList BrowserActivityNode::its_default_stereotypes;	// unicode
 
-BrowserActivityNode::BrowserActivityNode(UmlCode c, QString s, BrowserNode * p, int id)
+BrowserActivityNode::BrowserActivityNode(UmlCode c, const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserActivityNode>(all, id),
       kind(c), def(new SimpleData)
 {
@@ -86,7 +86,7 @@ BrowserActivityNode::BrowserActivityNode(const BrowserActivityNode * model, Brow
     kind = model->kind;
 }
 
-BrowserNode * BrowserActivityNode::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserActivityNode::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserNode * result = new BrowserActivityNode(this, p);
 
@@ -428,7 +428,7 @@ void BrowserActivityNode::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserActivityNode::apply_shortcut(QString s)
+void BrowserActivityNode::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

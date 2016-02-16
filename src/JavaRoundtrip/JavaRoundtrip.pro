@@ -1,15 +1,9 @@
 TEMPLATE      = app
-CONFIG(Debug, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt warn_on Debug
-    QMAKE_POST_LINK = " "
-}
-CONFIG(Release, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt Release
-    QMAKE_POST_LINK = " "
-}
-HEADERS          = 
+CONFIG -= app_bundle
+CONFIG += qt warn_on c++11
+QMAKE_POST_LINK = " "
+DEFINES += QT_DEPRECATED_WARNINGS
+HEADERS          =
 SOURCES          = main.cpp BrowserNode.cpp Statistic.cpp \
         ../JavaCat/UmlClassItem.cpp ../JavaCat/UmlArtifact.cpp \
         ../JavaCat/UmlAttribute.cpp ../JavaCat/UmlClass.cpp \
@@ -111,25 +105,21 @@ SOURCES          = main.cpp BrowserNode.cpp Statistic.cpp \
     ../Logging/QsDebugOutput.cpp
 
 TARGET          = java_roundtrip
-DEFINES          = WITHJAVA REVERSE ROUNDTRIP TRUE=true FALSE=false
-INCLUDEPATH   = ../Tools ../JavaRoundtrip ../JavaCat ../ ../misc
+DEFINES          += WITHJAVA REVERSE ROUNDTRIP TRUE=true FALSE=false
+INCLUDEPATH   += ../Tools ../JavaRoundtrip ../JavaCat ../ ../misc
 
 #The following line was inserted by qt3to4
 QT += network widgets
 #qt3support
 
-
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
-
 DESTDIR = ../../bin
-Release {
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/java_roundtrip
     OBJECTS_DIR = $${DESTDIR}/obj_release/java_roundtrip
 }
-
-Debug {
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
     MOC_DIR = $${DESTDIR}/moc_debug/java_roundtrip
     OBJECTS_DIR = $${DESTDIR}/obj_debug/java_roundtrip
 }
-

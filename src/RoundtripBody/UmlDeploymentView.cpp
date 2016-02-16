@@ -31,7 +31,7 @@ void UmlDeploymentView::roundtrip_cpp()
 {
     QVector<UmlItem*> ch = UmlItem::children();
 
-    for (unsigned index = 0; index != ch.size(); index += 1)
+    for (int index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_cpp();
 }
 
@@ -39,7 +39,7 @@ void UmlDeploymentView::roundtrip_java()
 {
     QVector<UmlItem*> ch = UmlItem::children();
 
-    for (unsigned index = 0; index != ch.size(); index += 1)
+    for (int index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_java();
 }
 
@@ -47,7 +47,7 @@ void UmlDeploymentView::roundtrip_php()
 {
     QVector<UmlItem*> ch = UmlItem::children();
 
-    for (unsigned index = 0; index != ch.size(); index += 1)
+    for (int index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_php();
 }
 
@@ -55,6 +55,6 @@ void UmlDeploymentView::roundtrip_python()
 {
     QVector<UmlItem*> ch = UmlItem::children();
 
-    for (unsigned index = 0; index != ch.size(); index += 1)
+    for (int index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_python();
 }

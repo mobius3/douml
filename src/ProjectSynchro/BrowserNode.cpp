@@ -44,11 +44,6 @@
 #define REVISION_COL 1
 #define MODIFIEDBY_COL 2
 
-//#ifdef __APPLE__
-//#define Qt::CTRL "Apple"
-//#else
-//#define Qt::CTRL "Ctrl"
-//#endif
 
 QHash<QString, BrowserNode*> BrowserNode::Youngs;
 

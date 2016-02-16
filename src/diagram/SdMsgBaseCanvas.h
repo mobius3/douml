@@ -69,7 +69,7 @@ protected:
 public:
     virtual ~SdMsgBaseCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     SdMsgSupport * get_dest()  const {
         return dest;
@@ -92,23 +92,24 @@ public:
     virtual int overlap_dir(SdDurationCanvas *) const = 0;
 
     virtual bool is_decenter(const QPoint &, BooL &) const;
-    virtual void setVisible(bool yes);
+    virtual void setVisible(bool yes) override;
 
-    virtual UmlCode typeUmlCode() const;
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual void open();
-    virtual void select_associated() = 0;
-    virtual void change_scale();
-    virtual bool copyable() const;
-    virtual void history_load(QBuffer &);
-    virtual void history_hide();
+    virtual UmlCode typeUmlCode() const override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual void open() override;
+    virtual void select_associated() override = 0;
+    virtual void change_scale() override;
+    virtual bool copyable() const override;
+    virtual void history_load(QBuffer &) override;
+    virtual void history_hide() override;
 
-    virtual void moveBy(double dx, double dy);
+    virtual void moveBy(double dx, double dy) override;
 
-    virtual bool represents(BrowserNode *);
+    virtual bool represents(BrowserNode *) override;
 
+    using DiagramCanvas::save;
     void save(QTextStream & st, QString & warning) const;
     void read(char *&);
 

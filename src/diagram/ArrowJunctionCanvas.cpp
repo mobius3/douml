@@ -159,10 +159,15 @@ void ArrowJunctionCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
+
 void ArrowJunctionCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode ArrowJunctionCanvas::typeUmlCode() const
 {
     return UmlArrowJunction;
@@ -189,7 +194,7 @@ void ArrowJunctionCanvas::menu(const QPoint &)
 
         MenuFactory::createTitle(m, TR("Line break");
                                  m.addSeparator();
-                                 m.insertItem(TR("Remove from diagram"), 0);
+                                 m.insertItem(TR("Remove from diagram"), 0));
 
         switch (m.exec(QCursor::pos())) {
     case 0:

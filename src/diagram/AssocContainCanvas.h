@@ -34,19 +34,20 @@
 
 class AssocContainCanvas : public ArrowCanvas
 {
+    Q_OBJECT
 public:
     AssocContainCanvas(UmlCanvas * canvas, DiagramItem * b,
                        DiagramItem * e, int id, float d_start, float d_end);
     virtual ~AssocContainCanvas();
 
-    virtual ArrowPointCanvas * brk(const QPoint &);
+    virtual ArrowPointCanvas * brk(const QPoint &) override;
 
-    virtual void open();
-    virtual void menu(const QPoint &);
-    virtual void remove(bool from_model);
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
+    virtual void remove(bool from_model) override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
 
-    virtual void save(QTextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const override;
     static AssocContainCanvas * read(char *& st, UmlCanvas * canvas, char * k);
 };
 

@@ -59,14 +59,14 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserExpansionRegion(QString s, BrowserNode * p, int id = 0);
+    BrowserExpansionRegion(const QString & s, BrowserNode * p, int id = 0);
     BrowserExpansionRegion(const BrowserExpansionRegion * model, BrowserNode * p);
     virtual ~BrowserExpansionRegion();
 
     virtual bool may_contains_them(const QList<BrowserNode *> & l,
                                    BooL & duplicable) const;
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     static BrowserExpansionRegion * add_expansionregion(BrowserNode * future_parent);
     static BrowserExpansionRegion * add_expansionregion(BrowserNode * future_parent, const char * name);
     static BrowserExpansionRegion * get_expansionregion(BrowserNode * parent);
@@ -76,7 +76,7 @@ public:
     virtual const QPixmap * pixmap(int) const;
 
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;

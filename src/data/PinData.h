@@ -41,17 +41,17 @@ public:
     PinData(const PinParamData & pd);
     PinData(PinData * model, BrowserNode * bn);
 
-    virtual void do_connect(BrowserClass *);
-    virtual void do_disconnect(BrowserClass *);
+    virtual void do_connect(BrowserClass *) override;
+    virtual void do_disconnect(BrowserClass *) override;
 
     void edit();
 
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-                              const QString & comment);
-    virtual void send_cpp_def(ToolCom * com);
-    virtual void send_java_def(ToolCom * com);
+                              const QString & comment) override;
+    virtual void send_cpp_def(ToolCom * com) override;
+    virtual void send_java_def(ToolCom * com) override;
     virtual bool tool_cmd(ToolCom * com, const char * args,
-                          BrowserNode * bn, const QString & comment);
+                          BrowserNode * bn, const QString & comment) override;
 
     void save(QTextStream &, QString & warning) const;
     void read(char *& , char *&);

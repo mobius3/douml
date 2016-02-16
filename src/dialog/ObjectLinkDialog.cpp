@@ -115,19 +115,19 @@ void ObjectLinkDialog::polish()
 static void add_rel(MyTable * table, RelationData * d, int row,
                     QString a, QString b)
 {
-    table->setItem(row, 0, new TableItem(table, TableItem::Never, a, TableItem::TableItemType));
+    table->setItem(row, 0, new TableItem(TableItem::Never, a, TableItem::TableItemType));
 
     const char * s;
 
     s = d->get_role_b();
-    table->setItem(row, 1, new TableItem(table, TableItem::Never, (s == 0) ? "" : s, TableItem::TableItemType));
+    table->setItem(row, 1, new TableItem(TableItem::Never, (s == 0) ? "" : s, TableItem::TableItemType));
 
-    table->setItem(row, 2, new TableItem(table, TableItem::Never, stringify(d->get_type()), TableItem::TableItemType));
+    table->setItem(row, 2, new TableItem(TableItem::Never, stringify(d->get_type()), TableItem::TableItemType));
 
     s = d->get_role_a();
-    table->setItem(row, 3, new TableItem(table, TableItem::Never, (s == 0) ? "" : s, TableItem::TableItemType));
+    table->setItem(row, 3, new TableItem(TableItem::Never, (s == 0) ? "" : s, TableItem::TableItemType));
 
-    table->setItem(row, 4, new TableItem(table, TableItem::Never, b, TableItem::TableItemType));
+    table->setItem(row, 4, new TableItem(TableItem::Never, b, TableItem::TableItemType));
 }
 
 void ObjectLinkDialog::init(RelationData * current)

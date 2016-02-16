@@ -49,11 +49,10 @@
 #define REVISION_COL 3
 #define MODIFIEDBY_COL 4
 
-// why the hell Qt::CTRL ?!
 #ifdef __APPLE__
-#define CTRL "Apple"
+static const QString controlKeyName = "Apple";
 #else
-#define CTRL "Ctrl"
+static const QString controlKeyName = "Ctrl";
 #endif
 
 BrowserNode::BrowserNode(BrowserView * parent, QString fn)
@@ -247,29 +246,29 @@ void BrowserNode::menu()
         m.addSeparator();
 
         if (owner == user_id()) {
-            action = m.addAction("Protect this package ("CTRL"+p)");
+            action = m.addAction("Protect this package (" + controlKeyName + "+p)");
             action->setData(3);
-            action = m.addAction("Unassign this package ("CTRL"+u)");
+            action = m.addAction("Unassign this package (" + controlKeyName + "+u)");
             action->setData(2);
         }
         else if (owner == -1) {
-            action = m.addAction("Protect this package ("CTRL"+p)");
+            action = m.addAction("Protect this package (" + controlKeyName + "+p)");
             action->setData(3);
-            action = m.addAction("Assign this package to " + who + " ("CTRL"+a)");
+            action = m.addAction("Assign this package to " + who + " (" + controlKeyName + "+a)");
             action->setData(1);
         }
         else if (owner < 2) {
-            action = m.addAction("Assign this package to " + who + " ("CTRL"+a)");
+            action = m.addAction("Assign this package to " + who + " (" + controlKeyName + "+a)");
             action->setData(1);
             action = m.addAction("Unassign this package (Ctrl+u)");
             action->setData(2);
         }
         else {
-            action =  m.addAction("Protect this package ("CTRL"+p)");
+            action =  m.addAction("Protect this package (" + controlKeyName + "+p)");
             action->setData(3);
-            action = m.addAction("Unassign this package ("CTRL"+u)");
+            action = m.addAction("Unassign this package (" + controlKeyName + "+u)");
             action->setData(2);
-            action = m.addAction("Assign this package to " + who + " ("CTRL"+a)");
+            action = m.addAction("Assign this package to " + who + " (" + controlKeyName + "+a)");
             action->setData(1);
         }
     }
@@ -396,7 +395,7 @@ void BrowserNode::assign(int w)
 
                 fputs("  ", fp);
 
-                int new_offset = (int) ftell(fp);
+                long new_offset = ftell(fp);
 
                 fputs(p + offset, fp);
                 fclose(fp);

@@ -1567,7 +1567,8 @@ void GenerationSettings::send_idl_def(ToolCom * com)
 bool GenerationSettings::tool_global_uml_cmd(ToolCom * com, const char * args)
 {
     //QLOG_INFO() << "Command will be: " + QString(stringify(static_cast<UmlSettingsCmd>((unsigned char) args[-1])));
-    QLOG_INFO() << "Command will be: " + (unsigned char) args[-1];
+    QLOG_INFO() << "Command will be: " << (unsigned char) args[-1];
+
     switch ((unsigned char) args[-1]) {
     case getUmlSettingsCmd:
         QLOG_INFO() << "Using getUmlSettingsCmd";

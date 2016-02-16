@@ -512,7 +512,7 @@ void UseCaseDiagramView::save(QTextStream & st, QString & warning,
     QList<QGraphicsItem *> items = canvas()->items();
     if (!copy)
         // sort is useless for a copy
-        qSort(items);
+        std::sort(items.begin(), items.end());
     st << "format " << api_format() << "\n";
 
     // save first class use_cases packages fragment subject notes and icons

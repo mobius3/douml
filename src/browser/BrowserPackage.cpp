@@ -101,7 +101,7 @@ QList<BrowserPackage *> BrowserPackage::removed;
 QStringList BrowserPackage::its_default_stereotypes;	// unicode
 QStringList BrowserPackage::relation_default_stereotypes;	// unicode
 
-BrowserPackage::BrowserPackage(QString s, BrowserView * parent, int id)
+BrowserPackage::BrowserPackage(const QString & s, BrowserView * parent, int id)
     : BrowserNode(s, parent), Labeled<BrowserPackage>(all, id),
       def(new PackageData), associated_diagram(0), is_imported(FALSE)
 {
@@ -242,7 +242,7 @@ BrowserPackage::BrowserPackage(QString s, BrowserView * parent, int id)
 
 }
 
-BrowserPackage::BrowserPackage(QString s, BrowserNode * parent, int id)
+BrowserPackage::BrowserPackage(const QString & s, BrowserNode * parent, int id)
     : BrowserNode(s, parent), Labeled<BrowserPackage>(all, id),
       def(new PackageData), associated_diagram(0), is_imported(FALSE)
 {
@@ -354,7 +354,7 @@ void BrowserPackage::make()
     parameterpin_color = UmlDefaultColor;
 }
 
-BrowserNode * BrowserPackage::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserPackage::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserPackage * result = new BrowserPackage(this, p);
 
@@ -624,9 +624,6 @@ void BrowserPackage::menu()
                 if (this == BrowserView::get_project()) {
                     importm.setTitle(("Import"));
                     m.addMenu(&importm);
-                    //m.setWhatsThis(importm.insertItem(("Generation settings"), 28,
-                    //                                  ("to import the generation settings from an other project, \
-                    //                                 note that the root directories are not imported"));
                     MenuFactory::addItem(importm, ("Generation settings"), 28,
                                          ("to import the generation settings from an other project, \
                                           note that the root directories are not imported"));
@@ -1093,7 +1090,7 @@ void BrowserPackage::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserPackage::apply_shortcut(QString s)
+void BrowserPackage::apply_shortcut(const QString & s)
 {
     int choice = -1;
 
@@ -1326,8 +1323,10 @@ void BrowserPackage::add_package(bool profile)
     }
 }
 
-BrowserPackage * BrowserPackage::import_project(QString fn, bool aslib, int id)
+BrowserPackage * BrowserPackage::import_project(const QString & fnInit, bool aslib, int id)
 {
+    QString fn = fnInit;
+    
     bool manual = fn.isEmpty();
     if (manual) {
         fn = QFileDialog::getOpenFileName(0, "import project", last_used_directory(), "*.prj");
@@ -2835,15 +2834,15 @@ unsigned BrowserPackage::load(bool recursive, int id)
     QFile fp((in_import())
              ? BrowserView::get_import_dir().absoluteFilePath(fn)
              : BrowserView::get_dir().absoluteFilePath(fn));
-    int sz;
+    qint64 sz;
     //QString filename = fp.fileName();
 
     ReadContext context = current_context();
 
     if ((sz = open_file(fp, QIODevice::ReadOnly)) != -1) {
         char * s = new char[sz + 1];
-        int offset = 0;
-        int nread;
+        qint64 offset = 0;
+        qint64 nread;
 
         is_read_only = (!in_import() && read_only_file()) ||
                 ((user_id() != 0) && is_api_base());
@@ -3134,8 +3133,9 @@ unsigned BrowserPackage::load(bool recursive, int id)
     return result;
 }
 
-bool BrowserPackage::load_version(QString fn)
+bool BrowserPackage::load_version(const QString & fnInit)
 {
+    QString fn = fnInit;
     QFileInfo any_fi(fn);
     QDir d(any_fi.absoluteFilePath());
     QStringList patternList;

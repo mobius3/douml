@@ -10,7 +10,7 @@ void UmlBaseMessage::read_(const QHash<void*, UmlClassInstanceReference*> & inst
 
     if (_operation == 0) _form = UmlCom::read_string();
 
-    _from = instances[(void *) UmlCom::read_unsigned()];
-    _to = instances[(void *) UmlCom::read_unsigned()];
+    _from = instances[reinterpret_cast<void*>(uintptr_t(UmlCom::read_unsigned()))];
+    _to = instances[reinterpret_cast<void*>(uintptr_t(UmlCom::read_unsigned()))];
 }
 

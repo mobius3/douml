@@ -58,7 +58,7 @@
 IdDict<BrowserDeploymentView> BrowserDeploymentView::all(__FILE__);
 QStringList BrowserDeploymentView::its_default_stereotypes;	// unicode
 
-BrowserDeploymentView::BrowserDeploymentView(QString s, BrowserNode * p, int id)
+BrowserDeploymentView::BrowserDeploymentView(const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserDeploymentView>(all, id)
 {
     make();
@@ -94,7 +94,7 @@ BrowserDeploymentView::~BrowserDeploymentView()
     delete def;
 }
 
-BrowserNode * BrowserDeploymentView::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserDeploymentView::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserDeploymentView * result = new BrowserDeploymentView(this, p);
 
@@ -472,7 +472,7 @@ void BrowserDeploymentView::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserDeploymentView::apply_shortcut(QString s)
+void BrowserDeploymentView::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

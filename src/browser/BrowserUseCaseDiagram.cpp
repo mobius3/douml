@@ -61,7 +61,7 @@ QList<BrowserUseCaseDiagram *> BrowserUseCaseDiagram::imported;
 QList<int> BrowserUseCaseDiagram::imported_ids;
 QStringList BrowserUseCaseDiagram::its_default_stereotypes;	// unicode
 
-BrowserUseCaseDiagram::BrowserUseCaseDiagram(QString s, BrowserNode * p, int id)
+BrowserUseCaseDiagram::BrowserUseCaseDiagram(const QString & s, BrowserNode * p, int id)
     : BrowserDiagram(s, p, id), window(0), used_settings(0)
 {
     make();
@@ -152,7 +152,7 @@ BrowserUseCaseDiagram * BrowserUseCaseDiagram::add_use_case_diagram(BrowserNode 
         return 0;
 }
 
-void BrowserUseCaseDiagram::set_name(QString s)
+void BrowserUseCaseDiagram::set_name(const QString & s)
 {
     BrowserDiagram::set_name(s);
     if (window != 0)
@@ -189,7 +189,7 @@ void BrowserUseCaseDiagram::delete_it()
     BrowserNode::delete_it();
 }
 
-BrowserNode * BrowserUseCaseDiagram::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserUseCaseDiagram::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserUseCaseDiagram * result = new BrowserUseCaseDiagram(this, p);
 
@@ -322,7 +322,7 @@ void BrowserUseCaseDiagram::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserUseCaseDiagram::apply_shortcut(QString s)
+void BrowserUseCaseDiagram::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

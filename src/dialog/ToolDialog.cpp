@@ -259,7 +259,7 @@ void ToolTable::init_row(int row)
 
     for (index = 2; index != n; index += 1)
         setItem(row, index,
-                new TableItem(this, TableItem::Never, "", TableItem::TableItemType));
+                new TableItem(TableItem::Never, "", TableItem::TableItemType));
 }
 
 void ToolTable::button_pressed(const QModelIndex &index)

@@ -42,7 +42,7 @@ protected:
     QString extension_points;
 
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-                              const QString & comment);
+                              const QString & comment) override;
 public:
     UseCaseData();
     UseCaseData(UseCaseData * model, BrowserNode *);
@@ -56,7 +56,7 @@ public:
     void edit();
 
     virtual bool tool_cmd(ToolCom * com, const char * args,
-                          BrowserNode * bn, const QString & comment);
+                          BrowserNode * bn, const QString & comment) override;
 
     void save(QTextStream &, QString & warning) const;
     void read(char *& st, char *& k);

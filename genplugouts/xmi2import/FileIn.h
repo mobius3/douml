@@ -51,8 +51,8 @@ public:
         return _path;
     }
 
-    static bool isBypassedId(WrapperStr id) {
-        return BypassedIds[id] != 0;
+    static bool isBypassedId(const WrapperStr& id) {
+        return BypassedIds.contains(id);
     }
 
 
@@ -71,7 +71,7 @@ protected:
 
     QMap<QString, char> _special_chars;
 
-    static QHash<WrapperStr,char*> BypassedIds;
+    static QSet<WrapperStr> BypassedIds;
 
 
 private:

@@ -95,7 +95,7 @@ BrowserTransition::~BrowserTransition()
         delete def;
 }
 
-BrowserNode * BrowserTransition::duplicate(BrowserNode * p, QString)
+BrowserNode * BrowserTransition::duplicate(BrowserNode * p, const QString &)
 {
     BrowserTransition * result = new BrowserTransition(this, p);
 
@@ -307,7 +307,7 @@ void BrowserTransition::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserTransition::apply_shortcut(QString s)
+void BrowserTransition::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

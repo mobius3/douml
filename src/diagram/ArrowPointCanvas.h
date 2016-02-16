@@ -40,26 +40,26 @@ public:
     ArrowPointCanvas(UmlCanvas * canvas, int x, int y);
     virtual ~ArrowPointCanvas();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     ArrowCanvas * get_other(const ArrowCanvas *) const;
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode typeUmlCode() const;
-    virtual void change_scale();
-    virtual void open();
-    virtual void menu(const QPoint &);
-    virtual QString may_start(UmlCode &) const;
-    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
-    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
-    virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    virtual bool alignable() const;
-    virtual void prepare_for_move(bool on_resize);
-    virtual void save(QTextStream & st, bool ref, QString & warning) const;
+    virtual UmlCode typeUmlCode() const override;
+    virtual void change_scale() override;
+    virtual void open() override;
+    virtual void menu(const QPoint &) override;
+    virtual QString may_start(UmlCode &) const override;
+    virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const override;
+    virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &) override;
+    virtual void delete_available(BooL & in_model, BooL & out_model) const override;
+    virtual bool alignable() const override;
+    virtual void prepare_for_move(bool on_resize) override;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const override;
     static ArrowPointCanvas * read(char *& st, UmlCanvas * canvas, char * k);
 protected:
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 };
 
 #endif

@@ -283,10 +283,15 @@ void SdClassInstCanvas::draw(QPainter & p)
             show_mark(p, rect());
     }
 }
+
 void SdClassInstCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 // all cases
 QString SdClassInstCanvas::get_name() const
 {
@@ -535,7 +540,7 @@ void SdClassInstCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void SdClassInstCanvas::apply_shortcut(QString s)
+void SdClassInstCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

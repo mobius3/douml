@@ -62,7 +62,7 @@
 IdDict<BrowserPseudoState> BrowserPseudoState::all(257, __FILE__);
 QStringList BrowserPseudoState::its_default_stereotypes;	// unicode
 
-BrowserPseudoState::BrowserPseudoState(UmlCode c, QString s, BrowserNode * p,
+BrowserPseudoState::BrowserPseudoState(UmlCode c, const QString & s, BrowserNode * p,
                                        PseudoStateData * d, int id)
     : BrowserNode(s, p), Labeled<BrowserPseudoState>(all, id), kind(c), def(d)
 {
@@ -85,7 +85,7 @@ BrowserPseudoState::BrowserPseudoState(const BrowserPseudoState * model, Browser
     kind = model->kind;
 }
 
-BrowserNode * BrowserPseudoState::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserPseudoState::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserNode * result = new BrowserPseudoState(this, p);
 
@@ -505,7 +505,7 @@ void BrowserPseudoState::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserPseudoState::apply_shortcut(QString s)
+void BrowserPseudoState::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

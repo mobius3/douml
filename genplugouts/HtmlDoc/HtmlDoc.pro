@@ -1,15 +1,9 @@
 TEMPLATE	= app
 TARGET		= ghtml
-CONFIG(Debug, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt warn_on Debug
-    QMAKE_POST_LINK = " "
-}
-CONFIG(Release, Debug|Release) {
-    CONFIG -= Debug Release
-    CONFIG += qt Release
-    QMAKE_POST_LINK = " "
-}
+CONFIG -= app_bundle
+CONFIG += qt warn_on c++11
+QMAKE_POST_LINK = " "
+DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES		+= WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON
 HEADERS		= ./UmlBaseRelation.h \
 		  ./UmlFormalParameter.h \
@@ -419,17 +413,14 @@ DEFINES += TRUE=true FALSE=false
 INCLUDEPATH += ../../src
 QT += testlib
 DESTDIR = ../../bin
-Release {
+CONFIG(release, debug|release) {
+DEFINES += NDEBUG
     MOC_DIR = $${DESTDIR}/moc_release/ghtml
     OBJECTS_DIR = $${DESTDIR}/obj_release/ghtml
 }
-
-Debug {
+CONFIG(debug, debug|release) {
+DEFINES += TRACE DEBUG DEBUG_DOUML
     MOC_DIR = $${DESTDIR}/moc_debug/ghtml
     OBJECTS_DIR = $${DESTDIR}/obj_debug/ghtml
 }
 UI_DIR = src/ui
-
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
-

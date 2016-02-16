@@ -172,7 +172,7 @@ protected:
     void init_format_menu(QMenu * m, QMenu * lm);
 
     void is_selected(BrowserNode *);
-    virtual void closeEvent(QCloseEvent *);
+    virtual void closeEvent(QCloseEvent *) override;
     void save_session();
 
     void setup_generator_action_visibility();
@@ -269,7 +269,7 @@ private slots:
     void windowsMenuAboutToShow();
     void windowsMenuActivated();
     void dialogsMenuActivated();
-    virtual void keyPressEvent(QKeyEvent * e);
+    virtual void keyPressEvent(QKeyEvent * e) override;
 public slots:
     void whats_this() const;
     void OnPickSelectionFromItem(const QModelIndex&,const QModelIndex& );

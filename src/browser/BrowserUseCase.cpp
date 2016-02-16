@@ -67,7 +67,7 @@ IdDict<BrowserUseCase> BrowserUseCase::all(257, __FILE__);
 QStringList BrowserUseCase::its_default_stereotypes;	// unicode
 QStringList BrowserUseCase::relations_default_stereotypes[UmlRelations];	// unicode
 
-BrowserUseCase::BrowserUseCase(QString s, BrowserNode * p, int id)
+BrowserUseCase::BrowserUseCase(const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserUseCase>(all, id)
 {
     make();
@@ -142,7 +142,7 @@ void BrowserUseCase::make()
     class_color = UmlDefaultColor;
 }
 
-BrowserNode * BrowserUseCase::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserUseCase::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserUseCase * result = new BrowserUseCase(this, p);
 
@@ -489,7 +489,7 @@ void BrowserUseCase::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserUseCase::apply_shortcut(QString s)
+void BrowserUseCase::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

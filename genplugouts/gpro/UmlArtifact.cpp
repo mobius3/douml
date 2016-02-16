@@ -200,7 +200,7 @@ void UmlArtifact::gen_app(const QByteArray & path)
 
             QString prodir = pfi.path();
             const QVector<UmlArtifact*> & arts = associatedArtifacts();
-            unsigned index;
+            int index;
             const char * sep;
             QByteArray ext;
 
@@ -288,8 +288,8 @@ QString UmlArtifact::way(QString pro_dir, bool header)
 
     // bypass common path header
 
-    unsigned index = 0;
-    unsigned i;
+    int index = 0;
+    int i;
     QString s;
 
     for (;;) {

@@ -1,14 +1,44 @@
-TEMPLATE      = app
-CONFIG          += qt warn_on
-HEADERS          = BrowserNode.h BrowserView.h BrowserSearchDialog.h \
-        ControlWindow.h UserDialog.h
-SOURCES          = main.cpp BrowserNode.cpp ControlWindow.cpp \
-        BrowserView.cpp Pixmap.cpp BrowserSearchDialog.cpp \
-        UserDialog.cpp myio.cpp 
+TEMPLATE = app
 
+CONFIG -= app_bundle
 
-TARGET          = projectControl
-DEFINES          = BooL=bool FALSE=false TRUE=true TR=tr
-INCLUDEPATH   = 
+CONFIG += qt warn_on c++11
+
+DEFINES += QT_DEPRECATED_WARNINGS
+
+HEADERS = \
+    BrowserNode.h \
+    BrowserView.h \
+    BrowserSearchDialog.h \
+    ControlWindow.h \
+    UserDialog.h
+
+SOURCES = \
+    main.cpp \
+    BrowserNode.cpp \
+    ControlWindow.cpp \
+    BrowserView.cpp \
+    Pixmap.cpp \
+    BrowserSearchDialog.cpp \
+    UserDialog.cpp \
+    myio.cpp
+
+TARGET = projectControl
+DEFINES += BooL=bool FALSE=false TRUE=true TR=tr
 QT += network widgets
+
 DESTDIR = ../../bin
+
+UI_DIR = src/ui
+
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
+    MOC_DIR = $${DESTDIR}/moc_release/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_release/$${TARGET}
+}
+
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
+    MOC_DIR = $${DESTDIR}/moc_debug/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_debug/$${TARGET}
+}

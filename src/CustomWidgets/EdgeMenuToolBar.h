@@ -21,13 +21,17 @@
 // e-mail : doumleditor@gmail.com
 //
 // *************************************************************************
+
 #ifndef EDGEMENUTOOLBAR_H
 #define EDGEMENUTOOLBAR_H
+
 #include <QToolBar>
 #include <QTimer>
 #include <QMenu>
 #include "CustomWidgets/MultiPurposeDragArea.h"
+
 class EdgeMenuDialog;
+
 class EdgeMenuToolBar : public QToolBar
 {
     Q_OBJECT
@@ -39,10 +43,10 @@ public:
     void SetDialog(EdgeMenuDialog *);
 protected:
     //! called on window show()
-    void leaveEvent(QEvent * event);
-    void enterEvent(QEvent * event);
+    virtual void leaveEvent(QEvent * event) override;
+    virtual void enterEvent(QEvent * event) override;
 
-    void focusOutEvent(QFocusEvent *) override;
+    virtual void focusOutEvent(QFocusEvent *) override;
 private:
 
     void IntitiateMove(QPoint);

@@ -368,10 +368,15 @@ void ActivityPartitionCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
+
 void ActivityPartitionCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode ActivityPartitionCanvas::typeUmlCode() const
 {
     return UmlActivityPartition;
@@ -564,7 +569,7 @@ void ActivityPartitionCanvas::turn(int cx100, int cy100)
     }
 }
 
-void ActivityPartitionCanvas::apply_shortcut(QString s)
+void ActivityPartitionCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

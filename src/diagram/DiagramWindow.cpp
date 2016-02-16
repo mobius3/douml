@@ -164,7 +164,7 @@ void DiagramWindow::add_scale_cmd(QToolBar *toolbar)
                                  this, SLOT(optimal_window_size()), toolbar, "optimal window size");
 
 
-    optwinsize->setWhatsThis(fitzoomText());
+    optwinsize->setWhatsThis(optwinsizeText());
     //Q3WhatsThis::add(optwinsize, optwinsizeText());
 
     optwinsize->setCheckable(FALSE);

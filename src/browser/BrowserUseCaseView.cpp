@@ -57,7 +57,7 @@
 IdDict<BrowserUseCaseView> BrowserUseCaseView::all(__FILE__);
 QStringList BrowserUseCaseView::its_default_stereotypes;	// unicode
 
-BrowserUseCaseView::BrowserUseCaseView(QString s, BrowserNode * p, int id)
+BrowserUseCaseView::BrowserUseCaseView(const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserUseCaseView>(all, id)
 {
     def = new SimpleData;
@@ -115,7 +115,7 @@ BrowserUseCaseView::~BrowserUseCaseView()
     delete def;
 }
 
-BrowserNode * BrowserUseCaseView::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserUseCaseView::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserUseCaseView * result = new BrowserUseCaseView(this, p);
 
@@ -469,7 +469,7 @@ void BrowserUseCaseView::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserUseCaseView::apply_shortcut(QString s)
+void BrowserUseCaseView::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

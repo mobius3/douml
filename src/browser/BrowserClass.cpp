@@ -101,7 +101,7 @@ QStringList BrowserClass::relations_default_stereotypes[UmlRelations];	// unicod
 static bool NeedPostLoad = FALSE;
 static BrowserClass * TemporaryClass;
 
-BrowserClass::BrowserClass(QString s, BrowserNode * p, ClassData * d, int id)
+BrowserClass::BrowserClass(const QString & s, BrowserNode * p, ClassData * d, int id)
     : BrowserNode(s, p), Labeled<BrowserClass>(all, id),
       def(d), associated_diagram(0), associated_artifact(0)
 {
@@ -284,7 +284,7 @@ void BrowserClass::renumber(int phase)
     BrowserNode::renumber(phase);
 }
 
-bool BrowserClass::new_java_enums(QString new_st)
+bool BrowserClass::new_java_enums(const QString & new_st)
 {
 
     IdIterator<BrowserClass> it(all);
@@ -315,10 +315,12 @@ bool BrowserClass::new_java_enums(QString new_st)
             }
         }
     }
-    if (new_st.isEmpty())
-        new_st = "enum_pattern";
 
-    its_default_stereotypes.append(new_st);
+    QString new_st_to_append = new_st;
+    if (new_st_to_append.isEmpty())
+        new_st_to_append = "enum_pattern";
+
+    its_default_stereotypes.append(new_st_to_append);
 
     return result;
 
@@ -409,28 +411,6 @@ void BrowserClass::update_stereotype(bool rec)
 
 }
 
-void BrowserClass::paintCell(QPainter * p, const QPalette & cg, int column,
-                             int width, int alignment)
-{
-/*BrowserClass::data used instead
-    const QColor & bg = p->background().color();
-
-    if (is_marked) {
-        p->setBackgroundMode(::Qt::OpaqueMode);
-        p->setBackgroundColor(UmlRedColor);
-    }
-
-    p->setFont((def->get_is_abstract())
-               ? ((is_writable()) ? BoldItalicFont : ItalicFont)
-               : ((is_writable()) ? BoldFont : NormalFont));
-    BrowserNode::paintCell(p, cg, column, width, alignment);
-
-    if (is_marked) {
-        p->setBackgroundMode(::Qt::TransparentMode);
-        p->setBackgroundColor(bg);
-    }
-    */
-}
 QVariant BrowserClass::data(int column, int role) const
 {
     if(role == Qt::FontRole)
@@ -1166,7 +1146,7 @@ void BrowserClass::exec_menu_choice(int rank,
     package_modified();
 }
 
-void BrowserClass::apply_shortcut(QString s)
+void BrowserClass::apply_shortcut(const QString & s)
 {
     int choice = -1;
 
@@ -1273,7 +1253,7 @@ void BrowserClass::apply_shortcut(QString s)
     exec_menu_choice(choice, l);
 }
 
-BrowserNode * BrowserClass::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserClass::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserClass * result = new BrowserClass(this, p);
 
@@ -1290,7 +1270,7 @@ BrowserNode * BrowserClass::duplicate(BrowserNode * p, QString name)
     // duplicates the sub elts
     for (child = firstChild(); n != 0; child = child->nextSibling(), n -= 1)
     {
-        BrowserNode* nodeCopy;
+        BrowserNode* nodeCopy = NULL;
         if (!((BrowserNode *) child)->deletedp())
         {
             if (IsaRelation(((BrowserNode *) child)->get_type()))
@@ -1304,11 +1284,13 @@ BrowserNode * BrowserClass::duplicate(BrowserNode * p, QString name)
             else
                 nodeCopy =  ((BrowserNode *) child)->duplicate(result);
         }
-        nodeCopy->set_n_keys(static_cast<BrowserNode*>(child)->get_n_keys());
-        for(int i(0); i < static_cast<BrowserNode*>(child)->get_n_keys(); i++)
-        {
-            nodeCopy->set_key(i, static_cast<BrowserNode*>(child)->get_key(i));
-            nodeCopy->set_value(i, static_cast<BrowserNode*>(child)->get_value(i));
+        if (nodeCopy) {
+            nodeCopy->set_n_keys(static_cast<BrowserNode*>(child)->get_n_keys());
+            for (unsigned i = 0; i < static_cast<BrowserNode*>(child)->get_n_keys(); i++)
+            {
+                nodeCopy->set_key(i, static_cast<BrowserNode*>(child)->get_key(i));
+                nodeCopy->set_value(i, static_cast<BrowserNode*>(child)->get_value(i));
+            }
         }
     }
 
@@ -1322,7 +1304,7 @@ BrowserNode * BrowserClass::duplicate(BrowserNode * p, QString name)
     return result;
 }
 
-void BrowserClass::set_name(QString s)
+void BrowserClass::set_name(const QString & s)
 {
     if (name != s) {
         bool firsttime = name.isEmpty();
@@ -2324,8 +2306,9 @@ BrowserClass * BrowserClass::get_class(BrowserNode * future_parent,
 
 BrowserClass * BrowserClass::add_class(bool stereotypep,
                                        BrowserNode * future_parent,
-                                       QString name)
+                                       const QString & nameInit)
 {
+    QString name = nameInit;
     if (name.isEmpty()) {
         if (!future_parent->enter_child_name(name,
                                              (stereotypep) ? QObject::tr("enter stereotype's name : ")
@@ -2408,7 +2391,7 @@ QString BrowserClass::check_inherit(const BrowserNode * new_parent) const
             : BrowserNode::check_inherit(new_parent);
 }
 
-QList<BrowserOperation *> BrowserClass::inherited_operations(unsigned limit, QString parent_name) const
+QList<BrowserOperation *> BrowserClass::inherited_operations(unsigned limit, const QString & parent_name) const
 {
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 

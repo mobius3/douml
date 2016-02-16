@@ -123,6 +123,8 @@ void EdgeMenuDialogBase::SetToolBar(EdgeMenuToolBar * newToolbar)
 {
 #ifdef EDGETOOLENABLED
     toolbar = newToolbar;
+#else
+    Q_UNUSED(newToolbar);
 #endif
 }
 

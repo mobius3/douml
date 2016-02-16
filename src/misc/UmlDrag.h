@@ -26,7 +26,7 @@
 // *************************************************************************
 
 #ifndef UMLDRAG_H
-#define UMLGRAG_H
+#define UMLDRAG_H
 
 //#include <q3dragobject.h>
 #include <qstring.h>

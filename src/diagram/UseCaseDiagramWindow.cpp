@@ -30,7 +30,7 @@
 
 
 #include <qapplication.h>
-#include <QMdiArea>.h>
+#include <QMdiArea>
 #include <QToolBar>
 #include <qtoolbutton.h>
 #include <qwhatsthis.h>

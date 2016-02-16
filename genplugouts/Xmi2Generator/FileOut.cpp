@@ -24,23 +24,23 @@ void FileOut::indent()
 
 void FileOut::id(UmlItem * x)
 {
-    ((QTextStream &) *this) << " xmi:id=\"BOUML_" << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
+    ((QTextStream &) *this) << " xmi:id=\"BOUML_" << (reinterpret_cast<void*>(x->getIdentifier())) << "_" << x->kind() << '"';
 
 }
 
 void FileOut::id_prefix(UmlItem * x, const char * pfix)
 {
-    ((QTextStream &) *this) << " xmi:id=\"BOUML_" << pfix << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
+    ((QTextStream &) *this) << " xmi:id=\"BOUML_" << pfix << (reinterpret_cast<void*>(x->getIdentifier())) << "_" << x->kind() << '"';
 }
 
 void FileOut::id_prefix(UmlItem * x, const char * pfix, int n)
 {
-    ((QTextStream &) *this) << " xmi:id=\"BOUML_" << pfix << n << "_" << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
+    ((QTextStream &) *this) << " xmi:id=\"BOUML_" << pfix << n << "_" << (reinterpret_cast<void*>(x->getIdentifier())) << "_" << x->kind() << '"';
 }
 
 void FileOut::idref(UmlItem * x)
 {
-    ((QTextStream &) *this) << " xmi:idref=\"BOUML_" << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
+    ((QTextStream &) *this) << " xmi:idref=\"BOUML_" << (reinterpret_cast<void*>(x->getIdentifier())) << "_" << x->kind() << '"';
 
 }
 
@@ -67,14 +67,14 @@ void FileOut::idref(WrapperStr s, UmlItem * x)
 void FileOut::idref_prefix(UmlItem * x, const char * pfix)
 {
     ((QTextStream &) *this) << " xmi:idref=\"BOUML_"
-                             << pfix << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
+                             << pfix << (reinterpret_cast<void*>(x->getIdentifier())) << "_" << x->kind() << '"';
 
 }
 
 void FileOut::idref_prefix(UmlItem * x, const char * pfix, int n)
 {
     ((QTextStream &) *this) << " xmi:idref=\"BOUML_"
-                             << pfix << n << "_" << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
+                             << pfix << n << "_" << (reinterpret_cast<void*>(x->getIdentifier())) << "_" << x->kind() << '"';
 
 }
 
@@ -96,18 +96,18 @@ void FileOut::idref_datatype(const WrapperStr & t)
 void FileOut::ref(UmlItem * x, const char * pfix1, const char * pfix2)
 {
     ((QTextStream &) *this) << " " << pfix1 << "=\"BOUML_"
-                             << pfix2 << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
+                             << pfix2 << (reinterpret_cast<void*>(x->getIdentifier())) << "_" << x->kind() << '"';
 }
 
 void FileOut::ref(UmlItem * x, const char * pfix1, const char * pfix2, int n)
 {
     ((QTextStream &) *this) << " " << pfix1 << "=\"BOUML_"
-                             << pfix2 << n << "_" << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
+                             << pfix2 << n << "_" << (reinterpret_cast<void*>(x->getIdentifier())) << "_" << x->kind() << '"';
 }
 
 void FileOut::ref_only(UmlItem * x, const char * pfix)
 {
-    ((QTextStream &) *this) << "BOUML_" << pfix << ((void *) x->getIdentifier())
+    ((QTextStream &) *this) << "BOUML_" << pfix << (reinterpret_cast<void*>(x->getIdentifier()))
                              << "_" << x->kind();
 }
 

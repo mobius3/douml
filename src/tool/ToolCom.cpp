@@ -85,6 +85,7 @@ Server::~Server()
 {
     //delete notifier;
 }
+
 bool Server::write_block(char * data, unsigned int len)
 {
     /* the four first bytes of data are free to contains the length
@@ -102,7 +103,7 @@ bool Server::write_block(char * data, unsigned int len)
     len += 4;
 
     for (;;) {
-        int sent = m_socket->write(data, len);
+        qint64 sent = m_socket->write(data, len);
 
         if (sent == -1)
             return FALSE;
@@ -322,7 +323,7 @@ const char * ToolCom::read_buffer()
         buffer_in = new char[buffer_in_size];
     }
 
-    int nread = sock->read(buffer_in + already_read, wanted);
+    qint64 nread = sock->read(buffer_in + already_read, wanted);
 
     if (nread == -1) {
         fatal_error("ToolCom read error");
@@ -433,9 +434,9 @@ void ToolCom::skip_type(const char *& p)
 
 //
 
-void ToolCom::check_size_out(unsigned n)
+void ToolCom::check_size_out(size_t n)
 {
-    unsigned used = p_buffer_out - buffer_out;
+    ptrdiff_t used = p_buffer_out - buffer_out;
 
     if ((used + n) >= buffer_out_size) {
         buffer_out_size = used + n + 1024;
@@ -486,7 +487,7 @@ void ToolCom::write_id(void * id)
 
 void ToolCom::write_id(BrowserNode * bn, char k, const char * s)
 {
-    unsigned ln = strlen(s) + 1;
+    size_t ln = strlen(s) + 1;
 
     check_size_out(ln + 2 + sizeof(void *));
 
@@ -527,7 +528,7 @@ void ToolCom::write_string(const char * p)
         // from a QString()
         p = "";
 
-    int len = strlen(p) + 1;
+    size_t len = strlen(p) + 1;
 
     check_size_out(len);
     memcpy(p_buffer_out, p, len);
@@ -1016,7 +1017,7 @@ void ToolCom::DisconnectExternalProcess()
     }
 }
 
-bool ToolCom::write_block(char * data, unsigned int len)
+bool ToolCom::write_block(char * data, size_t len)
 {
     /* the four first bytes of data are free to contains the length
      these are taken into account by len */
@@ -1034,7 +1035,7 @@ bool ToolCom::write_block(char * data, unsigned int len)
     len += 4;
 
     for (;;) {
-        int sent = sock->write(data, len);
+        qint64 sent = sock->write(data, len);
 
         if (sent == -1)
             return FALSE;

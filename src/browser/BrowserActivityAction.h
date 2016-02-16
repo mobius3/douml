@@ -1,9 +1,3 @@
-//Added by qt3to4:
-#include <QTextStream>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-//#include <QList>
-#include <QPixmap>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -34,6 +28,13 @@
 #ifndef BROWSER_ACTIVITYACTION_H
 #define BROWSER_ACTIVITYACTION_H
 
+//Added by qt3to4:
+#include <QTextStream>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+//#include <QList>
+#include <QPixmap>
+
 class QPixmap;
 class ActivityActionData;
 class BrowserPin;
@@ -63,13 +64,13 @@ protected:
     void exec_menu_choice(int rank, BrowserNode * who);
 
 public:
-    BrowserActivityAction(QString s, BrowserNode * p, int id = 0);
+    BrowserActivityAction(const QString & s, BrowserNode * p, int id = 0);
     BrowserActivityAction(const BrowserActivityAction * model, BrowserNode * p);
-    BrowserActivityAction(QString s, BrowserNode * p, UmlActionKind);
+    BrowserActivityAction(const QString & s, BrowserNode * p, UmlActionKind);
     virtual ~BrowserActivityAction();
 
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString());
     virtual bool may_contains_them(const QList<BrowserNode *> & l,
                                    BooL & duplicable) const;
     static BrowserActivityAction * add_activityaction(BrowserNode * future_parent,
@@ -104,7 +105,7 @@ public:
     virtual const QPixmap * pixmap(int) const;
 
     virtual void menu();
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s);
     virtual void open(bool);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;

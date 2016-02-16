@@ -1,7 +1,9 @@
 TEMPLATE    = app
 TARGET        = gxmi
-CONFIG        += warn_on qt
-DEFINES        = WITHCPP WITHJAVA WITHIDL TRUE=true FALSE=false
+CONFIG -= app_bundle
+CONFIG        += warn_on qt c++11
+DEFINES += QT_DEPRECATED_WARNINGS
+DEFINES       += WITHCPP WITHJAVA WITHIDL TRUE=true FALSE=false
 HEADERS        = ./UmlBaseFinalState.h \
           ./UmlBaseAttribute.h \
           ./UmlEntryPointPseudoState.h \
@@ -242,21 +244,18 @@ QT += network  widgets
 
 INCLUDEPATH += ../../src
 QT += testlib
-Release{
 
-
-    MOC_DIR = bin/douml/xmi/MOC_release
-    OBJECTS_DIR = bin/douml/xmi/Obj_release
-}
-
-Debug{
-    MOC_DIR = bin/douml/xmi/MOC_Debug
-    OBJECTS_DIR = bin/douml/xmi/Obj_Debug
-
-}
     UI_DIR = src/ui
     DESTDIR = ../../bin
 
-QMAKE_CXXFLAGS += -std=gnu++11
-mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
+    MOC_DIR = $${DESTDIR}/moc_release/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_release/$${TARGET}
+}
 
+CONFIG(debug, debug|release) {
+    DEFINES += TRACE DEBUG DEBUG_DOUML
+    MOC_DIR = $${DESTDIR}/moc_debug/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_debug/$${TARGET}
+}

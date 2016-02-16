@@ -34,6 +34,7 @@
 
 class SdSelfMsgCanvas : public SdMsgBaseCanvas
 {
+    Q_OBJECT
 public:
     SdSelfMsgCanvas(UmlCanvas * canvas, SdMsgSupport * d,
                     UmlCode l, int v, int id);
@@ -41,28 +42,28 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual void change_scale();
-    virtual void update_hpos();
-    virtual void check_vpos(const QRect &);
-    virtual double min_y() const;
-    virtual void update();
+    virtual void change_scale() override;
+    virtual void update_hpos() override;
+    virtual void check_vpos(const QRect &) override;
+    virtual double min_y() const override;
+    virtual void update() override;
     virtual void change_duration(SdDurationCanvas * oldone,
-                                 SdDurationCanvas * newone);
-    virtual int overlap_dir(SdDurationCanvas *) const;
-    virtual void menu(const QPoint &);
-    virtual void select_associated();
+                                 SdDurationCanvas * newone) override;
+    virtual int overlap_dir(SdDurationCanvas *) const override;
+    virtual void menu(const QPoint &) override;
+    virtual void select_associated() override;
 
-    virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(QList<DiagramItem *> &);
-    virtual void clone_drawing_settings(const DiagramItem *src);
+    virtual bool has_drawing_settings() const override;
+    virtual void edit_drawing_settings(QList<DiagramItem *> &) override;
+    virtual void clone_drawing_settings(const DiagramItem *src) override;
 
-    virtual void apply_shortcut(QString s);
+    virtual void apply_shortcut(const QString & s) override;
     void edit_drawing_settings();
 
-    virtual void save(QTextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const override;
     static SdSelfMsgCanvas * read(char *& , UmlCanvas *, char *);
 protected:
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 };
 
 #endif

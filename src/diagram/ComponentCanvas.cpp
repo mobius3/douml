@@ -813,10 +813,15 @@ void ComponentCanvas::draw(QPainter & p)
     if (isSelected())
         show_mark(p, rect());
 }
+
 void ComponentCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode ComponentCanvas::typeUmlCode() const
 {
     return UmlComponent;
@@ -967,7 +972,7 @@ void ComponentCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void ComponentCanvas::apply_shortcut(QString s)
+void ComponentCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         browser_node->select_in_browser();

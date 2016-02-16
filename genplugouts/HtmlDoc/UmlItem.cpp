@@ -228,7 +228,7 @@ void UmlItem::memo_ref()
 
     const QVector<UmlItem*> ch = children();
 
-    for (unsigned i = 0; i != ch.size(); i += 1)
+    for (int i = 0; i != ch.size(); i += 1)
         ch[i]->memo_ref();
 }
 
@@ -250,7 +250,7 @@ void UmlItem::start_file(QByteArray f, QByteArray s, bool withrefs)
         throw 0;
 
     fw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    fw.write("<!-- Documentation produced by the Html generator of Bouml (http://bouml.free.fr) -->\n");
+    fw.write("<!-- Documentation produced by the Html generator of DoUML (https://github.com/DoUML) -->\n");
     fw.write((is_frame)
              ? "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd\">\n"
              : "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n");
@@ -324,7 +324,7 @@ void UmlItem::ref_indexes()
     UmlDeploymentDiagram::ref_index();
     fw.write("</p>\n<p>\n</p>\n<p>");
 
-    for (unsigned i = 0; i != letters.length(); i += 1) {
+    for (int i = 0; i != letters.length(); i += 1) {
         fw.write("<a href=\"index_");
         fw.write(letters.at(i) & 255u);
         fw.write(".html\" target = \"projectFrame\"><b> ");

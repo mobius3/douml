@@ -56,7 +56,7 @@
 IdDict<BrowserComponentView> BrowserComponentView::all(__FILE__);
 QStringList BrowserComponentView::its_default_stereotypes;	// unicode
 
-BrowserComponentView::BrowserComponentView(QString s, BrowserNode * p, int id)
+BrowserComponentView::BrowserComponentView(const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserComponentView>(all, id)
 {
     make();
@@ -91,7 +91,7 @@ BrowserComponentView::~BrowserComponentView()
     delete def;
 }
 
-BrowserNode * BrowserComponentView::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserComponentView::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserComponentView * result = new BrowserComponentView(this, p);
 
@@ -320,7 +320,7 @@ void BrowserComponentView::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserComponentView::apply_shortcut(QString s)
+void BrowserComponentView::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

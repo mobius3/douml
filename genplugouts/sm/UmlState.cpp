@@ -15,7 +15,7 @@
 bool UmlState::isLeaf()
 {
     const QVector<UmlItem*> ch = children();
-    unsigned index;
+    int index;
 
     for (index = 0; index != ch.count(); index += 1) {
         switch (ch[index]->kind()) {
@@ -113,7 +113,7 @@ void UmlState::init(UmlClass * mother, QByteArray path, QByteArray pretty_path, 
     // goes down
 
     const QVector<UmlItem*> ch = children();
-    unsigned index;
+    int index;
 
     for (index = 0; index != ch.count(); index += 1)
         ch[index]->init(_class, _path, _pretty_path, this);
@@ -365,7 +365,7 @@ void UmlState::generate(UmlClass * machine, UmlClass * anystate, UmlState *)
 {
     // inherits anystate
     const QVector<UmlItem*> clch = _class->children();
-    unsigned index;
+    int index;
 
     for (index = 0; index != clch.count(); index += 1)
         if ((clch[index]->kind() == aRelation) &&

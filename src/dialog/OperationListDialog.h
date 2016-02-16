@@ -33,6 +33,8 @@ class BrowserOperation;
 
 class OperationListDialog : public QDialog
 {
+    Q_OBJECT
+    
 protected:
     QComboBox * cb;
 

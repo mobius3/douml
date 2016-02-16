@@ -64,8 +64,8 @@ public:
 
     QString full_name() const;
 
-    virtual BrowserNode * new_type();
-    virtual bool new_type_available();
+    virtual BrowserNode * new_type() override;
+    virtual bool new_type_available() override;
     virtual BrowserNode * container(UmlCode) const = 0;
     void compute_size(int & w, int & h, UmlCanvas *);
     void draw(QPainter & p, UmlCanvas * canvas, QRect r);

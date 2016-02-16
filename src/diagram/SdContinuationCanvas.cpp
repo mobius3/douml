@@ -115,10 +115,15 @@ void SdContinuationCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, r);
 }
+
 void SdContinuationCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     draw(*painter);
 }
+
 UmlCode SdContinuationCanvas::typeUmlCode() const
 {
     return UmlContinuation;
@@ -268,7 +273,7 @@ void SdContinuationCanvas::menu(const QPoint &)
     package_modified();
 }
 
-void SdContinuationCanvas::apply_shortcut(QString s)
+void SdContinuationCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Upper")
         upper();

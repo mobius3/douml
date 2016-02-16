@@ -28,25 +28,31 @@
 #ifndef TABLEITEM_H
 #define TABLEITEM_H
 
-
-
 #include "DialogUtil.h"
 #include <QTableWidget>
 //Added by qt3to4:
 #include <QPixmap>
 #include "tablewidgetitemdelegate.h"
+
 class TableItem : public QTableWidgetItem
 {
 public:
-    enum{
-        TableItemType= UserType,
+    enum {
+        TableItemType = UserType,
         ComboType,
         MLinesType,
         MsgTableItemType
     };
-    enum	EditType { Always, WhenCurrent, OnTyping, Never };
-    TableItem(QTableWidget * table, EditType et, const QString & text, int type)
-        : QTableWidgetItem(/*table,*/  text, type) {
+    enum EditType {
+        Always,
+        WhenCurrent,
+        OnTyping,
+        Never
+    };
+
+    TableItem(EditType et, const QString & text, int type)
+        : QTableWidgetItem(text, type)
+    {
         switch(et)
         {
         case Always:
@@ -63,8 +69,10 @@ public:
             break;
         }
     }
-    TableItem(QTableWidget * table, EditType et, const QString & text, const QPixmap & p, int type)
-        : QTableWidgetItem(/*table,*/ QIcon(p),text,type) {
+
+    TableItem(EditType et, const QString & text, const QPixmap & p, int type)
+        : QTableWidgetItem(QIcon(p), text, type)
+    {
         switch(et)
         {
         case Always:
@@ -83,7 +91,9 @@ public:
     }
 
     virtual int alignment() const;
+
 };
+
 #define DISABLESORTINGMYTABLE bool sortingEnabled = false;\
 if(isSortingEnabled())\
 {\
@@ -101,14 +111,18 @@ class MyTable : public QTableWidget
     Q_OBJECT
 
 public:
-    MyTable(QWidget * parent = 0, const char * name = 0)
-        : QTableWidget(parent/*, name*/){
-        //setSortingEnabled(-1);
+    MyTable(QWidget * parent = 0)
+        : QTableWidget(parent)
+    {
     }
-    MyTable(int numRows, int numCols, QWidget * parent = 0, const char * name = 0)
-    :QTableWidget(numRows, numCols, parent/*, name*/){}
+    MyTable(int numRows, int numCols, QWidget * parent = 0)
+        : QTableWidget(numRows, numCols, parent)
+    {
+    }
 
-    ~MyTable(){}
+    ~MyTable()
+    {
+    }
 
     virtual void setText(int row, int col, const QString & text);
     QString text(int row, int colum) const;

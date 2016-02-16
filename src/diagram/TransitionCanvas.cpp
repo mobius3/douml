@@ -360,22 +360,17 @@ void TransitionCanvas::menu(const QPoint &)
     }
 }
 
-void TransitionCanvas::apply_shortcut(QString s)
+void TransitionCanvas::apply_shortcut(const QString & s)
 {
     if (s == "Select in browser") {
         data->get_start()->select_in_browser();
-        return;
     }
     else if (s == "Edit drawing settings") {
         edit_drawing_settings();
-        return;
     }
     else {
         data->get_start()->apply_shortcut(s);
-        return;
     }
-
-    modified(); // call package_modified()
 }
 
 void TransitionCanvas::edit_drawing_settings()
@@ -774,7 +769,7 @@ void TransitionCanvas::save(QTextStream & st, bool ref, QString & warning) const
         }
 
         nl_indent(st);
-        (const TransitionCanvas *) ArrowCanvas::save_lines(st, TRUE, TRUE, warning);
+        save_lines(st, TRUE, TRUE, warning);
         nl_indent(st);
         st << "write_horizontally " << stringify(write_horizontally)
            << " show_definition " << stringify(show_definition)

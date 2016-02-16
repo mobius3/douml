@@ -35,11 +35,13 @@ class HaveKeyValueData;
 class TableWidgetItemDelegate;
 class KeyValuesTable : public StringTable
 {
+    Q_OBJECT
+
 public:
     KeyValuesTable(HaveKeyValueData * h, QWidget * parent, bool visit);
 
-    virtual void init_row(int index);
-    bool eventFilter(QObject *o, QEvent *);
+    virtual void init_row(int index) override;
+    virtual bool eventFilter(QObject *o, QEvent *) override;
     bool check_unique();
     void updateNodeFromThis(HaveKeyValueData * h);
     void updateThisFromNode(HaveKeyValueData * h, bool visit = false);

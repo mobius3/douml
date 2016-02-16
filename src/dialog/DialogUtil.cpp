@@ -541,7 +541,7 @@ void manage_alias(const BrowserNode * node,
         static char st[256];
         char * key = ((pclosed - p) > 255) ? new char[pclosed - p - 1] : st;
         QString qsvalue;
-        int keylen = pclosed - p - 2;
+        ptrdiff_t keylen = pclosed - p - 2;
 
         strncpy(key, p + 2, keylen);
         key[keylen] = 0;
@@ -597,7 +597,7 @@ void manage_alias(const BrowserNode * node,
     {
         static char st[256];
         char * key = ((pclosed - p) > 255) ? new char[pclosed - p - 1] : st;
-        int keylen = pclosed - p - 2;
+        ptrdiff_t keylen = pclosed - p - 2;
 
         strncpy(key, p + 2, keylen);
         key[keylen] = 0;

@@ -170,8 +170,8 @@ UmlStereotype * UmlSettings::_class_stereotypes;
 
 void UmlSettings::read_()
 {
-    unsigned n;
-    unsigned index;
+    int n;
+    int index;
 
     n = UmlCom::read_unsigned();
 
@@ -275,8 +275,8 @@ WrapperStr UmlSettings::uml_class_stereotype(const WrapperStr & t, WrapperStr Um
 
 UmlBuiltin * UmlSettings::add_type(const WrapperStr & s)
 {
-    unsigned n = _map_builtins.count();
-    unsigned index;
+    int n = _map_builtins.count();
+    int index;
 
     UmlBuiltin * builtins = new UmlBuiltin[n + 1];
 
@@ -312,8 +312,8 @@ UmlBuiltin * UmlSettings::add_type(const WrapperStr & s)
 
 UmlStereotype * UmlSettings::add_rel_attr_stereotype(const WrapperStr & s)
 {
-    unsigned n = _map_relation_attribute_stereotypes.count();
-    unsigned index;
+    int n = _map_relation_attribute_stereotypes.count();
+    int index;
 
     UmlStereotype * relation_attribute_stereotypes = new UmlStereotype[n + 1];
 
@@ -347,8 +347,8 @@ UmlStereotype * UmlSettings::add_rel_attr_stereotype(const WrapperStr & s)
 
 UmlStereotype * UmlSettings::add_class_stereotype(const WrapperStr & s)
 {
-    unsigned n = _map_class_stereotypes.count();
-    unsigned index;
+    int n = _map_class_stereotypes.count();
+    int index;
 
     UmlStereotype * class_stereotypes = new UmlStereotype[n + 1];
 

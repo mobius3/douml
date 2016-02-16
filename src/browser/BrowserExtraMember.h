@@ -51,45 +51,45 @@ protected:
     void exec_menu_choice(int rank);
 
 public:
-    BrowserExtraMember(QString s, BrowserNode * p, ExtraMemberData * d, int id = 0);
+    BrowserExtraMember(const QString & s, BrowserNode * p, ExtraMemberData * d, int id = 0);
     BrowserExtraMember(const BrowserExtraMember * model, BrowserNode * p);
     virtual ~BrowserExtraMember();
 
     virtual BrowserNode * duplicate(BrowserNode * p,
-                                    QString name = QString());
+                                    const QString & name = QString()) override;
 
-    virtual const QPixmap * pixmap(int) const;
+    virtual const QPixmap * pixmap(int) const override;
 
-    virtual void menu();
-    virtual void apply_shortcut(QString s);
-    virtual void open(bool);
-    virtual UmlCode get_type() const;
-    virtual QString get_stype() const;
-    virtual int get_identifier() const;
-    virtual const char * help_topic() const;
-    virtual void modified();
-    virtual BasicData * get_data() const;
-    virtual void set_name(const char * s);
-    virtual bool same_name(const QString & s, UmlCode type) const;
-    virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
+    virtual void menu() override;
+    virtual void apply_shortcut(const QString & s) override;
+    virtual void open(bool) override;
+    virtual UmlCode get_type() const override;
+    virtual QString get_stype() const override;
+    virtual int get_identifier() const override;
+    virtual const char * help_topic() const override;
+    virtual void modified() override;
+    virtual BasicData * get_data() const override;
+    virtual void set_name(const QString & s) override;
+    virtual bool same_name(const QString & s, UmlCode type) const override;
+    virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const override;
     virtual void member_cpp_def(const QString & prefix, const QString &,
-                                QString & s, bool templ) const;
-    virtual bool allow_empty() const;
+                                QString & s, bool templ) const override;
+    virtual bool allow_empty() const override;
 
-    virtual void save(QTextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning) override;
     static BrowserExtraMember * read(char *& , char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
 
-    static BrowserExtraMember * new_one(QString s, BrowserNode * p);
+    static BrowserExtraMember * new_one(const QString & s, BrowserNode * p);
 
     static void clear(bool old);
     static void update_idmax_for_root();
-    virtual void renumber(int phase);
-    virtual void prepare_update_lib() const;
+    virtual void renumber(int phase) override;
+    virtual void prepare_update_lib() const override;
 
-    virtual bool tool_cmd(ToolCom * com, const char * args);
+    virtual bool tool_cmd(ToolCom * com, const char * args) override;
 
-    virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
+    virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after) override;
 };
 
 #endif

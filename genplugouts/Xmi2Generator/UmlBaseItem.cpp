@@ -248,7 +248,7 @@ void UmlBaseItem::unload(bool rec, bool del)
 
     if (_children != 0) {
         if (rec) {
-            for (unsigned chindex = 0; chindex != _children->size(); chindex += 1) {
+            for (int chindex = 0; chindex != _children->size(); chindex += 1) {
                 _children->at(chindex)->unload(TRUE, del);
 
                 if (del)
@@ -506,7 +506,7 @@ UmlItem * UmlBaseItem::read_()
     const char * name = UmlCom::read_string();
 
 #ifndef WIN32
-    //cout << "UmlBaseItem::read id " << id << " kind " << kind << " name " << name << '\n';
+    //qDebug() << "UmlBaseItem::read id " << id << " kind " << kind << " name " << name << '\n';
 #endif
 
     UmlItem * result = _all.value(id, 0);

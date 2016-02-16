@@ -309,7 +309,7 @@ void ComponentDialog::rz_stereotypeFilterActivated(const QString & st)
 
 void ComponentDialog::require_cls()
 {
-    unsigned int i = 0;
+    int i = 0;
 
     while (i != lb_rq_available->count()) {
         QListWidgetItem * item = lb_rq_available->item(i);
@@ -328,7 +328,7 @@ void ComponentDialog::require_cls()
 
 void ComponentDialog::unrequire_cls()
 {
-    unsigned int i = 0;
+    int i = 0;
 
     while (i != lb_rq->count()) {
         QListWidgetItem * item = lb_rq->item(i);
@@ -353,7 +353,7 @@ void ComponentDialog::unrequire_cls()
 
 void ComponentDialog::provide_cls()
 {
-    unsigned int i = 0;
+    int i = 0;
 
     while (i != lb_pr_available->count()) {
         QListWidgetItem * item = lb_pr_available->item(i);
@@ -372,7 +372,7 @@ void ComponentDialog::provide_cls()
 
 void ComponentDialog::unprovide_cls()
 {
-    unsigned int i = 0;
+    int i = 0;
 
     while (i != lb_pr->count()) {
         QListWidgetItem * item = lb_pr->item(i);
@@ -397,7 +397,7 @@ void ComponentDialog::unprovide_cls()
 
 void ComponentDialog::realize_cls()
 {
-    unsigned int i = 0;
+    int i = 0;
 
     while (i != lb_rz_available->count()) {
         QListWidgetItem * item = lb_rz_available->item(i);
@@ -416,7 +416,7 @@ void ComponentDialog::realize_cls()
 
 void ComponentDialog::unrealize_cls()
 {
-    unsigned int i = 0;
+    int i = 0;
 
     while (i != lb_rz->count()) {
         QListWidgetItem * item = lb_rz->item(i);

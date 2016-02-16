@@ -64,7 +64,7 @@
 IdDict<BrowserParameter> BrowserParameter::all(257, __FILE__);
 QStringList BrowserParameter::its_default_stereotypes;	// unicode
 
-BrowserParameter::BrowserParameter(QString s, BrowserNode * p, int id)
+BrowserParameter::BrowserParameter(const QString & s, BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserParameter>(all, id),
       def(new ParameterData)
 {
@@ -86,7 +86,7 @@ BrowserParameter::BrowserParameter(const BrowserParameter * model, BrowserNode *
     comment = model->comment;
 }
 
-BrowserNode * BrowserParameter::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserParameter::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserNode * result = new BrowserParameter(this, p);
 
@@ -271,7 +271,7 @@ void BrowserParameter::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserParameter::apply_shortcut(QString s)
+void BrowserParameter::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

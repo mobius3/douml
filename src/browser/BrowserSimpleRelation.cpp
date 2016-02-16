@@ -98,7 +98,7 @@ BrowserSimpleRelation::~BrowserSimpleRelation()
         delete def;
 }
 
-BrowserNode * BrowserSimpleRelation::duplicate(BrowserNode * p, QString)
+BrowserNode * BrowserSimpleRelation::duplicate(BrowserNode * p, const QString &)
 {
     BrowserSimpleRelation * result = new BrowserSimpleRelation(this, p);
 
@@ -329,7 +329,7 @@ void BrowserSimpleRelation::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserSimpleRelation::apply_shortcut(QString s)
+void BrowserSimpleRelation::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

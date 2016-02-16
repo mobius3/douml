@@ -104,9 +104,14 @@ bool UmlAttribute::new_one(Class * container, const WrapperStr & name,
 
     if (
 #ifdef REVERSE
-        container->from_libp() &&
+        container->from_libp() && (
 #endif
-        (visibility == PrivateVisibility)) {
+                                   visibility == PrivateVisibility
+#ifdef REVERSE
+                                   )
+#endif
+        )
+    {
         Lex::finish_line();
         Lex::clear_comments();
         return TRUE;

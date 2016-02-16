@@ -31,7 +31,11 @@
 #include <QAction>
 #include <QFileInfo>
 #include <QLabel>
-static int defaultButtonSize = 15;
+
+#ifdef EDGETOOLENABLED
+static const int defaultButtonSize = 15;
+#endif // EDGETOOLENABLED
+
 EdgeMenuToolBar * CreateLimitedDialogMenu()
 {
     EdgeMenuToolBar * toolbar = new EdgeMenuToolBar();

@@ -737,7 +737,9 @@ static void cpp_generate_inlines(BrowserNode * cl, const QString & cl_name,
             const char * def = d->get_cpp_def();
 
             if ((templp || d->get_cpp_inline()) && def[0]) {
-                s += '\n' + def + '\n';
+                s += "\n";
+                s += def;
+                s += "\n";
             }
         }
         }
@@ -1894,11 +1896,11 @@ FormalParamsTable::FormalParamsTable(ClassData * cl, QWidget * parent,
     setItemDelegateForColumn(3, m_comboBoxDelegate);
     if (visit) {
         for (index = 0; index < sup; index += 1) {
-            setItem(index, 0, new TableItem(this, TableItem::Never, cl->get_formalparam_type(index), TableItem::TableItemType));
-            setItem(index, 1, new TableItem(this, TableItem::Never, cl->get_formalparam_name(index), TableItem::TableItemType));
-            setItem(index, 2, new TableItem(this, TableItem::Never,
+            setItem(index, 0, new TableItem(TableItem::Never, cl->get_formalparam_type(index), TableItem::TableItemType));
+            setItem(index, 1, new TableItem(TableItem::Never, cl->get_formalparam_name(index), TableItem::TableItemType));
+            setItem(index, 2, new TableItem(TableItem::Never,
                                             cl->get_formalparam_default_value(index, !node_names.isEmpty()), TableItem::TableItemType));
-            setItem(index, 3, new TableItem(this, TableItem::Never,
+            setItem(index, 3, new TableItem(TableItem::Never,
                                             cl->get_formalparam_extends(index, !node_names.isEmpty()), TableItem::TableItemType));
         }
     }
@@ -1906,14 +1908,14 @@ FormalParamsTable::FormalParamsTable(ClassData * cl, QWidget * parent,
         for (index = 0; index < sup; index += 1) {
             setText(index, 0, cl->get_formalparam_type(index));
             setText(index, 1, cl->get_formalparam_name(index));
-            setItem(index, 2, new ComboItem(this, cl->get_formalparam_default_value(index, TRUE), types));
-            setItem(index, 3, new ComboItem(this, cl->get_formalparam_extends(index, TRUE), types));
+            setItem(index, 2, new ComboItem(cl->get_formalparam_default_value(index, TRUE), types));
+            setItem(index, 3, new ComboItem(cl->get_formalparam_extends(index, TRUE), types));
             setText(index, 4, QString());
         }
         setText(index, 0, "class");
         setText(index, 1, QString());
-        setItem(index, 2, new ComboItem(this, QString(), types));
-        setItem(index, 3, new ComboItem(this, QString(), types));
+        setItem(index, 2, new ComboItem(QString(), types));
+        setItem(index, 3, new ComboItem(QString(), types));
         setText(index, 4, QString());
     }
 
@@ -1967,35 +1969,35 @@ void FormalParamsTable::Reinitiliaze(ClassData *cl, QStringList &node_names, boo
         for ( index = 0; index < sup; index += 1) {
             setText(index, 0, cl->get_formalparam_type(index));
             setText(index, 1, cl->get_formalparam_name(index));
-            setItem(index, 2, new ComboItem(this, cl->get_formalparam_default_value(index, TRUE), types));
-            setItem(index, 3, new ComboItem(this, cl->get_formalparam_extends(index, TRUE), types));
+            setItem(index, 2, new ComboItem(cl->get_formalparam_default_value(index, TRUE), types));
+            setItem(index, 3, new ComboItem(cl->get_formalparam_extends(index, TRUE), types));
             setText(index, 4, QString());
         }
         setText(index, 0, "class");
         setText(index, 1, QString());
-        setItem(index, 2, new ComboItem(this, QString(), types));
-        setItem(index, 3, new ComboItem(this, QString(), types));
+        setItem(index, 2, new ComboItem(QString(), types));
+        setItem(index, 3, new ComboItem(QString(), types));
         setText(index, 4, QString());
     }
     else
     {
         setColumnCount(4);
         for (int index = 0; index < sup; index += 1) {
-            setItem(index, 0, new TableItem(this, TableItem::Never, cl->get_formalparam_type(index), TableItem::TableItemType));
-            setItem(index, 1, new TableItem(this, TableItem::Never, cl->get_formalparam_name(index), TableItem::TableItemType));
-            setItem(index, 2, new TableItem(this, TableItem::Never, cl->get_formalparam_default_value(index, !node_names.isEmpty()), TableItem::TableItemType));
-            setItem(index, 3, new TableItem(this, TableItem::Never, cl->get_formalparam_extends(index, !node_names.isEmpty()), TableItem::TableItemType));
+            setItem(index, 0, new TableItem(TableItem::Never, cl->get_formalparam_type(index), TableItem::TableItemType));
+            setItem(index, 1, new TableItem(TableItem::Never, cl->get_formalparam_name(index), TableItem::TableItemType));
+            setItem(index, 2, new TableItem(TableItem::Never, cl->get_formalparam_default_value(index, !node_names.isEmpty()), TableItem::TableItemType));
+            setItem(index, 3, new TableItem(TableItem::Never, cl->get_formalparam_extends(index, !node_names.isEmpty()), TableItem::TableItemType));
 
         }
 
 
         for (int index = 0; index < sup; index += 1) {
-            setItem(index, 0, new TableItem(this, TableItem::Never, cl->get_actualparam_name(index), TableItem::TableItemType));
+            setItem(index, 0, new TableItem(TableItem::Never, cl->get_actualparam_name(index), TableItem::TableItemType));
 
             if (!isWritable)
-                setItem(index, 1, new TableItem(this, TableItem::Never, cl->get_actualparam_value(index), TableItem::TableItemType));
+                setItem(index, 1, new TableItem(TableItem::Never, cl->get_actualparam_value(index), TableItem::TableItemType));
             else
-                setItem(index, 1, new ComboItem(this, cl->get_actualparam_value(index), types));
+                setItem(index, 1, new ComboItem(cl->get_actualparam_value(index), types));
         }
     }
     ENABLESORTINGMYTABLE;
@@ -2014,8 +2016,8 @@ void FormalParamsTable::activateNextCell()
             setRowCount(row + 1);
             setText(row, 0, "class");
             setText(row, 1, QString());
-            setItem(row, 2, new ComboItem(this, QString(), types));
-            setItem(row, 3, new ComboItem(this, QString(), types));
+            setItem(row, 2, new ComboItem(QString(), types));
+            setItem(row, 3, new ComboItem(QString(), types));
             setText(row, 4, QString());
         }
 
@@ -2106,8 +2108,8 @@ void FormalParamsTable::insert_row_before(int row)
     insertRow(row);
     setText(row, 0, "class");
     setText(row, 1, QString());
-    setItem(row, 2, new ComboItem(this, QString(), types));
-    setItem(row, 3, new ComboItem(this, QString(), types));
+    setItem(row, 2, new ComboItem(QString(), types));
+    setItem(row, 3, new ComboItem(QString(), types));
     setText(row, 4, QString());
     ENABLESORTINGMYTABLE
     blockSignals(false);
@@ -2120,8 +2122,8 @@ void FormalParamsTable::insert_row_after(int row)
     insertRow(row+1);
     setText(row + 1, 0, "class");
     setText(row + 1, 1, QString());
-    setItem(row + 1, 2, new ComboItem(this, QString(), types));
-    setItem(row + 1, 3, new ComboItem(this, QString(), types));
+    setItem(row + 1, 2, new ComboItem(QString(), types));
+    setItem(row + 1, 3, new ComboItem(QString(), types));
     setText(row + 1, 4, QString());
     ENABLESORTINGMYTABLE
     blockSignals(false);
@@ -2135,8 +2137,8 @@ void FormalParamsTable::delete_row(int row)
         // the alone line : empty it
         setText(0, 0, "class");
         setText(0, 1, QString());
-        setItem(0, 2, new ComboItem(this, QString(), types));
-        setItem(0, 3, new ComboItem(this, QString(), types));
+        setItem(0, 2, new ComboItem(QString(), types));
+        setItem(0, 3, new ComboItem(QString(), types));
     }
     else {
         for (index = row; index != n - 1; index += 1) {
@@ -2334,12 +2336,12 @@ ActualParamsTable::ActualParamsTable(ClassData * cl, QWidget * parent,
     setItemDelegateForColumn(1, m_comboBoxDelegate);
 
     for (index = 0; index < sup; index += 1) {
-        setItem(index, 0, new TableItem(this, TableItem::Never, cl->get_actualparam_name(index), TableItem::TableItemType));
+        setItem(index, 0, new TableItem(TableItem::Never, cl->get_actualparam_name(index), TableItem::TableItemType));
 
         if (!isWritable)
-            setItem(index, 1, new TableItem(this, TableItem::Never, cl->get_actualparam_value(index), TableItem::TableItemType));
+            setItem(index, 1, new TableItem(TableItem::Never, cl->get_actualparam_value(index), TableItem::TableItemType));
         else
-            setItem(index, 1, new ComboItem(this, cl->get_actualparam_value(index), types));
+            setItem(index, 1, new ComboItem(cl->get_actualparam_value(index), types));
     }
     adjustColumn(0);
     setColumnStretchable(0, FALSE);
@@ -2358,12 +2360,12 @@ void ActualParamsTable::Reinitiliaze(ClassData * cl, QStringList & node_names, b
     types = node_names;
     setRowCount(sup);
     for (int index = 0; index < sup; index += 1) {
-        setItem(index, 0, new TableItem(this, TableItem::Never, cl->get_actualparam_name(index), TableItem::TableItemType));
+        setItem(index, 0, new TableItem(TableItem::Never, cl->get_actualparam_name(index), TableItem::TableItemType));
 
         if (!isWritable)
-            setItem(index, 1, new TableItem(this, TableItem::Never, cl->get_actualparam_value(index), TableItem::TableItemType));
+            setItem(index, 1, new TableItem(TableItem::Never, cl->get_actualparam_value(index), TableItem::TableItemType));
         else
-            setItem(index, 1, new ComboItem(this, cl->get_actualparam_value(index), types));
+            setItem(index, 1, new ComboItem(cl->get_actualparam_value(index), types));
     }
     types = node_names;
     blockSignals(false);
@@ -2485,10 +2487,10 @@ ApplicableOnTable::ApplicableOnTable(QWidget * parent, QString s, bool visit)
 
     for (it = available.begin(); it != available.end(); ++it) {
         setItem(row, 0,
-                new TableItem(this, TableItem::Never,
+                new TableItem(TableItem::Never,
                               tr(ProfiledStereotypes::pretty(*it).toLatin1().constData()), TableItem::TableItemType));
         setItem(row, 1,
-                new TableItem(this, TableItem::Never,
+                new TableItem(TableItem::Never,
                               (l.indexOf(*it) == -1) ? empty : yes, TableItem::TableItemType));
         row += 1;
     }

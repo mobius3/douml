@@ -128,7 +128,7 @@ const char * UmlOperation::generate_body(QTextStream & f,
         unsigned id = get_id();
 
         sprintf(s_id, "%08X", id);
-        body = bodies.value((long) id);
+        body = bodies.value(id);
     }
 
     if (body == 0) {
@@ -426,7 +426,7 @@ static char * read_file(const char * filename)
 
     if (fp.open(QIODevice::ReadOnly)) {
         QFileInfo fi(fp);
-        int size = fi.size();
+        qint64 size = fi.size();
         char * s = new char[size + 1];
 
         if (fp.read(s, size) == -1) {
@@ -498,7 +498,7 @@ static void read_bodies(const char * path, QHash<int, char*> & bodies)
 
             *p2 = 0;
 
-            int len = p2 - body + 1;
+            ptrdiff_t len = p2 - body + 1;
             char * b = new char[len];
 
             memcpy(b, body, len);

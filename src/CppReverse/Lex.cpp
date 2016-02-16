@@ -26,7 +26,7 @@
 // *************************************************************************
 
 // lexer written by hand rather than using [f]lex as usual,
-// BOUML is also my first development including a source code
+// DOUML is also my first development including a source code
 // reader where I do not use yacc/bison, to see how it is
 // without ... (comment by Bruno)
 
@@ -64,7 +64,7 @@ void Lex::defines(const WrapperStr & f)
     }
 
     char l[1024];
-    int n;
+    qint64 n;
 
     while ((n = in.readLine(l, sizeof(l) - 1)) != -1) {
         if (n != 0) {
@@ -88,7 +88,7 @@ void Lex::defines(const WrapperStr & f)
                 v = strdup(p + 1);
             }
             else
-                v = "";
+                v = strdup("");
 
             _defines.insert(strdup(l), v);
         }
@@ -147,13 +147,13 @@ bool Lex::open(const QString & f)
     _context.description = "";
 
     QFile in(f);
-    unsigned sz;
+    size_t sz;
 
     if (!in.open(QIODevice::ReadOnly) ||
         ((_buffer = new char[(sz = in.size()) + 1]) == 0))
         return FALSE;
 
-    unsigned offset = 0;
+    size_t offset = 0;
 
     do offset += in.read(_buffer + offset, sz - offset);
 
@@ -986,7 +986,7 @@ char Lex::read_word_bis(bool set_context, bool in_expr)
                 while (*p && (Separators.find(*p) == -1))
                     p += 1;
 
-                int n = p - _context.pointer;
+                ptrdiff_t n = p - _context.pointer;
 
                 if (n == 8) {
                     if (!strncmp(_context.pointer, "template", 8))
@@ -1178,7 +1178,7 @@ bool Lex::identifierp(const char * s, bool strictp)
                 return FALSE;
         }
         else {
-            int len = strlen(s);
+            size_t len = strlen(s);
 
             if ((len > 3) &&
                 (s[len - 1] == '*') &&
@@ -1217,7 +1217,7 @@ bool Lex::star(const char * s)
     if (*s == '*')
         return TRUE;
 
-    int len = strlen(s);
+    size_t len = strlen(s);
 
     return ((len > 3) &&
             (s[len - 1] == '*') &&

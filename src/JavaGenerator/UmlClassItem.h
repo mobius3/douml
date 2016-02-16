@@ -45,6 +45,7 @@ public:
         : UmlBaseClassItem(id, n) {
     };
 
+    using UmlBaseClassItem::generate;
     virtual void generate(QTextStream & f, const WrapperStr & cl_stereotype,
                           WrapperStr indent) = 0;
     virtual void generate_enum_pattern_item(QTextStream & f, int & current_value,

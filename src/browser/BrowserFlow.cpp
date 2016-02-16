@@ -94,7 +94,7 @@ BrowserFlow::~BrowserFlow()
         delete def;
 }
 
-BrowserNode * BrowserFlow::duplicate(BrowserNode * p, QString)
+BrowserNode * BrowserFlow::duplicate(BrowserNode * p, const QString &)
 {
     BrowserFlow * result = new BrowserFlow(this, p);
 
@@ -301,7 +301,7 @@ void BrowserFlow::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserFlow::apply_shortcut(QString s)
+void BrowserFlow::apply_shortcut(const QString & s)
 {
     int choice = -1;
 

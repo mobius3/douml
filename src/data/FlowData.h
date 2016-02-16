@@ -65,16 +65,16 @@ protected:
     FlowDef java;
 
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-                              const QString & comment);
-    virtual void send_cpp_def(ToolCom * com);
-    virtual void send_java_def(ToolCom * com);
+                              const QString & comment) override;
+    virtual void send_cpp_def(ToolCom * com) override;
+    virtual void send_java_def(ToolCom * com) override;
 
 public:
     FlowData();
     FlowData(const BrowserFlow * model, BrowserFlow * r);
     virtual ~FlowData();
 
-    virtual void delete_it();
+    virtual void delete_it() override;
 
     void set_start_end(BrowserFlow * s, BrowserNode * e);
     void edit();
@@ -90,7 +90,7 @@ public:
     QString transformation(DrawingLanguage) const;
 
     virtual bool tool_cmd(ToolCom * com, const char * args,
-                          BrowserNode * bn, const QString & comment);
+                          BrowserNode * bn, const QString & comment) override;
 
     void save(QTextStream &, QString & warning) const;
     static FlowData * read(char *& , char *& k);

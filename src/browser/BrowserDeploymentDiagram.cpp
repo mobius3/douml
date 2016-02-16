@@ -58,7 +58,7 @@ QList<BrowserDeploymentDiagram *> BrowserDeploymentDiagram::imported;
 QList<int> BrowserDeploymentDiagram::imported_ids;
 QStringList BrowserDeploymentDiagram::its_default_stereotypes;	// unicode
 
-BrowserDeploymentDiagram::BrowserDeploymentDiagram(QString s, BrowserNode * p, int id)
+BrowserDeploymentDiagram::BrowserDeploymentDiagram(const QString & s, BrowserNode * p, int id)
     : BrowserDiagram(s, p, id), window(0), used_settings(0)
 {
     make();
@@ -142,7 +142,7 @@ BrowserDeploymentDiagram * BrowserDeploymentDiagram::add_deployment_diagram(Brow
         return 0;
 }
 
-void BrowserDeploymentDiagram::set_name(QString s)
+void BrowserDeploymentDiagram::set_name(const QString & s)
 {
     BrowserDiagram::set_name(s);
 
@@ -182,7 +182,7 @@ void BrowserDeploymentDiagram::delete_it()
     BrowserNode::delete_it();
 }
 
-BrowserNode * BrowserDeploymentDiagram::duplicate(BrowserNode * p, QString name)
+BrowserNode * BrowserDeploymentDiagram::duplicate(BrowserNode * p, const QString & name)
 {
     BrowserDeploymentDiagram * result = new BrowserDeploymentDiagram(this, p);
 
@@ -314,7 +314,7 @@ void BrowserDeploymentDiagram::exec_menu_choice(int rank)
     package_modified();
 }
 
-void BrowserDeploymentDiagram::apply_shortcut(QString s)
+void BrowserDeploymentDiagram::apply_shortcut(const QString & s)
 {
     int choice = -1;
 
