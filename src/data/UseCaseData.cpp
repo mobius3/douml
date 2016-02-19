@@ -128,7 +128,7 @@ void UseCaseData::save(QTextStream & st, QString & warning) const
 void UseCaseData::read(char *& st, char *& k)
 {
     if (!strcmp(k, "extension_points")) {
-        extension_points = toUnicode(read_string(st));
+        extension_points = read_string(st);
         k = read_keyword(st);
     }
 

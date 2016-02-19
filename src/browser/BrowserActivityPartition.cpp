@@ -166,7 +166,7 @@ BrowserActivityPartition::add_activitypartition(BrowserNode * future_parent)
 
 BrowserActivityPartition *
 BrowserActivityPartition::add_activitypartition(BrowserNode * future_parent,
-                                                const char * name)
+                                                QString name)
 {
     BrowserActivityPartition * r =
             new BrowserActivityPartition(name, future_parent);

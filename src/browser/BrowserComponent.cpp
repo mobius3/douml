@@ -254,7 +254,7 @@ static bool select_associated(int rank, int bias,
         return FALSE;
 
     if (rank == bias) {
-        ClassListDialog dialog( QObject::tr("Choose class").toLatin1().constData(), l);
+        ClassListDialog dialog( QObject::tr("Choose class"), l);
 
         dialog.raise();
 
@@ -309,7 +309,7 @@ Note that you can undelete it after"));
         MenuFactory::addItem(m, QObject::tr("Referenced by"), 3,
                        QObject::tr("to know who reference the <i>component</i> \
 through a relation"));
-        mark_menu(m, QObject::tr("the component").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the component"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&

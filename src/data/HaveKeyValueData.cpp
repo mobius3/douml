@@ -46,43 +46,43 @@ HaveKeyValueData::~HaveKeyValueData()
         delete [] keyvalues;
 }
 
-const char * HaveKeyValueData::get_key(int rank) const
+QString HaveKeyValueData::get_key(int rank) const
 {
     return keyvalues[rank].get_key();
 }
 
-void HaveKeyValueData::set_key(int rank, const char * k)
+void HaveKeyValueData::set_key(int rank, QString k)
 {
     keyvalues[rank].set_key(k);
 }
 
-const char * HaveKeyValueData::get_value(int rank) const
+QString HaveKeyValueData::get_value(int rank) const
 {
     return keyvalues[rank].get_value();
 }
 
-const char * HaveKeyValueData::get_value(const char * k) const
+QString HaveKeyValueData::get_value(QString k) const
 {
     unsigned index;
 
     for (index = 0; index != nkeyvalues; index += 1)
-        if (strcmp(keyvalues[index].get_key(), k) == 0)
+        if (keyvalues[index].get_key() == k)
             return keyvalues[index].get_value();
 
     return 0;
 }
 
-void HaveKeyValueData::set_value(int rank, const char * v)
+void HaveKeyValueData::set_value(int rank, QString v)
 {
     keyvalues[rank].set_value(v);
 }
 
-int HaveKeyValueData::has_key(const char * v)
+int HaveKeyValueData::has_key(QString v)
 {
     unsigned index;
 
     for (index = 0; index != nkeyvalues; index += 1)
-        if (strcmp(keyvalues[index].get_key(), v) == 0)
+        if (keyvalues[index].get_key() == v)
             return index;
 
     return -1;
@@ -95,12 +95,12 @@ void HaveKeyValueData::remove_key_value(unsigned index)
     keyvalues[index].set_value(keyvalues[nkeyvalues].get_value());
 }
 
-void HaveKeyValueData::remove_key_value(const char * k)
+void HaveKeyValueData::remove_key_value(QString k)
 {
     unsigned index;
 
     for (index = 0; index != nkeyvalues; index += 1) {
-        if (strcmp(keyvalues[index].get_key(), k) == 0) {
+        if (keyvalues[index].get_key() == k) {
             nkeyvalues -= 1;
             keyvalues[index].set_key(keyvalues[nkeyvalues].get_key());
             keyvalues[index].set_value(keyvalues[nkeyvalues].get_value());
@@ -151,12 +151,12 @@ void HaveKeyValueData::send_def(ToolCom * com) const
     }
 }
 
-void HaveKeyValueData::set_value(const char * k, const char * v)
+void HaveKeyValueData::set_value(QString k, QString v)
 {
     unsigned index;
 
     for (index = 0; index != nkeyvalues; index += 1) {
-        if (strcmp(keyvalues[index].get_key(), k) == 0) {
+        if (keyvalues[index].get_key() == k) {
             keyvalues[index].set_value(v);
             return;
         }

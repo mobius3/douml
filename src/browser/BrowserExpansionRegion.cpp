@@ -164,12 +164,12 @@ BrowserExpansionRegion::add_expansionregion(BrowserNode * future_parent)
             UmlExpansionRegion, TRUE, TRUE))
 
            ? 0
-           : add_expansionregion(future_parent, name.toLatin1().constData());
+           : add_expansionregion(future_parent, name);
 }
 
 BrowserExpansionRegion *
 BrowserExpansionRegion::add_expansionregion(BrowserNode * future_parent,
-        const char * name)
+        QString name)
 {
     BrowserExpansionRegion * r = new BrowserExpansionRegion(name, future_parent);
 
@@ -200,7 +200,7 @@ BrowserExpansionRegion::get_expansionregion(BrowserNode * parent)
 
     return (old != 0)
            ? ((BrowserExpansionRegion *) old)
-           : add_expansionregion(parent, name.toLatin1().constData());
+           : add_expansionregion(parent, name);
 }
 
 void BrowserExpansionRegion::menu()
@@ -243,7 +243,7 @@ Note that you can undelete it after"));
 
         MenuFactory::addItem(m, QObject::tr("Referenced by"), 3,
                        QObject::tr("to know who reference the <i>region</i>"));
-        mark_menu(m, QObject::tr("the expansion region").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the expansion region"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&

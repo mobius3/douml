@@ -154,8 +154,8 @@ public:
 
     void copy_in_clipboard(bool optimal, bool temporary);
     bool save_pict(const char * f, bool optimal, bool temporary);
-    bool save_in(const char * f, bool optimal, bool temporary);
-    bool svg_save_in(const char * f, bool optimal, bool temporary);
+    bool save_in(QString f, bool optimal, bool temporary);
+    bool svg_save_in(QString f, bool optimal, bool temporary);
 
     void renumber(int ident);
 

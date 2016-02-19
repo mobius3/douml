@@ -52,7 +52,7 @@ ParameterData::ParameterData(ParameterData * model, BrowserNode * bn)
 
 void ParameterData::edit()
 {
-    setObjectName(browser_node->get_name().toLatin1().constData());
+    setObjectName(browser_node->get_name());
     (new ParameterDialog(this))->show();
 }
 

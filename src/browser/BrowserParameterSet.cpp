@@ -172,7 +172,7 @@ Note that you can undelete it after"));
 
         MenuFactory::addItem(m, QObject::tr("Referenced by"), 4,
                        QObject::tr("to know who reference the <i>parameter set</i>"));
-        mark_menu(m, QObject::tr("the parameter set").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the parameter set"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&

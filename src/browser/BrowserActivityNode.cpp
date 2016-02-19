@@ -370,7 +370,7 @@ Note that you can undelete it after").arg(s));
         MenuFactory::addItem(m,  QObject::tr("Referenced by"), 5,
                        QObject::tr("to know who reference the <i>%1</i> \
 through a flow").arg(s));
-        mark_menu(m, QObject::tr("the %1").arg(s).toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the %1").arg(s), 90);
         ProfiledStereotypes::menu(m, this, 99990);;
 
         if ((edition_number == 0) &&

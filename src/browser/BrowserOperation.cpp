@@ -260,7 +260,7 @@ void BrowserOperation::AddConstructorInitalizer()
     ciDialog.resize(800, 400);
     if(ciDialog.exec() == QDialog::Accepted)
     {
-        this->set_value("constructor-initializer", ciDialog.ui->edInitializer->toPlainText().toLatin1().constData());
+        this->set_value("constructor-initializer", ciDialog.ui->edInitializer->toPlainText());
         this->modified();
         this->get_data()->get_browser_node()->modified();
         this->get_data()->get_browser_node()->package_modified();
@@ -709,7 +709,7 @@ void BrowserOperation::menu()
             }
         }
 
-        mark_menu(m, QObject::tr("the operation").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the operation"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
@@ -1014,7 +1014,7 @@ QString BrowserOperation::python_init_self(BrowserNode * cl)
 
     for (child = cl->firstChild(); child; child = child->nextSibling()) {
         if ((((BrowserNode *) child)->get_type() == UmlOperation) &&
-                !strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "__init__")) {
+                ((BrowserNode *) child)->get_name() == "__init__") {
             return (((BrowserOperation *) child)->def->get_n_params() != 0)
                     ? ((BrowserOperation *) child)->def->get_param_name(0)
                     : "self";

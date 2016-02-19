@@ -365,7 +365,7 @@ void BrowserState::menu()
                                          MenuFactory::addItem(m, QObject::tr("Referenced by"), 10,
                                                               QObject::tr("to know who reference the <i>state</i> \
                                                                           through a transition or a reference"));
-                                                                          mark_menu(m, QObject::tr("the %1").arg(what).toLatin1().constData(), 90);
+                                                                          mark_menu(m, QObject::tr("the %1").arg(what), 90);
                                                               ProfiledStereotypes::menu(m, this, 99990);
 
                                          if ((edition_number == 0) &&

@@ -181,7 +181,7 @@ a double click with the left mouse button does the same thing"));
 Note that you can undelete it after"));
         }
 
-        mark_menu(m, QObject::tr("the region").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the region"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
@@ -296,7 +296,7 @@ void BrowserRegion::apply_shortcut(const QString & s)
 void BrowserRegion::open(bool)
 {
     if (!is_edited)
-        edit(QObject::tr("Region").toLatin1().constData(), its_default_stereotypes);
+        edit(QObject::tr("Region"), its_default_stereotypes);
 }
 
 void BrowserRegion::modified()

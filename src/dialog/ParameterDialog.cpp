@@ -497,9 +497,9 @@ void ParameterDialog::accept()
         msg_critical(tr("Error"), s + tr("\n\nillegal name or already used"));
     else {
         // check consistency
-        UmlParamDirection dir = direction(eddir->currentText().toLatin1().constData());
+        UmlParamDirection dir = direction(eddir->currentText());
         bool exception = exception_rb->isChecked();
-        UmlParamEffect effect = ::effect(edeffect->currentText().toLatin1().constData());
+        UmlParamEffect effect = ::effect(edeffect->currentText());
         QString err;
 
         if ((dir == UmlIn) && exception)

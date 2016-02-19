@@ -257,25 +257,25 @@ extern const char * stringify(UmlParamEffect);
 extern const char * stringify(UmlActionKind);
 extern const char * stringify(UmlExpansionKind);
 extern const char * stringify(UmlOrderingKind);
-extern UmlCode arrow_type(const char *);
+extern UmlCode arrow_type(QString);
 extern bool IsaSimpleRelation(UmlCode);
-extern UmlVisibility visibility(const char * s);
-extern UmlCode relation_type(const char * s,
+extern UmlVisibility visibility(QString s);
+extern UmlCode relation_type(QString s,
                              bool simple_relation = 0);
-extern UmlParamDirection direction(const char * s);
-extern UmlParamEffect effect(const char * s);
-extern Uml3States state(const char * s);
-extern UmlColor color(const char * s);
-extern UmlFont font(const char * s);
-extern ClassDrawingMode drawing_mode(const char * s);
-extern DrawingLanguage drawing_language(const char * s);
-extern ShowContextMode context_mode(const char * s);
-extern CanvasFormat canvas_format(const char * s);
-extern UmlCode pseudo_state_kind(const char * s);
-extern LineGeometry line_geometry(const char * s);
-extern UmlCode activity_node_kind(const char * s);
-extern UmlActionKind activity_action_kind(const char * s);
-extern UmlExpansionKind expansion_mode_kind(const char * s);
-extern UmlOrderingKind ordering(const char * s);
+extern UmlParamDirection direction(QString s);
+extern UmlParamEffect effect(QString s);
+extern Uml3States state(QString s);
+extern UmlColor color(QString s);
+extern UmlFont font(QString s);
+extern ClassDrawingMode drawing_mode(QString s);
+extern DrawingLanguage drawing_language(QString s);
+extern ShowContextMode context_mode(QString s);
+extern CanvasFormat canvas_format(QString s);
+extern UmlCode pseudo_state_kind(QString s);
+extern LineGeometry line_geometry(QString s);
+extern UmlCode activity_node_kind(QString s);
+extern UmlActionKind activity_action_kind(QString s);
+extern UmlExpansionKind expansion_mode_kind(QString s);
+extern UmlOrderingKind ordering(QString s);
 
 #endif

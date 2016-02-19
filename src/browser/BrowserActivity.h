@@ -70,7 +70,7 @@ public:
                                     const QString & name = QString());
     static BrowserNodeList & instances(BrowserNodeList &, bool sort);
     static BrowserActivity * add_activity(BrowserNode * future_parent);
-    static BrowserActivity * add_activity(BrowserNode * future_parent, const char * name);
+    static BrowserActivity * add_activity(BrowserNode * future_parent, QString name);
     static BrowserActivity * get_activity(BrowserNode * parent);
     QList<BrowserParameter *> get_params() const;
     void add_activity_diagram();

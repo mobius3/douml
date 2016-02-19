@@ -3404,7 +3404,7 @@ bool OperationDialog::SaveData(OperationData *oper)
         if (cpp_undef)
         {
             oper->cpp_decl = QString();
-            oper->cpp_def.assign(QString().toLatin1().constData(), TRUE);
+            oper->cpp_def.assign(QString(), TRUE);
 
             if (!oldcppbody.isEmpty())
                 oper->new_body(QString(), 'c');
@@ -3441,7 +3441,7 @@ bool OperationDialog::SaveData(OperationData *oper)
             oper->cpp_override = cppTab->ui->cbCppOverride->isChecked();
             oper->cpp_final = cppTab->ui->cbCppFinal->isChecked();
             oper->cpp_decl = cppTab->ui->edCppDeclProto->text();
-            oper->cpp_def.assign(cppTab->ui->edCppDefProto->text().toLatin1().constData(),
+            oper->cpp_def.assign(cppTab->ui->edCppDefProto->text(),
                                  abstract_cb->isChecked() ||
                                  (cppTab->ui->edCppDefProto->text().indexOf("${body}") != -1));
         }
@@ -3475,7 +3475,7 @@ bool OperationDialog::SaveData(OperationData *oper)
 
             oper->java_final = javafinal_cb->isChecked();
             oper->java_synchronized = synchronized_cb->isChecked();
-            oper->java_def.assign(edjavadef->text().toLatin1().constData(),
+            oper->java_def.assign(edjavadef->text(),
                                   abstract_cb->isChecked() || interf ||
                                   (edjavadef->text().indexOf("${body}") != -1));
 
@@ -3510,7 +3510,7 @@ bool OperationDialog::SaveData(OperationData *oper)
                 oper->new_body(QString(), 'p');
 
             oper->php_final = phpfinal_cb->isChecked();
-            oper->php_def.assign(edphpdef->text().toLatin1().constData(),
+            oper->php_def.assign(edphpdef->text(),
                                  abstract_cb->isChecked() || interf ||
                                  (edphpdef->text().indexOf("${body}") != -1));
         }
@@ -3539,7 +3539,7 @@ bool OperationDialog::SaveData(OperationData *oper)
             else if (!oldpythonbody.isEmpty())
                 oper->new_body(QString(), 'y');
 
-            oper->python_def.assign(edpythondef->text().toLatin1().constData(),
+            oper->python_def.assign(edpythondef->text(),
                                     // rmq : abstractmethod have body !
                                     (edpythondef->text().indexOf("${body}") != -1));
 

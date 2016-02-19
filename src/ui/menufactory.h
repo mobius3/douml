@@ -57,12 +57,7 @@ public:
 
     static void addItem(
         QMenu   &   menu,
-        const char * const name,
-        const int         id,
-        const char * const whatsThis = NULL);
-    static void addItem(
-        QMenu   &   menu,
-        QString const name,
+        const QString name,
         const int         id,
         QString const whatsThis = QString());
 

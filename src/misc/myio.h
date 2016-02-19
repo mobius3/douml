@@ -110,7 +110,7 @@ extern int indent();
 extern void indent0();
 
 extern bool at_end(char *& st);
-extern char * read_string(char *& st);
+extern QString read_string(char *& st);
 extern char * read_keyword(char *& st);
 extern char * read_keyword(char *& st, const char * expected);
 extern char * read_keyword(char *& st, const char * expected1,
@@ -172,7 +172,7 @@ extern void load(int &, QBuffer &);
 
 // svg
 
-extern bool start_svg(const char * f, int w, int h);
+extern bool start_svg(QString f, int w, int h);
 extern void end_svg();
 extern FILE * svg();
 extern int svg_height();

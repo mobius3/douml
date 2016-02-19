@@ -242,7 +242,7 @@ void BrowserObjectDiagram::menu()
             }
         }
 
-        mark_menu(m, QObject::tr("the object diagram").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the object diagram"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&

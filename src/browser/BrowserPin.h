@@ -81,7 +81,7 @@ public:
     static BrowserPin * read(char *& , char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
 
-    static void new_one(BrowserNode * future_parent, const char * name, const PinParamData & pd);
+    static void new_one(BrowserNode * future_parent, QString name, const PinParamData & pd);
     static BrowserPin * new_one(BrowserNode * future_parent, const char * name);
     static BrowserPin * add_pin(BrowserPin * pin, BrowserNode * future_parent);
     virtual BasicData * add_relation(UmlCode, BrowserNode * end);

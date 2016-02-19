@@ -158,9 +158,9 @@ public:
     friend QTextStream & operator<<(QTextStream & ds, const WrapperStr &str);
     friend QDebug operator<<(QDebug dbg, const WrapperStr& str);
 
-    void assign(const char * c, int len) {
+    void assign(QString c, int len) {
         Q_UNUSED(len);
-        this->wrappedString = QString(QLatin1String(c));
+        this->wrappedString = c;
         this->byteArray = this->wrappedString.toLatin1();
     }
 

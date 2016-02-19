@@ -185,7 +185,7 @@ BrowserNode * BrowserSeqDiagram::duplicate(BrowserNode * p, const QString & name
 {
     BrowserSeqDiagram * result = new BrowserSeqDiagram(this, p);
 
-    result->set_name((name.isEmpty()) ? get_name().toLatin1().constData() : name.toLatin1().constData());
+    result->set_name((name.isEmpty()) ? get_name() : name);
     result->update_stereotype();
 
     return result;
@@ -252,7 +252,7 @@ void BrowserSeqDiagram::menu()
             }
         }
 
-        mark_menu(m, QObject::tr("the sequence diagram").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the sequence diagram"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
@@ -279,7 +279,7 @@ void BrowserSeqDiagram::exec_menu_choice(int rank)
         break;
 
     case 1:
-        edit(QObject::tr("Sequence diagram").toLatin1().constData(), its_default_stereotypes);
+        edit(QObject::tr("Sequence diagram"), its_default_stereotypes);
         return;
 
     case 2:
@@ -703,7 +703,7 @@ BrowserSeqDiagram * BrowserSeqDiagram::read(char *& st, char * k,
         }
         else {
             r->set_parent(parent);
-            r->set_name(s.toLatin1().constData());
+            r->set_name(s);
         }
 
         r->is_defined = TRUE;

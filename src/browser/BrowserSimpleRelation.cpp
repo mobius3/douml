@@ -72,7 +72,7 @@ BrowserSimpleRelation::BrowserSimpleRelation(BrowserNode * p, SimpleRelationData
 }
 
 BrowserSimpleRelation::BrowserSimpleRelation(const BrowserSimpleRelation * model,
-        BrowserNode * p)
+                                             BrowserNode * p)
     : BrowserNode(model->def->definition(FALSE, FALSE), p),
       Labeled<BrowserSimpleRelation>(all, 0)
 {
@@ -115,10 +115,10 @@ bool BrowserSimpleRelation::undelete(bool, QString & warning, QString & renamed)
         return FALSE;
 
     if (def->get_start_node()->deletedp() ||
-        def->get_end_node()->deletedp()) {
+            def->get_end_node()->deletedp()) {
         warning += QString("<li><b>") + quote(def->definition(FALSE, FALSE)) + "</b> " + QObject::tr("from") + " <b>" +
-                   def->get_start_node()->full_name() +
-                   "</b> " + QObject::tr("to") + " <b>" + def->get_end_node()->full_name() + "</b>\n";
+                def->get_start_node()->full_name() +
+                "</b> " + QObject::tr("to") + " <b>" + def->get_end_node()->full_name() + "</b>\n";
         return FALSE;
     }
     else {
@@ -128,9 +128,9 @@ bool BrowserSimpleRelation::undelete(bool, QString & warning, QString & renamed)
             // use case
             if (!def->get_start_node()->check_inherit(def->get_end_node()).isEmpty()) {
                 warning += QString("<li><b>") + quote(def->definition(FALSE, FALSE)) + "</b> "
-                           + QObject::tr(QString(QString("because <b>%1</b> cannot (or already) inherit on <b>%2</b>")
-.arg(def->get_start_node()->full_name()).arg(def->get_end_node()->full_name())
-                           + "\n").toLatin1().constData());
+                        + QObject::tr("because <b>%1</b> cannot (or already) inherit on <b>%2</b>")
+                                              .arg(def->get_start_node()->full_name()).arg(def->get_end_node()->full_name())
+                                              + "\n";
                 return FALSE;
             }
 
@@ -168,18 +168,18 @@ void BrowserSimpleRelation::referenced_by(QList<BrowserNode *> & l, bool ondelet
 }
 
 void BrowserSimpleRelation::compute_referenced_by(QList<BrowserNode *> & l,
-        BrowserNode * target)
+                                                  BrowserNode * target)
 {
     IdIterator<BrowserSimpleRelation> it(all);
 
     while (it.hasNext()) {
         it.next();
         if(it.value()) {
-        if (!it.value()->deletedp() &&
-            (it.value()->def->get_end_node() == target))
-            l.append(it.value());
+            if (!it.value()->deletedp() &&
+                    (it.value()->def->get_end_node() == target))
+                l.append(it.value());
 
-}
+        }
     }
 }
 
@@ -208,7 +208,7 @@ void BrowserSimpleRelation::update_stereotype(bool)
 {
     if (def != 0) {
         QString n = def->definition(FALSE, FALSE) + " " +
-                    def->get_end_node()->get_name();
+                def->get_end_node()->get_name();
         const char * stereotype = def->get_stereotype();
 
         if (show_stereotypes && stereotype[0]) {
@@ -244,29 +244,29 @@ void BrowserSimpleRelation::menu()
     if (!deletedp()) {
         if (!in_edition()) {
             MenuFactory::addItem(m, QObject::tr("Edit"), 0,
-                           QObject::tr("to edit the <i>relation</i>, \
-a double click with the left mouse button does the same thing"));
+                                 QObject::tr("to edit the <i>relation</i>, \
+                                             a double click with the left mouse button does the same thing"));
 
-            if (!is_read_only && (edition_number == 0)) {
-                MenuFactory::addItem(m, QObject::tr("Delete"), 2,
-                               QObject::tr("to delete the <i>relation</i>. \
-Note that you can undelete it after"));
-            }
+                                             if (!is_read_only && (edition_number == 0)) {
+                                                 MenuFactory::addItem(m, QObject::tr("Delete"), 2,
+                                                 QObject::tr("to delete the <i>relation</i>. \
+                                                 Note that you can undelete it after"));
+                                             }
 
-            m.addSeparator();
+                                             m.addSeparator();
         }
 
         MenuFactory::addItem(m, QObject::tr("Referenced by"), 8,
-                       QObject::tr("to know who reference the <i>relation</i>"));
+                             QObject::tr("to know who reference the <i>relation</i>"));
 
         MenuFactory::addItem(m, QString(QObject::tr("select ")) + def->get_end_node()->get_name(),
-                                    7,
-                       QObject::tr("to select the destination"));
-        mark_menu(m, QObject::tr("the relation").toLatin1().constData(), 90);
+                             7,
+                             QObject::tr("to select the destination"));
+        mark_menu(m, QObject::tr("the relation"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0)
-            && Tool::menu_insert(&toolm, get_type(), 100)) {
+                && Tool::menu_insert(&toolm, get_type(), 100)) {
             m.addSeparator();
             toolm.setTitle( QObject::tr("Tool"));
             m.addMenu(&toolm);
@@ -274,17 +274,17 @@ Note that you can undelete it after"));
     }
     else if (!is_read_only && (edition_number == 0)) {
         MenuFactory::addItem(m, QObject::tr("Undelete"), 3,
-                       QObject::tr("undelete the <i>relation</i> \
-(except if the other side is also deleted)"));
+                             QObject::tr("undelete the <i>relation</i> \
+                                         (except if the other side is also deleted)"));
 
-        if (def->get_start_node()->deletedp() ||
-            def->get_end_node()->deletedp())
+                                         if (def->get_start_node()->deletedp() ||
+                                             def->get_end_node()->deletedp())
         {
-                                       QAction *act = MenuFactory::findAction(m, 3);
-                                       if(act)
-                                        act->setEnabled(false);
-            //m.setItemEnabled(3, FALSE);
-                                   }
+                                             QAction *act = MenuFactory::findAction(m, 3);
+                                             if(act)
+                                             act->setEnabled(false);
+                                             //m.setItemEnabled(3, FALSE);
+                                         }
     }
 
     QAction *resultAction = m.exec(QCursor::pos());
@@ -407,7 +407,7 @@ QString BrowserSimpleRelation::full_name(bool rev, bool) const
 
 void BrowserSimpleRelation::write_id(ToolCom * com)
 {
-    com->write_id(this, UmlSimpleRelations - UmlRelations, name.toLatin1().constData());
+    com->write_id(this, UmlSimpleRelations - UmlRelations, name);
 }
 
 bool BrowserSimpleRelation::tool_cmd(ToolCom * com, const char * args)
@@ -427,7 +427,7 @@ void BrowserSimpleRelation::DropAfterEvent(QDropEvent * e, BrowserNode * after)
 QString BrowserSimpleRelation::drag_key() const
 {
     return QString::number(UmlSimpleRelations)
-           + "#" + QString::number((unsigned long) parent());
+            + "#" + QString::number((unsigned long) parent());
 }
 
 QString BrowserSimpleRelation::drag_postfix() const
@@ -438,7 +438,7 @@ QString BrowserSimpleRelation::drag_postfix() const
 QString BrowserSimpleRelation::drag_key(BrowserNode * p)
 {
     return QString::number(UmlSimpleRelations)
-           + "#" + QString::number((unsigned long) p);
+            + "#" + QString::number((unsigned long) p);
 }
 
 void BrowserSimpleRelation::save(QTextStream & st, bool ref,
@@ -473,8 +473,8 @@ BrowserSimpleRelation * BrowserSimpleRelation::read_ref(char *& st)
     BrowserSimpleRelation * result = all[id];
 
     return (result == 0)
-           ? new BrowserSimpleRelation(id)
-           : result;
+            ? new BrowserSimpleRelation(id)
+            : result;
 }
 
 BrowserSimpleRelation *
@@ -486,8 +486,8 @@ BrowserSimpleRelation::read(char *& st, char * k,
         BrowserSimpleRelation * result = all[id];
 
         return (result == 0)
-               ? new BrowserSimpleRelation(id)
-               : result;
+                ? new BrowserSimpleRelation(id)
+                : result;
     }
     else if (!strcmp(k, "simplerelation")) {
         int id = read_id(st);
@@ -518,7 +518,7 @@ BrowserSimpleRelation::read(char *& st, char * k,
         result->is_defined = TRUE;
 
         result->is_read_only = !parent->is_writable() ||
-                               ((user_id() != 0) && result->is_api_base());
+                ((user_id() != 0) && result->is_api_base());
 
         k = read_keyword(st);
 
@@ -541,8 +541,8 @@ BrowserNode * BrowserSimpleRelation::get_it(const char * k, int id)
 }
 
 void BrowserSimpleRelation::get_relating(BrowserNode * elt, QHash<BrowserNode *, BrowserNode *> &d,
-        BrowserNodeList & newones, bool inh,
-        bool dep, bool sametype, UmlCode k)
+                                         BrowserNodeList & newones, bool inh,
+                                         bool dep, bool sametype, UmlCode k)
 {
     IdIterator<BrowserSimpleRelation> it(all);
     BrowserSimpleRelation * r;
@@ -552,32 +552,32 @@ void BrowserSimpleRelation::get_relating(BrowserNode * elt, QHash<BrowserNode *,
         r = it.value();
         if(r != 0)
         {
-        if (!r->deletedp() &&
-            (r->def->get_end_node() == elt)) {
-            BrowserNode * src = r->def->get_start_node();
+            if (!r->deletedp() &&
+                    (r->def->get_end_node() == elt)) {
+                BrowserNode * src = r->def->get_start_node();
 
-            if ((!sametype || (src->get_type() == k)) && (d[src] == 0)) {
-                switch (r->get_type()) {
-                case UmlDependOn:
-                    if (! dep)
+                if ((!sametype || (src->get_type() == k)) && (d[src] == 0)) {
+                    switch (r->get_type()) {
+                    case UmlDependOn:
+                        if (! dep)
+                            continue;
+
+                        break;
+
+                    case UmlInherit:
+                        if (! inh)
+                            continue;
+
+                        break;
+
+                    default:
                         continue;
+                    }
 
-                    break;
-
-                case UmlInherit:
-                    if (! inh)
-                        continue;
-
-                    break;
-
-                default:
-                    continue;
+                    d.insert(src, src);
+                    newones.append(src);
                 }
-
-                d.insert(src, src);
-                newones.append(src);
             }
-        }
         }
     }
 }

@@ -657,7 +657,7 @@ void BrowserPackage::menu()
         MenuFactory::addItem(m, ("Referenced by"), 13,
                              ("to know who reference the <i>package</i> \
                               through a relation"));
-                              mark_menu(m, QString(QObject::tr("the package")).toLatin1().constData(), 90);
+                              mark_menu(m, QString(QObject::tr("the package")), 90);
                              ProfiledStereotypes::menu(m, this, 99990);
 
 
@@ -1747,7 +1747,7 @@ void BrowserPackage::on_delete()
 void BrowserPackage::write_id(ToolCom * com)
 {
     // to manage project case as any package
-    com->write_id(this, UmlPackage - UmlRelations, name.toLatin1().constData());
+    com->write_id(this, UmlPackage - UmlRelations, name);
 }
 
 // connexion by a flow or a dependency
@@ -2310,9 +2310,9 @@ void BrowserPackage::read_stereotypes(char *& st, char *& k)
         init();
 }
 
-bool BrowserPackage::read_stereotypes(const char * f)
+bool BrowserPackage::read_stereotypes(QString f)
 {
-    char * s = read_file((f == 0) ? "stereotypes" : f);
+    char * s = read_file((f.isEmpty()) ? "stereotypes" : f);
 
     if (s != 0) {
         PRE_TRY;
@@ -2428,7 +2428,7 @@ void BrowserPackage::save_all(bool modified_only)
         QString fn;
 
         if (prj)
-            fn = ((const char *) pack->name.toLatin1()) + QString(".prj");
+            fn = pack->name + QString(".prj");
         else
             fn.setNum(it.key());
 
@@ -3025,7 +3025,7 @@ unsigned BrowserPackage::load(bool recursive, int id)
                         UmlWindow::set_default_format(IsoA4);
 
                     if (!strcmp(k, "image_root_dir")) {
-                        UmlWindow::set_images_root_dir(toUnicode(read_string(st)));
+                        UmlWindow::set_images_root_dir(read_string(st));
                         k = read_keyword(st);
                     }
                     else

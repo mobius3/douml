@@ -48,23 +48,23 @@ public:
     HaveKeyValueData();
     virtual ~HaveKeyValueData();
 
-    const char * get_key(int rank) const;
+    QString get_key(int rank) const;
 
-    void set_key(int rank, const char * k);
-    const char * get_value(int rank) const;
-    const char * get_value(const char * k) const;
-    void set_value(int rank, const char * v);
-    int has_key(const char*);
+    void set_key(int rank, QString k);
+    QString get_value(int rank) const;
+    QString get_value(QString k) const;
+    void set_value(int rank, QString v);
+    int has_key(QString);
     unsigned get_n_keys() const {
         return nkeyvalues;
     };
     void remove_key_value(unsigned index);
-    void remove_key_value(const char * k);
+    void remove_key_value(QString k);
     void set_n_keys(unsigned n);	// the old key-values are lost
     void resize_n_keys(unsigned n, bool realloc); // the old key-values are not lost
 
     void send_def(ToolCom * com) const;
-    void set_value(const char * k, const char * v);
+    void set_value(QString k, QString v);
 
     void save(QTextStream &) const;
     void read(char *& , char *& k);

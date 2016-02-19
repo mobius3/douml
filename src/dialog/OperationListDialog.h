@@ -41,7 +41,7 @@ protected:
     static QSize previous_size;
 
 public:
-    OperationListDialog(const char * m, QList<BrowserOperation *> & l);
+    OperationListDialog(QString m, QList<BrowserOperation *> & l);
     virtual ~OperationListDialog();
 
     int choosen();

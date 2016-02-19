@@ -2408,7 +2408,7 @@ bool DiagramView::save_pict(const char * f, bool optimal, bool temporary)
             : save_in(f, optimal, temporary);
 }
 
-bool DiagramView::save_in(const char * f, bool optimal, bool temporary)
+bool DiagramView::save_in(QString f, bool optimal, bool temporary)
 {
     if (the_canvas()->selection().count() != 0) {
         // unselect element and redraw them to remove selection mark
@@ -2470,7 +2470,7 @@ bool DiagramView::save_in(const char * f, bool optimal, bool temporary)
     return r;
 }
 
-bool DiagramView::svg_save_in(const char * f, bool optimal, bool temporary)
+bool DiagramView::svg_save_in(QString f, bool optimal, bool temporary)
 {
     bool result = FALSE;
     the_canvas()->show_limits(FALSE);
@@ -2638,13 +2638,13 @@ void DiagramView::save_picture(bool optimal, bool svg)
             if (filename.right(4).toLower() != ".svg")
                 filename += ".svg";
 
-            svg_save_in(filename.toLatin1().constData(), optimal, FALSE);
+            svg_save_in(filename, optimal, FALSE);
         }
         else {
             if (filename.right(4).toLower() != ".png")
                 filename += ".png";
 
-            save_in(filename.toLatin1().constData(), optimal, FALSE);
+            save_in(filename, optimal, FALSE);
         }
     }
 }

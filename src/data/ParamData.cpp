@@ -40,7 +40,7 @@ ParamData::ParamData() : dir(UmlInOut)
 {
 }
 
-void ParamData::set_name(const char * s)
+void ParamData::set_name(QString s)
 {
     name = s;
 }

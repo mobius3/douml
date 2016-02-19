@@ -92,7 +92,7 @@ protected:
                   const char * lbl, const char * sl, bool enabled);
 
 public:
-    ActivityObjectDialog(ActivityObjectData * a, const char * what,
+    ActivityObjectDialog(ActivityObjectData * a, QString what,
                          QStringList & st);
     virtual ~ActivityObjectDialog();
 

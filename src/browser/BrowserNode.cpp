@@ -334,9 +334,9 @@ bool BrowserNode::delete_internal(QString & warning)
     return ok;
 }
 
-const char * BrowserNode::get_comment() const
+QString BrowserNode::get_comment() const
 {
-    return comment.operator const char *();
+    return comment;
 }
 
 void BrowserNode::set_comment(const QString & c)
@@ -532,22 +532,16 @@ QString BrowserNode::stereotypes_properties() const
         QString result;
 
         for (int ik = 0; ik != nk; ik += 1) {
-            const char * k =  get_key(ik);
-            const char * p;
-            unsigned nseps = 0;
 
-            for (p = k; *p; p += 1) {
-                if (*p == ':') {
-                    nseps += 1;
-                    k = p + 1;
-                }
-            }
+            QString v;
+            QString k =  get_key(ik);
+            QStringList p = k.split(':');
 
-            if (nseps == 2) {
-                p = get_value(ik);
+            if(p.count() == 3){
+                v = get_value(ik);
 
-                if (p && *p)
-                    result += nl + k + QString("=") + p;
+                if (!v.isEmpty())
+                    result += nl + p.at(2) + QString("=") + v;
             }
         }
 
@@ -774,7 +768,7 @@ QString BrowserNode::visibility_as_string() const
 
 UmlVisibility BrowserNode::encode_visibility(const QString & val)
 {
-    return visibility(val.toLatin1().constData());
+    return visibility(val);
 }
 
 void BrowserNode::package_settings(BooL &, ShowContextMode &) const
@@ -973,13 +967,13 @@ bool BrowserNode::may_contains_it(BrowserNode * bn) const
 // recurssively :
 #define SIMPLE_DUPLICATION
 
-void BrowserNode::mark_menu(QMenu & m, const char * s, int bias) const
+void BrowserNode::mark_menu(QMenu & m, QString s, int bias) const
 {
 
     if (! is_marked) {
         m.addSeparator();
         MenuFactory::addItem(m,("Mark"), bias,
-                             QString("to mark %1").arg(s).toLatin1().constData());
+                             QString("to mark %1").arg(s));
 
         if (!marked_list.isEmpty()) {
             bool parents_marked = FALSE;
@@ -1033,30 +1027,30 @@ void BrowserNode::mark_menu(QMenu & m, const char * s, int bias) const
                 if (moveable) {
                     if (into)
                         MenuFactory::addItem(m,("Move marked into"), bias + 3,
-                                             QString("to move the marked items into %1").arg(s).toLatin1().constData());
+                                             QString("to move the marked items into %1").arg(s));
 
                     if (after)
                         MenuFactory::addItem(m,("Move marked after"), bias + 4,
-                                             QString("to move the marked items after %1").arg( s).toLatin1().constData());
+                                             QString("to move the marked items after %1").arg( s));
                     m.addSeparator();
                 }
             }
 
             if (into && duplicable_into) {
                 MenuFactory::addItem(m,("Duplicate marked into"), bias + 5,
-                                     QString("to duplicate the marked items into %1").arg( s).toLatin1().constData());
+                                     QString("to duplicate the marked items into %1").arg( s));
 #ifndef SIMPLE_DUPLICATION
 
                 if (rec && !parents_marked)
                     MenuFactory::addItem(m,("Duplicate recursivelly marked into"), bias + 6,
-                            QObject::tr("to recurcivelly duplicate the marked items into %1", s).toLatin1().constData());
+                            QObject::tr("to recurcivelly duplicate the marked items into %1", s));
 
 #endif
             }
 
             if (after && duplicable_after) {
                 MenuFactory::addItem(m,("Duplicate marked after"), bias + 7,
-                                     QString("to duplicate the marked items after %1").arg( s).toLatin1().constData());
+                                     QString("to duplicate the marked items after %1").arg( s));
 #ifndef SIMPLE_DUPLICATION
 
                 if (rec && !parents_marked)
@@ -1070,11 +1064,11 @@ void BrowserNode::mark_menu(QMenu & m, const char * s, int bias) const
     else {
         m.addSeparator();
         MenuFactory::addItem(m,("Unmark"), bias + 1,
-                             QObject::tr("to unmark %1").arg(s).toLatin1().constData());
+                             QObject::tr("to unmark %1").arg(s));
 
         if (!marked_list.isEmpty())
             MenuFactory::addItem(m,("Unmark all"), bias + 2,
-                                 QObject::tr("to unmark all the marked items").toLatin1().constData());
+                                 QObject::tr("to unmark all the marked items"));
     }
 
 }
@@ -1918,7 +1912,7 @@ void BrowserNode::member_cpp_def(const QString &, const QString &,
 
 void BrowserNode::write_id(ToolCom * com)
 {
-    com->write_id(this, get_type() - UmlRelations, name.toLatin1().constData());
+    com->write_id(this, get_type() - UmlRelations, name);
 }
 
 void BrowserNode::init_save_counter()
@@ -2005,7 +1999,7 @@ void BrowserNode::read(char *& st, char *& k, int id)
     }
     HaveKeyValueData::read(st, k);
     if (!strcmp(k, "comment")) {
-        comment = QString(QTextCodec::codecForName(codec().toLatin1().constData())->fromUnicode(read_string(st)));
+        comment = read_string(st);
         k = read_keyword(st);
     }
     is_new = FALSE;
@@ -2373,8 +2367,8 @@ void BrowserNodeList::names(QStringList & list) const
     list.clear();
 
     foreach (BrowserNode *node, *this) {
-        const char * s = node->get_name().toLatin1().constData();
-        list.append(((s == 0) || (*s == 0)) ? "<anonymous>" : s);
+        QString s = node->get_name();
+        list.append(s.isEmpty() ? "<anonymous>" : s);
     }
 }
 

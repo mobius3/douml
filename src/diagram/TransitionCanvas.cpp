@@ -549,7 +549,7 @@ void TransitionCanvas::update(bool updatepos)
             }
         }
         else {
-            s = QString("<<") + toUnicode(s.toLatin1().constData()) + ">>";
+            s = QString("<<") + s + ">>";
 
             if ((pstereotype == 0) && (begin->typeUmlCode() != UmlArrowPoint)) {
                 // adds relation's stereotype

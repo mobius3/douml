@@ -65,7 +65,7 @@ public:
                                     const QString & name = QString());
     static BrowserPseudoState * add_pseudostate(BrowserNode * future_parent, UmlCode c);
     static BrowserPseudoState * add_pseudostate(BrowserNode * future_parent,
-            UmlCode c, const char * name);
+            UmlCode c, QString name);
     static BrowserPseudoState * get_pseudostate(BrowserNode * future_parent, UmlCode c);
     virtual BasicData * add_relation(UmlCode, BrowserNode * end);
     BrowserTransition * add_transition(BrowserNode * end);

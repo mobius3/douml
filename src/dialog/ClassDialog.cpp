@@ -2959,9 +2959,9 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     grandParent = (BrowserNode *) currentNode->parent()->parent();
     edname->setText(cl->get_browser_node()->get_name());
     edname->setReadOnly(!isWritable);
-    if(currentNode->get_value("stereotypeSetParameters"))
+    if(!currentNode->get_value("stereotypeSetParameters").isEmpty())
         edinitparam->setText(currentNode->get_value("stereotypeSetParameters"));
-    if(currentNode->get_value("stereotypeCheckParameters"))
+    if(!currentNode->get_value("stereotypeCheckParameters").isEmpty())
         edcheckparam->setText(currentNode->get_value("stereotypeCheckParameters"));
     // filling stereotypes edit element
     edstereotype->clear();
@@ -3820,15 +3820,15 @@ bool ClassDialog::SaveData()
 
             bn->set_n_keys(n + 6);
             bn->set_key(n, "stereotypeSet");
-            bn->set_value(n, stereo_init_cb->currentText().toLatin1().constData());
+            bn->set_value(n, stereo_init_cb->currentText());
             bn->set_key(++n, "stereotypeCheck");
-            bn->set_value(n, stereo_check_cb->currentText().toLatin1().constData());
+            bn->set_value(n, stereo_check_cb->currentText());
             bn->set_key(++n, "stereotypeSetParameters");
-            bn->set_value(n, fromUnicode(edinitparam->text().simplified().toLatin1().constData()));
+            bn->set_value(n, fromUnicode(edinitparam->text().simplified()));
             bn->set_key(++n, "stereotypeCheckParameters");
-            bn->set_value(n, fromUnicode(edcheckparam->text().simplified().toLatin1().constData()));
+            bn->set_value(n, fromUnicode(edcheckparam->text().simplified()));
             bn->set_key(++n, "stereotypeApplyOn");
-            bn->set_value(n, applicableon_table->targets().toLatin1().constData());
+            bn->set_value(n, applicableon_table->targets());
             bn->set_key(++n, "stereotypeIconPath");
             bn->set_value(n, newiconpath);
 

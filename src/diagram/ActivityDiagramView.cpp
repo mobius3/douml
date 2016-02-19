@@ -765,7 +765,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
         history_protected = FALSE;
 
         BrowserActivityObject * obj =
-            BrowserActivityObject::add_activityobject(container(p.toPoint()), bn->get_name().toLatin1().constData());
+            BrowserActivityObject::add_activityobject(container(p.toPoint()), bn->get_name());
 
         if (obj != 0) {
             ((ActivityObjectData *) obj->get_data())

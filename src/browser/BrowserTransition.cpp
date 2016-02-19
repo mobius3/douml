@@ -239,7 +239,7 @@ Note that you can undelete it after"));
                        QObject::tr("to select the destination"));
         MenuFactory::addItem(m, QObject::tr("Referenced by"), 4,
                        QObject::tr("to know who reference the <i>transition</i>"));
-        mark_menu(m, QObject::tr("the transition").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the transition"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0)

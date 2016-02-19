@@ -177,8 +177,8 @@ QString AttributeData::definition(bool full, bool with_kind) const
     if (! full)
         r += browser_node->get_name();
     else
-        r.append(browser_node->get_name().toLatin1().constData()
-             + QString(" : ") + ((const char *) type.get_type().toLatin1().constData()));
+        r.append(browser_node->get_name()
+             + QString(" : ") + type.get_type());
     return r;
 }
 
@@ -354,14 +354,14 @@ void AttributeData::on_delete()
     modified();
 }
 
-const char * AttributeData::get_idlcase() const
+QString AttributeData::get_idlcase() const
 {
     return (idl_case != 0)
-           ? ((const char *) idl_case->get_name().toLatin1().constData())
-           : ((const char *) idl_explicit_case);
+           ? idl_case->get_name()
+           : idl_explicit_case;
 }
 
-void AttributeData::set_idlcase(BrowserAttribute * a, const char * e)
+void AttributeData::set_idlcase(BrowserAttribute * a, QString e)
 {
     if (idl_case != a) {
         if (idl_case != 0)
@@ -841,7 +841,7 @@ void AttributeData::read(char *& st, char *& k)
         multiplicity = 0;
 
     if (!strcmp(k, "init_value")) {
-        init_value = QString(QTextCodec::codecForName(codec().toLatin1().constData())->fromUnicode(read_string(st)));
+        init_value = read_string(st);
 //        init_value = read_string(st);
         k = read_keyword(st);
     }

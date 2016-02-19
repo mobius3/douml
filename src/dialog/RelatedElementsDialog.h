@@ -54,7 +54,7 @@ protected:
     static QSize previous_size;
 
 public:
-    RelatedElementsDialog(BrowserNode *, const char * what,
+    RelatedElementsDialog(BrowserNode *, QString what,
                           bool inh, bool assoc, BrowserNodeList &);
     virtual ~RelatedElementsDialog();
 

@@ -236,7 +236,7 @@ void UseCaseDiagramView::add_related_elements(DiagramItem  * di, QString what,
                                               bool inh, bool assoc)
 {
     BrowserNodeList l;
-    RelatedElementsDialog dialog(di->get_bn(), what.toLatin1().constData(), inh, assoc, l);
+    RelatedElementsDialog dialog(di->get_bn(), what, inh, assoc, l);
 
     dialog.raise();
 

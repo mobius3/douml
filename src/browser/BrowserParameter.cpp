@@ -214,7 +214,7 @@ void BrowserParameter::menu()
                                              MenuFactory::addItem(m, QObject::tr("Referenced by"), 4,
                                                                   QObject::tr("to know who reference the <i>parameter</i> \
                                                                               through a flow"));
-                                                                              mark_menu(m, QObject::tr("the parameter").toLatin1().constData(), 90);
+                                                                              mark_menu(m, QObject::tr("the parameter"), 90);
                                                                   ProfiledStereotypes::menu(m, this, 99990);
 
                                              if ((edition_number == 0) &&

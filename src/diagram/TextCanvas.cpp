@@ -131,7 +131,7 @@ void TextCanvas::open()
     if (s.isEmpty())
         delete_it();
     else {
-        text = toUnicode(s.toLatin1().constData());
+        text = s;
 
         if (created) {
             QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
@@ -376,7 +376,7 @@ TextCanvas * TextCanvas::read(char *& st, UmlCanvas * canvas, char * k)
         return ((TextCanvas *) dict_get(read_id(st), "textcanvas", canvas));
     else if (!strcmp(k, "textcanvas")) {
         int id = read_id(st);
-        QString text = toUnicode(read_string(st));
+        QString text = read_string(st);
         UmlFont font;
         UmlColor fg_c = UmlBlack;
         UmlColor bg_c = UmlTransparent;

@@ -108,8 +108,6 @@ void InfoCanvas::open()
 
 void InfoCanvas::set(QString s)
 {
-    s = toUnicode(s.toLatin1().constData());
-
     if (s != note) {
         note = s;
         modified();

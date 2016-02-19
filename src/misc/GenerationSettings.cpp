@@ -4443,7 +4443,7 @@ void GenerationSettings::read()
     }
 }
 
-static bool read_incl(IncludesSpec & sp, const char * filename)
+static bool read_incl(IncludesSpec & sp, QString filename)
 {
     char * s = read_file(filename);
 
@@ -4503,10 +4503,10 @@ bool GenerationSettings::import()
             POST_TRY;
             delete [] s;
 
-            read_incl(cpp_includes, fn.replace(fn.lastIndexOf("generation_settings"), 19, "cpp_includes").toLatin1().constData());
-            read_incl(java_imports, fn.replace(fn.lastIndexOf("cpp_includes"), 12, "java_imports").toLatin1().constData());
-            read_incl(python_imports, fn.replace(fn.lastIndexOf("java_imports"), 12, "python_imports").toLatin1().constData());
-            read_incl(idl_includes, fn.replace(fn.lastIndexOf("python_imports"), 14, "idl_includes").toLatin1().constData());
+            read_incl(cpp_includes, fn.replace(fn.lastIndexOf("generation_settings"), 19, "cpp_includes"));
+            read_incl(java_imports, fn.replace(fn.lastIndexOf("cpp_includes"), 12, "java_imports"));
+            read_incl(python_imports, fn.replace(fn.lastIndexOf("java_imports"), 12, "python_imports"));
+            read_incl(idl_includes, fn.replace(fn.lastIndexOf("python_imports"), 14, "idl_includes"));
 
             return TRUE;
         }

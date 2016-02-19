@@ -55,14 +55,14 @@ void ConstructorInitializerDialog::Init(OperationData * _oper)
     definitionCopy = oper->get_cppdef();
     oper->set_cppdef(ui->edConstructorPrototype->toPlainText());
     connect(ui->edInitializer,SIGNAL(textChanged()),this, SLOT(OnInitializerChanged()));
-    oper->get_browser_node()->set_value("constructor-initializer", ui->edInitializer->toPlainText().toLatin1().constData());
+    oper->get_browser_node()->set_value("constructor-initializer", ui->edInitializer->toPlainText());
     RegenerateConstructor();
 
 }
 
 void ConstructorInitializerDialog::reject()
 {
-   oper->get_browser_node()->set_value("constructor-initializer", initializerCopy.toLatin1().constData());
+   oper->get_browser_node()->set_value("constructor-initializer", initializerCopy);
    oper->set_cppdef(definitionCopy);
 #ifdef EDGETOOLENABLED
    toolbar->setParent(0);
@@ -93,6 +93,6 @@ void ConstructorInitializerDialog::RegenerateConstructor()
 
 void ConstructorInitializerDialog::OnInitializerChanged()
 {
-    oper->get_browser_node()->set_value("constructor-initializer", ui->edInitializer->toPlainText().toLatin1().constData());
+    oper->get_browser_node()->set_value("constructor-initializer", ui->edInitializer->toPlainText());
     RegenerateConstructor();
 }

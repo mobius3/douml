@@ -476,9 +476,9 @@ void PinDialog::accept()
         msg_critical(tr("Error"), s + tr("\n\nillegal name or already used"));
     else {
         // check consistency
-        UmlParamDirection dir = direction(eddir->currentText().toLatin1().constData());
+        UmlParamDirection dir = direction(eddir->currentText());
         bool exception = exception_rb->isChecked();
-        UmlParamEffect effect = ::effect(edeffect->currentText().toLatin1().constData());
+        UmlParamEffect effect = ::effect(edeffect->currentText());
         QString err;
 
         if ((dir == UmlIn) && exception)
@@ -524,7 +524,7 @@ void PinDialog::accept()
             pin->dir = dir;
             pin->multiplicity =
                 edmultiplicity->currentText().trimmed();
-            pin->ordering = ordering(edordering->currentText().toLatin1().constData());
+            pin->ordering = ordering(edordering->currentText());
             pin->effect = effect;
             pin->is_control = is_control_cb->isChecked();
             pin->unique = unique_cb->isChecked();

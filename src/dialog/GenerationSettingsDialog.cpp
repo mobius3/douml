@@ -427,7 +427,7 @@ void GenerationSettingsDialog::init_cpp4()
 
     vtab->addWidget(htab =new HHBox(vtab));
     htab->addWidget(cpp_get_visibility.init(htab, GenerationSettings::cpp_get_visibility,
-                            FALSE, tr("Visibility").toLatin1().constData()));
+                            FALSE, tr("Visibility")));
 
     //bg = new QGroupBox(3, Qt::Horizontal, QObject::tr("Modifiers"), htab));
     htab->addWidget(bg = new BButtonGroup(/*3, Qt::Horizontal, */tr("Modifiers"), htab));
@@ -465,7 +465,7 @@ void GenerationSettingsDialog::init_cpp4()
 
     vtab->addWidget(htab =new HHBox(vtab));
     htab->addWidget(cpp_set_visibility.init(htab, GenerationSettings::cpp_get_visibility,
-                                            FALSE, tr("Visibility").toLatin1().constData()));
+                                            FALSE, tr("Visibility")));
 
     htab->addWidget(bg = new BButtonGroup(/*4, Qt::Horizontal, */tr("Modifiers"), htab));
     ////bg->setExclusive(FALSE);
@@ -585,7 +585,7 @@ void GenerationSettingsDialog::init_cpp5()
     htab->addWidget(lbl2);
     htab->addWidget(cpp_include_table =
             new IncludeTable(htab, GenerationSettings::cpp_includes,
-                             tr("Include etc...").toLatin1().constData(), "#include <>"));
+                             tr("Include etc..."), "#include <>"));
 
     same_width(lbl1, lbl2);
 
@@ -763,7 +763,7 @@ void GenerationSettingsDialog::init_java3()
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
     htab->addWidget(java_get_visibility.init(htab, GenerationSettings::noncpp_get_visibility,
-                                             TRUE, tr("Visibility (shared with Php)").toLatin1().constData()));
+                                             TRUE, tr("Visibility (shared with Php)")));
     java_get_visibility.connect(SIGNAL(clicked(int)), this, SLOT(java_get_visi_changed(int)));
 
     htab->addWidget(bg = new BButtonGroup(/*1, Qt::Horizontal, */tr("Modifiers"), htab));
@@ -789,7 +789,7 @@ void GenerationSettingsDialog::init_java3()
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
     htab->addWidget(java_set_visibility.init(htab, GenerationSettings::noncpp_set_visibility,
-                                             TRUE, tr("Visibility (shared with Php)").toLatin1().constData()));
+                                             TRUE, tr("Visibility (shared with Php)")));
     java_set_visibility.connect(SIGNAL(clicked(int)), this, SLOT(java_set_visi_changed(int)));
 
     htab->addWidget(bg = new BButtonGroup(/*2, Qt::Horizontal,*/ QObject::tr("Modifiers"), htab));
@@ -997,7 +997,7 @@ void GenerationSettingsDialog::init_php2()
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
     htab->addWidget(php_get_visibility.init(htab, GenerationSettings::noncpp_get_visibility,
-                                            FALSE, tr("Visibility (shared with Java)").toLatin1().constData()));
+                                            FALSE, tr("Visibility (shared with Java)")));
     php_get_visibility.connect(SIGNAL(clicked(int)), this, SLOT(php_get_visi_changed(int)));
 
     htab->addWidget(bg = new BButtonGroup(/*1, Qt::Horizontal,*/ QObject::tr("Modifiers"), htab));
@@ -1023,7 +1023,7 @@ void GenerationSettingsDialog::init_php2()
     grid->addWidget(htab =new HHBox(grid));
     htab->setMargin(3);
     htab->addWidget(php_set_visibility.init(htab, GenerationSettings::noncpp_set_visibility,
-                                            FALSE, tr("Visibility (shared with Java)").toLatin1().constData()));
+                                            FALSE, tr("Visibility (shared with Java)")));
     php_set_visibility.connect(SIGNAL(clicked(int)), this, SLOT(php_set_visi_changed(int)));
 
     htab->addWidget(bg = new BButtonGroup(/*2, Qt::Horizontal,*/ QObject::tr("Modifiers"), htab));
@@ -2602,7 +2602,7 @@ void StereotypesTable::update(int & nst, Stereotype *& st)
 // IncludeTable
 
 IncludeTable::IncludeTable(QWidget * parent, IncludesSpec & spc,
-                           const char * title, const char * df)
+                           QString title, const char * df)
     : StringTable(spc.types.count() + 1, 3, parent, FALSE),
       spec(spc), dflt(df)
 {

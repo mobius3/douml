@@ -77,7 +77,7 @@ class BrowserNode : public QTreeWidgetItem,
 {
 protected:
     QString name;
-    WrapperStr comment;
+    QString comment;
     QByteArray tempBa;
     friend class BrowserView;
     int original_id = 0;	// from project library
@@ -133,7 +133,7 @@ public:
     virtual void edit_end() override;
     virtual bool in_edition() const;
 
-    void mark_menu(QMenu & m, const char *, int bias) const;
+    void mark_menu(QMenu & m, QString, int bias) const;
     void mark_shortcut(const QString & s, int & index, int bias);
     void mark_management(int choice);
     void toggle_mark();
@@ -173,7 +173,7 @@ public:
     bool nestedp() const {
         return ((BrowserNode *) parent())->get_type() == get_type();
     }
-    virtual const char * get_comment() const;
+    virtual QString get_comment() const;
     virtual void set_comment(const QString & c);
     const char * get_stereotype() const;
     virtual QString stereotypes_properties() const;

@@ -235,7 +235,7 @@ QString BrowserActivityObject::connexion_from(bool) const
 
 BrowserActivityObject *
 BrowserActivityObject::add_activityobject(BrowserNode * future_parent,
-                                          const char * s)
+                                          QString s)
 {
     QString name;
 
@@ -317,7 +317,7 @@ void BrowserActivityObject::menu()
                                          MenuFactory::addItem(m, QObject::tr("Referenced by"), 4,
                                                               QObject::tr("to know who reference the <i>activity object</i> \
                                                                           through a flow or dependency"));
-                                                                          mark_menu(m, QObject::tr("the activity object").toLatin1().constData(), 90);
+                                                                          mark_menu(m, QObject::tr("the activity object"), 90);
                                                               ProfiledStereotypes::menu(m, this, 99990);
 
                                          if ((edition_number == 0) &&

@@ -312,7 +312,7 @@ public:
     void set_return_type(const AType & t);
     void set_return_type(const QString & value);
 
-    const char * get_param_name(int rank) const;
+    QString get_param_name(int rank) const;
     QStringList get_param_names() const;
     QStringList get_param_types() const;
     QStringList get_param_default_values() const;

@@ -163,7 +163,7 @@ Note that you can undelete it after"));
             }
         }
 
-        mark_menu(m, QObject::tr("the extra member").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the extra member"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&

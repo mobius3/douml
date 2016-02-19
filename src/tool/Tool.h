@@ -66,8 +66,8 @@ public:
     static bool menu_insert(QMenu * tool, UmlCode target, int first_id);
     static void shortcut(QString s, int & choice, UmlCode target, int first_id);
     static QStringList all_display();
-    static const char * command(int rank);
-    static const char * command(const char *);
+    static QString command(int rank);
+    static QString command(QString);
 
     static void save();
     static bool read(const char * = 0);

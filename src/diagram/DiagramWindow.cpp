@@ -286,7 +286,7 @@ void DiagramWindow::duplicate(int dest_id, const char * ext) const
     indent0();
     get_view()->save(st, warning, FALSE);
     st.flush();
-    save_definition(dest_id, ext, diagram_def.toLatin1().constData(), is_new);
+    save_definition(dest_id, ext, diagram_def, is_new);
     indent(current_indent);
 
     if (zm != 1)

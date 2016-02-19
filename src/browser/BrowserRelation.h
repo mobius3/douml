@@ -68,7 +68,7 @@ public:
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     const QString & name = QString()) override;
 
-    virtual const char * get_comment() const override;
+    virtual QString get_comment() const override;
     virtual void set_comment(const QString & c) override;
 
     virtual UmlVisibility get_visibility() const override;

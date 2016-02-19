@@ -99,7 +99,7 @@ public:
     virtual ~PackageDialog();
 
 protected:
-    void browse(LineEdit * ed, QPushButton * button, const char * caption,
+    void browse(LineEdit * ed, QPushButton * button, QString caption,
                 QString root);
     void relative(LineEdit * ed, QPushButton * button, QString root);
 

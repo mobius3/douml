@@ -67,7 +67,7 @@ public:
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     const QString & name = QString());
     static BrowserInterruptibleActivityRegion * add_interruptibleactivityregion(BrowserNode * future_parent);
-    static BrowserInterruptibleActivityRegion * add_interruptibleactivityregion(BrowserNode * future_parent, const char * name);
+    static BrowserInterruptibleActivityRegion * add_interruptibleactivityregion(BrowserNode * future_parent, QString name);
     static BrowserInterruptibleActivityRegion * get_interruptibleactivityregion(BrowserNode * parent);
 
     virtual const QPixmap * pixmap(int) const;

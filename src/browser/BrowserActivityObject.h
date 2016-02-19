@@ -69,7 +69,7 @@ public:
     virtual bool may_contains_them(const QList<BrowserNode *> & l,
                                    BooL & duplicable) const;
     static BrowserActivityObject * add_activityobject(BrowserNode * future_parent,
-            const char * s);
+            QString s);
     static BrowserActivityObject * get_activityobject(BrowserNode * future_parent);
     virtual BasicData * add_relation(UmlCode, BrowserNode * end);
     QString may_start() const;

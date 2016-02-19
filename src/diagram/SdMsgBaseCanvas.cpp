@@ -509,13 +509,13 @@ void SdMsgBaseCanvas::read(char *& st)
         k = read_keyword(st);
 
         if (!strcmp(k, "stereotype")) {
-            k = read_string(st);
+            QString strk = read_string(st);
             read_keyword(st, "xyz");
 
             int x = (int) read_double(st);
 
             stereotype =
-                new LabelCanvas(k, the_canvas(), x, (int) read_double(st));
+                new LabelCanvas(strk, the_canvas(), x, (int) read_double(st));
 
             stereotype->setZValue(read_double(st));
             stereotype->show();

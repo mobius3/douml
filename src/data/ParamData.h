@@ -44,7 +44,7 @@ protected:
 public:
     ParamData();
 
-    void set_name(const char *);
+    void set_name(QString);
     QString get_name() const {
         return name;
     };

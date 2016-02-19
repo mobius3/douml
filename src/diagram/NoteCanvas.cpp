@@ -465,9 +465,9 @@ void NoteCanvas::save(QTextStream & st, bool ref, QString &) const
 
 void NoteCanvas::read_internal(char *& st)
 {
-    char* test = read_string(st);
+    note = read_string(st);
     //Q_UNUSED(test);
-    note = test;
+
 
 
     char * k = read_keyword(st);

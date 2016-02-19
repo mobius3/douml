@@ -251,24 +251,22 @@ QStringList Tool::all_display()
     return r;
 }
 
-const char * Tool::command(int rank)
+QString Tool::command(int rank)
 {
-    static QByteArray command;
-    command = tools[rank].cmd.toLatin1();
-    return command.constData();
+    return tools[rank].cmd;
 }
 
-const char * Tool::command(const char * d)
+QString Tool::command(QString d)
 {
     unsigned index;
 
     for (index = 0; index != ntools; index += 1)
-        if (strcmp(d, tools[index].display.toLatin1().constData()) == 0)
+        if (d == tools[index].display)
         {
-            return tools[index].cmd.toLatin1().constData();
+            return tools[index].cmd;
         }
 
-    return 0;
+    return QString();
 }
 
 void Tool::set_ntools(unsigned n)

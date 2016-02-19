@@ -50,7 +50,7 @@
 #include <QHash>
 QSize RelatedElementsDialog::previous_size;
 
-RelatedElementsDialog::RelatedElementsDialog(BrowserNode * e, const char * what,
+RelatedElementsDialog::RelatedElementsDialog(BrowserNode * e, QString what,
         bool inh, bool assoc, BrowserNodeList & l)
     : QDialog(0), elt(e), elts(l)
 {
