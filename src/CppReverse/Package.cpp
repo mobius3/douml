@@ -520,20 +520,6 @@ int Package::file_number(QString path, bool rec, const char * ext)
 
         if (! allowed(DirFilter, d.dirName()))
             return 0;
-
-        /*
-        const QFileInfoList * list = d.entryInfoList(QDir::Files | QDir::Readable);
-
-        if (list != 0) {
-          QFileInfoListIterator it(*list);
-          QFileInfo * fi;
-
-          while ((fi = it.current()) != 0) {
-        if (fi->extension(FALSE) == ext)
-          result += 1;
-        ++it;
-          }
-          */
         QFileInfoList list = d.entryInfoList(QDir::Files | QDir::Readable);
 
         if (!list.isEmpty()) {
@@ -541,31 +527,14 @@ int Package::file_number(QString path, bool rec, const char * ext)
             int extIndex;
             QString fileName;
 
-            while (it != list.end()) {
+            for(;it != list.end(); ++it){
                 fileName = (*it).fileName();
                 extIndex = fileName.lastIndexOf('.');
                 if (extIndex != -1 && fileName.mid(extIndex+1) == ext) result += 1;
-
-                it++;
             }
         }
 
         if (rec) {
-            /*      // sub directories
-                  list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
-
-                  if (list) {
-            	QFileInfoListIterator itd(*list);
-            	QFileInfo * di;
-
-            	while ((di = itd.current()) != 0) {
-            	  if (((const char *) di->fileName())[0] != '.')
-            	    result += file_number(di->filePath(), rec, ext);
-            	  ++itd;
-            	}
-                  }
-                }
-                */
 
             // sub directories
             list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
@@ -573,12 +542,10 @@ int Package::file_number(QString path, bool rec, const char * ext)
             if (!list.isEmpty()) {
                 QFileInfoList::iterator it = list.begin();
 
-                while (it != list.end()) {
+                for(;it != list.end(); ++it){
                     if ((*it).fileName()[0] != '.') {
                         result += file_number((*it).filePath(), rec, ext);
                     }
-
-                    it++;
                 }
             }
         }
@@ -683,38 +650,6 @@ void Package::reverse_directory(QString path, bool rec,
     if (! allowed(DirFilter, d.dirName()))
         return;
 
-    /*
-    const QFileInfoList list =
-      d.entryInfoList("*." + ext, QDir::Files | QDir::Readable);
-
-    if (list != 0) {
-      QFileInfoListIterator it(*list);
-
-      while (it.current() != 0) {
-        if (allowed(FileFilter, it.current()->fileName())) {
-    #ifdef ROUNDTRIP
-    QString fn = it.current()->absFilePath();
-    UmlArtifact * art = Roundtriped.find(fn);
-
-    if (h)
-      fname = my_baseName(it.current());
-
-    if ((art != 0) && (art->parent()->parent() != uml))
-      // own by an other package
-      ((UmlPackage *) art->parent()->parent())->get_package()->reverse_file(WrapperStr(fn), art, h);
-    else
-      reverse_file(WrapperStr(fn), art, h);
-    #else
-    if (h)
-      fname = my_baseName(it.current());
-    reverse_file(WrapperStr(it.current()->filePath()));
-    #endif
-        }
-        Progress::tic_it();
-        ++it;
-      }
-    }*/
-
     QStringList filter;
     filter<<"*."+ext;
     QFileInfoList list =
@@ -724,8 +659,7 @@ void Package::reverse_directory(QString path, bool rec,
     if (list.isEmpty() == false)
     {
         QFileInfoList::iterator it = list.begin();
-
-        while (it != list.end())
+        for(;it != list.end(); ++it)
         {
             if (allowed(FileFilter, (*it).fileName())) {
 #ifdef ROUNDTRIP
@@ -753,37 +687,21 @@ void Package::reverse_directory(QString path, bool rec,
             }
 
             Progress::tic_it();
-            ++it;
         }
     }
 
 
     if (rec) {
         // sub directories
-        /*list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
-
-        if (list != 0) {
-          QFileInfoListIterator itd(*list);
-          QFileInfo * di;
-
-          while ((di = itd.current()) != 0) {
-        if (((const char *) di->fileName())[0] != '.')
-          find(di)->reverse_directory(di->filePath(), TRUE, ext, h);
-        ++itd;
-          }
-        }*/
-        // sub directories
         list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
 
         if (!list.isEmpty()) {
             QFileInfoList::iterator itd = list.begin();
-
-            while (itd != list.end()) {
+            for(;itd != list.end(); ++itd)
+            {
                 if ((*itd).fileName()[0] != '.') {
                     find(&(*itd))->reverse_directory((*itd).filePath(), TRUE, ext, h);
                 }
-
-                ++itd;
             }
         }
     }
