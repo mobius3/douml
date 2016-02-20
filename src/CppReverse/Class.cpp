@@ -820,7 +820,10 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
             retVal = hashBased.contains(control) ? hashBased[control]() : hashBased[s]();
             control = "";
             if(retVal == ESwitchKeyword::k_none)
+            {
                 s = Lex::read_word();
+                continue;
+            }
             else if (retVal == ESwitchKeyword::k_continue)
                 continue;
             else if (retVal == ESwitchKeyword::k_break)
