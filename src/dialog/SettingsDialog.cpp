@@ -379,7 +379,7 @@ QString SettingsDialog::previous_active_tab;
 
 SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
                                bool nodefault, bool unchanged, QString title)
-    : TabDialog(0, title.toLatin1().constData(), TRUE),
+    : TabDialog(0, title, TRUE),
       states(st), colors(co), first_visible_page(0),
       several(unchanged), did_apply(FALSE)
 {

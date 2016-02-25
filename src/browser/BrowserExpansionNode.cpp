@@ -228,7 +228,7 @@ void BrowserExpansionNode::menu()
                                              MenuFactory::addItem(m, QObject::tr("Referenced by"), 4,
                                                                   QObject::tr("to know who reference the <i>expansion node</i> \
                                                                               through a flow"));
-                                                                              mark_menu(m, QObject::tr("the expansion node").toLatin1().constData(), 90);
+                                                                              mark_menu(m, QObject::tr("the expansion node"), 90);
                                                                   ProfiledStereotypes::menu(m, this, 99990);
 
                                              if ((edition_number == 0) &&
@@ -325,7 +325,7 @@ void BrowserExpansionNode::apply_shortcut(const QString & s)
 void BrowserExpansionNode::open(bool)
 {
     if (!is_edited)
-        def->edit(QObject::tr("Expansion Node").toLatin1().constData(), its_default_stereotypes);
+        def->edit(QObject::tr("Expansion Node"), its_default_stereotypes);
 }
 
 void BrowserExpansionNode::modified()
@@ -500,7 +500,7 @@ void BrowserExpansionNode::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "expansionnode " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         indent(+1);
         def->save(st, warning);
         BrowserNode::save(st);

@@ -172,7 +172,7 @@ public:
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char *& , char *&);
-    static bool read_stereotypes(const char * = 0);
+    static bool read_stereotypes(QString = QString());
     static bool import_stereotypes();
     static void save_stereotypes();
 

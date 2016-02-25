@@ -35,7 +35,7 @@
 #include "VisibilityGroup.h"
 #include "bbuttongroup.h"
 BButtonGroup * VisibilityGroup::init(QWidget * parent, UmlVisibility v, bool pack_allowed,
-                                      const char * title,
+                                      QString title,
                                       QString default_prefix)
 {
     if (!bgroup) {

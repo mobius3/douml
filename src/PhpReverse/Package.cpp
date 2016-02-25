@@ -202,18 +202,6 @@ int Package::file_number(QDir & d, bool rec)
         return 0;
 
     int result = 0;
-//  const QFileInfoList * list = d.entryInfoList(QDir::Files | QDir::Readable);
-    /*
-     if (list != 0) {
-       QFileInfoListIterator it(*list);
-       QFileInfo * fi;
-
-       while ((fi = it.current()) != 0) {
-         if (fi->extension(FALSE) == Ext)
-    result += 1;
-         ++it;
-       }
-     }*/
 
     // Oh lord, Bruno is so used to cut-n-paste, I am getting sick.
     QFileInfoList list = d.entryInfoList(QDir::Files | QDir::Readable);
@@ -223,46 +211,25 @@ int Package::file_number(QDir & d, bool rec)
             int extIndex;
             QString fileName;
 
-            while (it != list.end()) {
+            for(;it != list.end(); ++it) {
                 fileName = (*it).fileName();
                 extIndex = fileName.lastIndexOf('.');
                 if (extIndex != -1 && fileName.mid(extIndex+1) == Ext) result += 1;
-
-            it++;
         }
     }
 
     if (rec) {
 //     // sub directories
-//     list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
-//
-//     if (list != 0) {
-//       QFileInfoListIterator itd(*list);
-//       QFileInfo * di;
-//
-//       while ((di = itd.current()) != 0) {
-// 	if (((const char *) di->fileName())[0] != '.') {
-// 	  QDir sd(di->filePath());
-//
-// 	  result += file_number(sd, rec);
-// 	}
-// 	++itd;
-//       }
-//     }
-//   }
-//
         list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
 
         if (!list.isEmpty()) {
             QFileInfoList::iterator it = list.begin();
 
-            while (it != list.end()) {
+            for(;it != list.end(); ++it){
                 if ((*it).fileName()[0] != '.') {
                     QDir sd((*it).filePath());
                     result += file_number(sd, rec);
                 }
-
-                it++;
             }
         }
     }
@@ -317,7 +284,7 @@ void Package::reverse_directory(QDir & d, bool rec)
     if (!list.isEmpty()) {
         QFileInfoList::iterator it = list.begin();
 
-        while (it != list.end()) {
+       for(;it != list.end(); ++it) {
             int extIndex;
             QString fileName;
             fileName = (*it).fileName();
@@ -332,21 +299,7 @@ void Package::reverse_directory(QDir & d, bool rec)
 
                 app->processEvents();
             }
-
-            ++it;
         }
-
-        /*
-            while ((fi = it.current()) != 0) {
-              if (fi->extension(FALSE) == Ext) {
-        	if (allowed(FileFilter, fi->fileName()))
-        	  reverse_file(WrapperStr(fi->filePath()), WrapperStr(my_baseName(fi)));
-        	if (progress)
-        	  progress->tic();
-        	app->processEvents();
-              }
-              ++it;
-            }*/
     }
 
     if (rec) {
@@ -356,7 +309,7 @@ void Package::reverse_directory(QDir & d, bool rec)
         if (!list.isEmpty()) {
             QFileInfoList::iterator itd = list.begin();
 
-            while (itd != list.end()) {
+            for(;itd != list.end(); ++itd) {
 
                 if ((*itd).fileName()[0] != '.') {
                     QDir sd((*itd).filePath());
@@ -366,8 +319,6 @@ void Package::reverse_directory(QDir & d, bool rec)
                     if (p != 0)
                         p->reverse_directory(sd, TRUE);
                 }
-
-                ++itd;
             }
         }
     }

@@ -44,9 +44,9 @@ class BrowserOperation;
 class BrowserPin;
 
 struct PinDescr : public PinParamData {
-    const char * name;
+    QString name;
 
-    PinDescr() : name(0) {}
+    PinDescr() : name(QString()) {}
 
     virtual void do_connect(BrowserClass *) override;
     virtual void do_disconnect(BrowserClass *) override;

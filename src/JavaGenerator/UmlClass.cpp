@@ -397,7 +397,7 @@ void UmlClass::generate_formals(QTextStream & f)
         QList<UmlFormalParameter>::Iterator it;
         const char * sep = "<";
 
-        for (it = fs.begin(); it != fs.end(); it++) {
+        for (it = fs.begin(); it != fs.end(); ++it) {
             UmlFormalParameter & p = *it;
 
             f << sep;

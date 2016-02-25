@@ -778,30 +778,30 @@ const char * stringify(LineGeometry v)
     }
 }
 
-UmlCode arrow_type(const char * s)
+UmlCode arrow_type(QString s)
 {
-    if (!strcmp(s, "---|>"))
+    if (s =="---|>")
         return UmlGeneralisation;
 
-    if (!strcmp(s, "----"))
+    if (s =="----")
         return UmlAssociation;
 
-    if (!strcmp(s, "--->"))
+    if (s =="--->")
         return UmlDirectionalAssociation;
 
-    if (!strcmp(s, "-_->"))
+    if (s =="-_->")
         return UmlDependency;
 
-    if (!strcmp(s, "-_-_"))
+    if (s =="-_-_")
         return UmlAnchor;
 
-    if (!strcmp(s, "---("))
+    if (s =="---(")
         return UmlRequired;
 
-    if (!strcmp(s, "---O"))
+    if (s =="---O")
         return UmlProvided;
 
-    if (!strcmp(s, "---+"))
+    if (s =="---+")
         return UmlInner;
 
     msg_critical("Error",
@@ -809,37 +809,37 @@ UmlCode arrow_type(const char * s)
     THROW_ERROR 0;
 }
 
-UmlCode relation_type(const char * s, bool simple_relation)
+UmlCode relation_type(QString s, bool simple_relation)
 {
-    if (!strcmp(s, "----"))
+    if (s =="----")
         return UmlAssociation;
 
-    if (!strcmp(s, "--->"))
+    if (s =="--->")
         return UmlDirectionalAssociation;
 
-    if (!strcmp(s, "---|>"))
+    if (s =="---|>")
         return (simple_relation)
                 ? UmlInherit
                 : UmlGeneralisation;
 
-    if (!strcmp(s, "o---"))
+    if (s =="o---")
         return UmlAggregation;
 
-    if (!strcmp(s, "*---"))
+    if (s =="*---")
         return UmlAggregationByValue;
 
-    if (!strcmp(s, "<>-->") || !strcmp(s, "o-->"))
+    if (s =="<>-->" || s =="o-->")
         return UmlDirectionalAggregation;
 
-    if (!strcmp(s, "<#>-->") || !strcmp(s, "*-->"))
+    if (s =="<#>-->" || s =="*-->")
         return UmlDirectionalAggregationByValue;
 
-    if (!strcmp(s, "-_->"))
+    if (s =="-_->")
         return (simple_relation)
                 ? UmlDependOn
                 : UmlDependency;
 
-    if (!strcmp(s, "-_-|>"))
+    if (s =="-_-|>")
         return UmlRealize;
 
     msg_critical("Error",
@@ -859,17 +859,17 @@ bool IsaSimpleRelation(UmlCode c)
     }
 }
 
-UmlVisibility visibility(const char * s)
+UmlVisibility visibility(QString s)
 {
-    if (!strcmp(s, "public"))
+    if (s == "public")
         return UmlPublic;
-    else if (!strcmp(s, "protected"))
+    else if (s == "protected")
         return UmlProtected;
-    else if (!strcmp(s, "private"))
+    else if (s == "private")
         return UmlPrivate;
-    else if (!strcmp(s, "package"))
+    else if (s == "package")
         return UmlPackageVisibility;
-    else if (!strcmp(s, "default"))
+    else if (s == "default")
         return UmlDefaultVisibility;
 
     msg_critical(QObject::tr("Error"),
@@ -877,18 +877,18 @@ UmlVisibility visibility(const char * s)
     THROW_ERROR 0;
 }
 
-UmlParamDirection direction(const char * s)
+UmlParamDirection direction(QString s)
 {
-    if (!strcmp(s, "inout"))
+    if (s =="inout")
         return UmlInOut;
 
-    if (!strcmp(s, "in"))
+    if (s =="in")
         return UmlIn;
 
-    if (!strcmp(s, "out"))
+    if (s =="out")
         return UmlOut;
 
-    if (!strcmp(s, "return"))
+    if (s =="return")
         return UmlReturn;
 
     msg_critical(QObject::tr("Error"),
@@ -896,21 +896,21 @@ UmlParamDirection direction(const char * s)
     THROW_ERROR 0;
 }
 
-UmlParamEffect effect(const char * s)
+UmlParamEffect effect(QString s)
 {
-    if (!strcmp(s, "none"))
+    if (s =="none")
         return UmlNoEffect;
 
-    if (!strcmp(s, "create"))
+    if (s =="create")
         return UmlCreate;
 
-    if (!strcmp(s, "read"))
+    if (s =="read")
         return UmlRead;
 
-    if (!strcmp(s, "update"))
+    if (s =="update")
         return UmlUpdate;
 
-    if (!strcmp(s, "delete"))
+    if (s =="delete")
         return UmlDelete;
 
     msg_critical(QObject::tr("Error"),
@@ -918,69 +918,69 @@ UmlParamEffect effect(const char * s)
     THROW_ERROR 0;
 }
 
-UmlActionKind activity_action_kind(const char * s)
+UmlActionKind activity_action_kind(QString s)
 {
-    if (!strcmp(s, "opaque_action"))
+    if (s =="opaque_action")
         return UmlOpaqueAction;
 
-    if (!strcmp(s, "accept_event_action"))
+    if (s =="accept_event_action")
         return UmlAcceptEventAction;
 
-    if (!strcmp(s, "read_variable_value_action"))
+    if (s =="read_variable_value_action")
         return UmlReadVariableValueAction;
 
-    if (!strcmp(s, "clear_variable_value_action"))
+    if (s =="clear_variable_value_action")
         return UmlClearVariableValueAction;
 
-    if (!strcmp(s, "write_variable_value_action"))
+    if (s =="write_variable_value_action")
         return UmlWriteVariableValueAction;
 
-    if (!strcmp(s, "add_variable_value_action"))
+    if (s =="add_variable_value_action")
         return UmlAddVariableValueAction;
 
-    if (!strcmp(s, "remove_variable_value_action"))
+    if (s =="remove_variable_value_action")
         return UmlRemoveVariableValueAction;
 
-    if (!strcmp(s, "call_behavior_action"))
+    if (s =="call_behavior_action")
         return UmlCallBehaviorAction;
 
-    if (!strcmp(s, "call_operation_action"))
+    if (s =="call_operation_action")
         return UmlCallOperationAction;
 
-    if (!strcmp(s, "send_object_action"))
+    if (s =="send_object_action")
         return UmlSendObjectAction;
 
-    if (!strcmp(s, "send_signal_action"))
+    if (s =="send_signal_action")
         return UmlSendSignalAction;
 
-    if (!strcmp(s, "broadcast_signal_action"))
+    if (s =="broadcast_signal_action")
         return UmlBroadcastSignalAction;
 
-    if (!strcmp(s, "unmarshall_action"))
+    if (s =="unmarshall_action")
         return UmlUnmarshallAction;
 
-    if (!strcmp(s, "value_specification_action"))
+    if (s =="value_specification_action")
         return UmlValueSpecificationAction;
 
-    if (!strcmp(s, "accept_call_action"))
+    if (s =="accept_call_action")
         return UmlAcceptCallAction;
 
-    if (!strcmp(s, "reply_action"))
+    if (s =="reply_action")
         return UmlReplyAction;
 
-    if (!strcmp(s, "create_object_action"))
+    if (s =="create_object_action")
         return UmlCreateObjectAction;
 
-    if (!strcmp(s, "destroy_object_action"))
+    if (s =="destroy_object_action")
         return UmlDestroyObjectAction;
 
-    if (!strcmp(s, "test_identity_action"))
+    if (s =="test_identity_action")
         return UmlTestIdentityAction;
 
-    if (!strcmp(s, "raise_exception_action"))
+    if (s =="raise_exception_action")
         return UmlRaiseExceptionAction;
 
-    if (!strcmp(s, "reduce_action"))
+    if (s =="reduce_action")
         return UmlReduceAction;
 
     msg_critical(QObject::tr("Error"),
@@ -988,15 +988,15 @@ UmlActionKind activity_action_kind(const char * s)
     THROW_ERROR 0;
 }
 
-UmlExpansionKind expansion_mode_kind(const char * s)
+UmlExpansionKind expansion_mode_kind(QString s)
 {
-    if (! strcmp(s, "parallel"))
+    if (s =="parallel")
         return UmlParallel;
 
-    if (! strcmp(s, "iterative"))
+    if (s =="iterative")
         return UmlIterative;
 
-    if (! strcmp(s, "stream"))
+    if (s =="stream")
         return UmlStream;
 
     msg_critical(QObject::tr("Error"),
@@ -1004,18 +1004,18 @@ UmlExpansionKind expansion_mode_kind(const char * s)
     THROW_ERROR 0;
 }
 
-UmlOrderingKind ordering(const char * s)
+UmlOrderingKind ordering(QString s)
 {
-    if (! strcmp(s, "unordered"))
+    if (s == "unordered")
         return UmlUnordered;
 
-    if (! strcmp(s, "ordered"))
+    if (s =="ordered")
         return UmlOrdered;
 
-    if (! strcmp(s, "lifo"))
+    if (s =="lifo")
         return UmlLifo;
 
-    if (! strcmp(s, "fifo"))
+    if (s =="fifo")
         return UmlFifo;
 
     msg_critical(QObject::tr("Error"),
@@ -1023,15 +1023,15 @@ UmlOrderingKind ordering(const char * s)
     THROW_ERROR 0;
 }
 
-Uml3States state(const char * s)
+Uml3States state(QString s)
 {
-    if (!strcmp(s, "yes"))
+    if (s =="yes")
         return UmlYes;
 
-    if (!strcmp(s, "no"))
+    if (s =="no")
         return UmlNo;
 
-    if (!strcmp(s, "default"))
+    if (s =="default")
         return UmlDefaultState;
 
     msg_critical(QObject::tr("Error"),
@@ -1039,30 +1039,30 @@ Uml3States state(const char * s)
     THROW_ERROR 0;
 }
 
-ClassDrawingMode drawing_mode(const char * s)
+ClassDrawingMode drawing_mode(QString s)
 {
-    if (!strcmp(s, "class"))
+    if (s =="class")
         return asClass;
 
-    if (!strcmp(s, "interface"))
+    if (s =="interface")
         return asInterface;
 
-    if (!strcmp(s, "control"))
+    if (s =="control")
         return asControl;
 
-    if (!strcmp(s, "boundary"))
+    if (s =="boundary")
         return asBoundary;
 
-    if (!strcmp(s, "entity"))
+    if (s =="entity")
         return asEntity;
 
-    if (!strcmp(s, "actor"))
+    if (s =="actor")
         return asActor;
 
-    if (!strcmp(s, "natural"))
+    if (s =="natural")
         return Natural;
 
-    if (!strcmp(s, "default"))
+    if (s =="default")
         return DefaultClassDrawingMode;
 
     msg_critical(QObject::tr("Error"),
@@ -1070,27 +1070,27 @@ ClassDrawingMode drawing_mode(const char * s)
     THROW_ERROR 0;
 }
 
-DrawingLanguage drawing_language(const char * s)
+DrawingLanguage drawing_language(QString s)
 {
-    if (!strcmp(s, "uml"))
+    if (s =="uml")
         return UmlView;
 
-    if (!strcmp(s, "c++"))
+    if (s =="c++")
         return CppView;
 
-    if (!strcmp(s, "java"))
+    if (s =="java")
         return JavaView;
 
-    if (!strcmp(s, "php"))
+    if (s =="php")
         return PhpView;
 
-    if (!strcmp(s, "python"))
+    if (s =="python")
         return PythonView;
 
-    if (!strcmp(s, "idl"))
+    if (s =="idl")
         return IdlView;
 
-    if (!strcmp(s, "default"))
+    if (s =="default")
         return DefaultDrawingLanguage;
 
     msg_critical(QObject::tr("Error"),
@@ -1098,27 +1098,27 @@ DrawingLanguage drawing_language(const char * s)
     THROW_ERROR 0;
 }
 
-ShowContextMode context_mode(const char * s)
+ShowContextMode context_mode(QString s)
 {
-    if (!strcmp(s, "no"))
+    if (s =="no")
         return noContext;
 
-    if (!strcmp(s, "uml"))
+    if (s =="uml")
         return umlContext;
 
-    if (!strcmp(s, "namespace"))
+    if (s =="namespace")
         return namespaceContext;
 
-    if (!strcmp(s, "package") || !strcmp(s, "java_package"))
+    if (s =="package" || s =="java_package")
         return javaPackageContext;
 
-    if (!strcmp(s, "python_package"))
+    if (s =="python_package")
         return pythonPackageContext;
 
-    if (!strcmp(s, "module"))
+    if (s =="module")
         return moduleContext;
 
-    if (!strcmp(s, "default"))
+    if (s =="default")
         return DefaultShowContextMode;
 
     msg_critical(QObject::tr("Error"),
@@ -1126,102 +1126,102 @@ ShowContextMode context_mode(const char * s)
     THROW_ERROR 0;
 }
 
-UmlColor color(const char * s)
+UmlColor color(QString s)
 {
-    if (!strcmp(s, "transparent"))
+    if (s =="transparent")
         return UmlTransparent;
 
-    if (!strcmp(s, "white"))
+    if (s =="white")
         return UmlWhite;
 
-    if (!strcmp(s, "lightyellow"))
+    if (s =="lightyellow")
         return UmlLightYellow;
 
-    if (!strcmp(s, "yellow"))
+    if (s =="yellow")
         return UmlYellow;
 
-    if (!strcmp(s, "mediumyellow"))
+    if (s =="mediumyellow")
         return UmlMediumYellow;
 
-    if (!strcmp(s, "gold"))
+    if (s =="gold")
         return UmlDarkYellow;
 
-    if (!strcmp(s, "lightblue"))
+    if (s =="lightblue")
         return UmlLightBlue;
 
-    if (!strcmp(s, "lightmediumblue"))
+    if (s =="lightmediumblue")
         return UmlLightMediumBlue;
 
-    if (!strcmp(s, "mediumblue"))
+    if (s =="mediumblue")
         return UmlMediumBlue;
 
-    if (!strcmp(s, "blue"))
+    if (s =="blue")
         return UmlBlue;
 
-    if (!strcmp(s, "darkblue"))
+    if (s =="darkblue")
         return UmlDarkBlue;
 
-    if (!strcmp(s, "lightgreen"))
+    if (s =="lightgreen")
         return UmlLightGreen;
 
-    if (!strcmp(s, "green"))
+    if (s =="green")
         return UmlGreen;
 
-    if (!strcmp(s, "lightmediumgreen"))
+    if (s =="lightmediumgreen")
         return UmlLightMediumGreen;
 
-    if (!strcmp(s, "mediumgreen"))
+    if (s =="mediumgreen")
         return UmlMediumGreen;
 
-    if (!strcmp(s, "darkgreen"))
+    if (s =="darkgreen")
         return UmlDarkGreen;
 
-    if (! strcmp(s, "lightred"))
+    if (s =="lightred")
         return UmlLightRed;
 
-    if (! strcmp(s, "midred"))
+    if (s =="midred")
         return UmlMidRed;
 
-    if (!strcmp(s, "red"))
+    if (s =="red")
         return UmlRed;
 
-    if (!strcmp(s, "verylightgray"))
+    if (s =="verylightgray")
         return UmlVeryLightGray;
 
-    if (!strcmp(s, "lightgray"))
+    if (s =="lightgray")
         return UmlLightGray;
 
-    if (!strcmp(s, "gray"))
+    if (s =="gray")
         return UmlGray;
 
-    if (!strcmp(s, "darkgray"))
+    if (s =="darkgray")
         return UmlDarkGray;
 
-    if (!strcmp(s, "black"))
+    if (s =="black")
         return UmlBlack;
 
-    if (! strcmp(s, "verylightorange"))
+    if (s =="verylightorange")
         return UmlVeryLightOrange;
 
-    if (! strcmp(s, "lightorange"))
+    if (s =="lightorange")
         return UmlLightOrange;
 
-    if (! strcmp(s, "orange"))
+    if (s =="orange")
         return UmlOrange;
 
-    if (! strcmp(s, "darkorange"))
+    if (s =="darkorange")
         return UmlDarkOrange;
 
-    if (! strcmp(s, "lightmagenta"))
+    if (s =="lightmagenta")
         return UmlLightMagenta;
 
-    if (! strcmp(s, "magenta"))
+    if (s =="magenta")
         return UmlMagenta;
 
-    if (! strcmp(s, "midmagenta"))
+    if (s =="midmagenta")
         return UmlMidMagenta;
 
-    if (! strcmp(s, "darkmagenta"))
+    if (s =="darkmagenta")
         return UmlDarkMagenta;
 
     msg_critical(QObject::tr("Error"),
@@ -1229,48 +1229,48 @@ UmlColor color(const char * s)
     THROW_ERROR 0;
 }
 
-UmlFont font(const char * s)
+UmlFont font(QString s)
 {
-    if (!strcmp(s, "normal"))
+    if (s =="normal")
         return UmlNormalFont;
 
-    if (!strcmp(s, "bold"))
+    if (s =="bold")
         return UmlNormalBoldFont;
 
-    if (!strcmp(s, "italic"))
+    if (s =="italic")
         return UmlNormalItalicFont;
 
-    if (!strcmp(s, "bold_italic"))
+    if (s =="bold_italic")
         return UmlNormalBoldItalicFont;
 
-    if (!strcmp(s, "small"))
+    if (s =="small")
         return UmlSmallFont;
 
-    if (!strcmp(s, "small_bold"))
+    if (s =="small_bold")
         return UmlSmallBoldFont;
 
-    if (!strcmp(s, "small_italic"))
+    if (s =="small_italic")
         return UmlSmallItalicFont;
 
-    if (!strcmp(s, "small_bold_italic"))
+    if (s =="small_bold_italic")
         return UmlSmallBoldItalicFont;
 
-    if (!strcmp(s, "large"))
+    if (s =="large")
         return UmlLargeFont;
 
-    if (!strcmp(s, "large_bold"))
+    if (s =="large_bold")
         return UmlLargeBoldFont;
 
-    if (!strcmp(s, "large_italic"))
+    if (s =="large_italic")
         return UmlLargeItalicFont;
 
-    if (!strcmp(s, "large_bold_italic"))
+    if (s =="large_bold_italic")
         return UmlLargeBoldItalicFont;
 
-    if (!strcmp(s, "underlined"))
+    if (s =="underlined")
         return UmlNormalUnderlinedFont;
 
-    if (!strcmp(s, "strikeout"))
+    if (s =="strikeout")
         return UmlNormalStrikeOutFont;
 
     msg_critical(QObject::tr("Error"),
@@ -1278,90 +1278,90 @@ UmlFont font(const char * s)
     THROW_ERROR 0;
 }
 
-CanvasFormat canvas_format(const char * s)
+CanvasFormat canvas_format(QString s)
 {
-    if (! strcmp(s, "A0"))
+    if (s =="A0")
         return IsoA0;
 
-    if (! strcmp(s, "A1"))
+    if (s =="A1")
         return IsoA1;
 
-    if (! strcmp(s, "A2"))
+    if (s =="A2")
         return IsoA2;
 
-    if (! strcmp(s, "A3"))
+    if (s =="A3")
         return IsoA3;
 
-    if (! strcmp(s, "A4"))
+    if (s =="A4")
         return IsoA4;
 
-    if (! strcmp(s, "A5"))
+    if (s =="A5")
         return IsoA5;
 
-    if (! strcmp(s, "A"))
+    if (s =="A")
         return UsA;
 
-    if (! strcmp(s, "B"))
+    if (s =="B")
         return UsB;
 
-    if (! strcmp(s, "C"))
+    if (s =="C")
         return UsC;
 
-    if (! strcmp(s, "D"))
+    if (s =="D")
         return UsD;
 
-    if (! strcmp(s, "E"))
+    if (s =="E")
         return UsE;
 
-    if (! strcmp(s, "Letter"))
+    if (s =="Letter")
         return UsLetter;
 
-    if (! strcmp(s, "Legal"))
+    if (s =="Legal")
         return UsLegal;
 
-    if (! strcmp(s, "Tabloid"))
+    if (s =="Tabloid")
         return UsTabloid;
 
-    if (! strcmp(s, "A0-Landscape"))
+    if (s =="A0-Landscape")
         return IsoA0Landscape;
 
-    if (! strcmp(s, "A1-Landscape"))
+    if (s =="A1-Landscape")
         return IsoA1Landscape;
 
-    if (! strcmp(s, "A2-Landscape"))
+    if (s =="A2-Landscape")
         return IsoA2Landscape;
 
-    if (! strcmp(s, "A3-Landscape"))
+    if (s =="A3-Landscape")
         return IsoA3Landscape;
 
-    if (! strcmp(s, "A4-Landscape"))
+    if (s =="A4-Landscape")
         return IsoA4Landscape;
 
-    if (! strcmp(s, "A5-Landscape"))
+    if (s =="A5-Landscape")
         return IsoA5Landscape;
 
-    if (! strcmp(s, "A-Landscape"))
+    if (s =="A-Landscape")
         return UsALandscape;
 
-    if (! strcmp(s, "B-Landscape"))
+    if (s =="B-Landscape")
         return UsBLandscape;
 
-    if (! strcmp(s, "C-Landscape"))
+    if (s =="C-Landscape")
         return UsCLandscape;
 
-    if (! strcmp(s, "D-Landscape"))
+    if (s =="D-Landscape")
         return UsDLandscape;
 
-    if (! strcmp(s, "E-Landscape"))
+    if (s =="E-Landscape")
         return UsELandscape;
 
-    if (! strcmp(s, "Letter-Landscape"))
+    if (s =="Letter-Landscape")
         return UsLetterLandscape;
 
-    if (! strcmp(s, "Legal-Landscape"))
+    if (s =="Legal-Landscape")
         return UsLegalLandscape;
 
-    if (! strcmp(s, "Ledger"))
+    if (s =="Ledger")
         return UsLedger;
 
     msg_critical(QObject::tr("Error"),
@@ -1369,39 +1369,39 @@ CanvasFormat canvas_format(const char * s)
     THROW_ERROR 0;
 }
 
-UmlCode pseudo_state_kind(const char * s)
+UmlCode pseudo_state_kind(QString s)
 {
-    if (! strcmp(s, "initial"))
+    if (s =="initial")
         return InitialPS;
 
-    if (! strcmp(s, "entry_point"))
+    if (s =="entry_point")
         return EntryPointPS;
 
-    if (! strcmp(s, "final"))
+    if (s =="final")
         return FinalPS;
 
-    if (! strcmp(s, "terminate"))
+    if (s =="terminate")
         return TerminatePS;
 
-    if (! strcmp(s, "exit_point"))
+    if (s =="exit_point")
         return ExitPointPS;
 
-    if (! strcmp(s, "deep_history"))
+    if (s =="deep_history")
         return DeepHistoryPS;
 
-    if (! strcmp(s, "shallow_history"))
+    if (s =="shallow_history")
         return ShallowHistoryPS;
 
-    if (! strcmp(s, "junction"))
+    if (s =="junction")
         return JunctionPS;
 
-    if (! strcmp(s, "choice"))
+    if (s =="choice")
         return ChoicePS;
 
-    if (! strcmp(s, "fork"))
+    if (s =="fork")
         return ForkPS;
 
-    if (! strcmp(s, "join"))
+    if (s =="join")
         return JoinPS;
 
     msg_critical(QObject::tr("Error"),
@@ -1409,31 +1409,31 @@ UmlCode pseudo_state_kind(const char * s)
     THROW_ERROR 0;
 }
 
-UmlCode activity_node_kind(const char * s)
+UmlCode activity_node_kind(QString s)
 {
-    if (! strcmp(s, "initial"))
+    if (s =="initial")
         // old releases
         return InitialAN;
 
-    if (! strcmp(s, "initial_node"))
+    if (s =="initial_node")
         return InitialAN;
 
-    if (! strcmp(s, "flow_final"))
+    if (s =="flow_final")
         return FlowFinalAN;
 
-    if (! strcmp(s, "activity_final"))
+    if (s =="activity_final")
         return ActivityFinalAN;
 
-    if (! strcmp(s, "decision"))
+    if (s =="decision")
         return DecisionAN;
 
-    if (! strcmp(s, "merge"))
+    if (s =="merge")
         return MergeAN;
 
-    if (! strcmp(s, "fork"))
+    if (s =="fork")
         return ForkAN;
 
-    if (! strcmp(s, "join"))
+    if (s =="join")
         return JoinAN;
 
     msg_critical(QObject::tr("Error"),
@@ -1441,24 +1441,24 @@ UmlCode activity_node_kind(const char * s)
     THROW_ERROR 0;
 }
 
-LineGeometry line_geometry(const char * s)
+LineGeometry line_geometry(QString s)
 {
-    if (! strcmp(s, "HV"))
+    if (s =="HV")
         return HVGeometry;
 
-    if (! strcmp(s, "HVr"))
+    if (s =="HVr")
         return HVrGeometry;
 
-    if (! strcmp(s, "VH"))
+    if (s =="VH")
         return VHGeometry;
 
-    if (! strcmp(s, "VHr"))
+    if (s =="VHr")
         return VHrGeometry;
 
-    if (! strcmp(s, "HVH"))
+    if (s =="HVH")
         return HVHGeometry;
 
-    if (! strcmp(s, "VHV"))
+    if (s =="VHV")
         return VHVGeometry;
 
     msg_critical(QObject::tr("Error"),
@@ -1599,31 +1599,24 @@ bool copy_file(QFileInfo * src, const QDir & dest)
     return TRUE;
 }
 
-void save_if_needed(const char * filename, const QSharedPointer<QByteArray> & newdef)
+void save_if_needed(const char * filename, QString& newdef)
 {
     QDir d = BrowserView::get_dir();
     QString path = d.absoluteFilePath(filename);
     FILE * fp = fopen(path.toLatin1().constData(), "rb");
-    bool needed;
+    bool needed = false;
 
     if (fp == 0)
         needed = TRUE;
     else {
-        int c;
-        const char * new_contains = newdef->constData();
-
-        needed = FALSE;
-
-        while ((c = fgetc(fp)) != EOF) {
-            if (c != *new_contains++) {
-                needed = TRUE;
-                break;
-            }
-        }
-
+        QString oldDef;
+        QTextStream st(fp, QIODevice::ReadOnly);
+        st.setCodec("UTF-8");
+        st>>oldDef;
+        st.flush();
+        if(newdef != oldDef)
+            needed = true;
         fclose(fp);
-
-        needed |= (*new_contains != 0);
     }
 
     if (needed) {
@@ -1634,22 +1627,14 @@ void save_if_needed(const char * filename, const QSharedPointer<QByteArray> & ne
                 (void) msg_critical("Error", QObject::tr("Cannot create file\n") + path,
                                     QMessageBox::Retry);
 
-            QLOG_INFO() << newdef.data();
+            QLOG_INFO() << newdef;
 
-            if (!newdef->isEmpty()) {
-                if (fputs(newdef->constData(), fp) < 0) {
-                    fclose(fp);
-                    (void) msg_critical(QObject::tr("Error"),
-                                        QObject::tr("Error while writting in\n%1\nmay be your disk is full").arg(path),
-                                        QMessageBox::Retry);
-                }
-                else
-                    // ok
-                    break;
-            }
-            else
-                // ok
-                break;
+            QTextStream st(fp);
+            st.setCodec("UTF-8");
+            st<<newdef;
+            st.flush();
+            break;
+
         }
 
         fclose(fp);
@@ -1773,7 +1758,7 @@ char * read_definition(int id, const char * ext, qint64 offset, qint64 len)
     return read_file(s, offset, len);
 }
 
-void save_definition(int id, const char * ext, const char * def,
+void save_definition(int id, const char * ext, QString def,
                      BooL & is_new)
 {
     QString s;
@@ -1803,20 +1788,11 @@ void save_definition(int id, const char * ext, const char * def,
                                 QObject::tr("Cannot create file\n") + s,
                                 QMessageBox::Retry);
 
-        if ((def != 0) && *def) {
-            if (fputs(def, fp) < 0) {
-                fclose(fp);
-                (void) msg_critical(QObject::tr("Error"),
-                                    QObject::tr("Cannot save definition in\n%1\nmay be your disk is full").arg(s),
-                                    QMessageBox::Retry);
-            }
-            else
-                // ok
-                break;
-        }
-        else
-            // ok
-            break;
+        QTextStream st(fp);
+        st.setCodec("UTF-8");
+        st<<def;
+        st.flush();
+        break;
     }
 
     fclose(fp);
@@ -1854,63 +1830,14 @@ static QString where()
 
 //
 
-void save_string(const char * p, QTextStream & st)
+void save_string(QString p, QTextStream & st)
 {
-    int zeroCount = 0;
-    if ((p == 0) || (*p == 0))
-        st << "\"\"";
-    else {
+    QString toWrite = p;
+    toWrite.replace('\\',"\\\\");
+    toWrite.replace('"',"\\\"");
         st << '"';
-
-        for (;;) {
-            const char * p2 = strchr(p, '"');
-            const char * p3 = strchr(p, '\\');
-
-            if ((p2 != 0) || (p3 != 0)) {
-                if ((p2 == 0) || ((p3 != 0) && (p3 < p2)))
-                    p2 = p3;
-
-                // do NOT use writeRawBytes !
-                while (p != p2) {
-                    QString temp1 = QTextCodec::codecForLocale()->toUnicode(p).left(1);
-                    int size = QTextCodec::codecForLocale()->fromUnicode(temp1).size();
-                    st << temp1;
-                    p += size;
-                    if (size == 0) {
-                        zeroCount++;
-                        if (zeroCount > 5)
-                            break;
-                    }
-                }
-
-                st << '\\';
-                QString temp1 = QTextCodec::codecForLocale()->toUnicode(p).left(1);
-                int size =  QTextCodec::codecForLocale()->fromUnicode(temp1).size();
-                p += size;
-                st << temp1;
-
-                if (size == 0) {
-                    zeroCount++;
-                    if (zeroCount > 5)
-                        break;
-                }
-
-                if (*p == 0)
-                    break;
-            }
-            else {
-                st << p;
-                break;
-            }
-
-            if (zeroCount > 5) {
-                printf("unicode error\r\n");
-                break;
-            }
-        }
-
+        st << toWrite;
         st << '"';
-    }
 }
 
 void save_string_list(const QStringList & list, QTextStream & st)
@@ -1919,7 +1846,7 @@ void save_string_list(const QStringList & list, QTextStream & st)
 
     for (const auto& s : list) {
         st << " ";
-        save_string(s.toLatin1().constData(), st);
+        save_string(s, st);
     }
 }
 
@@ -1928,7 +1855,7 @@ void save_unicode_string_list(const QStringList & list, QTextStream & st)
     st << " " << list.count();
     for (const auto& s : list) {
         st << " ";
-        save_string(fromUnicode(s), st);
+        save_string(s, st);
     }
 }
 
@@ -2003,7 +1930,7 @@ bool at_end(char *& st)
     return (*st == 0);
 }
 
-char * read_string(char *& st)
+QString read_string(char *& st)
 {
     skip_whitespace_comment(st);
 
@@ -2041,7 +1968,7 @@ char * read_string(char *& st)
 
             Context.previous_word = new char[p - r + 1];
             memcpy(Context.previous_word, r, p - r + 1);
-            return r;
+            return QString::fromUtf8(r);
 
         case '\\':
             if (*++st  == 0) {
@@ -2332,7 +2259,7 @@ void read_unicode_string_list(QStringList & list, char *& st)
     list.clear();
 
     while (n--)
-        list.append(toUnicode(read_string(st)));
+        list.append(read_string(st));
 }
 
 char * skip_until(char *& st, const char * expected)
@@ -2649,9 +2576,9 @@ void load(int & i, QBuffer & b)
 static FILE * svg_fp;
 static int pict_height;
 
-bool start_svg(const char * f, int w, int h)
+bool start_svg(QString f, int w, int h)
 {
-    svg_fp = fopen(f, "w");
+    svg_fp = fopen(f.toLatin1().constData(), "w");
 
     if (svg_fp == 0)
         return FALSE;

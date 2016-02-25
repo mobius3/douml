@@ -9,7 +9,7 @@ class TabDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit TabDialog(QWidget * parent = 0, const char * name = 0, bool modal = false, Qt::WidgetAttribute f = Qt::WA_Disabled);
+    explicit TabDialog(QWidget * parent = 0, QString name = QString(), bool modal = false, Qt::WidgetAttribute f = Qt::WA_Disabled);
     void addTab(QWidget* tabWidget, QString name);
     void removePage(QWidget* page);
     void setOkButton(QString name);

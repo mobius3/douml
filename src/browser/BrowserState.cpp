@@ -365,7 +365,7 @@ void BrowserState::menu()
                                          MenuFactory::addItem(m, QObject::tr("Referenced by"), 10,
                                                               QObject::tr("to know who reference the <i>state</i> \
                                                                           through a transition or a reference"));
-                                                                          mark_menu(m, QObject::tr("the %1").arg(what).toLatin1().constData(), 90);
+                                                                          mark_menu(m, QObject::tr("the %1").arg(what), 90);
                                                               ProfiledStereotypes::menu(m, this, 99990);
 
                                          if ((edition_number == 0) &&
@@ -1027,7 +1027,7 @@ void BrowserState::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "state " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         indent(+1);
         def->save(st, warning);
 

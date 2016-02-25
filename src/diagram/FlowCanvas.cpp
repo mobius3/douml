@@ -559,7 +559,7 @@ void FlowCanvas::update(bool updatepos)
             if (s == "interrupt")
                 s = LabelCanvas::Zigzag;
             else if (s != LabelCanvas::Zigzag)
-                s = QString("<<") + toUnicode(s.toLatin1().constData()) + ">>";
+                s = QString("<<") + s + ">>";
 
             if ((pstereotype == 0) && (begin->typeUmlCode() != UmlArrowPoint)) {
                 // adds relation's stereotype

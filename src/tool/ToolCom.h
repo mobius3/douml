@@ -98,7 +98,7 @@ public:
     }
     virtual ~ToolCom();
 
-    static int run(const char * cmd, BrowserNode *,
+    static int run(QString cmd, BrowserNode *,
                    bool exit = FALSE, bool clr = TRUE,
                    void (*pf)() = 0);
     friend int exit_value();
@@ -119,7 +119,7 @@ public:
 
     void write_unsigned(unsigned u);
     void write_bool(bool);
-    void write_id(BrowserNode * bn, char kind, const char * name);
+    void write_id(BrowserNode * bn, char kind, QString name);
     void write_id(void * id);
     void write_string(QString str);
     void write_string(WrapperStr str);

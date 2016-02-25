@@ -67,7 +67,7 @@ public:
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     const QString & name = QString());
     static BrowserActivityPartition * add_activitypartition(BrowserNode * future_parent);
-    static BrowserActivityPartition * add_activitypartition(BrowserNode * future_parent, const char * name);
+    static BrowserActivityPartition * add_activitypartition(BrowserNode * future_parent, QString name);
     static BrowserActivityPartition * get_activitypartition(BrowserNode * parent);
 
     virtual const QPixmap * pixmap(int) const;

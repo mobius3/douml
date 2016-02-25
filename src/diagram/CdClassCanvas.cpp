@@ -332,22 +332,15 @@ void CdClassCanvas::check_size()
                     bool have_stprop = FALSE;
 
                     for (int ik = 0; ik != nk; ik += 1) {
-                        const char * k =  kv->get_key(ik);
-                        const char * p;
-                        unsigned nseps = 0;
+                        QString v;
+                        QString k =  kv->get_key(ik);
+                        QStringList p = k.split(':');
 
-                        for (p = k; *p; p += 1) {
-                            if (*p == ':') {
-                                nseps += 1;
-                                k = p + 1;
-                            }
-                        }
+                        if(p.count() == 3){
+                            v = kv->get_value(ik);
 
-                        if (nseps == 2) {
-                            p = kv->get_value(ik);
-
-                            if (p && *p) {
-                                s = k + QString("=") + p;
+                            if (!v.isEmpty()) {
+                                s = p.at(2) + QString("=") + v;
 
                                 if ((int) s.length() >= max_member_width)
                                     s = s.left(max_member_width) + "...";
@@ -757,21 +750,14 @@ void write_member_st_prop(QPainter & p, FILE * fp, QRect & r,
     int nk = (int) kv->get_n_keys();
 
     for (int ik = 0; ik != nk; ik += 1) {
-        const char * k =  kv->get_key(ik);
-        const char * ps;
-        unsigned nseps = 0;
+        QString v;
+        QString k =  kv->get_key(ik);
+        QStringList ps = k.split(':');
 
-        for (ps = k; *ps; ps += 1) {
-            if (*ps == ':') {
-                nseps += 1;
-                k = ps + 1;
-            }
-        }
+        if(ps.count() == 3){
+            v = kv->get_value(ik);
 
-        if (nseps == 2) {
-            ps = kv->get_value(ik);
-
-            if (ps && *ps) {
+            if (!v.isEmpty()) {
                 if (!stwritten) {
                     stwritten = TRUE;
                     st = "<<" + st + ">>";
@@ -783,7 +769,7 @@ void write_member_st_prop(QPainter & p, FILE * fp, QRect & r,
                     r.setTop(r.top() + he);
                 }
 
-                QString s = k + QString("=") + ps;
+                QString s = ps.at(2) + QString("=") + v;
 
                 if ((int) s.length() >= max_member_width)
                     s = s.left(max_member_width) + "...";
@@ -1564,7 +1550,7 @@ void CdClassCanvas::menu(const QPoint &)
         break;
 
     case 1999: {
-        OperationListDialog dialog(QObject::tr("Choose operation to edit").toLatin1().constData(),
+        OperationListDialog dialog(QObject::tr("Choose operation to edit"),
                                    (QList<BrowserOperation *> &) operations);
 
         dialog.raise();
@@ -1578,7 +1564,7 @@ void CdClassCanvas::menu(const QPoint &)
     case 2999: {
         l = ((BrowserClass *) browser_node)->inherited_operations(~0u);
 
-        OperationListDialog dialog(QObject::tr("Choose inherited operation to add it").toLatin1().constData(), l);
+        OperationListDialog dialog(QObject::tr("Choose inherited operation to add it"), l);
 
         dialog.raise();
 

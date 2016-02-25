@@ -405,7 +405,7 @@ void ColMsg::save(QTextStream & st, const ColMsgList & l, bool copy,
                 }
                 else {
                     st << "explicitmsg ";
-                    save_string(br_op->get_name().toLatin1().constData(), st);
+                    save_string(br_op->get_name(), st);
                 }
             }
             else {
@@ -415,14 +415,14 @@ void ColMsg::save(QTextStream & st, const ColMsgList & l, bool copy,
         }
         else {
             st << "explicitmsg ";
-            save_string(msg->explicit_operation.toLatin1().constData(), st);
+            save_string(msg->explicit_operation, st);
         }
 
         indent(+1);
         nl_indent(st);
         st << ((msg->is_forward) ? "forward" : "backward")
            << " ranks " << msg->absolute_rank << " ";
-        save_string(msg->hierarchical_rank.toLatin1().constData(), st);
+        save_string(msg->hierarchical_rank, st);
 
         st << " ";
         msg->in->save(st, TRUE, warning);

@@ -266,7 +266,7 @@ void BrowserUseCase::menu()
         MenuFactory::addItem(m,  QObject::tr("Referenced by"), 12,
                              QObject::tr("to know who reference the <i>use case</i> \
                                          through a relation"));
-                                         mark_menu(m,  QObject::tr("the use case").toLatin1().constData(), 90);
+                                         mark_menu(m,  QObject::tr("the use case"), 90);
                              ProfiledStereotypes::menu(m, this, 99990);
 
                 if ((edition_number == 0) &&
@@ -1168,7 +1168,7 @@ void BrowserUseCase::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "usecase " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         indent(+1);
         def->save(st, warning);
         nl_indent(st);

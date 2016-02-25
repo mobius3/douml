@@ -32,8 +32,8 @@
 
 class QPixmap;
 
-QPixmap * get_pixmap(const char * path);
-QPixmap * get_pixmap(const char * path, double zoom);
+QPixmap * get_pixmap(QString path);
+QPixmap * get_pixmap(QString path, double zoom);
 void init_images();
 
 #endif

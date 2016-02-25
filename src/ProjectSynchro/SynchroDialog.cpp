@@ -149,7 +149,7 @@ void SynchroDialog::accept()
     QList<BrowserView*>::iterator itprj = browsers.begin();
     QList<QCheckBox*>::iterator itcb = checks.begin();
     bool work = FALSE;
-
+    ++itcb;
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     for (; itprj != browsers.end(); ++itprj) {

@@ -251,24 +251,22 @@ QStringList Tool::all_display()
     return r;
 }
 
-const char * Tool::command(int rank)
+QString Tool::command(int rank)
 {
-    static QByteArray command;
-    command = tools[rank].cmd.toLatin1();
-    return command.constData();
+    return tools[rank].cmd;
 }
 
-const char * Tool::command(const char * d)
+QString Tool::command(QString d)
 {
     unsigned index;
 
     for (index = 0; index != ntools; index += 1)
-        if (strcmp(d, tools[index].display.toLatin1().constData()) == 0)
+        if (d == tools[index].display)
         {
-            return tools[index].cmd.toLatin1().constData();
+            return tools[index].cmd;
         }
 
-    return 0;
+    return QString();
 }
 
 void Tool::set_ntools(unsigned n)
@@ -357,20 +355,18 @@ static const struct {
 
 void Tool::save()
 {
-    QSharedPointer<QByteArray> newdef(new QByteArray());
-    QTextStream st(newdef.data(), QIODevice::WriteOnly);
-
-    //st.setEncoding(QTextStream::Latin1);
-    st.setCodec(QTextCodec::codecForName("latin1"));
+    QString newdef;
+    QTextStream st(&newdef, QIODevice::WriteOnly);
+    st.setCodec(QTextCodec::codecForName("UTF-8"));
     st << "// 'tool' \"the executable\" \"displayed string\" {target}+";
 
     for (unsigned rank = 0; rank != ntools; rank += 1) {
         ATool & tool = tools[rank];
 
         st << "\ntool ";
-        save_string(tools[rank].display.toLatin1().constData(), st);
+        save_string(tools[rank].display, st);
         st << " ";
-        save_string(tools[rank].cmd.toLatin1().constData(), st);
+        save_string(tools[rank].cmd, st);
 
         for (int index = 0; index != sizeof(ToolCase) / sizeof(*ToolCase); index += 1) {
             if (tool.applicable[ToolCase[index].kind]) {

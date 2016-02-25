@@ -244,7 +244,7 @@ void BrowserStateDiagram::menu()
             }
         }
 
-        mark_menu(m,  QObject::tr("the state diagram").toLatin1().constData(), 90);
+        mark_menu(m,  QObject::tr("the state diagram"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
@@ -630,7 +630,7 @@ void BrowserStateDiagram::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "statediagram " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         indent(+1);
         def->save(st, warning);
         settings.save(st);

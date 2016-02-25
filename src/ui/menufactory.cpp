@@ -53,18 +53,7 @@ void MenuFactory::addItems(
 
 void MenuFactory::addItem(
     QMenu   &   menu,
-    const char * const name,
-    const int         id,
-    const char * const whatsThis)
-{
-    QAction *action = menu.addAction(QObject::tr(name));
-    if(whatsThis)
-        action->setWhatsThis(QObject::tr(whatsThis));
-    action->setData(id);
-}
-void MenuFactory::addItem(
-    QMenu   &   menu,
-    QString const name,
+    const QString name,
     const int         id,
     QString const whatsThis)
 {

@@ -84,7 +84,7 @@ extern void delete_backup(const QDir & d);
 extern qint64 open_file(QFile & fp, int mode, bool silent = FALSE);
 extern void read_in(const QString &);
 extern bool copy_file(QFileInfo * src, const QDir & dest);
-extern void save_if_needed(const char * filename, const QSharedPointer<QByteArray> &);
+extern void save_if_needed(const char * filename, QString& newdef);
 
 extern char * read_file(QString filename);
 extern char * read_file(QString filename, qint64 offset, qint64 len);
@@ -98,10 +98,10 @@ extern unsigned read_file_format();
 extern QString abs_file_path(int id, const char * ext);
 extern char * read_definition(int id, const char * ext);
 char * read_definition(int id, const char * ext, qint64 offset, qint64 len);
-extern void save_definition(int id, const char * ext, const char * def, BooL & is_new);
+extern void save_definition(int id, const char * ext, QString def, BooL & is_new);
 extern void delete_definition(int id, const char * ext);
 
-extern void save_string(const char *, QTextStream & st);
+extern void save_string(QString, QTextStream & st);
 extern void save_string_list(const QStringList & list, QTextStream & st);
 extern void save_unicode_string_list(const QStringList & list, QTextStream & st);
 extern void nl_indent(QTextStream & st);
@@ -110,7 +110,7 @@ extern int indent();
 extern void indent0();
 
 extern bool at_end(char *& st);
-extern char * read_string(char *& st);
+extern QString read_string(char *& st);
 extern char * read_keyword(char *& st);
 extern char * read_keyword(char *& st, const char * expected);
 extern char * read_keyword(char *& st, const char * expected1,
@@ -172,7 +172,7 @@ extern void load(int &, QBuffer &);
 
 // svg
 
-extern bool start_svg(const char * f, int w, int h);
+extern bool start_svg(QString f, int w, int h);
 extern void end_svg();
 extern FILE * svg();
 extern int svg_height();

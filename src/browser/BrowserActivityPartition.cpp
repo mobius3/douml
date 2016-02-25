@@ -166,7 +166,7 @@ BrowserActivityPartition::add_activitypartition(BrowserNode * future_parent)
 
 BrowserActivityPartition *
 BrowserActivityPartition::add_activitypartition(BrowserNode * future_parent,
-                                                const char * name)
+                                                QString name)
 {
     BrowserActivityPartition * r =
             new BrowserActivityPartition(name, future_parent);
@@ -656,7 +656,7 @@ void BrowserActivityPartition::save(QTextStream & st, bool ref, QString & warnin
     else {
         nl_indent(st);
         st << "activitypartition " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         indent(+1);
         def->save(st, warning);
 

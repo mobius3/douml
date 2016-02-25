@@ -226,7 +226,7 @@ Note that you can undelete them after"));
             }
         }
 
-        mark_menu(m, QObject::tr("the deployment view").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the deployment view"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         bool cpp = GenerationSettings::cpp_get_default_defs();
@@ -335,7 +335,7 @@ void BrowserDeploymentView::exec_menu_choice(int rank)
     break;
 
     case 3:
-        edit(QObject::tr("Deployment view").toLatin1().constData(), its_default_stereotypes);
+        edit(QObject::tr("Deployment view"), its_default_stereotypes);
         return;
 
     case 4:
@@ -549,7 +549,7 @@ void BrowserDeploymentView::apply_shortcut(const QString & s)
 void BrowserDeploymentView::open(bool)
 {
     if (!is_edited)
-        edit(QObject::tr("Deployment view").toLatin1().constData(), its_default_stereotypes);
+        edit(QObject::tr("Deployment view"), its_default_stereotypes);
 }
 
 UmlCode BrowserDeploymentView::get_type() const
@@ -803,7 +803,7 @@ void BrowserDeploymentView::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "deploymentview " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         indent(+1);
 
         def->save(st, warning);

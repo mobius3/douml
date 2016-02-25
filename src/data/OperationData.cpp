@@ -560,7 +560,7 @@ void OperationData::set_browser_node(BrowserOperation * o, bool update)
         if (GenerationSettings::cpp_get_default_defs()) {
             if (ClassDialog::cpp_stereotype(st) != "enum") {
                 cpp_decl = default_cpp_decl(browser_node->get_name());
-                cpp_def.assign(default_cpp_def(browser_node->get_name()).toLatin1().constData(), TRUE);
+                cpp_def.assign(default_cpp_def(browser_node->get_name()), TRUE);
             }
             else {
                 cpp_decl = "";
@@ -569,18 +569,18 @@ void OperationData::set_browser_node(BrowserOperation * o, bool update)
         }
 
         if (GenerationSettings::java_get_default_defs())
-            java_def.assign(default_java_def(browser_node->get_name()).toLatin1().constData(), TRUE);
+            java_def.assign(default_java_def(browser_node->get_name()), TRUE);
 
         if (GenerationSettings::php_get_default_defs())
             php_def.assign(default_php_def(browser_node->get_name(),
-                                           ClassDialog::php_stereotype(st) == "interface").toLatin1().constData(),
+                                           ClassDialog::php_stereotype(st) == "interface"),
                            TRUE);
 
         if (GenerationSettings::python_get_default_defs()) {
-            python_def.assign(default_python_def(browser_node->get_name()).toLatin1().constData(),
+            python_def.assign(default_python_def(browser_node->get_name()),
                               TRUE);
 
-            if (!strcmp(browser_node->get_name().toLatin1().constData(), "__init__")) {
+            if (browser_node->get_name() == "__init__") {
                 nparams = 1;
                 //params = new ParamData[1];
                 params.clear();
@@ -749,7 +749,7 @@ void OperationData::set_is_abstract(bool yes)
 
             if (index2 != -1) {
                 d = d.left(index) + dd.mid(index2);
-                php_def.assign(d.toLatin1().constData(), TRUE);
+                php_def.assign(d, TRUE);
             }
         }
     }
@@ -791,9 +791,9 @@ void OperationData::set_return_type(const QString &value)
     return_type = t;
 }
 
-const char * OperationData::get_param_name(int rank) const
+QString OperationData::get_param_name(int rank) const
 {
-    return params[rank]->get_name().toLatin1().constData();
+    return params[rank]->get_name();
 }
 
 QStringList OperationData::get_param_names() const
@@ -3378,7 +3378,7 @@ void OperationData::save(QTextStream & st, bool ref, QString & warning) const
 {
     if (ref) {
         st << "operation_ref " << get_ident() << " // ";
-        save_string(definition(TRUE, FALSE).toLatin1(), st);
+        save_string(definition(TRUE, FALSE), st);
     }
     else {
         BasicData::save(st, warning);
@@ -3780,9 +3780,9 @@ void OperationData::read(char *& st, char *& k)
         cpp_decl = "";
 
     if (!strcmp(k, "cpp_def")) {
-        char * d = read_string(st);
+        QString d = read_string(st);
 
-        cpp_def.assign(d, (is_abstract || (strstr(d, "${body}") != 0)));
+        cpp_def.assign(d, (is_abstract || (d.contains("${body}"))));
         k = read_keyword(st);
     }
     else
@@ -3827,12 +3827,12 @@ void OperationData::read(char *& st, char *& k)
         java_synchronized = FALSE;
 
     if (!strcmp(k, "java_def")) {
-        char * d = read_string(st);
+        QString d = read_string(st);
         QString ste = GenerationSettings::java_class_stereotype(stereotype);
 
         java_def.assign(d,
                         is_abstract ||
-                        (strstr(d, "${body}") != 0) ||
+                        d.contains("${body}") ||
                         (ste == "interface") ||
                         (ste == "@interface"));
         k = read_keyword(st);
@@ -3879,12 +3879,12 @@ void OperationData::read(char *& st, char *& k)
         php_final = FALSE;
 
     if (!strcmp(k, "php_def")) {
-        char * d = read_string(st);
+        QString d = read_string(st);
         QString ste = GenerationSettings::php_class_stereotype(stereotype);
 
         php_def.assign(d,
                        is_abstract ||
-                       (strstr(d, "${body}") != 0) ||
+                       d.contains("${body}") ||
                        (ste == "interface"));
         k = read_keyword(st);
     }
@@ -3923,9 +3923,9 @@ void OperationData::read(char *& st, char *& k)
         python_decorator = "";
 
     if (!strcmp(k, "python_def")) {
-        char * d = read_string(st);
+        QString d = read_string(st);
 
-        python_def.assign(d, (strstr(d, "${body}") != 0));
+        python_def.assign(d, d.contains("${body}"));
         k = read_keyword(st);
     }
     else

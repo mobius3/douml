@@ -446,7 +446,7 @@ void SdMsgBaseCanvas::save(QTextStream & st, QString & warning) const
             }
             else {
                 st << " explicitmsg ";
-                save_string(msg->get_browser_node()->get_name().toLatin1().constData(), st);
+                save_string(msg->get_browser_node()->get_name(), st);
             }
         }
         else {
@@ -464,7 +464,7 @@ void SdMsgBaseCanvas::save(QTextStream & st, QString & warning) const
     if (stereotype != 0) {
         nl_indent(st);
         st << "stereotype ";
-        save_string(stereotype->get_name().toLatin1().constData(), st);
+        save_string(stereotype->get_name(), st);
         save_xyz(st, stereotype, " xyz");
     }
 
@@ -509,13 +509,13 @@ void SdMsgBaseCanvas::read(char *& st)
         k = read_keyword(st);
 
         if (!strcmp(k, "stereotype")) {
-            k = read_string(st);
+            QString strk = read_string(st);
             read_keyword(st, "xyz");
 
             int x = (int) read_double(st);
 
             stereotype =
-                new LabelCanvas(k, the_canvas(), x, (int) read_double(st));
+                new LabelCanvas(strk, the_canvas(), x, (int) read_double(st));
 
             stereotype->setZValue(read_double(st));
             stereotype->show();

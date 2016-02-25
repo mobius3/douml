@@ -181,7 +181,7 @@ BrowserNode * BrowserClassDiagram::duplicate(BrowserNode * p, const QString & na
 {
     BrowserClassDiagram * result = new BrowserClassDiagram(this, p);
 
-    result->set_name((name.isEmpty()) ? get_name().toLatin1().constData() : name.toLatin1().constData());
+    result->set_name((name.isEmpty()) ? get_name() : name);
     result->update_stereotype();
 
     return result;
@@ -239,7 +239,7 @@ Note that you can undelete it after");
             }
         }
 
-        mark_menu(m, QObject::tr("the class diagram").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the class diagram"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
@@ -576,7 +576,7 @@ void BrowserClassDiagram::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "classdiagram " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         indent(+1);
         def->save(st, warning);
         settings.save(st);
@@ -656,7 +656,7 @@ BrowserClassDiagram * BrowserClassDiagram::read(char *& st, char * k,
         }
         else {
             r->set_parent(parent);
-            r->set_name(s.toLatin1().constData());
+            r->set_name(s);
         }
 
         r->is_defined = TRUE;

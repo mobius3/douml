@@ -52,22 +52,22 @@ protected:
 
     static QSize previous_size;
 
-    MyInputDialog(const char * title, const QString & msg,
+    MyInputDialog(QString title, const QString & msg,
                   const QString & init);
-    MyInputDialog(const char * title, const QString & msg,
+    MyInputDialog(QString title, const QString & msg,
                   const QStringList & l, const QString & init, bool existing, const QValidator * v = 0);
-    MyInputDialog(const char * title, const QString & msg,
+    MyInputDialog(QString title, const QString & msg,
                                  const QString & init, QValidator *validator);
     virtual ~MyInputDialog();
 
 public:
-    static QString getTextWithOnlineValidator(const char * title, const QString & msg,
+    static QString getTextWithOnlineValidator(QString title, const QString & msg,
                                    const QString & init, BooL & ok,
                                    QValidator * v);
-    static QString getText(const char * title, const QString & msg,
+    static QString getText(QString title, const QString & msg,
                            const QString & init, BooL & ok,
                            const QValidator * v = 0);
-    static QString getText(const char * title, const QString & msg,
+    static QString getText(QString title, const QString & msg,
                            const QStringList & l, const QString & init,
                            bool existing, BooL & ok,
                            const QValidator * v = NULL);

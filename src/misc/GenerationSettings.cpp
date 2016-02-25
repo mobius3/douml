@@ -2650,10 +2650,10 @@ bool GenerationSettings::tool_global_idl_cmd(ToolCom * com,
 
 static void save_includes_imports(IncludesSpec & sp, const char * filename)
 {
-    QSharedPointer<QByteArray> newdef(new QByteArray());
-    QTextStream st(newdef.data(), QIODevice::WriteOnly);
-    //st.setEncoding(QTextStream::Latin1);
-    st.setCodec(QTextCodec::codecForName("latin1"));
+    QString newdef;
+    QTextStream st(&newdef, QIODevice::WriteOnly);
+    st.setCodec("UTF-8");
+    st.setCodec(QTextCodec::codecForName("UTF-8"));
 
     st << "// \"a type\" \"needed " << filename << "\"\n";
 
@@ -2662,9 +2662,9 @@ static void save_includes_imports(IncludesSpec & sp, const char * filename)
     QStringList::Iterator it_incl = sp.includes.begin();
 
     for (int index = 0; index != sup; index += 1, it_type++, it_incl++) {
-        save_string((*it_type).toLatin1().constData(), st);
+        save_string((*it_type), st);
         st << " ";
-        save_string((*it_incl).toLatin1().constData(), st);
+        save_string((*it_incl), st);
         st << "\n\n";
     }
 
@@ -2678,31 +2678,31 @@ void GenerationSettings::save_dirs(QTextStream & st)
     if (!cpp_root_dir.isEmpty()) {
         nl_indent(st);
         st << "cpp_root_dir ";
-        save_string(cpp_root_dir.toLatin1().constData(), st);
+        save_string(cpp_root_dir, st);
     }
 
     if (!java_root_dir.isEmpty()) {
         nl_indent(st);
         st << "java_root_dir ";
-        save_string(java_root_dir.toLatin1().constData(), st);
+        save_string(java_root_dir, st);
     }
 
     if (!php_root_dir.isEmpty()) {
         nl_indent(st);
         st << "php_root_dir ";
-        save_string(php_root_dir.toLatin1().constData(), st);
+        save_string(php_root_dir, st);
     }
 
     if (!python_root_dir.isEmpty()) {
         nl_indent(st);
         st << "python_root_dir ";
-        save_string(python_root_dir.toLatin1().constData(), st);
+        save_string(python_root_dir, st);
     }
 
     if (!idl_root_dir.isEmpty()) {
         nl_indent(st);
         st << "idl_root_dir ";
-        save_string(idl_root_dir.toLatin1().constData(), st);
+        save_string(idl_root_dir, st);
     }
 
     st << '\n';
@@ -2713,31 +2713,31 @@ void GenerationSettings::save_descriptions(QTextStream & st)
     if (! artifact_default_description.isEmpty()) {
         nl_indent(st);
         st << "artifact_default_description ";
-        save_string(artifact_default_description.toLatin1().constData(), st);
+        save_string(artifact_default_description, st);
     }
 
     if (! class_default_description.isEmpty()) {
         nl_indent(st);
         st << "class_default_description ";
-        save_string(class_default_description.toLatin1().constData(), st);
+        save_string(class_default_description, st);
     }
 
     if (! operation_default_description.isEmpty()) {
         nl_indent(st);
         st << "operation_default_description ";
-        save_string(operation_default_description.toLatin1().constData(), st);
+        save_string(operation_default_description, st);
     }
 
     if (! attribute_default_description.isEmpty()) {
         nl_indent(st);
         st << "attribute_default_description ";
-        save_string(attribute_default_description.toLatin1().constData(), st);
+        save_string(attribute_default_description, st);
     }
 
     if (! relation_default_description.isEmpty()) {
         nl_indent(st);
         st << "relation_default_description ";
-        save_string(relation_default_description.toLatin1().constData(), st);
+        save_string(relation_default_description, st);
     }
 
     st << '\n';
@@ -2745,11 +2745,9 @@ void GenerationSettings::save_descriptions(QTextStream & st)
 
 void GenerationSettings::save()
 {
-    QSharedPointer<QByteArray> newdef(new QByteArray());
-    QTextStream st(newdef.data(), QIODevice::WriteOnly);
-
-    //st.setEncoding(QTextStream::Latin1);
-    st.setCodec(QTextCodec::codecForName("latin1"));
+    QString newdef;
+    QTextStream st(&newdef, QIODevice::WriteOnly);
+    st.setCodec("UTF-8");
 
     nl_indent(st);
 
@@ -2770,17 +2768,17 @@ void GenerationSettings::save()
 
     nl_indent(st);
     st << "cpp_h_extension ";
-    save_string(cpp_h_extension.toLatin1().constData(), st);
+    save_string(cpp_h_extension, st);
     st << " cpp_src_extension ";
-    save_string(cpp_src_extension.toLatin1().constData(), st);
+    save_string(cpp_src_extension, st);
     st << " java_extension ";
-    save_string(java_extension.toLatin1().constData(), st);
+    save_string(java_extension, st);
     st << " php_extension ";
-    save_string(php_extension.toLatin1().constData(), st);
+    save_string(php_extension, st);
     st << " python_extension ";
-    save_string(python_extension.toLatin1().constData(), st);
+    save_string(python_extension, st);
     st << " idl_extension ";
-    save_string(idl_extension.toLatin1().constData(), st);
+    save_string(idl_extension, st);
 
     if (cpp_include_with_path) {
         nl_indent(st);
@@ -2844,21 +2842,21 @@ void GenerationSettings::save()
 
         nl_indent(st);
         st << "  ";
-        save_string(b.uml.toLatin1().constData(), st);
+        save_string(b.uml, st);
         st << " ";
-        save_string(b.cpp.toLatin1().constData(), st);
+        save_string(b.cpp, st);
         st << " ";
-        save_string(b.java.toLatin1().constData(), st);
+        save_string(b.java, st);
         st << " ";
-        save_string(b.idl.toLatin1().constData(), st);
+        save_string(b.idl, st);
         st << " ";
-        save_string(b.cpp_in.toLatin1().constData(), st);
+        save_string(b.cpp_in, st);
         st << " ";
-        save_string(b.cpp_out.toLatin1().constData(), st);
+        save_string(b.cpp_out, st);
         st << " ";
-        save_string(b.cpp_inout.toLatin1().constData(), st);
+        save_string(b.cpp_inout, st);
         st << " ";
-        save_string(b.cpp_return.toLatin1().constData(), st);
+        save_string(b.cpp_return, st);
     }
 
     nl_indent(st);
@@ -2870,15 +2868,15 @@ void GenerationSettings::save()
 
         nl_indent(st);
         st << "  ";
-        save_string(s.uml.toLatin1().constData(), st);
+        save_string(s.uml, st);
         st << " ";
-        save_string(s.cpp.toLatin1().constData(), st);
+        save_string(s.cpp, st);
         st << " ";
-        save_string(s.java.toLatin1().constData(), st);
+        save_string(s.java, st);
         st << " ";
-        save_string(s.python.toLatin1().constData(), st);
+        save_string(s.python, st);
         st << " ";
-        save_string(s.idl.toLatin1().constData(), st);
+        save_string(s.idl, st);
     }
 
     nl_indent(st);
@@ -2890,39 +2888,39 @@ void GenerationSettings::save()
 
         nl_indent(st);
         st << "  ";
-        save_string(s.uml.toLatin1().constData(), st);
+        save_string(s.uml, st);
         st << " ";
-        save_string(s.cpp.toLatin1().constData(), st);
+        save_string(s.cpp, st);
         st << " ";
-        save_string(s.java.toLatin1().constData(), st);
+        save_string(s.java, st);
         st << " ";
-        save_string(s.php.toLatin1().constData(), st);
+        save_string(s.php, st);
         st << " ";
-        save_string(s.python.toLatin1().constData(), st);
+        save_string(s.python, st);
         st << " ";
-        save_string(s.idl.toLatin1().constData(), st);
+        save_string(s.idl, st);
     }
 
     nl_indent(st);
     nl_indent(st);
     st << "cpp_enum_default_type_forms ";
-    save_string(cpp_enum_in.toLatin1().constData(), st);
+    save_string(cpp_enum_in, st);
     st << " ";
-    save_string(cpp_enum_out.toLatin1().constData(), st);
+    save_string(cpp_enum_out, st);
     st << " ";
-    save_string(cpp_enum_inout.toLatin1().constData(), st);
+    save_string(cpp_enum_inout, st);
     st << " ";
-    save_string(cpp_enum_return.toLatin1().constData(), st);
+    save_string(cpp_enum_return, st);
     st << " // in out inout return";
     nl_indent(st);
     st << "other_cpp_types_default_type_forms ";
-    save_string(cpp_in.toLatin1().constData(), st);
+    save_string(cpp_in, st);
     st << " ";
-    save_string(cpp_out.toLatin1().constData(), st);
+    save_string(cpp_out, st);
     st << " ";
-    save_string(cpp_inout.toLatin1().constData(), st);
+    save_string(cpp_inout, st);
     st << " ";
-    save_string(cpp_return.toLatin1().constData(), st);
+    save_string(cpp_return, st);
     st << " // in out inout return";
 
     st << '\n';
@@ -4445,7 +4443,7 @@ void GenerationSettings::read()
     }
 }
 
-static bool read_incl(IncludesSpec & sp, const char * filename)
+static bool read_incl(IncludesSpec & sp, QString filename)
 {
     char * s = read_file(filename);
 
@@ -4505,10 +4503,10 @@ bool GenerationSettings::import()
             POST_TRY;
             delete [] s;
 
-            read_incl(cpp_includes, fn.replace(fn.lastIndexOf("generation_settings"), 19, "cpp_includes").toLatin1().constData());
-            read_incl(java_imports, fn.replace(fn.lastIndexOf("cpp_includes"), 12, "java_imports").toLatin1().constData());
-            read_incl(python_imports, fn.replace(fn.lastIndexOf("java_imports"), 12, "python_imports").toLatin1().constData());
-            read_incl(idl_includes, fn.replace(fn.lastIndexOf("python_imports"), 14, "idl_includes").toLatin1().constData());
+            read_incl(cpp_includes, fn.replace(fn.lastIndexOf("generation_settings"), 19, "cpp_includes"));
+            read_incl(java_imports, fn.replace(fn.lastIndexOf("cpp_includes"), 12, "java_imports"));
+            read_incl(python_imports, fn.replace(fn.lastIndexOf("java_imports"), 12, "python_imports"));
+            read_incl(idl_includes, fn.replace(fn.lastIndexOf("python_imports"), 14, "idl_includes"));
 
             return TRUE;
         }
@@ -4747,7 +4745,7 @@ void ReverseRoundtripFilter::save(const char * key, QTextStream & st)   //[lgfre
 {
     if (! regexp.isEmpty()) {
         st << key << " ";
-        save_string(regexp.toLatin1().constData(), st);
+        save_string(regexp, st);
 
         if (case_sensitive)
             st << " case_sensitive";

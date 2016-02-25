@@ -46,7 +46,7 @@ public:
     virtual void do_connect(BrowserClass * c) override;
     virtual void do_disconnect(BrowserClass * c) override;
 
-    void edit(const char * what, QStringList & st);
+    void edit(QString what, QStringList & st);
 
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
                               const QString & comment) override;

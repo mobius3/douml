@@ -193,7 +193,7 @@ bool BrowserRelation::undelete(bool, QString & warning, QString & renamed)
     return TRUE;
 }
 
-const char * BrowserRelation::get_comment() const
+QString BrowserRelation::get_comment() const
 {
     return (def->is_a(this))
             ? def->get_comment_a()
@@ -549,7 +549,7 @@ void BrowserRelation::menu()
                               : def->get_start_class())->get_name(),
                              7,
                              QObject::tr("to select the destination class"));
-        mark_menu(m, QObject::tr("the relation").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the relation"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0)
@@ -798,7 +798,7 @@ void BrowserRelation::member_cpp_def(const QString & prefix, const QString &,
 
 void BrowserRelation::write_id(ToolCom * com)
 {
-    com->write_id(this, 0, name.toLatin1().constData());
+    com->write_id(this, 0, name);
 }
 
 bool BrowserRelation::tool_cmd(ToolCom * com, const char * args)

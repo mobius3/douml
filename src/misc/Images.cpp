@@ -35,14 +35,14 @@
 #include "DialogUtil.h"
 
 // all the pixmap for diagram with scale 100, key = path,
-static QMap<const char *, QPixmap*> DiagramPixmap;
+static QMap<QString, QPixmap*> DiagramPixmap;
 
 // all the pixmap for diagram, key = path,
 // value is QPtrDict with key = width
-static QMap<const char*, QMap<void*,QPixmap*> *> DiagramScaledPixmap;
+static QMap<QString, QMap<void*,QPixmap*> *> DiagramScaledPixmap;
 
 // return pixmap for zoom 100%
-QPixmap * get_pixmap(const char * path)
+QPixmap * get_pixmap(QString path)
 {
     QPixmap * px = DiagramPixmap.value(path);
 
@@ -73,7 +73,7 @@ QPixmap * get_pixmap(const char * path)
 }
 
 // return pixmap for a given zoom != 100
-QPixmap * get_pixmap(const char * path, double zoom)
+QPixmap * get_pixmap(QString path, double zoom)
 {
     QPixmap * px = get_pixmap(path);
 

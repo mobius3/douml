@@ -645,7 +645,7 @@ void PackageDialog::accept()
 }
 
 void PackageDialog::browse(LineEdit * ed, QPushButton * button,
-                           const char * caption, QString root)
+                           QString caption, QString root)
 {
     QString s = ed->text();
     bool rel = FALSE;
@@ -676,37 +676,37 @@ void PackageDialog::browse(LineEdit * ed, QPushButton * button,
 
 void PackageDialog::cpph_browse()
 {
-    browse(edcpphdir, cpphbutton, QObject::tr("C++ header directory").toLatin1().constData(),
+    browse(edcpphdir, cpphbutton, QObject::tr("C++ header directory"),
            GenerationSettings::get_cpp_root_dir());
 }
 
 void PackageDialog::cppsrc_browse()
 {
-    browse(edcppsrcdir, cppsrcbutton, QObject::tr("C++ source directory").toLatin1().constData(),
+    browse(edcppsrcdir, cppsrcbutton, QObject::tr("C++ source directory"),
            GenerationSettings::get_cpp_root_dir());
 }
 
 void PackageDialog::java_browse()
 {
-    browse(edjavadir, javabutton, QObject::tr("Java directory").toLatin1().constData(),
+    browse(edjavadir, javabutton, QObject::tr("Java directory"),
            GenerationSettings::get_java_root_dir());
 }
 
 void PackageDialog::php_browse()
 {
-    browse(edphpdir, phpbutton, QObject::tr("Php directory").toLatin1().constData(),
+    browse(edphpdir, phpbutton, QObject::tr("Php directory"),
            GenerationSettings::get_php_root_dir());
 }
 
 void PackageDialog::python_browse()
 {
-    browse(edpythondir, pythonbutton, QObject::tr("Python directory").toLatin1().constData(),
+    browse(edpythondir, pythonbutton, QObject::tr("Python directory"),
            GenerationSettings::get_python_root_dir());
 }
 
 void PackageDialog::idl_browse()
 {
-    browse(edidldir, idlbutton, QObject::tr("Idl directory").toLatin1().constData(),
+    browse(edidldir, idlbutton, QObject::tr("Idl directory"),
            GenerationSettings::get_idl_root_dir());
 }
 

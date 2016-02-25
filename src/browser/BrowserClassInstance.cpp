@@ -299,7 +299,7 @@ void BrowserClassInstance::menu()
         MenuFactory::addItem(m, QObject::tr("Referenced by"), 3,
                              QObject::tr("to know who reference the <i>class instance</i> \
                                          through a relation"));
-                                         mark_menu(m, QObject::tr("the class instance").toLatin1().constData(), 90);
+                                         mark_menu(m, QObject::tr("the class instance"), 90);
                              ProfiledStereotypes::menu(m, this, 99990);
 
                 if ((edition_number == 0) &&
@@ -622,7 +622,7 @@ void BrowserClassInstance::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "classinstance " << get_ident() << " ";
-        save_string(name.toLatin1(), st);
+        save_string(name, st);
         indent(+1);
         def->save(st, warning);
 

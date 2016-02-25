@@ -33,19 +33,19 @@
 class KeyValueData
 {
 protected:
-    WrapperStr key;
-    WrapperStr value;
+    QString key;
+    QString value;
 
 public:
     KeyValueData() {};
 
-    void set_key(const char *);
-    const char * get_key() {
+    void set_key(QString);
+    QString get_key() {
         return key;
     };
 
-    void set_value(const char *);
-    const char * get_value() {
+    void set_value(QString);
+    QString get_value() {
         return value;
     };
 };

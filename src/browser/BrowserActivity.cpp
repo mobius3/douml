@@ -193,11 +193,11 @@ BrowserActivity * BrowserActivity::add_activity(BrowserNode * future_parent)
                                              UmlActivity, TRUE, FALSE))
 
             ? 0
-            : add_activity(future_parent, name.toLatin1().constData());
+            : add_activity(future_parent, name);
 }
 
 BrowserActivity * BrowserActivity::add_activity(BrowserNode * future_parent,
-                                                const char * name)
+                                                QString name)
 {
     BrowserActivity * r = new BrowserActivity(name, future_parent);
 
@@ -332,7 +332,7 @@ void BrowserActivity::menu()
                     "Referenced by",
                     12,
                     "to know who reference the <i>activity</i>");
-        mark_menu(builder.menu(), QObject::tr("the activity").toLatin1().constData(), 90);
+        mark_menu(builder.menu(), QObject::tr("the activity"), 90);
         ProfiledStereotypes::menu(builder.menu(), this, 99990);
 
         if ((edition_number == 0) &&
@@ -889,7 +889,7 @@ void BrowserActivity::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "activity " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         indent(+1);
         def->save(st, warning);
 

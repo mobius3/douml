@@ -95,7 +95,7 @@ static QHash<void*, ProfiledStereotype*> ProfiledStereotyped;
 static QMap<QString, ProfiledStereotype*> All;
 
 // all the pixmap for browser, key = path
-static QMap<const char* ,QPixmap*> BrowserPixmap;
+static QMap<QString ,QPixmap*> BrowserPixmap;
 
 // to continue to apply check recursively
 struct CheckCell {
@@ -173,8 +173,8 @@ void ProfiledStereotype::renamed(BrowserAttribute * at)
     QString prop_oldname = propertiesFullName[rank];
     QString prop_newname =
         prop_oldname.left(prop_oldname.lastIndexOf(':') + 1) + at->get_name();
-    const char * oldprop = (const char *) prop_oldname.toLatin1().constData();
-    const char * newprop = (const char *) prop_newname.toLatin1().constData();
+    QString oldprop = prop_oldname;
+    QString newprop = prop_newname;
 
     propertiesFullName[rank] = prop_newname;
 
@@ -188,7 +188,7 @@ void ProfiledStereotype::renamed(BrowserAttribute * at)
         unsigned nprop = bn->get_n_keys();
 
         for (unsigned index = 0; index != nprop; index += 1) {
-            if (!strcmp(bn->get_key(index), oldprop)) {
+            if (bn->get_key(index) == oldprop) {
                 bn->set_key(index, newprop);
                 break;
             }
@@ -207,7 +207,7 @@ void ProfiledStereotype::deleted(BrowserAttribute * at)
         return;
 
     QString prop_name = propertiesFullName[rank];
-    const char * prop = (const char *) prop_name.toLatin1().constData();
+    QString prop = prop_name;
 
     propertiesFullName.removeOne(propertiesFullName.at(rank));
     properties.removeOne(properties.at(rank));
@@ -222,7 +222,7 @@ void ProfiledStereotype::deleted(BrowserAttribute * at)
         unsigned nprop = bn->get_n_keys();
 
         for (unsigned index = 0; index != nprop; index += 1) {
-            if (!strcmp(bn->get_key(index), prop)) {
+            if (bn->get_key(index) == prop) {
                 bn->remove_key_value(index);
                 bn->modified();
                 break;
@@ -267,9 +267,9 @@ void ProfiledStereotype::setIcon()
 {
     browser_icon = 0;
 
-    const char * path = cl->get_value("stereotypeIconPath");
+    QString path = cl->get_value("stereotypeIconPath");
 
-    if ((path == 0) || (*path == 0))
+    if (path.isEmpty())
         return;
 
     QPixmap * px = BrowserPixmap[path];
@@ -322,9 +322,9 @@ void ProfiledStereotype::updateStereotypedIcon()
 
 const QPixmap * ProfiledStereotype::diagramPixmap(double zoom)
 {
-    const char * path = cl->get_value("stereotypeIconPath");
+    QString path = cl->get_value("stereotypeIconPath");
 
-    return (path == 0) ? 0 : get_pixmap(path, zoom);
+    return (path.isEmpty()) ? 0 : get_pixmap(path, zoom);
 }
 
 //
@@ -510,9 +510,9 @@ void renamed(BrowserClass * cl, QString oldname, QString oldpkname)
     oldst += ":";
 
     QHashIterator<void*, ProfiledStereotype*> it(ProfiledStereotyped);
-    const char * oldsst = (const char *) oldst.toLatin1().constData();
+    QString oldsst =  oldst;
     int oldlen = oldst.length();
-    WrapperStr newcst = (const char *) newst.toLatin1().constData();
+    WrapperStr newcst =  newst;
 
     newcst += ":";
 
@@ -529,9 +529,9 @@ void renamed(BrowserClass * cl, QString oldname, QString oldpkname)
         unsigned nprop = bn->get_n_keys();
 
         for (index = 0; index != nprop; index += 1) {
-            const char * k = bn->get_key(index);
+            QString k = bn->get_key(index);
 
-            if (!strncmp(k, oldsst, oldlen)) {
+            if (k.startsWith(oldsst)) {
                 WrapperStr newk = newcst + (k + oldlen);
 
                 bn->set_key(index, (const char *) newk);
@@ -841,14 +841,11 @@ void ProfiledStereotypes::recompute(BrowserNode * bn)
         unsigned index = 0;
 
         while (index != nprop) {
-            const char * k = bn->get_key(index);
-            int nseps = 0;
+            QString k = bn->get_key(index);
+            QStringList p = k.split(':');
 
-            for (const char * p = k; *p; p += 1)
-                if (*p == ':')
-                    nseps += 1;
 
-            if (nseps == 2) {
+            if (p.count() == 3) {
                 if (st->propertiesFullName.indexOf(k) == -1) {
                     // extra property, remove it
                     bn->remove_key_value(index);
@@ -883,7 +880,7 @@ void ProfiledStereotypes::recompute(BrowserNode * bn)
                 const char * k = s.toLatin1().constData();
 
                 for (index = 0; index != nprop; index += 1)
-                    if (strcmp(k, bn->get_key(index)) == 0)
+                    if (k == bn->get_key(index))
                         break;
 
                 if (index == nprop) {
@@ -891,7 +888,7 @@ void ProfiledStereotypes::recompute(BrowserNode * bn)
                     modified = TRUE;
                     bn->set_key(insertindex, k);
                     bn->set_value(insertindex,
-                                  ((AttributeData *)(*ita)->get_data())->get_init_value().toLatin1().constData());
+                                  ((AttributeData *)(*ita)->get_data())->get_init_value());
 
                     if (--missing == 0)
                         break;
@@ -912,14 +909,9 @@ void ProfiledStereotypes::recompute(BrowserNode * bn)
         unsigned index = 0;
 
         while (index != nprop) {
-            const char * k = bn->get_key(index);
-            int nseps = 0;
-
-            for (const char * p = k; *p; p += 1)
-                if (*p == ':')
-                    nseps += 1;
-
-            if (nseps == 2) {
+            QString k = bn->get_key(index);
+            QStringList p = k.split(':');
+            if(p.count() == 3){
                 // extra property, remove it
                 bn->remove_key_value(index);
                 modified = TRUE;
@@ -1052,11 +1044,11 @@ void ProfiledStereotypes::modified(BrowserNode * bn, bool newst)
             recompute(bn);
         }
 
-        const char * s =
+        QString s =
             st->cl->get_value((newst) ? "stereotypeSet" : "stereotypeCheck");
 
-        if ((s != 0) && ((s = Tool::command(s)) != 0)) {
-            const char * args = st->cl->get_value((newst) ? "stereotypeSetParameters"
+        if (s ==  Tool::command(s)) {
+            QString args = st->cl->get_value((newst) ? "stereotypeSetParameters"
                                                   : "stereotypeCheckParameters");
 
             if (args == 0)
@@ -1125,9 +1117,9 @@ void ProfiledStereotypes::callCheck(BrowserNode * bn, bool rec)
     bool applied = FALSE;
 
     if (st != 0) {
-        const char * s = st->cl->get_value("stereotypeCheck");
+        QString s = st->cl->get_value("stereotypeCheck");
 
-        if ((s != 0) && ((s = Tool::command(s)) != 0)) {
+        if (!(s = Tool::command(s)).isEmpty()) {
             ToolCom::run(s, bn, FALSE, FALSE, (rec) ? &callCheckCont : 0);
             applied = TRUE;
         }
@@ -1149,9 +1141,9 @@ static bool haveCheck(BrowserNode * bn)
     ProfiledStereotype * st = All[sts];
 
     if (st != 0) {
-        const char * s = st->cl->get_value("stereotypeCheck");
+        QString s = st->cl->get_value("stereotypeCheck");
 
-        if ((s != 0) && (Tool::command(s) != 0))
+        if (!Tool::command(s).isEmpty())
             return TRUE;
     }
 
@@ -1172,9 +1164,9 @@ void ProfiledStereotypes::menu(QMenu & m, BrowserNode * bn, int bias)
     bool separatorinserted = FALSE;
 
     if (st != 0) {
-        const char * s = st->cl->get_value("stereotypeCheck");
+        QString s = st->cl->get_value("stereotypeCheck");
 
-        if ((s != 0) && (Tool::command(s) != 0)) {
+        if (!Tool::command(s).isEmpty()) {
             separatorinserted = TRUE;
             m.addSeparator();
             QAction *action;

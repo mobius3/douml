@@ -2,7 +2,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-TabDialog::TabDialog(QWidget *parent, const char *name, bool modal, Qt::WidgetAttribute f) :
+TabDialog::TabDialog(QWidget *parent, QString name, bool modal, Qt::WidgetAttribute f) :
     QDialog(parent/*, f*/),
     m_okButton(NULL), m_cancelButton(NULL), m_helpButton(NULL)
 {

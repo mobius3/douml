@@ -129,7 +129,7 @@ LineEdit::LineEdit(const QString & s, QWidget * parent, const char * name)
 // setText() redefinition
 void LineEdit::setText(const QString & s)
 {
-    QLineEdit::setText(toUnicode(s.toLatin1().constData()));
+    QLineEdit::setText(s);
 }
 
 // text() redefinition
@@ -551,13 +551,13 @@ void manage_alias(const BrowserNode * node,
             s += qsvalue;
         }
         else {
-            const char * value = 0;
+            QString value;
             const BrowserNode * nd = (kvt != 0)
                                      ? ((const BrowserNode *) node->parent())
                                      : node;
 
             while (nd != 0) {
-                if ((value = nd->get_value(key)) != 0)
+                if (!(value = nd->get_value(key)).isEmpty())
                     break;
 
                 nd = (BrowserNode *) nd->parent();
@@ -608,13 +608,13 @@ void manage_alias(const BrowserNode * node,
             s += QString(kvt->get_value(key));
         }
         else {
-            const char * value = 0;
+            QString value;
             const BrowserNode * nd = (kvt != 0)
                                      ? ((const BrowserNode *) node->parent())
                                      : node;
 
             while (nd != 0) {
-                if ((value = nd->get_value(key)) != 0)
+                if (!(value = nd->get_value(key)).isEmpty())
                     break;
 
                 nd = (BrowserNode *) nd->parent();

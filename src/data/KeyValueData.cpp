@@ -31,12 +31,12 @@
 
 #include "KeyValueData.h"
 
-void KeyValueData::set_key(const char * s)
+void KeyValueData::set_key(QString s)
 {
     key = s;
 }
 
-void KeyValueData::set_value(const char * s)
+void KeyValueData::set_value(QString s)
 {
     value = s;
 }

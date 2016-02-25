@@ -43,7 +43,7 @@
 
 QSize OperationListDialog::previous_size;
 
-OperationListDialog::OperationListDialog(const char * m,
+OperationListDialog::OperationListDialog(QString m,
         QList<BrowserOperation *> & l)
     : QDialog(0)
 {

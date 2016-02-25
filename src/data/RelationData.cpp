@@ -676,13 +676,13 @@ void RelationData::select_in_browser(bool prefer_start) const
 
 //
 
-const char * RelationData::get_idlcase(const RoleData & role)
+QString RelationData::get_idlcase(const RoleData & role)
 {
-    return (role.idl_case != 0) ? role.idl_case->get_name().toLatin1().constData() : role.idl_explicit_case.operator QString().toLatin1().constData();
+    return (role.idl_case != 0) ? role.idl_case->get_name() : role.idl_explicit_case.operator QString();
 }
 
 void RelationData::set_idlcase(RoleData & role, BrowserAttribute * at,
-                               const char * e)
+                               QString e)
 {
     if (role.idl_case != at) {
         // do not disconnect because don't check the other side

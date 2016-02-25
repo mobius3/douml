@@ -281,7 +281,7 @@ void ColMsgTable::change_ranks(int row, int col)
     ColMsg * msg = flat_msg_list[row];
     HierarchicalRankValidator validator(view, msg->hierarchical_rank);
     BooL ok;
-    QString new_hr = MyInputDialog::getText(tr("Enter new hierarchical rank").toLatin1().constData(), tr("Hierarchical rank : "),
+    QString new_hr = MyInputDialog::getText(tr("Enter new hierarchical rank"), tr("Hierarchical rank : "),
                                             msg->hierarchical_rank, ok,
                                             &validator);
 

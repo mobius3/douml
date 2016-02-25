@@ -306,7 +306,7 @@ protected:
 
 public:
     IncludeTable(QWidget * parent, IncludesSpec & spc,
-                 const char * title, const char * df);
+                 QString title, const char * df);
 
 public:
     virtual void init_row(int index);

@@ -215,7 +215,7 @@ Note that you can undelete them after"));
             }
         }
 
-        mark_menu(m, QObject::tr("the component view").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the component view"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
@@ -258,7 +258,7 @@ void BrowserComponentView::exec_menu_choice(int rank)
     break;
 
     case 3:
-        edit(QObject::tr("Component view").toLatin1().constData(), its_default_stereotypes);
+        edit(QObject::tr("Component view"), its_default_stereotypes);
         return;
 
         /*case 4:
@@ -367,7 +367,7 @@ void BrowserComponentView::apply_shortcut(const QString & s)
 void BrowserComponentView::open(bool)
 {
     if (!is_edited)
-        edit(QObject::tr("Component view").toLatin1().constData(), its_default_stereotypes);
+        edit(QObject::tr("Component view"), its_default_stereotypes);
 }
 
 UmlCode BrowserComponentView::get_type() const
@@ -598,7 +598,7 @@ void BrowserComponentView::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "componentview " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         indent(+1);
 
         def->save(st, warning);

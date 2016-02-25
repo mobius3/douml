@@ -624,9 +624,6 @@ void BrowserPackage::menu()
                 if (this == BrowserView::get_project()) {
                     importm.setTitle(("Import"));
                     m.addMenu(&importm);
-                    //m.setWhatsThis(importm.insertItem(("Generation settings"), 28,
-                    //                                  ("to import the generation settings from an other project, \
-                    //                                 note that the root directories are not imported"));
                     MenuFactory::addItem(importm, ("Generation settings"), 28,
                                          ("to import the generation settings from an other project, \
                                           note that the root directories are not imported"));
@@ -660,7 +657,7 @@ void BrowserPackage::menu()
         MenuFactory::addItem(m, ("Referenced by"), 13,
                              ("to know who reference the <i>package</i> \
                               through a relation"));
-                              mark_menu(m, QString(QObject::tr("the package")).toLatin1().constData(), 90);
+                              mark_menu(m, QString(QObject::tr("the package")), 90);
                              ProfiledStereotypes::menu(m, this, 99990);
 
 
@@ -1750,7 +1747,7 @@ void BrowserPackage::on_delete()
 void BrowserPackage::write_id(ToolCom * com)
 {
     // to manage project case as any package
-    com->write_id(this, UmlPackage - UmlRelations, name.toLatin1().constData());
+    com->write_id(this, UmlPackage - UmlRelations, name);
 }
 
 // connexion by a flow or a dependency
@@ -2247,15 +2244,13 @@ void BrowserPackage::init()
 void BrowserPackage::save_stereotypes()
 {
 
-    QSharedPointer<QByteArray> newdef(new QByteArray());
-    QTextStream st(newdef.data(), QIODevice::WriteOnly);
-    //  QLOG_INFO() << newdef->data();
-    st.setCodec("latin1");
-    //  QLOG_INFO() << newdef->data();
+    QString newdef;
+    QTextStream st(&newdef, QIODevice::WriteOnly);
+    st.setCodec("UTF-8");
     nl_indent(st);
     st << "package_stereotypes ";
     st.flush();
-    QLOG_INFO() << newdef->data();
+    QLOG_INFO() << newdef;
     save_unicode_string_list(its_default_stereotypes, st);
     nl_indent(st);
     st << "  " << stringify(UmlDependency);
@@ -2292,7 +2287,7 @@ void BrowserPackage::save_stereotypes()
     st << "\nend\n";
     st << '\000';
     st.flush();
-    QLOG_INFO() << newdef->data();
+    QLOG_INFO() << newdef;
     save_if_needed("stereotypes", newdef);
 
 }
@@ -2315,9 +2310,9 @@ void BrowserPackage::read_stereotypes(char *& st, char *& k)
         init();
 }
 
-bool BrowserPackage::read_stereotypes(const char * f)
+bool BrowserPackage::read_stereotypes(QString f)
 {
-    char * s = read_file((f == 0) ? "stereotypes" : f);
+    char * s = read_file((f.isEmpty()) ? "stereotypes" : f);
 
     if (s != 0) {
         PRE_TRY;
@@ -2433,7 +2428,7 @@ void BrowserPackage::save_all(bool modified_only)
         QString fn;
 
         if (prj)
-            fn = ((const char *) pack->name.toLatin1()) + QString(".prj");
+            fn = pack->name + QString(".prj");
         else
             fn.setNum(it.key());
 
@@ -2458,14 +2453,14 @@ void BrowserPackage::save_all(bool modified_only)
 
                 QTextStream st(&fp);
 
-                st.setCodec("latin1"/*QTextStream::Latin1*/);
+                st.setCodec("UTF-8");
 
                 // saves the package own data
 
                 indent0();
                 st << "format " << api_format() << "\n";
 
-                save_string(pack->name.toLatin1().constData(), st);
+                save_string(pack->name, st);
 
                 if (!prj)
                     st << " // " << pack->full_name();
@@ -3030,7 +3025,7 @@ unsigned BrowserPackage::load(bool recursive, int id)
                         UmlWindow::set_default_format(IsoA4);
 
                     if (!strcmp(k, "image_root_dir")) {
-                        UmlWindow::set_images_root_dir(toUnicode(read_string(st)));
+                        UmlWindow::set_images_root_dir(read_string(st));
                         k = read_keyword(st);
                     }
                     else

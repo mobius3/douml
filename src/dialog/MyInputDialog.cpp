@@ -47,7 +47,7 @@
 #include <QLineEdit>
 QSize MyInputDialog::previous_size;
 
-MyInputDialog::MyInputDialog(const char * title, const QString & msg,
+MyInputDialog::MyInputDialog(QString title, const QString & msg,
                              const QString & init)
     : QDialog(0/*, title, TRUE*/), le(NULL), cb(NULL)
 {
@@ -91,7 +91,7 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
     le->setFocus();
 }
 
-MyInputDialog::MyInputDialog(const char * title, const QString & msg,
+MyInputDialog::MyInputDialog(QString title, const QString & msg,
                              const QStringList & list, const QString & init,
                              bool existing, const QValidator *v)
     : QDialog(0/*, title, TRUE*/)
@@ -170,7 +170,7 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
     }
 }
 
-MyInputDialog::MyInputDialog(const char * title, const QString & msg,
+MyInputDialog::MyInputDialog(QString title, const QString & msg,
                              const QString & init, QValidator *validator)
     : QDialog(0/*, title, TRUE*/)
     , le(NULL)
@@ -288,7 +288,7 @@ void MyInputDialog::onTextChanged()
     vl->fixup(text);
     lb->setText(text);
 }
-QString MyInputDialog::getTextWithOnlineValidator(const char * title, const QString & msg,
+QString MyInputDialog::getTextWithOnlineValidator(QString title, const QString & msg,
                                                   const QString & init, BooL & ok,
                                                   QValidator * v)
 {
@@ -299,7 +299,7 @@ QString MyInputDialog::getTextWithOnlineValidator(const char * title, const QStr
             ? d.le->text()
             : QString();
 }
-QString MyInputDialog::getText(const char * title, const QString & msg,
+QString MyInputDialog::getText(QString title, const QString & msg,
                                const QString & init, BooL & ok,
                                const QValidator * v)
 {
@@ -315,7 +315,7 @@ QString MyInputDialog::getText(const char * title, const QString & msg,
             : QString();
 }
 
-QString MyInputDialog::getText(const char * title, const QString & msg,
+QString MyInputDialog::getText(QString title, const QString & msg,
                                const QStringList & list, const QString & init,
                                bool existing, BooL & ok, const QValidator * v)
 {

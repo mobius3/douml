@@ -44,7 +44,7 @@
 
 QSize ClassListDialog::previous_size;
 
-ClassListDialog::ClassListDialog(const char * m,
+ClassListDialog::ClassListDialog(QString m,
                                  const QList<BrowserClass *> & l)
     : QDialog(0)
 {

@@ -377,7 +377,7 @@ bool ComponentCanvas::connexion(UmlCode action, const QPoint &, const QPoint & p
     else
         comp->get_all_required_classes(l, TRUE);
 
-    ClassListDialog dialog(tr("Choose class").toLatin1().constData(), l);
+    ClassListDialog dialog(tr("Choose class"), l);
 
     if (dialog.exec() != QDialog::Accepted)
         return FALSE;

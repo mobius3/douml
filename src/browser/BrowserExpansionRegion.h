@@ -68,7 +68,7 @@ public:
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     const QString & name = QString());
     static BrowserExpansionRegion * add_expansionregion(BrowserNode * future_parent);
-    static BrowserExpansionRegion * add_expansionregion(BrowserNode * future_parent, const char * name);
+    static BrowserExpansionRegion * add_expansionregion(BrowserNode * future_parent, QString name);
     static BrowserExpansionRegion * get_expansionregion(BrowserNode * parent);
     QList<BrowserExpansionNode *> get_nodes() const;
     BrowserNode * add_expansionnode();

@@ -520,7 +520,7 @@ void CodClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) con
         nl_indent(st);
         ClassInstCanvas::save(st);
         st << " name ";
-        save_string(iname.toLatin1().constData(), st);
+        save_string(iname, st);
         st << " ";
         save_xyz(st, this, " xyz");
     }

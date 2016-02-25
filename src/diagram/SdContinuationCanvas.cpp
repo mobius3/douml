@@ -387,7 +387,7 @@ void SdContinuationCanvas::save(QTextStream & st, bool ref, QString &) const
         nl_indent(st);
 
         st << "continuation " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         nl_indent(st);
 
         if (itscolor != UmlDefaultColor)

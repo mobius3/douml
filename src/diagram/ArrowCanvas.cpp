@@ -1943,7 +1943,7 @@ const ArrowCanvas * ArrowCanvas::save_lines(QTextStream & st, bool with_label,
 
         if (with_stereotype && ar->stereotype) {
             st << " stereotype ";
-            save_string(ar->stereotype->get_name().toLatin1(), st);
+            save_string(ar->stereotype->get_name(), st);
             save_xyz(st, ar->stereotype, " xyz");
         }
 
@@ -1963,7 +1963,7 @@ const ArrowCanvas * ArrowCanvas::save_lines(QTextStream & st, bool with_label,
 
     if (with_stereotype && ar->stereotype) {
         st << " stereotype ";
-        save_string(ar->stereotype->get_name().toLatin1(), st);
+        save_string(ar->stereotype->get_name(), st);
         save_xyz(st, ar->stereotype, " xyz");
     }
 
@@ -2013,7 +2013,7 @@ ArrowCanvas * ArrowCanvas::read_list(char *& st, UmlCanvas * canvas,
         }
 
         if (!strcmp(k, "stereotype")) {
-            k = read_string(st);
+            QString strk = read_string(st);
 
             if (read_file_format() < 5)
                 read_keyword(st, "xy");
@@ -2023,7 +2023,7 @@ ArrowCanvas * ArrowCanvas::read_list(char *& st, UmlCanvas * canvas,
             int x = (int) read_double(st);
 
             stereotype =
-                new LabelCanvas(k, canvas, x, (int) read_double(st));
+                new LabelCanvas(strk, canvas, x, (int) read_double(st));
 
             stereotype->setZValue((read_file_format() < 5) ? OLD_ARROW_Z
                              : read_double(st));

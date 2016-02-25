@@ -2971,7 +2971,7 @@ void BrowserClass::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "class " << get_ident() << " ";
-        save_string(name.toLatin1().constBegin(), st);
+        save_string(name, st);
 
         indent(+1);
         def->save(st, warning);
@@ -3828,9 +3828,9 @@ static void extend(BrowserClass * cl, WrapperStr mclpath,
         if (dflt) {
             foreach (BrowserClass *mcl, metaclasses) {
                 if (!strcmp(mclname, mcl->get_name().toLatin1().constData())) {
-                    const char * s = mcl->get_value("metaclassPath");
+                    QString s = mcl->get_value("metaclassPath");
 
-                    if ((s == 0) || !strcmp(s, defltpath0) || !strcmp(s, defltpath1)) {
+                    if (s.isEmpty()|| s == defltpath0 || s == defltpath1) {
                         metaclass = mcl;
                         break;
                     }
@@ -3840,9 +3840,9 @@ static void extend(BrowserClass * cl, WrapperStr mclpath,
         else {
             foreach (BrowserClass *mcl, metaclasses) {
                 if (!strcmp(mclname, mcl->get_name().toLatin1().constData())) {
-                    const char * s = mcl->get_value("metaclassPath");
+                    QString s = mcl->get_value("metaclassPath");
 
-                    if ((s != 0) && (path == s)) {
+                    if (path == s) {
                         metaclass = mcl;
                         break;
                     }

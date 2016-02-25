@@ -47,11 +47,11 @@
 ImageCanvas::ImageCanvas(UmlCanvas * canvas, int x, int y, QString pa, int id)
     : DiagramCanvas(0, canvas, x, y, 30, 30, id), path(pa)
 {
-    if ((px = get_pixmap(path.toLatin1().constData())) != 0) {
+    if ((px = get_pixmap(path)) != 0) {
         width_scale100 = px->width();
         height_scale100 = px->height();
 
-        px = get_pixmap(path.toLatin1().constData(), canvas->zoom());
+        px = get_pixmap(path);
         setRect(rect().x(), rect().y(), px->width(), px->height());
         set_center100();
     }
@@ -120,13 +120,13 @@ void ImageCanvas::open()
     if ((d.exec() == QDialog::Accepted) &&
             !s.isEmpty() &&
             (s != path)) {
-        QPixmap * p = get_pixmap(s.toLatin1().constData());
+        QPixmap * p = get_pixmap(s);
 
         if (p != 0) {
             path = s;
             width_scale100 = p->width();
             height_scale100 = p->height();
-            px = get_pixmap(path.toLatin1().constData(), the_canvas()->zoom());
+            px = get_pixmap(path, the_canvas()->zoom());
 
             hide();
             hide_lines();
@@ -147,7 +147,7 @@ ImageCanvas * ImageCanvas::add(UmlCanvas * canvas, int x, int y)
     ImageDialog d(s);
 
     if ((d.exec() == QDialog::Accepted) && !s.isEmpty()) {
-        QPixmap * p = get_pixmap(s.toLatin1().constData(), canvas->zoom());
+        QPixmap * p = get_pixmap(s, canvas->zoom());
 
         if (p != 0)
             return new ImageCanvas(canvas, x, y, s, 0);
@@ -168,7 +168,7 @@ void ImageCanvas::modified()
 void ImageCanvas::change_scale()
 {
     QGraphicsRectItem::setVisible(FALSE);
-    px = get_pixmap(path.toLatin1().constData(), the_canvas()->zoom());
+    px = get_pixmap(path, the_canvas()->zoom());
     setRect(rect().x(), rect().y(), px->width(), px->height());
     recenter();
     QGraphicsRectItem::setVisible(TRUE);
@@ -292,7 +292,7 @@ ImageCanvas * ImageCanvas::read(char *& st, UmlCanvas * canvas, char * k)
         return (ImageCanvas *) dict_get(read_id(st), "image", canvas);
     else if (!strcmp(k, "image")) {
         int id = read_id(st);
-        QString pa = toUnicode(read_string(st));
+        QString pa = read_string(st);
         ImageCanvas * result = new ImageCanvas(canvas, 0, 0, pa, id);
 
         read_keyword(st, "xyz");

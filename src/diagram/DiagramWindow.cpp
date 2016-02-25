@@ -255,12 +255,13 @@ void DiagramWindow::save(const char * ext, QString & warning,
 
     QString diagram_def;
     QTextStream st(&diagram_def, QIODevice::WriteOnly);
+    st.setCodec("UTF-8");
     int current_indent = indent();
 
     indent0();
     get_view()->save(st, warning, FALSE);
     st.flush();
-    save_definition(browser_node->get_ident(), ext, diagram_def.toLatin1().constData(), is_new);
+    save_definition(browser_node->get_ident(), ext, diagram_def, is_new);
     indent(current_indent);
 
     if (zm != 1)
@@ -278,13 +279,14 @@ void DiagramWindow::duplicate(int dest_id, const char * ext) const
 
     QString diagram_def;
     QTextStream st(&diagram_def, QIODevice::WriteOnly); //[lgfreitas] it was nothing but some inlines to do this
+    st.setCodec("UTF-8");
     int current_indent = indent();
     BooL is_new = TRUE;
 
     indent0();
     get_view()->save(st, warning, FALSE);
     st.flush();
-    save_definition(dest_id, ext, diagram_def.toLatin1().constData(), is_new);
+    save_definition(dest_id, ext, diagram_def, is_new);
     indent(current_indent);
 
     if (zm != 1)
@@ -303,6 +305,7 @@ QString DiagramWindow::copy_selected() const
 
 
     QTextStream st(&diagram_def, QIODevice::WriteOnly);
+    st.setCodec("UTF-8");
 
     indent0();
     get_view()->save(st, warning, TRUE);

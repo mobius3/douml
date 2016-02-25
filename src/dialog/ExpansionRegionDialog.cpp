@@ -227,7 +227,7 @@ void ExpansionRegionDialog::accept()
     }
 
     data->must_isolate = must_isolate_cb->isChecked();
-    data->mode = expansion_mode_kind(edmode->currentText().toLatin1().constData());
+    data->mode = expansion_mode_kind(edmode->currentText());
 
     bool newst = data->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
 

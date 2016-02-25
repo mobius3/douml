@@ -149,7 +149,7 @@ bool SubjectCanvas::copyable() const
 void SubjectCanvas::open()
 {
     BooL ok;
-    QString s = MyInputDialog::getText(tr("Subject dialog").toLatin1().constData(), tr("subject : "),
+    QString s = MyInputDialog::getText(tr("Subject dialog"), tr("subject : "),
                                        fromUnicode(name), ok);
 
     if (ok) {
@@ -441,7 +441,7 @@ SubjectCanvas * SubjectCanvas::read(char *& st, UmlCanvas * canvas, char * k)
         int id = read_id(st);
         SubjectCanvas * result = new SubjectCanvas(canvas, 0, 0, id);
 
-        result->name = toUnicode(read_string(st));
+        result->name = read_string(st);
 
         k = read_keyword(st);
         read_color(st, "color", result->itscolor, k);

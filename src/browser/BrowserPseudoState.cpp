@@ -336,12 +336,12 @@ BrowserPseudoState::add_pseudostate(BrowserNode * future_parent,
 
         return 0;
 
-    return add_pseudostate(future_parent, c, name.toLatin1().constData());
+    return add_pseudostate(future_parent, c, name);
 }
 
 BrowserPseudoState *
 BrowserPseudoState::add_pseudostate(BrowserNode * future_parent,
-                                    UmlCode c, const char * name)
+                                    UmlCode c, QString name)
 {
     return new BrowserPseudoState(c, name, future_parent, new PseudoStateData());
 }
@@ -435,7 +435,7 @@ Note that you can undelete it after").arg(s));
         MenuFactory::addItem(m,  QObject::tr("Referenced by"), 5,
                         QObject::tr("to know who reference the <i>%1</i> \
 through a transition").arg(s));
-        mark_menu(m,  QObject::tr("the ").arg(s).toLatin1().constData(), 90);
+        mark_menu(m,  QObject::tr("the ").arg(s), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
@@ -752,7 +752,7 @@ void BrowserPseudoState::save(QTextStream & st, bool ref, QString & warning)
         st << "pseudostate " << get_ident() << " " << stringify(kind) << " ";
 
         if (!allow_empty())
-            save_string(name.toLatin1().constData(), st);
+            save_string(name, st);
 
         indent(+1);
         def->save(st, warning);
@@ -821,12 +821,12 @@ BrowserPseudoState * BrowserPseudoState::read(char *& st, char * k,
         result = all[id];
 
         if (result == 0)
-            result = new BrowserPseudoState(c, (allow_empty(c)) ? "" : (const char *) read_string(st),
+            result = new BrowserPseudoState(c, (allow_empty(c)) ? "" : read_string(st),
                                             parent, new PseudoStateData, id);
         else if (result->is_defined) {
             BrowserPseudoState * already_exist = result;
 
-            result = new BrowserPseudoState(c, (allow_empty(c)) ? "" : (const char *) read_string(st),
+            result = new BrowserPseudoState(c, (allow_empty(c)) ? "" : read_string(st),
                                             parent, new PseudoStateData, id);
 
             already_exist->must_change_id(all);

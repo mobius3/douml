@@ -80,7 +80,7 @@ void AType::save(QTextStream & st, QString & warning,
         if (type->deletedp()) {
             // theo not possible
             st << ex;
-            save_string(type->get_name().toLatin1().constData(), st);
+            save_string(type->get_name(), st);
         }
         else {
             st << t;

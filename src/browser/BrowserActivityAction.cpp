@@ -561,7 +561,7 @@ void BrowserActivityAction::menu()
         MenuFactory::addItem(m, QObject::tr("Referenced by"), 4,
                              QObject::tr("to know who reference the <i>%1</i> \
                                          through a flow or dependency").arg(kind));
-                                         mark_menu(m, QObject::tr("the %1").arg(kind).toLatin1().constData(), 90);
+                                         mark_menu(m, QObject::tr("the %1").arg(kind), 90);
                              ProfiledStereotypes::menu(m, this, 99990);
 
                 if ((edition_number == 0) &&
@@ -1081,7 +1081,7 @@ void BrowserActivityAction::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "activityaction " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         indent(+1);
         def->save(st, warning);
 

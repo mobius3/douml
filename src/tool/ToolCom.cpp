@@ -167,7 +167,7 @@ ToolCom::~ToolCom()
     DisconnectExternalProcess();
 }
 
-int ToolCom::run(const char * cmd, BrowserNode * bn,
+int ToolCom::run(QString cmd, BrowserNode * bn,
                  bool exit, bool clr, void (*pf)())
 {
     QLOG_TRACE() << Q_FUNC_INFO << " called";
@@ -195,7 +195,7 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
     com->cont = pf;
 
     com->exit_bouml = exit;
-    com->cmd = strdup(cmd);
+    com->cmd = strdup(cmd.toLatin1().constData());
     com->timer = new QTimer(com);
     connect(com->timer, SIGNAL(timeout()), com, SLOT(connexion_timeout()));
     com->timer->start(30 * 10000);
@@ -203,7 +203,7 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
     unsigned port = com->bind(1024);
 
     qDebug() << QDir::currentPath();
-    QStringList commandList = QString(cmd).split(" ");
+    QStringList commandList = cmd.split(" ");
     QString command = commandList.at(0);
     commandList.removeAt(0);
     com->externalProcess = new QProcess();
@@ -485,9 +485,9 @@ void ToolCom::write_id(void * id)
 #endif
 }
 
-void ToolCom::write_id(BrowserNode * bn, char k, const char * s)
+void ToolCom::write_id(BrowserNode * bn, char k, QString s)
 {
-    size_t ln = strlen(s) + 1;
+    size_t ln = strlen(s.toLatin1().constData()) + 1;
 
     check_size_out(ln + 2 + sizeof(void *));
 
@@ -503,7 +503,7 @@ void ToolCom::write_id(BrowserNode * bn, char k, const char * s)
         k -= 7;
 
     p_buffer_out[sizeof(void *) + 1] = k;
-    memcpy(p_buffer_out + sizeof(void *) + 2, s, ln);
+    memcpy(p_buffer_out + sizeof(void *) + 2, s.toLatin1().constData(), ln);
 
     ToolCom::p_buffer_out += ln + 2 + sizeof(void *);
 #ifdef DEBUGCOM

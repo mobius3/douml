@@ -195,8 +195,8 @@ void KeyValuesTable::SetupTableText(HaveKeyValueData *kvData,  bool isReadOnly)
     unsigned index = 0;
     for (index = 0; index < kvData->get_n_keys(); index++)
     {
-        QString k = toUnicode(kvData->get_key(index));
-        QString v = toUnicode(kvData->get_value(index));
+        QString k = kvData->get_key(index);
+        QString v = kvData->get_value(index);
 
         TableItem * tiKey = nullptr;
         tiKey =  new MLinesItem(k, !isReadOnly);

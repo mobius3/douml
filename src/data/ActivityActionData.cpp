@@ -573,7 +573,7 @@ QString OpaqueAction::str(DrawingLanguage lang, QString name) const
 
     return (s.isEmpty())
            ? AnyAction::str(lang, name)
-           : toUnicode(s.toLatin1().constData());
+           : s;
 }
 
 void OpaqueAction::save(QTextStream & st, QString &) const
@@ -1208,7 +1208,7 @@ QList<PinDescr> CallBehaviorAction::pins() const
             PinParamData * model = (ParameterData *)(*iter)->get_data();
             PinDescr p;
 
-            p.name = (*iter)->get_name().toLatin1().constData();
+            p.name = (*iter)->get_name();
             p.set_type(model->get_type());
             p.multiplicity = model->multiplicity;
             p.in_state = model->in_state;
@@ -1436,7 +1436,7 @@ QString CallOperationAction::str(DrawingLanguage lang, QString name) const
     else if (name.isEmpty())
         return operation->get_name();
     else
-        return toUnicode(name.toLatin1().constData());
+        return name;
 }
 
 BasicData * CallOperationAction::depend_on()

@@ -160,12 +160,12 @@ BrowserInterruptibleActivityRegion::add_interruptibleactivityregion(BrowserNode 
                                              UmlInterruptibleActivityRegion, TRUE, TRUE))
 
             ? 0
-            : add_interruptibleactivityregion(future_parent, name.toLatin1().constData());
+            : add_interruptibleactivityregion(future_parent, name);
 }
 
 BrowserInterruptibleActivityRegion *
 BrowserInterruptibleActivityRegion::add_interruptibleactivityregion(BrowserNode * future_parent,
-                                                                    const char * name)
+                                                                    QString name)
 {
     BrowserInterruptibleActivityRegion * r =
             new BrowserInterruptibleActivityRegion(name, future_parent);
@@ -245,7 +245,7 @@ void BrowserInterruptibleActivityRegion::menu()
 
                                          MenuFactory::addItem(m, QObject::tr("Referenced by"), 3,
                                                               QObject::tr("to know who reference the <i>region</i>"));
-                             mark_menu(m, QObject::tr("the interruptible activity region").toLatin1().constData(), 90);
+                             mark_menu(m, QObject::tr("the interruptible activity region"), 90);
                 ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
@@ -727,7 +727,7 @@ void BrowserInterruptibleActivityRegion::save(QTextStream & st, bool ref, QStrin
     else {
         nl_indent(st);
         st << "interruptibleactivityregion " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         indent(+1);
         def->save(st, warning);
 

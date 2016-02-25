@@ -56,7 +56,7 @@
 #include "menufactory.h"
 QSize ActivityObjectDialog::previous_size;
 
-ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * what,
+ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, QString what,
                                            QStringList & st)
     : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), data(d)
 {
@@ -444,7 +444,7 @@ void ActivityObjectDialog::accept()
     data->set_type(t);
     data->multiplicity =
             edmultiplicity->currentText().trimmed();
-    data->ordering = ordering(edordering->currentText().toLatin1().constData());
+    data->ordering = ordering(edordering->currentText());
     data->is_control = is_control_cb->isChecked();
     data->in_state = edin_state->text().trimmed();
     data->uml_selection = eduml_selection->text().trimmed();

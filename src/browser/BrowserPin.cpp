@@ -166,7 +166,7 @@ void BrowserPin::compute_referenced_by(QList<BrowserNode *> & l,
 }
 
 void BrowserPin::new_one(BrowserNode * future_parent,
-                         const char * name, const PinParamData & pd)
+                         QString name, const PinParamData & pd)
 {
     PinData * d = new PinData(pd);
     BrowserPin * r = new BrowserPin(name, future_parent, d);
@@ -288,7 +288,7 @@ Note that you can undelete it after"));
 
         MenuFactory::addItem(m, QObject::tr("Referenced by"), 4,
                        QObject::tr("to know who reference the <i>pin</i>"));
-        mark_menu(m, QObject::tr("the pin").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the pin"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
@@ -534,7 +534,7 @@ void BrowserPin::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "pin " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         indent(+1);
         def->save(st, warning);
         BrowserNode::save(st);

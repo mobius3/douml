@@ -75,7 +75,7 @@ protected:
 
     // Idl
     BrowserAttribute * idl_case;	// exclusive with idl_explicit_case
-    WrapperStr idl_explicit_case;
+    QString idl_explicit_case;
     WrapperStr idl_decl;
 
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
@@ -183,8 +183,8 @@ public:
     const char * get_idldecl() const {
         return idl_decl;
     }
-    const char * get_idlcase() const;
-    void set_idlcase(BrowserAttribute * a, const char * e);
+    QString get_idlcase() const;
+    void set_idlcase(BrowserAttribute * a, QString e);
 
     void edit(bool new_st_attr);
 

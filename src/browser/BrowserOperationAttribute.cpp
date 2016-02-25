@@ -33,7 +33,7 @@ BrowserOperationAttribute::~BrowserOperationAttribute()
 
 void BrowserOperationAttribute::set_name(const QString & value)
 {
-    param->set_name(value.toLatin1().constData());
+    param->set_name(value);
 }
 
 QString BrowserOperationAttribute::get_name() const

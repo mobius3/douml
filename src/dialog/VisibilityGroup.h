@@ -55,7 +55,7 @@ public:
     BButtonGroup * init(QWidget * parent,
                          UmlVisibility v,
                          bool pack_allowed = 0,
-                         const char * title = 0, QString default_prefix = 0);
+                         QString title = QString(), QString default_prefix = 0);
     void update_default(const VisibilityGroup & default_grp);
     void connect(const char *, QWidget *, const char *);
     void follow(const VisibilityGroup & other);

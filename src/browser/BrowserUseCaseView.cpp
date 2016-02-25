@@ -232,7 +232,7 @@ void BrowserUseCaseView::menu()
             }
         }
 
-        mark_menu(m, QObject::tr("the use case view").toLatin1().constData(), 90);
+        mark_menu(m, QObject::tr("the use case view"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
@@ -337,7 +337,7 @@ void BrowserUseCaseView::exec_menu_choice(int rank)
         break;
 
     case 8:
-        edit(QObject::tr("Use case view").toLatin1().constData(), its_default_stereotypes);
+        edit(QObject::tr("Use case view"), its_default_stereotypes);
         return;
 
     case 9:
@@ -534,7 +534,7 @@ void BrowserUseCaseView::apply_shortcut(const QString & s)
 void BrowserUseCaseView::open(bool)
 {
     if (!is_edited)
-        edit(QObject::tr("Use case view").toLatin1().constData(), its_default_stereotypes);
+        edit(QObject::tr("Use case view"), its_default_stereotypes);
 }
 
 UmlCode BrowserUseCaseView::get_type() const
@@ -976,7 +976,7 @@ void BrowserUseCaseView::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "usecaseview " << get_ident() << " ";
-        save_string(name.toLatin1().constData(), st);
+        save_string(name, st);
         indent(+1);
 
         def->save(st, warning);

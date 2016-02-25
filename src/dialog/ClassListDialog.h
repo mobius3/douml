@@ -44,7 +44,7 @@ protected:
     static QSize previous_size;
 
 public:
-    ClassListDialog(const char * m, const QList<BrowserClass *> & l);
+    ClassListDialog(QString m, const QList<BrowserClass *> & l);
     virtual ~ClassListDialog();
 
     int choosen();
