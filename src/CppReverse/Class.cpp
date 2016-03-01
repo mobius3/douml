@@ -163,12 +163,15 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
         // bypass all the class
         // note : user can't ask for update a nested class
         char c;
-
+        //if body not hit yet
+        if(s != "{")
+        {
         while ((c = Lex::read_word_bis(TRUE, FALSE)) != '{') {
             if (c == 0) {
                 Lex::premature_eof();
                 throw 0;
             }
+        }
         }
 
         UmlOperation::skip_body(1);
