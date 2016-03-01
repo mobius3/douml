@@ -31,10 +31,10 @@ protected:
 
 public:
     // return the pins part of the parameter set
-    const QHash<int,UmlActivityPin*> & pins();
+    const QVector<UmlActivityPin *> &pins();
 
     // set the pins
-    bool set_Pins(const QHash<int,UmlActivityPin*> & v);
+    bool set_Pins(const QVector<UmlActivityPin *> &v);
 
     // to unload the object to free memory, it will be reloaded automatically
     // if needed. Recursively done for the sub items if 'rec' is TRUE.
@@ -46,7 +46,7 @@ public:
 
 
 private:
-    QHash<int,UmlActivityPin*> _pins;
+    QVector<UmlActivityPin*> _pins;
 
 
 protected:

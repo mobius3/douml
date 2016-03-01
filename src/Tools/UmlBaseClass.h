@@ -96,7 +96,7 @@ public:
 
     // returns the components realizing or providing the class.
     // To set them refer to the UmlBaseComponent's operation setAssociatedClasses()
-    const QHash<int,UmlComponent*> associatedComponents();
+    const QVector<UmlComponent *> associatedComponents();
 
 #ifdef WITHCPP
     // returns TRUE if the class is external, its definition

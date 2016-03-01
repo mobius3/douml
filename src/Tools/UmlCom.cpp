@@ -591,7 +591,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlItem*
     flush();
 }
 
-void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const QHash<int,UmlClass*> & l1, const QHash<int,UmlClass*> & l2, const QHash<int,UmlClass*> & l3)
+void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlClass*> & l1, const QVector<UmlClass*> & l2, const QVector<UmlClass*> & l3)
 {
 #ifdef TRACE
     QLOG_INFO() << "UmlCom::send_cmd(id, " << cmd << ", const QHash<int,UmlClass*> & l1, const QHash<int,UmlClass*> & l2, const QHash<int,UmlClass*> & l3)\n";
@@ -604,28 +604,25 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const QHash<int,UmlCla
 
     n = l1.count();
     write_unsigned(n);
-    QHashIterator<int, UmlClass*> it1(l1);
+    QVectorIterator<UmlClass*> it1(l1);
     while(it1.hasNext())
     {
-        it1.next();
-        write_id(((UmlBaseItem *) it1.value())->_identifier);
+        write_id(it1.next()->_identifier);
     }
     n = l2.count();
     write_unsigned(n);
-    QHashIterator<int, UmlClass*> it2(l2);
+    QVectorIterator<UmlClass*> it2(l2);
     while(it2.hasNext())
     {
-        it2.next();
-        write_id(((UmlBaseItem *) it2.value())->_identifier);
+        write_id(it2.next()->_identifier);
     }
 
     n = l3.count();
     write_unsigned(n);
-    QHashIterator<int, UmlClass*> it3(l3);
+    QVectorIterator<UmlClass*> it3(l3);
     while(it3.hasNext())
     {
-        it3.next();
-        write_id(((UmlBaseItem *) it3.value())->_identifier);
+        write_id(it3.next()->_identifier);
     }
 
     flush();
@@ -715,7 +712,7 @@ void UmlCom::read_item_list(QVector<UmlItem*> & v)
     // warning : don't use data() to directly store
     // in UmlItem ** else count() will be false later
     for (unsigned index = 0; index != n; index += 1)
-        v.insert(index, UmlBaseItem::read_());
+        v.append(UmlBaseItem::read_());
 }
 
 void UmlCom::fatal_error(const WrapperStr &

@@ -221,7 +221,7 @@ public:
     //internal, do NOT use it
 
     static void send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlItem*> & l);
-    static void send_cmd(const void * id, OnInstanceCmd cmd, const QHash<int, UmlClass*> & l1, const QHash<int, UmlClass*> & l2, const QHash<int, UmlClass*> & l3);
+    static void send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlClass *> &l1, const QVector<UmlClass *> &l2, const QVector<UmlClass *> &l3);
 
     //internal, do NOT use it
 

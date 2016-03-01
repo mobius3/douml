@@ -15,13 +15,13 @@ anItemKind UmlBaseParameterSet::kind()
     return aParameterSet;
 }
 
-const QHash<int,UmlActivityPin *> &UmlBaseParameterSet::pins()
+const QVector<UmlActivityPin *> &UmlBaseParameterSet::pins()
 {
     read_if_needed_();
     return _pins;
 }
 
-bool UmlBaseParameterSet::set_Pins(const QHash<int,UmlActivityPin*> & v)
+bool UmlBaseParameterSet::set_Pins(const QVector<UmlActivityPin*> & v)
 {
     UmlCom::send_cmd(_identifier, replaceParameterCmd, (const QVector<UmlItem*> &) v);
 
@@ -36,7 +36,7 @@ bool UmlBaseParameterSet::set_Pins(const QHash<int,UmlActivityPin*> & v)
 
 void UmlBaseParameterSet::unload(bool rec, bool del)
 {
-    _pins.reserve(0);
+    _pins.clear();
     UmlBaseItem::unload(rec, del);
 }
 

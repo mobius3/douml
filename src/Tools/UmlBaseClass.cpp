@@ -130,17 +130,17 @@ UmlArtifact * UmlBaseClass::associatedArtifact()
     return (UmlArtifact *) UmlBaseItem::read_();
 }
 
-const QHash<int, UmlComponent *> UmlBaseClass::associatedComponents()
+const QVector<UmlComponent *> UmlBaseClass::associatedComponents()
 {
     UmlCom::send_cmd(_identifier, assocComponentCmd);
 
-    QHash<int,UmlComponent*> result;
+    QVector<UmlComponent*> result;
     unsigned n = UmlCom::read_unsigned();
 
     result.reserve(n);
 
     for (unsigned index = 0; index != n; index += 1)
-        result.insert(index, (UmlComponent *) UmlBaseItem::read_());
+        result.append((UmlComponent *) UmlBaseItem::read_());
 
     return result;
 }
