@@ -502,10 +502,7 @@ void Package::scan_dirs(int & n)
 static bool allowed(QRegExp * rg, QString f)
 {
     if (rg != 0) {
-        //int matchLen;
-        return rg->exactMatch(f); //[lgfreitas] I do not know if this will work
-        /*return ((rg->match(f, 0, &matchLen) != 0) ||
-            (matchLen != (int) f.length()));*/
+        return (rg->indexIn(f) != 0 || rg->matchedLength() != f.length());
     }
     else
         return TRUE;
