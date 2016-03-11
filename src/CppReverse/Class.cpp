@@ -103,7 +103,11 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
     WrapperStr comment = Lex::get_comments();
     WrapperStr description = Lex::get_description();
     WrapperStr q_modifier;
-
+    Lex::simplify_comment(comment);
+    if(CppSettings::isGenerateJavadocStyleComment())
+    {
+        comment = Lex::remove_javadoc_star_signs_from_comment(comment);
+    }
     if (!from_typedef)
         if ((name = Lex::read_word()).isEmpty())
             return 0;
@@ -253,7 +257,7 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
                     cl->set_updated();
                 }
             }
-            else if (nequal(cl_uml->description(), Lex::simplify_comment(comment))) {
+            else if (nequal(cl_uml->description(), comment)) {
                 // comment simplified
                 cl_uml->set_Description(comment);
                 cl->set_updated();
@@ -291,7 +295,7 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
                     d = CppSettings::classDecl();
 
                 cl_uml->set_Description((d.find("${description}") != -1)
-                                        ? description : Lex::simplify_comment(comment));
+                                        ? description : comment);
             }
 
 #ifdef ROUNDTRIP
@@ -1195,6 +1199,11 @@ Class * Class::reverse_enum(ClassContainer * container,
     WrapperStr description = Lex::get_description();
     WrapperStr s;
 
+    Lex::simplify_comment(comment);
+    if(CppSettings::isGenerateJavadocStyleComment())
+    {
+        comment = Lex::remove_javadoc_star_signs_from_comment(comment);
+    }
     if (!from_typedef)
     {
         name = Lex::read_word();
@@ -1359,7 +1368,7 @@ Class * Class::reverse_enum(ClassContainer * container,
                 cl->set_updated();
             }
         }
-        else if (nequal(cl_uml->description(), Lex::simplify_comment(comment))) {
+        else if (nequal(cl_uml->description(), comment)) {
             // comment simplified
             cl_uml->set_Description(comment);
             cl->set_updated();
@@ -1375,7 +1384,7 @@ Class * Class::reverse_enum(ClassContainer * container,
 
         if (! comment.isEmpty())
             cl_uml->set_Description((s.find("${description}") != -1)
-                                    ? description : Lex::simplify_comment(comment));
+                                    ? description : comment);
 
         cl_uml->set_CppDecl(s);
 #ifdef ROUNDTRIP
@@ -1739,7 +1748,11 @@ Class * Class::reverse_enum(ClassContainer * container,
         WrapperStr type;
         UmlTypeSpec base_type;
         WrapperStr typeform = "${type}";
-
+        Lex::simplify_comment(comment);
+        if(CppSettings::isGenerateJavadocStyleComment())
+        {
+            comment = Lex::remove_javadoc_star_signs_from_comment(comment);
+        }
         for (;;) {
             if ((s == "unsigned") || (s == "signed") ||
                 (s == "void") || (s == "bool")) {
@@ -1964,7 +1977,7 @@ Class * Class::reverse_enum(ClassContainer * container,
                     ty->set_updated();
                 }
             }
-            else if (nequal(ty_uml->description(), Lex::simplify_comment(comment))) {
+            else if (nequal(ty_uml->description(), comment)) {
                 ty_uml->set_Description(comment); // comment was set
                 ty->set_updated();
             }
@@ -1975,7 +1988,7 @@ Class * Class::reverse_enum(ClassContainer * container,
 
             if (! comment.isEmpty())
                 ty_uml->set_Description((decl.find("${description}") != -1)
-                                        ? description : Lex::simplify_comment(comment));
+                                        ? description : comment);
 
 #ifdef ROUNDTRIP
         }

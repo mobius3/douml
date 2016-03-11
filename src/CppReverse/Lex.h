@@ -109,6 +109,7 @@ public:
     static WrapperStr read_list_elt();
     static bool finish_template(WrapperStr &);
     static WrapperStr simplify_comment(WrapperStr &);
+    static QString remove_javadoc_star_signs_from_comment(QString comment);
 };
 
 bool neq(const WrapperStr & s1, const WrapperStr & s2);

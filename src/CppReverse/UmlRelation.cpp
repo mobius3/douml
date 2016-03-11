@@ -161,6 +161,11 @@ bool UmlRelation::new_one(Class * container, const WrapperStr & name,
         Lex::finish_line();
 
         comment = Lex::get_comments(comment);
+        Lex::simplify_comment(comment);
+        if(CppSettings::isGenerateJavadocStyleComment())
+        {
+            comment = Lex::remove_javadoc_star_signs_from_comment(comment);
+        }
         description = Lex::get_description(description);
 
 #ifdef ROUNDTRIP
@@ -309,7 +314,7 @@ bool UmlRelation::new_one(Class * container, const WrapperStr & name,
                     container->set_updated();
                 }
             }
-            else if (nequal(rel->description(), Lex::simplify_comment(comment))) {
+            else if (nequal(rel->description(), comment)) {
                 rel->set_Description(comment); // comment was set
                 container->set_updated();
             }
@@ -324,7 +329,7 @@ bool UmlRelation::new_one(Class * container, const WrapperStr & name,
 
         if (!comment.isEmpty())
             rel->set_Description((decl.find("${description") != -1)
-                                 ? description : Lex::simplify_comment(comment));
+                                 ? description : comment);
 
         return rel->set_RoleName(name);
     }

@@ -231,6 +231,11 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
 {
     // the "(" was read
 
+    Lex::simplify_comment(comment);
+    if(CppSettings::isGenerateJavadocStyleComment())
+    {
+        comment = Lex::remove_javadoc_star_signs_from_comment(comment);
+    }
 #ifdef DEBUG_DOUML
     QLOG_INFO() << "OPERATION '" << name << "' type '" << type << "' modifier '" << modifier << "'\n";
 #endif
@@ -361,7 +366,7 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
         if (!comment.isEmpty())
             if (op != 0)
                 op->set_Description((decl.find("${description}") != -1)
-                                    ? description : Lex::simplify_comment(comment));
+                                    ? description : comment);
 
     }
 
@@ -420,7 +425,7 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
                     cl->set_updated();
                 }
             }
-            else if (nequal(op->description(), Lex::simplify_comment(comment))) {
+            else if (nequal(op->description(), comment)) {
                 op->set_Description(comment); // comment was set
                 cl->set_updated();
             }
@@ -450,7 +455,7 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
 
             if (!comment.isEmpty())
                 op->set_Description((decl.find("${description}") != -1)
-                                    ? description : Lex::simplify_comment(comment));
+                                    ? description : comment);
 
             QList<UmlParameter>::Iterator it;
 
@@ -1947,12 +1952,18 @@ bool UmlOperation::reverse_if_def(Package * pack,
                 insert_template(*formals, def, FALSE);
                 def_modified = TRUE;
             }
-
             s = comment;
+            Lex::simplify_comment(s);
+            if(CppSettings::isGenerateJavadocStyleComment())
+            {
+                s = Lex::remove_javadoc_star_signs_from_comment(s);
+            }
+
+
 
             if (!s.isEmpty() &&
                     nequal(op->description(), description) &&
-                    nequal(op->description(), Lex::simplify_comment(s))) {
+                    nequal(op->description(), s)) {
                 int index;
 
                 if ((index = def.find("${description}")) != -1) {
