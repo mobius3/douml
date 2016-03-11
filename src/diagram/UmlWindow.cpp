@@ -2586,28 +2586,34 @@ void UmlWindow::is_selected(BrowserNode * bn)
 
 void UmlWindow::next_select()
 {
-    if (++HistoricIterator != select_historic.end()) {
-        OnHistoric = TRUE;
-        browser->select(*HistoricIterator);
+    if(select_historic.count())
+    {
+        if (++HistoricIterator != select_historic.end()) {
+            OnHistoric = TRUE;
+            browser->select(*HistoricIterator);
 
-        the->prev->setIcon(*leftPixmap);
-        ++HistoricIterator;
-        the->next->setIcon((HistoricIterator != select_historic.end())
-                           ? *rightPixmap : *rightUnavailablePixmap);
+            the->prev->setIcon(*leftPixmap);
+            ++HistoricIterator;
+            the->next->setIcon((HistoricIterator != select_historic.end())
+                               ? *rightPixmap : *rightUnavailablePixmap);
+        }
+
+        --HistoricIterator;
     }
-
-    --HistoricIterator;
 }
 
 void UmlWindow::prev_select()
 {
-    if (HistoricIterator != select_historic.begin()) {
-        OnHistoric = TRUE;
-        browser->select(*--HistoricIterator);
+    if(select_historic.count())
+    {
+        if (HistoricIterator != select_historic.begin()) {
+            OnHistoric = TRUE;
+            browser->select(*--HistoricIterator);
 
-        the->prev->setIcon((HistoricIterator != select_historic.begin())
-                           ? *leftPixmap : *leftUnavailablePixmap);
-        the->next->setIcon(*rightPixmap);
+            the->prev->setIcon((HistoricIterator != select_historic.begin())
+                               ? *leftPixmap : *leftUnavailablePixmap);
+            the->next->setIcon(*rightPixmap);
+        }
     }
 }
 void UmlWindow::historic_forget(BrowserNode * bn)
