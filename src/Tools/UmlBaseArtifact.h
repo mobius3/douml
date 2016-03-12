@@ -59,7 +59,7 @@ public:
 
     // returns (in Java a copy of) the associated artifacts list
     // significant when the artifact is not stereotyped <<source>>
-    const QHash<int,UmlArtifact*> & associatedArtifacts();
+    const QVector<UmlArtifact *> &associatedArtifacts();
 
     // adds an associated artifacts, returns false if 'cp' is already
     // an associate artifact.
@@ -149,7 +149,7 @@ private:
 
     QVector<UmlClass*> _assoc_classes;
 
-    QHash<int,UmlArtifact*> _associated;
+    QVector<UmlArtifact*> _associated;
 
 #ifdef WITHCPP
     WrapperStr _cpp_h;

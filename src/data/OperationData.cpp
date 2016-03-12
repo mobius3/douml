@@ -3203,10 +3203,12 @@ void OperationData::new_body(QString s, int who)
         key = ".python!!!\t";
     }
 
-    if (!((BrowserClass *) browser_node->parent())->get_bodies_read())
+    BrowserClass * cl = (BrowserClass *) browser_node->parent();
+    if(cl)
+    {
+        if (!cl->get_bodies_read())
         set_bodies_info();
 
-    BrowserClass * cl = (BrowserClass *) browser_node->parent();
     QString fn = abs_file_path(cl->get_ident(), "b");
 
     for (;;) {
@@ -3258,6 +3260,7 @@ void OperationData::new_body(QString s, int who)
                             "\nmay be your disk is full",
                             QMessageBox::Retry);
     }
+}
 }
 
 void OperationData::save_body(QFile & qf, QString & filename,

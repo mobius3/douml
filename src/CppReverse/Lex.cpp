@@ -754,6 +754,22 @@ WrapperStr Lex::simplify_comment(WrapperStr & comment)
         }
     }
 }
+// remove * sign in front of each line
+QString Lex::remove_javadoc_star_signs_from_comment(QString comment)
+{
+    if (comment.isEmpty())
+        return comment;
+    //if includes javadoc
+    if(comment.startsWith("*"))
+    {
+        if(comment.startsWith("*\n * "))
+            comment.remove(0,5);
+        else
+            comment.remove(0,1);
+        comment.replace(QRegExp("\\n[\\s]*\\* "), "\n");
+    }
+    return comment.trimmed();
+}
 
 void Lex::goes_to_word_beginning()
 {

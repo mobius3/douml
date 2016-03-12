@@ -51,8 +51,7 @@ bool UmlBaseArtifact::addAssociatedClass(UmlClass * cl)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            _assoc_classes.reserve(_assoc_classes.size() + 1);
-            _assoc_classes.insert(_assoc_classes.size() - 1, cl);
+            _assoc_classes.append(cl);
         }
 
         return TRUE;
@@ -73,13 +72,7 @@ bool UmlBaseArtifact::removeAssociatedClass(UmlClass * cl)
             if (((int) index) == -1)
                 // theo impossible
                 return FALSE;
-
-            unsigned last = _assoc_classes.size() - 1;
-
-            if (index != last)
-                _assoc_classes.insert(index, _assoc_classes[last]);
-
-            _assoc_classes.reserve(last);
+            _assoc_classes.removeAt(index);
         }
 
         return TRUE;
@@ -102,7 +95,7 @@ bool UmlBaseArtifact::set_AssociatedClasses(const QVector<UmlClass*> & l)
         return FALSE;
 }
 
-const QHash<int, UmlArtifact*> & UmlBaseArtifact::associatedArtifacts()
+const QVector<UmlArtifact*> & UmlBaseArtifact::associatedArtifacts()
 {
     read_if_needed_();
 
@@ -116,8 +109,7 @@ bool UmlBaseArtifact::addAssociatedArtifact(UmlArtifact * cp)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            _associated.reserve(_associated.size() + 1);
-            _associated.insert(_associated.size() - 1, cp);
+            _associated.append(cp);
         }
 
         return TRUE;
@@ -133,18 +125,12 @@ bool UmlBaseArtifact::removeAssociatedArtifact(UmlArtifact * cp)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            unsigned index = (unsigned) _associated.key(cp, -1);
+            unsigned index = (unsigned) _associated.indexOf(cp);
 
             if (((int) index) == -1)
                 // theo impossible
                 return FALSE;
-
-            unsigned last = _associated.size() - 1;
-
-            if (index != last)
-                _associated.insert(index, _associated[last]);
-
-            _associated.reserve(last);
+            _associated.removeAt(index);
         }
 
         return TRUE;
@@ -288,7 +274,7 @@ void UmlBaseArtifact::read_uml_()
     _associated.reserve(n);
 
     for (index = 0; index != n; index += 1)
-        _associated.insert(index, (UmlArtifact *) UmlBaseItem::read_());
+        _associated.append((UmlArtifact *) UmlBaseItem::read_());
 }
 
 #ifdef WITHCPP

@@ -517,7 +517,8 @@ void BrowserPackage::prepare_for_sort()
     IdIterator<BrowserPackage> it(all);
     while (it.hasNext()) {
         it.next();
-        it.value()->full_path = QString();
+        if(it.value())
+            it.value()->full_path = QString();
     }
 }
 
