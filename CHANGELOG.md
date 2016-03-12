@@ -6,6 +6,7 @@
 [#167]: https://github.com/DoUML/douml/pull/167
 [#170]: https://github.com/DoUML/douml/pull/170
 [#173]: https://github.com/DoUML/douml/pull/173
+[#179]: https://github.com/DoUML/douml/pull/179
 
 * Fixed compilation on OS X El Capitan [#155]
 * Fixed warning about duplicated uml entities showing up needlessly [#161]
@@ -15,7 +16,7 @@
 * Some UI improvements [#161]
 * Version bump [#161]
 * Improvements regarding Qt5 style handling [#167]
-* Crash fix and code improvements [#167]
+* Crash fix and code improvements [#167] [#179]
 * Missing specifiers of c++ operation added to CppReverse and CppRoundtrip [#167]
 * Fix missing = sign in default and delete specifiers [#167]
 * Reduce amount of warnings [#170]
