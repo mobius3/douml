@@ -344,6 +344,16 @@ BrowserOperation * BrowserOperation::new_one(QString s, BrowserNode * p)
 
     //if constructor
     int lastIndexOfConstructor = 0;
+    //leave members other then operations and attributes in place
+    while(BrowserNode *node = (BrowserNode *)p->child(lastIndexOfConstructor))
+    {
+        if(UmlOperation != node->get_type() && UmlAttribute != node->get_type())
+        {
+            lastIndexOfConstructor++;
+        }
+        else
+            break;
+    }
     while(BrowserNode *node = (BrowserNode *)p->child(lastIndexOfConstructor))
     {
         if(nameOfClassNode == node->get_name())
