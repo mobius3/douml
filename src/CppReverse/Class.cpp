@@ -886,6 +886,48 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 
             return;
         }
+        //attributes seperated by ,
+        else if (s == ",")
+        {
+            if (Package::scanning())
+                return;
+
+            if (name.isEmpty() || type.isEmpty()) {
+                Lex::error_near(",");
+                return;
+            }
+
+            UmlTypeSpec dest_type;
+            WrapperStr typeform = "${type}";
+
+            if (CppSettings::umlType(type).isEmpty() &&
+                (modifier.isEmpty() || (modifier == "*") || (modifier == "&")) &&
+                bitfield.isEmpty() &&
+                !typenamep &&
+                (compute_type(type, dest_type, typeform, TRUE), dest_type.type != 0) &&
+                ((typeform == "${type}") || (array.isEmpty() && modifier.isEmpty())))
+                UmlRelation::new_one(this, name, dest_type.type, modifier, pretype,
+                                     array, typeform, visibility, staticp, constp,
+                                     mutablep, volatilep, value, comment, description
+#ifdef ROUNDTRIP
+                                     , roundtrip, expected_order
+#endif
+                                    );
+            else
+                UmlAttribute::new_one(this, name, type, modifier, pretype, array,
+                                      visibility, staticp, constp, typenamep, mutablep,
+                                      volatilep, bitfield, value, comment, description
+#ifdef ROUNDTRIP
+                                      , roundtrip, expected_order
+#endif
+                                     );
+            name = "";
+            modifier = "";
+            bitfield = "";
+            array = "";
+            value = "";
+
+        }
         else if (s == "friend")
         {
             s = Lex::read_word();
