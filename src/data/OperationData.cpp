@@ -65,7 +65,12 @@ OperationData::OperationData(int id)
       isa_class_operation(FALSE), is_abstract(FALSE),
       force_body_gen(FALSE), is_volatile(FALSE),
       cpp_const(FALSE), cpp_friend(FALSE), cpp_virtual(FALSE),
-      cpp_inline(FALSE), cpp_get_set_frozen(FALSE), cpp_indent_body(TRUE),
+      cpp_inline(FALSE),
+      cpp_default(FALSE),
+      cpp_delete(FALSE),
+      cpp_override(FALSE),
+      cpp_final(FALSE),
+      cpp_get_set_frozen(FALSE), cpp_indent_body(TRUE),
       java_final(FALSE), java_synchronized(FALSE),
       java_get_set_frozen(FALSE), java_indent_body(TRUE),
       php_final(FALSE), php_get_set_frozen(FALSE), php_indent_body(TRUE),
@@ -88,6 +93,10 @@ OperationData::OperationData(OperationData * model, BrowserNode * bn)
       cpp_friend(model->cpp_friend),
       cpp_virtual(model->cpp_virtual),
       cpp_inline(model->cpp_inline),
+      cpp_default(model->cpp_default),
+      cpp_delete(model->cpp_delete),
+      cpp_override(model->cpp_override),
+      cpp_final(model->cpp_final),
       cpp_get_set_frozen(FALSE),
       cpp_indent_body(model->cpp_indent_body),
       java_final(model->java_final),
@@ -172,6 +181,10 @@ void OperationData::PropagateFrom(const OperationData * model, bool goBack, QLis
     cpp_const = model->cpp_const;
     cpp_friend = model->cpp_friend;
     cpp_virtual = model->cpp_virtual;
+    cpp_default = model->cpp_default;
+    cpp_delete = model->cpp_delete;
+    cpp_override = model->cpp_override;
+    cpp_final = model->cpp_final;
     //cpp_inline = model->cpp_inline;
     cpp_get_set_frozen = model->cpp_get_set_frozen;
     //cpp_indent_body = model->cpp_indent_body;
@@ -4102,6 +4115,10 @@ bool PropagationEquality(const OperationData & origin, const OperationData & ano
      origin.cpp_friend!= another. cpp_friend||
      origin.cpp_virtual!= another.cpp_virtual ||
      //origin.cpp_inline!= another.cpp_inline ||
+    origin.cpp_default!= another.cpp_default ||
+    origin.cpp_delete!= another.cpp_delete ||
+    origin.cpp_override != another. cpp_override||
+    origin.cpp_final != another.cpp_final ||
      origin.cpp_get_set_frozen != another.cpp_get_set_frozen ||
      origin.java_synchronized != another. java_synchronized||
      origin.java_get_set_frozen!= another. java_get_set_frozen||
