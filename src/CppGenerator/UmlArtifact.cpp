@@ -80,7 +80,8 @@ void UmlArtifact::generate()
         WrapperStr src_path = pack->source_path(name);
         WrapperStr nasp_start;
         WrapperStr nasp_end;
-        const char * cnasp = pack->cppNamespace();
+        WrapperStr cnaspstr = pack->cppNamespace();
+        const char * cnasp = cnaspstr;
         WrapperStr nasp = ((cnasp[0] == ':') && (cnasp[1] == ':'))
                          ? cnasp + 2 : cnasp;
 
