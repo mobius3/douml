@@ -520,7 +520,7 @@ public:
     QString get_precond(DrawingLanguage) const;
     QString get_postcond(DrawingLanguage) const;
     QString str(DrawingLanguage lang) const;
-    const char * get_constraint() const {
+    QString get_constraint() const {
         return constraint;
     }
     UmlActionKind get_action_kind() const {
