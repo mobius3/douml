@@ -151,7 +151,10 @@ SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
         synchronous_rb->setChecked(TRUE);
     else
         asynchronous_rb->setChecked(TRUE);
+    bg->addWidget(synchronous_rb);
+    bg->addWidget(asynchronous_rb);
 
+    htab->addWidget(bg);
     hbox->addWidget(htab);
 
     vbox->addWidget(new QLabel(tr("\n\nWhen the arguments are specified they replace the \

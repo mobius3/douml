@@ -51,7 +51,7 @@
 QSize SimpleRelationDialog::previous_size;
 
 SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), rel(r)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), rel(r)
 {
     r->browser_node->edit_start();
 

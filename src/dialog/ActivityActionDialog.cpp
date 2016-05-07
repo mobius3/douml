@@ -80,7 +80,7 @@ static GridBox * mkgrid(TabDialog * d, QString name = QString())
 }
 
 ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), act(a)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), act(a)
 {
     a->browser_node->edit_start();
 

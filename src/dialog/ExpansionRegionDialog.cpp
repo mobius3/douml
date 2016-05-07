@@ -50,7 +50,7 @@
 QSize ExpansionRegionDialog::previous_size;
 
 ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), data(nd)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), data(nd)
 {
     nd->browser_node->edit_start();
 

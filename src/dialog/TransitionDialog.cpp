@@ -51,7 +51,7 @@
 QSize TransitionDialog::previous_size;
 
 TransitionDialog::TransitionDialog(TransitionData * r)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), rel(r)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), rel(r)
 {
     r->browser_node->edit_start();
 

@@ -57,7 +57,7 @@ static QString Absolute;
 QSize PackageDialog::previous_size;
 
 PackageDialog::PackageDialog(PackageData * da)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), pa(da)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), pa(da)
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
     Relative = QObject::tr("Set it relative");

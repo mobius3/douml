@@ -53,7 +53,7 @@
 QSize ActivityPartitionDialog::previous_size;
 
 ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), data(d)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), data(d)
 {
     d->browser_node->edit_start();
 

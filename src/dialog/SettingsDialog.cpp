@@ -383,6 +383,7 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
       states(st), colors(co), first_visible_page(0),
       several(unchanged), did_apply(FALSE)
 {
+    this->setModal(true);
     setWindowTitle((title.isEmpty()) ? QObject::tr("Diagram Drawing Settings dialog") : title);
 
     QString s_diagram = QObject::tr("diagram");

@@ -53,7 +53,7 @@
 QSize ExtraMemberDialog::previous_size;
 
 ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), emd(ex)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), emd(ex)
 {
     ex->browser_node->edit_start();
 

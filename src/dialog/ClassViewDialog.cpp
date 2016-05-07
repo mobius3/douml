@@ -51,7 +51,7 @@
 QSize ClassViewDialog::previous_size;
 
 ClassViewDialog::ClassViewDialog(BasicData * nd)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), data(nd)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), data(nd)
 {
     nd->get_browser_node()->edit_start();
 

@@ -60,7 +60,7 @@
 QSize ParameterDialog::previous_size;
 
 ParameterDialog::ParameterDialog(ParameterData * pa)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), param(pa)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), param(pa)
 {
     pa->browser_node->edit_start();
 

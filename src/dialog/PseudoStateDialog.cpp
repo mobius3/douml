@@ -53,7 +53,7 @@
 QSize PseudoStateDialog::previous_size;
 
 PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), pst(ps)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), pst(ps)
 {
     BrowserPseudoState * bn = (BrowserPseudoState *) pst->browser_node;
     BrowserState * refst;

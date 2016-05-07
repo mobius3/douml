@@ -58,7 +58,7 @@ QSize ActivityObjectDialog::previous_size;
 
 ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, QString what,
                                            QStringList & st)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), data(d)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), data(d)
 {
     d->browser_node->edit_start();
 

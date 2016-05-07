@@ -58,7 +58,7 @@
 QSize PinDialog::previous_size;
 
 PinDialog::PinDialog(PinData * pi)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), pin(pi)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), pin(pi)
 {
     pi->browser_node->edit_start();
 

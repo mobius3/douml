@@ -66,7 +66,7 @@
 QSize AttributeDialog::previous_size;
 
 AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose),
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose),
       new_in_st(new_st_attr), att(a)
 {
     a->browser_node->edit_start();

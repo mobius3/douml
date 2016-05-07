@@ -128,7 +128,7 @@ void RelTable::button_pressed(const QModelIndex &index)
 QSize ClassInstanceDialog::previous_size;
 
 ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
-    : TabDialog(0, "class instance dialog", FALSE, Qt::WA_DeleteOnClose),
+    : TabDialog(0, "class instance dialog", true, Qt::WA_DeleteOnClose),
       inst(i), atbl(0), rtbl(0)
 {
     setWindowTitle(tr("Class instance dialog"));

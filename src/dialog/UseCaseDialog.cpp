@@ -49,7 +49,7 @@
 QSize UseCaseDialog::previous_size;
 
 UseCaseDialog::UseCaseDialog(UseCaseData * u)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), uc(u)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), uc(u)
 {
     BrowserNode * bn = u->browser_node;
 

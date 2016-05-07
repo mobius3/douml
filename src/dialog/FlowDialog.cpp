@@ -50,7 +50,7 @@
 QSize FlowDialog::previous_size;
 
 FlowDialog::FlowDialog(FlowData * d)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), flow(d)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), flow(d)
 {
     d->browser_node->edit_start();
 

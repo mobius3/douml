@@ -49,7 +49,7 @@
 BasicDialog::BasicDialog(BasicData * nd, QString s,
                          const QStringList & default_stereotypes,
                          QSize & sz, bool unnamed)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), data(nd), previous_size(sz)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), data(nd), previous_size(sz)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     nd->get_browser_node()->edit_start();
