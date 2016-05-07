@@ -501,7 +501,7 @@ void DiagramCanvas::lower()
         set_z(((int) min_z) - 5);	// (int) to manage Template & labels
     else {
         // other canvas go up
-        double incr = ((int) zValue()) + 5;
+        double incr = ((int) zValue()) - min_z + 5;
 
         for (it = l.begin(); it != l.end(); it++) {
             DiagramItem * di = QCanvasItemToDiagramItem(*it);
