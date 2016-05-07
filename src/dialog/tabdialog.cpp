@@ -100,7 +100,7 @@ void TabDialog::setHelpButton(QString name)
 
 void TabDialog::showPage(QWidget *page)
 {
-    m_tabWidget->setCornerWidget(page);
+    m_tabWidget->setCurrentWidget(page);
 }
 
 void TabDialog::setCaption(QString cap)
