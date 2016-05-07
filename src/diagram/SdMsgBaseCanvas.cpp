@@ -346,6 +346,7 @@ void SdMsgBaseCanvas::default_label_position() const
     QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
     QSize sz = fm.size(0, label->get_name());
 
+
     label->setPos(sceneBoundingRect().center().x() - sz.width() / 2,
                 y() - fm.height());
 }
