@@ -11,7 +11,7 @@ TabDialog::TabDialog(QWidget *parent, QString name, bool modal, Qt::WidgetAttrib
     setWindowTitle(name);
     setModal(modal);
     m_tabWidget = new QTabWidget(this);
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout();
     this->setLayout(layout);
 
     m_buttonLayout = new QHBoxLayout();

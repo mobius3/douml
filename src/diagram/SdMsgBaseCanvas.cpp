@@ -347,7 +347,7 @@ void SdMsgBaseCanvas::default_label_position() const
     QSize sz = fm.size(0, label->get_name());
 
 
-    label->setPos(sceneBoundingRect().center().x() - sz.width() / 2,
+    label->moveBy(center().x() - sz.width() / 2,
                 y() - fm.height());
 }
 
@@ -356,7 +356,7 @@ void SdMsgBaseCanvas::default_stereotype_position() const
     QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
     QSize sz = fm.size(0, stereotype->get_name());
 
-    stereotype->setPos(sceneBoundingRect().center().x() - sz.width() / 2,
+    stereotype->moveBy(center().x() - sz.width() / 2,
                          y() + fm.height());
 }
 

@@ -342,7 +342,6 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0)
     connect(windowsMenu, SIGNAL(aboutToShow()),
             this, SLOT(windowsMenuAboutToShow()));
     menuBar()->addMenu(windowsMenu);
-    windowsMenu->addAction(tr("&Cascade"), ws, SLOT(cascadeSubWindows()));
 
     toolMenu = new QMenu(tr("&Tools"),this);
     connect(toolMenu, SIGNAL(aboutToShow()), this, SLOT(toolMenuAboutToShow()));
