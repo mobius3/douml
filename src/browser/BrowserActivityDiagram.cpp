@@ -363,7 +363,7 @@ void BrowserActivityDiagram::open(bool)
         window = new ActivityDiagramWindow(full_name(TRUE), this);
     else
         window->raise();
-
+    windowDestroyed = false;
     window->setFocus();
 }
 

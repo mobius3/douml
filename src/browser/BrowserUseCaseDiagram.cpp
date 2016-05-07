@@ -368,7 +368,7 @@ void BrowserUseCaseDiagram::open(bool)
     }
     else
         window->raise();
-
+    windowDestroyed = false;
     window->setFocus();
 }
 

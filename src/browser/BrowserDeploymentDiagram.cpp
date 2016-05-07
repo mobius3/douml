@@ -357,7 +357,7 @@ void BrowserDeploymentDiagram::open(bool)
         window = new DeploymentDiagramWindow(full_name(TRUE), this);
     else
         window->raise();
-
+    windowDestroyed = false;
     window->setFocus();
 }
 
