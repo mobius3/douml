@@ -7,13 +7,14 @@
 [#170]: https://github.com/DoUML/douml/pull/170
 [#173]: https://github.com/DoUML/douml/pull/173
 [#179]: https://github.com/DoUML/douml/pull/179
+[#194]: https://github.com/DoUML/douml/pull/194
 
 * Fixed compilation on OS X El Capitan [#155]
 * Fixed warning about duplicated uml entities showing up needlessly [#161]
 * Build date and time automated [#161]
 * Fixed mutually exclusive attribute menus when they should not be [#161] [#167]
 * Fixed some keywords not being parsed by cpp reverse and roundtrip [#161]
-* Some UI improvements [#161]
+* Some UI improvements [#161] [#194]
 * Version bump [#161]
 * Improvements regarding Qt5 style handling [#167]
 * Crash fix and code improvements [#167] [#179]
@@ -29,6 +30,12 @@
 * Removed a misplaced text only appearing on Mac OS X in the Shortcut dialog. [#170]
 * Fixed segmentation fault when quitting DoUML with opened project. [#170]
 * Non latin1 string support is added [#173] 
+* Fix positioning of sequence diagrams labels [#194]
+* Some dialogs are now modal [#194]
+* Fix diagrams appearing twice when double clicked in browser view [#194]
+* Correct tabs disappearing in the drawing settings dialog [#194]
+* Fix snapshots and copying pictures of diagrams [#194]
+* Fix zvaue of diagrams not being saved correctly [#194]
 
 # v1.0.8
 * Numerous bugfixes
