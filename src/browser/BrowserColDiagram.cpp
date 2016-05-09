@@ -351,7 +351,7 @@ void BrowserColDiagram::open(bool)
         window = new ColDiagramWindow(full_name(TRUE), this);
     else
         window->raise();
-
+    windowDestroyed = false;
     window->setFocus();
 }
 

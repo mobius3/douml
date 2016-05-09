@@ -2350,7 +2350,7 @@ void GenerationSettingsDialog::idlroot_browse()
 void GenerationSettingsDialog::relative(LineEdit * ed, QPushButton * button)
 {
     QString root = BrowserView::get_dir().absolutePath();
-    const QString s = ed->text();
+    const QString s = QDir::toNativeSeparators(ed->text());
 
     if (root.at(root.length() - 1) != QChar('/'))
         root += '/';

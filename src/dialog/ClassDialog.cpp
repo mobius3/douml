@@ -72,7 +72,7 @@ static QString RelativeRoot;
 static QString RelativePrj;
 static QString Absolute;
 //QSharedPointer<ClassDialog> ClassDialog::instance;
-ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0, 0, FALSE), cl(c)
+ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0, 0, true), cl(c)
 {
     //setAttribute(Qt::WA_DeleteOnClose);
     // take time in case of many classes and artifacts

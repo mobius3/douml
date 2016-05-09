@@ -353,7 +353,7 @@ void BrowserStateDiagram::open(bool)
         window = new StateDiagramWindow(full_name(TRUE), this);
     else
         window->raise();
-
+    windowDestroyed = false;
     window->setFocus();
 }
 

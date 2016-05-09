@@ -51,7 +51,7 @@
 QSize StateActionDialog::previous_size;
 
 StateActionDialog::StateActionDialog(StateActionData * d)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), action(d)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), action(d)
 {
     d->browser_node->edit_start();
 

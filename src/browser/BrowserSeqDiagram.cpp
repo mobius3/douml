@@ -362,7 +362,7 @@ void BrowserSeqDiagram::open(bool)
         window = new SeqDiagramWindow(full_name(TRUE), this);
     else
         window->raise();
-
+    windowDestroyed = false;
     window->setFocus();
 
 }

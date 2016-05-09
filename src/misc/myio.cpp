@@ -2339,7 +2339,7 @@ void save_xyzwh(QTextStream & st, const QGraphicsRectItem *c, const char * s)
     st << s << " " << xs.setNum(c->boundingRect().x()) << " " << ys.setNum(c->boundingRect().y()) << " " << zs.setNum(0)
        << " " << (int) c->boundingRect().width() << " " << (int) c->boundingRect().height();
        */
-    st << s << " " << xs.setNum(c->x()) << " " << ys.setNum(c->y()) << " " << zs.setNum(0)
+    st << s << " " << xs.setNum(c->x()) << " " << ys.setNum(c->y()) << " " << zs.setNum(c->zValue())
        << " " << (int) c->rect().width() << " " << (int) c->rect().height();
 
 #endif

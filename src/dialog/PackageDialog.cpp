@@ -57,7 +57,7 @@ static QString Absolute;
 QSize PackageDialog::previous_size;
 
 PackageDialog::PackageDialog(PackageData * da)
-    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), pa(da)
+    : TabDialog(0, 0, true, Qt::WA_DeleteOnClose), pa(da)
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
     Relative = QObject::tr("Set it relative");
@@ -713,7 +713,7 @@ void PackageDialog::idl_browse()
 void PackageDialog::relative(LineEdit * ed, QPushButton * button,
                              QString root)
 {
-    const QString s = ed->text();
+    const QString s = QDir::toNativeSeparators(ed->text());
 
     if (QDir::isRelativePath(root))
         root = BrowserView::get_dir().filePath(root);
@@ -722,11 +722,7 @@ void PackageDialog::relative(LineEdit * ed, QPushButton * button,
         int len = root.length();
 
         if (
-
-
-
             (s.indexOf(root) == 0) &&
-
             (s.length() >= len)) {
             ed->setText(s.mid(len));
             button->setText(Absolute);

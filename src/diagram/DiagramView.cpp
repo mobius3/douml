@@ -2436,6 +2436,16 @@ bool DiagramView::save_in(QString f, bool optimal, bool temporary)
         needed_width_height(maxx, maxy, minx, miny);
         maxx += 30;
         maxy += 10;
+
+
+        QPoint minP = mapFromScene(minx, miny);
+        QPoint maxP = mapFromScene(maxx, maxy);
+        minx = minP.x();
+        miny = minP.y();
+
+        maxx = maxP.x();
+        maxy = maxP.y();
+
         // add a large margin to be sure to see all in one shot contrarilly
         // to the optimal_window_size whose must have the pretty size
         if ((viewport()->width() >= (maxx + 90)) && (viewport()->height() >= (maxy + 90)))
@@ -2574,6 +2584,15 @@ void DiagramView::copy_in_clipboard(bool optimal, bool temporary)
         maxx += 30;
         maxy += 10;
 
+        QPoint minP = mapFromScene(minx, miny);
+        QPoint maxP = mapFromScene(maxx, maxy);
+        minx = minP.x();
+        miny = minP.y();
+
+        maxx = maxP.x();
+        maxy = maxP.y();
+
+
         // add a large margin to be sure to see all in one shot contrarilly
         // to the optimal_window_size whose must have the pretty size
 
@@ -2593,7 +2612,7 @@ void DiagramView::copy_in_clipboard(bool optimal, bool temporary)
             history_protected = TRUE;
             canvas()->update();
             QApplication::clipboard()
-                    ->setPixmap(QPixmap::grabWidget(viewport(), 0, 0, maxx, maxy));
+                    ->setPixmap(QPixmap::grabWidget(viewport(), 0, 0 , maxx,  maxy));
 
             if (! temporary) {
 

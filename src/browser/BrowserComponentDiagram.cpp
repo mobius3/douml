@@ -354,7 +354,7 @@ void BrowserComponentDiagram::open(bool)
         window = new ComponentDiagramWindow(full_name(TRUE), this);
     else
         window->raise();
-
+    windowDestroyed = false;
     window->setFocus();
 }
 

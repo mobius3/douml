@@ -996,7 +996,7 @@ void SdDurationCanvas::update_instance_dead()
 
 int SdDurationCanvas::sub_x(int sub_w) const
 {
-    QRect r = rect();
+    QRect r = sceneBoundingRect().toRect();
 
     return r.right() - sub_w / 2 + 1;
 }
