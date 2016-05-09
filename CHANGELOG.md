@@ -35,7 +35,7 @@
 * Fix diagrams appearing twice when double clicked in browser view [#194]
 * Correct tabs disappearing in the drawing settings dialog [#194]
 * Fix snapshots and copying pictures of diagrams [#194]
-* Fix zvaue of diagrams not being saved correctly [#194]
+* Fix zValue of diagrams not being saved correctly [#194]
 
 # v1.0.8
 * Numerous bugfixes
