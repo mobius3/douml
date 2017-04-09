@@ -34,12 +34,12 @@
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 #include "SynchroDialog.h"
 #include "BrowserView.h"
 
-SynchroDialog::SynchroDialog(Q3PtrList<BrowserView> & b)
+SynchroDialog::SynchroDialog(QList<BrowserView *> & b)
     : QDialog(0, "Synchronize", TRUE), browsers(b)
 {
     setCaption("Synchronize");

@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 #include <math.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 
 #include "RelationCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -66,13 +66,13 @@ RelationCanvas::RelationCanvas(UmlCanvas * canvas, DiagramItem * b,
       data(d), role_a(0), role_b(0), multiplicity_a(0), multiplicity_b(0),
       stereotypeproperties(0), show_modifier(FALSE), show_visibility(FALSE)
 {
-    if ((e->type() != UmlArrowPoint) && (bb == 0)) {
+    if ((e->typeUmlCode() != UmlArrowPoint) && (bb == 0)) {
         // end of line construction, update all the line bb & be
         // adds browser relation 2 times
         update_begin(e);
     }
     else if (d != 0) {
-        if (e->type() != UmlArrowPoint) {
+        if (e->typeUmlCode() != UmlArrowPoint) {
             check_stereotypeproperties();
         }
 
@@ -136,7 +136,7 @@ void RelationCanvas::remove(bool from_model)
         if (the_canvas()->must_draw_all_relations()) {
             const RelationCanvas * a = this;
 
-            while (a->begin->type() == UmlArrowPoint) {
+            while (a->begin->typeUmlCode() == UmlArrowPoint) {
                 a = (RelationCanvas *)((ArrowPointCanvas *) a->begin)->get_other(a);
 
                 if (a == 0)
@@ -146,7 +146,7 @@ void RelationCanvas::remove(bool from_model)
             if (a && !a->begin->isSelected() && !a->begin->get_bn()->deletedp()) {
                 a = this;
 
-                while (a->end->type() == UmlArrowPoint) {
+                while (a->end->typeUmlCode() == UmlArrowPoint) {
                     a = (RelationCanvas *)((ArrowPointCanvas *) a->end)->get_other(a);
 
                     if (a == 0)
@@ -181,7 +181,7 @@ BrowserClass * RelationCanvas::update_begin(DiagramItem * cnend)
     // static to be updated in all the cases
     static RelationData * d = 0;
 
-    if (begin->type() == UmlArrowPoint) {
+    if (begin->typeUmlCode() == UmlArrowPoint) {
         RelationCanvas * other =
             ((RelationCanvas *)((ArrowPointCanvas *) begin)->get_other(this));
 
@@ -190,7 +190,7 @@ BrowserClass * RelationCanvas::update_begin(DiagramItem * cnend)
     else {
         // the relation start here
         br_begin = ((BrowserClass *) begin->get_bn());
-        d = (RelationData *) begin->add_relation(type(), cnend);
+        d = (RelationData *) begin->add_relation(typeUmlCode(), cnend);
     }
 
     data = d;
@@ -210,16 +210,16 @@ void RelationCanvas::update_pos()
     ArrowCanvas::update_pos();
 
     if (auto_pos) {
-        if ((role_a != 0) && !role_a->selected())
+        if ((role_a != 0) && !role_a->isSelected())
             role_a_default_position();
 
-        if ((role_b != 0) && !role_b->selected())
+        if ((role_b != 0) && !role_b->isSelected())
             role_b_default_position();
 
-        if ((multiplicity_a != 0) && !multiplicity_a->selected())
+        if ((multiplicity_a != 0) && !multiplicity_a->isSelected())
             multiplicity_a_default_position();
 
-        if ((multiplicity_b != 0) && !multiplicity_b->selected())
+        if ((multiplicity_b != 0) && !multiplicity_b->isSelected())
             multiplicity_b_default_position();
     }
 
@@ -250,19 +250,19 @@ void RelationCanvas::moveBy(double dx, double dy)
 {
     ArrowCanvas::moveBy(dx, dy);
 
-    if ((role_a != 0) && !role_a->selected())
+    if ((role_a != 0) && !role_a->isSelected())
         role_a->moveBy(dx, dy);
 
-    if ((role_b != 0) && !role_b->selected())
+    if ((role_b != 0) && !role_b->isSelected())
         role_b->moveBy(dx, dy);
 
-    if ((multiplicity_a != 0) && !multiplicity_a->selected())
+    if ((multiplicity_a != 0) && !multiplicity_a->isSelected())
         multiplicity_a->moveBy(dx, dy);
 
-    if ((multiplicity_b != 0) && !multiplicity_b->selected())
+    if ((multiplicity_b != 0) && !multiplicity_b->isSelected())
         multiplicity_b->moveBy(dx, dy);
 
-    if ((stereotypeproperties != 0) && !stereotypeproperties->selected())
+    if ((stereotypeproperties != 0) && !stereotypeproperties->isSelected())
         stereotypeproperties->moveBy(dx, dy);
 }
 
@@ -271,23 +271,23 @@ void RelationCanvas::set_z(double z)
     ArrowCanvas::set_z(z);
 
     if (role_a != 0)
-        role_a->setZ(z);
+        role_a->setZValue(z);
 
     if (role_b != 0)
-        role_b->setZ(z);
+        role_b->setZValue(z);
 
     if (multiplicity_a != 0)
-        multiplicity_a->setZ(z);
+        multiplicity_a->setZValue(z);
 
     if (multiplicity_b != 0)
-        multiplicity_b->setZ(z);
+        multiplicity_b->setZValue(z);
 }
 
 void RelationCanvas::setSelected(bool yes)
 {
     UmlWindow::set_commented((yes) ? data->get_start() : 0);
 
-    Q3CanvasPolygon::setSelected(yes);
+    QGraphicsPolygonItem::setSelected(yes);
 }
 
 void RelationCanvas::select_associated()
@@ -299,42 +299,42 @@ void RelationCanvas::select_associated()
     RelationCanvas * rel = this;
 
     // goes to the beginning of the (broken) line
-    while (rel->begin->type() == UmlArrowPoint)
+    while (rel->begin->typeUmlCode() == UmlArrowPoint)
         rel = ((RelationCanvas *)((ArrowPointCanvas *) rel->begin)->get_other(rel));
 
     rel->begin->select_associated();
 
-    if ((rel->stereotypeproperties != 0) && !rel->stereotypeproperties->selected())
+    if ((rel->stereotypeproperties != 0) && !rel->stereotypeproperties->isSelected())
         the_canvas()->select(rel->stereotypeproperties);
 
     for (;;) {
         // select labels
-        if ((rel->role_a != 0) && !rel->role_a->selected())
+        if ((rel->role_a != 0) && !rel->role_a->isSelected())
             the_canvas()->select(rel->role_a);
 
-        if ((rel->role_b != 0) && !rel->role_b->selected())
+        if ((rel->role_b != 0) && !rel->role_b->isSelected())
             the_canvas()->select(rel->role_b);
 
-        if ((rel->multiplicity_a != 0) && !rel->multiplicity_a->selected())
+        if ((rel->multiplicity_a != 0) && !rel->multiplicity_a->isSelected())
             the_canvas()->select(rel->multiplicity_a);
 
-        if ((rel->multiplicity_b != 0) && !rel->multiplicity_b->selected())
+        if ((rel->multiplicity_b != 0) && !rel->multiplicity_b->isSelected())
             the_canvas()->select(rel->multiplicity_b);
 
-        if ((rel->label != 0) && !rel->label->selected())
+        if ((rel->label != 0) && !rel->label->isSelected())
             the_canvas()->select(rel->label);
 
-        if ((rel->stereotype != 0) && !rel->stereotype->selected())
+        if ((rel->stereotype != 0) && !rel->stereotype->isSelected())
             the_canvas()->select(rel->stereotype);
 
-        if (! rel->selected())
+        if (! rel->isSelected())
             the_canvas()->select(rel);
 
         // goes forward
-        if (rel->end->type() != UmlArrowPoint)
+        if (rel->end->typeUmlCode() != UmlArrowPoint)
             break;
 
-        if (!((ArrowPointCanvas *) rel->end)->selected())
+        if (!((ArrowPointCanvas *) rel->end)->isSelected())
             the_canvas()->select((ArrowPointCanvas *) rel->end);
 
         rel = (RelationCanvas *)((ArrowPointCanvas *) rel->end)->get_other(rel);
@@ -373,59 +373,63 @@ void RelationCanvas::menu(const QPoint & lpos)
         const RelationCanvas * first = this;
         const RelationCanvas * last = this;
 
-        while (first->begin->type() == UmlArrowPoint)
+        while (first->begin->typeUmlCode() == UmlArrowPoint)
             first = ((RelationCanvas *)((ArrowPointCanvas *) first->begin)->get_other(first));
 
-        while (last->end->type() == UmlArrowPoint)
+        while (last->end->typeUmlCode() == UmlArrowPoint)
             last = (RelationCanvas *)((ArrowPointCanvas *) last->end)->get_other(last);
 
         bool prefer_start =
             (lpos - first->beginp).manhattanLength() >
             (lpos - last->endp).manhattanLength();
-        Q3PopupMenu m(0);
-        Q3PopupMenu geo(0);
-        Q3PopupMenu toolm(0);
+        QMenu m(0);
+        QMenu geo(0);
+        QMenu toolm(0);
 
         MenuFactory::createTitle(m, data->definition(FALSE, TRUE));
-        m.insertSeparator();
-        m.insertItem(TR("Edit"), 0);
-        m.insertSeparator();
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Edit"), 0);
+        m.addSeparator();
 
-        m.insertItem(TR("Select in browser"), 2);
+        MenuFactory::addItem(m, TR("Select in browser"), 2);
 
         if (plabel || pstereotype ||
             first->role_b || first->multiplicity_b ||
             last->role_a || last->multiplicity_a) {
-            m.insertSeparator();
-            m.insertItem(TR("Select labels"), 3);
-            m.insertItem(TR("Labels default position"), 4);
+            m.addSeparator();
+            MenuFactory::addItem(m, TR("Select labels"), 3);
+            MenuFactory::addItem(m, TR("Labels default position"), 4);
 
             if (plabel && (label == 0))
-                m.insertItem(TR("Attach relation's name to this segment"), 5);
+                MenuFactory::addItem(m, TR("Attach relation's name to this segment"), 5);
 
             if (pstereotype && (stereotype == 0))
-                m.insertItem(TR("Attach relation's stereotype to this segment"), 6);
+                MenuFactory::addItem(m, TR("Attach relation's stereotype to this segment"), 6);
         }
 
         if (get_start() != get_end()) {
-            m.insertSeparator();
+            m.addSeparator();
             init_geometry_menu(geo, 10);
-            m.insertItem(TR("Geometry (Ctrl+l)"), &geo);
+            MenuFactory::insertItem(m, TR("Geometry (Ctrl+l)"), &geo);
         }
 
-        m.insertSeparator();
-        m.insertItem(TR("Remove from diagram"), 7);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Remove from diagram"), 7);
 
         if ((data->get_end()) ? data->is_writable(data->get_end())
             : data->is_writable(data->get_start()))
-            m.insertItem(TR("Delete from model"), 8);
+            MenuFactory::addItem(m, TR("Delete from model"), 8);
 
-        m.insertSeparator();
+        m.addSeparator();
 
         if (Tool::menu_insert(&toolm, itstype, 20))
-            m.insertItem(TR("Tool"), &toolm);
+            MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
-        int rank = m.exec(QCursor::pos());
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+        int rank = retAction->data().toInt();
+
 
         switch (rank) {
         case 0:
@@ -524,6 +528,7 @@ void RelationCanvas::menu(const QPoint & lpos)
             else
                 return;
         }
+        }
 
         package_modified();
     }
@@ -535,7 +540,7 @@ ArrowPointCanvas * RelationCanvas::brk(const QPoint & p)
     ArrowPointCanvas * ap =
         new ArrowPointCanvas(the_canvas(), p.x(), p.y());
 
-    ap->setZ(z() + 1);
+    ap->setZValue(zValue() + 1);
 
     DiagramItem * e = end;
 
@@ -591,13 +596,13 @@ ArrowCanvas * RelationCanvas::join(ArrowCanvas * other, ArrowPointCanvas * ap)
 
 void RelationCanvas::modified()
 {
-    if (visible()) {
+    if (isVisible()) {
         hide();
         update(TRUE);
         show();
         canvas()->update();
 
-        if (begin->type() != UmlArrowPoint) {
+        if (begin->typeUmlCode() != UmlArrowPoint) {
             if (data->get_association().type != 0)
                 show_assoc_class(0);
             else
@@ -668,7 +673,7 @@ void RelationCanvas::update(bool updatepos)
                 plabel->label = 0;
             }
         }
-        else if ((plabel == 0) && (begin->type() != UmlArrowPoint)) {
+        else if ((plabel == 0) && (begin->typeUmlCode() != UmlArrowPoint)) {
             // adds relation's name
             label =
                 new LabelCanvas(s, the_canvas(), c.x() - fm.width(s) / 2,
@@ -693,12 +698,12 @@ void RelationCanvas::update(bool updatepos)
             }
         }
         else {
-            s = toUnicode(s);
+            s = toUnicode(s.toLatin1().constData());
 
             if (s[0] != '{')
                 s = QString("<<") + s + ">>";
 
-            if ((pstereotype == 0) && (begin->type() != UmlArrowPoint)) {
+            if ((pstereotype == 0) && (begin->typeUmlCode() != UmlArrowPoint)) {
                 // adds relation's stereotype
                 stereotype = new LabelCanvas(s, the_canvas(), 0, 0);
                 stereotype_default_position();
@@ -724,7 +729,7 @@ void RelationCanvas::update(bool updatepos)
 
         s = data->get_role_a();
 
-        if (unamed || s.isEmpty() || (end->type() == UmlArrowPoint)) {
+        if (unamed || s.isEmpty() || (end->typeUmlCode() == UmlArrowPoint)) {
             // relation does not have role_a name or it must be hidden
             if (role_a != 0) {
                 the_canvas()->del(role_a);
@@ -798,7 +803,7 @@ void RelationCanvas::update(bool updatepos)
         if (unamed ||
             s.isEmpty() ||
             RelationData::uni_directional(itstype) ||
-            (begin->type() == UmlArrowPoint)) {
+            (begin->typeUmlCode() == UmlArrowPoint)) {
             // relation does not have role_b name
             if (role_b != 0) {
                 the_canvas()->del(role_b);
@@ -868,7 +873,7 @@ void RelationCanvas::update(bool updatepos)
 
         s = data->get_multiplicity_a();
 
-        if (unamed || s.isEmpty() || (end->type() == UmlArrowPoint)) {
+        if (unamed || s.isEmpty() || (end->typeUmlCode() == UmlArrowPoint)) {
             // relation does not have multiplicity_a or it must be hidden
             if (multiplicity_a != 0) {
                 the_canvas()->del(multiplicity_a);
@@ -890,7 +895,7 @@ void RelationCanvas::update(bool updatepos)
 
         s = data->get_multiplicity_b();
 
-        if (unamed || s.isEmpty() || (begin->type() == UmlArrowPoint)) {
+        if (unamed || s.isEmpty() || (begin->typeUmlCode() == UmlArrowPoint)) {
             // relation does not have multiplicity_b or it must be hidden
             if (multiplicity_b != 0) {
                 the_canvas()->del(multiplicity_b);
@@ -915,7 +920,7 @@ void RelationCanvas::update(bool updatepos)
 
 void RelationCanvas::update_actuals(RelationCanvas * plabel)
 {
-    if ((plabel == 0) && (begin->type() == UmlArrowPoint))
+    if ((plabel == 0) && (begin->typeUmlCode() == UmlArrowPoint))
         return;
 
     QString s =
@@ -963,18 +968,18 @@ void RelationCanvas::role_a_default_position() const
     int dx = endp.x() - beginp.x();
     int dy = endp.y() - beginp.y();
 
-    if (fabs(dx) >= fabs(dy)) {
+    if (fabs((double)dx) >= fabs((double)dy)) {
         // horizontal line
         if (dx == 0) dx = 1;
 
         if (dx > 0) {
             int w = fm.width(role_a->get_name());
 
-            role_a->move(endp.x() - w - ARROW_LENGTH,
+            role_a->moveBy(endp.x() - w - ARROW_LENGTH,
                          endp.y() - 4 * h / 3 + (dy * ARROW_LENGTH) / dx);
         }
         else
-            role_a->move(endp.x() + ARROW_LENGTH,
+            role_a->moveBy(endp.x() + ARROW_LENGTH,
                          endp.y() - 4 * h / 3 + (dy * ARROW_LENGTH) / dx);
     }
     else {
@@ -982,10 +987,10 @@ void RelationCanvas::role_a_default_position() const
         if (dy == 0) dy = 1;
 
         if (dy > 0)
-            role_a->move(endp.x() + ARROW_LENGTH - (dx * h / 2) / dy,
+            role_a->moveBy(endp.x() + ARROW_LENGTH - (dx * h / 2) / dy,
                          endp.y() - 4 * h / 3);
         else
-            role_a->move(endp.x() + ARROW_LENGTH + (dx * h / 2) / dy,
+            role_a->moveBy(endp.x() + ARROW_LENGTH + (dx * h / 2) / dy,
                          endp.y() + h / 2);
     }
 
@@ -999,17 +1004,17 @@ void RelationCanvas::role_b_default_position() const
     int dx = endp.x() - beginp.x();
     int dy = endp.y() - beginp.y();
 
-    if (fabs(dx) >= fabs(dy)) {
+    if (fabs((double)dx) >= fabs((double)dy)) {
         // horizontal line
         if (dx == 0) dx = 1;
 
         if (dx > 0)
-            role_b->move(beginp.x() + ARROW_LENGTH,
+            role_b->moveBy(beginp.x() + ARROW_LENGTH,
                          beginp.y() - 4 * h / 3 + (dy * ARROW_LENGTH) / dx);
         else {
             int w = fm.width(role_b->get_name());
 
-            role_b->move(beginp.x() - w - ARROW_LENGTH,
+            role_b->moveBy(beginp.x() - w - ARROW_LENGTH,
                          beginp.y() - 4 * h / 3 + (dy * ARROW_LENGTH) / dx);
         }
     }
@@ -1018,10 +1023,10 @@ void RelationCanvas::role_b_default_position() const
         if (dy == 0) dy = 1;
 
         if (dy > 0)
-            role_b->move(beginp.x() + ARROW_LENGTH + (dx * h / 2) / dy,
+            role_b->moveBy(beginp.x() + ARROW_LENGTH + (dx * h / 2) / dy,
                          beginp.y() + h / 2);
         else
-            role_b->move(beginp.x() + ARROW_LENGTH - (dx * h / 2) / dy,
+            role_b->moveBy(beginp.x() + ARROW_LENGTH - (dx * h / 2) / dy,
                          beginp.y() - 4 * h / 3);
     }
 
@@ -1036,15 +1041,15 @@ void RelationCanvas::multiplicity_a_default_position() const
     int dx = endp.x() - beginp.x();
     int dy = endp.y() - beginp.y();
 
-    if (fabs(dx) >= fabs(dy)) {
+    if (fabs((double)dx) >= fabs((double)dy)) {
         // horizontal line
         if (dx == 0) dx = 1;
 
         if (dx > 0)
-            multiplicity_a->move(endp.x() - w - ARROW_LENGTH,
+            multiplicity_a->moveBy(endp.x() - w - ARROW_LENGTH,
                                  endp.y() + h / 2 + (dy * ARROW_LENGTH) / dx);
         else
-            multiplicity_a->move(endp.x() + ARROW_LENGTH,
+            multiplicity_a->moveBy(endp.x() + ARROW_LENGTH,
                                  endp.y() + h / 2 + (dy * ARROW_LENGTH) / dx);
     }
     else {
@@ -1052,10 +1057,10 @@ void RelationCanvas::multiplicity_a_default_position() const
         if (dy == 0) dy = 1;
 
         if (dy > 0)
-            multiplicity_a->move(endp.x() - w - ARROW_LENGTH - (dx * h / 2) / dy,
+            multiplicity_a->moveBy(endp.x() - w - ARROW_LENGTH - (dx * h / 2) / dy,
                                  endp.y() - 4 * h / 3);
         else
-            multiplicity_a->move(endp.x() - w - ARROW_LENGTH + (dx * h / 2) / dy,
+            multiplicity_a->moveBy(endp.x() - w - ARROW_LENGTH + (dx * h / 2) / dy,
                                  endp.y() + h / 2);
     }
 
@@ -1070,15 +1075,15 @@ void RelationCanvas::multiplicity_b_default_position() const
     int dy = endp.y() - beginp.y();
     int w = fm.width(data->get_multiplicity_b());
 
-    if (fabs(dx) >= fabs(dy)) {
+    if (fabs((double)dx) >= fabs((double)dy)) {
         // horizontal line
         if (dx == 0) dx = 1;
 
         if (dx > 0)
-            multiplicity_b->move(beginp.x() + ARROW_LENGTH,
+            multiplicity_b->moveBy(beginp.x() + ARROW_LENGTH,
                                  beginp.y() + h / 2 + (dy * ARROW_LENGTH) / dx);
         else
-            multiplicity_b->move(beginp.x() - w - ARROW_LENGTH,
+            multiplicity_b->moveBy(beginp.x() - w - ARROW_LENGTH,
                                  beginp.y() + h / 2 + (dy * ARROW_LENGTH) / dx);
     }
     else {
@@ -1086,10 +1091,10 @@ void RelationCanvas::multiplicity_b_default_position() const
         if (dy == 0) dy = 1;
 
         if (dy > 0)
-            multiplicity_b->move(beginp.x() - w - ARROW_LENGTH + (dx * h / 2) / dy,
+            multiplicity_b->moveBy(beginp.x() - w - ARROW_LENGTH + (dx * h / 2) / dy,
                                  beginp.y() + h / 2);
         else
-            multiplicity_b->move(beginp.x() - w - ARROW_LENGTH - (dx * h / 2) / dy,
+            multiplicity_b->moveBy(beginp.x() - w - ARROW_LENGTH - (dx * h / 2) / dy,
                                  beginp.y() - 4 * h / 3);
     }
 
@@ -1108,16 +1113,16 @@ void RelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
     BrowserClass * to = def->get_end_class();
     DiagramItem * ccfrom = 0;
     DiagramItem * ccto = 0;
-    Q3CanvasItemList all = canvas->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = canvas->items();
+    QList<QGraphicsItem*>::Iterator cit;
 
     // the two classes are drawn ?
     for (cit = all.begin(); cit != all.end(); ++cit) {
-        if ((*cit)->visible()) {
+        if ((*cit)->isVisible()) {
             DiagramItem * adi = QCanvasItemToDiagramItem(*cit);
 
             if ((adi != 0) &&		// an uml canvas item
-                (adi->type() == UmlClass)) {
+                (adi->typeUmlCode() == UmlClass)) {
                 if (adi->get_bn() == from) {
                     ccfrom = adi;
 
@@ -1146,7 +1151,7 @@ void RelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
             rel->hide();	// else self rel not fully shown
             rel->show();
 
-            if (rel->begin->type() != UmlArrowPoint) {
+            if (rel->begin->typeUmlCode() != UmlArrowPoint) {
                 if (rel->data->get_association().type != 0)
                     rel->show_assoc_class(0);
                 else
@@ -1160,7 +1165,7 @@ void RelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
 
 // the relation is not yet drawn,
 void RelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas,
-                          Q3PtrDict<DiagramItem> & drawn)
+                          QHash<BasicData*, DiagramItem*> & drawn)
 {
     RelationData * def = (RelationData *) bn->get_data();
     BrowserClass * from = def->get_start_class();
@@ -1183,7 +1188,8 @@ void RelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas,
                 rel->show_assoc_class((CdClassCanvas *) ac);
         }
 
-        drawn.replace(def, rel);
+        drawn.remove(def);
+        drawn.insert(def, rel);
 
         // package set modified by caller
     }
@@ -1198,14 +1204,14 @@ void RelationCanvas::show_assoc_class(CdClassCanvas * cc)
         // search for the assoc class drawing
         BrowserNode * assoc = data->get_association().type;
 
-        Q3CanvasItemList all = canvas()->allItems();
-        Q3CanvasItemList::Iterator cit;
+        QList<QGraphicsItem*> all = canvas()->items();
+        QList<QGraphicsItem*>::Iterator cit;
 
         for (cit = all.begin(); cit != all.end(); ++cit) {
             DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
             if ((di != 0) &&
-                (di->type() == UmlClass) &&
+                (di->typeUmlCode() == UmlClass) &&
                 (((CdClassCanvas *) di)->get_bn() == assoc)) {
                 cc = (CdClassCanvas *) di;
                 break;
@@ -1223,7 +1229,7 @@ void RelationCanvas::show_assoc_class(CdClassCanvas * cc)
     // assoc already drawn ?
     RelationCanvas * rc = this;
 
-    while (rc->begin->type() == UmlArrowPoint)
+    while (rc->begin->typeUmlCode() == UmlArrowPoint)
         // go to beginning of line
         rc = (RelationCanvas *)
              ((ArrowPointCanvas *) rc->begin)->get_other(rc);
@@ -1232,13 +1238,8 @@ void RelationCanvas::show_assoc_class(CdClassCanvas * cc)
 
     for (;;) {
         // goes throw the line and check / search assoc
-        Q3PtrList<ArrowCanvas> l = rc->lines;
-        Q3PtrListIterator<ArrowCanvas> it(l);
-
-        for (; it.current(); ++it) {
-            ArrowCanvas * a = it.current();
-
-            if (a->type() == UmlAnchor) {
+        foreach (ArrowCanvas *a, rc->lines) {
+            if (a->typeUmlCode() == UmlAnchor) {
                 DiagramItem * s = a->get_start();
                 DiagramItem * e = a->get_end();
 
@@ -1246,21 +1247,21 @@ void RelationCanvas::show_assoc_class(CdClassCanvas * cc)
                     if (e == cc)
                         // already drawn
                         return;
-                    else if (e->type() == UmlClass)
+                    else if (e->typeUmlCode() == UmlClass)
                         // not the good one
                         a->delete_it();
                 }
                 else if (s == cc)
                     // already drawn
                     return;
-                else if (s->type() == UmlClass)
+                else if (s->typeUmlCode() == UmlClass)
                     // not the good one
                     a->delete_it();
             }
         }
 
         // goes to the next line part
-        if (rc->end->type() == UmlArrowPoint)
+        if (rc->end->typeUmlCode() == UmlArrowPoint)
             rc = (RelationCanvas *)
                  ((ArrowPointCanvas *) rc->end)->get_other(rc);
         else
@@ -1279,21 +1280,17 @@ void RelationCanvas::hide_assoc_class()
     // assoc drawn ?
     RelationCanvas * rc = this;
 
-    while (rc->begin->type() == UmlArrowPoint)
+    while (rc->begin->typeUmlCode() == UmlArrowPoint)
         // go to beginning of line
         rc = (RelationCanvas *)
              ((ArrowPointCanvas *) rc->begin)->get_other(rc);
 
     for (;;) {
         // goes through the line to remove existing assoc
-        Q3PtrListIterator<ArrowCanvas> it(rc->lines);
-
-        for (; it.current(); ++it) {
-            ArrowCanvas * a = it.current();
-
-            if ((a->type() == UmlAnchor) &&
-                ((a->get_start()->type() == UmlClass) ||
-                 (a->get_end()->type() == UmlClass))) {
+        foreach (ArrowCanvas *a, rc->lines) {
+            if ((a->typeUmlCode() == UmlAnchor) &&
+                ((a->get_start()->typeUmlCode() == UmlClass) ||
+                 (a->get_end()->typeUmlCode() == UmlClass))) {
                 a->delete_it();
 
                 the_canvas()->get_view()->protect_history(FALSE);
@@ -1302,7 +1299,7 @@ void RelationCanvas::hide_assoc_class()
         }
 
         // goes to the next line part
-        if (rc->end->type() == UmlArrowPoint)
+        if (rc->end->typeUmlCode() == UmlArrowPoint)
             rc = (RelationCanvas *)
                  ((ArrowPointCanvas *) rc->end)->get_other(rc);
         else
@@ -1312,7 +1309,7 @@ void RelationCanvas::hide_assoc_class()
 
 QString RelationCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 {
-    if ((l == UmlAnchor) && (dest->type() == UmlClass)) {
+    if ((l == UmlAnchor) && (dest->typeUmlCode() == UmlClass)) {
         if (data->get_association().type != dest->get_bn())
             return ((data->get_end())
                     ? data->is_writable(data->get_end())
@@ -1329,7 +1326,7 @@ QString RelationCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 
 void RelationCanvas::post_connexion(UmlCode l, DiagramItem * dest)
 {
-    if ((l == UmlAnchor) && (dest->type() == UmlClass)) {
+    if ((l == UmlAnchor) && (dest->typeUmlCode() == UmlClass)) {
         BrowserClass * cl = data->get_association().type;
 
         if (cl != dest->get_bn()) {
@@ -1347,7 +1344,7 @@ void RelationCanvas::post_connexion(UmlCode l, DiagramItem * dest)
 void RelationCanvas::check_stereotypeproperties()
 {
     // the note is memorized by the first segment
-    if (begin->type() == UmlArrowPoint)
+    if (begin->typeUmlCode() == UmlArrowPoint)
         ((RelationCanvas *)((ArrowPointCanvas *) begin)->get_other(this))
         ->check_stereotypeproperties();
     else {
@@ -1374,7 +1371,7 @@ void RelationCanvas::save(QTextStream & st, bool ref, QString & warning) const
     if (ref)
         st << "relationcanvas_ref " << get_ident()
            << " // " << data->get_name();
-    else if (begin->type() != UmlArrowPoint) {
+    else if (begin->typeUmlCode() != UmlArrowPoint) {
         // relation canvas start
         nl_indent(st);
         st << "relationcanvas " << get_ident() << " ";
@@ -1524,7 +1521,7 @@ RelationCanvas * RelationCanvas::read(char *& st, UmlCanvas * canvas, char * k)
                     label = 0;
                 }
                 else
-                    label->setZ(z);
+                    label->setZValue(z);
 
                 k = read_keyword(st);
             }
@@ -1553,7 +1550,7 @@ RelationCanvas * RelationCanvas::read(char *& st, UmlCanvas * canvas, char * k)
                         s = QString("<<") + s + ">>";
 
                     stereotype = new LabelCanvas(s, canvas, x, y);
-                    stereotype->setZ((read_file_format() < 5) ? OLD_ARROW_Z
+                    stereotype->setZValue((read_file_format() < 5) ? OLD_ARROW_Z
                                      : read_double(st));
                 }
 
@@ -1607,7 +1604,7 @@ RelationCanvas * RelationCanvas::read(char *& st, UmlCanvas * canvas, char * k)
 
             result->show();
 
-            if (di->type() != UmlArrowPoint)
+            if (di->typeUmlCode() != UmlArrowPoint)
                 break;
 
             bi = di;
@@ -1632,7 +1629,7 @@ RelationCanvas * RelationCanvas::read(char *& st, UmlCanvas * canvas, char * k)
             if (!unamed && !s.isEmpty()) {
                 result->role_a = new LabelCanvas(s, canvas, x, y, FALSE, FALSE,
                                                  rd->get_isa_class_relation_a());
-                result->role_a->setZ(z);
+                result->role_a->setZValue(z);
                 result->role_a->show();
             }
         }
@@ -1651,7 +1648,7 @@ RelationCanvas * RelationCanvas::read(char *& st, UmlCanvas * canvas, char * k)
             if (!unamed && !s.isEmpty()) {
                 first->role_b = new LabelCanvas(s, canvas, x, y, FALSE, FALSE,
                                                 rd->get_isa_class_relation_b());
-                first->role_b->setZ(z);
+                first->role_b->setZValue(z);
                 first->role_b->show();
             }
         }
@@ -1669,7 +1666,7 @@ RelationCanvas * RelationCanvas::read(char *& st, UmlCanvas * canvas, char * k)
 
             if (!unamed && !s.isEmpty()) {
                 result->multiplicity_a = new LabelCanvas(s, canvas, x, y);
-                result->multiplicity_a->setZ(z);
+                result->multiplicity_a->setZValue(z);
                 result->multiplicity_a->show();
             }
         }
@@ -1687,7 +1684,7 @@ RelationCanvas * RelationCanvas::read(char *& st, UmlCanvas * canvas, char * k)
 
             if (!unamed && !s.isEmpty()) {
                 first->multiplicity_b = new LabelCanvas(s, canvas, x, y);
-                first->multiplicity_b->setZ(z);
+                first->multiplicity_b->setZValue(z);
                 first->multiplicity_b->show();
             }
         }
@@ -1768,6 +1765,6 @@ void RelationCanvas::history_load(QBuffer & b)
 
 void RelationCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     unconnect();
 }

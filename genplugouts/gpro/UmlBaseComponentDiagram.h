@@ -4,15 +4,14 @@
 
 #include "UmlDiagram.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlComponentDiagram;
 class UmlComponentView;
 
 //  Manage the component diagrams
-class UmlBaseComponentDiagram : public UmlDiagram
-{
-public:
+class UmlBaseComponentDiagram : public UmlDiagram {
+  public:
     // returns a new component diagram named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -24,9 +23,9 @@ public:
     virtual anItemKind kind();
 
 
-protected:
+  protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseComponentDiagram(void * id, const Q3CString & n) : UmlDiagram(id, n) {};
+    UmlBaseComponentDiagram(void * id, const QByteArray & n) : UmlDiagram(id, n) {};
 
 };
 

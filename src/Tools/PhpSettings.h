@@ -7,7 +7,7 @@
 #include "misc/mystr.h"
 #include "aVisibility.h"
 #include "UmlSettings.h"
-#include <q3dict.h>
+
 
 // This class manages settings concerning PHP, configured through
 // the 'Generation settings' dialog.

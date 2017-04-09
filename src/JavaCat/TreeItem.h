@@ -1,5 +1,5 @@
 //Added by qt3to4:
-#include <Q3PtrList>
+
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -32,21 +32,21 @@
 
 #ifndef REVERSE
 
-#include <q3listview.h>
+#include <QTreeWidget>
 #include <qstring.h>
 
-#define TreeItem Q3ListViewItem
+#define TreeItem QTreeWidgetItem
 
 #else
 
-#include <q3ptrlist.h>
-#include <qstring.h>
+#include <QList>
+#include <QString>
 
 class TreeItem
 {
 private:
     TreeItem * its_parent;
-    Q3PtrList<TreeItem> its_children;
+    QList<TreeItem *> its_children;
     QString its_name;	// java_classes share it in case of a java classes
 
 public:
@@ -58,16 +58,16 @@ public:
     void setText(int, QString s) {
         its_name = s;
     };
+    void setText(QString s) {
+        its_name = s;
+    };
     TreeItem * parent() {
         return its_parent;
     };
 
-    TreeItem * firstChild() {
-        return its_children.first();
-    };
-    TreeItem * nextSibling() {
-        return its_parent->its_children.next();
-    };
+    const QList<TreeItem *> &children() const {
+        return its_children;
+    }
 };
 
 #endif

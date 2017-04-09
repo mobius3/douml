@@ -46,7 +46,7 @@ WrapperStr UmlArtifact::imports;
 
 void UmlArtifact::generate_imports(QTextStream & f, WrapperStr & made)
 {
-    Q3PtrVector<UmlItem> ch = children();
+    QVector<UmlItem*> ch = children();
     unsigned index;
     const unsigned sup = ch.size();
 
@@ -115,7 +115,7 @@ void UmlArtifact::generate()
                              + name + "</i> in " + path + "</i></font><br>");
 
         // get bodies if preserve
-        const Q3PtrVector<UmlClass> & cls = associatedClasses();
+        const QVector<UmlClass*> & cls = associatedClasses();
 
         if (preserve())
             UmlOperation::read_bodies(path);

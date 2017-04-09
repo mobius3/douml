@@ -32,7 +32,7 @@
 #include "BrowserNode.h"
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 class CdClassCanvas;
 
@@ -46,8 +46,8 @@ class ConstraintCanvas : public NoteCanvas
 protected:
     bool indicate_visible;
     CdClassCanvas * cl;
-    Q3ValueList<BrowserNode *> hidden_visible;
-    Q3ValueList<BasicData *> connect_list;	// class only
+    QList<BrowserNode *> hidden_visible;
+    QList<BasicData *> connect_list;	// class only
     BrowserNodeList elements;
 
 public:
@@ -57,7 +57,7 @@ public:
 
     virtual void delete_it();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool copyable() const;
     virtual void history_load(QBuffer &);
@@ -67,8 +67,8 @@ public:
 
     virtual void apply_shortcut(QString s);
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem *> &);
+    virtual void clone_drawing_settings(const DiagramItem *src);
 
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static ConstraintCanvas * read(char *& , UmlCanvas *, char *, CdClassCanvas *);

@@ -31,13 +31,10 @@
 
 #include <qcursor.h>
 #include <qfont.h>
-#include <q3popupmenu.h>
-//Added by qt3to4:
 #include <QTextStream>
 #include <QDropEvent>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
-
 #include "ActivityDiagramWindow.h"
 #include "ActivityDiagramView.h"
 #include "ActivityCanvas.h"
@@ -83,7 +80,7 @@ ActivityDiagramView::ActivityDiagramView(QWidget * parent, UmlCanvas * canvas, i
 
 void ActivityDiagramView::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
     MenuFactory::createTitle(m, TR("Activity diagram menu"));
 
@@ -104,18 +101,20 @@ void ActivityDiagramView::menu(const QPoint &)
 
 BrowserNode * ActivityDiagramView::container(const QPoint & p, bool part)
 {
-    Q3CanvasItem * ci = the_canvas()->collision(p);
+    QGraphicsItem * ci = the_canvas()->collision(p);
     DiagramItem * di;
 
     return ((ci != 0) &&
             ((di = QCanvasItemToDiagramItem(ci)) != 0) &&
-            IsaActivityContainer(di->type(), part))
+            IsaActivityContainer(di->typeUmlCode(), part))
            ? ((ActivityContainerCanvas *) di)->get_bn()
            : (BrowserNode *) window()->browser_diagram()->parent();
 }
 
-void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
+void ActivityDiagramView::mousePressEvent(QMouseEvent * e)
 {
+    QPoint diagramPoint(e->x(), e->y());
+    QPointF scenePoint = mapToScene(diagramPoint);
     if (!window()->frozen()) {
         UmlCode action = window()->buttonOn();
 
@@ -137,7 +136,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
                 }
 
                 ActivityCanvas * c =
-                    new ActivityCanvas(b, the_canvas(), e->x(), e->y());
+                    new ActivityCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y());
 
                 c->show();
                 c->upper();
@@ -154,7 +153,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
             window()->selectOn();
             history_save();
 
-            BrowserNode * parent = container(e->pos());
+            BrowserNode * parent = container(scenePoint.toPoint());
             BrowserNode * b =
                 BrowserInterruptibleActivityRegion::get_interruptibleactivityregion(parent);
 
@@ -166,7 +165,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
                 }
 
                 InterruptibleActivityRegionCanvas * c =
-                    new InterruptibleActivityRegionCanvas(b, the_canvas(), e->x(), e->y());
+                    new InterruptibleActivityRegionCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y());
                 bool rz;
 
                 c->show();
@@ -185,7 +184,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
             window()->selectOn();
             history_save();
 
-            BrowserNode * parent = container(e->pos());
+            BrowserNode * parent = container(scenePoint.toPoint());
             BrowserNode * b =
                 BrowserExpansionRegion::get_expansionregion(parent);
 
@@ -197,7 +196,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
                 }
 
                 ExpansionRegionCanvas * c =
-                    new ExpansionRegionCanvas(b, the_canvas(), e->x(), e->y());
+                    new ExpansionRegionCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y());
                 bool rz;
 
                 c->show();
@@ -222,13 +221,13 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
             window()->selectOn();
             history_save();
 
-            BrowserNode * parent = container(e->pos());
+            BrowserNode * parent = container(scenePoint.toPoint());
             BrowserNode * b = BrowserActivityNode::get_activitynode(parent, action);
 
             if (b != 0) {
                 // a new element, don't check already drawn
                 ActivityNodeCanvas * c =
-                    new ActivityNodeCanvas(b, the_canvas(), e->x(), e->y());
+                    new ActivityNodeCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y());
 
                 c->show();
                 (void) ActivityContainerCanvas::force_inside(c, FALSE);
@@ -244,7 +243,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
             window()->selectOn();
             history_save();
 
-            BrowserNode * parent = container(e->pos());
+            BrowserNode * parent = container(scenePoint.toPoint());
             BrowserNode * b = BrowserActivityAction::get_activityaction(parent);
 
             if (b != 0) {
@@ -257,7 +256,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
                 }
 
                 ActivityActionCanvas * c =
-                    new ActivityActionCanvas(b, the_canvas(), e->x(), e->y());
+                    new ActivityActionCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y());
 
                 c->show();
                 (void) ActivityContainerCanvas::force_inside(c, FALSE);
@@ -274,7 +273,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
             window()->selectOn();
             history_save();
 
-            BrowserNode * parent = container(e->pos());
+            BrowserNode * parent = container(scenePoint.toPoint());
             BrowserNode * b = BrowserActivityObject::get_activityobject(parent);
 
             if (b != 0) {
@@ -287,7 +286,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
                 history_protected = TRUE;
 
                 ActivityObjectCanvas * c =
-                    new ActivityObjectCanvas(b, the_canvas(), e->x(), e->y());
+                    new ActivityObjectCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y());
 
                 c->show();
                 (void) ActivityContainerCanvas::force_inside(c, FALSE);
@@ -304,7 +303,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
             window()->selectOn();
             history_save();
 
-            BrowserNode * parent = container(e->pos(), TRUE);
+            BrowserNode * parent = container(scenePoint.toPoint(), TRUE);
             BrowserNode * b =
                 BrowserActivityPartition::get_activitypartition(parent);
 
@@ -316,7 +315,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
                 }
 
                 ActivityPartitionCanvas * c =
-                    new ActivityPartitionCanvas(b, the_canvas(), e->x(), e->y());
+                    new ActivityPartitionCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y());
                 bool rz;
 
                 c->show();
@@ -330,7 +329,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
         break;
 
         default:
-            DiagramView::contentsMousePressEvent(e);
+            DiagramView::mousePressEvent(e);
             return;
         }
 
@@ -338,7 +337,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
         history_protected = FALSE;
     }
     else
-        DiagramView::contentsMousePressEvent(e);
+        DiagramView::mousePressEvent(e);
 }
 
 void ActivityDiagramView::dragEnterEvent(QDragEnterEvent * e)
@@ -371,27 +370,66 @@ void ActivityDiagramView::dragEnterEvent(QDragEnterEvent * e)
          UmlDrag::canDecode(e, UmlState, FALSE, TRUE)))
         e->accept();
     else
+    {
         // don't accept Parameter & ParameterSet
         e->ignore();
+    }
 }
-
+void ActivityDiagramView::dragMoveEvent(QDragMoveEvent * e)
+{
+    if (!window()->frozen() &&
+            (UmlDrag::canDecode(e, UmlActivity, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlInterruptibleActivityRegion, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlExpansionRegion, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlActivityPartition, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlPackage, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlFlow, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlSimpleRelations, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlClassDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlUseCaseDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlSeqDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlColDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlObjectDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlComponentDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlDeploymentDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlActivityDiagram, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlStateDiagram, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlActivityNode, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlActivityAction, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlActivityObject, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlOperation, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlAttribute, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlRelations, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlClass, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlClassInstance, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlState, FALSE, TRUE)))
+        e->accept();
+    else
+    {
+        // don't accept Parameter & ParameterSet
+        e->ignore();
+    }
+}
 void ActivityDiagramView::dropEvent(QDropEvent * e)
 {
     BrowserNode * bn;
-    QPoint p = viewportToContents(e->pos());
+    QPointF p = mapToScene(e->pos());
 
     if ((bn = UmlDrag::decode(e, UmlActivity, TRUE)) != 0) {
-        Q3PopupMenu m(0);
+        QMenu m(0);
 
         MenuFactory::createTitle(m, TR("Choose"));
-        m.insertSeparator();
+        m.addSeparator();
 
         if (!the_canvas()->already_drawn(bn))
-            m.insertItem(TR("Draw activity"), 0);
+            MenuFactory::addItem(m, TR("Draw activity"), 0);
 
-        m.insertItem(TR("Add a call behavior"), 1);
+        MenuFactory::addItem(m, TR("Add a call behavior"), 1);
 
-        switch (m.exec(QCursor::pos())) {
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+        switch (retAction->data().toInt()) {
         case 0: {
             history_save();
             history_protected = TRUE;
@@ -412,7 +450,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
         break;
 
         case 1: {
-            bn = BrowserActivityAction::add_call_behavior(container(p), bn);
+            bn = BrowserActivityAction::add_call_behavior(container(p.toPoint()), bn);
 
             if (bn != 0) {
                 history_save();
@@ -435,6 +473,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
 
         default:
             break;
+        }
         }
     }
     else if ((bn = UmlDrag::decode(e, UmlPackage)) != 0) {
@@ -620,7 +659,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
         window()->package_modified();
     }
     else if ((bn = UmlDrag::decode(e, UmlOperation)) != 0) {
-        bn = BrowserActivityAction::add_call_operation(container(p), (BrowserOperation *) bn);
+        bn = BrowserActivityAction::add_call_operation(container(p.toPoint()), (BrowserOperation *) bn);
 
         if (bn != 0) {
             history_save();
@@ -641,39 +680,43 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     }
     else if (((bn = UmlDrag::decode(e, UmlAttribute)) != 0) ||
              ((bn = UmlDrag::decode(e, UmlRelations, TRUE)) != 0)) {
-        Q3PopupMenu m(0);
+        QMenu m(0);
 
         MenuFactory::createTitle(m, TR("Choose"));
-        m.insertSeparator();
-        m.insertItem(TR("Add a read variable value action"), 0);
-        m.insertItem(TR("Add a clear variable value action"), 1);
-        m.insertItem(TR("Add a write variable value action"), 2);
-        m.insertItem(TR("Add a add variable value action"), 3);
-        m.insertItem(TR("Add a remove variable value action"), 4);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Add a read variable value action"), 0);
+        MenuFactory::addItem(m, TR("Add a clear variable value action"), 1);
+        MenuFactory::addItem(m, TR("Add a write variable value action"), 2);
+        MenuFactory::addItem(m, TR("Add a add variable value action"), 3);
+        MenuFactory::addItem(m, TR("Add a remove variable value action"), 4);
 
-        switch (m.exec(QCursor::pos())) {
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+        switch (retAction->data().toInt()) {
         case 0:
-            bn = BrowserActivityAction::add_read_variable_value(container(p), bn);
+            bn = BrowserActivityAction::add_read_variable_value(container(p.toPoint()), bn);
             break;
 
         case 1:
-            bn = BrowserActivityAction::add_clear_variable_value(container(p), bn);
+            bn = BrowserActivityAction::add_clear_variable_value(container(p.toPoint()), bn);
             break;
 
         case 2:
-            bn = BrowserActivityAction::add_write_variable_value(container(p), bn);
+            bn = BrowserActivityAction::add_write_variable_value(container(p.toPoint()), bn);
             break;
 
         case 3:
-            bn = BrowserActivityAction::add_add_variable_value(container(p), bn);
+            bn = BrowserActivityAction::add_add_variable_value(container(p.toPoint()), bn);
             break;
 
         case 4:
-            bn = BrowserActivityAction::add_remove_variable_value(container(p), bn);
+            bn = BrowserActivityAction::add_remove_variable_value(container(p.toPoint()), bn);
             break;
 
         default:
             return;
+        }
         }
 
         if (bn != 0) {
@@ -697,7 +740,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
         history_protected = FALSE;
 
         BrowserActivityObject * obj =
-            BrowserActivityObject::add_activityobject(container(p), 0);
+            BrowserActivityObject::add_activityobject(container(p.toPoint()), 0);
 
         if (obj != 0) {
             ((ActivityObjectData *) obj->get_data())->set_type((BrowserClass *) bn);
@@ -722,7 +765,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
         history_protected = FALSE;
 
         BrowserActivityObject * obj =
-            BrowserActivityObject::add_activityobject(container(p), bn->get_name());
+            BrowserActivityObject::add_activityobject(container(p.toPoint()), bn->get_name().toLatin1().constData());
 
         if (obj != 0) {
             ((ActivityObjectData *) obj->get_data())
@@ -747,7 +790,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     else if ((bn = UmlDrag::decode(e, UmlState, TRUE)) != 0) {
         history_protected = FALSE;
 
-        bn = BrowserActivityAction::add_call_behavior(container(p), bn);
+        bn = BrowserActivityAction::add_call_behavior(container(p.toPoint()), bn);
 
         if (bn != 0) {
             history_save();
@@ -770,8 +813,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
 void ActivityDiagramView::save(QTextStream & st, QString & warning,
                                bool copy) const
 {
-    DiagramItemList items(canvas()->allItems());
-    DiagramItem * di;
+    DiagramItemList items(canvas()->items());
 
     if (!copy)
         // sort is useless for a copy
@@ -781,8 +823,8 @@ void ActivityDiagramView::save(QTextStream & st, QString & warning,
 
     // save first activity, activity nodes, actions, objects, packages, fragments, notes and icons
 
-    for (di = items.first(); di != 0; di = items.next()) {
-        switch (di->type()) {
+    foreach (DiagramItem *di, items) {
+        switch (di->typeUmlCode()) {
         case UmlActivity:
         case UmlInterruptibleActivityRegion:
         case UmlExpansionRegion:
@@ -815,8 +857,8 @@ void ActivityDiagramView::save(QTextStream & st, QString & warning,
 
     // then saves relations
 
-    for (di = items.first(); di != 0; di = items.next()) {
-        switch (di->type()) {
+    foreach (DiagramItem *di, items) {
+        switch (di->typeUmlCode()) {
         case UmlFlow:
         case UmlDependOn:
             if (!copy || di->copyable())
@@ -829,8 +871,8 @@ void ActivityDiagramView::save(QTextStream & st, QString & warning,
 
     // then saves anchors
 
-    for (di = items.first(); di != 0; di = items.next())
-        if ((!copy || di->copyable()) && (di->type() == UmlAnchor))
+    foreach (DiagramItem *di, items)
+        if ((!copy || di->copyable()) && (di->typeUmlCode() == UmlAnchor))
             di->save(st, FALSE, warning);
 
     if (!copy && (preferred_zoom != 0)) {
@@ -848,7 +890,8 @@ void ActivityDiagramView::read(char * st, char * k)
     // reads first state package icons notes text and image
     UmlCanvas * canvas = the_canvas();
 
-    while (ActivityCanvas::read(st, canvas, k) ||
+    while (
+           ActivityCanvas::read(st, canvas, k) ||
            InterruptibleActivityRegionCanvas::read(st, canvas, k) ||
            ExpansionRegionCanvas::read(st, canvas, k) ||
            ActivityPartitionCanvas::read(st, canvas, k) ||

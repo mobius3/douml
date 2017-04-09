@@ -28,10 +28,10 @@
 #ifndef UMLRELATION_H
 #define UMLRELATION_H
 
-#include <q3valuelist.h>
+#include <QList.h>
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3PtrList>
+
 
 #include "UmlBaseRelation.h"
 #include "UmlTypeSpec.h"
@@ -54,7 +54,7 @@ public:
                         WrapperStr comment, WrapperStr description,
                         WrapperStr annotation
 #ifdef ROUNDTRIP
-                        , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                        , bool roundtrip, QList<UmlItem *> & expected_order
 #endif
                        );
     static bool new_one(Class * container, const WrapperStr & name,
@@ -66,7 +66,7 @@ public:
                         WrapperStr comment, WrapperStr description,
                         WrapperStr annotation
 #ifdef ROUNDTRIP
-                        , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                        , bool roundtrip, QList<UmlItem *> & expected_order
 #endif
                        );
 #ifdef ROUNDTRIP

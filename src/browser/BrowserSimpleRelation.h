@@ -86,8 +86,8 @@ public:
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
 
-    virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
-    static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserNode *);
+    virtual void referenced_by(QList<BrowserNode *> & l, bool ondelete);
+    static void compute_referenced_by(QList<BrowserNode *> &, BrowserNode *);
 
     virtual bool tool_cmd(ToolCom * com, const char * args);
 
@@ -96,7 +96,7 @@ public:
     virtual QString drag_postfix() const;
     virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
 
-    static void get_relating(BrowserNode *, Q3PtrDict<BrowserNode> & d,
+    static void get_relating(BrowserNode *, QHash<BrowserNode*,BrowserNode*> & d,
                              BrowserNodeList & newones, bool inh,
                              bool dep, bool sametype, UmlCode k);
 };

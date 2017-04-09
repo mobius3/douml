@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 class QTextStream;
 
@@ -53,10 +53,10 @@ public:
     virtual void generate_import(QTextStream & f, const WrapperStr & indent);
 
     void generate_extends(const char *& sep, QTextStream & f,
-                          const Q3ValueList<UmlActualParameter> & actuals,
+                          const QList<UmlActualParameter> & actuals,
                           const WrapperStr & stereotype);
     void generate_implements(const char *& sep, QTextStream & f,
-                             const Q3ValueList<UmlActualParameter> & actuals,
+                             const QList<UmlActualParameter> & actuals,
                              const WrapperStr & stereotype);
 };
 

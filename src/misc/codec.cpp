@@ -38,10 +38,10 @@ bool hasCodec()
 QString codec()
 {
     if (Codec != 0) {
-        QString na = Codec->name();
+        QByteArray na = Codec->name();
         int pos = 0;
 
-        while ((pos = na.find(" ", pos)) != -1)
+        while ((pos = na.indexOf(" ", pos)) != -1)
             na.replace(pos, 1, "_");
 
         if (QTextCodec::codecForName(na) == Codec)
@@ -56,7 +56,7 @@ void set_codec(QString s)
     if (s.isEmpty())
         Codec = 0;
     else
-        Codec = QTextCodec::codecForName(s);
+        Codec = QTextCodec::codecForName(s.toLatin1());
 }
 
 QString toUnicode(const char * str)
@@ -76,7 +76,7 @@ void latinize(QString & s)
     while (i != 0) {
         QChar c = s.at(--i);
 
-        if (c.latin1() == 0) {
+        if (c.toLatin1() == 0) {
             if (c.unicode() == 8217)
                 // special case for the pseudo ' returned by microsoft editors
                 c = '\'';

@@ -4,7 +4,7 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 UmlItem::~UmlItem()
 {
 }
@@ -16,7 +16,7 @@ void UmlItem::xmi(int, char **)
 
 bool UmlItem::write_if_needed(FileOut & out)
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
     bool used = FALSE;
 
@@ -100,34 +100,35 @@ void UmlItem::write_description_properties(FileOut & out)
             out << "</UML:ModelElement.taggedValue>\n";
         }
 
-        const Q3Dict<Q3CString> up = properties();
-        Q3DictIterator<Q3CString> it(up);
+        const QHash<QByteArray, QByteArray*> up = properties();
+        QHashIterator<QByteArray, QByteArray*> it(up);
 
-        while (it.current()) {
+        while (it.hasNext()) {
+            it.next();
             out.indent();
             out << "<UML:ModelElement.taggedValue>\n";
             out.indent();
 
             if (_taggedvalue_mode == 1) {
                 out << "\t<UML:TaggedValue tag=\"";
-                out.quote(it.currentKey());
+                out.quote(it.key());
                 out << "\" value=\"";
-                out.quote(*(it.current()));
+                out.quote(*(it.value()));
                 out << "\"/>\n";
             }
             else {
                 out << "\t<UML:TaggedValue.tag>";
-                out.quote(it.currentKey());
+                out.quote(it.key());
                 out << "</UML:TaggedValue.tag>\n";
                 out.indent();
                 out << "\t<UML:TaggedValue.value>";
-                out.quote(*(it.current()));
+                out.quote(*(it.value()));
                 out << "</UML:TaggedValue.value>\n";
             }
 
             out.indent();
             out << "</UML:ModelElement.taggedValue>\n";
-            ++it;
+//            ++it;
         }
     }
 }

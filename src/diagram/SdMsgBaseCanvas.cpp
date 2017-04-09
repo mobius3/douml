@@ -82,7 +82,7 @@ void SdMsgBaseCanvas::delete_it()
     DiagramCanvas::delete_it();
 }
 
-UmlCode SdMsgBaseCanvas::type() const
+UmlCode SdMsgBaseCanvas::typeUmlCode() const
 {
     return itsType;
 }
@@ -116,13 +116,13 @@ QString SdMsgBaseCanvas::get_msg(bool with_args) const
         return m;
 
     QString a = (const char *) args;
-    int index1 = m.find('(');
-    int index2 = m.findRev(')');
+    int index1 = m.indexOf('(');
+    int index2 = m.lastIndexOf(')');
 
     if ((index1 == -1) || (index2 == -1) || (index2 < index1))
         return m;
 
-    if (a.find('\n') == -1)
+    if (a.indexOf('\n') == -1)
         return m.left(index1 + 1) + a + m.mid(index2);
 
     // multi lines args, compute indent
@@ -140,7 +140,7 @@ QString SdMsgBaseCanvas::get_msg(bool with_args) const
 
     int index3;
 
-    while ((index3 = a.find('\n', index1)) != -1) {
+    while ((index3 = a.indexOf('\n', index1)) != -1) {
         s += a.mid(index1, index3 - index1 + 1) + indent;
         index1 = index3 + 1;
     }
@@ -292,7 +292,7 @@ void SdMsgBaseCanvas::open()
 
         if (d.exec() == QDialog::Accepted) {
             update_st(st);
-            explicit_msg = val.stripWhiteSpace();
+            explicit_msg = val.trimmed();
             modified();
         }
     }
@@ -346,7 +346,7 @@ void SdMsgBaseCanvas::default_label_position() const
     QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
     QSize sz = fm.size(0, label->get_name());
 
-    label->move(rect().center().x() - sz.width() / 2,
+    label->moveBy(rect().center().x() - sz.width() / 2,
                 y() - fm.height());
 }
 
@@ -355,7 +355,7 @@ void SdMsgBaseCanvas::default_stereotype_position() const
     QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
     QSize sz = fm.size(0, stereotype->get_name());
 
-    stereotype->move(rect().center().x() - sz.width() / 2,
+    stereotype->moveBy(rect().center().x() - sz.width() / 2,
                      y() + fm.height());
 }
 
@@ -369,11 +369,13 @@ void SdMsgBaseCanvas::setVisible(bool yes)
 
 void SdMsgBaseCanvas::moveBy(double dx, double dy)
 {
+    int itsY = y();
+    int minY= min_y();
     if (dy > 80000) {
         // horizontal moving due to the life line moving
         DiagramCanvas::moveBy(dx, 0);
 
-        if ((stereotype != 0) && !stereotype->selected())
+        if ((stereotype != 0) && !stereotype->isSelected())
             stereotype->moveBy(dx, 0);
     }
     else if (!already_moved && ((y() + dy) > min_y())) {
@@ -381,7 +383,7 @@ void SdMsgBaseCanvas::moveBy(double dx, double dy)
         already_moved = TRUE;
         DiagramCanvas::moveBy(0, dy);
 
-        if ((stereotype != 0) && !stereotype->selected())
+        if ((stereotype != 0) && !stereotype->isSelected())
             stereotype->moveBy(0, dy);
     }
 }
@@ -390,7 +392,7 @@ void SdMsgBaseCanvas::update_after_move(SdMsgSupport * p)
 {
     already_moved = FALSE;
 
-    p->update_v_to_contain(rect());
+    p->update_v_to_contain(sceneRect());
 }
 
 void SdMsgBaseCanvas::change_scale()
@@ -398,18 +400,18 @@ void SdMsgBaseCanvas::change_scale()
     // Just update the vertical position, the horizontal size
     // and position are update by the durations.
     // The label is also moved independently
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
 
-    Q3CanvasRectangle::moveBy(0,
+    QGraphicsRectItem::moveBy(0,
                               ((int)(center_y_scale100 * the_canvas()->zoom() + 0.5))
                               - center().y());
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 bool SdMsgBaseCanvas::copyable() const
 {
     // must not call dest->copyable() else infinite loop
-    return selected() && dest->selected();
+    return isSelected() && dest->isSelected();
 }
 
 bool SdMsgBaseCanvas::represents(BrowserNode * bn)
@@ -425,11 +427,11 @@ void SdMsgBaseCanvas::save(QTextStream & st, QString & warning) const
     nl_indent(st);
 #ifdef FORCE_INT_COORD
     // note : << float bugged in Qt 3.3.3
-    st << "yz " << (int) y() << " " << (int) z();
+    st << "yz " << (int) y() << " " << (int) zValue();
 #else
     QString sy, sz;
 
-    st << "yz " << sy.setNum(y()) << " " << sz.setNum(z());
+    st << "yz " << sy.setNum(y()) << " " << sz.setNum(zValue());
 #endif
 
     if (msg != 0) {
@@ -446,7 +448,7 @@ void SdMsgBaseCanvas::save(QTextStream & st, QString & warning) const
             }
             else {
                 st << " explicitmsg ";
-                save_string(msg->get_browser_node()->get_name(), st);
+                save_string(msg->get_browser_node()->get_name().toLatin1().constData(), st);
             }
         }
         else {
@@ -464,7 +466,7 @@ void SdMsgBaseCanvas::save(QTextStream & st, QString & warning) const
     if (stereotype != 0) {
         nl_indent(st);
         st << "stereotype ";
-        save_string(stereotype->get_name(), st);
+        save_string(stereotype->get_name().toLatin1().constData(), st);
         save_xyz(st, stereotype, " xyz");
     }
 
@@ -517,7 +519,7 @@ void SdMsgBaseCanvas::read(char *& st)
             stereotype =
                 new LabelCanvas(k, the_canvas(), x, (int) read_double(st));
 
-            stereotype->setZ(read_double(st));
+            stereotype->setZValue(read_double(st));
             stereotype->show();
             k = read_keyword(st);
         }
@@ -662,7 +664,7 @@ void SdMsgBaseCanvas::send(ToolCom * com, int fromid) const
             QString s = stereotype->get_name();
 
             s = s.mid(2, s.length() - 4);
-            com->write_string((const char *) s);
+            com->write_string((const char *) s.toLatin1().constData());
         }
     }
 

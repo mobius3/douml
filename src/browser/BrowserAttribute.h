@@ -43,6 +43,7 @@ class BrowserClass;
 class BrowserAttribute : public BrowserNode, public Labeled<BrowserAttribute>
 {
     friend class StereotypesDialog;
+    friend class QuickEdit;
 
 protected:
     static IdDict<BrowserAttribute> all;
@@ -61,7 +62,7 @@ public:
     BrowserAttribute(QString s, BrowserNode * p, AttributeData * d, int id = 0);
     BrowserAttribute(const BrowserAttribute * model, BrowserNode * p);
     virtual ~BrowserAttribute();
-
+    uint TypeID() override;
     virtual void delete_it();
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     QString name = QString());
@@ -80,7 +81,7 @@ public:
     void add_set_oper();
 
     virtual const QPixmap * pixmap(int) const;
-    virtual void paintCell(QPainter *, const QColorGroup &, int, int, int);
+    virtual void paintCell(QPainter *, const QPalette &, int, int, int);
 
     virtual void menu();
     virtual void apply_shortcut(QString s);
@@ -113,8 +114,8 @@ public:
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
 
-    virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
-    static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserNode *);
+    virtual void referenced_by(QList<BrowserNode *> &, bool ondelete = FALSE);
+    static void compute_referenced_by(QList<BrowserNode *> &, BrowserNode *);
 
     virtual bool tool_cmd(ToolCom * com, const char * args);
 
@@ -123,6 +124,7 @@ public:
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
+    virtual QVariant	data(int column, int role) const;
 };
 
 #endif

@@ -29,9 +29,7 @@
 #define UMLATTRIBUTE_H
 
 #include "UmlBaseAttribute.h"
-//Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3PtrList>
 
 class Class;
 
@@ -49,7 +47,7 @@ public:
                         const WrapperStr & value,	WrapperStr comment,
                         WrapperStr description
 #ifdef ROUNDTRIP
-                        , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                        , bool roundtrip, QList<UmlItem *> & expected_order
 #endif
                        );
 #ifdef ROUNDTRIP

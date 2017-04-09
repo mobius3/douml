@@ -28,15 +28,12 @@
 #ifndef CLASSINSTANCEDIALOG_H
 #define CLASSINSTANCEDIALOG_H
 
-#include <q3tabdialog.h>
+#include <tabdialog.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3PtrList>
-
 #include "BrowserNode.h"
 #include "MyTable.h"
 
-class Q3ComboBox;
+class QComboBox;
 class LineEdit;
 class KeyValuesTable;
 class ClassInstanceData;
@@ -57,7 +54,7 @@ protected slots:
     virtual void button_pressed(int row, int col, int button, const QPoint & mousePos);
 };
 
-class ClassInstanceDialog : public Q3TabDialog
+class ClassInstanceDialog : public TabDialog
 {
     Q_OBJECT
 
@@ -69,12 +66,12 @@ protected:
     QStringList list;
     BrowserNodeList nodes;
     LineEdit * edname;
-    Q3ComboBox * edtype;
-    Q3ComboBox * edstereotype;
+    QComboBox * edtype;
+    QComboBox * edstereotype;
     BrowserNodeList attributes;
     BrowserNode * cl_container;
     MultiLineEdit * comment;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog *> edits;
     MyTable * atbl;
     RelTable * rtbl;
     KeyValuesTable * kvtable;
@@ -96,7 +93,7 @@ protected slots:
     void edit_description();
     void type_changed(int);
     void menu_class();
-    void update_all_tabs(QWidget *);
+    void update_all_tabs(int index);
 };
 
 #endif

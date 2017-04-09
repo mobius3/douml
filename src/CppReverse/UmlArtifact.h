@@ -29,9 +29,7 @@
 #define UMLARTIFACT_H
 
 #include "UmlBaseArtifact.h"
-//Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3PtrList>
 
 // This class manages 'artifact'
 // You can modify it as you want (except the constructor)
@@ -66,7 +64,7 @@ public:
     virtual bool set_roundtrip_expected();
     virtual void scan_it(int & n);
     virtual void send_it(int n);
-    virtual void mark_useless(Q3PtrList<UmlItem> & l);
+    virtual void mark_useless(QList<UmlItem *> & l);
     bool set_roundtrip_expected_for_class();
     bool is_roundtrip_expected() const {
         return roundtrip_expected;

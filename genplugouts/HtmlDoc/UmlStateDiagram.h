@@ -2,7 +2,7 @@
 #define _UMLSTATEDIAGRAM_H
 
 
-#include <q3cstring.h>
+
 #include "Vector.h"
 #include "UmlBaseStateDiagram.h"
 #include "UmlStateItem.h"
@@ -15,7 +15,7 @@ public:
     virtual void memo_ref();
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QByteArray sKind();
 
     static void ref_index();
 
@@ -28,7 +28,7 @@ protected:
 
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlStateDiagram(void * id, const Q3CString & s) : UmlBaseStateDiagram(id, s) {
+    UmlStateDiagram(void * id, const QByteArray & s) : UmlBaseStateDiagram(id, s) {
     }
 
 };

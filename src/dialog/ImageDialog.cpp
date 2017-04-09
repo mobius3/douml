@@ -30,13 +30,13 @@
 
 
 #include <qlayout.h>
-#include <q3vbox.h>
+#include <vvbox.h>
 #include <qlabel.h>
 #include <qdir.h>
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include "ImageDialog.h"
 #include "DialogUtil.h"
@@ -52,16 +52,17 @@ static QString RelativeRoot;
 static QString RelativePrj;
 
 ImageDialog::ImageDialog(QString & p)
-    : QDialog(0, "Image dialog", TRUE), path(p)
+    : QDialog(0), path(p)
 {
-    setCaption(TR("Image dialog"));
+    setWindowTitle(TR("Image dialog"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
 
     vbox->setMargin(5);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
 
     hbox->addWidget(new QLabel(TR("Image path :"), this));
@@ -79,7 +80,7 @@ ImageDialog::ImageDialog(QString & p)
     connect(b, SIGNAL(clicked()), this, SLOT(browse()));
     hbox->addWidget(new QLabel("", this));
 
-    Q3VBox * vtab = new Q3VBox(this);
+    VVBox * vtab = new VVBox(this);
 
     hbox->addWidget(vtab);
 
@@ -102,7 +103,8 @@ ImageDialog::ImageDialog(QString & p)
     accept->setFixedSize(bs);
     cancel->setFixedSize(bs);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
 
     hbox->addWidget(accept);
     hbox->addWidget(cancel);
@@ -120,8 +122,9 @@ ImageDialog::~ImageDialog()
 
 void ImageDialog::browse()
 {
-    QString s = edpath->text().simplifyWhiteSpace();
-    const QString ns = Q3FileDialog::getOpenFileName(s, "", this, 0, TR("Select image"));
+    QString s = edpath->text().simplified();
+    const QString ns = QFileDialog::getOpenFileName(0, QObject::TR("Select image"),s);//(s, "", this, 0, QObject::tr("Select image"));
+
 
     if (! ns.isEmpty()) {
         edpath->setText(ns);
@@ -151,7 +154,7 @@ void ImageDialog::root_relative()
 
 
 
-            (s.find(root) == 0) &&
+            (s.indexOf(root) == 0) &&
 
             (s.length() >= len)) {
             edpath->setText(s.mid(len));
@@ -168,7 +171,7 @@ void ImageDialog::root_relative()
 
 void ImageDialog::prj_relative()
 {
-    QString root = BrowserView::get_dir().absPath();
+    QString root = BrowserView::get_dir().absolutePath();
     const QString s = edpath->text();
 
     if (root.at(root.length() - 1) != QChar('/'))
@@ -181,7 +184,7 @@ void ImageDialog::prj_relative()
 
 
 
-            (s.find(root) == 0) &&
+            (s.indexOf(root) == 0) &&
 
             (s.length() >= len)) {
             edpath->setText(s.mid(len));
@@ -200,6 +203,6 @@ void ImageDialog::prj_relative()
 
 void ImageDialog::accept()
 {
-    path = edpath->text().simplifyWhiteSpace();
+    path = edpath->text().simplified();
     QDialog::accept();
 }

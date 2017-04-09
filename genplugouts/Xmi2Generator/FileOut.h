@@ -2,7 +2,7 @@
 #define _FILEOUT_H
 
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 #include <qmap.h>
 
 
@@ -10,7 +10,7 @@ class QFile;
 class UmlItem;
 
 //QTextOStream + usefull operations
-class FileOut : public Q3TextStream
+class FileOut : public QTextStream
 {
 public:
     FileOut(QFile * fp, bool lf, bool utf8);
@@ -49,11 +49,11 @@ public:
 
     void define_datatypes(bool uml_20, bool primitive_type, bool gen_extension);
 
-    void quote(const WrapperStr & s);
+    void quote(const QString & s);
 
-    void quote(const char * s);
+    //void quote(const char * s);
 
-    void quote(char c);
+    //void quote(QString c);
 
 
 protected:
@@ -61,9 +61,9 @@ protected:
 
     int _indent;
 
-    QMap<WrapperStr, int> _datatypes;
+    QMap<QString, int> _datatypes;
 
-    QMap<WrapperStr, int> _modifiedtypes;
+    QMap<QString, int> _modifiedtypes;
 
 };
 

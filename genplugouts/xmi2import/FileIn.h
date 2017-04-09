@@ -1,11 +1,8 @@
 #ifndef _FILEIN_H
 #define _FILEIN_H
-
-
+#include <QHash>
+#include "misc/mystr.h"
 #include <qstring.h>
-
-#include <q3dict.h>
-
 #include <stdio.h>
 #include <qmap.h>
 class Token;
@@ -55,7 +52,7 @@ public:
     }
 
     static bool isBypassedId(WrapperStr id) {
-        return BypassedIds[QString(id)] != 0;
+        return BypassedIds[id] != 0;
     }
 
 
@@ -72,9 +69,9 @@ protected:
 
     char * _buffer;
 
-    QMap<WrapperStr, char> _special_chars;
+    QMap<QString, char> _special_chars;
 
-    static Q3Dict<char> BypassedIds;
+    static QHash<WrapperStr,char*> BypassedIds;
 
 
 private:

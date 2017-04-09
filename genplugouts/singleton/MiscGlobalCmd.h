@@ -3,12 +3,12 @@
 
 
 // Internal enum
-enum MiscGlobalCmd {
+/*enum MiscGlobalCmd {
     byeCmd,
     traceCmd,
     messageCmd,
     toolRunningCmd,
     targetCmd
 
-};
+};*/
 #endif

@@ -44,7 +44,7 @@ public:
     InfoCanvas(UmlCanvas * canvas, DiagramItem *, QString);
     virtual ~InfoCanvas();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool copyable() const;
     virtual void open();
@@ -52,8 +52,8 @@ public:
 
     virtual void apply_shortcut(QString s);
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem *> &);
+    virtual void clone_drawing_settings(const DiagramItem *src);
 
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static InfoCanvas * read(char *& , UmlCanvas *, char *, DiagramItem *);

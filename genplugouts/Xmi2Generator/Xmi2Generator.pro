@@ -1,7 +1,20 @@
 TEMPLATE    = app
 TARGET        = gxmi2
-CONFIG        += debug warn_on qt
-DEFINES        = WITHCPP WITHJAVA WITHIDL WITHPYTHON WITHPHP
+CONFIG(Debug, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt warn_on Debug
+    QMAKE_POST_LINK = " "
+}
+CONFIG(Release, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt Release
+    QMAKE_POST_LINK = " "
+}
+CONFIG += precompile_header
+DEFINES        += WITHCPP WITHJAVA WITHIDL WITHPYTHON WITHPHP
+#QMAKE_CXXFLAGS += -std=gnu++11
+QMAKE_CXXFLAGS += -std=c++11
+PRECOMPILED_HEADER += ../../src/misc/mystr.h
 HEADERS        = ./UmlBaseClassDiagram.h \
           ./UmlBaseDeepHistoryPseudoState.h \
           ./FlowContainer.h \
@@ -205,7 +218,9 @@ HEADERS        = ./UmlBaseClassDiagram.h \
           ./UmlStateDiagram.h \
           ./UmlBaseNcRelation.h \
           ./UmlBaseJunctionPseudoState.h \
-          ./UmlClassMember.h
+          ./UmlClassMember.h \
+    bbuttongroup.h \
+    hhbox.h
 SOURCES        = ./UmlBaseClassDiagram.cpp \
           ./UmlBaseDeepHistoryPseudoState.cpp \
           ./FlowContainer.cpp \
@@ -410,26 +425,26 @@ SOURCES        = ./UmlBaseClassDiagram.cpp \
           ./UmlStateDiagram.cpp \
           ./UmlBaseNcRelation.cpp \
           ./UmlBaseJunctionPseudoState.cpp \
-          ./UmlClassMember.cpp
+          ./UmlClassMember.cpp \
+          ../../src/misc/mystr.cpp \
+    bbuttongroup.cpp \
+    hhbox.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+DEFINES += TRUE=true FALSE=false
 
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
-Release{
-
-
-    MOC_DIR = bin/douml/xmi2/MOC_release
-    OBJECTS_DIR = bin/douml/xmi2/Obj_release
-}
-
-Debug{
-    MOC_DIR = bin/douml/xmi2/MOC_Debug
-    OBJECTS_DIR = bin/douml/xmi2/Obj_Debug
-
-}
-    UI_DIR = src/ui
-    DESTDIR = ../../bin
-
+QT += testlib
 QMAKE_CXXFLAGS += -std=gnu++11
+UI_DIR = src/ui
+DESTDIR = ../../bin
+
+Release {
+    MOC_DIR = $${DESTDIR}/moc_release/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_release/$${TARGET}
+}
+
+Debug {
+    MOC_DIR = $${DESTDIR}/moc_debug/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_debug/$${TARGET}
+}

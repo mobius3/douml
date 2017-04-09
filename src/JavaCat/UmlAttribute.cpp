@@ -30,7 +30,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 using namespace std;
 #endif
@@ -94,7 +94,7 @@ bool UmlAttribute::new_one(Class * container, const WrapperStr & name,
                            const WrapperStr & value, WrapperStr comment,
                            WrapperStr description, WrapperStr annotation
 #ifdef ROUNDTRIP
-                           , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                           , bool roundtrip, QList<UmlItem *> & expected_order
 #endif
                           )
 {
@@ -302,11 +302,12 @@ bool UmlAttribute::new_one(Class * container, const WrapperStr & name,
 
             if ((typespec.type == 0) && (cl->stereotype() != "enum")) {
                 WrapperStr t = typespec.explicit_type;
-                int index2;
+                int index2 = 0;
 
                 if (!t.isEmpty() &&
                         (t.at(t.length() - 1) == ">") &&
-                    ((index2 = t.find('<')) > 0)) {
+                    ((index2 = t.find('<')) > 0))
+                {
                     at->set_Stereotype(t.left(index2));
                     typespec.explicit_type =
                         // may be a,b ...
@@ -340,7 +341,7 @@ bool UmlAttribute::new_one(Class * container, const WrapperStr & name,
     bool UmlAttribute::manage_enum_item(WrapperStr name, UmlClass * cl
 #ifdef ROUNDTRIP
                                         , bool roundtrip,
-                                        Q3PtrList<UmlItem> & expected_order
+                                        QList<UmlItem *> & expected_order
 #endif
                                        )
     {

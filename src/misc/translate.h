@@ -28,11 +28,11 @@
 #ifndef TRANSLATION_H
 #define TRANSLATION_H
 
-extern QString TR(QString s);
+/*extern QString TR(QString s);
 extern QString TR(QString s, QString a1); // s contains %1
 extern QString TR(QString s, QString a1, QString a2); // s contains %1 and %2
 extern QString TR(QString s, QString a1, QString a2, QString a3); // s contains %1 %2 and %3
-
+*/
 extern QString current_lang();
 extern void set_lang(QString);
 

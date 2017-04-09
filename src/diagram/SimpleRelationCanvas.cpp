@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 #include <math.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 
 #include "SimpleRelationCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -61,12 +61,12 @@ SimpleRelationCanvas::SimpleRelationCanvas(UmlCanvas * canvas,
     : ArrowCanvas(canvas, b, e, t, id, TRUE, d_start, d_end),
       br_begin(bb), data(d), stereotypeproperties(0)
 {
-    if ((e->type() != UmlArrowPoint) && (bb == 0)) {
+    if ((e->typeUmlCode() != UmlArrowPoint) && (bb == 0)) {
         // end of line construction
         update_begin(e);
     }
     else if (d != 0) {
-        if (e->type() != UmlArrowPoint)
+        if (e->typeUmlCode() != UmlArrowPoint)
             check_stereotypeproperties();
 
         connect(d, SIGNAL(changed()), this, SLOT(modified()));
@@ -119,7 +119,7 @@ void SimpleRelationCanvas::remove(bool from_model)
         if (the_canvas()->must_draw_all_relations()) {
             const SimpleRelationCanvas * a = this;
 
-            while (a->begin->type() == UmlArrowPoint) {
+            while (a->begin->typeUmlCode() == UmlArrowPoint) {
                 a = (SimpleRelationCanvas *)((ArrowPointCanvas *) a->begin)->get_other(a);
 
                 if (a == 0)
@@ -129,7 +129,7 @@ void SimpleRelationCanvas::remove(bool from_model)
             if (a && !a->begin->isSelected() && !a->begin->get_bn()->deletedp()) {
                 a = this;
 
-                while (a->end->type() == UmlArrowPoint) {
+                while (a->end->typeUmlCode() == UmlArrowPoint) {
                     a = (SimpleRelationCanvas *)((ArrowPointCanvas *) a->end)->get_other(a);
 
                     if (a == 0)
@@ -157,7 +157,7 @@ BrowserNode * SimpleRelationCanvas::update_begin(DiagramItem * cnend)
     // static to be updated in all the cases
     static SimpleRelationData * d = 0;
 
-    if (begin->type() == UmlArrowPoint) {
+    if (begin->typeUmlCode() == UmlArrowPoint) {
         SimpleRelationCanvas * other =
             ((SimpleRelationCanvas *)((ArrowPointCanvas *) begin)->get_other(this));
 
@@ -166,7 +166,7 @@ BrowserNode * SimpleRelationCanvas::update_begin(DiagramItem * cnend)
     else {
         // the relation start here
         br_begin = begin->get_bn();
-        d = (SimpleRelationData *) begin->add_relation(type(), cnend);
+        d = (SimpleRelationData *) begin->add_relation(typeUmlCode(), cnend);
     }
 
     connect(d, SIGNAL(changed()), this, SLOT(modified()));
@@ -196,44 +196,47 @@ void SimpleRelationCanvas::menu(const QPoint &)
             pstereotype = (SimpleRelationCanvas *) apstereotype;
         }
 
-        Q3PopupMenu m(0);
-        Q3PopupMenu geo(0);
-        Q3PopupMenu toolm(0);
+        QMenu m(0);
+        QMenu geo(0);
+        QMenu toolm(0);
 
         MenuFactory::createTitle(m, data->definition(FALSE, TRUE));
-        m.insertSeparator();
-        m.insertItem("Edit", 0);
-        m.insertSeparator();
+        m.addSeparator();
+        MenuFactory::addItem(m, "Edit", 0);
+        m.addSeparator();
 
-        m.insertItem("Select in browser", 2);
+        MenuFactory::addItem(m, "Select in browser", 2);
 
         if (pstereotype) {
-            m.insertSeparator();
-            m.insertItem("Select stereotype", 3);
-            m.insertItem("Stereotype default position", 4);
+            m.addSeparator();
+            MenuFactory::addItem(m, "Select stereotype", 3);
+            MenuFactory::addItem(m, "Stereotype default position", 4);
 
             if (stereotype == 0)
-                m.insertItem("Attach stereotype to this segment", 6);
+                MenuFactory::addItem(m, "Attach stereotype to this segment", 6);
         }
 
         if (get_start() != get_end()) {
-            m.insertSeparator();
+            m.addSeparator();
             init_geometry_menu(geo, 10);
-            m.insertItem("Geometry (Ctrl+l)", &geo);
+            MenuFactory::insertItem(m, "Geometry (Ctrl+l)", &geo);
         }
 
-        m.insertSeparator();
-        m.insertItem("Remove from diagram", 7);
+        m.addSeparator();
+        MenuFactory::addItem(m, "Remove from diagram", 7);
 
         if (data->get_start()->is_writable())
-            m.insertItem("Delete from model", 8);
+            MenuFactory::addItem(m, "Delete from model", 8);
 
-        m.insertSeparator();
+        m.addSeparator();
 
         if (Tool::menu_insert(&toolm, itstype, 20))
-            m.insertItem("Tool", &toolm);
+            MenuFactory::insertItem(m, "Tool", &toolm);
 
-        int rank = m.exec(QCursor::pos());
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+        int rank = retAction->data().toInt();
 
         switch (rank) {
         case 0:
@@ -288,6 +291,7 @@ void SimpleRelationCanvas::menu(const QPoint &)
             else
                 return;
         }
+        }
 
         package_modified();
     }
@@ -306,7 +310,7 @@ ArrowPointCanvas * SimpleRelationCanvas::brk(const QPoint & p)
     ArrowPointCanvas * ap =
         new ArrowPointCanvas(the_canvas(), p.x(), p.y());
 
-    ap->setZ(z() + 1);
+    ap->setZValue(zValue() + 1);
 
     SimpleRelationCanvas * other =
         // do not give data to not call update()
@@ -350,12 +354,12 @@ ArrowCanvas * SimpleRelationCanvas::join(ArrowCanvas * other, ArrowPointCanvas *
 
 void SimpleRelationCanvas::modified()
 {
-    if (visible()) {
+    if (isVisible()) {
         hide();
         update(TRUE);
         show();
 
-        if (begin->type() != UmlArrowPoint)
+        if (begin->typeUmlCode() != UmlArrowPoint)
             check_stereotypeproperties();
 
         canvas()->update();
@@ -367,7 +371,7 @@ void SimpleRelationCanvas::setSelected(bool yes)
 {
     UmlWindow::set_commented((yes) ? data->get_start() : 0);
 
-    Q3CanvasPolygon::setSelected(yes);
+    QGraphicsPolygonItem::setSelected(yes);
 }
 
 void SimpleRelationCanvas::update(bool updatepos)
@@ -399,12 +403,12 @@ void SimpleRelationCanvas::update(bool updatepos)
             }
         }
         else {
-            s = toUnicode(s);
+            s = toUnicode(s.toLatin1().constData());
 
             if (s[0] != '{')
                 s = QString("<<") + s + ">>";
 
-            if ((pstereotype == 0) && (begin->type() != UmlArrowPoint)) {
+            if ((pstereotype == 0) && (begin->typeUmlCode() != UmlArrowPoint)) {
                 // adds relation's stereotype
                 stereotype = new LabelCanvas(s, the_canvas(), 0, 0);
                 stereotype_default_position();
@@ -440,12 +444,12 @@ void SimpleRelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
     BrowserNode * to = def->get_end_node();
     DiagramItem * ccfrom = 0;
     DiagramItem * ccto = 0;
-    Q3CanvasItemList all = canvas->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = canvas->items();
+    QList<QGraphicsItem*>::Iterator cit;
 
     // the two classes are drawn ?
     for (cit = all.begin(); cit != all.end(); ++cit) {
-        if ((*cit)->visible()) {
+        if ((*cit)->isVisible()) {
             DiagramItem * adi = QCanvasItemToDiagramItem(*cit);
 
             if (adi != 0) {
@@ -482,7 +486,7 @@ void SimpleRelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
 
 // the relation is not yet drawn,
 void SimpleRelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas,
-                                Q3PtrDict<DiagramItem> & drawn)
+                                QHash<BasicData*,DiagramItem*> & drawn)
 {
     SimpleRelationData * def = (SimpleRelationData *) bn->get_data();
     BrowserNode * from = def->get_start_node();
@@ -498,7 +502,8 @@ void SimpleRelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas,
         rel->show();
         rel->package_modified();
 
-        drawn.replace(def, rel);
+        drawn.remove(def);
+        drawn.insert(def, rel);
 
         // package set modified by caller
     }
@@ -524,7 +529,7 @@ void SimpleRelationCanvas::moveBy(double dx, double dy)
 
 void SimpleRelationCanvas::select_associated()
 {
-    if (!selected()) {
+    if (!isSelected()) {
         if ((stereotypeproperties != 0) && !stereotypeproperties->selected())
             the_canvas()->select(stereotypeproperties);
 
@@ -535,7 +540,7 @@ void SimpleRelationCanvas::select_associated()
 void SimpleRelationCanvas::check_stereotypeproperties()
 {
     // the note is memorized by the first segment
-    if (begin->type() == UmlArrowPoint)
+    if (begin->typeUmlCode() == UmlArrowPoint)
         ((SimpleRelationCanvas *)((ArrowPointCanvas *) begin)->get_other(this))
         ->check_stereotypeproperties();
     else {
@@ -563,7 +568,7 @@ void SimpleRelationCanvas::save(QTextStream & st, bool ref, QString & warning) c
 {
     if (ref)
         st << "simplerelationcanvas_ref " << get_ident();
-    else if (begin->type() != UmlArrowPoint) {
+    else if (begin->typeUmlCode() != UmlArrowPoint) {
         // relation canvas start
         nl_indent(st);
         st << "simplerelationcanvas " << get_ident() << " ";
@@ -683,7 +688,7 @@ SimpleRelationCanvas * SimpleRelationCanvas::read(char *& st, UmlCanvas * canvas
                         s = QString("<<") + s + ">>";
 
                     stereotype = new LabelCanvas(s, canvas, x, y);
-                    stereotype->setZ(read_double(st));
+                    stereotype->setZValue(read_double(st));
                 }
 
                 k = read_keyword(st);
@@ -727,7 +732,7 @@ SimpleRelationCanvas * SimpleRelationCanvas::read(char *& st, UmlCanvas * canvas
 
             result->show();
 
-            if (di->type() != UmlArrowPoint)
+            if (di->typeUmlCode() != UmlArrowPoint)
                 break;
 
             bi = di;
@@ -774,7 +779,7 @@ SimpleRelationCanvas * SimpleRelationCanvas::read(char *& st, UmlCanvas * canvas
 
 void SimpleRelationCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     unconnect();
 }
 

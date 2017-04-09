@@ -5,15 +5,14 @@
 #include "UmlItem.h"
 #include "aRelationKind.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlNcRelation;
 
 // Manage the relations between non class objects, for instances
 // dependency between packages and use case generalization
-class UmlBaseNcRelation : public UmlItem
-{
-public:
+class UmlBaseNcRelation : public UmlItem {
+  public:
     // returns a new non class relation of the given 'kind' from 'start' to 'end'
     //
     // In case it cannot be created ('parent' cannot contain it etc ...)
@@ -31,23 +30,22 @@ public:
     UmlItem * target();
 
 
-private:
+  private:
     aRelationKind _rel_kind;
 
     UmlItem * _target;
 
 
-protected:
+  protected:
     virtual void read_uml_();
 
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseNcRelation(void * id, const Q3CString & n);
+    UmlBaseNcRelation(void * id, const QByteArray & n);
 
 };
 
-inline UmlBaseNcRelation::UmlBaseNcRelation(void * id, const Q3CString & n) : UmlItem(id, n)
-{
-    _target = 0;
+inline UmlBaseNcRelation::UmlBaseNcRelation(void * id, const QByteArray & n) : UmlItem(id, n) {
+  _target = 0;
 }
 
 #endif

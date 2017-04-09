@@ -169,19 +169,17 @@ void UmlPackage::xmi(int argc, char ** argv)
                     utf8 = FALSE;
 
                 FileOut out(&fp, _linefeed, utf8);
-                Q3PtrList<UmlPackage> profiles;
+                QList<UmlPackage*> profiles;
                 UmlPackage * prof;
 
                 search_profiles(profiles);
 
-                out << "\
-<?xml version=\"1.0\" encoding=\"" << encoding << "\"?>\n\
-<xmi:XMI xmi:version=\"2." << ((_uml_20) ? "0" : "1")
+                out << "<?xml version=\"1.0\" encoding=\"" << encoding.operator QString() << "\"?>\n<xmi:XMI xmi:version=\"2." << ((_uml_20) ? "0" : "1")
                     << "\" xmlns:uml=\"http://schema.omg.org/spec/UML/2." << ((_uml_20) ? "0" : "1")
                     << "\" xmlns:xmi=\"http://schema.omg.org/spec/XMI/2." << ((_uml_20) ? "0" : "1")
                     << "\"";
 
-                for (prof = profiles.first(); prof != 0; prof = profiles.next()) {
+                foreach (prof,profiles) {
                     out << " xmlns:";
                     out.quote((const char *)prof->name()); //[jasa] ambiguous call
                     out << "=\"http:///schemas/";
@@ -205,11 +203,11 @@ void UmlPackage::xmi(int argc, char ** argv)
                     out.indent(+1);
                 else {
                     out << "\t<uml:Model xmi:type=\"uml:Model\" xmi:id=\"themodel\" name=\""
-                        << name() << "\">\n";
+                        << name().operator QString() << "\">\n";
                     out.indent(+2);
                 }
 
-                for (prof = profiles.first(); prof != 0; prof = profiles.next()) {
+                foreach (prof,profiles) {
                     out.indent();
                     out << "<profileApplication xmi:type=\"uml:ProfileApplication\"";
                     out.id_prefix(prof, "PRFA_");
@@ -279,15 +277,15 @@ void UmlPackage::write(FileOut & out)
         out << "<elementImport";
         out.id_prefix(this, "MCR_");
 
-        int index = mcr.findRev('#');
+        int index = mcr.operator QString().indexOf('#');
 
         if (index != -1)
-            out << " alias=\"" << mcr.mid(index + 1) << "\">\n";
+            out << " alias=\"" << mcr.mid(index + 1).operator QString() << "\">\n";
         else
             out << ">\n";
 
         out.indent();
-        out << "\t<importedElement xmi:type=\"uml:Class\" href=\"" << mcr << "#1\"/>\n";
+        out << "\t<importedElement xmi:type=\"uml:Class\" href=\"" << mcr.operator QString() << "#1\"/>\n";
         out.indent();
         out << "</elementImport>\n";
     }
@@ -298,12 +296,12 @@ void UmlPackage::write(FileOut & out)
         out.id_prefix(this, "MMR_");
         out << ">\n";
         out.indent();
-        out << "\t<importedPackage xmi:type=\"uml:Model\" href=\"" << mmr << "#1\"/>\n";
+        out << "\t<importedPackage xmi:type=\"uml:Model\" href=\"" << mmr.operator QString() << "#1\"/>\n";
         out.indent();
         out << "</packageImport>\n";
     }
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
 
     if (is_profile) {
@@ -337,22 +335,22 @@ void UmlPackage::write(FileOut & out)
     }
 
     while (! _relations.isEmpty())
-        _relations.take(0)->write(out, FALSE);
+        _relations.takeAt(0)->write(out, FALSE);
 
     while (! _assocs.isEmpty())
-        _assocs.take(0)->write_it(out);
+        _assocs.takeAt(0)->write_it(out);
 
     out.indent(-1);
     out.indent();
     out << "</" << k << ">\n";
 }
 
-void UmlPackage::search_profiles(Q3PtrList<UmlPackage> & l)
+void UmlPackage::search_profiles(QList<UmlPackage*> & l)
 {
     if (stereotype() == "profile")
         l.append(this);
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
 
     for (unsigned i = 0; i != n; i += 1)
@@ -362,7 +360,7 @@ void UmlPackage::search_profiles(Q3PtrList<UmlPackage> & l)
 
 void UmlPackage::search_class_assoc()
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
 
     for (unsigned i = 0; i != n; i += 1)

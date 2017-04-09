@@ -110,9 +110,9 @@ void UmlState::write(FileOut & out)
     }
 
     while (! _incoming_trans.isEmpty())
-        _incoming_trans.take(0)->write_in(out);
+        _incoming_trans.takeAt(0)->write_in(out);
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
     unsigned i;
     bool need_region = FALSE;
@@ -162,7 +162,7 @@ void UmlState::write(FileOut & out)
 
     // to bypass Eclipse's bug
     while (! _trans.isEmpty())
-        _trans.take(0)->write_it(out);
+        _trans.takeAt(0)->write_it(out);
 
 #endif
 
@@ -175,7 +175,7 @@ void UmlState::write(FileOut & out)
 
 void UmlState::memo_incoming_trans()
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
     unsigned i;
 
@@ -199,10 +199,10 @@ void UmlState::add_incoming_trans(UmlTransition * tr)
 
 UmlState * UmlState::find(WrapperStr s)
 {
-    QMap<WrapperStr, UmlState *>::Iterator iter = _all.find(s);
+    QMap<QString, UmlState *>::Iterator iter = _all.find(s);
 
     return (iter == _all.end()) ? 0 : *iter;
 }
 
-QMap<WrapperStr, UmlState *> UmlState::_all;
+QMap<QString, UmlState *> UmlState::_all;
 

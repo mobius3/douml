@@ -3,20 +3,20 @@
 #include "UmlOperation.h"
 #include "UmlActivity.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlActivity::sKind()
+QByteArray UmlActivity::sKind()
 {
     return "activity";
 }
 
-void UmlActivity::html(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlActivity::html(QByteArray pfix, unsigned int rank, unsigned int level)
 {
     define();
 
     chapter("Activity", pfix, rank, "activity", level);
 
-    Q3CString s = description();
+    QByteArray s = description();
 
     if (!s.isEmpty()) {
         fw.write("<p>");
@@ -44,7 +44,7 @@ void UmlActivity::html(Q3CString pfix, unsigned int rank, unsigned int level)
     else if (isSingleExecution())
         fw.write("<p>Single execution</p>");
 
-    Q3CString scpp, sjava;
+    QByteArray scpp, sjava;
 
     s = preCondition();
     scpp = cppPreCondition();

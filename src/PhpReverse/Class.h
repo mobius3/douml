@@ -35,7 +35,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include "misc/mystr.h"
-#include <Q3PtrList>
+
 
 class Package;
 class UmlArtifact;
@@ -60,7 +60,7 @@ protected:
     bool description_updatedp;
     WrapperStr description;
 
-    static Q3PtrList<Class> Historic;
+    static QList<Class *> Historic;
 #endif
 
     bool manage_extends(ClassContainer * container);

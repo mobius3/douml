@@ -33,10 +33,8 @@
 
 
 #include <qobject.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QTextStream>
-
 #include "ActivityContainerCanvas.h"
 #include "Settings.h"
 
@@ -63,7 +61,7 @@ protected:
     QPoint pre_offset;
     QPoint post_offset;
     int post_width;
-    Q3ValueList<ParameterCanvas *> params;
+    QList<ParameterCanvas *> params;
     InfoCanvas * constraint;
 
 protected:
@@ -72,11 +70,12 @@ protected:
     void check_params();
     void check_constraint();
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     ActivityCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ActivityCanvas();
 
-    Q3ValueList<ParameterCanvas *> get_params() {
+    QList<ParameterCanvas *> get_params() {
         return params;
     }
     void force_sub_inside(bool rz);
@@ -89,7 +88,7 @@ public:
     virtual void draw(QPainter & p);
     virtual void change_scale();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
@@ -107,8 +106,8 @@ public:
     virtual void moveBy(double dx, double dy);
 
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem *> &);
+    virtual void clone_drawing_settings(const DiagramItem *src);
 
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();

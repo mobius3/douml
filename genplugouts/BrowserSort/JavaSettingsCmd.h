@@ -8,7 +8,7 @@ enum JavaSettingsCmd {
     getJavaUseDefaultsCmd,
     setJavaUseDefaultsCmd,
     setJavaTypeCmd,
-    setJavaRelationStereotypeCmd,
+    setJavaRelationAttributeStereotypeCmd,
     setJavaClassStereotypeCmd,
     setJavaImportCmd,
     setJavaRootdirCmd,

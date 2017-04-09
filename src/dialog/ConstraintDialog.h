@@ -29,7 +29,7 @@
 #define CONSTRAINTDIALOG_H
 
 #include <qdialog.h>
-#include <q3table.h>
+#include <QTableWidget>
 
 #include "StringTable.h"
 #include "UmlEnum.h"
@@ -61,7 +61,7 @@ protected slots:
     virtual void polish();
 };
 
-class ConstraintTable : public Q3Table
+class ConstraintTable : public QTableWidget
 {
     Q_OBJECT
 

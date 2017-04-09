@@ -5,9 +5,9 @@
 #include "UmlClassMember.h"
 #include "anItemKind.h"
 #include "UmlTypeSpec.h"
-#include <q3valuelist.h>
-#include <q3cstring.h>
-#include <q3dict.h>
+#include <QList>
+#include <QByteArray>
+
 
 #include "UmlFormalParameter.h"
 #include "UmlActualParameter.h"
@@ -20,10 +20,9 @@ class UmlArtifact;
 class UmlPackage;
 
 //  Manage the classes
-class UmlBaseClass : public UmlClassMember
-{
-public:
-    // returns a new class named 'name' created under 'parent'
+class UmlBaseClass : public UmlClassMember {
+  public:
+    // returns a new class named 'name' created under 'parent' 
     //
     // In case it cannot be created (the name is already used or
     // invalid, 'parent' cannot contain it etc ...) return 0 in C++
@@ -47,12 +46,12 @@ public:
     const UmlTypeSpec & baseType();
 
     // to set the type on which the class (in fact a typedef) is based
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java, does not check that the class is (already) a typedef
     bool set_BaseType(const UmlTypeSpec & t);
 
     // returns (a copy of) the formals list
-    Q3ValueList<UmlFormalParameter> formals();
+    QList<UmlFormalParameter> formals();
 
     // remove the formal of the given rank (0...), returns 0 on error
     //
@@ -64,18 +63,18 @@ public:
     //
     //On error return FALSE in C++, produce a RuntimeException in Java,
     //does not check that the class is (already) a typedef
-
+    
     bool addFormal(unsigned int rank, const UmlFormalParameter & formal);
 
     // replace the formal at the given rank (0...)
     //
     // On error return FALSE in C++, produce a RuntimeException in Java,
     // does not check that the class is (already) a typedef
-
+    
     bool replaceFormal(unsigned int rank, const UmlFormalParameter & formal);
 
     // returns (a copy of) the actuals list
-    Q3ValueList<UmlActualParameter> actuals();
+    QList<UmlActualParameter> actuals();
 
     // replace the actual value at the given rank (0...)
     //
@@ -104,7 +103,7 @@ public:
     bool isCppExternal();
 
     // set if the class is external
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isCppExternal(bool y);
 #endif
@@ -116,7 +115,7 @@ public:
     bool isJavaExternal();
 
     // set if the class is external
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isJavaExternal(bool y);
 
@@ -124,15 +123,15 @@ public:
     bool isJavaPublic();
 
     // set if the class is public
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isJavaPublic(bool y);
 
-    // returns TRUE is the class is final
+    // returns TRUE is the class is final   
     bool isJavaFinal();
 
     // set if the class is final
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isJavaFinal(bool y);
 #endif
@@ -177,23 +176,23 @@ public:
     //returns the class having the name given in argument in case it
     //exist, else 0/null. In case the package is specified, the class must
     //be defined in a sub-level of the package
-
-    static UmlClass * get(const Q3CString & n, const UmlPackage * p);
+    
+    static UmlClass * get(const QByteArray & n, const UmlPackage * p);
 
     // to unload the object to free memory, it will be reloaded automatically
-    // if needed. Recursively done for the sub items if 'rec' is TRUE.
+    // if needed. Recursively done for the sub items if 'rec' is TRUE. 
     //
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
     // you will have to call Children() to re-access to them
     virtual void unload(bool rec = FALSE, bool del = FALSE);
 
-    friend class UmlBaseRelation;
-    friend class UmlBaseArtifact;
+  friend class UmlBaseRelation;
+  friend class UmlBaseArtifact;
 
-private:
+  private:
     //key includes package/class-container
-    static Q3Dict<UmlClass> classes;
+    static QHash<QByteArray,UmlClass*> classes;
 
     bool _abstract;
 
@@ -208,6 +207,17 @@ private:
 
     bool _java_final : 1;
 #endif
+#ifdef WITHPHP
+    bool _php_external : 1;
+
+    bool _php_final : 1;
+#endif
+
+#ifdef WITHPYTHON
+    bool _python_external : 1;
+
+    bool _python_2_2 : 1;
+#endif
 
 #ifdef WITHIDL
     bool _idl_external : 1;
@@ -216,7 +226,7 @@ private:
 
     bool _idl_custom : 1;
 #endif
-
+    
 
     UmlTypeSpec _base_type;
 
@@ -228,9 +238,9 @@ private:
 #endif
 
 
-protected:
+  protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseClass(void * id, const Q3CString & n);
+    UmlBaseClass(void * id, const QByteArray & n);
 
     virtual void read_uml_();
 
@@ -240,6 +250,18 @@ protected:
 
 #ifdef WITHJAVA
     virtual void read_java_();
+#endif
+
+#ifdef WITHPHP
+    //internal, do NOT use it
+
+    virtual void read_php_();
+#endif
+
+#ifdef WITHPYTHON
+    //internal, do NOT use it
+
+    virtual void read_python_();
 #endif
 
 #ifdef WITHIDL

@@ -114,7 +114,7 @@ void Association::import(FileIn & in, Token & token)
 
 Association & Association::get(WrapperStr id, WrapperStr s)
 {
-    QMap<WrapperStr, Association>::Iterator it = All.find(id);
+    QMap<QString, Association>::Iterator it = All.find(id);
 
     if (it == All.end()) {
         Association a;
@@ -131,7 +131,7 @@ Association & Association::get(WrapperStr id, WrapperStr s)
 
 void Association::solveThem()
 {
-    QMap<WrapperStr, Association>::Iterator it;
+    QMap<QString, Association>::Iterator it;
 
     for (it = All.begin(); it != All.end(); ++it)
         (*it).solve(it.key());
@@ -139,7 +139,7 @@ void Association::solveThem()
     All.clear();
 }
 
-QMap<WrapperStr, Association> Association::All;
+QMap<QString, Association> Association::All;
 
 void Association::solve(WrapperStr id)
 {
@@ -160,7 +160,7 @@ void Association::solve(WrapperStr id)
 
         Role & a = roles[rank];
         Role & b = roles[1 - rank];
-        QMap<WrapperStr, UmlItem *>::Iterator it;
+        QMap<QString, UmlItem *>::Iterator it;
 
         if ((it = UmlItem::All.find(a.idref)) == UmlItem::All.end()) {
             if (!FileIn::isBypassedId(a.idref))

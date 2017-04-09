@@ -30,24 +30,23 @@
 
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <Q3TextEdit>
+//#include <Q3TextEdit>
 #include <qmessagebox.h>
 //Added by qt3to4:
-#include <Q3PopupMenu>
+////#include <QMenu>
 //Added by qt3to4:
-#include <Q3PtrList>
+//
 
 #include "AType.h"
-
+#include <QPlainTextEdit>
+#include "tabdialog.h"
 class QWidget;
-class Q3PopupMenu;
-class Q3TabDialog;
-class BrowserNodeList;
-class UmlCanvas;
-class BodyDialog;
-class BrowserNode;
 class KeyValuesTable;
 class HaveKeyValueData;
+class BrowserNode;
+class BrowserNodeList;
+class BodyDialog;
+class UmlCanvas;
 
 // a push button without magin
 class SmallPushButton : public QPushButton
@@ -59,7 +58,7 @@ public:
 };
 
 // redefine text() to remove non latin1 characters
-class MultiLineEdit : public Q3TextEdit
+class MultiLineEdit : public QPlainTextEdit
 {
 public:
     MultiLineEdit(QWidget * w, const char * name = 0);
@@ -67,7 +66,7 @@ public:
     virtual void setText(const QString &);
     virtual QString text() const;
 
-    QString stripWhiteSpaceText() const;
+    QString trimmedText() const;
 
     void setTheText(const QString & s);
 
@@ -88,8 +87,7 @@ public:
 
     QString theText() const;
 };
-
-extern void init_font_menu(Q3PopupMenu & fontsubm, UmlCanvas * the_canvas,
+extern void init_font_menu(QMenu & fontsubm, UmlCanvas * the_canvas,
                            int index);
 extern void same_width(QWidget *, QWidget *);
 extern void same_width(QWidget *, QWidget *, QWidget *);
@@ -98,11 +96,10 @@ extern void same_width(QWidget *, QWidget *, QWidget *, QWidget *, QWidget *);
 
 enum EditType { CppEdit, JavaEdit, PhpEdit, PythonEdit, TxtEdit };
 
-typedef void (* post_edit)(Q3TabDialog *, QString);
-
+typedef void (* post_edit)(TabDialog *, QString);
 extern void edit(const QString &, QString name, void * id, EditType k,
-                 Q3TabDialog * tbl, post_edit pf, Q3PtrList<BodyDialog> & edits);
-extern bool check_edits(Q3PtrList<BodyDialog> & edits);
+                 TabDialog * tbl, post_edit pf, QList<BodyDialog *> & edits);
+extern bool check_edits(QList<BodyDialog *> & edits);
 
 extern AType the_type(const QString & t, const QStringList & types,
                       BrowserNodeList & nodes);
@@ -131,7 +128,6 @@ extern QString get_python_name(const AType,
                                ShowContextMode mode = noContext);
 extern QString get_idl_name(const AType,
                             ShowContextMode mode = noContext);
-
 extern void manage_alias(const BrowserNode * node, const char *& p,
                          QString & s, KeyValuesTable *);
 extern void manage_alias(const BrowserNode * node, const char *& p,
@@ -146,15 +142,12 @@ extern int msg_critical(QString caption, QString text,
 extern int msg_information(QString caption, QString text,
                            int button0 = QMessageBox::Ok,
                            int button1 = 0, int button2 = 0);
-
 extern QString editor();
 extern void set_editor(QString);
 
 extern void set_completion(bool y);
 extern bool completion();
-
 extern void open_dialog(QWidget *);
 extern void close_dialog(QWidget *);
 extern QWidgetList dialogs();
-
 #endif

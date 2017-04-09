@@ -31,13 +31,11 @@
 
 #include <qcursor.h>
 #include <qlayout.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3ValueList>
-#include <Q3HBoxLayout>
-
+#include <QVBoxLayout>
+#include <QList>
+#include <QHBoxLayout>
 #include "ClassListDialog.h"
 #include "BrowserClass.h"
 #include "BasicData.h"
@@ -47,28 +45,29 @@
 QSize ClassListDialog::previous_size;
 
 ClassListDialog::ClassListDialog(const char * m,
-                                 const Q3ValueList<BrowserClass *> & l)
-    : QDialog(0, m, TRUE)
+                                 const QList<BrowserClass *> & l)
+    : QDialog(0)
 {
-    setCaption(m);
+    setWindowTitle(m);
     move(QCursor::pos());
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
 
     vbox->setMargin(5);
 
-    cb = new Q3ComboBox(FALSE, this);
+    cb = new QComboBox(this);
     vbox->addWidget(cb);
 
-    Q3ValueList<BrowserClass *>::ConstIterator end = l.end();
-    Q3ValueList<BrowserClass *>::ConstIterator it;
+    QList<BrowserClass *>::ConstIterator end = l.end();
+    QList<BrowserClass *>::ConstIterator it;
 
     for (it = l.begin(); it != end; ++it)
         if (!(*it)->deletedp())
-            cb->insertItem((*it)->full_name(TRUE));
+            cb->addItem((*it)->full_name(TRUE));
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * ok = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -94,5 +93,5 @@ ClassListDialog::~ClassListDialog()
 
 int ClassListDialog::choosen()
 {
-    return cb->currentItem();
+    return cb->currentIndex();
 }

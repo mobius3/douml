@@ -1,7 +1,7 @@
 TEMPLATE	= app
 TARGET		= uml_proj
 CONFIG		+= debug warn_on qt
-DEFINES		= WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON BooL=bool
+DEFINES		= WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON BooL=bool FALSE=false  TRUE=true
 HEADERS		= ./UmlBaseExpansionNode.h \
 		  ./UmlChoicePseudoState.h \
 		  ./UmlActivityNode.h \
@@ -198,7 +198,8 @@ HEADERS		= ./UmlBaseExpansionNode.h \
 		  ./MiscGlobalCmd.h \
 		  ./UmlBaseJunctionPseudoState.h \
 		  ./UmlBaseClassDiagram.h \
-		  ./StateBehavior.h
+		  ./StateBehavior.h \
+    hhbox.h
 SOURCES		= ./UmlBaseExpansionNode.cpp \
 		  ./UmlChoicePseudoState.cpp \
 		  ./UmlActivityNode.cpp \
@@ -396,13 +397,14 @@ SOURCES		= ./UmlBaseExpansionNode.cpp \
 		  ./MiscGlobalCmd.cpp \
 		  ./UmlBaseJunctionPseudoState.cpp \
 		  ./UmlBaseClassDiagram.cpp \
-		  ./StateBehavior.cpp
+		  ./StateBehavior.cpp \
+    hhbox.cpp
 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network  widgets
 
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
+QT += testlib
 Release{
 
 

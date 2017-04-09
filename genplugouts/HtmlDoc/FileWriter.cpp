@@ -1,12 +1,12 @@
 
 #include "FileWriter.h"
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 #include <qfile.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-bool FileWriter::open(Q3CString s)
+bool FileWriter::open(QByteArray s)
 {
     f = new QFile(s);
 
@@ -15,7 +15,7 @@ bool FileWriter::open(Q3CString s)
         return FALSE;
     }
 
-    ts = new Q3TextStream(f);
+    ts = new QTextStream(f);
     return TRUE;
 }
 
@@ -29,28 +29,32 @@ void FileWriter::close()
     ts = 0;
 }
 
-void FileWriter::write(Q3CString s)
+void FileWriter::write(QByteArray s)
 {
-    ts->writeRawBytes(s, s.length());
+    //ts->writeRawBytes(s, s.length());
+    *ts<<s;
 }
 
 void FileWriter::write(const char * s)
 {
-    ts->writeRawBytes(s, strlen(s));
+    //ts->writeRawBytes(s, strlen(s));
+    *ts<<s;
 }
 
 void FileWriter::write(char c)
 {
-    ts->writeRawBytes(&c, 1);
+    //ts->writeRawBytes(&c, 1);
+    *ts<<c;
 }
 
 void FileWriter::write(unsigned n)
 {
-    Q3CString s;
+    QByteArray s;
 
     s.setNum(n);
 
-    ts->writeRawBytes(s, s.length());
+    //ts->writeRawBytes(s, s.length());
+    *ts<<s;
 
 }
 

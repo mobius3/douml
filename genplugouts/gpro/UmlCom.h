@@ -2,27 +2,27 @@
 #define _UMLCOM_H
 
 
-#include <q3socketdevice.h>
-//#include "CmdFamily.h"
-//#include "OnInstanceCmd.h"
+#include <QTcpSocket>
+#include "CmdFamily.h"
+#include "OnInstanceCmd.h"
 #include "anItemKind.h"
 #include "aRelationKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
-#include <q3ptrvector.h>
+#include <QVector>
 #include <qstring.h>
 
 class UmlItem;
 class UmlTypeSpec;
 class UmlClass;
 
-class Q3SocketDevice;
+class QTcpSocket;
 class UmlItem;
 class UmlTypeSpec;
 class UmlClass;
 // This class manages the communications
 //
-// This class may be defined as a 'singleton', but I prefer to use static
+// This class may be defined as a 'singleton', but I prefer to use static 
 // members allowing to just write 'UmlCom::member' rather than
 // 'UmlCom::instance()->member' or other long sentence like this.
 //
@@ -39,13 +39,13 @@ class UmlClass;
 // - bye()
 //
 // - close()
-//
+// 
 // you must NOT call the others
 class UmlCom
 {
-public:
+  public:
     // does the connexion
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     static bool connect(unsigned int port);
     //  returns the item on which the tool is applied
@@ -62,8 +62,8 @@ public:
     // disconnexion
     static void close();
 
-private:
-    static Q3SocketDevice * sock;
+  private:
+    static QTcpSocket * sock;
 
     static char * buffer_in;
 
@@ -80,7 +80,7 @@ private:
     static unsigned int buffer_out_size;
 
 
-protected:
+  protected:
     static void check_size_out(unsigned int len);
     static void read_if_needed();
     static void read_buffer(unsigned int len);
@@ -90,7 +90,7 @@ protected:
     static void write_id(const void * id);
     static void write_string(const char * p);
 
-public:
+  public:
     // do NOT call the followings yourself !!!!
     static void send_cmd(CmdFamily f, unsigned int cmd);
     static void send_cmd(CmdFamily f, unsigned int cmd, char arg);
@@ -114,7 +114,7 @@ public:
     static void send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, const UmlTypeSpec & arg2);
     static void send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, const char * arg2, const char * arg3, const UmlTypeSpec & arg4);
     static void send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, char arg2, const char * arg3, const char * arg4, const UmlTypeSpec & arg5);
-    static void send_cmd(const void * id, OnInstanceCmd cmd, const Q3PtrVector<UmlClass> & l);
+    static void send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlClass*> & l);
     static void * read_id();
     static const char * read_string();
     static bool read_bool();
@@ -122,8 +122,8 @@ public:
     static unsigned int read_unsigned();
     // reads the selected items when the tool is called
     // you MUST call it only one time after the connexion
-    static void read_item_list(Q3PtrVector<UmlItem> & v);
-    static void fatal_error(const Q3CString & msg);
+    static void read_item_list(QVector<UmlItem*> & v);
+    static void fatal_error(const QByteArray & msg);
     static void flush();
 };
 

@@ -1,11 +1,11 @@
 #ifndef _UMLBASECOMPONENT_H
 #define _UMLBASECOMPONENT_H
-
+#include <QVector>
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3ptrvector.h>
-#include <q3cstring.h>
+
+
 
 #include "UmlClass.h"	// to avoid destructor problem
 class UmlComponent;
@@ -36,18 +36,18 @@ public:
     bool set_AssociatedDiagram(UmlComponentDiagram * d);
 
     // returns (in Java a copy of) the optional realized classes
-    const Q3PtrVector<UmlClass> & realizedClasses();
+    const QVector<UmlClass*> & realizedClasses();
 
     // returns (in Java a copy of) the optional provided classes
-    const Q3PtrVector<UmlClass> & providedClasses();
+    const QVector<UmlClass*> & providedClasses();
 
     // returns (in Java a copy of) the optional required classes
-    const Q3PtrVector<UmlClass> & requiredClasses();
+    const QVector<UmlClass*> & requiredClasses();
 
     // set the realized, provided and required classes lists
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    bool set_AssociatedClasses(const Q3PtrVector<UmlClass> & realized, const Q3PtrVector<UmlClass> & provided, const Q3PtrVector<UmlClass> & required);
+    bool set_AssociatedClasses(const QVector<UmlClass*> & realized, const QVector<UmlClass*> & provided, const QVector<UmlClass*> & required);
 
     // to unload the object to free memory, it will be reloaded
     // automatically if needed. args unused
@@ -57,11 +57,11 @@ public:
 private:
     UmlComponentDiagram * _assoc_diagram;
 
-    Q3PtrVector<UmlClass> _realized;
+    QVector<UmlClass*> _realized;
 
-    Q3PtrVector<UmlClass> _provided;
+    QVector<UmlClass*> _provided;
 
-    Q3PtrVector<UmlClass> _required;
+    QVector<UmlClass*> _required;
 
 
 protected:
@@ -70,11 +70,11 @@ protected:
     virtual void read_uml_();
 
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseComponent(void * id, const Q3CString & n);
+    UmlBaseComponent(void * id, const QByteArray & n);
 
 };
 
-inline UmlBaseComponent::UmlBaseComponent(void * id, const Q3CString & n) : UmlItem(id, n)
+inline UmlBaseComponent::UmlBaseComponent(void * id, const QByteArray & n) : UmlItem(id, n)
 {
     _assoc_diagram = 0;
 }

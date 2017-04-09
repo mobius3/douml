@@ -38,7 +38,7 @@ UmlItem::~UmlItem()
 
 void UmlItem::manage_comment(const char *& p, const char *& pp)
 {
-    static QString the_comment;
+    static QByteArray the_comment;
 
     p += 10;
 
@@ -73,7 +73,7 @@ void UmlItem::manage_comment(const char *& p, const char *& pp)
 
 void UmlItem::manage_description(const char *& p, const char *& pp)
 {
-    static QString the_comment;
+    static QByteArray the_comment;
 
     p += 14;
 
@@ -81,7 +81,7 @@ void UmlItem::manage_description(const char *& p, const char *& pp)
         description().isEmpty())
         return;
 
-    the_comment = description().operator QString();
+    the_comment = (description().operator QString()).toLatin1();
 
     switch (*p) {
     case 0:
@@ -102,7 +102,7 @@ void UmlItem::manage_alias(const char *& p, QTextStream & ts)
     const char * pclosed;
 
     if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0)) {
-        Q3CString key(p + 2, pclosed - p - 1);
+        QByteArray key(p + 2, pclosed - p - 1);
         WrapperStr value;
         UmlItem * node = this;
 

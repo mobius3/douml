@@ -47,7 +47,7 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL &, BooL & out_model) const;
     virtual void delete_it();
     virtual void change_scale();
@@ -67,6 +67,8 @@ public:
     virtual bool isOverlappingDuration() const;
     virtual void save(QTextStream & st, bool ref, QString & warning) const;
     static SdLostFoundMsgSupportCanvas * read(char *& st, UmlCanvas * canvas, char * k);
+protected:
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 #endif

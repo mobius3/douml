@@ -7,12 +7,12 @@
 #include "UmlOperation.h"
 #include "UmlState.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-void UmlExitPointPseudoState::init(UmlClass *, Q3CString, Q3CString, UmlState *)
+void UmlExitPointPseudoState::init(UmlClass *, QByteArray, QByteArray, UmlState *)
 {
     // check transition number
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
 
     switch (ch.count()) {
     case 0:
@@ -36,7 +36,9 @@ void UmlExitPointPseudoState::generate(UmlClass * machine, UmlClass * anystate, 
 {
     // adds the operation _exit<n>() to share this pseudo state a priori shared
     if (_oper.isEmpty())
-        _oper.sprintf("_exit%d", ++_rank);
+    {
+        _oper.append(QString("_exit%1").arg(++_rank));
+    }
 
     UmlClass * cl = state->assocClass();
     UmlOperation * ex;
@@ -54,14 +56,14 @@ void UmlExitPointPseudoState::generate(UmlClass * machine, UmlClass * anystate, 
     ex->addParam(0, InputOutputDirection, "stm", machine);
     ex->setParams("${t0} & ${p0}");
 
-    Q3CString body;
+    QByteArray body;
 
     // the exit behavior is made entering in the exit pseudo state
     if (! state->cppExitBehavior().isEmpty())
         body = "  _doexit(stm);\n";
 
     // transition number <= 1 already checked by init()
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
 
     if (ch.count() != 0) {
         if (!((UmlTransition *) ch[0])->cppGuard().isEmpty()) {
@@ -75,11 +77,11 @@ void UmlExitPointPseudoState::generate(UmlClass * machine, UmlClass * anystate, 
     ex->set_CppBody(body);
 }
 
-void UmlExitPointPseudoState::generate(UmlClass *, UmlClass *, UmlState *, Q3CString & body, Q3CString indent)
+void UmlExitPointPseudoState::generate(UmlClass *, UmlClass *, UmlState *, QByteArray & body, QByteArray indent)
 {
     // generate a call to _exit<n>() because it is a priori shared
     if (_oper.isEmpty())
-        _oper.sprintf("_exit%d", ++_rank);
+        _oper.append(QString("_exit%1").arg(++_rank));
 
     // note : only a state may contain an exit point, a region can't
     body += indent + "stm" + ((UmlState *) parent())->path()

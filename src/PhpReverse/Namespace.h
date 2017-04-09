@@ -28,10 +28,10 @@
 #ifndef NAMESPACE_H
 #define NAMESPACE_H
 
-#include <q3valuelist.h>
+#include <QList.h>
 #include <qstringlist.h>
 #include "misc/mystr.h"
-#include <q3dict.h>
+
 #include <qmap.h>
 
 #include "Lex.h"
@@ -50,7 +50,7 @@ public:
     }
 
     static void add_alias(const WrapperStr & a, const WrapperStr & s) {
-        Aliases.replace(a.operator QString(), s);
+        Aliases[a.operator QString()]= s;
     }
     static void clear_aliases() {
         Aliases.clear();
@@ -74,28 +74,28 @@ class NDict
 public:
     NDict() {}
     NDict(unsigned n) {
-        d.resize(n);
+        d.reserve(n);
     }
 
-    void insert(const WrapperStr & key, const T * item);
-    void replace(const WrapperStr & key, const T * item);
+    void insert(const WrapperStr & key, T *item);
+    void replace(const WrapperStr & key, T *item);
     bool remove(const WrapperStr & key);
     T * operator[](const WrapperStr & key) const;
 
 private:
-    Q3Dict<T> d;
+    QHash<QString, T*> d;
 };
 
 template<class T>
-void NDict<T>::insert(const WrapperStr & key, const T * item)
+void NDict<T>::insert(const WrapperStr & key, T * item)
 {
     d.insert(Namespace::namespacify(key), item);
 }
 
 template<class T>
-void NDict<T>::replace(const WrapperStr & key, const T * item)
+void NDict<T>::replace(const WrapperStr & key, T * item)
 {
-    d.replace(Namespace::namespacify(key), item);
+    d.insert(Namespace::namespacify(key), item);
 }
 
 template<class T>

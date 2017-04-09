@@ -1,9 +1,9 @@
 
 #include "UmlChoicePseudoState.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlChoicePseudoState::sKind()
+QByteArray UmlChoicePseudoState::sKind()
 {
     return "choice pseudo state";
 }

@@ -27,24 +27,26 @@
 
 #ifndef COMBOITEM_H
 #define COMBOITEM_H
-
+#include <QStyledItemDelegate>
 #include "MyTable.h"
+#include <QModelIndex>
 
-class Q3ComboBox;
+class QComboBox;
 
 class ComboItem : public TableItem
 {
 protected:
     bool editable;
-    Q3ComboBox * cb;
+    QComboBox * cb;
     const QStringList & types;
 
 public:
-    ComboItem(Q3Table * t, const QString & s,
+    ComboItem(QTableWidget * t, const QString & s,
               const QStringList & list, bool edit = TRUE);
-
-    virtual QWidget * createEditor() const;
-    virtual void setContentFromEditor(QWidget * w);
+    bool getEditable() const;
+    void setEditable(bool value);
+    QStringList getTypes();
 };
+
 
 #endif

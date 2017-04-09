@@ -2,27 +2,19 @@
 #include "UmlBaseOperation.h"
 #include "UmlOperation.h"
 #include "UmlClass.h"
-
 #include "UmlCom.h"
 #include "UmlBaseClass.h"
 #include "UmlClassMember.h"
-//#include "misc/myio.h"
-//Added by qt3to4:
-
-#include <Q3ValueList>
-
+#include <QList>
 #include <QFileInfo>
 #include <QSettings>
 
 
 unsigned api_format(bool useTrueFormat)
 {
-    QFileInfo info("settings.ini");
-    bool test = info.exists();
-    QSettings settings("settings.ini", QSettings::IniFormat);
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
-    int compat = settings.value("Main/compatibility_save").toInt();
-    //int compat = 0;
+    int compat = settings.value("Main/compatibility_save", 0).toInt();
     if((compat != 1) || useTrueFormat)
     {
         int fileFormat = settings.value("Main/fileformat").toInt();
@@ -96,7 +88,7 @@ bool UmlBaseOperation::set_ReturnType(const UmlTypeSpec & t)
     return set_it_(_return_type, t, setReturnTypeCmd);
 }
 
-const Q3ValueList<UmlParameter> UmlBaseOperation::params()
+const QList<UmlParameter> UmlBaseOperation::params()
 {
     read_if_needed_();
 
@@ -110,7 +102,7 @@ bool UmlBaseOperation::addParameter(unsigned rank, const UmlParameter & p)
 
     if (UmlCom::read_bool()) {
         if (_defined)
-            _params.insert(_params.at(rank), p);
+            _params.insert(rank, p);
 
         return TRUE;
     }
@@ -124,7 +116,7 @@ bool UmlBaseOperation::removeParameter(unsigned rank)
 
     if (UmlCom::read_bool()) {
         if (_defined)
-            _params.remove(_params.at(rank));
+            _params.removeAt(rank);
 
         return TRUE;
     }
@@ -147,7 +139,7 @@ bool UmlBaseOperation::replaceParameter(unsigned rank, const UmlParameter & p)
         return FALSE;
 }
 
-const Q3ValueList<UmlTypeSpec> UmlBaseOperation::exceptions()
+const QList<UmlTypeSpec> UmlBaseOperation::exceptions()
 {
     read_if_needed_();
 
@@ -160,7 +152,7 @@ bool UmlBaseOperation::addException(unsigned rank, const UmlTypeSpec & t)
 
     if (UmlCom::read_bool()) {
         if (_defined)
-            _exceptions.insert(_exceptions.at(rank), t);
+            _exceptions.insert(rank, t);
 
         return TRUE;
     }
@@ -174,7 +166,7 @@ bool UmlBaseOperation::removeException(unsigned rank)
 
     if (UmlCom::read_bool()) {
         if (_defined)
-            _exceptions.remove(_exceptions.at(rank));
+            _exceptions.removeAt(rank);
 
         return TRUE;
     }

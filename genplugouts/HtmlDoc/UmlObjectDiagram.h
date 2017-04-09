@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseObjectDiagram.h"
-#include <q3cstring.h>
+
 #include "Vector.h"
 
 // This class manages 'object diagrams', notes that the class 'UmlDiagram'
@@ -15,11 +15,11 @@ class UmlObjectDiagram : public UmlBaseObjectDiagram
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlObjectDiagram(void * id, const Q3CString & s) : UmlBaseObjectDiagram(id, s) {
+    UmlObjectDiagram(void * id, const QByteArray & s) : UmlBaseObjectDiagram(id, s) {
     }
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QByteArray sKind();
 
     //set he html ref
     //set the diagrams list

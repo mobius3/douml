@@ -28,9 +28,9 @@
 #ifndef BROWSERVIEW_H
 #define BROWSERVIEW_H
 
-#include <q3listview.h>
+#include <qtreewidget.h>
 
-class BrowserView : public Q3ListView
+class BrowserView : public QTreeWidget
 {
     Q_OBJECT
 
@@ -43,11 +43,11 @@ public:
     static BrowserView * instance() {
         return the;
     };
-    static void select(Q3ListViewItem * b);
+    static void select(QTreeWidgetItem *b);
 
 protected slots:
-    void selected(Q3ListViewItem *);
-    void rightPressed(Q3ListViewItem *);
+    void selected(QTreeWidgetItem *);
+    void rightPressed(QTreeWidgetItem *);
 
 public slots:
     void refer(const QString & href);

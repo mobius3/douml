@@ -27,11 +27,7 @@
 
 #ifndef PSEUDOSTATEDATA_H
 #define PSEUDOSTATEDATA_H
-
-#include <q3ptrdict.h>
-//Added by qt3to4:
 #include <QTextStream>
-
 #include "SimpleData.h"
 
 class BrowserPseudoState;

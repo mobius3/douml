@@ -4,7 +4,7 @@
 #include "UmlStateAction.h"
 #include "UmlState.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 UmlStateAction * UmlBaseStateAction::create(UmlState * parent)
 {
@@ -16,7 +16,7 @@ anItemKind UmlBaseStateAction::kind()
     return aStateAction;
 }
 
-const Q3CString & UmlBaseStateAction::expression()
+const QByteArray & UmlBaseStateAction::expression()
 {
     read_if_needed_();
     return _uml;
@@ -28,7 +28,7 @@ bool UmlBaseStateAction::set_Expression(const char * s)
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseStateAction::cppExpression()
+const QByteArray & UmlBaseStateAction::cppExpression()
 {
     read_if_needed_();
     return _cpp;
@@ -41,7 +41,7 @@ bool UmlBaseStateAction::set_CppExpression(const char * s)
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseStateAction::javaExpression()
+const QByteArray & UmlBaseStateAction::javaExpression()
 {
     read_if_needed_();
     return _java;

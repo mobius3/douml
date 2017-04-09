@@ -59,7 +59,7 @@ BrowserDiagram::BrowserDiagram(QString s, BrowserNode * parent, int id)
         // delete files in case one re-use the id of
         // a previously deleted diagram
         QString fn =
-            BrowserView::get_dir().absFilePath(QString::number(get_ident()) + ".d");
+            BrowserView::get_dir().absoluteFilePath(QString::number(get_ident()) + ".d");
 
         QFile::remove(fn);
         QFile::remove(fn + "iagram");
@@ -80,12 +80,11 @@ BrowserNodeList & BrowserDiagram::instances(BrowserNodeList & result, bool sort)
 {
     IdIterator<BrowserDiagram> it(all);
     BrowserDiagram * d;
-
-    while ((d = it.current()) != 0) {
+    while(it.hasNext()){
+        it.next();
+    if ((d = it.value()) != 0)
         if (!d->deletedp())
             result.append(d);
-
-        ++it;
     }
 
     if (sort)
@@ -158,7 +157,7 @@ void BrowserDiagram::prepare_update_lib() const
     all.memo_id_oid(get_ident(), original_id);
 }
 
-void BrowserDiagram::support_file(Q3Dict<char> & files, bool add) const
+void BrowserDiagram::support_file(QHash<QString, char*> & files, bool add) const
 {
     QString s;
 
@@ -169,7 +168,7 @@ void BrowserDiagram::support_file(Q3Dict<char> & files, bool add) const
     else
         files.remove(s);
 
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->support_file(files, add);

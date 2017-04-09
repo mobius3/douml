@@ -29,12 +29,12 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 #include <QPixmap>
 
 #include "BrowserSeqDiagram.h"
@@ -53,8 +53,8 @@
 #include "mu.h"
 #include "translate.h"
 
-Q3PtrList<BrowserSeqDiagram> BrowserSeqDiagram::imported;
-Q3ValueList<int> BrowserSeqDiagram::imported_ids;
+QList<BrowserSeqDiagram *> BrowserSeqDiagram::imported;
+QList<int> BrowserSeqDiagram::imported_ids;
 QStringList BrowserSeqDiagram::its_default_stereotypes;	// unicode
 QStringList BrowserSeqDiagram::message_default_stereotypes;	// unicode
 
@@ -89,7 +89,6 @@ BrowserSeqDiagram::BrowserSeqDiagram(BrowserSeqDiagram * model, BrowserNode * p)
     overlapping_bars = model->overlapping_bars;
     canvas_size = model->canvas_size;
     is_modified = TRUE;
-
     if (model->window != 0)
         model->window->duplicate(get_ident(), "diagram");
     else {
@@ -111,7 +110,7 @@ BrowserSeqDiagram::~BrowserSeqDiagram()
 
         QDir d = BrowserView::get_dir();
 
-        QFile::remove(d.absFilePath(fn));
+        QFile::remove(d.absoluteFilePath(fn));
     }
 
 #if 0
@@ -141,7 +140,7 @@ BrowserSeqDiagram * BrowserSeqDiagram::add_sequence_diagram(BrowserNode * future
 {
     QString name;
 
-    if (future_parent->enter_child_name(name, TR("enter sequence diagram's name : "),
+    if (future_parent->enter_child_name(name, QObject::TR("enter sequence diagram's name : "),
                                         UmlSeqDiagram, TRUE, FALSE))
         return new BrowserSeqDiagram(name, future_parent);
     else
@@ -151,23 +150,20 @@ BrowserSeqDiagram * BrowserSeqDiagram::add_sequence_diagram(BrowserNode * future
 void BrowserSeqDiagram::set_name(const char * s)
 {
     BrowserDiagram::set_name(s);
-
     if (window != 0)
-        window->setCaption(s);
+        window->setWindowTitle(s);
 }
 
 void BrowserSeqDiagram::import()
 {
-    Q3ValueList<int>::Iterator it = imported_ids.begin();
-
-    while (!imported.isEmpty()) {
-        QString warning;
-        BrowserSeqDiagram * d = imported.take(0);
-
-        (new SeqDiagramWindow(d->full_name(), d, *it))->close(TRUE);
-        it = imported_ids.remove(it);
+    QList<int>::Iterator it = imported_ids.begin();
+    foreach (BrowserSeqDiagram *d, imported) {
+        (new SeqDiagramWindow(d->full_name(), d, *it))->close();
+        it = imported_ids.erase(it);
         d->is_modified = TRUE;
     }
+
+    imported.clear();
 }
 
 void BrowserSeqDiagram::renumber(int phase)
@@ -185,7 +181,7 @@ void BrowserSeqDiagram::delete_it()
 {
     if (window)
         delete window;
-
+    window = 0;
     BrowserNode::delete_it();
 }
 
@@ -193,7 +189,7 @@ BrowserNode * BrowserSeqDiagram::duplicate(BrowserNode * p, QString name)
 {
     BrowserSeqDiagram * result = new BrowserSeqDiagram(this, p);
 
-    result->set_name((name.isEmpty()) ? get_name() : name);
+    result->set_name((name.isEmpty()) ? get_name().toLatin1().constData() : name.toLatin1().constData());
     result->update_stereotype();
 
     return result;
@@ -230,50 +226,53 @@ void BrowserSeqDiagram::draw_svg() const
 
 void BrowserSeqDiagram::menu()
 {
-    Q3PopupMenu m(0, name);
-    Q3PopupMenu toolm(0);
+    QMenu m(name,0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
-        m.setWhatsThis(m.insertItem(TR("Show"), 0),
-                       TR("to show and edit the <i>sequence diagram</i>"));
+        MenuFactory::addItem(m, QObject::tr("Show"), 0,
+                             QObject::TR("to show and edit the <i>sequence diagram</i>"));
 
         if (!is_edited) {
-            m.setWhatsThis(m.insertItem(TR("Edit"), 1),
-                           TR("to edit the <i>sequence diagram</i>"));
+            MenuFactory::addItem(m, QObject::tr("Edit"), 1,
+                                 QObject::TR("to edit the <i>sequence diagram</i>"));
 
             if (!is_read_only) {
-                m.setWhatsThis(m.insertItem(TR("Edit drawing settings"), 2),
-                               TR("to set how the <i>sequence diagram</i>'s items must be drawn"));
-                m.insertSeparator();
-                m.setWhatsThis(m.insertItem(TR("Duplicate"), 3),
-                               TR("to duplicate the <i>sequence diagram</i>"));
+                MenuFactory::addItem(m, QObject::tr("Edit drawing settings"), 2,
+                                     QObject::TR("to set how the <i>sequence diagram</i>'s items must be drawn"));
+                m.addSeparator();
+                MenuFactory::addItem(m, QObject::tr("Duplicate"), 3,
+                                     QObject::TR("to duplicate the <i>sequence diagram</i>"));
 
                 if (edition_number == 0) {
-                    m.insertSeparator();
-                    m.setWhatsThis(m.insertItem(TR("Delete"), 4),
-                                   TR("to delete the <i>sequence diagram</i>. \
-Note that you can undelete it after"));
+                    m.addSeparator();
+                    MenuFactory::addItem(m, QObject::tr("Delete"), 4,
+                                         QObject::TR("to delete the <i>sequence diagram</i>. \
+                                                     Note that you can undelete it after"));
                 }
             }
         }
 
-        mark_menu(m, TR("the sequence diagram"), 90);
+        mark_menu(m, QObject::tr("the sequence diagram").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
-            Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+                Tool::menu_insert(&toolm, get_type(), 100)) {
+            m.addSeparator();
+            toolm.setTitle( QObject::tr("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0))
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 5),
-                       TR("to undelete the <i>sequence diagram</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 5,
+                             QObject::TR("to undelete the <i>sequence diagram</i>"));
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserSeqDiagram::exec_menu_choice(int rank)
@@ -284,7 +283,7 @@ void BrowserSeqDiagram::exec_menu_choice(int rank)
         break;
 
     case 1:
-        edit(TR("Sequence diagram"), its_default_stereotypes);
+        edit(QObject::TR("Sequence diagram").toLatin1().constData(), its_default_stereotypes);
         return;
 
     case 2:
@@ -294,13 +293,13 @@ void BrowserSeqDiagram::exec_menu_choice(int rank)
     case 3: {
         QString name;
 
-        if (((BrowserNode *)parent())->enter_child_name(name, TR("enter sequence diagram's name : "),
-                UmlSeqDiagram, TRUE, FALSE))
+        if (((BrowserNode *)parent())->enter_child_name(name, QObject::TR("enter sequence diagram's name : "),
+                                                        UmlSeqDiagram, TRUE, FALSE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
         else
             return;
     }
-    break;
+        break;
 
     case 4:
         delete_it();
@@ -369,6 +368,7 @@ void BrowserSeqDiagram::open(bool)
         window->raise();
 
     window->setFocus();
+
 }
 
 void BrowserSeqDiagram::edit_settings()
@@ -379,11 +379,11 @@ void BrowserSeqDiagram::edit_settings()
 
         settings.complete(st, TRUE);
 
-        co[0].set(TR("note color"), &note_color);
-        co[1].set(TR("class instance \ncolor"), &class_instance_color);
-        co[2].set(TR("duration color"), &duration_color);
-        co[3].set(TR("continuation color"), &continuation_color);
-        co[4].set(TR("fragment color"), &fragment_color);
+        co[0].set(QObject::TR("note color"), &note_color);
+        co[1].set(QObject::TR("class instance \ncolor"), &class_instance_color);
+        co[2].set(QObject::TR("duration color"), &duration_color);
+        co[3].set(QObject::TR("continuation color"), &continuation_color);
+        co[4].set(QObject::TR("fragment color"), &fragment_color);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -422,7 +422,7 @@ UmlCode BrowserSeqDiagram::get_type() const
 
 QString BrowserSeqDiagram::get_stype() const
 {
-    return TR("Sequence diagram");
+    return QObject::TR("Sequence diagram");
 }
 
 int BrowserSeqDiagram::get_identifier() const
@@ -480,8 +480,8 @@ UmlColor BrowserSeqDiagram::get_color(UmlCode who) const
     }
 
     return (c != UmlDefaultColor)
-           ? c
-           : ((BrowserNode *) parent())->get_color(who);
+            ? c
+            : ((BrowserNode *) parent())->get_color(who);
 }
 
 bool BrowserSeqDiagram::get_shadow() const
@@ -503,7 +503,7 @@ bool BrowserSeqDiagram::get_draw_all_relations() const
 void BrowserSeqDiagram::dont_draw_all_relations()
 {
     settings.draw_all_relations =
-        used_settings->draw_all_relations = UmlNo;
+            used_settings->draw_all_relations = UmlNo;
 }
 
 bool BrowserSeqDiagram::get_show_stereotype_properties() const
@@ -536,10 +536,10 @@ bool BrowserSeqDiagram::tool_cmd(ToolCom * com, const char * args)
 
         QDir d = BrowserView::get_dir();
 
-        com->write_string(d.absFilePath(fn));
+        com->write_string(d.absoluteFilePath(fn));
     }
 
-    return TRUE;
+        return TRUE;
 
     case saveInCmd:
         if (window != 0)
@@ -551,9 +551,8 @@ bool BrowserSeqDiagram::tool_cmd(ToolCom * com, const char * args)
                                                     !w->get_view()->has_preferred_size_zoom(),
                                                     TRUE));
             w->dont_save();
-            w->close(TRUE);
+            w->close();
         }
-
         return TRUE;
 
     case sideCmd:
@@ -564,9 +563,8 @@ bool BrowserSeqDiagram::tool_cmd(ToolCom * com, const char * args)
 
             ((SeqDiagramView *) w->get_view())->send(com);
             w->dont_save();
-            w->close(TRUE);
+            w->close();
         }
-
         return TRUE;
 
     default:
@@ -575,24 +573,25 @@ bool BrowserSeqDiagram::tool_cmd(ToolCom * com, const char * args)
     }
 }
 
-void BrowserSeqDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
-        BrowserNode * bn,
-        char const * kc,
-        char const * kr)
+void BrowserSeqDiagram::compute_referenced_by(QList<BrowserNode *> & l,
+                                              BrowserNode * bn,
+                                              char const * kc,
+                                              char const * kr)
 {
     int id = bn->get_identifier();
     IdIterator<BrowserDiagram> it(all);
     BrowserDiagram * d;
+    while (it.hasNext()) {
+        it.next();
+        if ((d = it.value()) != 0) {
+            if (!d->deletedp() && (d->get_type() == UmlSeqDiagram)) {
+                if ((((BrowserSeqDiagram *) d)->window != 0)
+                        ? ((BrowserSeqDiagram *) d)->window->get_view()->is_present(bn)
+                        : is_referenced(read_definition(d->get_ident(), "diagram"), id, kc, kr))
+                    l.append((BrowserSeqDiagram *) d);
+            }
 
-    while ((d = it.current()) != 0) {
-        if (!d->deletedp() && (d->get_type() == UmlSeqDiagram)) {
-            if ((((BrowserSeqDiagram *) d)->window != 0)
-                ? ((BrowserSeqDiagram *) d)->window->get_view()->is_present(bn)
-                : is_referenced(read_definition(d->get_ident(), "diagram"), id, kc, kr))
-                l.append((BrowserSeqDiagram *) d);
         }
-
-        ++it;
     }
 }
 
@@ -636,7 +635,7 @@ void BrowserSeqDiagram::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "sequencediagram " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
         settings.save(st);
@@ -655,7 +654,9 @@ void BrowserSeqDiagram::save(QTextStream & st, bool ref, QString & warning)
             is_modified = FALSE;
 
             if (window)
+            {
                 window->save("diagram", warning, is_new);
+            }
             else
                 BrowserDiagram::save();
         }
@@ -678,7 +679,7 @@ void BrowserSeqDiagram::save(QTextStream & st, bool ref, QString & warning)
 }
 
 BrowserSeqDiagram * BrowserSeqDiagram::read(char *& st, char * k,
-        BrowserNode * parent)
+                                            BrowserNode * parent)
 {
     BrowserSeqDiagram * r;
     int id;
@@ -706,13 +707,13 @@ BrowserSeqDiagram * BrowserSeqDiagram::read(char *& st, char * k,
         }
         else {
             r->set_parent(parent);
-            r->set_name(s);
+            r->set_name(s.toLatin1().constData());
         }
 
         r->is_defined = TRUE;
 
         r->is_read_only = (!in_import() && read_only_file()) ||
-                          ((user_id() != 0) && r->is_api_base());
+                ((user_id() != 0) && r->is_api_base());
 
         QFileInfo fi(BrowserView::get_dir(), QString::number(id) + ".diagram");
 

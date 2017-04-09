@@ -30,7 +30,7 @@
 
 
 #include <qcursor.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -74,8 +74,8 @@ void AssocContainCanvas::open()
 
 void AssocContainCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu geo(0);
+    QMenu m(0);
+    QMenu geo(0);
     ArrowCanvas * aplabel;
     ArrowCanvas * apstereotype;
 
@@ -85,94 +85,98 @@ void AssocContainCanvas::menu(const QPoint &)
     AssocContainCanvas * pstereotype = (AssocContainCanvas *) apstereotype;
 
     MenuFactory::createTitle(m, TR("Association"));
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 1);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit"), 1);
 
     if (pstereotype || plabel) {
-        m.insertSeparator();
-        m.insertItem(TR("Select stereotype and label"), 2);
-        m.insertItem(TR("Default stereotype and label position"), 3);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Select stereotype and label"), 2);
+        MenuFactory::addItem(m, TR("Default stereotype and label position"), 3);
 
         if (plabel && (label == 0))
-            m.insertItem(TR("Attach label to this segment"), 4);
+            MenuFactory::addItem(m, TR("Attach label to this segment"), 4);
 
         if (pstereotype && (stereotype == 0))
-            m.insertItem(TR("Attach stereotype to this segment"), 5);
+            MenuFactory::addItem(m, TR("Attach stereotype to this segment"), 5);
     }
 
     if (get_start() != get_end()) {
-        m.insertSeparator();
+        m.addSeparator();
         init_geometry_menu(geo, 10);
-        m.insertItem(TR("Geometry (Ctrl+l)"), &geo);
+        MenuFactory::insertItem(m, TR("Geometry (Ctrl+l)"), &geo);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 6);
-    m.insertItem(TR("Delete from model"), 7);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 6);
+    MenuFactory::addItem(m, TR("Delete from model"), 7);
 
-    int rank = m.exec(QCursor::pos());
+    QAction *retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        int rank = retAction->data().toInt();
 
-    switch (rank) {
-    case 1:
-        open();
-        return;
+        switch (rank) {
+        case 1:
+            open();
+            return;
 
-    case 2:
-        the_canvas()->unselect_all();
+        case 2:
+            the_canvas()->unselect_all();
 
-        if (plabel)
-            the_canvas()->select(plabel->label);
+            if (plabel)
+                the_canvas()->select(plabel->label);
 
-        if (pstereotype)
-            the_canvas()->select(pstereotype->stereotype);
+            if (pstereotype)
+                the_canvas()->select(pstereotype->stereotype);
 
-        return;
+            return;
 
-    case 3:
-        if (plabel)
-            plabel->default_label_position();
+        case 3:
+            if (plabel)
+                plabel->default_label_position();
 
-        if (pstereotype)
-            pstereotype->default_stereotype_position();
+            if (pstereotype)
+                pstereotype->default_stereotype_position();
 
-        break;
+            break;
 
-    case 4:
-        label = plabel->label;
-        plabel->label = 0;
-        default_label_position();
-        break;
+        case 4:
+            label = plabel->label;
+            plabel->label = 0;
+            default_label_position();
+            break;
 
-    case 5:
-        stereotype = pstereotype->stereotype;
-        pstereotype->stereotype = 0;
-        default_stereotype_position();
-        break;
+        case 5:
+            stereotype = pstereotype->stereotype;
+            pstereotype->stereotype = 0;
+            default_stereotype_position();
+            break;
 
-    case 6:
-        // not removed from the model : just hide it
-        remove(FALSE);
-        break;
+        case 6:
+            // not removed from the model : just hide it
+            remove(FALSE);
+            break;
 
-    case 7:
-        get_start()->unassociate(get_end());	// line will be deleted
-        break;
+        case 7:
+            get_start()->unassociate(get_end());	// line will be deleted
+            break;
 
-    default:
-        if (rank >= 10) {
-            rank -= 10;
+        default:
+            if (rank >= 10) {
+                rank -= 10;
 
-            if (rank == RecenterBegin)
-                set_decenter(-1.0, decenter_end);
-            else if (rank == RecenterEnd)
-                set_decenter(decenter_begin, -1.0);
-            else if (rank != (int) geometry)
-                set_geometry((LineGeometry) rank, TRUE);
+                if (rank == RecenterBegin)
+                    set_decenter(-1.0, decenter_end);
+                else if (rank == RecenterEnd)
+                    set_decenter(decenter_begin, -1.0);
+                else if (rank != (int) geometry)
+                    set_geometry((LineGeometry) rank, TRUE);
+                else
+                    return;
+            }
             else
                 return;
         }
-        else
-            return;
     }
 
     package_modified();
@@ -184,7 +188,7 @@ void AssocContainCanvas::remove(bool from_model)
         if (the_canvas()->must_draw_all_relations()) {
             const AssocContainCanvas * a = this;
 
-            while (a->begin->type() == UmlArrowPoint) {
+            while (a->begin->typeUmlCode() == UmlArrowPoint) {
                 a = (AssocContainCanvas *)((ArrowPointCanvas *) a->begin)->get_other(a);
 
                 if (a == 0)
@@ -194,7 +198,7 @@ void AssocContainCanvas::remove(bool from_model)
             if (a && !a->begin->isSelected() && !a->begin->get_bn()->deletedp()) {
                 a = this;
 
-                while (a->end->type() == UmlArrowPoint) {
+                while (a->end->typeUmlCode() == UmlArrowPoint) {
                     a = (AssocContainCanvas *)((ArrowPointCanvas *) a->end)->get_other(a);
 
                     if (a == 0)
@@ -223,13 +227,13 @@ void AssocContainCanvas::delete_available(BooL & in_model, BooL & out_model) con
 ArrowPointCanvas * AssocContainCanvas::brk(const QPoint & p)
 {
     ArrowPointCanvas * ap =
-        new ArrowPointCanvas(the_canvas(), p.x(), p.y());
+            new ArrowPointCanvas(the_canvas(), p.x(), p.y());
 
-    ap->setZ(z() + 1);
+    ap->setZValue(zValue() + 1);
 
     AssocContainCanvas * other =
-        new AssocContainCanvas(the_canvas(), ap, end, 0,
-                               decenter_begin, decenter_end);
+            new AssocContainCanvas(the_canvas(), ap, end, 0,
+                                   decenter_begin, decenter_end);
 
     ap->add_line(this);
     end->remove_line(this, TRUE);
@@ -250,7 +254,7 @@ void AssocContainCanvas::save(QTextStream & st, bool ref, QString & warning) con
 {
     if (ref)
         st << "containcanvas_ref " << get_ident();
-    else if (begin->type() != UmlArrowPoint) {
+    else if (begin->typeUmlCode() != UmlArrowPoint) {
         nl_indent(st);
         st << "containcanvas " << get_ident();
 
@@ -330,11 +334,11 @@ AssocContainCanvas * AssocContainCanvas::read(char *& st, UmlCanvas * canvas, ch
         unread_keyword(k, st);
 
         AssocContainCanvas * r = (AssocContainCanvas *)
-                                 read_list(st, canvas, UmlContain, geo, fixed, dbegin, dend, id, &make);
+                read_list(st, canvas, UmlContain, geo, fixed, dbegin, dend, id, &make);
 
         // remove association between components available in the
         // 2.0 deployment diagrams
-        if (r->begin->type() == UmlComponent)
+        if (r->begin->typeUmlCode() == UmlComponent)
             Undefined.append(r);
         else if (read_file_format() == 30)
             // to remove redondant transitions made by release 2.22

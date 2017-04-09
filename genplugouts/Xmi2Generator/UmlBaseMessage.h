@@ -1,9 +1,10 @@
 #ifndef _UMLBASEMESSAGE_H
 #define _UMLBASEMESSAGE_H
+#include "../src/misc/mystr.h"
+#include <QByteArray>
+#include <QHash>
 
 
-
-#include <q3ptrdict.h>
 
 class UmlClassInstanceReference;
 class UmlOperation;
@@ -45,7 +46,7 @@ private:
     WrapperStr _form;
 
     // internal, don't call it
-    void read_(const Q3PtrDict<UmlClassInstanceReference> & instances);
+    void read_(const QHash<void*, UmlClassInstanceReference*> & instances);
 
     friend class UmlBaseSequenceMessage;
     friend class UmlBaseCollaborationMessage;

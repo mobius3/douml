@@ -28,10 +28,7 @@
 #ifndef UMLARTIFACT_H
 #define UMLARTIFACT_H
 
-#include <q3asciidict.h>
-//Added by qt3to4:
 #include "misc/mystr.h"
-
 #include "UmlBaseArtifact.h"
 
 class UmlPackage;
@@ -43,7 +40,7 @@ class UmlArtifact : public UmlBaseArtifact
 {
 private:
     bool managed;
-    Q3AsciiDict<UmlArtifact> * imports;
+    QHash<WrapperStr, UmlArtifact*> * imports;
 
     static UmlArtifact * current;
     static UmlPackage * package_of_generated_artifact;

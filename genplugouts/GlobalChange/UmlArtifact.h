@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseArtifact.h"
-#include <q3cstring.h>
+
 
 class Context;
 
@@ -13,7 +13,7 @@ class Context;
 class UmlArtifact : public UmlBaseArtifact
 {
 public:
-    UmlArtifact(void * id, const Q3CString & n) : UmlBaseArtifact(id, n) {};
+    UmlArtifact(void * id, const QByteArray & n) : UmlBaseArtifact(id, n) {};
 
     virtual void change(Context & ctx);
 

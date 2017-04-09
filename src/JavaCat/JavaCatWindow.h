@@ -37,7 +37,7 @@
 
 #else
 
-#include <q3mainwindow.h>
+#include <qmainwindow.h>
 
 class QSplitter;
 class BrowserView;
@@ -46,7 +46,7 @@ class CommentView;
 
 // singleton
 
-class JavaCatWindow : public Q3MainWindow
+class JavaCatWindow : public QMainWindow
 {
     Q_OBJECT
 
@@ -57,6 +57,8 @@ public:
     static void trace(WrapperStr);
     static void clear_trace();
 
+public slots:
+    void whats_this() const;
 protected:
     static JavaCatWindow * the;
 

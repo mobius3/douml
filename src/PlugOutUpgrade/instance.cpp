@@ -40,7 +40,7 @@
 #include "instance.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 
 //
 // add class instance
@@ -503,7 +503,7 @@ void fixe_classinstance(UmlClass * bci)
 
     UmlClass * rel = UmlClass::get("UmlRelation", 0);
     UmlOperation * op = bci->get_operation("add_Relation");
-    Q3ValueList<UmlParameter> params = op->params();
+    QList<UmlParameter> params = op->params();
     UmlParameter param = params.first();
 
     param.type.type = rel;

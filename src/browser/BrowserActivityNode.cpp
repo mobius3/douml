@@ -29,8 +29,8 @@
 
 
 
-#include <q3popupmenu.h>
-#include <q3painter.h>
+////#include <q3popupmenu.h>
+//#include <qpainter.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -115,17 +115,16 @@ void BrowserActivityNode::prepare_update_lib() const
 {
     all.memo_id_oid(get_ident(), original_id);
 
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->prepare_update_lib();
 }
 
-void BrowserActivityNode::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete)
+void BrowserActivityNode::referenced_by(QList<BrowserNode *> & l, bool ondelete)
 {
     BrowserNode::referenced_by(l, ondelete);
     BrowserFlow::compute_referenced_by(l, this);
-
     if (! ondelete)
         BrowserActivityDiagram::compute_referenced_by(l, this, "activitynodecanvas", "activitynode_ref");
 }
@@ -201,8 +200,7 @@ const QPixmap * BrowserActivityNode::pixmap(int) const
 
 bool BrowserActivityNode::target_of_flow() const
 {
-    Q3PtrList<BrowserNode> l;
-
+    QList<BrowserNode *> l;
     BrowserFlow::compute_referenced_by(l, this);
     return !l.isEmpty();
 }
@@ -219,19 +217,19 @@ QString BrowserActivityNode::may_start() const
     switch (get_type()) {
     case FlowFinalAN:
     case ActivityFinalAN:
-        return TR("can't have outgoing flow");
+        return QObject::TR("can't have outgoing flow");
 
     case InitialAN:
     case MergeAN:	      // theo all input and output must
     case JoinAN:	      // be control/data exclusively
         // only one flow is allowed
     {
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling())
             if ((((BrowserNode *) child)->get_type() == UmlFlow) &&
                 (!((BrowserNode *) child)->deletedp()))
-                return TR("can't have several outgoing flows");
+                return QObject::TR("can't have several outgoing flows");
     }
 
     // no break
@@ -246,35 +244,35 @@ QString BrowserActivityNode::may_connect(const BrowserNode * dest) const
     BrowserNode * bn = dest->get_container(UmlActivity);
 
     if ((bn != 0) && (get_container(UmlActivity) != bn))
-        return TR("not in the same activity");
+        return QObject::TR("not in the same activity");
 
     BasicData * data = dest->get_data();
 
     switch (dest->get_type()) {
     case InitialAN:
-        return TR("initial node can't have incoming flow");
+        return QObject::TR("initial node can't have incoming flow");
 
     case ForkAN:
         return (((BrowserActivityNode *) dest)->target_of_flow())
-               ? TR("fork can't have several incoming flow")
+               ? QObject::TR("fork can't have several incoming flow")
                : QString();
 
     case UmlParameter:
         if (((ParameterData *) data)->get_dir() == UmlIn)
-            return TR("an input parameter can't have incoming flows");
+            return QObject::TR("an input parameter can't have incoming flows");
         else if (!((ParameterData *) data)->get_is_control())
-            return TR("parameter can't accept control flow (not 'is_control')");
+            return QObject::TR("parameter can't accept control flow (not 'is_control')");
         else
             return QString();
 
     case UmlExpansionNode:
         return (!((ActivityObjectData *) data)->get_is_control())
-               ? TR("can't accept control flow (not 'is_control')")
+               ? QObject::TR("can't accept control flow (not 'is_control')")
                : QString();
 
     case UmlActivityPin:
         return (!((PinData *) data)->get_is_control())
-               ? TR("pin can't accept control flow (not 'is_control')")
+               ? QObject::TR("pin can't accept control flow (not 'is_control')")
                : QString();
 
     case UmlActivityObject:
@@ -287,7 +285,7 @@ QString BrowserActivityNode::may_connect(const BrowserNode * dest) const
         return 0;
 
     default:
-        return TR("illegal");
+        return QObject::TR("illegal");
     }
 }
 
@@ -296,14 +294,14 @@ QString BrowserActivityNode::connexion_from(bool control) const
     switch (get_type()) {
     case ForkAN:  // theo all input and output must be control/data exclusively
         if (target_of_flow())
-            return TR("fork can't have several incoming flow");
+            return QObject::TR("fork can't have several incoming flow");
         else
             return 0;
 
     case FlowFinalAN:
     case ActivityFinalAN:
         if (! control)
-            return TR("can't have incoming data flow");
+            return QObject::TR("can't have incoming data flow");
         else
             return 0;
 
@@ -313,7 +311,7 @@ QString BrowserActivityNode::connexion_from(bool control) const
         return 0;
 
     default:
-        return TR("illegal");
+        return QObject::TR("illegal");
     }
 }
 
@@ -343,51 +341,53 @@ BrowserActivityNode * BrowserActivityNode::get_activitynode(BrowserNode * future
 void BrowserActivityNode::menu()
 {
     QString s = stringify(kind);
-    int index = s.find("_");
+    int index = s.indexOf("_");
 
     if (index != -1)
         s.replace(index, 1, " ");
-
-    Q3PopupMenu m(0, "Activity node");
-    Q3PopupMenu toolm(0);
+    QMenu m("Activity node", 0 );
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
-        m.setWhatsThis(m.insertItem(TR("Edit"), 1),
-                       TR("to edit the <i>" + s + "</i>, \
-a double click with the left mouse button does the same thing"));
+        MenuFactory::addItem(m, QObject::TR("Edit"), 1,
+                       QObject::TR("to edit the <i>%1</i>, \
+a double click with the left mouse button does the same thing").arg(s));
 
         if (!is_read_only) {
-            m.setWhatsThis(m.insertItem(TR("Duplicate"), 2),
-                           TR("to copy the <i>" + s + "</i> in a new one"));
-            m.insertSeparator();
+            MenuFactory::addItem(m,  QObject::tr("Duplicate"), 2,
+                           QObject::TR("to copy the <i>%1</i> in a new one").arg(s));
+            m.addSeparator();
 
             if (edition_number == 0)
-                m.setWhatsThis(m.insertItem(TR("Delete"), 3),
-                               TR("to delete the <i>" + s + "</i>. \
-Note that you can undelete it after"));
+                MenuFactory::addItem(m, QObject::tr("Delete"), 3,
+                               QObject::TR("to delete the <i>%1</i>. \
+Note that you can undelete it after").arg(s));
         }
 
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), 5),
-                       TR("to know who reference the <i>" + s + "</i> \
-through a flow"));
-        mark_menu(m, TR("the " + s), 90);
+        MenuFactory::addItem(m,  QObject::tr("Referenced by"), 5,
+                       QObject::TR("to know who reference the <i>%1</i> \
+through a flow").arg(s));
+        mark_menu(m, QObject::tr("the %1").arg(s).toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);;
 
         if ((edition_number == 0) &&
             Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+            m.addSeparator();
+            toolm.setTitle(QObject::tr("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 4),
-                       TR("to undelete the <i>" + s + "</i>"));
+        MenuFactory::addItem(m, QObject::TR("Undelete"), 4,
+                       QObject::TR("to undelete the <i>%1</i>").arg(s));
     }
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserActivityNode::exec_menu_choice(int rank)
@@ -466,7 +466,7 @@ void BrowserActivityNode::open(bool)
         QString s = stringify(kind);
         int index = 0;
 
-        while ((index = s.find("_")) != -1)
+        while ((index = s.indexOf("_")) != -1)
             s.replace(index, 1, " ");
 
         static QSize previous_size;
@@ -490,12 +490,12 @@ UmlCode BrowserActivityNode::get_type() const
 QString BrowserActivityNode::get_stype() const
 {
     QString s = stringify(kind);
-    int index = s.find("_");
+    int index = s.indexOf("_");
 
     if (index != -1)
         s.replace(index, 1, " ");
 
-    return TR(s);
+    return s; //QObject::TR(s);
 }
 
 int BrowserActivityNode::get_identifier() const
@@ -558,7 +558,6 @@ bool BrowserActivityNode::tool_cmd(ToolCom * com, const char * args)
             switch (k) {
             case UmlFlow: {
                 BrowserNode * end = (BrowserNode *) com->get_id(args);
-
                 if (may_connect(end).isEmpty())
                     (new BrowserFlow(this, end))->write_id(com);
                 else
@@ -614,13 +613,12 @@ void BrowserActivityNode::DragMoveInsideEvent(QDragMoveEvent * e)
 void BrowserActivityNode::DropAfterEvent(QDropEvent * e, BrowserNode * after)
 {
     BrowserNode * bn;
-
     if ((((bn = UmlDrag::decode(e, BrowserFlow::drag_key(this))) != 0)) &&
         (bn != after) && (bn != this)) {
         if (may_contains(bn, FALSE))
             move(bn, after);
         else {
-            msg_critical(TR("Error"), TR("Forbidden"));
+            msg_critical(QObject::TR("Error"), QObject::TR("Forbidden"));
             e->ignore();
         }
     }
@@ -675,14 +673,14 @@ void BrowserActivityNode::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "activitynode " << get_ident() << " " << stringify(kind) << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
         BrowserNode::save(st);
 
         // saves the sub elts
 
-        Q3ListViewItem * child = firstChild();
+        BrowserNode * child = firstChild();
 
         if (child != 0) {
             for (;;) {
@@ -770,7 +768,6 @@ BrowserActivityNode * BrowserActivityNode::read(char *& st, char * k,
         if (strcmp(k, "end")) {
             while (BrowserFlow::read(st, k, result))
                 k = read_keyword(st);
-
             if (strcmp(k, "end"))
                 wrong_keyword(k, "end");
         }

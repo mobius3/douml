@@ -1,7 +1,7 @@
 TEMPLATE    = app
 TARGET        = gxmi
 CONFIG        += debug warn_on qt
-DEFINES        = WITHCPP WITHJAVA WITHIDL
+DEFINES        = WITHCPP WITHJAVA WITHIDL TRUE=true FALSE=false
 HEADERS        = ./UmlBaseFinalState.h \
           ./UmlBaseAttribute.h \
           ./UmlEntryPointPseudoState.h \
@@ -116,7 +116,9 @@ HEADERS        = ./UmlBaseFinalState.h \
           ./UmlBaseItem.h \
           ./Dialog.h \
           ./UmlBasePackage.h \
-          ./UmlOperation.h
+          ./UmlOperation.h \
+    bbuttongroup.h \
+    hhbox.h
 SOURCES        = ./UmlBaseFinalState.cpp \
           ./UmlBaseAttribute.cpp \
           ./UmlEntryPointPseudoState.cpp \
@@ -232,12 +234,14 @@ SOURCES        = ./UmlBaseFinalState.cpp \
           ./UmlBaseItem.cpp \
           ./Dialog.cpp \
           ./UmlBasePackage.cpp \
-          ./UmlOperation.cpp
+          ./UmlOperation.cpp \
+    bbuttongroup.cpp \
+    hhbox.cpp
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network  widgets
 
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
+QT += testlib
 Release{
 
 

@@ -38,9 +38,9 @@
 #include "BrowserClass.h"
 #include "ClassData.h"
 #include "ClassDialog.h"
+#include "AttributeDialog.h"
 #include "BrowserAttribute.h"
 #include "BrowserOperation.h"
-#include "AttributeDialog.h"
 #include "GenerationSettings.h"
 #include "myio.h"
 #include "ToolCom.h"
@@ -108,7 +108,6 @@ void AttributeData::set_browser_node(BrowserAttribute * a, bool update,
                                      bool enum_item)
 {
     BasicData::set_browser_node(a);
-
     if (update) {
         if (enum_item)
             type.type = (BrowserClass *) a->parent();
@@ -172,16 +171,14 @@ void AttributeData::set_browser_node(BrowserAttribute * a, bool update,
 QString AttributeData::definition(bool full, bool with_kind) const
 {
     QString r;
-
     if (with_kind)
         r = "[" + browser_node->get_stype() + "] ";
 
     if (! full)
         r += browser_node->get_name();
     else
-        r += ((const char *) browser_node->get_name())
-             + QString(" : ") + ((const char *) type.get_type());
-
+        r.append(browser_node->get_name().toLatin1().constData()
+             + QString(" : ") + ((const char *) type.get_type().toLatin1().constData()));
     return r;
 }
 
@@ -191,7 +188,7 @@ QString AttributeData::definition(bool full, bool mult, bool init,
 {
     switch (language) {
     case UmlView: {
-        QString r = ((const char *) browser_node->get_name());
+        QString r = browser_node->get_name();
 
         if (is_derived)
             r = "/" + r;
@@ -289,11 +286,11 @@ QString AttributeData::definition(bool full, bool mult, bool init,
 bool AttributeData::decldefbody_contain(const QString & s, bool cs,
                                         BrowserNode *)
 {
-    return ((QString(get_cppdecl()).find(s, 0, cs) != -1) ||
-            (QString(get_javadecl()).find(s, 0, cs) != -1) ||
-            (QString(get_phpdecl()).find(s, 0, cs) != -1) ||
-            (QString(get_pythondecl()).find(s, 0, cs) != -1) ||
-            (QString(get_idldecl()).find(s, 0, cs) != -1));
+    return ((QString(get_cppdecl()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1) ||
+            (QString(get_javadecl()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1) ||
+            (QString(get_phpdecl()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1) ||
+            (QString(get_pythondecl()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1) ||
+            (QString(get_idldecl()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1));
 }
 
 UmlVisibility AttributeData::get_visibility(BrowserNode *)
@@ -304,6 +301,11 @@ UmlVisibility AttributeData::get_visibility(BrowserNode *)
 void AttributeData::set_visibility(UmlVisibility v)
 {
     uml_visibility = v;
+}
+
+void AttributeData::set_visibility(int v)
+{
+    uml_visibility = static_cast<UmlVisibility>(v);
 }
 
 void AttributeData::set_type(const AType & t)
@@ -322,6 +324,26 @@ void AttributeData::set_type(const AType & t)
     type.explicit_type = t.explicit_type;
 }
 
+void AttributeData::set_type(const QString &value)
+{
+    QStringList list;
+    BrowserNodeList nodes;
+    BrowserClass::instances(nodes);
+    nodes.full_names(list);
+
+    AType t;
+    if (!value.isEmpty())
+    {
+        int rank = list.indexOf(value);
+
+        if (rank != -1)
+            t.type = (BrowserClass *) nodes.at(rank);
+        else
+            t.explicit_type = value;
+    }
+    set_type(t);
+}
+
 void AttributeData::on_delete()
 {
     if (type.type && type.type->deletedp()) {
@@ -335,7 +357,7 @@ void AttributeData::on_delete()
 const char * AttributeData::get_idlcase() const
 {
     return (idl_case != 0)
-           ? ((const char *) idl_case->get_name())
+           ? ((const char *) idl_case->get_name().toLatin1().constData())
            : ((const char *) idl_explicit_case);
 }
 
@@ -819,7 +841,7 @@ void AttributeData::read(char *& st, char *& k)
         multiplicity = 0;
 
     if (!strcmp(k, "init_value")) {
-        init_value = QString(QTextCodec::codecForName(codec())->fromUnicode(read_string(st)));
+        init_value = QString(QTextCodec::codecForName(codec().toLatin1().constData())->fromUnicode(read_string(st)));
 //        init_value = read_string(st);
         k = read_keyword(st);
     }

@@ -37,5 +37,6 @@ void UmlBaseUseCase::read_uml_()
 {
     _assoc_diagram = (UmlUseCaseDiagram *) UmlBaseItem::read_();
     UmlBaseItem::read_uml_();
+    _extension_points = UmlCom::read_string();
 }
 

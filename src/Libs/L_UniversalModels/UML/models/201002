@@ -1,0 +1,3273 @@
+format 75
+"TreeController" // TreeController
+  revision 38
+  modified_by 42 "zeks"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default show_class_context_mode default show_msg_context_mode default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default show_msg_context default draw_all_relations default shadow default show_stereotype_properties default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default show_stereotype_properties default
+  
+  cpp_h_dir "include/"
+  cpp_src_dir "src/"
+  ncouples 3
+  key "exportHeader" value "#include \"l_tree_controller_global.h\""
+  key "export" value "L_TREE_CONTROLLER_EXPORT"
+  key "copyright" value "// *************************************************************************
+//
+// Copyright 2012-2013 Nikolai Marchenko.
+//
+// This file is part of the Douml Uml Toolkit.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License Version 3.0 as published by
+// the Free Software Foundation and appearing in the file LICENSE.GPL included in the
+//  packaging of this file.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License Version 3.0 for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// e-mail : doumleditor@gmail.com
+//
+// *************************************************************************"
+  classview 254890 "classes"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default show_msg_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default show_class_context_mode default show_msg_context_mode default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    associated_deployment_view deploymentview_ref 227626 // classes
+    classdiagram 200490 "Adapting Table Model"
+      draw_all_relations default hide_attributes yes hide_operations yes hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+      size A3
+    end
+
+    class 714794 "TreeItem"
+      visibility package 
+      nformals 1
+      formal name "T" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${description}${template}class @{externalClass}${name}${inherit}  @{parent}
+{
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      ncouples 1
+      key "export" value " "
+      extra_member 175786 "value_type"
+	
+	cpp "typedef TreeItem<T> value_type;" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      operation 2139690 "TreeItem"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 1
+	
+	  param inout name "data" explicit_type "T"
+	    defaultvalue "nullptr"
+	cpp_decl "    ${description}${inline}${name}${(}${t0} * ${p0}${v0}${)}${volatile};
+"
+	cpp_def "${description}${inline}@{externalClass}@{externalClass}@{externalClass}@{externalClass}${class}::${name}${(}${t0} * ${p0}${)} @{cInit}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${synchronized}${name}${(}${)}${throws} {
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+	ncouples 1
+	key "cInit" value ": TreeItemInterface()"
+      end
+
+      operation 2139946 "TreeItem"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 0
+	
+	cpp_decl "    ${description}${inline}explicit ${name}${(}${)}${volatile};
+"
+	cpp_def "${description}${inline}@{externalClass}${class}::${name}${(}${)}${volatile} @{cInit}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${synchronized}${name}${(}${)}${throws} {
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+	ncouples 1
+	key "cInit" value ": TreeItemInterface()"
+      end
+
+      operation 2228906 "GetChildren"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "QList<QSharedPointer<TreeItemInterface> >"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2215466 "ResetState"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2139818 "~TreeItem"
+	cpp_virtual public explicit_return_type ""
+	nparams 0
+	
+	cpp_decl "    ${description}${inline}${virtual}${name}${(}${)}${volatile};
+"
+	cpp_def "${description}${inline}@{externalClass}${class}::${name}${(}${)}${volatile} 
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2113578 "columnCount"
+	preserve_cpp_body_indent const cpp_virtual public explicit_return_type "int"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2113706 "childCount"
+	preserve_cpp_body_indent const cpp_virtual public explicit_return_type "int"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2113450 "data"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "variant"
+	nparams 2
+	
+	  param in name "index" explicit_type "modelIndex"
+	  param in name "role" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}, ${t1} ${p1}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2113322 "isCheckable"
+	preserve_cpp_body_indent const cpp_virtual public explicit_return_type "bool"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2113194 "setCheckState"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "state" explicit_type "Qt::CheckState"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2113066 "checkState"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "Qt::CheckState"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2112810 "setData"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
+	nparams 3
+	
+	  param in name "index" explicit_type "modelIndex"
+	  param in name "value" explicit_type "variant"
+	  param in name "role" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}, const ${t1} & ${p1}, ${t2} ${p2}${)}${const}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2112682 "removeChildren"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
+	nparams 2
+	
+	  param in name "position" explicit_type "int"
+	  param in name "count" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2112554 "insertChildren"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
+	nparams 2
+	
+	  param in name "position" explicit_type "int"
+	  param in name "count" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2114346 "children"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "QList<QSharedPointer<TreeItemInterface > >&"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2114218 "children"
+	preserve_cpp_body_indent const cpp_virtual public explicit_return_type "const QList<QSharedPointer<TreeItemInterface > >&"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2114090 "addChildren"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "_children" explicit_type "QList<QSharedPointer<TreeItemInterface> >"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2114858 "get_controller"
+	force_body_gen const cpp_inline public return_type class_ref 714666 // ItemController
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}QSharedPointer<${type} > ${name}${(}${)}${const}${volatile};
+"
+	cpp_def "${description}${inline}QSharedPointer<${type} > ${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    return controller;
+}
+"
+	cpp_name_spec "Get${Name}"
+	final 
+	java_name_spec "get${Name}"
+	php_final 
+	php_name_spec "get${Name}"
+	
+	python_name_spec "get${Name}"
+	
+	idl_name_spec "get_${name}"
+	get_of_relation classrelation_ref 773418 // controller (<directional aggregation>)
+      end
+
+      operation 2114986 "set_controller"
+	force_body_gen public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "value" type class_ref 714666 // ItemController
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}QSharedPointer<${t0} > ${p0}${)}${const}${volatile};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}QSharedPointer<${t0} > ${p0}${)}${const}${volatile}${staticnl}
+{
+    controller = ${p0};
+}
+"
+	cpp_name_spec "Set${Name}"
+	
+	java_name_spec "set${Name}"
+	
+	php_name_spec "set${Name}"
+	
+	python_name_spec "set${Name}"
+	
+	idl_name_spec "set_${name}"
+	set_of_relation classrelation_ref 773418 // controller (<directional aggregation>)
+      end
+
+      operation 2124970 "GetColumns"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "stringlist"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2125098 "IndexOf"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "int"
+	nparams 1
+	
+	  param inout name "item" type class_ref 714922 // TreeItemInterface
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} * ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2140074 "SetInternalData"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "_data" explicit_type "T"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} * ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2131626 "InternalPointer"
+	preserve_cpp_body_indent public explicit_return_type "void*"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2317098 "InternalPointer"
+	preserve_cpp_body_indent const cpp_virtual public explicit_return_type "void*"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2149674 "child"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "TreeItemInterface*"
+	nparams 1
+	
+	  param in name "row" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2149802 "parent"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "TreeItemInterface*"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2150058 "row"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "int"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2150314 "SetParent"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "void"
+	nparams 1
+	
+	  param inout name "_parent" explicit_type "QSharedPointer<TreeItemInterface >"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2150442 "GetIndexOfChild"
+	preserve_cpp_body_indent public explicit_return_type "int"
+	nparams 1
+	
+	  param inout name "child" type class_ref 714922 // TreeItemInterface
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} * ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2208426 "flags"
+	preserve_cpp_body_indent const cpp_virtual public explicit_return_type "Qt::ItemFlags"
+	nparams 1
+	
+	  param in name "index" explicit_type "modelIndex"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2228650 "AddChildren"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "void"
+	nparams 2
+	
+	  param in name "children" explicit_type "QList<QSharedPointer<TreeItemInterface> >"
+	  param in name "insertAfter" explicit_type "int"
+	    defaultvalue "0"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2310570 "GetParent"
+	cpp_virtual public explicit_return_type "QSharedPointer<TreeItemInterface>"
+	nparams 0
+	
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      attribute 1257514 "m_data"
+	private explicit_type "T*"
+	init_value "nullptr"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 1258026 "m_children"
+	protected explicit_type "QList<QSharedPointer<TreeItemInterface > >"
+	stereotype "std::list"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 1257898 "m_parent"
+	protected explicit_type "QWeakPointer<TreeItemInterface >"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 1258282 "m_isCheckable"
+	private explicit_type "bool"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 1258154 "m_checkState"
+	private explicit_type "Qt::CheckState"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      classrelation 773418 // controller (<directional aggregation>)
+	relation 773034 o--> name "<directional aggregation>"
+	  a role_name "controller" private
+	    cpp default "    ${description}${static}${mutable}${volatile}${const}QSharedPointer<${type} > ${name}${value};
+"
+	    classrelation_ref 773418 // controller (<directional aggregation>)
+	  b parent class_ref 714666 // ItemController
+	get_oper operation_ref 2114858 // get_controller
+	set_oper operation_ref 2114986 // set_controller
+      end
+
+      classrelation 773802 // (<generalisation>)
+	relation 773418 ---|> name "<generalisation>"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 773802 // (<generalisation>)
+	  b parent class_ref 714922 // TreeItemInterface
+      end
+    end
+
+    class 714666 "ItemController"
+      visibility package 
+      nformals 1
+      formal name "T" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${description}${template}class @{externalClass}${name}${inherit}  @{parent}
+{
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      ncouples 1
+      key "export" value " "
+      operation 2112042 "get_columns"
+	force_body_gen const cpp_inline public explicit_return_type "stringlist"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    return columns;
+}
+"
+	cpp_name_spec "Get${Name}"
+	final 
+	java_name_spec "get${Name}"
+	php_final 
+	php_name_spec "get${Name}"
+	
+	python_name_spec "get${Name}"
+	
+	idl_name_spec "get_${name}"
+	get_of_attribute attribute_ref 1257386 // columns
+      end
+
+      operation 2112170 "set_columns"
+	force_body_gen public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "value" explicit_type "stringlist"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${)}${const}${volatile};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    columns = ${p0};
+}
+"
+	cpp_name_spec "Set${Name}"
+	
+	java_name_spec "set${Name}"
+	
+	php_name_spec "set${Name}"
+	
+	python_name_spec "set${Name}"
+	
+	idl_name_spec "set_${name}"
+	set_of_attribute attribute_ref 1257386 // columns
+      end
+
+      operation 2112298 "GetValue"
+	preserve_cpp_body_indent public explicit_return_type "QVariant"
+	nparams 3
+	
+	  param in name "item" explicit_type "T"
+	  param in name "index" explicit_type "modelIndex"
+	  param in name "role" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} * ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}const ${t0} * ${p0}, const ${t1} & ${p1}, ${t2} ${p2}${)}${const}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2112426 "SetValue"
+	preserve_cpp_body_indent public explicit_return_type "bool"
+	nparams 4
+	
+	  param inout name "item" explicit_type "T"
+	  param in name "index" explicit_type "modelIndex"
+	  param in name "value" explicit_type "QVariant"
+	  param in name "role" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}, const ${t1} & ${p1}${v1}, const ${t2} & ${p2}${v2}, ${t3} ${p3}${v3}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} * ${p0}, const ${t1} & ${p1}, const ${t2} & ${p2}, ${t3} ${p3}${)}${const}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2168746 "AddGetter"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 2
+	
+	  param in name "index" explicit_type "QPair<int,int>"
+	  param inout name "function" explicit_type "std::function<QVariant(const T*, QModelIndex)>"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}, ${t1} ${p1}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2297258 "AddGetter"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 3
+	
+	  param in name "row" explicit_type "int"
+	  param in name "roles" explicit_type "QVector<int>"
+	  param inout name "function" explicit_type "std::function<QVariant(const T*, QModelIndex)>"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}, const ${t1} & ${p1}, ${t2} ${p2}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2168874 "AddSetter"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 2
+	
+	  param in name "index" explicit_type "QPair<int,int>"
+	  param inout name "function" explicit_type "std::function<bool(T*, QVariant, QModelIndex)>"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}, ${t1} ${p1}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2297130 "AddSetter"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 3
+	
+	  param in name "row" explicit_type "int"
+	  param in name "roles" explicit_type "QVector<int>"
+	  param inout name "function" explicit_type "std::function<bool(T*, QVariant, QModelIndex)>"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}, const ${t1} & ${p1}, ${t2} ${p2}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2303914 "AddPostProcessor"
+	public explicit_return_type "void"
+	nparams 3
+	
+	  param in name "column" explicit_type "int"
+	  param in name "role" explicit_type "int"
+	  param inout name "_postProcessor" explicit_type "std::function<void(T*, const QModelIndex&)>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} & ${p2}${v2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} & ${p2}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2303786 "AddPostProcessors"
+	public explicit_return_type "void"
+	nparams 3
+	
+	  param in name "column" explicit_type "int"
+	  param in name "roles" explicit_type "QVector<int>"
+	  param inout name "_postProcessor" explicit_type "std::function<void(T*,const QModelIndex&)>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}, const ${t1} & ${p1}, ${t2} & ${p2}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2207658 "flags"
+	preserve_cpp_body_indent const public explicit_return_type "Qt::ItemFlags"
+	nparams 1
+	
+	  param in name "index" explicit_type "modelIndex"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2207786 "get_flagsFunctors"
+	force_body_gen cpp_inline public explicit_return_type "QVector<std::function<Qt::ItemFlags(const QModelIndex&)> >"
+	nparams 0
+	
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    return flagsFunctors;
+}
+"
+	cpp_name_spec "Get${Name}"
+	final java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  return flagsFunctors;
+}
+"
+	java_name_spec "get${Name}"
+	php_final 
+	php_name_spec "get${Name}"
+	
+	python_name_spec "get${Name}"
+	
+	idl_name_spec "get_${name}"
+	get_of_attribute attribute_ref 1294122 // flagsFunctors
+      end
+
+      operation 2207914 "set_flagsFunctors"
+	force_body_gen public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "value" explicit_type "QVector<std::function<Qt::ItemFlags(const QModelIndex&)> >"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${)}${const}${volatile}${throw};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    flagsFunctors = ${p0};
+}
+"
+	cpp_name_spec "Set${Name}"
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  flagsFunctors = ${p0};
+}
+"
+	java_name_spec "set${Name}"
+	
+	php_name_spec "set${Name}"
+	
+	python_name_spec "set${Name}"
+	
+	idl_name_spec "set_${name}"
+	set_of_attribute attribute_ref 1294122 // flagsFunctors
+      end
+
+      operation 2208298 "AddFlagsFunctor"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param inout name "functor" explicit_type "std::function<Qt::ItemFlags(const QModelIndex&)>"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2208170 "SetDefaultTreeFunctor"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      attribute 1257386 "columns"
+	private explicit_type "stringlist"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	get_oper operation_ref 2112042 // get_columns
+	set_oper operation_ref 2112170 // set_columns
+      end
+
+      attribute 1257642 "getters"
+	private explicit_type "QHash<QPair<int, int>, std::function<QVariant(const T*, QModelIndex)> >"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 1257770 "setters"
+	private explicit_type "QHash<QPair<int,int>, std::function<bool(T*, QVariant, QModelIndex)> >"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 1294122 "flagsFunctors"
+	private explicit_type "QVector<std::function<Qt::ItemFlags(const QModelIndex&)> >"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	get_oper operation_ref 2207786 // get_flagsFunctors
+	set_oper operation_ref 2207914 // set_flagsFunctors
+      end
+
+      attribute 1326890 "postProcessors"
+	private explicit_type "QHash<QPair<int, int> , std::function<void(T*, const QModelIndex&)> >"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+    end
+
+    class 714922 "TreeItemInterface"
+      abstract visibility package 
+      cpp_decl "${description}${template}class @{export} @{externalClass}${name}${inherit}  @{parent}
+{
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 2151338 "TreeItemInterface"
+	public explicit_return_type ""
+	nparams 0
+	
+	cpp_decl "    ${description}${inline}explicit ${name}${(}${)}${volatile};
+"
+	cpp_def "${description}${inline}@{externalClass}${class}::${name}${(}${)}${volatile} 
+{
+    ${body}}
+"
+	java_def "  ${comment}${@}${visibility}${final}${synchronized}${name}${(}${)}${throws} {
+  ${body}}
+"
+	
+	
+	
+      end
+
+      operation 2151466 "~TreeItemInterface"
+	cpp_virtual public explicit_return_type ""
+	nparams 0
+	
+	cpp_decl "    ${description}${inline}${virtual}${name}${(}${)}${volatile};
+"
+	cpp_def "${description}${inline}@{externalClass}${class}::${name}${(}${)}${volatile} 
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2228778 "GetChildren"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "QList<QSharedPointer<TreeItemInterface> >"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2115114 "childCount"
+	abstract preserve_cpp_body_indent const cpp_virtual public explicit_return_type "int"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2115242 "columnCount"
+	abstract preserve_cpp_body_indent const cpp_virtual public explicit_return_type "int"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2115370 "data"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "variant"
+	nparams 2
+	
+	  param in name "index" explicit_type "modelIndex"
+	  param in name "role" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2115498 "isCheckable"
+	abstract preserve_cpp_body_indent const cpp_virtual public explicit_return_type "bool"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2115626 "setCheckState"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "state" explicit_type "Qt::CheckState"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2115754 "checkState"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "Qt::CheckState"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2116010 "setData"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
+	nparams 3
+	
+	  param in name "index" explicit_type "modelIndex"
+	  param in name "value" explicit_type "variant"
+	  param in name "role" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2116138 "removeChildren"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
+	nparams 2
+	
+	  param in name "position" explicit_type "int"
+	  param in name "count" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2116266 "insertChildren"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
+	nparams 2
+	
+	  param in name "position" explicit_type "int"
+	  param in name "count" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2118442 "GetColumns"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "stringlist"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2131754 "InternalPointer"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "void*"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2290602 "InternalPointer"
+	abstract preserve_cpp_body_indent const cpp_virtual public explicit_return_type "void*"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2149418 "child"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "TreeItemInterface*"
+	nparams 1
+	
+	  param in name "row" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2149546 "parent"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "TreeItemInterface*"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2149930 "row"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "int"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2150186 "SetParent"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "void"
+	nparams 1
+	
+	  param inout name "_parent" explicit_type "QSharedPointer<TreeItemInterface >"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2208042 "flags"
+	abstract preserve_cpp_body_indent const cpp_virtual public explicit_return_type "Qt::ItemFlags"
+	nparams 1
+	
+	  param in name "index" explicit_type "modelIndex"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2228522 "AddChildren"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "void"
+	nparams 2
+	
+	  param in name "children" explicit_type "QList<QSharedPointer<TreeItemInterface> >"
+	  param in name "insertAfter" explicit_type "int"
+	    defaultvalue "0"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2235434 "IndexOf"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "int"
+	nparams 1
+	
+	  param inout name "item" type class_ref 714922 // TreeItemInterface
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2235562 "GetIndexOfChild"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "int"
+	nparams 1
+	
+	  param inout name "child" type class_ref 714922 // TreeItemInterface
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2310442 "GetParent"
+	abstract cpp_virtual public explicit_return_type "QSharedPointer<TreeItemInterface>"
+	nparams 0
+	
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 735018 "AdaptingTableModel"
+      visibility package 
+      cpp_decl "${description}${template}class @{export} @{externalClass}${name}${inherit}  @{parent}
+{
+${members}};
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      ncouples 1
+      key "parent" value ": public QAbstractTableModel"
+      extra_member 195626 "object"
+	
+	cpp "
+Q_OBJECT
+" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      operation 2158250 "AdaptingTableModel"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 1
+	
+	  param inout name "parent" explicit_type "QObject"
+	    defaultvalue "0"
+	cpp_decl "    ${description}${inline}${name}${(}${t0} * ${p0}${v0}${)}${volatile};
+"
+	cpp_def "${description}${inline}@{externalClass}${class}::${name}${(}${t0} * ${p0}${)} @{cInit}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${synchronized}${name}${(}${)}${throws} {
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+	ncouples 1
+	key "cInit" value ": QAbstractTableModel(parent),
+d_ptr(new AdaptingTableModelPrivate())"
+      end
+
+      operation 2158378 "~AdaptingTableModel"
+	cpp_virtual public explicit_return_type ""
+	nparams 0
+	
+	cpp_decl "    ${description}${inline}${virtual}${name}${(}${)}${volatile};
+"
+	cpp_def "${description}${inline}@{externalClass}${class}::${name}${(}${)}${volatile} 
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2158506 "data"
+	preserve_cpp_body_indent const public explicit_return_type "QVariant"
+	nparams 2
+	
+	  param in name "index" explicit_type "modelIndex"
+	  param in name "role" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}, ${t1} ${p1}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2168618 "setData"
+	preserve_cpp_body_indent public explicit_return_type "bool"
+	nparams 3
+	
+	  param in name "index" explicit_type "modelIndex"
+	  param in name "value" explicit_type "variant"
+	  param in name "role" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}, const ${t1} & ${p1}, ${t2} ${p2}${)}${const}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2158634 "rowCount"
+	preserve_cpp_body_indent const public explicit_return_type "int"
+	nparams 1
+	
+	  param in name "index" explicit_type "modelIndex"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2158762 "columnCount"
+	preserve_cpp_body_indent const public explicit_return_type "int"
+	nparams 1
+	
+	  param in name "index" explicit_type "modelIndex"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2198314 "SetInterface"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param inout name "_interface" explicit_type "QSharedPointer<TableDataInterface>"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2178218 "index"
+	preserve_cpp_body_indent const public explicit_return_type "QModelIndex"
+	nparams 3
+	
+	  param in name "row" explicit_type "int"
+	  param in name "column" explicit_type "int"
+	  param in name "parent" explicit_type "modelIndex"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, const ${t2} & ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}, const ${t2} & ${p2}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2191530 "flags"
+	preserve_cpp_body_indent const public explicit_return_type "Qt::ItemFlags"
+	nparams 1
+	
+	  param in name "index" explicit_type "modelIndex"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2191658 "headerData"
+	preserve_cpp_body_indent const public explicit_return_type "QVariant"
+	nparams 3
+	
+	  param in name "section" explicit_type "int"
+	  param inout name "orientation" explicit_type "Qt::Orientation"
+	  param in name "role" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${const}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2262954 "RowForValue"
+	public explicit_return_type "int"
+	nparams 1
+	
+	  param in name "value" explicit_type "void*"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2269482 "sort"
+	public explicit_return_type "void"
+	nparams 0
+	
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2283818 "RemoveRow"
+	public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "index" explicit_type "modelIndex"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      extra_member 188842 "slots"
+	
+	cpp "
+public slots:
+" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      operation 2191402 "OnReloadDataFromInterface"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      classrelation 814762 // (<directional aggregation>)
+	relation 814378 o--> name "<directional aggregation>"
+	  a role_name "" private
+	    cpp default "
+"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 814762 // (<directional aggregation>)
+	  b parent class_ref 761642 // AdaptingTableModelPrivate
+      end
+
+      extra_member 202282 "declare_private"
+	
+	cpp "Q_DECLARE_PRIVATE(AdaptingTableModel)" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      attribute 1300778 "d_ptr"
+	protected explicit_type "AdaptingTableModelPrivate* const"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+    end
+
+    class 741802 "TreeModel"
+      visibility package 
+      cpp_decl "${description}${template}class @{export} @{externalClass}${name}${inherit}  @{parent}
+{
+${members}};
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 800810 // rootItem (<directional aggregation>)
+	relation 800426 o--> name "<directional aggregation>"
+	  stereotype "list"
+	  a role_name "rootItem" multiplicity "*" private
+	    cpp default "     ${description}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};
+"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 800810 // rootItem (<directional aggregation>)
+	  b parent class_ref 714922 // TreeItemInterface
+      end
+    end
+
+    class 748330 "TableDataInterface"
+      abstract visibility package 
+      cpp_decl "${description}${template}class @{export} @{externalClass}${name}${inherit}  @{parent}
+{
+${members}};
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      ncouples 1
+      key "parent" value ": public QObject"
+      extra_member 188970 "object"
+	
+	cpp "
+Q_OBJECT
+" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      operation 2184746 "TableDataInterface"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 1
+	
+	  param inout name "parent" explicit_type "QObject"
+	    defaultvalue "0"
+	cpp_decl "    ${description}${inline}${name}${(}${t0} * ${p0}${v0}${)}${volatile};
+"
+	cpp_def "${description}${inline}@{externalClass}${class}::${name}${(}${t0} * ${p0}${)} @{cInit}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${synchronized}${name}${(}${)}${throws} {
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+	ncouples 1
+	key "cInit" value ": QObject(parent)"
+      end
+
+      operation 2184874 "~TableDataInterface"
+	cpp_virtual public explicit_return_type ""
+	nparams 0
+	
+	cpp_decl "    ${description}${inline}${virtual}${name}${(}${)}${volatile};
+"
+	cpp_def "${description}${inline}@{externalClass}${class}::${name}${(}${)}${volatile} 
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2175914 "GetValue"
+	abstract preserve_cpp_body_indent const cpp_virtual public explicit_return_type "QVariant"
+	nparams 3
+	
+	  param in name "row" explicit_type "int"
+	  param in name "column" explicit_type "int"
+	  param in name "role" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2176042 "SetValue"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "void"
+	nparams 4
+	
+	  param in name "row" explicit_type "int"
+	  param in name "column" explicit_type "int"
+	  param in name "role" explicit_type "int"
+	  param in name "value" explicit_type "QVariant"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}, const ${t3} & ${p3}${v3}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2176170 "GetColumns"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "stringlist"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2176810 "rowCount"
+	abstract preserve_cpp_body_indent const cpp_virtual public explicit_return_type "int"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2177066 "columnCount"
+	abstract preserve_cpp_body_indent const cpp_virtual public explicit_return_type "int"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2242218 "PreviousRowCount"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "int"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2248874 "InternalPointer"
+	abstract preserve_cpp_body_indent const cpp_virtual public explicit_return_type "void*"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2255658 "InternalPointer"
+	abstract preserve_cpp_body_indent const cpp_virtual public explicit_return_type "void*"
+	nparams 1
+	
+	  param in name "row" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2262186 "Equal"
+	abstract cpp_virtual public explicit_return_type "bool"
+	nparams 2
+	
+	  param in name "row" explicit_type "int"
+	  param in name "data" explicit_type "void*"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2269994 "SetSortFunction"
+	abstract cpp_virtual public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "func" explicit_type "std::function<bool(void*, void*)>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2269738 "sort"
+	abstract cpp_virtual public explicit_return_type "void"
+	nparams 0
+	
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2277290 "flags"
+	abstract preserve_cpp_body_indent const cpp_virtual public explicit_return_type "Qt::ItemFlags"
+	nparams 1
+	
+	  param in name "index" explicit_type "modelIndex"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2283946 "RemoveRow"
+	abstract cpp_virtual public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "index" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      extra_member 189098 "signals"
+	
+	cpp "
+signals:
+" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      operation 2191786 "reloadData"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+    end
+
+    class 748458 "TableDataListHolder"
+      abstract visibility package 
+      nformals 1
+      formal name "T" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${description}${template}class @{export} @{externalClass}${name}${inherit}  @{parent}
+{
+${members}};
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      ncouples 1
+      key "export" value ""
+      classrelation 807850 // (<generalisation>)
+	relation 807466 ---|> name "<generalisation>"
+	  a public
+	    cpp default "${type}"
+	    java "${type}"
+	    classrelation_ref 807850 // (<generalisation>)
+	  b parent class_ref 748330 // TableDataInterface
+      end
+
+      operation 2176298 "GetValue"
+	preserve_cpp_body_indent const cpp_virtual public explicit_return_type "QVariant"
+	nparams 3
+	
+	  param in name "row" explicit_type "int"
+	  param in name "column" explicit_type "int"
+	  param in name "role" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2176426 "SetValue"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "void"
+	nparams 4
+	
+	  param in name "row" explicit_type "int"
+	  param in name "column" explicit_type "int"
+	  param in name "role" explicit_type "int"
+	  param in name "value" explicit_type "QVariant"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}, const ${t3} & ${p3}${v3}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, const ${t3} & ${p3}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2176554 "GetColumns"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "stringlist"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2178090 "SetColumns"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "_columns" explicit_type "stringlist"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2176682 "SetData"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "data" explicit_type "QList<T*>"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2198570 "GetData"
+	preserve_cpp_body_indent const public explicit_return_type "QList<T>"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2221994 "GetData"
+	preserve_cpp_body_indent public explicit_return_type "QList<T>&"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2277034 "get_flagsFunctors"
+	class_operation force_body_gen cpp_inline public explicit_return_type "QVector<std::function<Qt::ItemFlags(const QModelIndex&)> >"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    return flagsFunctors;
+}
+"
+	cpp_name_spec "Get${Name}"
+	final java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  return flagsFunctors;
+}
+"
+	java_name_spec "get${Name}"
+	php_final 
+	php_name_spec "get${Name}"
+	
+	python_name_spec "get${Name}"
+	
+	idl_name_spec "get_${name}"
+	get_of_attribute attribute_ref 1294122 // flagsFunctors
+      end
+
+      operation 2177194 "columnCount"
+	preserve_cpp_body_indent const cpp_virtual public explicit_return_type "int"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2176938 "rowCount"
+	preserve_cpp_body_indent const cpp_virtual public explicit_return_type "int"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2177578 "AddGetter"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 2
+	
+	  param in name "index" explicit_type "QPair<int,int>"
+	  param inout name "function" explicit_type "std::function<QVariant(const T*)>"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}, ${t1} ${p1}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2177706 "AddSetter"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 2
+	
+	  param in name "index" explicit_type "QPair<int,int>"
+	  param inout name "function" explicit_type "std::function<void(T*, QVariant)>"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}, ${t1} ${p1}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2242346 "PreviousRowCount"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "int"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2249002 "InternalPointer"
+	preserve_cpp_body_indent const cpp_virtual public explicit_return_type "void*"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2255530 "InternalPointer"
+	preserve_cpp_body_indent const cpp_virtual public explicit_return_type "void*"
+	nparams 1
+	
+	  param in name "row" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2262314 "Equal"
+	cpp_virtual public explicit_return_type "bool"
+	nparams 2
+	
+	  param in name "row" explicit_type "int"
+	  param in name "data" explicit_type "void*"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2276906 "flags"
+	preserve_cpp_body_indent const public explicit_return_type "Qt::ItemFlags"
+	nparams 1
+	
+	  param in name "index" explicit_type "modelIndex"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2270250 "sort"
+	cpp_virtual public explicit_return_type "void"
+	nparams 0
+	
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2276778 "AddFlagsFunctor"
+	class_operation preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param inout name "functor" explicit_type "std::function<Qt::ItemFlags(const QModelIndex&)>"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2277162 "set_flagsFunctors"
+	class_operation force_body_gen public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "value" explicit_type "QVector<std::function<Qt::ItemFlags(const QModelIndex&)> >"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${)}${const}${volatile};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    flagsFunctors = ${p0};
+}
+"
+	cpp_name_spec "Set${Name}"
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  flagsFunctors = ${p0};
+}
+"
+	java_name_spec "set${Name}"
+	
+	php_name_spec "set${Name}"
+	
+	python_name_spec "set${Name}"
+	
+	idl_name_spec "set_${name}"
+	set_of_attribute attribute_ref 1294122 // flagsFunctors
+      end
+
+      operation 2270122 "SetSortFunction"
+	cpp_virtual public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "func" explicit_type "std::function<bool(void*, void*)>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2284074 "RemoveRow"
+	cpp_virtual public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "index" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      attribute 1286314 "m_data"
+	private explicit_type "QList<T*>"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 1286570 "setters"
+	private explicit_type "QHash<QPair<int,int>, std::function<void(T*, QVariant)> >"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 1286442 "getters"
+	private explicit_type "QHash<QPair<int, int>, std::function<QVariant(const T*)> >"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      classrelation 808106 // controller (<directional aggregation>)
+	relation 807722 o--> name "<directional aggregation>"
+	  a role_name "controller" private
+	    cpp default "    ${description}${static}${mutable}${volatile}${const}QSharedPointer<${type} > ${name}${value};
+"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 808106 // controller (<directional aggregation>)
+	  b parent class_ref 714666 // ItemController
+      end
+
+      attribute 1286698 "m_columns"
+	private explicit_type "stringlist"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 1307306 "previousRowCount"
+	private explicit_type "int"
+	init_value "0"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 1313834 "sortFunction"
+	private explicit_type "std::function<bool(void*, void*)>"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 1320362 "flagsFunctors"
+	class_attribute private explicit_type "QVector<std::function<Qt::ItemFlags(const QModelIndex&)> >"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	get_oper operation_ref 2277034 // get_flagsFunctors
+	set_oper operation_ref 2277162 // set_flagsFunctors
+      end
+    end
+
+    class 755114 "StructToDBEditor"
+      visibility package 
+      nformals 1
+      formal name "T" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${description}${template}class @{export} @{externalClass}${name}${inherit}  @{parent}
+{
+${members}};
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      ncouples 1
+      key "export" value ""
+      operation 2206250 "Insert"
+	preserve_cpp_body_indent public explicit_return_type "bool"
+	nparams 3
+	
+	  param in name "tableName" explicit_type "string"
+	  param inout name "data" explicit_type "T"
+	  param in name "db" explicit_type "QSqlDatabase"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} * ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} * ${p1}, ${t2} ${p2}${)}${const}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2235690 "UpdateIndexAsLastInTable"
+	preserve_cpp_body_indent public explicit_return_type "bool"
+	nparams 4
+	
+	  param in name "tableName" explicit_type "string"
+	  param inout name "data" explicit_type "T"
+	  param in name "db" explicit_type "QSqlDatabase"
+	  param in name "indexSetter" explicit_type "std::function<void(T*,int)>"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} * ${p1}${v1}, ${t2} ${p2}${v2}, ${t3} ${p3}${v3}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} * ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${const}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2206762 "Update"
+	preserve_cpp_body_indent public explicit_return_type "bool"
+	nparams 3
+	
+	  param in name "tableName" explicit_type "string"
+	  param inout name "data" explicit_type "T"
+	  param in name "db" explicit_type "QSqlDatabase"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} * ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} * ${p1}, ${t2} ${p2}${)}${const}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2207146 "Delete"
+	preserve_cpp_body_indent public explicit_return_type "bool"
+	nparams 3
+	
+	  param in name "tableName" explicit_type "string"
+	  param inout name "data" explicit_type "T"
+	  param in name "db" explicit_type "QSqlDatabase"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} * ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} * ${p1}, ${t2} ${p2}${)}${const}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2207018 "InsertOrUpdate"
+	preserve_cpp_body_indent public explicit_return_type "bool"
+	nparams 3
+	
+	  param in name "tableName" explicit_type "string"
+	  param inout name "data" explicit_type "T"
+	  param in name "db" explicit_type "QSqlDatabase"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} * ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} * ${p1}, ${t2} ${p2}${)}${const}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2206890 "TestExistence"
+	preserve_cpp_body_indent public explicit_return_type "bool"
+	nparams 3
+	
+	  param in name "tableName" explicit_type "string"
+	  param inout name "data" explicit_type "T"
+	  param in name "db" explicit_type "QSqlDatabase"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} * ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} * ${p1}, ${t2} ${p2}${)}${const}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      attribute 1293738 "nameToPermission"
+	public explicit_type "QHash<QString, std::function<bool(T*)> >"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 1293610 "nameToValue"
+	public explicit_type "QHash<QString, std::function<QVariant(T*)> >"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 1293866 "keys"
+	public explicit_type "stringlist"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+    end
+
+    class 761642 "AdaptingTableModelPrivate"
+      visibility package 
+      cpp_decl "${description}${template}class @{export} @{externalClass}${name}${inherit}  @{parent}
+{
+${members}};
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      ncouples 1
+      key "export" value " "
+      extra_member 202154 "public_member"
+	
+	cpp "Q_DECLARE_PUBLIC(AdaptingTableModel)" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      operation 2215210 "AdaptingTableModelPrivate"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 0
+	
+	cpp_decl "    ${description}${inline}explicit ${name}${(}${)}${volatile};
+"
+	cpp_def "${description}${inline}@{externalClass}${class}::${name}${(}${)}${volatile} 
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${synchronized}${name}${(}${)}${throws} {
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2215338 "~AdaptingTableModelPrivate"
+	cpp_virtual public explicit_return_type ""
+	nparams 0
+	
+	cpp_decl "    ${description}${inline}${virtual}${name}${(}${)}${volatile};
+"
+	cpp_def "${description}${inline}@{externalClass}${class}::${name}${(}${)}${volatile} 
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      attribute 1300650 "q_ptr"
+	private explicit_type "AdaptingTableModel *"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      classrelation 814634 // interface (<directional aggregation>)
+	relation 814250 o--> name "<directional aggregation>"
+	  a role_name "interface" private
+	    cpp default "    ${description}${static}${mutable}${volatile}${const}QSharedPointer<${type}> ${name}${value};
+"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 814634 // interface (<directional aggregation>)
+	  b parent class_ref 748330 // TableDataInterface
+      end
+    end
+  end
+
+  deploymentview 227498 "deployment"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  end
+
+  deploymentview 227626 "classes"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+    artifact 613162 "TreeItem"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${description}
+${includes}
+@{exportHeader}
+@{loggingHeader}
+@{header}
+${declarations}
+@{h_exdef}
+${namespace_start}
+${definition}
+
+${namespace_end}
+#endif
+"
+      associated_classes
+	class_ref 714794 // TreeItem
+      end
+      ncouples 1
+      key "header" value "#include <QAbstractItemView>"
+    end
+
+    artifact 613034 "ItemController"
+      stereotype "source"
+      cpp_h "@{copyright}
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${description}
+${includes}
+@{exportHeader}
+@{loggingHeader}
+@{header}
+${declarations}
+@{h_exdef}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      associated_classes
+	class_ref 714666 // ItemController
+      end
+      ncouples 1
+      key "header" value "#include <functional>"
+    end
+
+    artifact 613290 "TreeItemInterface"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${description}
+${includes}
+@{exportHeader}
+@{loggingHeader}
+@{header}
+${declarations}
+@{h_exdef}
+${namespace_start}
+${definition}
+@{h_later}
+${namespace_end}
+#endif
+"
+      cpp_src "${description}
+@{meta}
+@{src}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 714922 // TreeItemInterface
+      end
+      ncouples 2
+      key "header" value "#include <QWeakPointer>
+#include <QList>
+#include <functional>
+
+"
+      key "h_later" value "
+"
+    end
+
+    artifact 619946 "AddressTemplateData"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${description}
+${includes}
+@{exportHeader}
+@{loggingHeader}
+@{header}
+${declarations}
+@{h_exdef}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${description}
+@{meta}
+@{src}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+      end
+    end
+
+    artifact 620074 "InterfaceAwareTreeData"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${description}
+${includes}
+@{exportHeader}
+@{loggingHeader}
+@{header}
+${declarations}
+@{h_exdef}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${description}
+@{meta}
+@{src}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+      end
+    end
+
+    artifact 626602 "AddressTemplateTreeData"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${description}
+${includes}
+@{exportHeader}
+@{loggingHeader}
+@{header}
+${declarations}
+@{h_exdef}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${description}
+@{meta}
+@{src}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+      end
+    end
+
+    artifact 633386 "AdaptingTableModel"
+      stereotype "source"
+      cpp_h "@{copyright}
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${description}
+${includes}
+@{exportHeader}
+@{loggingHeader}
+@{header}
+${declarations}
+@{h_exdef}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "@{copyright}
+${description}
+@{meta}
+@{src}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 735018 // AdaptingTableModel
+      end
+      ncouples 1
+      key "header" value "#include <QAbstractTableModel>
+"
+    end
+
+    artifact 639914 "TableDataInterface"
+      stereotype "source"
+      cpp_h "@{copyright}
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${description}
+${includes}
+@{exportHeader}
+@{loggingHeader}
+@{header}
+${declarations}
+@{h_exdef}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${description}
+@{meta}
+@{src}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 748330 // TableDataInterface
+      end
+    end
+
+    artifact 640042 "TableDataListHolder"
+      stereotype "source"
+      cpp_h "@{copyright}
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${description}
+${includes}
+
+@{loggingHeader}
+@{header}
+${declarations}
+@{h_exdef}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      associated_classes
+	class_ref 748458 // TableDataListHolder
+      end
+    end
+
+    artifact 646570 "StructToDBEditor"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${description}
+${includes}
+@{exportHeader}
+@{loggingHeader}
+@{header}
+${declarations}
+@{h_exdef}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${description}
+@{meta}
+@{src}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 755114 // StructToDBEditor
+      end
+      ncouples 1
+      key "header" value "#include <functional>
+#include <QxtLogger>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlField>
+#include <QSqlRecord>
+#include <QSqlQuery>"
+    end
+
+    artifact 653098 "AdaptingTableModelPrivate"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${description}
+${includes}
+@{exportHeader}
+@{loggingHeader}
+@{header}
+${declarations}
+@{h_exdef}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${description}
+@{meta}
+@{src}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 761642 // AdaptingTableModelPrivate
+      end
+      ncouples 2
+      key "header" value "#include \"AdaptingTableModel.h\""
+      key "src" value "#include \"TableDataInterface.h\""
+    end
+  end
+end

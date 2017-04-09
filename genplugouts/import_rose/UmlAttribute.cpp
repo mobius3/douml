@@ -9,7 +9,7 @@
 #include "JavaSettings.h"
 #include "IdlSettings.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 void UmlAttribute::import(File & f)
 {
     if (scanning) {
@@ -17,7 +17,7 @@ void UmlAttribute::import(File & f)
         return;
     }
 
-    Q3CString s;
+    QByteArray s;
     UmlTypeSpec t;
 
     for (;;) {
@@ -86,16 +86,16 @@ void UmlAttribute::import(File & f)
 
 void UmlAttribute::import(File & f, UmlClass * parent)
 {
-    Q3CString s;
+    QByteArray s;
 
     if (f.read(s) != STRING)
         f.syntaxError(s, "attributes's name");
 
-    Q3CString id;
-    Q3CString ste;
-    Q3CString doc;
-    Q3Dict<Q3CString> prop;
-    Q3CString s2;
+    QByteArray id;
+    QByteArray ste;
+    QByteArray doc;
+    QHash<QByteArray, QByteArray*> prop;
+    QByteArray s2;
     int k;
 
     do {
@@ -157,7 +157,7 @@ void UmlAttribute::import(File & f, UmlClass * parent)
 
 }
 
-void UmlAttribute::importIdlConstant(UmlClass * parent, const Q3CString & id, const Q3CString & s, const Q3CString & doc, Q3Dict<Q3CString> & prop)
+void UmlAttribute::importIdlConstant(UmlClass * parent, const QByteArray & id, const QByteArray & s, const QByteArray & doc, QHash<QByteArray, QByteArray*> & prop)
 {
     UmlAttribute * x;
 
@@ -174,9 +174,9 @@ void UmlAttribute::importIdlConstant(UmlClass * parent, const Q3CString & id, co
 
     x->set_IdlDecl(IdlSettings::constDecl());
 
-    Q3CString * v;
+    QByteArray * v;
 
-    if ((v = prop.find("CORBA/ImplementationType")) != 0) {
+    if ((v = prop.value("CORBA/ImplementationType")) != 0) {
         if (!v->isEmpty()) {
             UmlTypeSpec t;
 
@@ -187,7 +187,7 @@ void UmlAttribute::importIdlConstant(UmlClass * parent, const Q3CString & id, co
         prop.remove("CORBA/ImplementationType");
     }
 
-    if ((v = prop.find("CORBA/ConstValue")) != 0) {
+    if ((v = prop.value("CORBA/ConstValue")) != 0) {
         if (!v->isEmpty()) {
             *v = "= " + *v;
             x->set_DefaultValue(*v);
@@ -199,21 +199,21 @@ void UmlAttribute::importIdlConstant(UmlClass * parent, const Q3CString & id, co
     x->setProperties(prop);
 }
 
-void UmlAttribute::cplusplus(Q3Dict<Q3CString> &)
+void UmlAttribute::cplusplus(QHash<QByteArray, QByteArray*> &)
 {
     set_CppDecl((parent()->stereotype() == "enum")
                 ? CppSettings::enumItemDecl()
                 : CppSettings::attributeDecl());
 }
 
-void UmlAttribute::oracle8(Q3Dict<Q3CString> &)
+void UmlAttribute::oracle8(QHash<QByteArray, QByteArray*> &)
 {
 }
 
-void UmlAttribute::corba(Q3Dict<Q3CString> & prop)
+void UmlAttribute::corba(QHash<QByteArray, QByteArray*> & prop)
 {
-    Q3CString * v;
-    Q3CString decl;
+    QByteArray * v;
+    QByteArray decl;
 
     if (parent()->stereotype() == "union")
         decl = IdlSettings::unionItemDecl();
@@ -222,23 +222,23 @@ void UmlAttribute::corba(Q3Dict<Q3CString> & prop)
     else
         decl = IdlSettings::attributeDecl();
 
-    if ((v = prop.find("CORBA/IsReadOnly")) != 0) {
+    if ((v = prop.value("CORBA/IsReadOnly")) != 0) {
         if (*v == "TRUE")
             set_isReadOnly(TRUE);
 
         prop.remove("CORBA/IsReadOnly");
     }
 
-    if ((v = prop.find("CORBA/CaseSpecifier")) != 0) {
+    if ((v = prop.value("CORBA/CaseSpecifier")) != 0) {
         set_IdlCase(*v);	// !!!!!!!!!!! chercher union attr
         prop.remove("CORBA/CaseSpecifier");
     }
 
-    if ((v = prop.find("CORBA/ArrayDimensions")) != 0) {
+    if ((v = prop.value("CORBA/ArrayDimensions")) != 0) {
         if (!v->isEmpty()) {
             int index;
 
-            if ((index = decl.find("${name}")) != -1)
+            if ((index = decl.indexOf("${name}")) != -1)
                 //decl.insert(index + 7, "[" + *v + "]");//[jasa] original line
                 decl.insert(index + 7, (const char *)("[" + (*v) + "]")); //[jasa] fix ambiguous call
         }
@@ -249,25 +249,25 @@ void UmlAttribute::corba(Q3Dict<Q3CString> & prop)
     set_IdlDecl(decl);
 }
 
-void UmlAttribute::java(Q3Dict<Q3CString> & prop)
+void UmlAttribute::java(QHash<QByteArray, QByteArray*> & prop)
 {
-    Q3CString * v;
+    QByteArray * v;
 
-    if ((v = prop.find("Java/Final")) != 0) {
+    if ((v = prop.value("Java/Final")) != 0) {
         if (*v == "TRUE")
             set_isReadOnly(TRUE);
 
         prop.remove("Java/Final");
     }
 
-    if ((v = prop.find("Java/Transient")) != 0) {
+    if ((v = prop.value("Java/Transient")) != 0) {
         if (*v == "TRUE")
             set_isJavaTransient(TRUE);
 
         prop.remove("Java/Transient");
     }
 
-    if ((v = prop.find("Java/Volatile")) != 0) {
+    if ((v = prop.value("Java/Volatile")) != 0) {
         if (*v == "TRUE")
             set_isVolatile(TRUE);
 

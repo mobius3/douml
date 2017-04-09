@@ -5,24 +5,22 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <q3vbox.h>
+#include "vvbox.h"
 #include <qlabel.h>
-#include <Q3TextEdit.h>
-#include <q3groupbox.h>
+#include <QTextEdit>
+#include <gridbox.h>
 #include <qtextcodec.h>
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3CString>
-
+#include <QSettings>
+#include <QByteArray>
 #include "UmlCom.h"
-
 #include "TabDialog.h"
 #include "UmlUseCase.h"
 
 const struct {
     const char * lbl;
     const char * key;
-    Q3TextEdit * (TabDialog::* a);
+    QTextEdit * (TabDialog::* a);
 } Tabs[] = {
     {
         "The summary of the use case '",
@@ -50,93 +48,62 @@ const struct {
     }
 };
 
-TabDialog::TabDialog(UmlUseCase * u) : Q3TabDialog(0, ""), uc(u)
+TabDialog::TabDialog(UmlUseCase * u) : TabDialogWrapper(0, ""), uc(u)
 {
-    setCaption(Q3CString("Properties of the use case '") + u->name() + "'");
+    setCaption(QByteArray("Properties of the use case '") + u->name() + "'");
 
     setCancelButton();
 
-    QString cs;
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
+    settings.setIniCodec("UTF-8");
+    int l, t, r, b;
+    l = settings.value("Desktop/left", -1).toInt();
+    r = settings.value("Desktop/right", -1).toInt();
+    t = settings.value("Desktop/top", -1).toInt();
+    b = settings.value("Desktop/bottom", -1).toInt();
 
-    // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
-    // if the path contains non latin1 characters, for instance cyrillic !
-    QString s = QDir::home().absFilePath(".doumlrc");
-    FILE * fp = fopen((const char *) s, "r");
-
-#ifdef WIN32
-
-    if (fp == 0) {
-        QString hd = getenv("USERPROFILE");
-
-        if (! hd.isEmpty()) {
-            QDir d(hd);
-            QString s2 = d.absFilePath(".doumlrc");
-
-            fp = fopen((const char *) s2, "r");
-        }
+    if(l != -1 && r != -1 && t != -1 && b != -1)
+    {
+      if (!((r == 0) && (t == 0) && (r == 0) && (b == 0)) &&
+          !((r < 0) || (t < 0) || (r < 0) || (b < 0)) &&
+          !((r <= l) || (b <= t)))
+      {
+        desktopCenter.setX((r + l) / 2);
+        desktopCenter.setY((t + b) / 2);
+      }
     }
 
-#endif
-
-    if (fp == 0)
-        cs = getenv("BOUML_CHARSET");
-    else {
-        char line[512];
-
-        while (fgets(line, sizeof(line) - 1, fp) != 0) {
-            if (!strncmp(line, "CHARSET ", 8)) {
-                int len = strlen(line);
-
-                if (len != 0) {
-                    if (line[len - 1] == '\n')
-                        line[--len] = 0;
-
-                    if ((len != 0) && (line[len - 1] == '\r'))
-                        line[len - 1] = 0;
-                }
-
-                cs = line + 8;
-            }
-            else if (!strncmp(line, "DESKTOP ", 8)) {
-                int l, t, r, b;
-
-                if (sscanf(line + 8, "%d %d %d %d", &l, &t, &r, &b) == 4) {
-                    if (!((r == 0) && (t == 0) && (r == 0) && (b == 0)) &&
-                        !((r < 0) || (t < 0) || (r < 0) || (b < 0)) &&
-                        !((r <= l) || (b <= t))) {
-                        desktopCenter.setX((r + l) / 2);
-                        desktopCenter.setY((t + b) / 2);
-                    }
-                }
-            }
-        }
-
-        fclose(fp);
-    }
+    QString cs = settings.value("Main/encoding", "UTF-8").toString();
 
     Codec = 0;
 
-    if (!cs.isEmpty() && ((Codec = QTextCodec::codecForName(cs)) == 0)) {
-        Q3VBox * vbox = new Q3VBox(this);
+    QLabel* lbl;
+    GridBox* grid;
+    if (!cs.isEmpty() && ((Codec = QTextCodec::codecForName(cs.toLatin1())) == 0)) {
+        VVBox * vbox = new VVBox(this);
 
         vbox->setMargin(5);
-        (new QLabel("ERROR : No codec for '" + cs + "'", vbox))
+        (lbl = new QLabel("ERROR : No codec for '" + cs + "'", vbox))
         ->setAlignment(Qt::AlignCenter);
+        vbox->addWidget(lbl);
 
         addTab(vbox, "Use case wizard");
         setOkButton(QString::null);
     }
     else {
+        setOkButton();
         for (unsigned i = 0; i != sizeof(Tabs) / sizeof(*Tabs); i += 1) {
-            Q3VBox * vbox = new Q3VBox(this);
+            VVBox * vbox = new VVBox(this);
 
             vbox->setMargin(5);
-            (new QLabel(Q3CString(Tabs[i].lbl) + u->name() + "'",
-                        new Q3GroupBox(1, Qt::Horizontal, vbox)))
+            (lbl = new QLabel(QByteArray(Tabs[i].lbl) + u->name() + "'",
+                        grid = new GridBox(1, vbox)))
             ->setAlignment(Qt::AlignCenter);
-            this->*(Tabs[i]).a = new Q3TextEdit(vbox);
+            vbox->addWidget(grid);
+            grid->addWidget(lbl);
+            vbox->addWidget(this->*(Tabs[i]).a = new QTextEdit(vbox));
 
-            Q3CString v;
+            QByteArray v;
 
             if (u->propertyValue(Tabs[i].key, v))
                 (this->*(Tabs[i]).a)->setText(toUnicode(v));
@@ -148,7 +115,7 @@ TabDialog::TabDialog(UmlUseCase * u) : Q3TabDialog(0, ""), uc(u)
 
 void TabDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialogWrapper::ensurePolished();
 
     if (! desktopCenter.isNull())
         move(x() + desktopCenter.x() - (x() + width() / 2),
@@ -158,16 +125,16 @@ void TabDialog::polish()
 void TabDialog::accept()
 {
     for (unsigned i = 0; i != sizeof(Tabs) / sizeof(*Tabs); i += 1)
-        uc->set_PropertyValue(Tabs[i].key, fromUnicode((this->*(Tabs[i]).a)->text()));
+        uc->set_PropertyValue(Tabs[i].key, fromUnicode((this->*(Tabs[i]).a)->toPlainText()));
 
     UmlCom::bye();
-    Q3TabDialog::accept();
+    TabDialogWrapper::accept();
 }
 
 void TabDialog::reject()
 {
     UmlCom::bye();
-    Q3TabDialog::reject();
+    TabDialogWrapper::reject();
 }
 
 QString TabDialog::toUnicode(const char * str)
@@ -187,7 +154,7 @@ void TabDialog::latinize(QString & s)
     while (i != 0) {
         QChar c = s.at(--i);
 
-        if (c.latin1() == 0) {
+        if (c.toLatin1() == 0) {
             if (c.unicode() == 8217)
                 // special case for the pseudo ' returned by microsoft editors
                 c = '\'';
@@ -199,13 +166,13 @@ void TabDialog::latinize(QString & s)
     }
 }
 
-Q3CString TabDialog::fromUnicode(const QString & s)
+QByteArray TabDialog::fromUnicode(const QString & s)
 {
     if (Codec == 0) {
         QString str = s;
 
         latinize(str);
-        return Q3CString((const char *)str);
+        return QByteArray(str.toLatin1());
     }
     else if (s.isEmpty())
         return "";

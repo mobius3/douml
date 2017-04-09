@@ -7,9 +7,9 @@
 #include "JavaSettings.h"
 #include "PythonSettings.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlRelation::sKind()
+QByteArray UmlRelation::sKind()
 {
     return "relation";
 }
@@ -31,7 +31,7 @@ void UmlRelation::memo_ref()
     }
 }
 
-void UmlRelation::html(Q3CString, unsigned int, unsigned int)
+void UmlRelation::html(QByteArray, unsigned int, unsigned int)
 {
     bool extension;
 
@@ -60,7 +60,7 @@ void UmlRelation::html(Q3CString, unsigned int, unsigned int)
         fw.write("</b></div></td></tr></table>");
     }
 
-    Q3CString s = description();
+    QByteArray s = description();
 
     if (!s.isEmpty()) {
         fw.write("<p>");
@@ -130,7 +130,7 @@ void UmlRelation::html(Q3CString, unsigned int, unsigned int)
     unload(FALSE, FALSE);
 }
 
-void UmlRelation::gen_cpp_decl(Q3CString s, bool descr)
+void UmlRelation::gen_cpp_decl(QByteArray s, bool descr)
 {
     const char * p;
 
@@ -184,7 +184,7 @@ void UmlRelation::gen_cpp_decl(Q3CString s, bool descr)
         else if (!strncmp(p, "${multiplicity}", 15)) {
             p += 15;
 
-            Q3CString m = multiplicity();
+            QByteArray m = multiplicity();
 
             if (m.isEmpty() || (((const char *) m)[0] != '[')) {
                 fw.write("[");
@@ -234,7 +234,7 @@ void UmlRelation::gen_cpp_decl(Q3CString s, bool descr)
     }
 }
 
-void UmlRelation::gen_java_decl(Q3CString s, bool descr)
+void UmlRelation::gen_java_decl(QByteArray s, bool descr)
 {
     const char * p = bypass_comment(s);
 
@@ -283,7 +283,7 @@ void UmlRelation::gen_java_decl(Q3CString s, bool descr)
         else if (!strncmp(p, "${multiplicity}", 15)) {
             p += 15;
 
-            Q3CString m = multiplicity();
+            QByteArray m = multiplicity();
 
             if (! m.isEmpty()) {
                 const char * s = m;
@@ -349,7 +349,7 @@ void UmlRelation::gen_java_decl(Q3CString s, bool descr)
     }
 }
 
-void UmlRelation::gen_php_decl(Q3CString s, bool descr)
+void UmlRelation::gen_php_decl(QByteArray s, bool descr)
 {
     const char * p = bypass_comment(s);
 
@@ -423,9 +423,9 @@ void UmlRelation::gen_php_decl(Q3CString s, bool descr)
     }
 }
 
-void UmlRelation::gen_python_decl(Q3CString s)
+void UmlRelation::gen_python_decl(QByteArray s)
 {
-    Q3CString st = PythonSettings::classStereotype(stereotype());
+    QByteArray st = PythonSettings::classStereotype(stereotype());
     const char * p = bypass_comment(s);
 
     while (*p) {
@@ -474,7 +474,7 @@ void UmlRelation::gen_uml_decl()
     fw.write(" : ");
     roleType()->write();
 
-    Q3CString s;
+    QByteArray s;
 
     s = defaultValue();
 
@@ -506,7 +506,7 @@ void UmlRelation::gen_uml_decl()
 
 }
 
-Q3CString UmlRelation::pretty_name()
+QByteArray UmlRelation::pretty_name()
 {
     return roleName();
 }

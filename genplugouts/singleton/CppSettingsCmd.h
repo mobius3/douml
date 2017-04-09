@@ -3,7 +3,7 @@
 
 
 // Internal enum
-enum CppSettingsCmd {
+/*enum CppSettingsCmd {
     getCppSettingsCmd,
     getCppUseDefaultsCmd,
     setCppUseDefaultsCmd,
@@ -45,5 +45,5 @@ enum CppSettingsCmd {
     setCppIsSetInlineCmd,
     setCppIsSetParamConstCmd
 
-};
+};*/
 #endif

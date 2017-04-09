@@ -21,7 +21,7 @@ UmlItem * UmlActivityPartition::container(anItemKind kind, Token & token, FileIn
 
 void UmlActivityPartition::solve(WrapperStr idref)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it == All.end()) {
         if (!FileIn::isBypassedId(idref))
@@ -79,7 +79,7 @@ void UmlActivityPartition::importIt(FileIn & in, Token & token, UmlItem * where)
         }
 
         if (! idref.isEmpty()) {
-            QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+            QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
             if (it == All.end())
                 Unresolved::addRef(r, idref);

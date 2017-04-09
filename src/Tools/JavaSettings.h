@@ -7,7 +7,7 @@
 #include "misc/mystr.h"
 #include "aVisibility.h"
 #include "UmlSettings.h"
-#include <q3dict.h>
+
 
 // This class manages settings concerning JAVA, configured through
 // the 'Generation settings' dialog.
@@ -376,7 +376,7 @@ private:
 
     static bool _is_force_package_gen;
 
-    static Q3Dict<QString> _map_imports;
+    static QHash<WrapperStr,QString*> _map_imports;
 
 
 protected:

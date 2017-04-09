@@ -29,7 +29,7 @@
 #define PARAMETERSETDATA_H
 
 #include <QTextStream>
-#include <q3valuelist.h>
+#include <QList>
 
 #include "SimpleData.h"
 
@@ -44,13 +44,13 @@ class ParameterSetData : public SimpleData
     friend class ParameterSetDialog;
 
 protected:
-    Q3ValueList<BrowserPin *> pins;
+    QList<BrowserPin *> pins;
 
 public:
     ParameterSetData();
     ParameterSetData(ParameterSetData * model, BrowserNode * bn);
 
-    const Q3ValueList<BrowserPin *> & get_pins() const {
+    const QList<BrowserPin *> & get_pins() const {
         return pins;
     }
 
@@ -65,7 +65,7 @@ public:
     void read(char *& , char *&);
 
 protected:
-    void set_pins(const Q3ValueList<BrowserPin *> & l);
+    void set_pins(const QList<BrowserPin *> & l);
 
 protected slots:
     void check();

@@ -30,7 +30,7 @@
 
 #include <qstringlist.h>
 //Added by qt3to4:
-#include <Q3PopupMenu>
+#include <QMenu>
 #include <QPixmap>
 
 #include "UmlEnum.h"
@@ -71,7 +71,7 @@ public:
     static BrowserClass * isModeled(QString, bool case_sensitive = TRUE);
     static void modified(BrowserNode *, bool);
     static void applyStereotype(BrowserNode * bn);
-    static void menu(Q3PopupMenu & m, BrowserNode * bn, int bias);
+    static void menu(QMenu & m, BrowserNode * bn, int bias);
     static void choiceManagement(BrowserNode * bn, int choice);
     static void callCheck(BrowserNode *, bool rec);
     static bool enumerated(QString st, QStringList &);

@@ -3,15 +3,15 @@
 
 #include "UmlClassDiagram.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlPackage::sKind()
+QByteArray UmlPackage::sKind()
 {
     return (stereotype() == "profile")
            ? "profile" : "package";
 }
 
-void UmlPackage::html(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlPackage::html(QByteArray pfix, unsigned int rank, unsigned int level)
 {
     define();
 
@@ -20,7 +20,7 @@ void UmlPackage::html(Q3CString pfix, unsigned int rank, unsigned int level)
     else
         chapter("Package", pfix, rank, "package", level);
 
-    Q3CString s = description();
+    QByteArray s = description();
 
     if (!s.isEmpty()) {
         fw.write("<p>");

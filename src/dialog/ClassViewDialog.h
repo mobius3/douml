@@ -28,20 +28,20 @@
 #ifndef CLASSVIEWDIALOG_H
 #define CLASSVIEWDIALOG_H
 
-#include <q3tabdialog.h>
+#include <tabdialog.h>
 //Added by qt3to4:
-#include <Q3PtrList>
+//
 
 #include "BrowserNode.h"
 
-class Q3ComboBox;
+class QComboBox;
 class LineEdit;
 class MultiLineEdit;
 class BasicData;
 class KeyValuesTable;
 class BodyDialog;
 
-class ClassViewDialog : public Q3TabDialog
+class ClassViewDialog : public TabDialog
 {
     Q_OBJECT
 
@@ -49,12 +49,12 @@ protected:
     QWidget * umltab;
     BasicData * data;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
-    Q3ComboBox * deploymentview;
+    QComboBox * edstereotype;
+    QComboBox * deploymentview;
     BrowserNodeList deploymentviews;
     MultiLineEdit * comment;
     KeyValuesTable * kvtable;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog *> edits;
 
     static QSize previous_size;
 

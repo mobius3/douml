@@ -1,10 +1,10 @@
 #ifndef _UMLBASECOMPONENT_H
 #define _UMLBASECOMPONENT_H
-
+#include <QVector>
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3ptrvector.h>
+
 
 
 #include "UmlClass.h"	// to avoid destructor problem
@@ -36,18 +36,18 @@ public:
     bool set_AssociatedDiagram(UmlComponentDiagram * d);
 
     // returns (in Java a copy of) the optional realizing classes
-    const Q3PtrVector<UmlClass> & realizingClasses();
+    const QVector<UmlClass*> & realizingClasses();
 
     // returns (in Java a copy of) the optional provided classes
-    const Q3PtrVector<UmlClass> & providedClasses();
+    const QVector<UmlClass*> & providedClasses();
 
     // returns (in Java a copy of) the optional required classes
-    const Q3PtrVector<UmlClass> & requiredClasses();
+    const QVector<UmlClass*> & requiredClasses();
 
     // set the realizing, provided and required classes lists
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    bool set_AssociatedClasses(const Q3PtrVector<UmlClass> & realizing, const Q3PtrVector<UmlClass> & provided, const Q3PtrVector<UmlClass> & required);
+    bool set_AssociatedClasses(const QVector<UmlClass*> & realizing, const QVector<UmlClass*> & provided, const QVector<UmlClass*> & required);
 
     // to unload the object to free memory, it will be reloaded
     // automatically if needed. args unused
@@ -57,11 +57,11 @@ public:
 private:
     UmlComponentDiagram * _assoc_diagram;
 
-    Q3PtrVector<UmlClass> _realizing;
+    QVector<UmlClass*> _realizing;
 
-    Q3PtrVector<UmlClass> _provided;
+    QVector<UmlClass*> _provided;
 
-    Q3PtrVector<UmlClass> _required;
+    QVector<UmlClass*> _required;
 
 
 protected:

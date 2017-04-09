@@ -32,7 +32,7 @@
 #include <math.h>
 
 #include <qpainter.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -68,7 +68,7 @@ ExpansionNodeCanvas::ExpansionNodeCanvas(BrowserNode * bn, UmlCanvas * canvas,
     if (id == 0) {
         // not on read
         update();
-        setZ(r->z() + 2);	// 2 to have lines upper region's z
+        setZValue(r->zValue() + 2);	// 2 to have lines upper region's z
 
         if (canvas->must_draw_all_relations())
             draw_all_flows();
@@ -141,13 +141,13 @@ void ExpansionNodeCanvas::update()
 
 void ExpansionNodeCanvas::check_position()
 {
-    QRect act_rect = region->rect();
-    QPoint ce = center();
+    QRect act_rect = region->sceneRect();
+    QPoint ce = sceneRect().center();
 
-    double dxl = fabs(act_rect.left() - ce.x());
-    double dxr = fabs(act_rect.right() - ce.x());
-    double dyt = fabs(act_rect.top() - ce.y());
-    double dyb = fabs(act_rect.bottom() - ce.y());
+    double dxl = fabs((double)act_rect.left() - ce.x());
+    double dxr = fabs((double)act_rect.right() - ce.x());
+    double dyt = fabs((double)act_rect.top() - ce.y());
+    double dyb = fabs((double)act_rect.bottom() - ce.y());
 
     if ((dxr == 0) || (dxl == 0)) {
         if (ce.y() < act_rect.top())
@@ -198,15 +198,15 @@ void ExpansionNodeCanvas::change_scale()
 
 void ExpansionNodeCanvas::do_change_scale()
 {
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
     double scale = the_canvas()->zoom();
 
-    setSize((int)(width_scale100 * scale) | 1,
+    setRect(0,0,(int)(width_scale100 * scale) | 1,
             (int)(height_scale100 * scale) | 1);
     recenter();
     // expansion region already in position, can check
     check_position();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void ExpansionNodeCanvas::moveBy(double dx, double dy)
@@ -234,8 +234,9 @@ void ExpansionNodeCanvas::draw(QPainter & p)
 
     p.setRenderHint(QPainter::Antialiasing, true);
     QBrush brsh = p.brush();
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
 
+    QBrush backBrush = p.background();
     p.setBackgroundMode((used_color == UmlTransparent)
                         ? ::Qt::TransparentMode
                         : ::Qt::OpaqueMode);
@@ -243,7 +244,9 @@ void ExpansionNodeCanvas::draw(QPainter & p)
     QColor co = color(used_color);
     FILE * fp = svg();
 
-    p.setBackgroundColor(co);
+    backBrush.setColor(co);
+    p.setBackground(backBrush);
+
 
     if (used_color != UmlTransparent)
         p.setBrush(co);
@@ -280,14 +283,18 @@ void ExpansionNodeCanvas::draw(QPainter & p)
         fputs("</g>\n", fp);
     }
 
-    p.setBackgroundColor(bckgrnd);
+    backBrush.setColor(bckgrnd);
+    p.setBackground(backBrush);
     p.setBrush(brsh);
 
     if (selected())
         show_mark(p, r);
 }
-
-UmlCode ExpansionNodeCanvas::type() const
+void ExpansionNodeCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode ExpansionNodeCanvas::typeUmlCode() const
 {
     return UmlExpansionNode;
 }
@@ -309,37 +316,40 @@ void ExpansionNodeCanvas::open()
 
 void ExpansionNodeCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
     int index;
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Edit expansion node"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Select in browser"), 4);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit expansion node"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select in browser"), 4);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 5);
+        MenuFactory::addItem(m, TR("Select linked items"), 5);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (browser_node->is_writable())
-        m.insertItem(TR("Delete from model"), 8);
+        MenuFactory::addItem(m, TR("Delete from model"), 8);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlExpansionNode, 20))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
-    switch (index = m.exec(QCursor::pos())) {
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    switch (index = retAction->data().toInt()) {
     case 0:
         region->upper();
         modified();	// call package_modified()
@@ -387,6 +397,7 @@ void ExpansionNodeCanvas::menu(const QPoint &)
             ToolCom::run(Tool::command(index - 20), browser_node);
 
         return;
+    }
     }
 
     package_modified();
@@ -443,7 +454,7 @@ bool ExpansionNodeCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void ExpansionNodeCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ExpansionNodeCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         ColorSpecVector co(1);
@@ -456,11 +467,10 @@ void ExpansionNodeCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
-                ((ExpansionNodeCanvas *) it.current())->itscolor = itscolor;
-                ((ExpansionNodeCanvas *) it.current())->modified();	// call package_modified()
+            foreach (DiagramItem *item, l) {
+                ExpansionNodeCanvas *canvas = (ExpansionNodeCanvas *)item;
+                canvas->itscolor = itscolor;
+                canvas->modified();	// call package_modified()
             }
         }
 
@@ -469,18 +479,11 @@ void ExpansionNodeCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void ExpansionNodeCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ExpansionNodeCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    ExpansionNodeCanvas * x = (ExpansionNodeCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        ExpansionNodeCanvas * o = (ExpansionNodeCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const ExpansionNodeCanvas * x = (const ExpansionNodeCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString ExpansionNodeCanvas::may_start(UmlCode & l) const
@@ -626,7 +629,7 @@ ExpansionNodeCanvas * ExpansionNodeCanvas::read(char *& st, UmlCanvas * canvas,
 
 void ExpansionNodeCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
     disconnect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
@@ -651,7 +654,7 @@ void ExpansionNodeCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
     connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
     connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));

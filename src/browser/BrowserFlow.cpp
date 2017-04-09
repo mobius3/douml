@@ -29,15 +29,13 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
-#include <q3painter.h>
-#include <q3ptrdict.h>
+#include <qpainter.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QDropEvent>
 #include <QPixmap>
-
 #include "BrowserFlow.h"
 #include "FlowData.h"
 #include "ReferenceDialog.h"
@@ -53,7 +51,7 @@
 #include "mu.h"
 #include "BrowserActivityDiagram.h"
 #include "translate.h"
-
+#include <QAction>
 IdDict<BrowserFlow> BrowserFlow::all(1021, __FILE__);
 QStringList BrowserFlow::its_default_stereotypes;	// unicode
 
@@ -113,10 +111,10 @@ bool BrowserFlow::undelete(bool, QString & warning, QString & renamed)
         return FALSE;
 
     if (def->get_start_node()->deletedp() ||
-        def->get_end_node()->deletedp()) {
-        warning += QString("<li><b>") + quote(name) + "</b> " + TR("from") + " <b>" +
-                   def->get_start_node()->full_name() +
-                   "</b> " + TR("to") + " <b>" + def->get_end_node()->full_name() + "</b>\n";
+            def->get_end_node()->deletedp()) {
+        warning += QString("<li><b>") + quote(name) + "</b> " + QObject::tr("from") + " <b>" +
+                def->get_start_node()->full_name() +
+                "</b> " + QObject::tr("to") + " <b>" + def->get_end_node()->full_name() + "</b>\n";
         return FALSE;
     }
 
@@ -129,7 +127,7 @@ bool BrowserFlow::undelete(bool, QString & warning, QString & renamed)
     return TRUE;
 }
 
-void BrowserFlow::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete)
+void BrowserFlow::referenced_by(QList<BrowserNode *> & l, bool ondelete)
 {
     BrowserNode::referenced_by(l, ondelete);
 
@@ -137,17 +135,18 @@ void BrowserFlow::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete)
         BrowserActivityDiagram::compute_referenced_by(l, this, "flowcanvas", "flow_ref");
 }
 
-void BrowserFlow::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserFlow::compute_referenced_by(QList<BrowserNode *> & l,
                                         const BrowserNode * target)
 {
     IdIterator<BrowserFlow> it(all);
+    while(it.hasNext()){
+        it.next();
+        if(it.value()) {
+            if (!it.value()->deletedp() &&
+                    (it.value()->def->get_end_node() == target))
+                l.append(it.value());
 
-    while (it.current()) {
-        if (!it.current()->deletedp() &&
-            (it.current()->def->get_end_node() == target))
-            l.append(it.current());
-
-        ++it;
+        }
     }
 }
 
@@ -183,7 +182,7 @@ void BrowserFlow::update_stereotype(bool)
 
         if (show_stereotypes && stereotype[0]) {
             QString s = toUnicode(stereotype);
-            int index = s.find(':');
+            int index = s.indexOf(':');
 
             setText(0,
                     "<<" + ((index == -1) ? s : s.mid(index + 1))
@@ -206,25 +205,25 @@ const QPixmap * BrowserFlow::pixmap(int) const
 
 void BrowserFlow::menu()
 {
-    Q3PopupMenu m(0, "flow");
-    Q3PopupMenu toolm(0);
+    QMenu m("flow",0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!in_edition()) {
-            m.setWhatsThis(m.insertItem(TR("Edit"), 0),
-                           TR("to edit the <i>flow</i>, \
-a double click with the left mouse button does the same thing"));
+            MenuFactory::addItem(m,QObject::tr("Edit"), 0,
+                                 QObject::tr("to edit the <i>flow</i>, \
+                                             a double click with the left mouse button does the same thing"));
 
-            if (!is_read_only && (edition_number == 0)) {
-                m.setWhatsThis(m.insertItem(TR("Delete"), 2),
-                               TR("to delete the <i>flow</i>. \
-Note that you can undelete it after"));
-            }
+                                             if (!is_read_only && (edition_number == 0)) {
+                                                 MenuFactory::addItem(m,QObject::tr("Delete"), 2,
+                                                 QObject::tr("to delete the <i>flow</i>. \
+                                                 Note that you can undelete it after"));
+                                             }
 
-            m.insertSeparator();
+                                             m.addSeparator();
         }
 
         QString s = def->get_end_node()->get_name();
@@ -232,30 +231,36 @@ Note that you can undelete it after"));
         if (s.isEmpty())
             s = stringify(def->get_end_node()->get_type());
 
-        m.setWhatsThis(m.insertItem(TR("Select ") + s, 7),
-                       TR("to select the destination"));
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), 4),
-                       TR("to know who reference the <i>region</i>"));
-        mark_menu(m, TR("the flow"), 90);
+        MenuFactory::addItem(m,QObject::tr("Select ") + s, 7,
+                             QObject::tr("to select the destination"));
+        MenuFactory::addItem(m,QObject::tr("Referenced by"), 4,
+                             QObject::tr("to know who reference the <i>region</i>"));
+        mark_menu(m, QObject::tr("the flow").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0)
-            && Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+                && Tool::menu_insert(&toolm, get_type(), 100)) {
+            m.addSeparator();
+            toolm.setTitle(QObject::tr("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 3),
-                       TR("undelete the <i>flow</i> \
-(except if the other side is also deleted)"));
-
-        if (def->get_start_node()->deletedp() ||
-            def->get_end_node()->deletedp())
-            m.setItemEnabled(3, FALSE);
+        MenuFactory::addItem(m,QObject::tr("Undelete"), 3,
+                             QObject::tr("undelete the <i>flow</i> \
+                                         (except if the other side is also deleted)"));
+                                         if (def->get_start_node()->deletedp() ||
+                                             def->get_end_node()->deletedp())
+        {
+                                             QAction* action = MenuFactory::findAction(m, 3);
+                                             if(action)
+                                             action->setEnabled(false);
+                                         }
     }
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *retAction = m.exec(QCursor::pos());
+    if(retAction)
+        exec_menu_choice(retAction->data().toInt());
 }
 
 void BrowserFlow::exec_menu_choice(int rank)
@@ -352,7 +357,7 @@ UmlCode BrowserFlow::get_type() const
 
 QString BrowserFlow::get_stype() const
 {
-    return TR("flow");
+    return QObject::tr("flow");
 }
 
 int BrowserFlow::get_identifier() const
@@ -431,7 +436,7 @@ void BrowserFlow::DropAfterEvent(QDropEvent * e, BrowserNode * after)
 QString BrowserFlow::drag_key() const
 {
     return QString::number(UmlFlow)
-           + "#" + QString::number((unsigned long) parent());
+            + "#" + QString::number((unsigned long) parent());
 }
 
 QString BrowserFlow::drag_postfix() const
@@ -442,7 +447,7 @@ QString BrowserFlow::drag_postfix() const
 QString BrowserFlow::drag_key(BrowserNode * p)
 {
     return QString::number(UmlFlow)
-           + "#" + QString::number((unsigned long) p);
+            + "#" + QString::number((unsigned long) p);
 }
 
 void BrowserFlow::save_stereotypes(QTextStream & st)
@@ -471,7 +476,7 @@ void BrowserFlow::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "flow " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
         BrowserNode::save(st);
@@ -493,8 +498,8 @@ BrowserFlow * BrowserFlow::read_ref(char *& st)
     BrowserFlow * result = all[id];
 
     return (result == 0)
-           ? new BrowserFlow(id)
-           : result;
+            ? new BrowserFlow(id)
+            : result;
 }
 
 BrowserFlow * BrowserFlow::read(char *& st, char * k, BrowserNode * parent)
@@ -534,7 +539,7 @@ BrowserFlow * BrowserFlow::read(char *& st, char * k, BrowserNode * parent)
         result->is_defined = TRUE;
 
         result->is_read_only = (!in_import() && read_only_file()) ||
-                               ((user_id() != 0) && result->is_api_base());
+                ((user_id() != 0) && result->is_api_base());
 
         result->BrowserNode::read(st, k, id);
 

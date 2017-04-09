@@ -40,8 +40,9 @@ class BrowserNode;
 class LabelCanvas;
 class StereotypePropertiesCanvas;
 
-class DiagramCanvas : public Q3CanvasRectangle, public DiagramItem
+class DiagramCanvas : public QGraphicsRectItem, public DiagramItem
 {
+
 protected:
     BrowserNode * browser_node;
     LabelCanvas * label;
@@ -85,6 +86,7 @@ public:
     virtual void change_scale();
     virtual QPoint center() const;
     virtual QRect rect() const;
+    virtual QRect sceneRect() const;
     void recenter();
     void set_center100();
     virtual bool contains(int, int) const;
@@ -126,6 +128,13 @@ public:
     static void draw_control_icon(QPainter & p, QRect & r,
                                   UmlColor used_color, double zoom);
     static double compute_angle(double delta_x, double delta_y);
+    bool visible()const {return isVisible();}
+    bool selected() const { return isSelected();}
+    int width()const { return rect().width();}
+    int height() const {return rect().height();}
+    QGraphicsScene* canvas() const { return scene();}
+    virtual QRectF boundingRect() const;
+    virtual int type() const;
 };
 
 #define CLASS_ICON_SIZE 20

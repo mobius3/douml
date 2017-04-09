@@ -1,6 +1,6 @@
 // *************************************************************************
 //
-// Copyright 2012-2013 Nikolai Marchenko  .
+// Copyright 2012-2013 Nikolai Marchenko.
 //
 // This file is part of the Douml Uml Toolkit.
 //
@@ -71,7 +71,9 @@ public:
     void SetToolBar(EdgeMenuToolBar*);
 
     bool isConnectedToToolBar;
+#ifdef EDGETOOLENABLED
     EdgeMenuToolBar* toolbar = 0;
+#endif
     BrowserNode * currentNode;
     EWidgetModificationMode modificationMode;
     QPoint modificationOrigin;

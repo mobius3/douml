@@ -40,7 +40,7 @@
 #include "util.h"
 #include "activity.h"
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include "misc/mystr.h"
 
 //
@@ -2159,7 +2159,7 @@ void add_pinparam(UmlClassView * base_class_view, UmlClassView * user_class_view
             (ch[index]->name() == "send_cmd")) {
             op = (UmlOperation *) ch[index];
 
-            Q3ValueList<UmlParameter> params = op->params();
+            QList<UmlParameter> params = op->params();
 
             if (params.count() == 3) {
                 UmlParameter p = params.last();

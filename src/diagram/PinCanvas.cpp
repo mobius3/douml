@@ -32,7 +32,7 @@
 #include <math.h>
 
 #include <qpainter.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -70,7 +70,7 @@ PinCanvas::PinCanvas(BrowserNode * bn, UmlCanvas * canvas,
     if (id == 0) {
         // not on read
         update();
-        setZ(a->z() + 2);  // z+2 to be upper the parameter sets with their lines
+        setZValue(a->zValue() + 2);  // z+2 to be upper the parameter sets with their lines
 
         if (canvas->must_draw_all_relations())
             draw_all_flows();
@@ -210,8 +210,8 @@ void PinCanvas::update()
 
 void PinCanvas::check_position()
 {
-    QRect r = rect();
-    QRect action_r = act->rect();
+    QRect r = sceneRect();
+    QRect action_r = act->sceneRect();
     int shadow = act->shadow_margin();
 
     if (shadow != 0) {
@@ -219,10 +219,10 @@ void PinCanvas::check_position()
         action_r.setBottom(action_r.bottom() - shadow);
     }
 
-    double dxl = fabs(action_r.left() - r.right());
-    double dxr = fabs(action_r.right() - r.left());
-    double dyt = fabs(action_r.top() - r.bottom());
-    double dyb = fabs(action_r.bottom() - r.top());
+    double dxl = fabs((double)action_r.left() - r.right());
+    double dxr = fabs((double)action_r.right() - r.left());
+    double dyt = fabs((double)action_r.top() - r.bottom());
+    double dyb = fabs((double)action_r.bottom() - r.top());
 
     if ((dxr == 0) || (dxl == 0)) {
         if (r.bottom() < action_r.top())
@@ -273,14 +273,14 @@ void PinCanvas::change_scale()
 
 void PinCanvas::do_change_scale()
 {
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
     int sz = (int)(PIN_SIZE * the_canvas()->zoom());
 
-    setSize(sz, sz);
+    setRect(0,0,sz, sz);
     recenter();
     // action already in position, can check
     check_position();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void PinCanvas::moveBy(double dx, double dy)
@@ -315,7 +315,8 @@ void PinCanvas::draw(QPainter & p)
 
     p.setRenderHint(QPainter::Antialiasing, true);
     QBrush brsh = p.brush();
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
+    QBrush backBrush = p.background();
 
     p.setBackgroundMode((used_color == UmlTransparent)
                         ? ::Qt::TransparentMode
@@ -325,7 +326,8 @@ void PinCanvas::draw(QPainter & p)
     QRect r = rect();
     FILE * fp = svg();
 
-    p.setBackgroundColor(co);
+    backBrush.setColor(co);
+    p.setBackground(backBrush);
 
     if (used_color != UmlTransparent)
         p.setBrush(co);
@@ -339,15 +341,18 @@ void PinCanvas::draw(QPainter & p)
                 r.x(), r.y(), r.width() - 1, r.height() - 1);
 
     p.drawRect(r);
-
-    p.setBackgroundColor(bckgrnd);
+    backBrush.setColor(bckgrnd);
+    p.setBackground(backBrush);
     p.setBrush(brsh);
 
     if (selected())
         show_mark(p, r);
 }
-
-UmlCode PinCanvas::type() const
+void PinCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode PinCanvas::typeUmlCode() const
 {
     return UmlActivityPin;
 }
@@ -369,42 +374,45 @@ void PinCanvas::open()
 
 void PinCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
     int index;
     BrowserClass * cl =
         ((PinData *) browser_node->get_data())->get_type().type;
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Edit pin"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Select in browser"), 4);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit pin"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select in browser"), 4);
 
     if (cl != 0)
-        m.insertItem(TR("Select class in browser"), 9);
+        MenuFactory::addItem(m, TR("Select class in browser"), 9);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 5);
+        MenuFactory::addItem(m, TR("Select linked items"), 5);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (browser_node->is_writable()) {
-        m.insertItem(TR("Delete from model"), 8);
-        m.insertSeparator();
+        MenuFactory::addItem(m, TR("Delete from model"), 8);
+        m.addSeparator();
     }
 
     if (Tool::menu_insert(&toolm, UmlActivityPin, 20))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
-    switch (index = m.exec(QCursor::pos())) {
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    switch (index = retAction->data().toInt()) {
     case 0:
         act->upper();
         modified();	// call package_modified()
@@ -456,6 +464,7 @@ void PinCanvas::menu(const QPoint &)
             ToolCom::run(Tool::command(index - 20), browser_node);
 
         return;
+    }
     }
 
     package_modified();
@@ -512,7 +521,7 @@ bool PinCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void PinCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void PinCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         ColorSpecVector co(1);
@@ -525,11 +534,10 @@ void PinCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
-                ((PinCanvas *) it.current())->itscolor = itscolor;
-                ((PinCanvas *) it.current())->modified();	// call package_modified()
+            foreach (DiagramItem *item, l) {
+                PinCanvas *canvas = (PinCanvas *)item;
+                canvas->itscolor = itscolor;
+                canvas->modified();
             }
         }
 
@@ -538,18 +546,11 @@ void PinCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void PinCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void PinCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    PinCanvas * x = (PinCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        PinCanvas * o = (PinCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const PinCanvas * x = (const PinCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString PinCanvas::may_start(UmlCode & l) const
@@ -689,7 +690,7 @@ PinCanvas * PinCanvas::read(char *& st, UmlCanvas * canvas,
 
 void PinCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(browser_node->get_data(), 0, this, 0);
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }
@@ -713,7 +714,7 @@ void PinCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
     connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
     connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));

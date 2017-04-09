@@ -31,10 +31,10 @@
 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3PointArray>
+#include <QPolygon>
 
 
 #include "FragmentCanvas.h"
@@ -79,12 +79,13 @@ void FragmentCanvas::delete_it()
 
 void FragmentCanvas::remove_it(FragmentSeparatorCanvas * sp)
 {
-    separators.remove(sp);
+    separators.removeOne(sp);
 }
 
 void FragmentCanvas::draw(QPainter & p)
 {
-    if (! visible()) return;
+    if (! isVisible()) return;
+    QBrush backBrush = p.background();
 
     p.setRenderHint(QPainter::Antialiasing, true);
     QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
@@ -100,7 +101,7 @@ void FragmentCanvas::draw(QPainter & p)
     int x1 = rname.right() + h1;
     int y1 = rname.bottom() - h1;
 
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
 
     p.setBackgroundMode((used_color == UmlTransparent) ? ::Qt::TransparentMode : ::Qt::OpaqueMode);
 
@@ -110,13 +111,14 @@ void FragmentCanvas::draw(QPainter & p)
     if (fp != 0)
         fputs("<g>\n", fp);
 
-    p.setBackgroundColor(co);
+    backBrush.setColor(co);
+    p.setBackground(backBrush);
     p.setFont(the_canvas()->get_font(UmlNormalFont));
 
     if (used_color != UmlTransparent)
         p.fillRect(r, co);
     else if (!name.isEmpty()) {
-        Q3PointArray a(6);
+        QPolygon a(6);
         QBrush brsh = p.brush();
 
         a.setPoint(0, rname.left(), rname.top());
@@ -127,7 +129,7 @@ void FragmentCanvas::draw(QPainter & p)
         a.setPoint(5, rname.left(), rname.top());
 
         p.setBrush(UmlWhiteColor);
-        p.drawPolygon(a, TRUE, 0, 5);
+        p.drawPolygon(a);
         p.setBrush(brsh);
 
         if (fp != 0)
@@ -178,13 +180,17 @@ void FragmentCanvas::draw(QPainter & p)
         fputs("</g>\n", fp);
     }
 
-    p.setBackgroundColor(bckgrnd);
+    backBrush.setColor(bckgrnd);
+    p.setBackground(backBrush);
 
-    if (selected())
+    if (isSelected())
         show_mark(p, r);
 }
-
-UmlCode FragmentCanvas::type() const
+void FragmentCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode FragmentCanvas::typeUmlCode() const
 {
     return UmlFragment;
 }
@@ -201,27 +207,23 @@ bool FragmentCanvas::alignable() const
 
 bool FragmentCanvas::copyable() const
 {
-    return selected();
+    return isSelected();
 }
 
 void FragmentCanvas::moveBy(double dx, double dy)
 {
     DiagramCanvas::moveBy(dx, dy);
 
-    Q3PtrListIterator<FragmentSeparatorCanvas> it(separators);
-
-    for (; it.current(); ++it)
-        it.current()->update();
+    foreach (FragmentSeparatorCanvas *canvas, separators)
+        canvas->update();
 }
 
 void FragmentCanvas::set_z(double z)
 {
-    setZ(z);
+    setZValue(z);
 
-    Q3PtrListIterator<FragmentSeparatorCanvas> it(separators);
-
-    for (; it.current(); ++it)
-        it.current()->update();
+    foreach (FragmentSeparatorCanvas *canvas, separators)
+        canvas->update();
 }
 
 void FragmentCanvas::open()
@@ -313,16 +315,15 @@ void FragmentCanvas::change_scale()
 {
     double scale = the_canvas()->zoom();
 
-    Q3CanvasRectangle::setVisible(FALSE);
-    setSize((int)(width_scale100 * scale), (int)(height_scale100 * scale));
+    QGraphicsRectItem::setVisible(FALSE);
+    //setSize((int)(width_scale100 * scale), (int)(height_scale100 * scale));
+    setRect(0,0,(int)(width_scale100 * scale), (int)(height_scale100 * scale));
     check_size();
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 
-    Q3PtrListIterator<FragmentSeparatorCanvas> it(separators);
-
-    for (; it.current(); ++it)
-        it.current()->update();
+    foreach (FragmentSeparatorCanvas *canvas, separators)
+        canvas->update();
 }
 
 void FragmentCanvas::modified()
@@ -343,34 +344,37 @@ void FragmentCanvas::modified()
 
 void FragmentCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
     MenuFactory::createTitle(m, TR("Fragment"));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 7);
-    m.insertItem(TR("Go down"), 8);
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 2);
-    m.insertItem(TR("Add separator"), 6);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 7);
+    MenuFactory::addItem(m, TR("Go down"), 8);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit"), 2);
+    MenuFactory::addItem(m, TR("Add separator"), 6);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 3);
 
     if (linked()) {
-        m.insertSeparator();
-        m.insertItem(TR("Select linked items"), 4);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Select linked items"), 4);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 5);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 5);
 
     if ((refer != 0) && !refer->deletedp()) {
-        m.insertSeparator();
-        m.insertItem(TR("Show referenced diagram"), 9);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Show referenced diagram"), 9);
     }
 
-    int index = m.exec(QCursor::pos());
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    int index = retAction->data().toInt();
 
     switch (index) {
     case 0:
@@ -428,6 +432,7 @@ void FragmentCanvas::menu(const QPoint &)
     default:
         return;
     }
+    }
 
     package_modified();
 }
@@ -481,7 +486,7 @@ bool FragmentCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void FragmentCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void FragmentCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         ColorSpecVector co(1);
@@ -494,11 +499,9 @@ void FragmentCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
-                ((FragmentCanvas *) it.current())->itscolor = itscolor;
-                ((FragmentCanvas *) it.current())->modified();	// call package_modified()
+            foreach (DiagramItem *item, l) {
+                ((FragmentCanvas *) item)->itscolor = itscolor;
+                ((FragmentCanvas *) item)->modified(); // call package_modified()
             }
         }
 
@@ -507,18 +510,11 @@ void FragmentCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void FragmentCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void FragmentCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    FragmentCanvas * x = (FragmentCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        FragmentCanvas * o = (FragmentCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const FragmentCanvas * x = (const FragmentCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString FragmentCanvas::may_start(UmlCode & l) const
@@ -540,19 +536,15 @@ void FragmentCanvas::resize(aCorner c, int dx, int dy, QPoint & o)
 {
     DiagramCanvas::resize(c, dx, dy, o, min_width, min_height);
 
-    Q3PtrListIterator<FragmentSeparatorCanvas> it(separators);
-
-    for (; it.current(); ++it)
-        it.current()->update();
+    foreach (FragmentSeparatorCanvas *canvas, separators)
+        canvas->update();
 }
 
 void FragmentCanvas::resize(const QSize & sz, bool w, bool h)
 {
     if (DiagramCanvas::resize(sz, w, h, min_width, min_height)) {
-        Q3PtrListIterator<FragmentSeparatorCanvas> it(separators);
-
-        for (; it.current(); ++it)
-            it.current()->update();
+        foreach (FragmentSeparatorCanvas *canvas, separators)
+            canvas->update();
     }
 }
 
@@ -562,14 +554,14 @@ void FragmentCanvas::prepare_for_move(bool on_resize)
         DiagramCanvas::prepare_for_move(on_resize);
 
         QRect r = rect();
-        Q3CanvasItemList l = collisions(TRUE);
-        Q3CanvasItemList::ConstIterator it;
-        Q3CanvasItemList::ConstIterator end = l.end();
+        QList<QGraphicsItem*> l = collidingItems();
+        QList<QGraphicsItem*>::ConstIterator it;
+        QList<QGraphicsItem*>::ConstIterator end = l.end();
         DiagramItem * di;
 
         for (it = l.begin(); it != end; ++it) {
-            if ((*it)->visible() && // at least not deleted
-                !(*it)->selected() &&
+            if ((*it)->isVisible() && // at least not deleted
+                !(*it)->isSelected() &&
                 ((di = QCanvasItemToDiagramItem(*it)) != 0) &&
                 r.contains(di->rect(), TRUE) &&
                 di->move_with(UmlFragment)) {
@@ -589,7 +581,7 @@ void FragmentCanvas::save(QTextStream & st, bool ref, QString & warning) const
         nl_indent(st);
 
         st << "fragment " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         nl_indent(st);
 
@@ -604,16 +596,14 @@ void FragmentCanvas::save(QTextStream & st, bool ref, QString & warning) const
 
         if (! form.isEmpty()) {
             st << "form ";
-            save_string(form, st);
+            save_string(form.toLatin1().constData(), st);
             st << " ";
         }
 
         save_xyzwh(st, this, "xyzwh");
 
-        Q3PtrListIterator<FragmentSeparatorCanvas> it(separators);
-
-        for (; it.current(); ++it)
-            it.current()->save(st, FALSE, warning);
+        foreach (FragmentSeparatorCanvas *canvas, separators)
+            canvas->save(st, false, warning);
 
         indent(-1);
         nl_indent(st);
@@ -655,12 +645,10 @@ FragmentCanvas * FragmentCanvas::read(char *& st, UmlCanvas * canvas, char * k)
         result->height_scale100 = result->height();
         result->set_center100();
         result->show();
-
         if (read_file_format() >= 28) {
             while (strcmp(k = read_keyword(st), "end"))
                 result->separators.append(FragmentSeparatorCanvas::read(st, canvas, k, result));
         }
-
         return result;
     }
     else
@@ -680,10 +668,9 @@ void FragmentCanvas::history_save(QBuffer & b) const
 
     ::save((int) separators.count(), b);
 
-    Q3PtrListIterator<FragmentSeparatorCanvas> it(separators);
 
-    for (; it.current(); ++it)
-        ::save(it.current(), b);
+    foreach (FragmentSeparatorCanvas *canvas, separators)
+        ::save(canvas, b);
 }
 
 void FragmentCanvas::history_load(QBuffer & b)
@@ -698,7 +685,7 @@ void FragmentCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
     int l;
 
@@ -730,24 +717,22 @@ void FragmentCanvas::history_hide()
 
 // for plug outs
 
-void FragmentCanvas::send(ToolCom * com, Q3CanvasItemList & all,
-                          Q3PtrList<FragmentCanvas> & fragments,
-                          Q3PtrList<FragmentCanvas> & refs)
+void FragmentCanvas::send(ToolCom * com, QList<QGraphicsItem*> & all,
+                          QList<FragmentCanvas *> & fragments,
+                          QList<FragmentCanvas *> & refs)
 {
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*>::Iterator cit;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
         DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
-        if ((di != 0) && (*cit)->visible() && (di->type() == UmlFragment))
+        if ((di != 0) && (*cit)->isVisible() && (di->typeUmlCode() == UmlFragment))
             fragments.append((FragmentCanvas *) di);
     }
 
     com->write_unsigned(fragments.count());
 
-    FragmentCanvas * f;
-
-    for (f = fragments.first(); f != 0; f = fragments.next()) {
+    foreach (FragmentCanvas * f, fragments) {
         WrapperStr s = fromUnicode(f->name);
 
         com->write_string((const char *) s);
@@ -760,11 +745,11 @@ void FragmentCanvas::send(ToolCom * com, Q3CanvasItemList & all,
             com->write_unsigned(1);
         else {
             FragmentSeparatorCanvas ** v = new FragmentSeparatorCanvas *[sz];
-            unsigned index;
-            Q3PtrListIterator<FragmentSeparatorCanvas> it(f->separators);
-
-            for (index = 0; it.current(); ++it, index += 1)
-                v[index] = it.current();
+            unsigned index = 0;
+            foreach (FragmentSeparatorCanvas *canvas, f->separators) {
+                v[index] = canvas;
+                ++index;
+            }
 
             bool modified;
 

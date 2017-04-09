@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+
 
 class UmlActivity;
 class UmlClassView;
@@ -27,13 +27,13 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseActivity(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseActivity(void * id, const QByteArray & s) : UmlItem(id, s) {
     }
 
 
 public:
     // return the pre condition
-    const Q3CString & preCondition();
+    const QByteArray & preCondition();
 
     // set the pre condition
     //
@@ -41,7 +41,7 @@ public:
     bool set_PreCondition(const char * v);
 
     // return the post condition
-    const Q3CString & postCondition();
+    const QByteArray & postCondition();
 
     // set the post condition
     //
@@ -50,7 +50,7 @@ public:
 
 #ifdef WITHCPP
     // return the pre condition in C++
-    const Q3CString & cppPreCondition();
+    const QByteArray & cppPreCondition();
 
     // set the pre condition in C++
     //
@@ -58,7 +58,7 @@ public:
     bool set_CppPreCondition(const char * v);
 
     // return the post condition in C++
-    const Q3CString & cppPostCondition();
+    const QByteArray & cppPostCondition();
 
     // set the post condition in C++
     //
@@ -68,7 +68,7 @@ public:
 
 #ifdef WITHJAVA
     // return the pre condition in Java
-    const Q3CString & javaPreCondition();
+    const QByteArray & javaPreCondition();
 
     // set the pre condition in Java
     //
@@ -76,7 +76,7 @@ public:
     bool set_JavaPreCondition(const char * v);
 
     // return the post condition in Java
-    const Q3CString & javaPostCondition();
+    const QByteArray & javaPostCondition();
 
     // set the post condition in Java
     //
@@ -126,20 +126,20 @@ public:
 
 
 private:
-    Q3CString _pre_condition;
+    QByteArray _pre_condition;
 
-    Q3CString _post_condition;
+    QByteArray _post_condition;
 
 #ifdef WITHCPP
-    Q3CString _cpp_pre_condition;
+    QByteArray _cpp_pre_condition;
 
-    Q3CString _cpp_post_condition;
+    QByteArray _cpp_post_condition;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_pre_condition;
+    QByteArray _java_pre_condition;
 
-    Q3CString _java_post_condition;
+    QByteArray _java_post_condition;
 #endif
 
     bool _read_only;

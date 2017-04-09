@@ -29,7 +29,7 @@ public:
 
     WrapperStr true_name(WrapperStr name, WrapperStr decl);
 
-    static bool identChar(char c);
+    static bool identChar(QCharRef);
 
     //The keyword link to the language are removed/replaced
     //Have to remove the name and type keywords given in argument,

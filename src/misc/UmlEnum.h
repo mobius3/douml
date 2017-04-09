@@ -31,7 +31,7 @@
 #define RTTI_ARROW	1000
 #define RTTI_COL_MSG	1001
 #define RTTI_LABEL	1002
-
+#include <QGraphicsItem>
 // warning : enums items order are linked with the ones in api.h
 // and known by ToolCom.cpp
 
@@ -106,6 +106,11 @@ enum UmlCode {
     UmlImage,
 
     UmlCodeSup
+};
+enum GraphicsItemType
+{
+    DiagramItemTypeStart = QGraphicsItem::UserType,
+    DiagramItemTypeEnd = DiagramItemTypeStart + 10000
 };
 
 #define IsaRelation(x) (x < UmlRelations)

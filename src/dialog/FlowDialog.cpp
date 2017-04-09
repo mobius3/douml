@@ -29,12 +29,11 @@
 
 
 
-#include <q3grid.h>
-#include <q3vbox.h>
+#include <gridbox.h>
+#include <vvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
-
 #include "FlowDialog.h"
 #include "FlowData.h"
 #include "BrowserFlow.h"
@@ -51,7 +50,7 @@
 QSize FlowDialog::previous_size;
 
 FlowDialog::FlowDialog(FlowData * d)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), flow(d)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), flow(d)
 {
     d->browser_node->edit_start();
 
@@ -64,48 +63,53 @@ FlowDialog::FlowDialog(FlowData * d)
         setCancelButton(TR("Close"));
     }
 
-    setCaption(TR("Flow dialog"));
+    setWindowTitle(TR("Flow dialog"));
     visit = !hasOkButton();
 
     BrowserNode * bn = flow->browser_node;
-    Q3Grid * grid;
+    GridBox * grid;
 
     //
     // general tab
     //
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     umltab = grid;
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(bn->get_name(), grid);
+    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(!visit, grid);
-    edstereotype->insertItem(toUnicode(flow->get_stereotype()));
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(edstereotype = new QComboBox( grid));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(flow->get_stereotype()));
 
     if (!visit) {
-        edstereotype->insertStringList(BrowserFlow::default_stereotypes());
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlFlow));
+        edstereotype->addItems(BrowserFlow::default_stereotypes());
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlFlow));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
-    Q3VBox * vtab = new Q3VBox(grid);
-    new QLabel(TR("description :"), vtab);
-
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    SmallPushButton* sButton;
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+        vtab->addWidget(sButton);
+    }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(bn->get_comment());
 
@@ -128,11 +132,11 @@ FlowDialog::FlowDialog(FlowData * d)
 
     // USER : list key - value
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable(bn, grid, visit);
+    grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
     addTab(grid, TR("Properties"));
 
     //
@@ -145,7 +149,7 @@ FlowDialog::FlowDialog(FlowData * d)
 
 void FlowDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -154,8 +158,9 @@ FlowDialog::~FlowDialog()
     flow->browser_node->edit_end();
     previous_size = size();
 
-    while (!edits.isEmpty())
-        edits.take(0)->close();
+    foreach (BodyDialog *dialog, edits)
+        dialog->close();
+    edits.clear();
 
     close_dialog(this);
 }
@@ -170,14 +175,14 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
                           const char * sl_guard, const char * sl_selection,
                           const char * sl_transformation, bool enabled)
 {
-    Q3Grid * grid = new Q3Grid(2, this);
-    Q3VBox * vtab;
+    GridBox * grid = new GridBox(2, this);
+    VVBox * vtab;
 
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("weight : "), grid);
-    d.edweight = new LineEdit(grid);
+    grid->addWidget(new QLabel(TR("weight : "), grid));
+    grid->addWidget(d.edweight = new LineEdit(grid));
 
     QFont font = d.edweight->font();
 
@@ -191,39 +196,48 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
     if (visit)
         d.edweight->setReadOnly(TRUE);
 
-    vtab = new Q3VBox(grid);
-    new QLabel(TR("guard : "), vtab);
-
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("guard : "), vtab));
+    SmallPushButton* b;
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_guard);
+    {
+        connect( b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_guard);
+        vtab->addWidget(b);
+    }
 
-    d.edguard = new MultiLineEdit(grid);
+    grid->addWidget(d.edguard = new MultiLineEdit(grid));
     d.edguard->setFont(font);
     d.edguard->setText(st.guard);
 
     if (visit)
         d.edguard->setReadOnly(TRUE);
 
-    vtab = new Q3VBox(grid);
-    new QLabel(TR("selection : "), vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("selection : "), vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_selection);
+    {
+        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_selection);
+        vtab->addWidget(b);
+    }
 
-    d.edselection = new MultiLineEdit(grid);
+    grid->addWidget(d.edselection = new MultiLineEdit(grid));
     d.edselection->setFont(font);
     d.edselection->setText(st.sel_trans.first);
 
     if (visit)
         d.edselection->setReadOnly(TRUE);
 
-    vtab = new Q3VBox(grid);
-    new QLabel(TR("transformation : "), vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("transformation : "), vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_transformation);
+    {
+        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_transformation);
+        vtab->addWidget(b);
+    }
 
-    d.edtransformation = new MultiLineEdit(grid);
+    grid->addWidget(d.edtransformation = new MultiLineEdit(grid));
     d.edtransformation->setFont(font);
     d.edtransformation->setText(st.sel_trans.second);
 
@@ -278,7 +292,7 @@ void FlowDialog::accept()
     BrowserNode * bn = flow->browser_node;
     QString s;
 
-    s = edname->text().stripWhiteSpace();
+    s = edname->text().trimmed();
 
     if ((s != bn->get_name()) &&
         ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlFlow,
@@ -288,7 +302,7 @@ void FlowDialog::accept()
     else {
         bn->set_name(s);
 
-        bool newst = flow->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+        bool newst = flow->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
 
         uml.accept(flow->uml);
         cpp.accept(flow->cpp);
@@ -305,13 +319,13 @@ void FlowDialog::accept()
         bn->package_modified();
         flow->modified();
 
-        Q3TabDialog::accept();
+        TabDialog::accept();
     }
 }
 
 void FlDialog::accept(FlowDef & st)
 {
-    st.weight = edweight->text().stripWhiteSpace();
+    st.weight = edweight->text().trimmed();
     st.guard = edguard->text();
     st.sel_trans.first = edselection->text();
     st.sel_trans.second = edtransformation->text();

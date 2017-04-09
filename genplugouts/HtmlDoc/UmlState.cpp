@@ -3,15 +3,15 @@
 #include "UmlOperation.h"
 #include "UmlState.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlState::sKind()
+QByteArray UmlState::sKind()
 {
     return (parent()->kind() == aClassView)
            ? "state machine" : "state";
 }
 
-void UmlState::html(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlState::html(QByteArray pfix, unsigned int rank, unsigned int level)
 {
     define();
 
@@ -19,7 +19,7 @@ void UmlState::html(Q3CString pfix, unsigned int rank, unsigned int level)
             ? "StateMachine" : "State",
             pfix, rank, "state", level);
 
-    Q3CString s = description();
+    QByteArray s = description();
 
     if (!s.isEmpty()) {
         fw.write("<p>");
@@ -46,7 +46,7 @@ void UmlState::html(Q3CString pfix, unsigned int rank, unsigned int level)
             fw.write("</p>");
         }
 
-        Q3CString scpp, sjava;
+        QByteArray scpp, sjava;
 
         s = entryBehavior();
         scpp = cppEntryBehavior();

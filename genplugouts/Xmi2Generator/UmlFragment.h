@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseFragment.h"
-#include <q3ptrlist.h>
+
 
 class FileOut;
 class UmlItem;
@@ -16,7 +16,7 @@ class UmlFragment : public UmlBaseFragment
 public:
     //
 
-    void write(FileOut & out, UmlItem * diagram, Q3PtrList<UmlSequenceMessage> & msgs);
+    void write(FileOut & out, UmlItem * diagram, QList<UmlSequenceMessage*> & msgs);
 
     void cover(UmlSequenceMessage * msg);
 
@@ -24,9 +24,9 @@ public:
 private:
     //
 
-    void write_ref(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs);
+    void write_ref(FileOut & out, UmlItem * diagram, QList< UmlSequenceMessage* > & msgs);
 
-    Q3PtrList<UmlClassInstanceReference> covered;
+    QList<UmlClassInstanceReference*> covered;
 
 };
 

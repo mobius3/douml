@@ -1,14 +1,14 @@
 
 #include "UmlActivityPin.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlActivityPin::sKind()
+QByteArray UmlActivityPin::sKind()
 {
     return "activity action pin";
 }
 
-void UmlActivityPin::html(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlActivityPin::html(QByteArray pfix, unsigned int rank, unsigned int level)
 {
     define();
 

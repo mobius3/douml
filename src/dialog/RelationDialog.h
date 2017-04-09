@@ -30,20 +30,17 @@
 
 #include <qwidget.h>
 #include <qstringlist.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
-
+#include <tabdialog.h>
 #include "BrowserNode.h"
 #include "VisibilityGroup.h"
 
 class QWidget;
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 class QPushButton;
-class Q3GroupBox;
-class Q3ButtonGroup;
-class Q3VBox;
+class GridBox;
+class BButtonGroup;
+class VVBox;
 class QRadioButton;
 
 class LineEdit;
@@ -59,7 +56,7 @@ class BodyDialog;
 struct RoleDialog {
     // Uml
     LineEdit * edrole;
-    Q3ComboBox * multiplicity;
+    QComboBox * multiplicity;
     QString previous_multiplicity;
     LineEdit * edinit;
     VisibilityGroup uml_visibility;
@@ -116,7 +113,7 @@ struct RoleDialog {
     bool idl_in_union;
     bool idl_in_valuetype;
     QCheckBox * idl_truncatable_inheritance_cb;
-    Q3ComboBox * edcase;
+    QComboBox * edcase;
     BrowserNodeList enums;
     QStringList enum_names;
     MultiLineEdit * edidldecl;
@@ -129,7 +126,7 @@ struct RoleDialog {
     KeyValuesTable * kvtable;
 };
 
-class RelationDialog : public Q3TabDialog
+class RelationDialog : public TabDialog
 {
     Q_OBJECT
 
@@ -144,21 +141,23 @@ protected:
     QWidget * idltab;
     RelationData * rel;
     LineEdit * edname;
-    Q3ComboBox * edtype;
-    Q3ComboBox * edstereotype;
+    QComboBox * edtype;
+    QComboBox * edstereotype;
     RoleDialog a;
     RoleDialog b;
     UmlCode current_type;
     QStringList list;
     BrowserNodeList nodes;
-    Q3ComboBox * edassociation;
+    QString aOldText;
+    QString bOldText;
+    QComboBox * edassociation;
     QWidgetList groupb;
-    Q3GroupBox * cpp_b;
-    Q3GroupBox * java_b;
-    Q3GroupBox * php_b;
-    Q3GroupBox * python_b;
-    Q3GroupBox * idl_b;
-    Q3PtrList<BodyDialog> edits;
+    GridBox * cpp_b;
+    GridBox * java_b;
+    GridBox * php_b;
+    GridBox * python_b;
+    GridBox * idl_b;
+    QList<BodyDialog *> edits;
     BrowserNode * view;
     int offset;
 
@@ -166,25 +165,25 @@ protected:
 
 protected:
     void init_uml_role(RoleDialog & role, const RoleData & rel,
-                       Q3GroupBox * bg, BrowserClass * cl1);
+                       GridBox * bg, BrowserClass * cl1);
     void init_cpp_role(RoleDialog & role, const RoleData & rel,
-                       Q3GroupBox * bg, const char * cpp_update_slot,
+                       GridBox * bg, const char * cpp_update_slot,
                        const char * cpp_default_slot,
                        const char * cpp_unmapped_slot,
                        const char * cpp_include_in_header_slot);
     void init_java_role(RoleDialog & role, const RoleData & rel,
-                        Q3GroupBox * bg, const char * java_update_slot,
+                        GridBox * bg, const char * java_update_slot,
                         const char * java_default_slot,
                         const char * java_unmapped_slot,
                         const char * java_edit_annotation);
     void init_php_role(RoleDialog & role, const RoleData & rel,
-                       Q3GroupBox * bg, const char * php_update_slot,
+                       GridBox * bg, const char * php_update_slot,
                        const char * php_default_slot, const char * php_unmapped_slot);
     void init_python_role(RoleDialog & role, const RoleData & rel, BrowserClass *,
-                          Q3GroupBox * bg, const char * python_update_slot,
+                          GridBox * bg, const char * python_update_slot,
                           const char * python_default_slot, const char * python_unmapped_slot);
     void init_idl_role(RoleDialog & role, const RoleData & rel, ClassData * cld,
-                       Q3GroupBox * bg, const char * idl_update_slot,
+                       GridBox * bg, const char * idl_update_slot,
                        const char * idl_default_slot, const char * idl_unmapped_slot);
     void cpp_update(RoleDialog & role, BrowserClass * cl, BrowserNode * rl);
     void java_update(RoleDialog & role, BrowserClass * cl, BrowserNode * rl);
@@ -265,7 +264,7 @@ protected slots:
     void idl_unmapped_a();
     void idl_default_b();
     void idl_unmapped_b();
-    void update_all_tabs(QWidget *);
+    void update_all_tabs(int index);
 };
 
 #endif

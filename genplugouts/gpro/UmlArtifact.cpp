@@ -3,9 +3,8 @@
 
 #include <qdir.h>
 #include <qmessagebox.h>
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QTextStream.h>
+#include <QByteArray>
 
 #include "CppSettings.h"
 #include "UmlPackage.h"
@@ -13,9 +12,9 @@
 #include "UmlClass.h"
 #include "Dialog.h"
 
-static Q3CString root_dir()
+static QByteArray root_dir()
 {
-    static Q3CString RootDir;
+    static QByteArray RootDir;
 
     if (RootDir.isEmpty()) {
         RootDir = CppSettings::rootDir();
@@ -27,9 +26,9 @@ static Q3CString root_dir()
 
         if (QDir::isRelativePath(RootDir)) {
             QFileInfo f(UmlPackage::getProject()->supportFile());
-            QDir d(f.dirPath());
+            QDir d(f.path());
 
-            RootDir = d.filePath(RootDir);
+            RootDir = d.filePath(RootDir).toLatin1();
         }
     }
 
@@ -41,7 +40,7 @@ void UmlArtifact::genpro()
 {
     UmlPackage * pack = (UmlPackage *) parent()->parent();
 
-    Q3CString path;
+    QByteArray path;
 
     if (! propertyValue("genpro path", path)) {
 
@@ -53,7 +52,7 @@ void UmlArtifact::genpro()
             QDir d(root_dir());
 
             d.cd(path);
-            path = d.absPath();
+            path = d.absolutePath().toLatin1();
         }
     }
 
@@ -64,10 +63,10 @@ void UmlArtifact::genpro()
         UmlCom::trace(stereotype() + " : not managed");
 }
 
-void UmlArtifact::gen_app(const Q3CString & path)
+void UmlArtifact::gen_app(const QByteArray & path)
 {
-    Q3CString target;
-    Q3CString pro;
+    QByteArray target;
+    QByteArray pro;
 
     propertyValue("genpro target", target);
     propertyValue("genpro pro", pro);
@@ -92,16 +91,16 @@ void UmlArtifact::gen_app(const Q3CString & path)
 
         QDir d(path);
 
-        pro = d.absFilePath(pro + ".pro");
+        pro = d.absoluteFilePath(pro + ".pro").toLatin1();
     }
 
-    Q3CString tmplt;
-    Q3CString config;
-    Q3CString defines;
-    Q3CString includepath;
-    Q3CString dependpath;
-    Q3CString objectsdir;
-    Q3CString footer;
+    QByteArray tmplt;
+    QByteArray config;
+    QByteArray defines;
+    QByteArray includepath;
+    QByteArray dependpath;
+    QByteArray objectsdir;
+    QByteArray footer;
 
     if (!propertyValue("genpro tmplt", tmplt))
         tmplt = "app";
@@ -111,34 +110,34 @@ void UmlArtifact::gen_app(const Q3CString & path)
 
     if (!propertyValue("genpro defines", defines))
         defines = "WITHCPP WITHJAVA WITHPHP WITHPYTHON WITHIDL";
-    else if (defines.find("WITHPHP") == -1) {
+    else if (defines.indexOf("WITHPHP") == -1) {
         int n = 0;
 
-        if (defines.find("WITHCPP") != -1)
+        if (defines.indexOf("WITHCPP") != -1)
             n += 1;
 
-        if (defines.find("WITHJAVA") != -1)
+        if (defines.indexOf("WITHJAVA") != -1)
             n += 1;
 
-        if (defines.find("WITHIDL") != -1)
+        if (defines.indexOf("WITHIDL") != -1)
             n += 1;
 
         if (n > 1)
             defines += " WITHPHP WITHPYTHON";
     }
-    else if (defines.find("WITHPYTHON") == -1) {
+    else if (defines.indexOf("WITHPYTHON") == -1) {
         int n = 0;
 
-        if (defines.find("WITHCPP") != -1)
+        if (defines.indexOf("WITHCPP") != -1)
             n += 1;
 
-        if (defines.find("WITHJAVA") != -1)
+        if (defines.indexOf("WITHJAVA") != -1)
             n += 1;
 
-        if (defines.find("WITHIDL") != -1)
+        if (defines.indexOf("WITHIDL") != -1)
             n += 1;
 
-        if (defines.find("WITHPHP") != -1)
+        if (defines.indexOf("WITHPHP") != -1)
             n += 1;
 
         if (n > 1)
@@ -173,17 +172,17 @@ void UmlArtifact::gen_app(const Q3CString & path)
         if (! f.open(QIODevice::WriteOnly))
             QMessageBox::critical((QWidget *) 0, "Error", "Cannot open " + QString(pro));
         else {
-            Q3TextStream t(&f);
+            QTextStream t(&f);
             QFileInfo tfi(target);
             QFileInfo pfi(pro);
 
             t << "TEMPLATE\t= " << tmplt << '\n';
             t << "TARGET\t\t= " << tfi.fileName() << '\n';
 
-            if ((target.find('/') != -1) &&
-                (pro.find('/') != -1) &&
-                (tfi.dirPath(TRUE) != pfi.dirPath(TRUE)))
-                t << "DESTDIR\t\t= " << tfi.dirPath(TRUE) << '\n';
+            if ((target.indexOf('/') != -1) &&
+                (pro.indexOf('/') != -1) &&
+                (tfi.path() != pfi.path()))
+                t << "DESTDIR\t\t= " << tfi.path() << '\n';
 
             if (! objectsdir.isEmpty())
                 t << "OBJECTS_DIR\t= " << objectsdir << '\n';
@@ -199,11 +198,11 @@ void UmlArtifact::gen_app(const Q3CString & path)
             if (!defines.isEmpty())
                 t << "DEFINES\t\t= " << defines << '\n';
 
-            QString prodir = pfi.dirPath(TRUE);
-            const Q3PtrVector<UmlArtifact> & arts = associatedArtifacts();
+            QString prodir = pfi.path();
+            const QVector<UmlArtifact*> & arts = associatedArtifacts();
             unsigned index;
             const char * sep;
-            Q3CString ext;
+            QByteArray ext;
 
             ext = CppSettings::headerExtension();
             sep = "HEADERS\t\t= ";
@@ -275,7 +274,7 @@ QString UmlArtifact::way(QString pro_dir, bool header)
         QDir d(root_dir());
 
         d.cd(dir);
-        dir = d.absPath();
+        dir = d.absolutePath();
     }
 
     if (dir.at(dir.length() - 1) != '/')
@@ -296,7 +295,7 @@ QString UmlArtifact::way(QString pro_dir, bool header)
     for (;;) {
         int i;
 
-        if ((i = pro_dir.find("/", index) + 1) != 0) {
+        if ((i = pro_dir.indexOf("/", index) + 1) != 0) {
             if (pro_dir.left(i) == dir.left(i))
                 index = i;
             else if (dir.length() == index) {
@@ -304,7 +303,7 @@ QString UmlArtifact::way(QString pro_dir, bool header)
                 do
                     s += "../";
 
-                while ((i = pro_dir.find("/", i) + 1) != 0);
+                while ((i = pro_dir.indexOf("/", i) + 1) != 0);
 
                 return s;
             }
@@ -325,7 +324,7 @@ QString UmlArtifact::way(QString pro_dir, bool header)
     // dir.at(index - 1) == pro_dir.at(index - 1) == '/'
     i = index;
 
-    while ((i = pro_dir.find("/", i) + 1) != 0)
+    while ((i = pro_dir.indexOf("/", i) + 1) != 0)
         s += "../";
 
     return s + dir.mid(index);

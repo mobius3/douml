@@ -2,9 +2,9 @@
 #define _BINDING_H
 
 
-#include <q3ptrlist.h>
 
 
+#include <QList>
 class FileIn;
 class Token;
 class UmlClass;
@@ -20,7 +20,7 @@ public:
 
 
 protected:
-    static Q3PtrList<Binding> All;
+    static QList<Binding*> All;
 
     //xmiId of the class having the binbing
     WrapperStr boundId;

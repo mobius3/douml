@@ -31,7 +31,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+
 #endif
 
 #include "UmlPackage.h"
@@ -60,9 +60,9 @@ UmlPackage::UmlPackage(void * id, const WrapperStr & n)
 UmlClassView * UmlPackage::get_classview()
 {
     if (classview == 0) {
-        const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-        UmlItem ** v = ch.data();
-        UmlItem ** const vsup = v + ch.size();
+        const QVector<UmlItem*> & ch = UmlItem::children();
+        UmlItem *const* v = ch.data();
+        UmlItem *const*  vsup = v + ch.size();
 
         for (; v != vsup; v += 1) {
             // return the first class view find
@@ -97,9 +97,9 @@ UmlClassView * UmlPackage::get_classview()
 UmlDeploymentView * UmlPackage::get_deploymentview()
 {
     if (deploymentview == 0) {
-        const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-        UmlItem ** v = ch.data();
-        UmlItem ** const vsup = v + ch.size();
+        const QVector<UmlItem*> & ch = UmlItem::children();
+        UmlItem *const* v = ch.data();
+        UmlItem *const*  vsup = v + ch.size();
 
         for (; v != vsup; v += 1) {
             // return the first class view found
@@ -136,9 +136,9 @@ void UmlPackage::init(Package * p)
 {
     package = p;
 
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = UmlItem::children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
 
     for (; v != vsup; v += 1)
         (*v)->upload(package);
@@ -148,9 +148,9 @@ void UmlPackage::upload(ClassContainer * cnt)
 {
     package = new Package((Package *) cnt, this);
 
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = UmlItem::children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
 
     for (; v != vsup; v += 1)
         (*v)->upload(package);
@@ -160,9 +160,9 @@ int UmlPackage::count_roundtriped()
 {
     int result = 1;
 
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = UmlItem::children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
 
     for (; v != vsup; v += 1)
         if ((*v)->kind() == aPackage)
@@ -178,9 +178,9 @@ bool UmlPackage::set_roundtrip_expected()
 
     Progress::tic_it();
 
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = UmlItem::children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
     bool result = isWritable();
 
     for (; v != vsup; v += 1)
@@ -189,9 +189,9 @@ bool UmlPackage::set_roundtrip_expected()
     return result;
 }
 
-void UmlPackage::mark_useless(Q3PtrList<UmlItem> & l)
+void UmlPackage::mark_useless(QList<UmlItem *> & l)
 {
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
     UmlClassItem ** v = (UmlClassItem **) ch.data();
     UmlClassItem ** const vsup = v + ch.size();
 

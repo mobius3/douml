@@ -29,9 +29,9 @@
 #define HIDESHOWDIALOG_H
 
 #include <qdialog.h>
-#include <q3valuelist.h>
+#include <QList.h>
 
-class Q3ListBox;
+class QListWidget;
 class QCheckBox;
 class BrowserNode;
 class BrowserNodeList;
@@ -42,17 +42,17 @@ class HideShowDialog : public QDialog
 
 protected:
     const BrowserNodeList & all;
-    Q3ValueList<BrowserNode *> & hidden_visible;
+    QList<BrowserNode *> & hidden_visible;
     BooL & on_visible;
-    Q3ListBox * lb_visible;
-    Q3ListBox * lb_hidden;
+    QListWidget * lb_visible;
+    QListWidget * lb_hidden;
     QCheckBox * cb_visible;
 
     static QSize previous_size;
 
 public:
     HideShowDialog(const BrowserNodeList & a,
-                   Q3ValueList<BrowserNode *> & h, BooL & visible);
+                   QList<BrowserNode *> & h, BooL & visible);
     virtual ~HideShowDialog();
 
 protected slots:

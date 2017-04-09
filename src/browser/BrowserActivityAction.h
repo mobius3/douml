@@ -2,7 +2,7 @@
 #include <QTextStream>
 #include <QDragMoveEvent>
 #include <QDropEvent>
-#include <Q3ValueList>
+//#include <QList>
 #include <QPixmap>
 // *************************************************************************
 //
@@ -70,7 +70,7 @@ public:
 
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     QString name = QString());
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
+    virtual bool may_contains_them(const QList<BrowserNode *> & l,
                                    BooL & duplicable) const;
     static BrowserActivityAction * add_activityaction(BrowserNode * future_parent,
             const char * s);
@@ -91,8 +91,8 @@ public:
             BrowserNode * var);
 
     void set_pins();
-    Q3ValueList<BrowserPin *> get_pins() const;
-    Q3ValueList<BrowserParameterSet *> get_parametersets() const;
+    QList<BrowserPin *> get_pins() const;
+    QList<BrowserParameterSet *> get_parametersets() const;
     void remove_pins();
     void update_pins();
     BrowserNode * add_parameter_set(BrowserParameterSet *, const char *);
@@ -133,8 +133,8 @@ public:
     virtual void write_id(ToolCom * com);
     virtual bool api_compatible(unsigned v) const;
 
-    virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
-    static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserNode *);
+    virtual void referenced_by(QList<BrowserNode *> &, bool ondelete = FALSE);
+    static void compute_referenced_by(QList<BrowserNode *> &, BrowserNode *);
 
     static void init();
     static const QStringList & default_stereotypes();

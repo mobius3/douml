@@ -46,7 +46,7 @@ public:
     virtual void draw(QPainter & p);
     virtual void change_scale();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void open();
     virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
@@ -61,6 +61,8 @@ public:
     virtual void save(QTextStream &, bool ref, QString & warning) const;
     static IconCanvas * read(char *& , UmlCanvas *, char *);
 
+protected:
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 private slots:
     void deleted();	// the browser_node is deleted
 };

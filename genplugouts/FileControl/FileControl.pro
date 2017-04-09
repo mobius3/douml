@@ -1,7 +1,16 @@
 TEMPLATE    = app
 TARGET        = file_control
-CONFIG        +=  warn_on qt
-DEFINES        = BooL=bool
+CONFIG(Debug, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt warn_on Debug
+    QMAKE_POST_LINK = " "
+}
+CONFIG(Release, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt Release
+    QMAKE_POST_LINK = " "
+}
+DEFINES        += BooL=bool
 HEADERS        = ./aVisibility.h \
           ./UmlBaseExtraClassMember.h \
           ./UmlBaseComponentDiagram.h \
@@ -113,7 +122,8 @@ HEADERS        = ./aVisibility.h \
           ./UmlBaseDeployment.h \
           ./UmlStereotype.h \
           ./UmlDeploymentDiagram.h \
-          ./UmlUseCase.h
+          ./UmlUseCase.h \
+    hhbox.h
 SOURCES        = ./aVisibility.cpp \
           ./UmlBaseExtraClassMember.cpp \
           ./UmlBaseComponentDiagram.cpp \
@@ -226,25 +236,23 @@ SOURCES        = ./aVisibility.cpp \
           ./UmlBaseDeployment.cpp \
           ./UmlStereotype.cpp \
           ./UmlDeploymentDiagram.cpp \
-          ./UmlUseCase.cpp
+          ./UmlUseCase.cpp \
+    hhbox.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+DEFINES += TRUE=true FALSE=false
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
-Release{
-
-
-    MOC_DIR = bin/douml/fcontrol/MOC_release
-    OBJECTS_DIR = bin/douml/fcontrol/Obj_release
+QT += testlib
+DESTDIR = ../../bin
+Release {
+    MOC_DIR = $${DESTDIR}/moc_release/file_control
+    OBJECTS_DIR = $${DESTDIR}/obj_release/file_control
 }
 
-Debug{
-    MOC_DIR = bin/douml/fcontrol/MOC_Debug
-    OBJECTS_DIR = bin/douml/fcontrol/Obj_Debug
-
+Debug {
+    MOC_DIR = $${DESTDIR}/moc_debug/file_control
+    OBJECTS_DIR = $${DESTDIR}/obj_debug/file_control
 }
-    UI_DIR = src/ui
-    DESTDIR = ../../bin
+UI_DIR = src/ui
 
 QMAKE_CXXFLAGS += -std=gnu++11

@@ -30,10 +30,8 @@
 
 #include "UmlBaseOperation.h"
 #include "UmlClass.h"
-//Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
-#include <Q3PtrList>
+#include <QList>
 
 class Class;
 
@@ -41,7 +39,7 @@ class UmlOperation : public UmlBaseOperation
 {
 private:
     static bool read_param(Class * container, unsigned rank,
-                           const Q3ValueList<FormalParameterList> & tmplts,
+                           const QList<FormalParameterList> & tmplts,
                            UmlParameter & param, WrapperStr & decl, bool bypass);
 
 public:
@@ -49,7 +47,7 @@ public:
         : UmlBaseOperation(id, n) {};
 
     static bool new_one(Class * container, const WrapperStr & name,
-                        const Q3ValueList<FormalParameterList> & tmplts,
+                        const QList<FormalParameterList> & tmplts,
                         const WrapperStr & oper_templ,
                         UmlTypeSpec & type, WrapperStr str_actuals,
                         UmlClass * first_actual_class, WrapperStr type_def,
@@ -59,7 +57,7 @@ public:
                         const WrapperStr & array,	WrapperStr comment,
                         WrapperStr description, WrapperStr annotation
 #ifdef ROUNDTRIP
-                        , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                        , bool roundtrip, QList<UmlItem *> & expected_order
 #endif
                        );
 
@@ -70,7 +68,7 @@ public:
 private:
     static UmlOperation * already_exist_from_id(Class * container, WrapperStr & body);
     static UmlOperation * already_exist(Class * container, const WrapperStr & name,
-                                        Q3ValueList<UmlParameter> & params);
+                                        QList<UmlParameter> & params);
 #endif
 };
 

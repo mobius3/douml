@@ -4,15 +4,14 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlComponentView;
 class UmlPackage;
 
 //  Manage the component views
-class UmlBaseComponentView : public UmlItem
-{
-public:
+class UmlBaseComponentView : public UmlItem {
+  public:
     // returns a new component view named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -24,9 +23,9 @@ public:
     virtual anItemKind kind();
 
 
-protected:
+  protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseComponentView(void * id, const Q3CString & n) : UmlItem(id, n) {};
+    UmlBaseComponentView(void * id, const QByteArray & n) : UmlItem(id, n) {};
 
 };
 

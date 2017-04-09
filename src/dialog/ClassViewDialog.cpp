@@ -29,11 +29,11 @@
 
 
 
-#include <q3grid.h>
+#include <gridbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h>
-#include <q3vbox.h>
+#include <qcombobox.h>
+#include <vvbox.h>
 
 #include "ClassViewDialog.h"
 #include "BasicData.h"
@@ -51,7 +51,7 @@
 QSize ClassViewDialog::previous_size;
 
 ClassViewDialog::ClassViewDialog(BasicData * nd)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), data(nd)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), data(nd)
 {
     nd->get_browser_node()->edit_start();
 
@@ -64,49 +64,50 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
         setCancelButton(TR("Close"));
     }
 
-    setCaption(TR("class view dialog"));
+    setWindowTitle(TR("class view dialog"));
 
     bool visit = !hasOkButton();
 
     // general tab
 
     BrowserClassView * bn = (BrowserClassView *) data->get_browser_node();
-    Q3Grid * grid = new Q3Grid(2, this);
+    GridBox * grid = new GridBox(2, this);
 
     umltab = grid;
-    grid->setMargin(5);
-    grid->setSpacing(5);
+    grid->setMargin(1);
+    grid->setSpacing(1);
 
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(bn->get_name(), grid);
+    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(!visit, grid);
-    edstereotype->insertItem(toUnicode(data->get_stereotype()));
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(edstereotype = new QComboBox( grid));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(data->get_stereotype()));
 
     if (!visit) {
-        edstereotype->insertStringList(BrowserClassView::default_stereotypes());
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlClassView));
+        edstereotype->addItems(BrowserClassView::default_stereotypes());
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlClassView));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
     BrowserNode * bcv = bn->get_associated();
 
     if (visit) {
         if ((bcv != 0) && !bcv->deletedp()) {
-            new QLabel(TR("deployment\nview : "), grid);
-            deploymentview = new Q3ComboBox(FALSE, grid);
+            grid->addWidget(new QLabel(TR("deployment\nview : "), grid));
+            grid->addWidget(deploymentview = new QComboBox( grid));
 
             BrowserNode * bcv = bn->get_associated();
 
-            deploymentview->insertItem(bcv->full_name(TRUE));
-            deploymentview->setCurrentItem(0);
+            deploymentview->addItem(bcv->full_name(TRUE));
+            deploymentview->setCurrentIndex(0);
         }
         else
             deploymentview = 0;
@@ -118,37 +119,42 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
             QStringList deploymentview_names;
 
             deploymentviews.full_names(deploymentview_names);
-            new QLabel(TR("deployment\nview : "), grid);
-            deploymentview = new Q3ComboBox(FALSE, grid);
-            deploymentview->insertItem("");
-            deploymentview->insertStringList(deploymentview_names);
+            grid->addWidget(new QLabel(TR("deployment\nview : "), grid));
+            grid->addWidget(deploymentview = new QComboBox(grid));
+            deploymentview->addItem("");
+            deploymentview->addItems(deploymentview_names);
 
             if (bcv != 0) {
                 if (bcv->deletedp()) {
                     QString fn = bcv->full_name(TRUE);
 
-                    deploymentview->insertItem(fn);
+                    deploymentview->addItem(fn);
                     deploymentviews.append(bcv);
-                    deploymentview->setCurrentItem(deploymentviews.count());
+                    deploymentview->setCurrentIndex(deploymentviews.count());
                 }
                 else
-                    deploymentview->setCurrentItem(deploymentviews.find(bcv) + 1);
+                    deploymentview->setCurrentIndex(deploymentviews.indexOf(bcv) + 1);
             }
             else
-                deploymentview->setCurrentItem(0);
+                deploymentview->setCurrentIndex(0);
         }
         else
             deploymentview = 0;
     }
 
-    Q3VBox * vtab = new Q3VBox(grid);
-    new QLabel(TR("description :"), vtab);
+    VVBox * vtab = new VVBox(grid);
+    grid->addWidget(vtab);
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
 
+    SmallPushButton *sButton;
     if (!visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+        vtab->addWidget(sButton);
+    }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(bn->get_comment());
     QFont font = comment->font();
@@ -163,11 +169,12 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
 
     // USER : list key - value
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
     kvtable = new KeyValuesTable(bn, grid, visit);
+    grid->addWidget(kvtable);
     addTab(grid, TR("Properties"));
 
     //
@@ -180,7 +187,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
 
 void ClassViewDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -189,8 +196,9 @@ ClassViewDialog::~ClassViewDialog()
     data->get_browser_node()->edit_end();
     previous_size = size();
 
-    while (!edits.isEmpty())
-        edits.take(0)->close();
+    foreach (BodyDialog *dialog, edits)
+        dialog->close();
+    edits.clear();
 
     close_dialog(this);
 }
@@ -203,7 +211,7 @@ void ClassViewDialog::change_tabs(QWidget * w)
 
 void ClassViewDialog::edit_description()
 {
-    edit(comment->text(), edname->text().stripWhiteSpace() + "_description",
+    edit(comment->text(), edname->text().trimmed() + "_description",
          data, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
 
@@ -217,7 +225,7 @@ void ClassViewDialog::accept()
     if (!check_edits(edits) || !kvtable->check_unique())
         return;
 
-    QString s = edname->text().stripWhiteSpace();
+    QString s = edname->text().trimmed();
     BrowserClassView * bn = (BrowserClassView *) data->get_browser_node();
 
     if ((s != bn->get_name()) &&
@@ -228,10 +236,10 @@ void ClassViewDialog::accept()
     else {
         bn->set_name(s);
 
-        bool newst = data->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+        bool newst = data->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
 
         if (deploymentview != 0) {
-            int index = deploymentview->currentItem();
+            int index = deploymentview->currentIndex();
 
             bn->set_associated_deploymentview((index == 0)
                                               ? 0 // "" : no deploymentview
@@ -248,6 +256,6 @@ void ClassViewDialog::accept()
         data->modified();
         bn->package_modified();
 
-        Q3TabDialog::accept();
+        TabDialog::accept();
     }
 }

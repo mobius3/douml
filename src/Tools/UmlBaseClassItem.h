@@ -64,7 +64,7 @@ public:
     bool set_IdlDecl(const char * s);
 #endif
 
-    virtual void unload(bool = FALSE, bool = FALSE);
+    virtual void unload(bool = false, bool = false);
 
     friend class UmlBaseAttribute;
     friend class UmlBaseOperation;

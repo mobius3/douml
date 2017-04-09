@@ -1,0 +1,71 @@
+format 75
+
+classcanvas 128170 class_ref 735018 // AdaptingTableModel
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 63 503 2000
+end
+classcanvas 128682 class_ref 714666 // ItemController
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 285 177 2011
+end
+classcanvas 129066 class_ref 714794 // TreeItem
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 494 178 2017
+end
+classcanvas 129450 class_ref 714922 // TreeItemInterface
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 468 299 2023
+end
+classcanvas 130474 class_ref 741802 // TreeModel
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 488 413 2000
+end
+classcanvas 132394 class_ref 748330 // TableDataInterface
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 66 303 2000
+end
+classcanvas 132650 class_ref 748458 // TableDataListHolder
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 64 178 2000
+end
+classcanvas 133290 class_ref 761642 // AdaptingTableModelPrivate
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 43 422 2000
+end
+relationcanvas 129194 relation_ref 773034 // <directional aggregation>
+  from ref 129066 z 2018 to ref 128682
+  role_a_pos 397 185 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129578 relation_ref 773418 // <generalisation>
+  from ref 129066 z 2024 to ref 129450
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 130730 relation_ref 800426 // <directional aggregation>
+  from ref 130474 z 2024 stereotype "<<list>>" xyz 502 374 3000 to ref 129450
+  role_a_pos 538 344 3000 no_role_b
+  multiplicity_a_pos 511 344 3000 no_multiplicity_b
+end
+relationcanvas 132778 relation_ref 807466 // <generalisation>
+  decenter_begin 495
+  from ref 132650 z 2001 to ref 132394
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 133034 relation_ref 807722 // <directional aggregation>
+  from ref 132650 z 2012 to ref 128682
+  role_a_pos 223 185 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 133418 relation_ref 814250 // <directional aggregation>
+  from ref 133290 z 2001 to ref 132394
+  role_a_pos 140 348 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 133546 relation_ref 814378 // <directional aggregation>
+  from ref 128170 z 2001 to ref 133290
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end

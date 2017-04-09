@@ -71,7 +71,7 @@ WrapperStr UmlPackage::rootDir(aLanguage who)
         if (!RootDir.isEmpty() && // empty -> error
             QDir::isRelativePath(RootDir)) {
             QFileInfo f(getProject()->supportFile());
-            QDir d(f.dirPath());
+            QDir d(f.path());
 
             RootDir = d.filePath(RootDir);
         }
@@ -112,7 +112,7 @@ WrapperStr UmlPackage::source_path(const WrapperStr & f)
 
     QDir d(dir.src);
 
-    return WrapperStr(d.filePath(f).toAscii().constData()) + WrapperStr(".") + CppSettings::sourceExtension();
+    return WrapperStr(d.filePath(f).toLatin1().constData()) + WrapperStr(".") + CppSettings::sourceExtension();
 }
 
 WrapperStr UmlPackage::header_path(const WrapperStr & f)
@@ -141,12 +141,12 @@ WrapperStr UmlPackage::header_path(const WrapperStr & f)
 
     QDir d(dir.h);
 
-    return WrapperStr(d.filePath(f).toAscii().constData()) + WrapperStr(".") + CppSettings::headerExtension();
+    return WrapperStr(d.filePath(f).toLatin1().constData()) + WrapperStr(".") + CppSettings::headerExtension();
 }
 
 void UmlPackage::roundtrip_cpp()
 {
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
 
     for (unsigned index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_cpp();
@@ -178,7 +178,7 @@ WrapperStr UmlPackage::java_path(const WrapperStr & f)
 
     QDir d(dir.src);
 
-    return WrapperStr(d.filePath(f).toAscii().constData()) + WrapperStr(".") + JavaSettings::sourceExtension();
+    return WrapperStr(d.filePath(f).toLatin1().constData()) + WrapperStr(".") + JavaSettings::sourceExtension();
 }
 
 WrapperStr UmlPackage::php_path(const WrapperStr & f)
@@ -207,7 +207,7 @@ WrapperStr UmlPackage::php_path(const WrapperStr & f)
 
     QDir d(dir.src);
 
-    return WrapperStr(d.filePath(f).toAscii().constData()) + WrapperStr(".") + PhpSettings::sourceExtension();
+    return WrapperStr(d.filePath(f).toLatin1().constData()) + WrapperStr(".") + PhpSettings::sourceExtension();
 }
 
 WrapperStr UmlPackage::python_path(const WrapperStr & f)
@@ -236,12 +236,12 @@ WrapperStr UmlPackage::python_path(const WrapperStr & f)
 
     QDir d(dir.src);
 
-    return WrapperStr(d.filePath(f).toAscii().constData()) + WrapperStr(".") + PythonSettings::sourceExtension();
+    return WrapperStr(d.filePath(f).toLatin1().constData()) + WrapperStr(".") + PythonSettings::sourceExtension();
 }
 
 void UmlPackage::roundtrip_java()
 {
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
 
     for (unsigned index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_java();
@@ -249,7 +249,7 @@ void UmlPackage::roundtrip_java()
 
 void UmlPackage::roundtrip_php()
 {
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
 
     for (unsigned index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_php();
@@ -257,7 +257,7 @@ void UmlPackage::roundtrip_php()
 
 void UmlPackage::roundtrip_python()
 {
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
 
     for (unsigned index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_python();

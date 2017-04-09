@@ -30,7 +30,7 @@
 
 
 #include <qcursor.h>
-#include <q3filedialog.h>
+//#include <q3filedialog.h>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -43,14 +43,15 @@
 #include "BrowserClass.h"
 #include "BrowserView.h"
 #include "ClassData.h"
-#include "AType.h"
+#include "err.h"
 #include "myio.h"
 #include "ToolCom.h"
 #include "Logging/QsLog.h"
-#include "err.h"
-
+#include "AType.h"
+#include <QTextCodec>
+#include <QFileDialog>
 int GenerationSettings::nbuiltins;
-Builtin * GenerationSettings::builtins;
+QList<Builtin> GenerationSettings::builtins;
 QStringList GenerationSettings::umltypes;
 
 bool GenerationSettings::cpp_default_defs;
@@ -366,312 +367,374 @@ void GenerationSettings::read_declaration_defaults()
 
 void GenerationSettings::init()
 {
-    if (builtins != 0)
-        delete [] builtins;
+//    if (builtins != 0)
+//        delete [] builtins;
 
-    read_declaration_defaults();
+      nbuiltins = 15;
+      //builtins = new Builtin[nbuiltins];
 
-    nbuiltins = 15;
-    builtins = new Builtin[nbuiltins];
+      builtins.append(Builtin("void", "void", "void", "void"));
+      builtins.append(Builtin("any", "void *", "Object", "any"));
 
-    builtins[0].set("void", "void", "void", "void");
-    builtins[1].set("any", "void *", "Object", "any");
-    builtins[1].cpp_in =  "const ${type}";
-    builtins[1].cpp_out = builtins[0].cpp_inout = "${type}";
-    builtins[2].set("bool", "bool", "boolean", "boolean");
-    builtins[3].set("char", "char", "char", "char");
-    builtins[4].set("uchar", "unsigned char", "char", "octet");
-    builtins[5].set("byte", "unsigned char", "byte", "octet");
-    builtins[6].set("short", "short", "short", "short");
-    builtins[7].set("ushort", "unsigned short", "short", "unsigned short");
-    builtins[8].set("int", "int", "int", "long");
-    builtins[9].set("uint", "unsigned int", "int", "unsigned long");
-    builtins[10].set("long", "long", "long", "long");
-    builtins[11].set("ulong", "unsigned long", "long", "unsigned long");
-    builtins[12].set("float", "float", "float", "float");
-    builtins[13].set("double", "double", "double", "double");
-    builtins[14].set("string", "string", "String", "string");
+      builtins[1].cpp_in =  "const ${type}";
+      builtins[1].cpp_out = builtins[0].cpp_inout = "${type}";
 
-    cpp_h_content = CPP_H_CONTENT;
+      builtins.append(Builtin("bool", "bool", "boolean", "boolean"));
+      builtins.append(Builtin("char", "char", "char", "char"));
+      builtins.append(Builtin("uchar", "unsigned char", "char", "octet"));
+      builtins.append(Builtin("byte", "unsigned char", "byte", "octet"));
+      builtins.append(Builtin("short", "short", "short", "short"));
+      builtins.append(Builtin("ushort", "unsigned short", "short", "unsigned short"));
+      builtins.append(Builtin("int", "int", "int", "long"));
+      builtins.append(Builtin("uint", "unsigned int", "int", "unsigned long"));
+      builtins.append(Builtin("long", "long", "long", "long"));
+      builtins.append(Builtin("ulong", "unsigned long", "long", "unsigned long"));
+      builtins.append(Builtin("float", "float", "float", "float"));
+      builtins.append(Builtin("double", "double", "double", "double"));
+      builtins.append(Builtin("string", "string", "String", "string"));
 
-    cpp_src_content = CPP_SRC_CONTENT;
-    cpp_h_extension = "h";
-    cpp_src_extension = "cpp";
+#define CPP_H_CONTENT "#ifndef ${NAMESPACE}_${NAME}_H\n\
+#define ${NAMESPACE}_${NAME}_H\n\
+\n\
+${comment}\n\
+${includes}\n\
+${declarations}\n\
+${namespace_start}\n\
+${definition}\n\
+${namespace_end}\n\
+#endif\n"
+  cpp_h_content = CPP_H_CONTENT;
+#define CPP_SRC_CONTENT "${comment}\n\
+${includes}\n\
+${namespace_start}\n\
+${members}\n\
+${namespace_end}"
+      cpp_src_content = CPP_SRC_CONTENT;
+      cpp_h_extension = "h";
+      cpp_src_extension = "cpp";
 
+#define JAVA_SRC_CONTENT "${comment}\n\
+${package}\n\
+${imports}\n\
+${definition}";
+      java_src_content = JAVA_SRC_CONTENT;
+      java_extension = "java";
 
-    java_src_content = JAVA_SRC_CONTENT;
-    java_extension = "java";
+#define PHP_SRC_CONTENT "<?php\n\
+${comment}\n\
+${namespace}\n\
+${require_once}\n\
+${definition}\n\
+?>\n";
+      php_src_content = PHP_SRC_CONTENT;
+      php_extension = "php";
 
+#define PYTHON_SRC_CONTENT "${comment}\n\
+${import}\n\
+${definition}";
+      python_src_content = PYTHON_SRC_CONTENT;
+      python_extension = "py";
 
-    php_src_content = PHP_SRC_CONTENT;
-    php_extension = "php";
+#define IDL_SRC_CONTENT "#ifndef ${MODULE}_${NAME}_H\n\
+#define ${MODULE}_${NAME}_H\n\
+\n\
+${comment}\n\
+${includes}\n\
+${module_start}\n\
+${definition}\n\
+${module_end}\n\
+#endif\n"
+      idl_src_content = IDL_SRC_CONTENT;
+      idl_extension = "idl";
 
-    python_src_content = PYTHON_SRC_CONTENT;
-    python_extension = "py";
-
-
-    idl_src_content = IDL_SRC_CONTENT;
-    idl_extension = "idl";
-
-    if (relattr_stereotypes != 0)
+      if (relattr_stereotypes != 0)
         delete [] relattr_stereotypes;
 
-    nrelattrstereotypes = 5;
-    relattr_stereotypes = new Stereotype[nrelattrstereotypes];
+      nrelattrstereotypes = 5;
+      relattr_stereotypes = new Stereotype[nrelattrstereotypes];
 
-    relattr_stereotypes[0].set("sequence", "vector", "Vector", "", "list", "sequence");
-    relattr_stereotypes[1].set("vector", "vector", "Vector", "", "list", "sequence");
-    relattr_stereotypes[2].set("list", "list", "List", "", "list", "sequence");
-    relattr_stereotypes[3].set("set", "set", "Set", "", "set", "sequence");
-    relattr_stereotypes[4].set("map", "map", "Map", "", "dict", "sequence");
+      relattr_stereotypes[0].set("sequence", "vector", "Vector", "", "list", "sequence");
+      relattr_stereotypes[1].set("vector", "vector", "Vector", "", "list", "sequence");
+      relattr_stereotypes[2].set("list", "list", "List", "", "list", "sequence");
+      relattr_stereotypes[3].set("set", "set", "Set", "", "set", "sequence");
+      relattr_stereotypes[4].set("map", "map", "Map", "", "dict", "sequence");
 
-    if (class_stereotypes != 0)
+      if (class_stereotypes != 0)
         delete [] class_stereotypes;
 
-    nclassstereotypes = 14;
-    class_stereotypes = new Stereotype[nclassstereotypes];
+      nclassstereotypes = 14;
+      class_stereotypes = new Stereotype[nclassstereotypes];
 
-    class_stereotypes[0].set("class", "class", "class", "class", "class", "valuetype");
-    class_stereotypes[1].set("interface", "class", "interface", "interface", "class", "interface");
-    class_stereotypes[2].set("exception", "class", "class", "class", "class", "exception");
-    class_stereotypes[3].set("enum", "enum", "enum", "enum", "enum", "enum");
-    class_stereotypes[4].set("enum_pattern", "enum", "enum_pattern", "enum", "enum", "enum");
-    class_stereotypes[5].set("struct", "struct", "class", "class", "class", "struct");
-    class_stereotypes[6].set("union", "union", "class", "class", "class", "union");
-    class_stereotypes[7].set("typedef", "typedef", "ignored", "ignored", "ignored", "typedef");
-    class_stereotypes[8].set("boundary", "class", "class", "class", "class", "interface");
-    class_stereotypes[9].set("control", "class", "class", "class", "class", "valuetype");
-    class_stereotypes[10].set("entity", "class", "class", "class", "class", "valuetype");
-    class_stereotypes[11].set("actor", "ignored", "ignored", "ignored", "ignored", "ignored");
-    class_stereotypes[12].set("@interface", "ignored", "@interface", "ignored", "ignored", "ignored");
-    class_stereotypes[13].set("stereotype", "ignored", "ignored", "ignored", "ignored", "ignored");
+      class_stereotypes[0].set("class", "class", "class", "class", "class", "valuetype");
+      class_stereotypes[1].set("interface", "class", "interface", "interface", "class", "interface");
+      class_stereotypes[2].set("exception", "class", "class", "class", "class", "exception");
+      class_stereotypes[3].set("enum", "enum", "enum", "enum", "enum", "enum");
+      class_stereotypes[4].set("enum_pattern", "enum", "enum_pattern", "enum", "enum", "enum");
+      class_stereotypes[5].set("struct", "struct", "class", "class", "class", "struct");
+      class_stereotypes[6].set("union", "union", "class", "class", "class", "union");
+      class_stereotypes[7].set("typedef", "typedef", "ignored", "ignored", "ignored", "typedef");
+      class_stereotypes[8].set("boundary", "class", "class", "class", "class", "interface");
+      class_stereotypes[9].set("control", "class", "class", "class", "class", "valuetype");
+      class_stereotypes[10].set("entity", "class", "class", "class", "class", "valuetype");
+      class_stereotypes[11].set("actor", "ignored", "ignored", "ignored", "ignored", "ignored");
+      class_stereotypes[12].set("@interface", "ignored", "@interface", "ignored", "ignored", "ignored");
+      class_stereotypes[13].set("stereotype", "ignored", "ignored", "ignored", "ignored", "ignored");
 
-    cpp_enum_in = "${type}";
-    cpp_enum_out = "${type} &";
-    cpp_enum_inout = "${type} &";
-    cpp_enum_return = "${type}";
+      cpp_enum_in = "${type}";
+      cpp_enum_out = "${type} &";
+      cpp_enum_inout = "${type} &";
+      cpp_enum_return = "${type}";
 
-    cpp_in = "const ${type} &";
-    cpp_out = "${type} &";
-    cpp_inout = "${type} &";
-    cpp_return = "${type}";
+      cpp_in = "const ${type} &";
+      cpp_out = "${type} &";
+      cpp_inout = "${type} &";
+      cpp_return = "${type}";
 
-    cpp_class_decl = "${comment}${template}class ${name}${inherit} {\n${members}};\n${inlines}\n";
-    cpp_external_class_decl = "${name}\n#include <${name}.h>\n";
-    cpp_struct_decl = "${comment}${template}struct ${name}${inherit} {\n${members}};\n${inlines}\n";
-    cpp_union_decl = "${comment}${template}union ${name} {\n${members}};\n${inlines}\n";
-    cpp_enum_decl = "${comment}enum ${name} {\n${items}\n};\n";
-    cpp_typedef_decl = "${comment}typedef ${type} ${name};\n";
+      cpp_class_decl = "${comment}${template}class ${name}${inherit} {\n${members}};\n${inlines}\n";
+      cpp_external_class_decl = "${name}\n#include <${name}.h>\n";
+      cpp_struct_decl = "${comment}${template}struct ${name}${inherit} {\n${members}};\n${inlines}\n";
+      cpp_union_decl = "${comment}${template}union ${name} {\n${members}};\n${inlines}\n";
+      cpp_enum_decl = "${comment}enum ${name} {\n${items}\n};\n";
+      cpp_typedef_decl = "${comment}typedef ${type} ${name};\n";
+#define CPP_ATTR_DECL1	"    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};\n"
+#define CPP_ATTR_DECL2	"    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};\n"
+#define CPP_ATTR_DESCR1	"    ${description}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};\n"
+#define CPP_ATTR_DESCR2	"    ${description}${static}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};\n"
+      cpp_attr_decl[0] = "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};\n";
+      cpp_attr_decl[1] = CPP_ATTR_DECL1;
+      cpp_attr_decl[2] = CPP_ATTR_DECL2;
+      cpp_enum_item_decl = "  ${name}${value},${comment}";
+      cpp_rel_decl[0][0] = "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};\n";
+      cpp_rel_decl[0][1] = "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};\n";
+      cpp_rel_decl[0][2] = "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${multiplicity}${value};\n";
+      cpp_rel_decl[1][0] = "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};\n";
+      cpp_rel_decl[1][1] = "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};\n";
+      cpp_rel_decl[1][2] = "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};\n";
+      cpp_oper_decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};\n";
+      cpp_oper_def = "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{\n  ${body}}\n";
+      cpp_force_throw = FALSE;
+      cpp_get_visibility = UmlPublic;
+      cpp_get_name = "get_${name}";
+      cpp_get_inline = TRUE;
+      cpp_get_const = TRUE;
+      cpp_get_value_const = TRUE;
+      cpp_set_visibility = UmlPublic;
+      cpp_set_name = "set_${name}";
+      cpp_set_inline = FALSE;
+      cpp_set_param_const = FALSE;
+      cpp_set_param_ref = FALSE;
+      cpp_include_with_path = FALSE;
+      cpp_relative_path = FALSE;
+      cpp_root_relative_path = FALSE;
+      cpp_force_namespace_gen = FALSE;
+      cpp_inline_force_incl_in_h = FALSE;
+      cpp_javadoc_comment = FALSE;
+#define CPP_INDENT_VISIBILITY "  "
+      cpp_indent_visibility = CPP_INDENT_VISIBILITY;
 
-    cpp_attr_decl[0] = "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};\n";
-    cpp_attr_decl[1] = CPP_ATTR_DECL1;
-    cpp_attr_decl[2] = CPP_ATTR_DECL2;
-    cpp_enum_item_decl = "  ${name}${value},${comment}";
-    cpp_rel_decl[0][0] = "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};\n";
-    cpp_rel_decl[0][1] = "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};\n";
-    cpp_rel_decl[0][2] = "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${multiplicity}${value};\n";
-    cpp_rel_decl[1][0] = "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};\n";
-    cpp_rel_decl[1][1] = "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};\n";
-    cpp_rel_decl[1][2] = "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};\n";
+      java_class_decl = "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {\n${members}}\n";
+      java_external_class_decl = "${name}";
+      java_interface_decl = "${comment}${@}${visibility}interface ${name}${extends} {\n${members}}\n";
+      java_enum_decl = "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {\n${items};\n${members}}\n";
+      java_enum_pattern_decl = "${comment}${@}${visibility}final class ${name} {\n${members}\n\
+      private final int value;\n\n\
+      public int value() {\n\
+        return value;\n\
+      }\n\n\
+      public static ${name} fromInt(int value) {\n\
+        switch (value) {\n\
+    ${cases}    default: throw new Error();\n\
+        }\n\n\
+      }\n\
+      private ${name}(int v) { value = v; };\n}\n";
+#define JAVA_ATTR_DECL1	"  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};\n"
+#define JAVA_ATTR_DECL2	"  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};\n"
+#define JAVA_ATTR_DESCR1	"  ${description}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};\n"
+#define JAVA_ATTR_DESCR2	"  ${description}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};\n"
+      java_attr_decl[0] = "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};\n";
+      java_attr_decl[1] = JAVA_ATTR_DECL1;
+      java_attr_decl[2] = JAVA_ATTR_DECL2;
+      java_enum_item_decl = "  ${@}${name}${value},${comment}";
+      java_enum_pattern_item_decl = "  ${comment}${@}public static final int _${name}${value};\n\
+    public static final ${class} ${name} = new ${class}(_${name});\n";
+      java_enum_pattern_item_case = "    case _${name}: return ${name};\n";
+      java_rel_decl[0] = "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};\n";
+      java_rel_decl[1] = "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};\n";
+      java_rel_decl[2] = "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};\n";
+      java_oper_def = "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{\n  ${body}}\n";
+      noncpp_get_visibility = UmlPublic;
+      java_get_name = "get${Name}";
+      java_get_final = TRUE;
+      noncpp_set_visibility = UmlPublic;
+      java_set_name = "set${Name}";
+      java_set_final = FALSE;
+      java_set_param_final = FALSE;
+      java_javadoc_comment = TRUE;
+      java_force_package_gen = TRUE;
 
-    QSettings settings("settings.ini", QSettings::IniFormat);
-    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
-    if(settings.value("Main/compatibility_save") .toInt() != 1)
-        cpp_oper_decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract}${default}${delete}${override}${final};\n";
-    else
-        cpp_oper_decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};\n";
-    cpp_oper_def = "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{\n  ${body}}\n";
-    cpp_force_throw = FALSE;
-    cpp_get_visibility = UmlPublic;
-    cpp_get_name = "get_${name}";
-    cpp_get_inline = TRUE;
-    cpp_get_const = TRUE;
-    cpp_get_value_const = TRUE;
-    cpp_set_visibility = UmlPublic;
-    cpp_set_name = "set_${name}";
-    cpp_set_inline = FALSE;
-    cpp_set_param_const = FALSE;
-    cpp_set_param_ref = FALSE;
-    cpp_include_with_path = FALSE;
-    cpp_relative_path = FALSE;
-    cpp_root_relative_path = FALSE;
-    cpp_force_namespace_gen = FALSE;
-    cpp_inline_force_incl_in_h = FALSE;
-    cpp_javadoc_comment = FALSE;
-    cpp_indent_visibility = "  ";
+    #define PHP_CLASS "${comment}${final}${abstract}class ${name}${extends}${implements} {\n${members}}\n"
+      php_class_decl = PHP_CLASS;
+      php_external_class_decl = "${name}";
+    #define PHP_ENUM "${comment}${visibility}final class ${name} {\n${items}}\n"
+      php_enum_decl = PHP_ENUM;
+    #define PHP_INTERFACE "${comment}interface ${name} {\n${members}}\n"
+      php_interface_decl = PHP_INTERFACE;
+    #define PHP_ATTR "  ${comment}${visibility}${const}${static}${var}${name}${value};\n"
+      php_attr_decl = PHP_ATTR;
+    #define PHP_ENUMITEM "  const ${name}${value};${comment}\n"
+      php_enum_item_decl = PHP_ENUMITEM;
+    #define PHP_REL PHP_ATTR
+      php_rel_decl = PHP_REL;
+    #define PHP_OPER "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}\n{\n  ${body}}\n"
+      // PHP_OPER known by php reverse
+      php_oper_def = PHP_OPER;
+      php_get_name = "get${Name}";
+      php_get_final = TRUE;
+      php_set_name = "set${Name}";
+      php_set_final = FALSE;
+      php_javadoc_comment = FALSE;
+      php_req_with_path = FALSE;
+      php_relative_path = FALSE;
+      php_root_relative_path = FALSE;
+      php_force_namespace_gen = FALSE;
 
-    java_class_decl = "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {\n${members}}\n";
-    java_external_class_decl = "${name}";
-    java_interface_decl = "${comment}${@}${visibility}interface ${name}${extends} {\n${members}}\n";
-    java_enum_decl = "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {\n${items};\n${members}}\n";
-    java_enum_pattern_decl = "${comment}${@}${visibility}final class ${name} {\n${members}\n\
-  private final int value;\n\n\
-  public int value() {\n\
-    return value;\n\
-  }\n\n\
-  public static ${name} fromInt(int value) {\n\
-    switch (value) {\n\
-${cases}    default: throw new Error();\n\
-    }\n\n\
-  }\n\
-  private ${name}(int v) { value = v; };\n}\n";
-    java_attr_decl[0] = "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};\n";
-    java_attr_decl[1] = JAVA_ATTR_DECL1;
-    java_attr_decl[2] = JAVA_ATTR_DECL2;
-    java_enum_item_decl = "  ${@}${name}${value},${comment}";
-    java_enum_pattern_item_decl = "  ${comment}${@}public static final int _${name}${value};\n\
-public static final ${class} ${name} = new ${class}(_${name});\n";
-    java_enum_pattern_item_case = "    case _${name}: return ${name};\n";
-    java_rel_decl[0] = "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};\n";
-    java_rel_decl[1] = "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};\n";
-    java_rel_decl[2] = "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};\n";
-    java_oper_def = "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{\n  ${body}}\n";
-    noncpp_get_visibility = UmlPublic;
-    java_get_name = "get${Name}";
-    java_get_final = TRUE;
-    noncpp_set_visibility = UmlPublic;
-    java_set_name = "set${Name}";
-    java_set_final = FALSE;
-    java_set_param_final = FALSE;
-    java_javadoc_comment = TRUE;
-    java_force_package_gen = TRUE;
+      python_2_2 = TRUE;
+      python_3_operation = FALSE;
+    #define PYTHON_INDENT_STEP "    "
+      python_indent_step = PYTHON_INDENT_STEP;
+    #define PYTHON_CLASS "class ${name}${inherit}:\n${docstring}${members}\n"
+      python_class_decl = PYTHON_CLASS;
+      python_external_class_decl = "${name}";
+    #define PYTHON_ENUM "class ${name}:\n${docstring}${members}\n"
+      python_enum_decl = PYTHON_ENUM;
+    #define PYTHON_ATTR1 "${comment}${self}${name} = ${value}\n"
+    #define PYTHON_ATTR2 "${comment}${self}${name} = ${stereotype}()\n"
+      python_attr_decl[0] = PYTHON_ATTR1;
+      python_attr_decl[1] = PYTHON_ATTR2;
+    #define PYTHON_ENUMITEM PYTHON_ATTR1
+      python_enum_item_decl = PYTHON_ENUMITEM;
+    #define PYTHON_REL1 PYTHON_ATTR1
+    #define PYTHON_REL2 PYTHON_ATTR2
+    #define PYTHON_REL_COMP "${comment}${self}${name} = ${type}()\n"
+      python_rel_decl[0][0] = PYTHON_REL1;
+      python_rel_decl[0][1] = PYTHON_REL2;
+      python_rel_decl[1][0] = PYTHON_REL_COMP;
+      python_rel_decl[1][1] = PYTHON_REL2;
+    #define PYTHON_OPER "${@}${static}${abstract}def ${name}${(}${)}:\n${docstring}${body}\n"
+      python_oper_def = PYTHON_OPER;
+    #define PYTHON_INITOPER "${@}${static}${abstract}def ${name}${(}${p0}${v0}${)}:\n${docstring}super(${class}, ${p0}).__init__()\n${body}\n"
+      python_initoper_def = PYTHON_INITOPER;
+      python_get_name = "get${Name}";
+      python_set_name = "set${Name}";
 
+    #define  IDL_EXTERNAL_CLASS_DECL "${name}\n#include \"${name}.idl\"\n";
+      idl_external_class_decl = IDL_EXTERNAL_CLASS_DECL;
+      idl_interface_decl = "${comment}${abstract}${local}interface ${name}${inherit} {\n${members}};\n";
+    #define IDL_VALUETYPE_DECL "${comment}${abstract}${custom}valuetype ${name}${inherit} {\n${members}};\n";
+      idl_valuetype_decl = IDL_VALUETYPE_DECL;
+      idl_struct_decl = "${comment}struct ${name} {\n${members}};\n";
+      idl_typedef_decl = "${comment}typedef ${type} ${name};\n";
+      idl_exception_decl = "${comment}exception ${name} {\n${members}};\n";
+      idl_union_decl = "${comment}union ${name} switch(${switch}) {\n${members}};\n";
+      idl_enum_decl = "${comment}enum ${name} {\n${items}};\n";
+    #define IDL_ATTR_DECL1	"  ${comment}${readonly}${attribute}${stereotype}<${type}> ${name};\n"
+    #define IDL_ATTR_DECL2	"  ${comment}${readonly}${attribute}${stereotype}<${type},${multiplicity}> ${name};\n"
+    #define IDL_ATTR_DESCR1	"  ${description}${readonly}${attribute}${stereotype}<${type}> ${name};\n"
+    #define IDL_ATTR_DESCR2	"  ${description}${readonly}${attribute}${stereotype}<${type},${multiplicity}> ${name};\n"
+      idl_attr_decl[0] = "  ${comment}${readonly}${attribute}${type} ${name};\n";
+      idl_attr_decl[1] = IDL_ATTR_DECL1;
+      idl_attr_decl[2] = IDL_ATTR_DECL2;
+    #define IDL_VALUETYPE_ATTRIBUTE_DECL0 "  ${comment}${visibility}${type} ${name};\n"
+    #define IDL_VALUETYPE_ATTRIBUTE_DECL1 "  ${comment}${visibility}${stereotype}<${type}> ${name};\n"
+    #define IDL_VALUETYPE_ATTRIBUTE_DECL2 "  ${comment}${visibility}${stereotype}<${type},${multiplicity}> ${name};\n"
+    #define IDL_VALUETYPE_ATTRIBUTE_DESCR1 "  ${description}${visibility}${stereotype}<${type}> ${name};\n"
+    #define IDL_VALUETYPE_ATTRIBUTE_DESCR2 "  ${description}${visibility}${stereotype}<${type},${multiplicity}> ${name};\n"
+      idl_valuetype_attr_decl[0] = IDL_VALUETYPE_ATTRIBUTE_DECL0;
+      idl_valuetype_attr_decl[1] = IDL_VALUETYPE_ATTRIBUTE_DECL1;
+      idl_valuetype_attr_decl[2] = IDL_VALUETYPE_ATTRIBUTE_DECL2;
+    #define IDL_CONST_ATTR_DECL1  "  ${comment}const ${stereotype}<${type}> ${name}${value};\n"
+    #define IDL_CONST_ATTR_DECL2  "  ${comment}const ${stereotype}<${type},${multiplicity}> ${name}${value};\n"
+    #define IDL_CONST_ATTR_DESCR1  "  ${description}const ${stereotype}<${type}> ${name}${value};\n"
+    #define IDL_CONST_ATTR_DESCR2  "  ${description}const ${stereotype}<${type},${multiplicity}> ${name}${value};\n"
+      idl_const_decl[0] = "  ${comment}const ${type} ${name}${value};\n";
+      idl_const_decl[1] = IDL_CONST_ATTR_DECL1;
+      idl_const_decl[2] = IDL_CONST_ATTR_DECL2;
+    #define IDL_UNION_ATTR_DECL1  "  ${comment}case ${case} : ${readonly}${stereotype}<${type}> ${name};";
+    #define IDL_UNION_ATTR_DECL2  "  ${comment}case ${case} : ${readonly}${stereotype}<${type},${multiplicity}> ${name};";
+    #define IDL_UNION_ATTR_DESCR1  "  ${description}case ${case} : ${readonly}${stereotype}<${type}> ${name};";
+    #define IDL_UNION_ATTR_DESCR2  "  ${description}case ${case} : ${readonly}${stereotype}<${type},${multiplicity}> ${name};";
+      idl_union_item_decl[0] = "  ${comment}case ${case} : ${readonly}${type} ${name};";
+      idl_union_item_decl[1] = IDL_UNION_ATTR_DECL1;
+      idl_union_item_decl[2] = IDL_UNION_ATTR_DECL2;
+      idl_enum_item_decl = "  ${name},${comment}";
+      idl_rel_decl[0] = "  ${comment}${readonly}${attribute}${type} ${name};\n";
+      idl_rel_decl[1] = "  ${comment}${readonly}${attribute}${stereotype}<${type}> ${name};\n";
+      idl_rel_decl[2] = "  ${comment}${readonly}${attribute}${stereotype}<${type},${multiplicity}> ${name};\n";
+    #define IDL_VALUETYPE_REL_DECL0 "  ${comment}${visibility}${type} ${name};\n"
+    #define IDL_VALUETYPE_REL_DECL1 "  ${comment}${visibility}${stereotype}<${type}> ${name};\n"
+    #define IDL_VALUETYPE_REL_DECL2 "  ${comment}${visibility}${stereotype}<${type},${multiplicity}> ${name};\n"
+    #define IDL_VALUETYPE_REL_DESCR1 "  ${description}${visibility}${stereotype}<${type}> ${name};\n"
+    #define IDL_VALUETYPE_REL_DESCR2 "  ${description}${visibility}${stereotype}<${type},${multiplicity}> ${name};\n"
+      idl_valuetype_rel_decl[0] = IDL_VALUETYPE_REL_DECL0;
+      idl_valuetype_rel_decl[1] = IDL_VALUETYPE_REL_DECL1;
+      idl_valuetype_rel_decl[2] = IDL_VALUETYPE_REL_DECL2;
+      idl_union_rel_decl[0] = "  ${comment}case ${case} : ${readonly}${type} ${name};";
+      idl_union_rel_decl[1] = "  ${comment}case ${case} : ${readonly}${stereotype}<${type}> ${name};";
+      idl_union_rel_decl[2] = "  ${comment}case ${case} : ${readonly}${stereotype}<${type},${multiplicity}> ${name};";
+      idl_oper_decl = "  ${comment}${oneway}${type} ${name}${(}${)}${raisesnl}${raises};\n";
+      idl_get_name = "get_${name}";
+      idl_set_name = "set_${name}";
+      idl_set_oneway = FALSE;
 
-    php_class_decl = PHP_CLASS;
-    php_external_class_decl = "${name}";
+      uml_get_name = UmlView;
+      uml_set_name = UmlView;
 
-    php_enum_decl = PHP_ENUM;
+      int i;
 
-    php_interface_decl = PHP_INTERFACE;
+      umltypes.clear();
 
-    php_attr_decl = PHP_ATTR;
-
-    php_enum_item_decl = PHP_ENUMITEM;
-
-    php_rel_decl = PHP_REL;
-
-    // PHP_OPER known by php reverse
-    php_oper_def = PHP_OPER;
-    php_get_name = "get${Name}";
-    php_get_final = TRUE;
-    php_set_name = "set${Name}";
-    php_set_final = FALSE;
-    php_javadoc_comment = FALSE;
-    php_req_with_path = FALSE;
-    php_relative_path = FALSE;
-    php_root_relative_path = FALSE;
-    php_force_namespace_gen = FALSE;
-
-    python_2_2 = TRUE;
-    python_3_operation = FALSE;
-
-    python_indent_step = PYTHON_INDENT_STEP_;
-
-    python_class_decl = PYTHON_CLASS;
-    python_external_class_decl = "${name}";
-
-    python_enum_decl = PYTHON_ENUM;
-    python_attr_decl[0] = PYTHON_ATTR1;
-    python_attr_decl[1] = PYTHON_ATTR2;
-
-    python_enum_item_decl = PYTHON_ENUMITEM;
-    python_rel_decl[0][0] = PYTHON_REL1;
-    python_rel_decl[0][1] = PYTHON_REL2;
-    python_rel_decl[1][0] = PYTHON_REL_COMP;
-    python_rel_decl[1][1] = PYTHON_REL2;
-
-    python_oper_def = PYTHON_OPER;
-
-    python_initoper_def = PYTHON_INITOPER;
-    python_get_name = "get${Name}";
-    python_set_name = "set${Name}";
-
-
-    idl_external_class_decl = IDL_EXTERNAL_CLASS_DECL;
-    idl_interface_decl = "${comment}${abstract}${local}interface ${name}${inherit} {\n${members}};\n";
-
-    idl_valuetype_decl = IDL_VALUETYPE_DECL;
-    idl_struct_decl = "${comment}struct ${name} {\n${members}};\n";
-    idl_typedef_decl = "${comment}typedef ${type} ${name};\n";
-    idl_exception_decl = "${comment}exception ${name} {\n${members}};\n";
-    idl_union_decl = "${comment}union ${name} switch(${switch}) {\n${members}};\n";
-    idl_enum_decl = "${comment}enum ${name} {\n${items}};\n";
-    idl_attr_decl[0] = "  ${comment}${readonly}${attribute}${type} ${name};\n";
-    idl_attr_decl[1] = IDL_ATTR_DECL1;
-    idl_attr_decl[2] = IDL_ATTR_DECL2;
-    idl_valuetype_attr_decl[0] = IDL_VALUETYPE_ATTRIBUTE_DECL0;
-    idl_valuetype_attr_decl[1] = IDL_VALUETYPE_ATTRIBUTE_DECL1;
-    idl_valuetype_attr_decl[2] = IDL_VALUETYPE_ATTRIBUTE_DECL2;
-    idl_const_decl[0] = "  ${comment}const ${type} ${name}${value};\n";
-    idl_const_decl[1] = IDL_CONST_ATTR_DECL1;
-    idl_const_decl[2] = IDL_CONST_ATTR_DECL2;
-    idl_union_item_decl[0] = "  ${comment}case ${case} : ${readonly}${type} ${name};";
-    idl_union_item_decl[1] = IDL_UNION_ATTR_DECL1;
-    idl_union_item_decl[2] = IDL_UNION_ATTR_DECL2;
-    idl_enum_item_decl = "  ${name},${comment}";
-    idl_rel_decl[0] = "  ${comment}${readonly}${attribute}${type} ${name};\n";
-    idl_rel_decl[1] = "  ${comment}${readonly}${attribute}${stereotype}<${type}> ${name};\n";
-    idl_rel_decl[2] = "  ${comment}${readonly}${attribute}${stereotype}<${type},${multiplicity}> ${name};\n";
-    idl_valuetype_rel_decl[0] = IDL_VALUETYPE_REL_DECL0;
-    idl_valuetype_rel_decl[1] = IDL_VALUETYPE_REL_DECL1;
-    idl_valuetype_rel_decl[2] = IDL_VALUETYPE_REL_DECL2;
-    idl_union_rel_decl[0] = "  ${comment}case ${case} : ${readonly}${type} ${name};";
-    idl_union_rel_decl[1] = "  ${comment}case ${case} : ${readonly}${stereotype}<${type}> ${name};";
-    idl_union_rel_decl[2] = "  ${comment}case ${case} : ${readonly}${stereotype}<${type},${multiplicity}> ${name};";
-    idl_oper_decl = "  ${comment}${oneway}${type} ${name}${(}${)}${raisesnl}${raises};\n";
-    idl_get_name = "get_${name}";
-    idl_set_name = "set_${name}";
-    idl_set_oneway = FALSE;
-
-    uml_get_name = UmlView;
-    uml_set_name = UmlView;
-
-    int i;
-
-    umltypes.clear();
-
-    for (i = 0; i != nbuiltins; i += 1)
+      for (i = 0; i != nbuiltins; i += 1)
         umltypes.append(builtins[i].uml);
 
-    if (umltypes.findIndex("void") == -1)
+      if (umltypes.indexOf("void") == -1)
         umltypes.append("void");
 
-    cpp_includes.types.clear();
-    cpp_includes.includes.clear();
+      cpp_includes.types.clear();
+      cpp_includes.includes.clear();
 
-    cpp_includes.types.append("vector");
-    cpp_includes.includes.append("#include <vector>\nusing namespace std;");
-    cpp_includes.types.append("list");
-    cpp_includes.includes.append("#include <list>\nusing namespace std;");
-    cpp_includes.types.append("map");
-    cpp_includes.includes.append("#include <map>\nusing namespace std;");
-    cpp_includes.types.append("string");
-    cpp_includes.includes.append("#include <string>\nusing namespace std;");
+      cpp_includes.types.append("vector");
+      cpp_includes.includes.append("#include <vector>\nusing namespace std;");
+      cpp_includes.types.append("list");
+      cpp_includes.includes.append("#include <list>\nusing namespace std;");
+      cpp_includes.types.append("map");
+      cpp_includes.includes.append("#include <map>\nusing namespace std;");
+      cpp_includes.types.append("string");
+      cpp_includes.includes.append("#include <string>\nusing namespace std;");
 
-    artifact_default_description = QString();
-    class_default_description = QString();
-    operation_default_description = QString();
-    attribute_default_description = QString();
-    relation_default_description = QString();
+      artifact_default_description = QString();
+      class_default_description = QString();
+      operation_default_description = QString();
+      attribute_default_description = QString();
+      relation_default_description = QString();
 
-    cpp_root_dir = QString();
-    java_root_dir = QString();
-    php_root_dir = QString();
-    python_root_dir = QString();
-    idl_root_dir = QString();
+      cpp_root_dir = QString();
+      java_root_dir = QString();
+      php_root_dir = QString();
+      python_root_dir = QString();
+      idl_root_dir = QString();
 
-    cpp_set_default_defs(FALSE);
-    java_set_default_defs(FALSE);
-    php_set_default_defs(FALSE);
-    python_set_default_defs(FALSE);
-    idl_set_default_defs(FALSE);
+      cpp_set_default_defs(FALSE);
+      java_set_default_defs(FALSE);
+      php_set_default_defs(FALSE);
+      python_set_default_defs(FALSE);
+      idl_set_default_defs(FALSE);
 
-    cpp_dir_filter.case_sensitive =
+      cpp_dir_filter.case_sensitive =
         cpp_file_filter.case_sensitive =
-            java_dir_filter.case_sensitive =
-                java_file_filter.case_sensitive =
-                    php_dir_filter.case_sensitive =
-                        php_file_filter.case_sensitive = FALSE;
+          java_dir_filter.case_sensitive =
+        java_file_filter.case_sensitive =
+          php_dir_filter.case_sensitive =
+            php_file_filter.case_sensitive = FALSE;
 }
 
 int GenerationSettings::find_type(const QString & s)
@@ -691,7 +754,6 @@ bool GenerationSettings::cpp_set_default_defs(bool y)
 
     if (p != 0)
         p->modified();
-
     return cpp_default_defs = y;
 }
 
@@ -708,7 +770,6 @@ bool GenerationSettings::java_set_default_defs(bool y)
 
     if (p != 0)
         p->modified();
-
     return java_default_defs = y;
 }
 
@@ -725,27 +786,25 @@ bool GenerationSettings::php_set_default_defs(bool y)
 
     if (p != 0)
         p->modified();
-
     return php_default_defs = y;
 }
 
 bool GenerationSettings::python_set_default_defs(bool y)
 {
-    BrowserPackage * p = BrowserView::get_project();
 
+    BrowserPackage * p = BrowserView::get_project();
     if (p != 0)
         p->modified();
-
     return python_default_defs = y;
 }
 
 bool GenerationSettings::idl_set_default_defs(bool y)
 {
+
     BrowserPackage * p = BrowserView::get_project();
 
     if (p != 0)
         p->modified();
-
     return idl_default_defs = y;
 }
 
@@ -761,7 +820,7 @@ static unsigned multiplicity_column(const QString & mult)
     if (mult.isEmpty() || (mult == "1"))
         return 0;
 
-    if ((mult == "*") || (mult.find("..") != -1))
+    if ((mult == "*") || (mult.indexOf("..") != -1))
         return 1;
 
     return 2;
@@ -777,9 +836,8 @@ const QString GenerationSettings::cpp(const AType & type,
 {
     QString s;
     int index;
-
     if ((type.type != 0) &&
-        !strcmp(cpp_class_stereotype(((ClassData *) type.type->get_data())->get_stereotype()),
+        !strcmp(cpp_class_stereotype(((ClassData *) type.type->get_data())->get_stereotype()).toLatin1().constData(),
                 "enum")) {
         switch (dir) {
         case UmlIn:
@@ -815,7 +873,7 @@ const QString GenerationSettings::cpp(const AType & type,
         }
     }
 
-    if ((index = s.find("${type}")) == -1)
+    if ((index = s.indexOf("${type}")) == -1)
         return s;
 
     QString t;
@@ -828,11 +886,10 @@ void GenerationSettings::set_cpp_return_type(const AType & type, QString & s)
 {
     int index;
 
-    if ((index = s.find("${type}")) == -1)
+    if ((index = s.indexOf("${type}")) == -1)
         return;
-
     if ((type.type != 0) &&
-        !strcmp(cpp_class_stereotype(((ClassData *) type.type->get_data())->get_stereotype()),
+        !strcmp(cpp_class_stereotype(((ClassData *) type.type->get_data())->get_stereotype()).toLatin1().constData(),
                 "enum"))
         s.replace(index, 7, cpp_enum_return);
     else {
@@ -1030,6 +1087,8 @@ QString GenerationSettings::idl_class_stereotype(const QString & s)
 bool GenerationSettings::edit()
 {
     GenerationSettingsDialog d;
+    //d.resize(1200,600);
+    //d.adjustSize();
 
     return (d.exec() == QDialog::Accepted);
 }
@@ -1584,23 +1643,11 @@ Builtin & GenerationSettings::get_type(const char * u)
         if (builtins[index].uml == u)
             return builtins[index];
 
-    // not find, add it
-
-    Builtin * b = new Builtin[index + 1];
-
-    for (index = 0; index != nbuiltins; index += 1)
-        b[index] = builtins[index];
-
-    b[index].set(u, u, u, u);
-    b[index].cpp_in =  "const ${type}";
-
-    if (builtins)
-        delete [] builtins;
-
-    builtins = b;
+    Builtin newBuiltin(u,u,u,u);
+    newBuiltin.cpp_in =  "const ${type}";
     nbuiltins += 1;
-
-    return b[index];
+    builtins.append(newBuiltin);
+    return builtins.last();
 }
 
 Stereotype & GenerationSettings::get_stereotype(int & n, Stereotype *& st,
@@ -1948,8 +1995,8 @@ bool GenerationSettings::tool_global_cpp_cmd(ToolCom * com,
             com->write_bool(TRUE);
             BrowserView::get_project()->package_modified();
         }
+        break;
     }
-
     return TRUE;
 }
 
@@ -2136,6 +2183,7 @@ bool GenerationSettings::tool_global_java_cmd(ToolCom * com,
             com->write_bool(TRUE);
             BrowserView::get_project()->package_modified();
         }
+        break;
     }
 
     return TRUE;
@@ -2275,6 +2323,7 @@ bool GenerationSettings::tool_global_php_cmd(ToolCom * com,
             com->write_bool(TRUE);
             BrowserView::get_project()->package_modified();
         }
+        break;
     }
 
     return TRUE;
@@ -2400,6 +2449,7 @@ bool GenerationSettings::tool_global_python_cmd(ToolCom * com,
             com->write_bool(TRUE);
             BrowserView::get_project()->package_modified();
         }
+        break;
     }
 
     return TRUE;
@@ -2591,6 +2641,7 @@ bool GenerationSettings::tool_global_idl_cmd(ToolCom * com,
             com->write_bool(TRUE);
             BrowserView::get_project()->package_modified();
         }
+        break;
     }
 
     return TRUE;
@@ -2600,8 +2651,8 @@ static void save_includes_imports(IncludesSpec & sp, const char * filename)
 {
     QSharedPointer<QByteArray> newdef(new QByteArray());
     QTextStream st(newdef.data(), QIODevice::WriteOnly);
-
-    st.setEncoding(QTextStream::Latin1);
+    //st.setEncoding(QTextStream::Latin1);
+    st.setCodec(QTextCodec::codecForName("latin1"));
 
     st << "// \"a type\" \"needed " << filename << "\"\n";
 
@@ -2610,9 +2661,9 @@ static void save_includes_imports(IncludesSpec & sp, const char * filename)
     QStringList::Iterator it_incl = sp.includes.begin();
 
     for (int index = 0; index != sup; index += 1, it_type++, it_incl++) {
-        save_string(*it_type, st);
+        save_string((*it_type).toLatin1().constData(), st);
         st << " ";
-        save_string(*it_incl, st);
+        save_string((*it_incl).toLatin1().constData(), st);
         st << "\n\n";
     }
 
@@ -2626,31 +2677,31 @@ void GenerationSettings::save_dirs(QTextStream & st)
     if (!cpp_root_dir.isEmpty()) {
         nl_indent(st);
         st << "cpp_root_dir ";
-        save_string(cpp_root_dir, st);
+        save_string(cpp_root_dir.toLatin1().constData(), st);
     }
 
     if (!java_root_dir.isEmpty()) {
         nl_indent(st);
         st << "java_root_dir ";
-        save_string(java_root_dir, st);
+        save_string(java_root_dir.toLatin1().constData(), st);
     }
 
     if (!php_root_dir.isEmpty()) {
         nl_indent(st);
         st << "php_root_dir ";
-        save_string(php_root_dir, st);
+        save_string(php_root_dir.toLatin1().constData(), st);
     }
 
     if (!python_root_dir.isEmpty()) {
         nl_indent(st);
         st << "python_root_dir ";
-        save_string(python_root_dir, st);
+        save_string(python_root_dir.toLatin1().constData(), st);
     }
 
     if (!idl_root_dir.isEmpty()) {
         nl_indent(st);
         st << "idl_root_dir ";
-        save_string(idl_root_dir, st);
+        save_string(idl_root_dir.toLatin1().constData(), st);
     }
 
     st << '\n';
@@ -2661,31 +2712,31 @@ void GenerationSettings::save_descriptions(QTextStream & st)
     if (! artifact_default_description.isEmpty()) {
         nl_indent(st);
         st << "artifact_default_description ";
-        save_string(artifact_default_description, st);
+        save_string(artifact_default_description.toLatin1().constData(), st);
     }
 
     if (! class_default_description.isEmpty()) {
         nl_indent(st);
         st << "class_default_description ";
-        save_string(class_default_description, st);
+        save_string(class_default_description.toLatin1().constData(), st);
     }
 
     if (! operation_default_description.isEmpty()) {
         nl_indent(st);
         st << "operation_default_description ";
-        save_string(operation_default_description, st);
+        save_string(operation_default_description.toLatin1().constData(), st);
     }
 
     if (! attribute_default_description.isEmpty()) {
         nl_indent(st);
         st << "attribute_default_description ";
-        save_string(attribute_default_description, st);
+        save_string(attribute_default_description.toLatin1().constData(), st);
     }
 
     if (! relation_default_description.isEmpty()) {
         nl_indent(st);
         st << "relation_default_description ";
-        save_string(relation_default_description, st);
+        save_string(relation_default_description.toLatin1().constData(), st);
     }
 
     st << '\n';
@@ -2696,7 +2747,8 @@ void GenerationSettings::save()
     QSharedPointer<QByteArray> newdef(new QByteArray());
     QTextStream st(newdef.data(), QIODevice::WriteOnly);
 
-    st.setEncoding(QTextStream::Latin1);
+    //st.setEncoding(QTextStream::Latin1);
+    st.setCodec(QTextCodec::codecForName("latin1"));
 
     nl_indent(st);
 
@@ -2717,17 +2769,17 @@ void GenerationSettings::save()
 
     nl_indent(st);
     st << "cpp_h_extension ";
-    save_string(cpp_h_extension, st);
+    save_string(cpp_h_extension.toLatin1().constData(), st);
     st << " cpp_src_extension ";
-    save_string(cpp_src_extension, st);
+    save_string(cpp_src_extension.toLatin1().constData(), st);
     st << " java_extension ";
-    save_string(java_extension, st);
+    save_string(java_extension.toLatin1().constData(), st);
     st << " php_extension ";
-    save_string(php_extension, st);
+    save_string(php_extension.toLatin1().constData(), st);
     st << " python_extension ";
-    save_string(python_extension, st);
+    save_string(python_extension.toLatin1().constData(), st);
     st << " idl_extension ";
-    save_string(idl_extension, st);
+    save_string(idl_extension.toLatin1().constData(), st);
 
     if (cpp_include_with_path) {
         nl_indent(st);
@@ -2785,26 +2837,27 @@ void GenerationSettings::save()
 
     int index;
 
-    for (index = 0; index != nbuiltins; index += 1) {
+    for (index = 0; index != nbuiltins; index += 1)
+    {
         Builtin & b = builtins[index];
 
         nl_indent(st);
         st << "  ";
-        save_string(b.uml, st);
+        save_string(b.uml.toLatin1().constData(), st);
         st << " ";
-        save_string(b.cpp, st);
+        save_string(b.cpp.toLatin1().constData(), st);
         st << " ";
-        save_string(b.java, st);
+        save_string(b.java.toLatin1().constData(), st);
         st << " ";
-        save_string(b.idl, st);
+        save_string(b.idl.toLatin1().constData(), st);
         st << " ";
-        save_string(b.cpp_in, st);
+        save_string(b.cpp_in.toLatin1().constData(), st);
         st << " ";
-        save_string(b.cpp_out, st);
+        save_string(b.cpp_out.toLatin1().constData(), st);
         st << " ";
-        save_string(b.cpp_inout, st);
+        save_string(b.cpp_inout.toLatin1().constData(), st);
         st << " ";
-        save_string(b.cpp_return, st);
+        save_string(b.cpp_return.toLatin1().constData(), st);
     }
 
     nl_indent(st);
@@ -2816,15 +2869,15 @@ void GenerationSettings::save()
 
         nl_indent(st);
         st << "  ";
-        save_string(s.uml, st);
+        save_string(s.uml.toLatin1().constData(), st);
         st << " ";
-        save_string(s.cpp, st);
+        save_string(s.cpp.toLatin1().constData(), st);
         st << " ";
-        save_string(s.java, st);
+        save_string(s.java.toLatin1().constData(), st);
         st << " ";
-        save_string(s.python, st);
+        save_string(s.python.toLatin1().constData(), st);
         st << " ";
-        save_string(s.idl, st);
+        save_string(s.idl.toLatin1().constData(), st);
     }
 
     nl_indent(st);
@@ -2836,39 +2889,39 @@ void GenerationSettings::save()
 
         nl_indent(st);
         st << "  ";
-        save_string(s.uml, st);
+        save_string(s.uml.toLatin1().constData(), st);
         st << " ";
-        save_string(s.cpp, st);
+        save_string(s.cpp.toLatin1().constData(), st);
         st << " ";
-        save_string(s.java, st);
+        save_string(s.java.toLatin1().constData(), st);
         st << " ";
-        save_string(s.php, st);
+        save_string(s.php.toLatin1().constData(), st);
         st << " ";
-        save_string(s.python, st);
+        save_string(s.python.toLatin1().constData(), st);
         st << " ";
-        save_string(s.idl, st);
+        save_string(s.idl.toLatin1().constData(), st);
     }
 
     nl_indent(st);
     nl_indent(st);
     st << "cpp_enum_default_type_forms ";
-    save_string(cpp_enum_in, st);
+    save_string(cpp_enum_in.toLatin1().constData(), st);
     st << " ";
-    save_string(cpp_enum_out, st);
+    save_string(cpp_enum_out.toLatin1().constData(), st);
     st << " ";
-    save_string(cpp_enum_inout, st);
+    save_string(cpp_enum_inout.toLatin1().constData(), st);
     st << " ";
-    save_string(cpp_enum_return, st);
+    save_string(cpp_enum_return.toLatin1().constData(), st);
     st << " // in out inout return";
     nl_indent(st);
     st << "other_cpp_types_default_type_forms ";
-    save_string(cpp_in, st);
+    save_string(cpp_in.toLatin1().constData(), st);
     st << " ";
-    save_string(cpp_out, st);
+    save_string(cpp_out.toLatin1().constData(), st);
     st << " ";
-    save_string(cpp_inout, st);
+    save_string(cpp_inout.toLatin1().constData(), st);
     st << " ";
-    save_string(cpp_return, st);
+    save_string(cpp_return.toLatin1().constData(), st);
     st << " // in out inout return";
 
     st << '\n';
@@ -3590,19 +3643,19 @@ void GenerationSettings::read(char *& st, char *& k)
     bool new_types = !strcmp(k, "type_forms");
 
     if (old_types || new_types) {
-        if (builtins != 0)
-            delete [] builtins;
+        if (!builtins.isEmpty())
+            builtins.clear();
 
         nbuiltins = (int) read_unsigned(st);
-        builtins = new Builtin[nbuiltins];
+        //builtins = new Builtin[nbuiltins];
 
         umltypes.clear();
 
         int index;
 
-        for (index = 0; index != nbuiltins; index += 1) {
-            Builtin & b = builtins[index];
-
+        for (index = 0; index != nbuiltins; index += 1)
+        {
+            Builtin b;
             b.uml = read_string(st);
             b.cpp = read_string(st);
             b.java = read_string(st);
@@ -3616,10 +3669,12 @@ void GenerationSettings::read(char *& st, char *& k)
             else
                 b.cpp_return = "${type}";
 
+            builtins.append(b);
+
             umltypes.append(b.uml);
         }
 
-        if (umltypes.findIndex("void") == -1)
+        if (umltypes.indexOf("void") == -1)
             umltypes.append("void");
 
         read_keyword(st, "relations_stereotypes");
@@ -4421,7 +4476,7 @@ static bool read_incl(IncludesSpec & sp, const char * filename)
 
 bool GenerationSettings::import()
 {
-    QString fn = Q3FileDialog::getOpenFileName(last_used_directory(), "generation_settings");
+    QString fn = QFileDialog::getOpenFileName(0, "generation_settings",last_used_directory());
 
     if (!fn.isEmpty()) {
         set_last_used_directory(fn);
@@ -4449,10 +4504,10 @@ bool GenerationSettings::import()
             POST_TRY;
             delete [] s;
 
-            read_incl(cpp_includes, fn.replace(fn.findRev("generation_settings"), 19, "cpp_includes"));
-            read_incl(java_imports, fn.replace(fn.findRev("cpp_includes"), 12, "java_imports"));
-            read_incl(python_imports, fn.replace(fn.findRev("java_imports"), 12, "python_imports"));
-            read_incl(idl_includes, fn.replace(fn.findRev("python_imports"), 14, "idl_includes"));
+            read_incl(cpp_includes, fn.replace(fn.lastIndexOf("generation_settings"), 19, "cpp_includes").toLatin1().constData());
+            read_incl(java_imports, fn.replace(fn.lastIndexOf("cpp_includes"), 12, "java_imports").toLatin1().constData());
+            read_incl(python_imports, fn.replace(fn.lastIndexOf("java_imports"), 12, "python_imports").toLatin1().constData());
+            read_incl(idl_includes, fn.replace(fn.lastIndexOf("python_imports"), 14, "idl_includes").toLatin1().constData());
 
             return TRUE;
         }
@@ -4590,7 +4645,6 @@ void GenerationSettings::read_includes_imports()
 
         d.rename("import", "java_imports");
     }
-
     read_incl(python_imports, "python_imports");
     read_incl(idl_includes, "idl_includes");
 }
@@ -4692,7 +4746,7 @@ void ReverseRoundtripFilter::save(const char * key, QTextStream & st)   //[lgfre
 {
     if (! regexp.isEmpty()) {
         st << key << " ";
-        save_string(regexp, st);
+        save_string(regexp.toLatin1().constData(), st);
 
         if (case_sensitive)
             st << " case_sensitive";
@@ -4713,3 +4767,4 @@ void ReverseRoundtripFilter::read(const char * key, char *& st, char *& k)
         }
     }
 }
+

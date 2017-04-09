@@ -4,14 +4,14 @@
 
 #include "UmlBaseState.h"
 #include "UmlStateItem.h"
-#include <q3cstring.h>
+#include <QByteArray>
 #include "UmlClass.h"
 
 class UmlState : public UmlBaseState, public UmlStateItem
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlState(void * id, const Q3CString & s)
+    UmlState(void * id, const QByteArray & s)
         : UmlBaseState(id, s), _has_initial(FALSE), _has_completion(FALSE), _class(0) {
     }
 
@@ -27,15 +27,15 @@ public:
 
     //  the path to the instance of the class managing the state
 
-    Q3CString path() const;
+    QByteArray path() const;
 
     //  the path of the state to be produced in debug trace
-    Q3CString prettyPath() const;
+    QByteArray prettyPath() const;
 
     bool inside(UmlState * other);
 
     //  perform initializations before generation
-    virtual void init(UmlClass * mother, Q3CString path, Q3CString pretty_path, UmlState * state);
+    virtual void init(UmlClass * mother, QByteArray path, QByteArray pretty_path, UmlState * state);
 
     //  to indicate that the state has a completion
 
@@ -64,11 +64,11 @@ protected:
 
     //  the path from the machine up to the class instance associated
     //  to the state.
-    Q3CString _path;
+    QByteArray _path;
 
     //  the path from the machine up to the class instance associated
     //  to the state.
-    Q3CString _pretty_path;
+    QByteArray _pretty_path;
 
 };
 
@@ -77,12 +77,12 @@ inline UmlClass * UmlState::assocClass() const
     return _class;
 }
 
-inline Q3CString UmlState::path() const
+inline QByteArray UmlState::path() const
 {
     return _path;
 }
 
-inline Q3CString UmlState::prettyPath() const
+inline QByteArray UmlState::prettyPath() const
 {
     return _pretty_path;
 }

@@ -113,6 +113,9 @@ public:
     bool get_isa_class_attribute() const {
         return isa_class_attribute;
     }
+    void set_isa_class_attribute(bool value){
+        isa_class_attribute = value;
+    }
 
     bool get_isa_const_attribute() const {
         return isa_const_attribute;
@@ -142,14 +145,19 @@ public:
         return cpp_visibility;
     }
     void set_visibility(UmlVisibility v);
+    void set_visibility(int v);
 
     const AType & get_type() const {
         return type;
     }
     void set_type(const AType & t);
+    void set_type(const QString & t);
 
-    const char * get_init_value() const {
+    QString  get_init_value() const {
         return init_value;
+    }
+    void set_init_value(QString value) {
+         init_value = value;
     }
     QString get_init_value_qstring() const {
         return init_value;

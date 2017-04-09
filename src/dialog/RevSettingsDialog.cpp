@@ -30,15 +30,15 @@
 
 
 #include <qlayout.h>
-#include <q3grid.h>
-#include <q3vbox.h>
+#include <gridbox.h>
+#include <vvbox.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
-#include <q3combobox.h>
-#include <q3textview.h>
+#include <qcombobox.h>
+#include <qtextedit.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include "RevSettingsDialog.h"
 #include "HelpRegexpDialog.h"
@@ -46,142 +46,148 @@
 #include "DialogUtil.h"
 #include "UmlDesktop.h"
 #include "translate.h"
+#include "hhbox.h"
 
 
 QSize RevSettingsDialog::previous_size;
 
 RevSettingsDialog::RevSettingsDialog()
-    : QDialog(0, "Reverse/Roundtrip Settings dialog", TRUE)
+    : QDialog(0/*, "Reverse/Roundtrip Settings dialog", TRUE*/)
 {
-    setCaption(TR("Reverse/Roundtrip Settings dialog"));
+    setWindowTitle(TR("Reverse/Roundtrip Settings dialog"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
     vbox->setMargin(5);
 
-    Q3Grid * grid = new Q3Grid(3, this);
-    Q3HBox * htab;
+    GridBox * grid = new GridBox(3, this);
+    HHBox * htab;
 
     vbox->addWidget(grid);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(grid);
-    new QLabel(TR("To specify through regular expression the directories\n"
-                  "and/or files to bypass during reverse and roundtrip"), grid);
+    grid->addWidget(new QLabel(grid));
+    grid->addWidget(new QLabel(TR("To specify through regular expression the directories\n"
+                  "and/or files to bypass during reverse and roundtrip"), grid));
 
-    SmallPushButton * help = new SmallPushButton(TR("Help regexp"), grid);
+    SmallPushButton * help;
+    grid->addWidget(help = new SmallPushButton(TR("Help regexp"), grid));
 
     connect(help, SIGNAL(clicked()), this, SLOT(show_regexp_help()));
 
-    new QLabel(grid);
-    new QLabel(grid);
-    new QLabel(grid);
+    grid->addWidget(new QLabel(grid));
+    grid->addWidget(new QLabel(grid));
+    grid->addWidget(new QLabel(grid));
 
-    new QLabel(TR("C++ directory : "), grid);
-    cpp_dir = new LineEdit(grid);
+    grid->addWidget(new QLabel(TR("C++ directory : "), grid));
+    grid->addWidget(cpp_dir = new LineEdit(grid));
     cpp_dir->setText(GenerationSettings::cpp_dir_filter.regexp);
-    cpp_dir_case_sensitive = new QCheckBox(TR("case sensitive"), grid);
+    grid->addWidget(cpp_dir_case_sensitive = new QCheckBox(TR("case sensitive"), grid));
 
     if (GenerationSettings::cpp_dir_filter.case_sensitive)
         cpp_dir_case_sensitive->setChecked(TRUE);
 
-    new QLabel(TR("C++ file : "), grid);
-    cpp_file = new LineEdit(grid);
+    grid->addWidget(new QLabel(TR("C++ file : "), grid));
+    grid->addWidget(cpp_file = new LineEdit(grid));
     cpp_file->setText(GenerationSettings::cpp_file_filter.regexp);
-    cpp_file_case_sensitive = new QCheckBox(TR("case sensitive"), grid);
+    grid->addWidget(cpp_file_case_sensitive = new QCheckBox(TR("case sensitive"), grid));
 
     if (GenerationSettings::cpp_file_filter.case_sensitive)
         cpp_file_case_sensitive->setChecked(TRUE);
 
-    new QLabel(grid);
-    htab = new Q3HBox(grid);
-    new QLabel(grid);
+    grid->addWidget(new QLabel(grid));
+    grid->addWidget(htab = new HHBox(grid));
+    grid->addWidget(new QLabel(grid));
 
     htab->setMargin(3);
     htab->setStretchFactor(new QLabel(TR("generated/reversed \nheader file extension : "), htab), 0);
-    edcpp_h_extension = new Q3ComboBox(TRUE, htab);
+    edcpp_h_extension = new QComboBox(htab);
+    edcpp_h_extension->setEditable(true);
     htab->setStretchFactor(edcpp_h_extension, 100);
-    edcpp_h_extension->insertItem(GenerationSettings::cpp_h_extension);
-    edcpp_h_extension->setCurrentItem(0);
-    edcpp_h_extension->insertItem("h");
-    edcpp_h_extension->insertItem("hh");
+    edcpp_h_extension->addItem(GenerationSettings::cpp_h_extension);
+    edcpp_h_extension->setCurrentIndex(0);
+    edcpp_h_extension->addItem("h");
+    edcpp_h_extension->addItem("hh");
 
     htab->setStretchFactor(new QLabel(TR("    generated/reversed \n    source file extension : "), htab), 0);
-    edcpp_src_extension = new Q3ComboBox(TRUE, htab);
+    edcpp_src_extension = new QComboBox(htab);
+    edcpp_src_extension->setEditable(true);
     htab->setStretchFactor(edcpp_src_extension, 100);
-    edcpp_src_extension->insertItem(GenerationSettings::cpp_src_extension);
-    edcpp_src_extension->setCurrentItem(0);
-    edcpp_src_extension->insertItem("cpp");
-    edcpp_src_extension->insertItem("cc");
+    edcpp_src_extension->addItem(GenerationSettings::cpp_src_extension);
+    edcpp_src_extension->setCurrentIndex(0);
+    edcpp_src_extension->addItem("cpp");
+    edcpp_src_extension->addItem("cc");
 
-    new QLabel(grid);
-    new QLabel(grid);
-    new QLabel(grid);
+    grid->addWidget(new QLabel(grid));
+    grid->addWidget(new QLabel(grid));
+    grid->addWidget(new QLabel(grid));
 
-    new QLabel(TR("Java directory : "), grid);
-    java_dir = new LineEdit(grid);
+    grid->addWidget(new QLabel(TR("Java directory : "), grid));
+    grid->addWidget(java_dir = new LineEdit(grid));
     java_dir->setText(GenerationSettings::java_dir_filter.regexp);
-    java_dir_case_sensitive = new QCheckBox(TR("case sensitive"), grid);
+    grid->addWidget(java_dir_case_sensitive = new QCheckBox(TR("case sensitive"), grid));
 
     if (GenerationSettings::java_dir_filter.case_sensitive)
         java_dir_case_sensitive->setChecked(TRUE);
 
-    new QLabel(TR("Java file : "), grid);
-    java_file = new LineEdit(grid);
+    grid->addWidget(new QLabel(TR("Java file : "), grid));
+    grid->addWidget(java_file = new LineEdit(grid));
     java_file->setText(GenerationSettings::java_file_filter.regexp);
-    java_file_case_sensitive = new QCheckBox(TR("case sensitive"), grid);
+    grid->addWidget(java_file_case_sensitive = new QCheckBox(TR("case sensitive"), grid));
 
     if (GenerationSettings::java_file_filter.case_sensitive)
         java_file_case_sensitive->setChecked(TRUE);
 
-    new QLabel(grid);
-    htab = new Q3HBox(grid);
-    new QLabel(grid);
+    grid->addWidget(new QLabel(grid));
+    grid->addWidget(htab = new HHBox(grid));
+    grid->addWidget(new QLabel(grid));
 
     htab->setMargin(3);
     htab->setStretchFactor(new QLabel(TR("generated/reversed file extension : "), htab), 0);
-    edjava_extension = new Q3ComboBox(TRUE, htab);
+    edjava_extension = new QComboBox(htab);
+    edjava_extension->setEditable(true);
     htab->setStretchFactor(edjava_extension, 100);
-    edjava_extension->insertItem(GenerationSettings::java_extension);
-    edjava_extension->setCurrentItem(0);
-    edjava_extension->insertItem("java");
+    edjava_extension->addItem(GenerationSettings::java_extension);
+    edjava_extension->setCurrentIndex(0);
+    edjava_extension->addItem("java");
 
-    new QLabel(grid);
-    new QLabel(grid);
-    new QLabel(grid);
+    grid->addWidget(new QLabel(grid));
+    grid->addWidget(new QLabel(grid));
+    grid->addWidget(new QLabel(grid));
 
-    new QLabel(TR("Php directory : "), grid);
-    php_dir = new LineEdit(grid);
+    grid->addWidget(new QLabel(TR("Php directory : "), grid));
+    grid->addWidget(php_dir = new LineEdit(grid));
     php_dir->setText(GenerationSettings::php_dir_filter.regexp);
-    php_dir_case_sensitive = new QCheckBox(TR("case sensitive"), grid);
+    grid->addWidget(php_dir_case_sensitive = new QCheckBox(TR("case sensitive"), grid));
 
     if (GenerationSettings::php_dir_filter.case_sensitive)
         php_dir_case_sensitive->setChecked(TRUE);
 
-    new QLabel(TR("Php file : "), grid);
-    php_file = new LineEdit(grid);
+    grid->addWidget(new QLabel(TR("Php file : "), grid));
+    grid->addWidget(php_file = new LineEdit(grid));
     php_file->setText(GenerationSettings::php_file_filter.regexp);
-    php_file_case_sensitive = new QCheckBox(TR("case sensitive"), grid);
+    grid->addWidget(php_file_case_sensitive = new QCheckBox(TR("case sensitive"), grid));
 
     if (GenerationSettings::php_file_filter.case_sensitive)
         php_file_case_sensitive->setChecked(TRUE);
 
-    new QLabel(grid);
-    htab = new Q3HBox(grid);
-    new QLabel(grid);
+    grid->addWidget(new QLabel(grid));
+    grid->addWidget(htab = new HHBox(grid));
+    grid->addWidget(new QLabel(grid));
 
     htab->setMargin(3);
     htab->setStretchFactor(new QLabel(TR("generated / reversed file extension : "), htab), 0);
-    edphp_extension = new Q3ComboBox(TRUE, htab);
+    edphp_extension = new QComboBox(htab);
+    edphp_extension->setEditable(true);
     htab->setStretchFactor(edphp_extension, 100);
-    edphp_extension->insertItem(GenerationSettings::php_extension);
-    edphp_extension->setCurrentItem(0);
-    edphp_extension->insertItem("php");
+    edphp_extension->addItem(GenerationSettings::php_extension);
+    edphp_extension->setCurrentIndex(0);
+    edphp_extension->addItem("php");
 
-    new QLabel(grid);
-    new QLabel(grid);
-    new QLabel(grid);
+    grid->addWidget(new QLabel(grid));
+    grid->addWidget(new QLabel(grid));
+    grid->addWidget(new QLabel(grid));
 
     QPushButton * accept = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -191,7 +197,8 @@ RevSettingsDialog::RevSettingsDialog()
     accept->setFixedSize(bs);
     cancel->setFixedSize(bs);
 
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+    QHBoxLayout * hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
 
     hbox->addWidget(accept);
     hbox->addWidget(cancel);
@@ -202,7 +209,7 @@ RevSettingsDialog::RevSettingsDialog()
 
 void RevSettingsDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -217,20 +224,20 @@ void RevSettingsDialog::accept()
     GenerationSettings::cpp_dir_filter.case_sensitive = cpp_dir_case_sensitive->isChecked();
     GenerationSettings::cpp_file_filter.regexp = cpp_file->text();
     GenerationSettings::cpp_file_filter.case_sensitive = cpp_file_case_sensitive->isChecked();
-    GenerationSettings::cpp_h_extension = edcpp_h_extension->currentText().stripWhiteSpace();
-    GenerationSettings::cpp_src_extension = edcpp_src_extension->currentText().stripWhiteSpace();
+    GenerationSettings::cpp_h_extension = edcpp_h_extension->currentText().trimmed();
+    GenerationSettings::cpp_src_extension = edcpp_src_extension->currentText().trimmed();
 
     GenerationSettings::java_dir_filter.regexp = java_dir->text();
     GenerationSettings::java_dir_filter.case_sensitive = java_dir_case_sensitive->isChecked();
     GenerationSettings::java_file_filter.regexp = java_file->text();
     GenerationSettings::java_file_filter.case_sensitive = java_file_case_sensitive->isChecked();
-    GenerationSettings::java_extension = edjava_extension->currentText().stripWhiteSpace();
+    GenerationSettings::java_extension = edjava_extension->currentText().trimmed();
 
     GenerationSettings::php_dir_filter.regexp = php_dir->text();
     GenerationSettings::php_dir_filter.case_sensitive = php_dir_case_sensitive->isChecked();
     GenerationSettings::php_file_filter.regexp = php_file->text();
     GenerationSettings::php_file_filter.case_sensitive = php_file_case_sensitive->isChecked();
-    GenerationSettings::php_extension = edphp_extension->currentText().stripWhiteSpace();
+    GenerationSettings::php_extension = edphp_extension->currentText().trimmed();
 
     QDialog::accept();
 }
@@ -248,13 +255,13 @@ void RevSettingsDialog::show_regexp_help()
 QSize HelpRegexpDialog::previous_size;
 
 HelpRegexpDialog::HelpRegexpDialog()
-    : QDialog(0, "Help, regular expression", TRUE)
+    : QDialog(0/*, "Help, regular expression", TRUE*/)
 {
-    setCaption(TR("Help regular expression"));
+    setWindowTitle(TR("Help regular expression"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
-    Q3TextView * txt = new Q3TextView(this);
+    QTextEdit * txt = new QTextEdit(this);
 
     txt->setText("<p>Extracted from the QT documentation :</p><hr>"
                  "<ul>"
@@ -273,9 +280,10 @@ HelpRegexpDialog::HelpRegexpDialog()
                  "<li><b>]</b> Ends the character set definition. To include the character ']' itself in the set, escape it or place it first (but after the negation operator '^', if present)</li>"
                  "</ul>"
                  "<p>Thus, <i>[a-zA-Z0-9.]</i> matches upper and lower case ASCII letters, digits and dot.</p>");
-    vbox->add(txt);
+    vbox->addWidget(txt);
 
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+    QHBoxLayout * hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
 
     QPushButton * close = new QPushButton(TR("Close"), this);

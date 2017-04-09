@@ -1,9 +1,9 @@
 
 #include "UmlPinParameter.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-void UmlPinParameter::html(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlPinParameter::html(QByteArray pfix, unsigned int rank, unsigned int level)
 {
     if (isUnique()) {
         if (isException())

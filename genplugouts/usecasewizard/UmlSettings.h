@@ -1,9 +1,9 @@
 #ifndef _UMLSETTINGS_H
 #define _UMLSETTINGS_H
+#include <QByteArray>
+#include <QHash>
 
 
-#include <q3dict.h>
-#include <q3cstring.h>
 
 struct UmlBuiltin;
 struct UmlStereotype;
@@ -18,15 +18,15 @@ protected:
 
     static bool _defined;
 
-    static Q3Dict<UmlBuiltin> _map_builtins;
+    static QHash<QByteArray,UmlBuiltin*> _map_builtins;
 
     static UmlBuiltin * _builtins;
 
-    static Q3Dict<UmlStereotype> _map_relation_stereotypes;
+    static QHash<QByteArray,UmlStereotype*> _map_relation_stereotypes;
 
     static UmlStereotype * _relation_stereotypes;
 
-    static Q3Dict<UmlStereotype> _map_class_stereotypes;
+    static QHash<QByteArray,UmlStereotype*> _map_class_stereotypes;
 
     static UmlStereotype * _class_stereotypes;
 
@@ -40,31 +40,31 @@ protected:
 
     //internal, do NOT use it
 
-    static unsigned multiplicity_column(const Q3CString & mult);
+    static unsigned multiplicity_column(const QByteArray & mult);
 
     //internal, do NOT use it
 
-    static Q3CString uml_type(const Q3CString & t, Q3CString UmlBuiltin::* f);
+    static QByteArray uml_type(const QByteArray & t, QByteArray UmlBuiltin::* f);
 
     //internal, do NOT use it
 
-    static Q3CString uml_rel_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
+    static QByteArray uml_rel_stereotype(const QByteArray & t, QByteArray UmlStereotype::* f);
 
     //internal, do NOT use it
 
-    static Q3CString uml_class_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
+    static QByteArray uml_class_stereotype(const QByteArray & t, QByteArray UmlStereotype::* f);
 
     //internal, do NOT use it
 
-    static UmlBuiltin * add_type(const Q3CString & s);
+    static UmlBuiltin * add_type(const QByteArray & s);
 
     //internal, do NOT use it
 
-    static UmlStereotype * add_rel_stereotype(const Q3CString & s);
+    static UmlStereotype * add_rel_stereotype(const QByteArray & s);
 
     //internal, do NOT use it
 
-    static UmlStereotype * add_class_stereotype(const Q3CString & s);
+    static UmlStereotype * add_class_stereotype(const QByteArray & s);
 
 };
 

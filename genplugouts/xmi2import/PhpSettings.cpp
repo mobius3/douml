@@ -28,7 +28,7 @@ WrapperStr PhpSettings::classStereotype(const WrapperStr & s)
 {
     read_if_needed_();
 
-    UmlStereotype * b = UmlSettings::_map_class_stereotypes.find(s);
+    UmlStereotype * b = UmlSettings::_map_class_stereotypes.value(s);
 
     return (b) ? b->php : s;
 }
@@ -39,7 +39,7 @@ bool PhpSettings::set_ClassStereotype(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(phpSettingsCmd, setPhpClassStereotypeCmd, (const char *)s, (const char *)v); //[rageek] Fix prototype
 
     if (UmlCom::read_bool()) {
-        UmlStereotype * st = UmlSettings::_map_class_stereotypes.find(s);
+        UmlStereotype * st = UmlSettings::_map_class_stereotypes.value(s);
 
         if (st == 0)
             st = UmlSettings::add_class_stereotype(s);

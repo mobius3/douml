@@ -31,11 +31,7 @@
 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h>
-//Added by qt3to4:
 #include <QTextStream>
-
-
 #include "SdContinuationCanvas.h"
 #include "ContinuationDialog.h"
 #include "UmlGlobal.h"
@@ -73,12 +69,13 @@ void SdContinuationCanvas::delete_it()
 
 void SdContinuationCanvas::draw(QPainter & p)
 {
-    if (! visible()) return;
+    if (! isVisible()) return;
 
     p.setRenderHint(QPainter::Antialiasing, true);
     QRect r = rect();
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
     QBrush brsh = p.brush();
+    QBrush backBrush = p.background();
 
     p.setBackgroundMode((used_color == UmlTransparent) ? ::Qt::TransparentMode : ::Qt::OpaqueMode);
 
@@ -88,7 +85,8 @@ void SdContinuationCanvas::draw(QPainter & p)
     if (fp != 0)
         fputs("<g>\n", fp);
 
-    p.setBackgroundColor(co);
+    backBrush.setColor(co);
+    p.setBackground(backBrush);
 
     if (used_color != UmlTransparent)
         p.setBrush(co);
@@ -110,14 +108,18 @@ void SdContinuationCanvas::draw(QPainter & p)
         fputs("</g>\n", fp);
     }
 
-    p.setBackgroundColor(bckgrnd);
+    backBrush.setColor(bckgrnd);
+    p.setBackground(backBrush);
     p.setBrush(brsh);
 
     if (selected())
         show_mark(p, r);
 }
-
-UmlCode SdContinuationCanvas::type() const
+void SdContinuationCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode SdContinuationCanvas::typeUmlCode() const
 {
     return UmlContinuation;
 }
@@ -174,11 +176,11 @@ void SdContinuationCanvas::change_scale()
 {
     double scale = the_canvas()->zoom();
 
-    Q3CanvasRectangle::setVisible(FALSE);
-    setSize((int)(width_scale100 * scale), (int)(height_scale100 * scale));
+    QGraphicsRectItem::setVisible(FALSE);
+    setRect(0,0,(int)(width_scale100 * scale), (int)(height_scale100 * scale));
     check_size();
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void SdContinuationCanvas::modified()
@@ -193,28 +195,31 @@ void SdContinuationCanvas::modified()
 
 void SdContinuationCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
     MenuFactory::createTitle(m, TR("Continuation"));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 6);
-    m.insertItem(TR("Go down"), 7);
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 6);
+    MenuFactory::addItem(m, TR("Go down"), 7);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 3);
 
     if (linked()) {
-        m.insertSeparator();
-        m.insertItem(TR("Select linked items"), 4);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Select linked items"), 4);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 5);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 5);
 
-    int index = m.exec(QCursor::pos());
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    int index = retAction->data().toInt();
 
     switch (index) {
     case 0:
@@ -257,6 +262,7 @@ void SdContinuationCanvas::menu(const QPoint &)
 
     default:
         return;
+    }
     }
 
     package_modified();
@@ -310,7 +316,7 @@ bool SdContinuationCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void SdContinuationCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void SdContinuationCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         ColorSpecVector co(1);
@@ -323,11 +329,10 @@ void SdContinuationCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
-                ((SdContinuationCanvas *) it.current())->itscolor = itscolor;
-                ((SdContinuationCanvas *) it.current())->modified();	// call package_modified()
+            foreach (DiagramItem *item, l) {
+                SdContinuationCanvas *canvas = (SdContinuationCanvas *)item;
+                canvas->itscolor = itscolor;
+                canvas->modified();
             }
         }
 
@@ -336,18 +341,11 @@ void SdContinuationCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void SdContinuationCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void SdContinuationCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    SdContinuationCanvas * x = (SdContinuationCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        SdContinuationCanvas * o = (SdContinuationCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const SdContinuationCanvas * x = (const SdContinuationCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString SdContinuationCanvas::may_start(UmlCode & l) const
@@ -384,7 +382,7 @@ void SdContinuationCanvas::save(QTextStream & st, bool ref, QString &) const
         nl_indent(st);
 
         st << "continuation " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         nl_indent(st);
 
         if (itscolor != UmlDefaultColor)
@@ -445,30 +443,30 @@ void SdContinuationCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
     connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }
 
 void SdContinuationCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }
 
 // for plug-out
 
-void SdContinuationCanvas::send(ToolCom * com, Q3CanvasItemList & all)
+void SdContinuationCanvas::send(ToolCom * com, QList<QGraphicsItem*> & all)
 {
     if (com->api_format() < 41)
         return;
 
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*>::Iterator cit;
 
     for (cit = all.begin(); (cit != all.end()); ++cit) {
         DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
-        if ((di != 0) && (*cit)->visible() && (di->type() == UmlContinuation)) {
+        if ((di != 0) && (*cit)->isVisible() && (di->typeUmlCode() == UmlContinuation)) {
             WrapperStr s = fromUnicode(((SdContinuationCanvas *) di)->name);
 
             com->write_bool(TRUE);	// one more

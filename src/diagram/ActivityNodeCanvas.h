@@ -52,6 +52,7 @@ protected:
     ActivityNodeCanvas(UmlCanvas * canvas, int id);
     void set_xpm();
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     ActivityNodeCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ActivityNodeCanvas();
@@ -61,7 +62,7 @@ public:
     virtual void draw(QPainter & p);
     virtual void change_scale();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;

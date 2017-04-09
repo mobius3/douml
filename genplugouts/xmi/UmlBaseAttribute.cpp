@@ -6,7 +6,7 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 UmlAttribute * UmlBaseAttribute::create(UmlClass * parent, const char * s)
 {
     return (UmlAttribute *) parent->create_(anAttribute, s);
@@ -29,7 +29,7 @@ bool UmlBaseAttribute::set_isReadOnly(bool y)
     return set_it_(_read_only, y, setIsReadOnlyCmd);
 }
 
-const Q3CString & UmlBaseAttribute::defaultValue()
+const QByteArray & UmlBaseAttribute::defaultValue()
 {
     read_if_needed_();
 
@@ -121,7 +121,7 @@ bool UmlBaseAttribute::set_isJavaTransient(bool y)
 #endif
 
 #ifdef WITHIDL
-Q3CString UmlBaseAttribute::idlCase()
+QByteArray UmlBaseAttribute::idlCase()
 {
     read_if_needed_();
 

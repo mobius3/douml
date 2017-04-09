@@ -27,10 +27,7 @@
 
 #ifndef OBJECTLINKDIALOG_H
 #define OBJECTLINKDIALOG_H
-
-#include <q3ptrlist.h>
 #include <qdialog.h>
-#include <q3ptrlist.h>
 
 class MyTable;
 class RelationData;
@@ -42,7 +39,7 @@ class ObjectLinkDialog : public QDialog
 
 public:
     ObjectLinkDialog(BrowserClassInstance * a, BrowserClassInstance * b,
-                     Q3PtrList<RelationData> & l, RelationData * current,
+                     QList<RelationData *> & l, RelationData * current,
                      int nfirstdir);
     virtual ~ObjectLinkDialog();
 
@@ -56,7 +53,7 @@ public:
 protected:
     void init(RelationData * current);
 
-    Q3PtrList<RelationData> & rels;
+    QList<RelationData *> & rels;
     int nforward;
     int ninputrels;
     BrowserClassInstance * clia;

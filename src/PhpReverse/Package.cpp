@@ -25,7 +25,7 @@
 //
 // *************************************************************************
 
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 #include <qapplication.h>
 #ifndef REVERSE
 #include <qmessagebox.h>
@@ -120,11 +120,11 @@ void Package::init(UmlPackage * r, QApplication * a)
     QString s;
 
     DirFilter = (!(s = (const char *) PhpSettings::reverseRoundtripDirRegExp()).isEmpty())
-                ? new QRegExp(s, PhpSettings::isReverseRoundtripDirRegExpCaseSensitive(), TRUE)
+                ? new QRegExp(s, (Qt::CaseSensitivity)PhpSettings::isReverseRoundtripDirRegExpCaseSensitive())
                 : 0;
 
     FileFilter = (!(s = (const char *) PhpSettings::reverseRoundtripFileRegExp()).isEmpty())
-                 ? new QRegExp(s, PhpSettings::isReverseRoundtripFileRegExpCaseSensitive(), TRUE)
+                 ? new QRegExp(s, (Qt::CaseSensitivity)PhpSettings::isReverseRoundtripFileRegExpCaseSensitive())
                  : 0;
 
     Ext = PhpSettings::sourceExtension().operator QString();
@@ -140,19 +140,18 @@ void Package::init(UmlPackage * r, QApplication * a)
 
 void Package::new_class(Class * cl)
 {
-    php_classes.insert((const char *) cl->text(0), cl);
+    php_classes.insert((const char *) cl->text(0).toLatin1().constData(), cl);
 }
 
 Package * Package::scan_dir()
 {
     // get input php source dir
 
-    QString path = Q3FileDialog::getExistingDirectory(QDir::currentDirPath(), 0, 0,
-                   "select the base directory to reverse");
+    QString path = QFileDialog::getExistingDirectory(0, "select the base directory to reverse", QDir::currentPath(), 0);
 
     if (! path.isEmpty()) {
         QDir d(path);
-        Package * p = new Package(root, path, d.dirName());
+        Package * p = new Package(root, path.toLatin1().constData(), d.dirName().toLatin1().constData());
 
         // scanning phase
 #ifndef REVERSE
@@ -221,9 +220,13 @@ int Package::file_number(QDir & d, bool rec)
 
     if (!list.isEmpty()) {
         QFileInfoList::iterator it = list.begin();
+            int extIndex;
+            QString fileName;
 
-        while (it != list.end()) {
-            if ((*it).extension(FALSE) == Ext) result += 1;
+            while (it != list.end()) {
+                fileName = (*it).fileName();
+                extIndex = fileName.lastIndexOf('.');
+                if (extIndex != -1 && fileName.mid(extIndex+1) == Ext) result += 1;
 
             it++;
         }
@@ -296,7 +299,7 @@ void Package::send_dir(bool rec)
 QString my_baseName(QFileInfo * fi)
 {
     QString fn = fi->fileName();
-    int index = fn.findRev('.');
+    int index = fn.lastIndexOf('.');
 
     return (index == -1)
            ? fn
@@ -315,9 +318,14 @@ void Package::reverse_directory(QDir & d, bool rec)
         QFileInfoList::iterator it = list.begin();
 
         while (it != list.end()) {
-            if ((*it).extension(FALSE) == Ext) {
+            int extIndex;
+            QString fileName;
+            fileName = (*it).fileName();
+            extIndex = fileName.lastIndexOf('.');
+            if (extIndex != -1 && fileName.mid(extIndex+1) == Ext){
+            //if ((*it).extension(FALSE) == Ext) {
                 if (allowed(FileFilter, (*it).fileName()))
-                    reverse_file(WrapperStr((*it).filePath().toAscii().constData()), WrapperStr(my_baseName(&(*it)).toAscii().constData()));
+                    reverse_file(WrapperStr((*it).filePath().toLatin1().constData()), WrapperStr(my_baseName(&(*it)).toLatin1().constData()));
 
                 if (progress)
                     progress->tic();
@@ -353,7 +361,7 @@ void Package::reverse_directory(QDir & d, bool rec)
                 if ((*itd).fileName()[0] != '.') {
                     QDir sd((*itd).filePath());
 
-                    Package * p = find(WrapperStr(sd.dirName().toAscii().constData()), TRUE);
+                    Package * p = find(WrapperStr(sd.dirName().toLatin1().constData()), TRUE);
 
                     if (p != 0)
                         p->reverse_directory(sd, TRUE);
@@ -613,7 +621,7 @@ void Package::use()
 
 void Package::update_class_list(WrapperStr pack, UmlItem * container)
 {
-    const Q3PtrVector<UmlItem> & ch = container->children();
+    const QVector<UmlItem*> & ch = container->children();
 
     for (unsigned i = 0; i != ch.size(); i += 1) {
         UmlItem * it = ch[i];
@@ -742,9 +750,8 @@ Package * Package::find(WrapperStr name, bool nohack)
         return this;
 
     Package * p = 0;
-    TreeItem * child;
 
-    for (child = firstChild(); child != 0; child = child->nextSibling()) {
+    foreach (TreeItem *child, children()) {
         if (((BrowserNode *) child)->isa_package() &&
             (child->text(0) == (const char *) name)) {
             p = (Package *) child;
@@ -780,11 +787,11 @@ Package * Package::package_unknown()
 UmlPackage * Package::get_uml(bool mandatory)
 {
     if (uml == 0) {
-        const char * name = text(0);
+        QString name = text(0);
         Package * pa = (Package *) parent();
         UmlPackage * uml_pa = pa->get_uml();	// will end on project
 
-        Q3PtrVector<UmlItem> ch = uml_pa->children();
+        QVector<UmlItem*> ch = uml_pa->children();
 
         for (unsigned index = 0; index != ch.size(); index += 1) {
             UmlItem * it = ch[index];
@@ -793,7 +800,7 @@ UmlPackage * Package::get_uml(bool mandatory)
                 return uml = (UmlPackage *) it;
         }
 
-        if ((uml = UmlBasePackage::create(uml_pa, name)) == 0) {
+        if ((uml = UmlBasePackage::create(uml_pa, name.toLatin1().constData())) == 0) {
             if (!mandatory)
                 return 0;
 

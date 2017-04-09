@@ -56,7 +56,7 @@ WrapperStr UmlPackage::file_path(const WrapperStr & f)
             if (!RootDir.isEmpty() && // empty -> error
                 QDir::isRelativePath(RootDir)) {
                 QFileInfo f(getProject()->supportFile());
-                QDir d(f.dirPath());
+                QDir d(f.path());
 
                 RootDir = d.filePath(RootDir);
             }
@@ -94,7 +94,7 @@ WrapperStr UmlPackage::file_path(const WrapperStr & f)
                 s.replace(index++, 1, "/");
         }
 
-        s = QDir::cleanDirPath(s) + "/";
+        s = QDir::cleanPath(s) + "/";
         index = s.find("/");
 
         int index2;
@@ -116,7 +116,7 @@ WrapperStr UmlPackage::file_path(const WrapperStr & f)
         }
     }
 
-    return WrapperStr(d.filePath(f).toAscii().constData()) + WrapperStr(".") +
+    return WrapperStr(d.filePath(f).toLatin1().constData()) + WrapperStr(".") +
            PythonSettings::sourceExtension();
 }
 
@@ -129,7 +129,7 @@ WrapperStr UmlPackage::text_path(const WrapperStr & f)
 
 void UmlPackage::generate()
 {
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
 
     for (unsigned index = 0; index != ch.size(); index += 1)
         ch[index]->generate();

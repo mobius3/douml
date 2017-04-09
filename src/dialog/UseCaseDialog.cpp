@@ -29,12 +29,11 @@
 
 
 
-#include <q3grid.h>
+#include <gridbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h>
-#include <q3vbox.h>
-
+#include <qcombobox.h>
+#include <vvbox.h>
 #include "UseCaseDialog.h"
 #include "BrowserUseCase.h"
 #include "UseCaseData.h"
@@ -50,7 +49,7 @@
 QSize UseCaseDialog::previous_size;
 
 UseCaseDialog::UseCaseDialog(UseCaseData * u)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), uc(u)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), uc(u)
 {
     BrowserNode * bn = u->browser_node;
 
@@ -65,37 +64,38 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
         setCancelButton(TR("Close"));
     }
 
-    setCaption(TR("Use Case dialog"));
+    setWindowTitle(TR("Use Case dialog"));
 
     bool visit = !hasOkButton();
 
     // general tab
 
-    Q3Grid * grid = new Q3Grid(2, this);
+    GridBox * grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(bn->get_name(), grid);
+    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(!visit, grid);
-    edstereotype->insertItem(toUnicode(uc->get_stereotype()));
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(edstereotype = new QComboBox( grid));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(uc->get_stereotype()));
 
     if (! visit) {
-        edstereotype->insertStringList(BrowserUseCase::default_stereotypes());
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlUseCase));
+        edstereotype->addItems(BrowserUseCase::default_stereotypes());
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlUseCase));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
-    new QLabel(TR("extension \npoints : "), grid);
-    extension_points = new MultiLineEdit(grid);
+    grid->addWidget(new QLabel(TR("extension \npoints : "), grid));
+    grid->addWidget(extension_points = new MultiLineEdit(grid));
     extension_points->setReadOnly(visit);
     extension_points->setText(uc->get_extension_points());
     QFont font = extension_points->font();
@@ -106,14 +106,19 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
     font.setFixedPitch(TRUE);
     extension_points->setFont(font);
 
-    Q3VBox * vtab = new Q3VBox(grid);
-    new QLabel(TR("description :"), vtab);
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
 
+            SmallPushButton *sButton;
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+        vtab->addWidget(sButton);
+    }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(bn->get_comment());
     comment->setFont(font);
@@ -122,11 +127,11 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
 
     // USER : list key - value
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable(bn, grid, visit);
+    grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
     addTab(grid, TR("Properties"));
 
     open_dialog(this);
@@ -134,7 +139,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
 
 void UseCaseDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -143,8 +148,9 @@ UseCaseDialog::~UseCaseDialog()
     uc->browser_node->edit_end();
     previous_size = size();
 
-    while (!edits.isEmpty())
-        edits.take(0)->close();
+    foreach (BodyDialog *dialog, edits)
+        dialog->close();
+    edits.clear();
 
     close_dialog(this);
 }
@@ -152,7 +158,7 @@ UseCaseDialog::~UseCaseDialog()
 void UseCaseDialog::edit_description()
 {
     edit(comment->text(),
-         edname->text().stripWhiteSpace() + "_description",
+         edname->text().trimmed() + "_description",
          uc, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
 
@@ -166,7 +172,7 @@ void UseCaseDialog::accept()
     if (!check_edits(edits) || !kvtable->check_unique())
         return;
 
-    QString s = edname->text().stripWhiteSpace();
+    QString s = edname->text().trimmed();
     BrowserNode * bn = uc->browser_node;
 
     if ((s != bn->get_name()) &&
@@ -179,14 +185,14 @@ void UseCaseDialog::accept()
     else
         bn->set_name(s);
 
-    bool newst = uc->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+    bool newst = uc->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
 
     bn->set_comment(comment->text());
     UmlWindow::update_comment_if_needed(bn);
 
     kvtable->updateNodeFromThis(bn);
 
-    uc->set_extension_points(extension_points->text().stripWhiteSpace());
+    uc->set_extension_points(extension_points->text().trimmed());
 
     ProfiledStereotypes::modified(bn, newst);
 
@@ -194,5 +200,5 @@ void UseCaseDialog::accept()
     bn->package_modified();
     uc->modified();
 
-    Q3TabDialog::accept();
+    TabDialog::accept();
 }

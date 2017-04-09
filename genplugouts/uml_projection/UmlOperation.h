@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseOperation.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 // This class manages 'operations', notes that the class 'UmlClassItem'
 // is a mother class of all the class's children.
@@ -12,7 +12,7 @@
 class UmlOperation : public UmlBaseOperation
 {
 public:
-    UmlOperation(void * id, const Q3CString & n) : UmlBaseOperation(id, n) {};
+    UmlOperation(void * id, const QByteArray & n) : UmlBaseOperation(id, n) {};
 
     virtual void uml2cpp(bool rec);
 

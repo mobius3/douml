@@ -29,8 +29,8 @@
 
 
 
-#include <q3popupmenu.h>
-#include <q3painter.h>
+//#include <q3popupmenu.h>
+#include <qpainter.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -89,7 +89,7 @@ BrowserExpansionNode::get_expansionnode(BrowserNode * future_parent)
     BrowserNode * old = 0;
     QString name;
 
-    if (!future_parent->enter_child_name(name, TR("enter expansion node's \nname (may be empty) : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter expansion node's \nname (may be empty) : "),
                                          UmlExpansionNode, TRUE, TRUE))
         return 0;
 
@@ -134,7 +134,7 @@ void BrowserExpansionNode::prepare_update_lib() const
 {
     all.memo_id_oid(get_ident(), original_id);
 
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->prepare_update_lib();
@@ -179,69 +179,72 @@ QString BrowserExpansionNode::may_connect(const BrowserNode * dest) const
     BrowserNode * container = dest->get_container(UmlActivity);
 
     if (container == 0)
-        return TR("illegal");
+        return QObject::tr("illegal");
 
     if (get_container(UmlActivity) != container)
-        return TR("not in the same activity");
+        return QObject::tr("not in the same activity");
 
     const BrowserActivityElement * elt =
-        dynamic_cast<const BrowserActivityElement *>(dest);
+            dynamic_cast<const BrowserActivityElement *>(dest);
 
     return (elt == 0)
-           ? TR("illegal")
-           : elt->connexion_from(def->get_is_control());
+            ? QObject::tr("illegal")
+            : elt->connexion_from(def->get_is_control());
 }
 
 QString BrowserExpansionNode::connexion_from(bool control) const
 {
     if (control != def->get_is_control())
         return (control)
-               ? TR("expansion node can't accept control flow (not 'is_control')")
-               : TR("expansion node can't accept data flow (is 'is_control')");
+                ? QObject::tr("expansion node can't accept control flow (not 'is_control')")
+                : QObject::tr("expansion node can't accept data flow (is 'is_control')");
     else
         return 0;
 }
 
 void BrowserExpansionNode::menu()
 {
-    Q3PopupMenu m(0, name);
-    Q3PopupMenu toolm(0);
+    QMenu m(name,0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!is_edited)
-            m.setWhatsThis(m.insertItem(TR("Edit"), 0),
-                           TR("to edit the <i>expansion node</i>, \
-a double click with the left mouse button does the same thing"));
+            MenuFactory::addItem(m, QObject::tr("Edit"), 0,
+                                 QObject::tr("to edit the <i>expansion node</i>, \
+                                             a double click with the left mouse button does the same thing"));
 
-        if (!is_read_only && (edition_number == 0)) {
-            m.setWhatsThis(m.insertItem(TR("Duplicate"), 1),
-                           TR("to copy the <i>expansion node</i> in a new one"));
-            m.insertSeparator();
-            m.setWhatsThis(m.insertItem(TR("Delete"), 2),
-                           TR("to delete the <i>expansion node</i>. \
-Note that you can undelete it after"));
-        }
+                                             if (!is_read_only && (edition_number == 0)) {
+                                                 MenuFactory::addItem(m, QObject::tr("Duplicate"), 1,
+                                                 QObject::tr("to copy the <i>expansion node</i> in a new one"));
+                                                 m.addSeparator();
+                                                 MenuFactory::addItem(m, QObject::tr("Delete"), 2,
+                                                 QObject::tr("to delete the <i>expansion node</i>. \
+                                                 Note that you can undelete it after"));
+                                             }
 
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), 4),
-                       TR("to know who reference the <i>expansion node</i> \
-through a flow"));
-        mark_menu(m, TR("the expansion node"), 90);
-        ProfiledStereotypes::menu(m, this, 99990);
+                                             MenuFactory::addItem(m, QObject::tr("Referenced by"), 4,
+                                                                  QObject::tr("to know who reference the <i>expansion node</i> \
+                                                                              through a flow"));
+                                                                              mark_menu(m, QObject::tr("the expansion node").toLatin1().constData(), 90);
+                                                                  ProfiledStereotypes::menu(m, this, 99990);
 
-        if ((edition_number == 0) &&
-            Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
-        }
+                                             if ((edition_number == 0) &&
+                                                 Tool::menu_insert(&toolm, get_type(), 100)) {
+                                                 m.addSeparator();
+                                                 toolm.setTitle( QObject::tr("Tool"));
+                                                 m.addMenu(&toolm);
+                                             }
     }
     else if (!is_read_only && (edition_number == 0))
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 3),
-                       TR("to undelete the <i>expansion node</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 3,
+                             QObject::tr("to undelete the <i>expansion node</i>"));
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *retAction = m.exec(QCursor::pos());
+    if(retAction)
+        exec_menu_choice(retAction->data().toInt());
 }
 
 void BrowserExpansionNode::exec_menu_choice(int rank)
@@ -254,11 +257,11 @@ void BrowserExpansionNode::exec_menu_choice(int rank)
     case 1: {
         QString name;
 
-        if (((BrowserNode *) parent())->enter_child_name(name, TR("enter expansion node's \nname (may be empty) : "),
-                UmlExpansionNode, TRUE, TRUE))
+        if (((BrowserNode *) parent())->enter_child_name(name, QObject::tr("enter expansion node's \nname (may be empty) : "),
+                                                         UmlExpansionNode, TRUE, TRUE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
     }
-    break;
+        break;
 
     case 2:
         delete_it();
@@ -322,7 +325,7 @@ void BrowserExpansionNode::apply_shortcut(QString s)
 void BrowserExpansionNode::open(bool)
 {
     if (!is_edited)
-        def->edit(TR("Expansion Node"), its_default_stereotypes);
+        def->edit(QObject::tr("Expansion Node").toLatin1().constData(), its_default_stereotypes);
 }
 
 void BrowserExpansionNode::modified()
@@ -338,7 +341,7 @@ UmlCode BrowserExpansionNode::get_type() const
 
 QString BrowserExpansionNode::get_stype() const
 {
-    return TR("expansion node");
+    return QObject::tr("expansion node");
 }
 
 int BrowserExpansionNode::get_identifier() const
@@ -366,7 +369,7 @@ QString BrowserExpansionNode::full_name(bool rev, bool) const
     return fullname(s, rev);
 }
 
-void BrowserExpansionNode::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete)
+void BrowserExpansionNode::referenced_by(QList<BrowserNode *> & l, bool ondelete)
 {
     BrowserNode::referenced_by(l, ondelete);
     BrowserFlow::compute_referenced_by(l, this);
@@ -375,20 +378,21 @@ void BrowserExpansionNode::referenced_by(Q3PtrList<BrowserNode> & l, bool ondele
         BrowserActivityDiagram::compute_referenced_by(l, this, "expansionnodecanvas", "expansionnode_ref");
 }
 
-void BrowserExpansionNode::compute_referenced_by(Q3PtrList<BrowserNode> & l,
-        BrowserNode * target)
+void BrowserExpansionNode::compute_referenced_by(QList<BrowserNode *> & l,
+                                                 BrowserNode * target)
 {
     IdIterator<BrowserExpansionNode> it(all);
+    while(it.hasNext()){
+        it.next();
+        if(it.value()) {
+            if (!it.value()->deletedp()) {
+                const AType & t = it.value()->def->get_type();
 
-    while (it.current()) {
-        if (!it.current()->deletedp()) {
-            const AType & t = it.current()->def->get_type();
+                if (t.type == target)
+                    l.append(it.value());
+            }
 
-            if (t.type == target)
-                l.append(it.current());
         }
-
-        ++it;
     }
 }
 
@@ -417,7 +421,7 @@ bool BrowserExpansionNode::tool_cmd(ToolCom * com, const char * args)
                 else
                     ok = FALSE;
             }
-            break;
+                break;
 
             default:
                 ok = FALSE;
@@ -449,7 +453,7 @@ void BrowserExpansionNode::DropAfterEvent(QDropEvent * e, BrowserNode * after)
 QString BrowserExpansionNode::drag_key() const
 {
     return QString::number(UmlParameter)
-           + "#" + QString::number((unsigned long) parent());
+            + "#" + QString::number((unsigned long) parent());
 }
 
 QString BrowserExpansionNode::drag_postfix() const
@@ -460,7 +464,7 @@ QString BrowserExpansionNode::drag_postfix() const
 QString BrowserExpansionNode::drag_key(BrowserNode * p)
 {
     return QString::number(UmlParameter)
-           + "#" + QString::number((unsigned long) p);
+            + "#" + QString::number((unsigned long) p);
 }
 
 void BrowserExpansionNode::init()
@@ -496,14 +500,14 @@ void BrowserExpansionNode::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "expansionnode " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
         BrowserNode::save(st);
 
         // saves the sub elts
 
-        Q3ListViewItem * child = firstChild();
+        BrowserNode * child = firstChild();
 
         if (child != 0) {
             for (;;) {
@@ -540,8 +544,8 @@ BrowserExpansionNode * BrowserExpansionNode::read_ref(char *& st)
     BrowserExpansionNode * result = all[id];
 
     return (result == 0)
-           ? new BrowserExpansionNode(id)
-           : result;
+            ? new BrowserExpansionNode(id)
+            : result;
 }
 
 BrowserExpansionNode *
@@ -595,7 +599,7 @@ BrowserExpansionNode::read(char *& st, char * k,
         }
 
         result->is_read_only = (!in_import() && read_only_file()) ||
-                               ((user_id() != 0) && result->is_api_base());
+                ((user_id() != 0) && result->is_api_base());
         result->def->set_browser_node(result);
 
         return result;

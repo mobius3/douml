@@ -59,6 +59,7 @@ protected:
 protected:
     StateActionCanvas(UmlCanvas * canvas, int id);
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     StateActionCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~StateActionCanvas();
@@ -70,7 +71,7 @@ public:
     virtual void draw(QPainter & p);
     virtual void change_scale();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
@@ -85,8 +86,8 @@ public:
     virtual void resize(const QSize & sz, bool w, bool h);
 
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem *> &);
+    virtual void clone_drawing_settings(const DiagramItem *src);
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
 

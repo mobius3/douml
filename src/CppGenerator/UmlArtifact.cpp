@@ -32,7 +32,7 @@
 #include "misc/mystr.h"
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3PtrList>
+////
 
 #include "UmlArtifact.h"
 #include "UmlPackage.h"
@@ -128,7 +128,7 @@ void UmlArtifact::generate()
         }
 
         // get bodies if preserve
-        const Q3PtrVector<UmlClass> & cls = associatedClasses();
+        const QVector<UmlClass*> & cls = associatedClasses();
 
         if (preserve())
             UmlOperation::read_bodies(h_path, src_path);
@@ -136,7 +136,7 @@ void UmlArtifact::generate()
         // compute dependencies
 
         bool all_in_h = (hdef.find("${all_includes}") != -1);
-        Q3PtrList<CppRefType> dependencies;
+        QList<CppRefType *> dependencies;
         unsigned n = cls.count();
         unsigned index;
 
@@ -185,9 +185,6 @@ void UmlArtifact::generate()
                     manage_alias(p, f_h);
                 else if (*p != '$')
                 {
-                    QTextCodec* codec = QTextCodec::codecForLocale();
-                    //f_h << codec->fromUnicode(*p,1);
-                    //p++;
                     f_h << toLocale(p);
                 }
                 else if (!strncmp(p, "${comment}", 10))
@@ -286,7 +283,7 @@ void UmlArtifact::generate()
                     p += 13;
 
                     for (index = 0; index != n; index += 1)
-                        cls[index]->generate_decl(f_h, current_indent(p, hdef.operator QString()));
+                        cls[index]->generate_decl(f_h, current_indent(p, hdef.operator QString().toLatin1().constData()));
 
                     if (*p == '\n')
                         p += 1;
@@ -320,7 +317,7 @@ void UmlArtifact::generate()
                     QTextStream out(&file);
                     out.setCodec(QTextCodec::codecForLocale());
                     QString temp(*headerFile.data());
-                    out << codec->toUnicode(temp);
+                    out << codec->toUnicode(temp.toLatin1().constData());
                     //out << *headerFile.data();
                     out.flush();
                 }

@@ -29,12 +29,12 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3PointArray>
+#include <QPolygon>
 #include <QPixmap>
 
 #include "ArtifactCanvas.h"
@@ -115,8 +115,8 @@ void ArtifactCanvas::remove(bool from_model)
 void ArtifactCanvas::compute_size()
 {
     used_color = (itscolor == UmlDefaultColor)
-                 ? the_canvas()->browser_diagram()->get_color(UmlArtifact)
-                 : itscolor;
+            ? the_canvas()->browser_diagram()->get_color(UmlArtifact)
+            : itscolor;
 
     const BasicData * data = browser_node->get_data();
     QFontMetrics fm(the_canvas()->get_font(UmlNormalBoldFont));
@@ -124,8 +124,8 @@ void ArtifactCanvas::compute_size()
     int wi;
 
     const QPixmap * px =
-        ProfiledStereotypes::diagramPixmap(data->get_stereotype(),
-                                           the_canvas()->zoom());
+            ProfiledStereotypes::diagramPixmap(data->get_stereotype(),
+                                               the_canvas()->zoom());
 
     if (px != 0) {
         wi = fm.width(browser_node->get_name());
@@ -142,9 +142,9 @@ void ArtifactCanvas::compute_size()
         // name on font_height+4 points
         const int four = (int)(4 * the_canvas()->zoom());
         int stw = fm.width((data->get_stereotype()[0])
-                           ? (QString("<<") + toUnicode(data->get_short_stereotype()) + ">>")
-                           : QString("<<artifact>>"))
-                  + 3 * fm.height();
+                ? (QString("<<") + toUnicode(data->get_short_stereotype()) + ">>")
+                : QString("<<artifact>>"))
+                + 3 * fm.height();
 
 
         he = 3 * fm.height() + four;
@@ -174,10 +174,10 @@ void ArtifactCanvas::compute_size()
 
 void ArtifactCanvas::change_scale()
 {
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
     compute_size();
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void ArtifactCanvas::modified()
@@ -230,8 +230,8 @@ void ArtifactCanvas::post_connexion(UmlCode action, DiagramItem * dest)
         canvas->freeze_draw_all_relations();
 
         ((ArtifactData *) browser_node->get_data())
-        ->associate((BrowserArtifact *)
-                    ((ArtifactCanvas *) dest)->browser_node);
+                ->associate((BrowserArtifact *)
+                            ((ArtifactCanvas *) dest)->browser_node);
 
         canvas->unfreeze_draw_all_relations();
     }
@@ -240,8 +240,8 @@ void ArtifactCanvas::post_connexion(UmlCode action, DiagramItem * dest)
 void ArtifactCanvas::unassociate(DiagramItem * other)
 {
     ((ArtifactData *) browser_node->get_data())
-    ->unassociate((BrowserArtifact *)
-                  ((ArtifactCanvas *) other)->browser_node);
+            ->unassociate((BrowserArtifact *)
+                          ((ArtifactCanvas *) other)->browser_node);
 }
 
 void ArtifactCanvas::draw_all_relations()
@@ -252,27 +252,23 @@ void ArtifactCanvas::draw_all_relations()
     else if (!DrawingSettings::just_modified() &&
              !on_load_diagram()) {
         // remove all association starting from 'this'
-        Q3PtrListIterator<ArrowCanvas> it(lines);
-
-        while (it.current()) {
-            if ((it.current()->type() == UmlContain) &&
-                (((AssocContainCanvas *) it.current())->get_start() == this))
-                it.current()->delete_it();
-            else
-                ++it;
+        foreach (ArrowCanvas *canvas, lines) {
+            if ((canvas->typeUmlCode() == UmlContain) &&
+                    (((AssocContainCanvas *) canvas)->get_start() == this))
+                canvas->delete_it();
         }
 
         // update non source artifact vis a vis 'this'
-        Q3CanvasItemList all = canvas()->allItems();
-        Q3CanvasItemList::Iterator cit;
+        QList<QGraphicsItem*> all = canvas()->items();
+        QList<QGraphicsItem*>::Iterator cit;
 
         for (cit = all.begin(); cit != all.end(); ++cit) {
-            if ((*cit)->visible()) {
+            if ((*cit)->isVisible()) {
                 DiagramItem * adi = QCanvasItemToDiagramItem(*cit);
 
                 if ((adi != 0) &&		// an uml canvas item
-                    (adi->type() == UmlArtifact) &&
-                    strcmp(((ArtifactCanvas *) adi)->browser_node->get_stereotype(), "source"))
+                        (adi->typeUmlCode() == UmlArtifact) &&
+                        strcmp(((ArtifactCanvas *) adi)->browser_node->get_stereotype(), "source"))
                     ((ArtifactCanvas *) adi)->update_relations(this);
             }
         }
@@ -282,110 +278,105 @@ void ArtifactCanvas::draw_all_relations()
 void ArtifactCanvas::update_relations(ArtifactCanvas * other)
 {
     // 'this' is a non source, check association with 'other'
-    const Q3PtrDict<BrowserArtifact> * associated =
-        ((ArtifactData *) browser_node->get_data())->get_associated();
+    const QHash<void*, BrowserArtifact*> * associated =
+            ((ArtifactData *) browser_node->get_data())->get_associated();
     bool association_must_exist =
-        ((associated != 0) &&
-         (associated->find((BrowserArtifact *) other->browser_node) != 0));
-    Q3PtrListIterator<ArrowCanvas> it(lines);
+            ((associated != 0) &&
+             (associated->value((BrowserArtifact *) other->browser_node) != 0));
 
-    while (it.current()) {
-        if ((it.current()->type() == UmlContain) &&
-            (((AssocContainCanvas *) it.current())->get_end() == other)) {
+    foreach (ArrowCanvas *canvas, lines) {
+        if ((canvas->typeUmlCode() == UmlContain) &&
+                (((AssocContainCanvas *) canvas)->get_end() == other)) {
             if (! association_must_exist)
-                it.current()->delete_it();
+                canvas->delete_it();
 
             return;
         }
-
-        ++it;
     }
 
     // association not yet exist
 
     if (association_must_exist)
         (new AssocContainCanvas(the_canvas(), this, other, 0, -1.0, -1.0))
-        ->show();
+            ->show();
 }
 
 void ArtifactCanvas::update_relations()
 {
     // 'this' is a non source, check its associations
-    const Q3PtrDict<BrowserArtifact> * associated =
-        ((ArtifactData *) browser_node->get_data())->get_associated();
-    Q3PtrDict<BrowserArtifact> associations;
-    Q3PtrListIterator<ArrowCanvas> it(lines);
+    const QHash<void*, BrowserArtifact*> * associated =
+            ((ArtifactData *) browser_node->get_data())->get_associated();
+    QHash<void*, BrowserArtifact*> associations;
+    foreach (ArrowCanvas *canvas, lines) {
+        if ((canvas->typeUmlCode() == UmlContain) &&
+                (((AssocContainCanvas *)canvas)->get_start() == this)) {
+            DiagramItem * adi = ((AssocContainCanvas *) canvas)->get_end();
 
-    while (it.current()) {
-        if ((it.current()->type() == UmlContain) &&
-            (((AssocContainCanvas *) it.current())->get_start() == this)) {
-            DiagramItem * adi = ((AssocContainCanvas *) it.current())->get_end();
-
-            if ((adi->type() == UmlArtifact) &&
-                (associated != 0) &&
-                (associated->find((BrowserArtifact *)
-                                  ((ArtifactCanvas *) adi)->browser_node) != 0)) {
+            if ((adi->typeUmlCode() == UmlArtifact) &&
+                    (associated != 0) &&
+                    (associated->value((BrowserArtifact *)
+                                      ((ArtifactCanvas *) adi)->browser_node) != 0)) {
                 // association must exist
                 BrowserArtifact * c = (BrowserArtifact *)
-                                      ((ArtifactCanvas *) adi)->browser_node;
+                        ((ArtifactCanvas *) adi)->browser_node;
 
                 associations.insert(c, c);
-                ++it;
             }
             else
                 // association must not exist
-                it.current()->delete_it();
+                canvas->delete_it();
         }
-        else
-            ++it;
     }
 
     if (associated != 0) {
-        Q3PtrDictIterator<BrowserArtifact> it(*associated);
+        QHashIterator<void*, BrowserArtifact*> it(*associated);
 
-        while (it.current()) {
-            if (associations.find(it.current()) == 0) {
+        while (it.hasNext()) {
+            it.next();
+            if(it.value())
+            {
+            if (associations.value(it.value()) == 0) {
                 // the association to 'it.current()' is not yet drawn
 
                 // search 'it.current()' cancas
-                Q3CanvasItemList all = canvas()->allItems();
-                Q3CanvasItemList::Iterator cit;
+                QList<QGraphicsItem*> all = canvas()->items();
+                QList<QGraphicsItem*>::Iterator cit;
 
                 for (cit = all.begin(); cit != all.end(); ++cit) {
-                    if ((*cit)->visible()) {
+                    if ((*cit)->isVisible()) {
                         DiagramItem * adi = QCanvasItemToDiagramItem(*cit);
 
                         if ((adi != 0) &&		// an uml canvas item
-                            (adi->type() == UmlArtifact) &&
-                            (((ArtifactCanvas *) adi)->browser_node == it.current())) {
+                                (adi->typeUmlCode() == UmlArtifact) &&
+                                (((ArtifactCanvas *) adi)->browser_node == it.value())) {
                             // find
                             (new AssocContainCanvas(the_canvas(), this, adi, 0, -1.0, -1.0))
-                            ->show();
+                                    ->show();
                             break;
                         }
                     }
                 }
             }
-
-            ++it;
+            }
         }
     }
 }
 
 void ArtifactCanvas::draw(QPainter & p)
 {
-    if (! visible()) return;
+    if (! isVisible()) return;
 
     p.setRenderHint(QPainter::Antialiasing, true);
     QRect r = rect();
     const BasicData * data = browser_node->get_data();
     FILE * fp = svg();
+    QBrush backBrush = p.background();
 
     if (fp != 0)
         fputs("<g>\n", fp);
 
     const QPixmap * px =
-        ProfiledStereotypes::diagramPixmap(browser_node->get_data()->get_stereotype(), the_canvas()->zoom());
+            ProfiledStereotypes::diagramPixmap(browser_node->get_data()->get_stereotype(), the_canvas()->zoom());
 
     if (px != 0) {
         p.setBackgroundMode(::Qt::TransparentMode);
@@ -397,10 +388,10 @@ void ArtifactCanvas::draw(QPainter & p)
         if (fp != 0)
             // pixmap not really exported in SVG
             fprintf(fp, "\t<rect fill=\"%s\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\""
-                    " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                        " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                     svg_color(UmlBlack), lft, r.y(), px->width() - 1, px->height() - 1);
 
-        r.moveBy(0, px->height());
+        r.translate(0, px->height());
         p.setFont(the_canvas()->get_font(UmlNormalBoldFont));
         p.drawText(r, ::Qt::AlignHCenter, browser_node->get_name());
 
@@ -410,13 +401,14 @@ void ArtifactCanvas::draw(QPainter & p)
         }
     }
     else {
-        QColor bckgrnd = p.backgroundColor();
+        QColor bckgrnd = p.background().color();
 
         p.setBackgroundMode((used_color == UmlTransparent) ? ::Qt::TransparentMode : ::Qt::OpaqueMode);
 
         QColor co = color(used_color);
 
-        p.setBackgroundColor(co);
+        backBrush.setColor(co);
+        p.setBackground(backBrush);
 
         // <<artifact>>/stereotype on 2*font_height with the icon on the right
         // the icon height = 2*font_height
@@ -442,12 +434,12 @@ void ArtifactCanvas::draw(QPainter & p)
 
                 if (fp != 0) {
                     fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
-                            " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                                " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                             QColor(::Qt::darkGray).rgb() & 0xffffff,
                             r.right(), r.top() + shadow, shadow - 1, r.height() - 1 - 1);
 
                     fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
-                            " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                                " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                             QColor(::Qt::darkGray).rgb() & 0xffffff,
                             r.left() + shadow, r.bottom(), r.width() - 1 - 1, shadow - 1);
                 }
@@ -461,13 +453,13 @@ void ArtifactCanvas::draw(QPainter & p)
 
             if (fp != 0)
                 fprintf(fp, "\t<rect fill=\"%s\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\""
-                        " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                            " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                         svg_color(used_color),
                         r.x(), r.y(), r.width() - 1, r.height() - 1);
         }
         else if (fp != 0)
             fprintf(fp, "\t<rect fill=\"none\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\""
-                    " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                        " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                     r.x(), r.y(), r.width() - 1, r.height() - 1);
 
         p.drawRect(r);
@@ -492,7 +484,7 @@ void ArtifactCanvas::draw(QPainter & p)
                           p.font(), fp);
         }
 
-        r.moveBy(0, r.height());
+        r.translate(0, r.height());
         r.setHeight(he + four);
         p.setFont(the_canvas()->get_font(UmlNormalBoldFont));
         p.drawText(r, ::Qt::AlignCenter, browser_node->get_name());
@@ -509,7 +501,7 @@ void ArtifactCanvas::draw(QPainter & p)
         re.setTop(re.top() + four);
         re.setHeight(2 * (he - four));
 
-        Q3PointArray a(7);
+        QPolygon a(7);
         const int corner_size = re.width() / 3;
 
         a.setPoint(0, re.left(), re.top());
@@ -527,19 +519,23 @@ void ArtifactCanvas::draw(QPainter & p)
         if (fp != 0) {
             draw_poly(fp, a, UmlTransparent);
             fprintf(fp, "\t<line stroke=\"black\" stroke-opacity=\"1\""
-                    " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n"
-                    "</g>\n",
+                        " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n"
+                        "</g>\n",
                     re.right() - corner_size, re.top(), re.right(), re.top() + corner_size);
         }
 
-        p.setBackgroundColor(bckgrnd);
+        backBrush.setColor(bckgrnd);
+        p.setBackground(backBrush);
     }
 
     if (selected())
         show_mark(p, rect());
 }
-
-UmlCode ArtifactCanvas::type() const
+void ArtifactCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode ArtifactCanvas::typeUmlCode() const
 {
     return UmlArtifact;
 }
@@ -567,47 +563,47 @@ void ArtifactCanvas::open()
 
 void ArtifactCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu gensubm(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu gensubm(0);
+    QMenu toolm(0);
     int index;
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 15);
-    m.insertItem(TR("Go down"), 16);
-    m.insertSeparator();
-    m.insertItem(TR("Add related elements"), 17);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Edit artifact"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Select in browser"), 4);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 15);
+    MenuFactory::addItem(m, TR("Go down"), 16);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Add related elements"), 17);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit artifact"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select in browser"), 4);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 5);
+        MenuFactory::addItem(m, TR("Select linked items"), 5);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (browser_node->is_writable()) {
         if (browser_node->get_associated() !=
-            (BrowserNode *) the_canvas()->browser_diagram())
-            m.insertItem(TR("Set associated diagram"), 6);
+                (BrowserNode *) the_canvas()->browser_diagram())
+            MenuFactory::addItem(m, TR("Set associated diagram"), 6);
 
         if (browser_node->get_associated())
-            m.insertItem(TR("Remove diagram association"), 12);
+            MenuFactory::addItem(m, TR("Remove diagram association"), 12);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 7);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        m.insertItem(TR("Delete from model"), 8);
+        MenuFactory::addItem(m, TR("Delete from model"), 8);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     bool cpp = GenerationSettings::cpp_get_default_defs();
     bool java = GenerationSettings::java_get_default_defs();
@@ -616,115 +612,119 @@ void ArtifactCanvas::menu(const QPoint &)
     bool idl = GenerationSettings::idl_get_default_defs();
 
     if (cpp || java || php || python || idl)
-        m.insertItem(TR("Generate"), &gensubm);
+        MenuFactory::insertItem(m, TR("Generate"), &gensubm);
 
     if (Tool::menu_insert(&toolm, UmlArtifact, 20))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
     if (cpp)
-        gensubm.insertItem("C++", 9);
+        MenuFactory::addItem(gensubm, "C++", 9);
 
     if (java)
-        gensubm.insertItem("Java", 10);
+        MenuFactory::addItem(gensubm, "Java", 10);
 
     if (php)
-        gensubm.insertItem("Php", 13);
+        MenuFactory::addItem(gensubm, "Php", 13);
 
     if (python)
-        gensubm.insertItem("Python", 14);
+        MenuFactory::addItem(gensubm, "Python", 14);
 
     if (idl)
-        gensubm.insertItem("Idl", 11);
+        MenuFactory::addItem(gensubm, "Idl", 11);
 
-    switch (index = m.exec(QCursor::pos())) {
-    case 0:
-        upper();
-        modified();	// call package_modified()
-        return;
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        switch (index = retAction->data().toInt()) {
+        case 0:
+            upper();
+            modified();	// call package_modified()
+            return;
 
-    case 1:
-        lower();
-        modified();	// call package_modified()
-        return;
+        case 1:
+            lower();
+            modified();	// call package_modified()
+            return;
 
-    case 15:
-        z_up();
-        modified();	// call package_modified()
-        return;
+        case 15:
+            z_up();
+            modified();	// call package_modified()
+            return;
 
-    case 16:
-        z_down();
-        modified();	// call package_modified()
-        return;
+        case 16:
+            z_down();
+            modified();	// call package_modified()
+            return;
 
-    case 2:
-        edit_drawing_settings();
-        return;
+        case 2:
+            edit_drawing_settings();
+            return;
 
-    case 3:
-        browser_node->open(TRUE);
-        return;
+        case 3:
+            browser_node->open(TRUE);
+            return;
 
-    case 4:
-        browser_node->select_in_browser();
-        return;
+        case 4:
+            browser_node->select_in_browser();
+            return;
 
-    case 5:
-        the_canvas()->unselect_all();
-        select_associated();
-        return;
+        case 5:
+            the_canvas()->unselect_all();
+            select_associated();
+            return;
 
-    case 6:
-        ((BrowserArtifact *) browser_node)
-        ->set_associated_diagram((BrowserDeploymentDiagram *)
-                                 the_canvas()->browser_diagram());
-        return;
+        case 6:
+            ((BrowserArtifact *) browser_node)
+                    ->set_associated_diagram((BrowserDeploymentDiagram *)
+                                             the_canvas()->browser_diagram());
+            return;
 
-    case 12:
-        ((BrowserArtifact *) browser_node)
-        ->set_associated_diagram(0);
-        return;
+        case 12:
+            ((BrowserArtifact *) browser_node)
+                    ->set_associated_diagram(0);
+            return;
 
-    case 7:
-        //remove from diagram
-        delete_it();
-        break;
+        case 7:
+            //remove from diagram
+            delete_it();
+            break;
 
-    case 8:
-        //delete from model
-        browser_node->delete_it();	// will delete the canvas
-        break;
+        case 8:
+            //delete from model
+            browser_node->delete_it();	// will delete the canvas
+            break;
 
-    case 9:
-        browser_node->apply_shortcut("Generate C++");
-        return;
+        case 9:
+            browser_node->apply_shortcut("Generate C++");
+            return;
 
-    case 10:
-        browser_node->apply_shortcut("Generate Java");
-        return;
+        case 10:
+            browser_node->apply_shortcut("Generate Java");
+            return;
 
-    case 11:
-        browser_node->apply_shortcut("Generate Idl");
-        return;
+        case 11:
+            browser_node->apply_shortcut("Generate Idl");
+            return;
 
-    case 13:
-        browser_node->apply_shortcut("Generate Php");
-        return;
+        case 13:
+            browser_node->apply_shortcut("Generate Php");
+            return;
 
-    case 14:
-        browser_node->apply_shortcut("Generate Python");
-        return;
+        case 14:
+            browser_node->apply_shortcut("Generate Python");
+            return;
 
-    case 17:
-        ((UmlCanvas *) canvas())->get_view()
-        ->add_related_elements(this, TR("artifact"), TRUE, FALSE);
-        return;
+        case 17:
+            ((UmlCanvas *) canvas())->get_view()
+                    ->add_related_elements(this, TR("artifact"), TRUE, FALSE);
+            return;
 
-    default:
-        if (index >= 20)
-            ToolCom::run(Tool::command(index - 20), browser_node);
+        default:
+            if (index >= 20)
+                ToolCom::run(Tool::command(index - 20), browser_node);
 
-        return;
+            return;
+        }
     }
 
     package_modified();
@@ -750,7 +750,7 @@ void ArtifactCanvas::apply_shortcut(QString s)
     }
     else if (s == "Add related elements") {
         ((UmlCanvas *) canvas())->get_view()
-        ->add_related_elements(this, TR("artifact"), TRUE, FALSE);
+                ->add_related_elements(this, TR("artifact"), TRUE, FALSE);
         return;
     }
     else {
@@ -787,7 +787,7 @@ bool ArtifactCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void ArtifactCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ArtifactCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         ColorSpecVector co(1);
@@ -800,11 +800,10 @@ void ArtifactCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
-                ((ArtifactCanvas *) it.current())->itscolor = itscolor;
-                ((ArtifactCanvas *) it.current())->modified();	// call package_modified()
+            foreach (DiagramItem *item, l) {
+                ArtifactCanvas *canvas = (ArtifactCanvas *)item;
+                canvas->itscolor = itscolor;
+                canvas->modified();
             }
         }
 
@@ -813,18 +812,11 @@ void ArtifactCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void ArtifactCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ArtifactCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    ArtifactCanvas * x = (ArtifactCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        ArtifactCanvas * o = (ArtifactCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const ArtifactCanvas * x = (const ArtifactCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString ArtifactCanvas::may_start(UmlCode & l) const
@@ -859,7 +851,7 @@ QString ArtifactCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
     if (l == UmlAnchor)
         return dest->may_start(l);
 
-    switch (dest->type()) {
+    switch (dest->typeUmlCode()) {
     case UmlArtifact:
         switch (l) {
         case UmlContain:
@@ -916,7 +908,7 @@ ArtifactCanvas * ArtifactCanvas::read(char *& st, UmlCanvas * canvas,
                                       char * k)
 {
     if (!strcmp(k, "artifactcanvas_ref") ||
-        ((read_file_format() < 20) && !strcmp(k, "componentcanvas_ref")))
+            ((read_file_format() < 20) && !strcmp(k, "componentcanvas_ref")))
         return ((ArtifactCanvas *) dict_get(read_id(st), "artifactcanvas", canvas));
     else if (!strcmp(k, "artifactcanvas") ||
              ((read_file_format() < 20) && !strcmp(k, "componentcanvas"))) {

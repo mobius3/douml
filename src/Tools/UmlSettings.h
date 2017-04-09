@@ -4,7 +4,6 @@
 
 #include "misc/mystr.h"
 #include "aLanguage.h"
-#include <q3dict.h>
 
 struct UmlBuiltin;
 struct UmlStereotype;
@@ -100,15 +99,15 @@ protected:
 
     static WrapperStr _relation_default_description;
 
-    static Q3Dict<UmlBuiltin> _map_builtins;
+    static QHash<QString,UmlBuiltin*> _map_builtins;
 
     static UmlBuiltin * _builtins;
 
-    static Q3Dict<UmlStereotype> _map_relation_attribute_stereotypes;
+    static QHash<QString,UmlStereotype*> _map_relation_attribute_stereotypes;
 
     static UmlStereotype * _relation_attribute_stereotypes;
 
-    static Q3Dict<UmlStereotype> _map_class_stereotypes;
+    static QHash<QString,UmlStereotype*> _map_class_stereotypes;
 
     static UmlStereotype * _class_stereotypes;
 

@@ -28,10 +28,10 @@
 #ifdef DEBUG_DOUML
 #include <iostream>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include "misc/mystr.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+
 #include "Logging/QsLog.h"
 
 using namespace std;
@@ -48,6 +48,7 @@ using namespace std;
 #include "UmlCom.h"
 #include "CppSettings.h"
 #include "Lex.h"
+#include <QSettings>
 #ifdef REVERSE
 #include "Statistic.h"
 # ifdef ROUNDTRIP
@@ -55,9 +56,9 @@ using namespace std;
 # endif
 #endif
 
-NDict< Q3PtrList<UmlOperation> > UmlOperation::friends;
+NDict< QList<UmlOperation *> > UmlOperation::friends;
 #ifdef ROUNDTRIP
-Q3PtrDict<WrapperStr> UmlOperation::DefNotYetSet(97);
+QHash<UmlOperation *,WrapperStr*> UmlOperation::DefNotYetSet;
 #endif
 
 UmlOperation::UmlOperation(void * id, const WrapperStr & n)
@@ -216,17 +217,17 @@ static void insert_template(const FormalParameterList & tmplt,
 }
 
 bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
-                           const Q3ValueList<FormalParameterList> & tmplts,
+                           const QList<FormalParameterList> & tmplts,
                            WrapperStr type, const WrapperStr & modifier,
                            const WrapperStr & pretype, aVisibility visibility,
                            bool inlinep, bool virtualp, bool staticp, bool constp,
                            bool volatilep, bool typenamep, bool explicitp,
                            bool friendp, WrapperStr friend_template,
                            WrapperStr comment, WrapperStr description, bool pfunc
-#ifdef ROUNDTRIP
-                           , bool roundtrip, Q3PtrList<UmlItem> & expected_order
-#endif
-                          )
+                           #ifdef ROUNDTRIP
+                           , bool roundtrip, QList<UmlItem *> & expected_order
+                           #endif
+                           )
 {
     // the "(" was read
 
@@ -234,21 +235,20 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
     QLOG_INFO() << "OPERATION '" << name << "' type '" << type << "' modifier '" << modifier << "'\n";
 #endif
 
-    WrapperStr cl_name = WrapperStr((cl->text(0)).toAscii().constData());
+    WrapperStr cl_name = WrapperStr((cl->text(0)).toLatin1().constData());
     UmlOperation * op;
 #ifdef ROUNDTRIP
-    bool may_roundtrip = roundtrip &&
-                         (!cl->from_libp() || (visibility != PrivateVisibility));
-    Q3ValueList<UmlParameter> params;
+    bool may_roundtrip = roundtrip && (!cl->from_libp() || (visibility != PrivateVisibility));
+    QList<UmlParameter> params;
     WrapperStr body;
 
     if (may_roundtrip)
 #else
     if (
-# ifdef REVERSE
-        cl->from_libp() &&
-# endif
-        (visibility == PrivateVisibility))
+        # ifdef REVERSE
+            cl->from_libp() &&
+        # endif
+            (visibility == PrivateVisibility))
 #endif
         op = 0;
     else {
@@ -271,20 +271,22 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
     UmlTypeSpec return_type;
     WrapperStr typeform;
 
-    if (!pfunc) {
+    if (!pfunc)
+    {
         typeform = (pretype.isEmpty())
-                   ? WrapperStr("${type}")
-                   : pretype + " ${type}";
+                ? WrapperStr("${type}")
+                : pretype + " ${type}";
 
         if (! type.isEmpty())
             // not a contructor or destructor
             cl->compute_type(type, return_type, typeform, FALSE, tmplts);
     }
 
-    int index;
+    int index = 0;
     WrapperStr decl;
 
-    if (op != 0) {
+    if (op != 0)
+    {
         op->set_Visibility(visibility);
 
         if (staticp) op->set_isClassMember(staticp);
@@ -304,15 +306,15 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
         decl = CppSettings::operationDecl();
 
         if ((decl.operator QString().lastIndexOf(';') == -1) ||
-            (decl.find("${friend}") == -1) ||
-            (decl.find("${static}") == -1) ||
-            ((index = decl.find("${(}")) == -1) ||
-            ((index = decl.find("${)}", index + 4)) == -1) ||
-            (decl.find("${volatile}", index + 4) == -1) ||
-            (decl.find("${const}", index + 4) == -1) ||
-            ((index = decl.find("${type}")) == -1) ||
-            (decl.find("${name}", index + 7) == -1) ||
-            (decl.find("${abstract}", index + 7) == -1)) {
+                (decl.find("${friend}") == -1) ||
+                (decl.find("${static}") == -1) ||
+                ((index = decl.find("${(}")) == -1) ||
+                ((index = decl.find("${)}", index + 4)) == -1) ||
+                (decl.find("${volatile}", index + 4) == -1) ||
+                (decl.find("${const}", index + 4) == -1) ||
+                ((index = decl.find("${type}")) == -1) ||
+                (decl.find("${name}", index + 7) == -1) ||
+                (decl.find("${abstract}", index + 7) == -1)) {
             // throw is not mandatory
             decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};";
             index = decl.find("${type}");
@@ -375,15 +377,18 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
     // note : don't use preserve_body identifier like in Java
     // else need to report existing operation detection when
     // will read its body rather than only its declaration
-    if (may_roundtrip) {
-        while (read_param(cl, rank, param, decl, tmplts, on_error, TRUE)) {
+    if (may_roundtrip)
+    {
+        while (read_param(cl, rank, param, decl, tmplts, on_error, TRUE))
+        {
             if (may_roundtrip) {
                 params.append(param);
                 rank += 1;
             }
         }
 
-        if ((op = already_exist(cl, name, params, FALSE)) != 0) {
+        if ((op = already_exist(cl, name, params, FALSE)) != 0)
+        {
             // update already existing operation
             op->set_usefull();
 
@@ -420,7 +425,8 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
                 cl->set_updated();
             }
         }
-        else {
+        else
+        {
             // operation doesn't yet exist
             op = UmlBaseOperation::create(cl->get_uml(), name);
 
@@ -446,7 +452,7 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
                 op->set_Description((decl.find("${description}") != -1)
                                     ? description : Lex::simplify_comment(comment));
 
-            Q3ValueList<UmlParameter>::Iterator it;
+            QList<UmlParameter>::Iterator it;
 
             for (rank = 0, it = params.begin(); it != params.end(); ++it, rank += 1) {
                 if (!op->addParameter(rank, *it)) {
@@ -473,10 +479,10 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
 
     if ((op != 0) && friendp) {
         // not an operation
-        Q3PtrList<UmlOperation> * fr = friends[name];
+        QList<UmlOperation *> * fr = friends[name];
 
         if (fr == 0) {
-            fr = new Q3PtrList<UmlOperation>;
+            fr = new QList<UmlOperation *>;
             fr->append(op);
             friends.insert(name, fr);
         }
@@ -490,7 +496,7 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
         Lex::mark();
 
         if (((s = Lex::read_word()) != ")") ||
-            ((s = Lex::read_word()) != "(")) {
+                ((s = Lex::read_word()) != "(")) {
             Lex::error_near(s);
             return FALSE;
         }
@@ -595,8 +601,8 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
 #ifdef ROUNDTRIP
 
             if (may_roundtrip) {
-                const Q3ValueList<UmlTypeSpec> old_exceptions = op->exceptions();
-                Q3ValueList<UmlTypeSpec>::ConstIterator it_old;
+                const QList<UmlTypeSpec> old_exceptions = op->exceptions();
+                QList<UmlTypeSpec>::ConstIterator it_old;
                 bool has;
 
                 for (it_old = old_exceptions.begin();
@@ -818,15 +824,15 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
                 int index = def.find("${(}");
 
                 if ((index == -1) ||
-                    (def.find("${body}", index) == -1) ||
-                    (def.find("${type}") == -1) ||
-                    (def.find("${class}::${name}") == -1) ||
-                    (def.find("${const}", index) == -1) ||
-                    (def.find("${volatile}", index) == -1)) {
+                        (def.find("${body}", index) == -1) ||
+                        (def.find("${type}") == -1) ||
+                        (def.find("${class}::${name}") == -1) ||
+                        (def.find("${const}", index) == -1) ||
+                        (def.find("${volatile}", index) == -1)) {
                     // use a definition where ${body] is not indented
                     def = (decl.find("${throw}") != -1)
-                          ? "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{\n${body}}\n"
-                          : "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}{\n${body}}\n";
+                            ? "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{\n${body}}\n"
+                            : "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}{\n${body}}\n";
                     index = def.find("${(}");
                 }
                 else {
@@ -920,7 +926,7 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
 
 bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
                               UmlParameter & param, WrapperStr & decl,
-                              const Q3ValueList<FormalParameterList> & tmplt,
+                              const QList<FormalParameterList> & tmplt,
                               BooL & on_error, bool add_defaultvalue)
 {
 #ifdef DEBUG_DOUML
@@ -1022,7 +1028,7 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
                 Lex::unread_word();	// ')'
 
             param.dir = (constp || modifier.isEmpty())
-                        ? InputDirection : InputOutputDirection;
+                    ? InputDirection : InputOutputDirection;
 
             WrapperStr s2;
 
@@ -1061,7 +1067,7 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
             }
             else {
                 param.type.explicit_type =
-                    param.type.explicit_type.simplifyWhiteSpace();
+                        param.type.explicit_type.simplifyWhiteSpace();
                 s2 += param.type.explicit_type;
                 param.type.explicit_type.remove(param.type.explicit_type.find(pn),
                                                 pn.length());
@@ -1133,8 +1139,8 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
             BooL func;
 
             if ((s == "(") &&
-                pfunc(func, param.name, param.type.explicit_type, pn) &&
-                !func)
+                    pfunc(func, param.name, param.type.explicit_type, pn) &&
+                    !func)
                 pfct = TRUE;
             else {
                 Lex::error_near(s);
@@ -1151,7 +1157,7 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
 
 bool UmlOperation::read_throw_elt(ClassContainer * container,
                                   UmlTypeSpec & typespec,
-                                  const Q3ValueList<FormalParameterList> & tmplts)
+                                  const QList<FormalParameterList> & tmplts)
 {
     char c;
 
@@ -1189,38 +1195,35 @@ bool UmlOperation::read_throw_elt(ClassContainer * container,
     return FALSE;
 }
 
-void UmlOperation::friend_operations(Q3PtrList<UmlOperation> & candidates,
-                                     const Q3ValueList<FormalParameterList> & tmplts,
+void UmlOperation::friend_operations(QList<UmlOperation *> & candidates,
+                                     const QList<FormalParameterList> & tmplts,
                                      const WrapperStr & name)
 {
-    Q3PtrList<UmlOperation> * fr = friends[name];
+    QList<UmlOperation *> * fr = friends[name];
 
     if (fr != 0) {
         // may be a friend operation
         FormalParameterList t;
         const FormalParameterList & tmpl = (tmplts.isEmpty()) ? t : tmplts.last();
-        Q3PtrListIterator<UmlOperation> it(*fr);
 
-        while (it.current() != 0) {
+        foreach (UmlOperation *op, *fr) {
             const FormalParameterList & formals =
-                ((UmlClass *) it.current()->parent())->formals();
+                    ((UmlClass *) op->parent())->formals();
 
             if (tmpl.count() <= formals.count()) {
                 unsigned rank = tmpl.count();
 
                 while (rank--) {
                     if (//??(formals[rank].Name() != tmplt[rank].Name()) ||
-                        (formals[rank].type() != tmpl[rank].type())) {
+                            (formals[rank].type() != tmpl[rank].type())) {
                         break;
                     }
                 }
 
                 if (rank == ~0u)
                     // candidate
-                    candidates.append(it.current());
+                    candidates.append(op);
             }
-
-            ++it;
         }
     }
 }
@@ -1255,8 +1258,8 @@ static bool compare_templates(const FormalParameterList & t1,
     return TRUE;
 }
 
-bool UmlOperation::operations(Q3PtrList<UmlOperation> & candidates, UmlClass * cl,
-                              const Q3ValueList<FormalParameterList> & tmplts,
+bool UmlOperation::operations(QList<UmlOperation *> & candidates, UmlClass * cl,
+                              const QList<FormalParameterList> & tmplts,
                               const FormalParameterList *& oper_tmplt,
                               const WrapperStr & name)
 {
@@ -1271,7 +1274,7 @@ bool UmlOperation::operations(Q3PtrList<UmlOperation> & candidates, UmlClass * c
     do {
         if (!((UmlClass *) cl1)->formals().isEmpty()) {
             // template not explicit
-            if (bypassed_tmplts == tmplts.count()) {
+            if ((int)bypassed_tmplts == tmplts.count()) {
                 Lex::warn("not enouth template specification for <font color =\"red\">"
                           + Lex::quote(name) + "</font>");
                 return TRUE;
@@ -1305,9 +1308,9 @@ bool UmlOperation::operations(Q3PtrList<UmlOperation> & candidates, UmlClass * c
                 rank -= 1;
 
                 if (!tmplts[rank].isEmpty() && // not a template specialisation
-                    !compare_templates(((UmlClass *) cl1)->formals(),
-                                       tmplts[rank], "for",
-                                       ((UmlClass *) cl1)->name()))
+                        !compare_templates(((UmlClass *) cl1)->formals(),
+                                           tmplts[rank], "for",
+                                           ((UmlClass *) cl1)->name()))
                     return TRUE;
             }
         }
@@ -1320,9 +1323,9 @@ bool UmlOperation::operations(Q3PtrList<UmlOperation> & candidates, UmlClass * c
 
     int index;
     WrapperStr opname = ((index = name.operator QString().lastIndexOf("::")) > 0)
-                       ? name.mid(index + 2)
-                       : name;
-    Q3PtrVector<UmlItem> children = cl->children();
+            ? name.mid(index + 2)
+            : name;
+    QVector<UmlItem*> children = cl->children();
 
     rank = children.size();
 
@@ -1330,7 +1333,7 @@ bool UmlOperation::operations(Q3PtrList<UmlOperation> & candidates, UmlClass * c
         UmlItem * it = children[rank];
 
         if ((it->kind() == aRelation) ? (((UmlRelation *) it)->roleName() == opname)
-            : (it->name() == opname)) {
+                : (it->name() == opname)) {
             switch (it->kind()) {
             case anOperation:
 
@@ -1338,7 +1341,7 @@ bool UmlOperation::operations(Q3PtrList<UmlOperation> & candidates, UmlClass * c
                 // bypass template operations (their decl is empty)
                 if (((((UmlOperation *) it)->formals != 0)
                      ? (oper_tmplt != 0) : (oper_tmplt == 0)) &&
-                    !((UmlOperation *) it)->cppDecl().isEmpty())
+                        !((UmlOperation *) it)->cppDecl().isEmpty())
                     candidates.append((UmlOperation *) it);
 
             default:	// to avoid compiler warning
@@ -1407,7 +1410,7 @@ bool UmlOperation::operations(Q3PtrList<UmlOperation> & candidates, UmlClass * c
 
 void UmlOperation::reverse_definition(Package * pack, WrapperStr name,
                                       WrapperStr type,
-                                      Q3ValueList<FormalParameterList> & tmplts,
+                                      QList<FormalParameterList> & tmplts,
                                       bool inlinep, const WrapperStr & comment,
                                       const WrapperStr & description)
 {
@@ -1435,12 +1438,16 @@ void UmlOperation::reverse_definition(Package * pack, WrapperStr name,
             WrapperStr s1;
             WrapperStr s2;
 
-            if (((index = type.operator QString().lastIndexOf("::")) > 0) &&
-                pack->find_type(normalized = Lex::normalize(type.left(index)), tcl) &&
-                (s1 = tcl.type->name(),
-                 s2 = type.mid(index + 2),
-                 s1 = ((index = s1.find('<')) != -1) ? s1.left(index) : s1,
-                 ((s1 == s2) || (s2 == (WrapperStr("~") + s1))))) {
+            auto hasDoubleColon = [&](){index = type.operator QString().lastIndexOf("::"); return index > 0;};
+            auto typeFound = [&](){return pack->find_type(normalized = Lex::normalize(type.left(index)), tcl);};
+            auto readTypes = [&]()
+            {
+                s1 = tcl.type->name();
+                s2 = type.mid(index + 2);
+                s1 = ((index = s1.find('<')) != -1) ? s1.left(index) : s1;
+            };
+            if (hasDoubleColon() && typeFound() && (readTypes(),  ((s1 == s2) || (s2 == (WrapperStr("~") + s1)))))
+            {
                 name = type;
                 type = 0;
             }
@@ -1466,12 +1473,12 @@ void UmlOperation::reverse_definition(Package * pack, WrapperStr name,
         }
     }
 
-    Q3PtrList<UmlOperation> candidates;
+    QList<UmlOperation *> candidates;
     const FormalParameterList * oper_tmplt;
 
     if ((tcl.type != 0) ||	// set in case of a contructor/destructor
-        (((index = name.operator QString().lastIndexOf("::")) > 0) &&
-         pack->find_type(normalized = Lex::normalize(name.left(index)), tcl))) {
+            (((index = name.operator QString().lastIndexOf("::")) > 0) &&
+             pack->find_type(normalized = Lex::normalize(name.left(index)), tcl))) {
         if (! operations(candidates, tcl.type, tmplts, oper_tmplt, name))
             // a variable, already managed inside operations
             return;
@@ -1485,28 +1492,28 @@ void UmlOperation::reverse_definition(Package * pack, WrapperStr name,
     QLOG_INFO() << candidates.count() << " compatible operations for " << name << '\n';
 #endif
 
-    if (candidates.isEmpty()) {
+    if (candidates.isEmpty())
+    {
         Lex::warn("<font color =\"red\"> " + Lex::quote(name) + "</font> is lost");
         UmlOperation::skip_body();
         return;
     }
 
-    Q3PtrListIterator<UmlOperation> it(candidates);
     LexContext context = Lex::get_context();
     BooL on_error = FALSE;
     unsigned nargs = ~0u;
     UmlClass * cl = 0;
 
-    do {
-        if ((nargs == ~0u) || (it.current()->params().count() == nargs)) {
-            if (cl != it.current()->parent()) {
-                cl = (UmlClass *) it.current()->parent();
+    foreach (UmlOperation *op, candidates) {
+        if ((nargs == ~0u) || (op->params().count() == (int)nargs)) {
+            if (cl != op->parent()) {
+                cl = (UmlClass *) op->parent();
                 cl->set_under_construction(TRUE, TRUE);
             }
 
-            if (it.current()->reverse_if_def(pack, tmplts, oper_tmplt, inlinep,
-                                             pfct, comment, description,
-                                             on_error, nargs, name)) {
+            if (op->reverse_if_def(pack, tmplts, oper_tmplt, inlinep,
+                                   pfct, comment, description,
+                                   on_error, nargs, name)) {
                 cl->set_under_construction(FALSE, TRUE);
                 return;
             }
@@ -1514,9 +1521,9 @@ void UmlOperation::reverse_definition(Package * pack, WrapperStr name,
             Lex::set_context(context);
         }
 
-        ++it;
+        if (on_error)
+            break;
     }
-    while (!on_error && (it.current() != 0));
 
     cl->set_under_construction(FALSE, TRUE);
 
@@ -1527,7 +1534,7 @@ void UmlOperation::reverse_definition(Package * pack, WrapperStr name,
 }
 
 bool UmlOperation::reverse_if_def(Package * pack,
-                                  Q3ValueList<FormalParameterList> & tmplts,
+                                  QList<FormalParameterList> & tmplts,
                                   const FormalParameterList * oper_tmplt,
                                   bool inlinep, bool pfct, const WrapperStr & comment,
                                   const WrapperStr & description, BooL & on_error,
@@ -1536,17 +1543,14 @@ bool UmlOperation::reverse_if_def(Package * pack,
     // parameters
 
     UmlParameter param;
-    Q3ValueList<UmlParameter> params = this->params();
-    Q3PtrList<WrapperStr> param_names;
+    QList<UmlParameter> params = this->params();
     WrapperStr decl = "${(}${)}";
     unsigned rank = 0;
 
-    param_names.setAutoDelete(TRUE);
-
     while (read_param(pack /*yes !*/, rank, param, decl, tmplts, on_error, FALSE)) {
-        if ((params.count() <= rank) ||
-            (params[rank].dir != param.dir) ||
-            (params[rank].type.toString() != param.type.toString()))
+        if ((params.count() <= (int)rank) ||
+                (params[rank].dir != param.dir) ||
+                (params[rank].type.toString() != param.type.toString()))
             // uncompatible
             return FALSE;
 
@@ -1566,7 +1570,7 @@ bool UmlOperation::reverse_if_def(Package * pack,
 
     if (pfct) {
         if (((s = Lex::read_word()) != ")") ||
-            ((s = Lex::read_word()) != "(")) {
+                ((s = Lex::read_word()) != "(")) {
             Lex::error_near(s);
             on_error = TRUE;
             return FALSE;
@@ -1621,7 +1625,7 @@ bool UmlOperation::reverse_if_def(Package * pack,
 
     // throw
 
-    const Q3ValueList<UmlTypeSpec> exc = exceptions();
+    const QList<UmlTypeSpec> exc = exceptions();
 
     if (s == "throw") {
         if (Lex::read_word_bis(TRUE, FALSE) != '(') {
@@ -1635,14 +1639,14 @@ bool UmlOperation::reverse_if_def(Package * pack,
         rank = 0;
 
         while (read_throw_elt(pack, tcl, tmplts)) {
-            if ((exc.count() <= rank) || (exc[rank].toString() != tcl.toString()))
+            if ((exc.count() <= (int)rank) || (exc[rank].toString() != tcl.toString()))
                 // uncompatible
                 return FALSE;
 
             rank += 1;
         }
 
-        if (exc.count() != rank)
+        if (exc.count() != (int)rank)
             // uncompatible
             return FALSE;
 
@@ -1665,7 +1669,7 @@ bool UmlOperation::reverse_if_def(Package * pack,
     int end = def.find("${)}");
 
     if (def.mid(start, end - start + 4).simplifyWhiteSpace() ==
-        decl.simplifyWhiteSpace()) {
+            decl.simplifyWhiteSpace()) {
         // operation find !
         if (formals == 0) {
             if (oper_tmplt != 0) {
@@ -1703,9 +1707,9 @@ bool UmlOperation::reverse_if_def(Package * pack,
         else {
 #ifdef ROUNDTRIP
 
-            while (params.count() != nargs) {
+            while (params.count() != (int)nargs) {
 #if QT_VERSION == 230
-                Q3ValueList<UmlParameter>::Iterator it = params.end();
+                QList<UmlParameter>::Iterator it = params.end();
 
                 --it;
                 params.remove(it);
@@ -1715,7 +1719,7 @@ bool UmlOperation::reverse_if_def(Package * pack,
             }
 
             if (cl->reversed() &&
-                ((op = already_exist(cl, this->name(), params, TRUE)) != 0)) {
+                    ((op = already_exist(cl, this->name(), params, TRUE)) != 0)) {
                 // update already existing operation
                 roundtrip = TRUE;
                 op->set_usefull();
@@ -1741,15 +1745,15 @@ bool UmlOperation::reverse_if_def(Package * pack,
                 op->set_ReturnType(returnType());
 
                 // parameters
-                Q3ValueList<UmlParameter>::ConstIterator itp;
+                QList<UmlParameter>::ConstIterator itp;
                 unsigned rk;
 
                 for (itp = params.begin(), rk = 0; itp != params.end(); ++itp, rk += 1)
                     op->addParameter(rk, *itp);
 
                 // exceptions
-                const Q3ValueList<UmlTypeSpec> exc = exceptions();
-                Q3ValueList<UmlTypeSpec>::ConstIterator ite;
+                const QList<UmlTypeSpec> exc = exceptions();
+                QList<UmlTypeSpec>::ConstIterator ite;
 
                 for (ite = exc.begin(), rk = 0; ite != exc.end(); ite++, rk += 1)
                     op->addException(rk, *ite);
@@ -1765,7 +1769,7 @@ bool UmlOperation::reverse_if_def(Package * pack,
             int index = s.operator QString().lastIndexOf("::");
 
             s = // <...>
-                s.mid(s.find('<', (index == -1) ? 0 : index + 2));
+                    s.mid(s.find('<', (index == -1) ? 0 : index + 2));
 
             if (! def0.isEmpty())
                 def = def0;
@@ -1868,8 +1872,8 @@ bool UmlOperation::reverse_if_def(Package * pack,
             s = comment;
 
             if (!s.isEmpty() &&
-                nequal(op->description(), description) &&
-                nequal(op->description(), Lex::simplify_comment(s))) {
+                    nequal(op->description(), description) &&
+                    nequal(op->description(), Lex::simplify_comment(s))) {
                 int index;
 
                 if ((index = def.find("${description}")) != -1) {
@@ -2000,11 +2004,11 @@ bool UmlOperation::need_source()
 }
 #endif
 
-void UmlOperation::update_param_names(Q3ValueList<UmlParameter> & params)
+void UmlOperation::update_param_names(QList<UmlParameter> & params)
 {
-    Q3ValueList<UmlParameter>::Iterator itdef;
-    const Q3ValueList<UmlParameter> decl_params = this->params();
-    Q3ValueList<UmlParameter>::ConstIterator itdecl;
+    QList<UmlParameter>::Iterator itdef;
+    const QList<UmlParameter> decl_params = this->params();
+    QList<UmlParameter>::ConstIterator itdecl;
     unsigned rank;
 
     for (rank = 0, itdef = params.begin(), itdecl = decl_params.begin();
@@ -2023,11 +2027,11 @@ void UmlOperation::update_param_names(Q3ValueList<UmlParameter> & params)
 
 #ifdef ROUNDTRIP
 void UmlOperation::update_params(Class * cl,
-                                 Q3ValueList<UmlParameter> & params)
+                                 QList<UmlParameter> & params)
 {
-    Q3ValueList<UmlParameter>::Iterator itp1;
-    const Q3ValueList<UmlParameter> old_params = this->params();
-    Q3ValueList<UmlParameter>::ConstIterator itp2;
+    QList<UmlParameter>::Iterator itp1;
+    const QList<UmlParameter> old_params = this->params();
+    QList<UmlParameter>::ConstIterator itp2;
     unsigned rank;
 
     for (rank = 0, itp1 = params.begin(), itp2 = old_params.begin();
@@ -2037,8 +2041,8 @@ void UmlOperation::update_params(Class * cl,
         const UmlParameter & p2 = *itp2;
 
         if (((p1.name.isEmpty()) ? !p2.name.isEmpty() : (p1.name != p2.name)) ||
-            nequal(p1.default_value, p2.default_value) ||
-            !p1.type.equal(p2.type)) {
+                nequal(p1.default_value, p2.default_value) ||
+                !p1.type.equal(p2.type)) {
             if (p1.name.isEmpty())
                 p1.name = p2.name;
 
@@ -2078,11 +2082,11 @@ void UmlOperation::update_params(Class * cl,
 }
 
 void UmlOperation::update_exceptions(Class * cl,
-                                     const Q3ValueList<UmlTypeSpec> & exceptions)
+                                     const QList<UmlTypeSpec> & exceptions)
 {
-    Q3ValueList<UmlTypeSpec>::ConstIterator ite1;
-    const Q3ValueList<UmlTypeSpec> old_exceptions = this->exceptions();
-    Q3ValueList<UmlTypeSpec>::ConstIterator ite2;
+    QList<UmlTypeSpec>::ConstIterator ite1;
+    const QList<UmlTypeSpec> old_exceptions = this->exceptions();
+    QList<UmlTypeSpec>::ConstIterator ite2;
     unsigned rank;
 
     for (rank = 0, ite1 = exceptions.begin(), ite2 = old_exceptions.begin();
@@ -2121,15 +2125,25 @@ void UmlOperation::update_exceptions(Class * cl,
 
 void UmlOperation::clean_body(WrapperStr & body)
 {
-    const char * BodyPrefix = "// Bouml preserved body begin ";
-    const char * BodyPostfix = "// Bouml preserved body end ";
-    const int BodyPrefixLength = 30;
+    //    const char * BodyPrefix = "// Bouml preserved body begin ";
+    //    const char * BodyPostfix = "// Bouml preserved body end ";
 
-    int index = body.find(BodyPrefix);
+    static const char * BodyPrefix = "// Bouml preserved body begin ";
+    static const char * BodyPrefix2 = "// Douml preserved body begin ";
+    static const char * BodyPostfix = "// Bouml preserved body end ";
+    static const char * BodyPostfix2 = "// Douml preserved body end ";
+
+    const int BodyPrefixLength = 30;
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    int compat = settings.value("Main/compatibility_save").toInt();
+
+    const char* actualPrefix = compat ? BodyPrefix : BodyPrefix2;
+    int index = body.find(actualPrefix);
 
     if (index != -1) {
         const char * b =
-            strchr(((const char *) body) + index + BodyPrefixLength, '\n');
+                strchr(((const char *) body) + index + BodyPrefixLength, '\n');
 
         if (b == 0) {
             // invalid
@@ -2137,7 +2151,7 @@ void UmlOperation::clean_body(WrapperStr & body)
             return;
         }
 
-        const char * e = strstr(b, BodyPostfix);
+        const char * e = strstr(b, compat ? BodyPostfix : BodyPostfix2);
 
         if (e != 0) {
             while ((e != b) && (e[-1] != '\n'))
@@ -2149,20 +2163,20 @@ void UmlOperation::clean_body(WrapperStr & body)
 }
 
 UmlOperation * UmlOperation::already_exist(Class * container,
-        const WrapperStr & name,
-        Q3ValueList<UmlParameter> & params,
-        bool empty_decl)
+                                           const WrapperStr & name,
+                                           QList<UmlParameter> & params,
+                                           bool empty_decl)
 {
-    const Q3PtrVector<UmlItem> & ch = container->get_uml()->UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
-    Q3PtrList<UmlOperation> opers;
+    const QVector<UmlItem*> & ch = container->get_uml()->UmlItem::children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
+    QList<UmlOperation *> opers;
 
     for (; v != vsup; v += 1)
         if (((*v)->kind() == anOperation) &&
-            ((*v)->name() == name) &&
-            ((UmlOperation *) *v)->is_useless() &&
-            (((UmlOperation *) *v)->cppDecl().isEmpty() == empty_decl))
+                ((*v)->name() == name) &&
+                ((UmlOperation *) *v)->is_useless() &&
+                (((UmlOperation *) *v)->cppDecl().isEmpty() == empty_decl))
             opers.append((UmlOperation *) *v);
 
     switch (opers.count()) {
@@ -2172,20 +2186,19 @@ UmlOperation * UmlOperation::already_exist(Class * container,
     case 1:
         // suppose it is this one
         // even don't know if it is placed later in file
-        return opers.getFirst();
+        return opers.first();
 
     default:
         break;
     }
 
-    UmlOperation * op;
-    Q3PtrList<UmlOperation> same_names;
+    QList<UmlOperation *> same_names;
 
     // search for operation having the same params name and number
-    for (op = opers.first(); op != 0; op = opers.next()) {
-        Q3ValueList<UmlParameter> ps = op->params();
-        Q3ValueList<UmlParameter>::ConstIterator it1;
-        Q3ValueList<UmlParameter>::ConstIterator it2;
+    foreach (UmlOperation *op, opers) {
+        QList<UmlParameter> ps = op->params();
+        QList<UmlParameter>::ConstIterator it1;
+        QList<UmlParameter>::ConstIterator it2;
         bool same_type = TRUE;
         bool same_name = TRUE;
 
@@ -2219,7 +2232,7 @@ UmlOperation * UmlOperation::already_exist(Class * container,
         // only one having the same number of param
         // and same param names (type changed)
         // suppose this one
-        return same_names.getFirst();
+        return same_names.first();
     }
 
     // suppose not find
@@ -2228,18 +2241,29 @@ UmlOperation * UmlOperation::already_exist(Class * container,
 
 void UmlOperation::force_defs()
 {
-    Q3PtrDictIterator<WrapperStr> it(DefNotYetSet);
+    QHashIterator<UmlOperation *,WrapperStr*> it(DefNotYetSet);
 
-    for (; it.current(); ++it) {
-        UmlOperation * op = (UmlOperation *) it.currentKey();
 
-        if (neq(*(it.current()), op->cppDef())) {
-            op->set_CppDef(*(it.current()));
-            ((UmlClass *) op->parent())->get_class()->set_updated();
+    while(it.hasNext())
+    {
+        it.next();
+        if(it.value())
+        {
+            UmlOperation * op = (UmlOperation *) it.key();
+
+            if (neq(*(it.value()), op->cppDef())) {
+                op->set_CppDef(*(it.value()));
+                ((UmlClass *) op->parent())->get_class()->set_updated();
+            }
         }
     }
 
-    DefNotYetSet.setAutoDelete(TRUE);
+    //DefNotYetSet.setAutoDelete(TRUE);
+    it.toFront();
+    while(it.hasNext())
+    {
+        delete it.next().value();
+    }
     DefNotYetSet.clear();
 }
 

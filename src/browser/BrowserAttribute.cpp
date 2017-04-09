@@ -29,7 +29,7 @@
 
 
 
-#include <q3popupmenu.h>
+////#include <q3popupmenu.h>
 #include <qpainter.h>
 #include <qcursor.h>
 //Added by qt3to4:
@@ -97,7 +97,8 @@ BrowserNode * BrowserAttribute::duplicate(BrowserNode * p, QString name)
 {
     BrowserAttribute * result = new BrowserAttribute(this, p);
 
-    if (name.isEmpty()) {
+    if (name.isEmpty())
+    {
         result->set_name(get_name());
         result->def->replace((BrowserClass *) parent(), (BrowserClass *) p);
     }
@@ -105,6 +106,8 @@ BrowserNode * BrowserAttribute::duplicate(BrowserNode * p, QString name)
         result->set_name(name);
 
     result->update_stereotype();
+    //move(result, this);
+    //result->select_in_browser();
 
     return result;
 }
@@ -113,6 +116,11 @@ BrowserAttribute::~BrowserAttribute()
 {
     all.remove(get_ident());
     delete def;
+}
+
+uint BrowserAttribute::TypeID()
+{
+    return TypeIdentifier<BrowserAttribute>::id();
 }
 
 void BrowserAttribute::clear(bool old)
@@ -217,7 +225,6 @@ const QPixmap * BrowserAttribute::pixmap(int) const
 {
     if (deletedp())
         return DeletedAttributeIcon;
-
     const QPixmap * px = ProfiledStereotypes::browserPixmap(def->get_stereotype());
 
     if (px != 0)
@@ -239,96 +246,123 @@ const QPixmap * BrowserAttribute::pixmap(int) const
     }
 }
 
-void BrowserAttribute::paintCell(QPainter * p, const QColorGroup & cg, int column,
+void BrowserAttribute::paintCell(QPainter * p, const QPalette & cg, int column,
                                  int width, int alignment)
 {
-    const QColor & bg = p->backgroundColor();
-
+    /*BrowserAttribute::data is used instead
+    const QColor & bg = p->background().color();
+    QBrush backBrush = p->background();
     if (is_marked) {
         p->setBackgroundMode(Qt::OpaqueMode);
-        p->setBackgroundColor(UmlRedColor);
+        backBrush.setColor(UmlRedColor);
+        p->setBackground(backBrush);
     }
 
     p->setFont((def->get_isa_class_attribute())
                ? ((is_writable()) ? BoldUnderlineFont : UnderlineFont)
                    : ((is_writable()) ? BoldFont : NormalFont));
-    Q3ListViewItem::paintCell(p, cg, column, width, alignment);
+    BrowserNode::paintCell(p, cg, column, width, alignment);
 
     if (is_marked) {
         p->setBackgroundMode(Qt::TransparentMode);
-        p->setBackgroundColor(bg);
+        backBrush.setColor(bg);
+        p->setBackground(backBrush);
     }
+    */
 }
-
+QVariant BrowserAttribute::data(int column, int role) const
+{
+    if(role == Qt::FontRole)
+    {
+        if(def->get_isa_class_attribute())
+        {
+            if(is_writable())
+                return BoldUnderlineFont;
+            else
+                return UnderlineFont;
+        }
+        else
+        {
+            if(is_writable())
+                return BoldFont;
+            else
+                return NormalFont;
+        }
+    }
+    return BrowserNode::data(column, role);
+}
 void BrowserAttribute::menu()
 {
     const char * st = ((BrowserClass *) parent())->get_stereotype();
     bool item = (!strcmp(st, "enum_pattern") || !strcmp(st, "enum")) &&
                 strcmp(get_stereotype(), "attribute");
-    Q3PopupMenu m(0, name);
-    Q3PopupMenu toolm(0);
+    QMenu m(name,0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!is_edited)
             if (get_container(UmlClass) != 0)
-                m.setWhatsThis(m.insertItem(TR("Up"), 20),
-                               TR("to return to parent node"));
+                MenuFactory::addItem(m, QObject::tr("Up"), 20,
+                               QObject::tr("to return to parent node"));
 
-        m.setWhatsThis(m.insertItem(TR("Edit"), 0),
+        MenuFactory::addItem(m, QObject::tr("Edit"), 0,
                        (item)
-                       ? TR("to edit the <i>item</i>,"
+                       ? QObject::tr("to edit the <i>item</i>,"
                             "a double click with the left mouse button does the same thing")
-                       : TR("to edit the <i>attribute</i>,"
+                       : QObject::tr("to edit the <i>attribute</i>,"
                             "a double click with the left mouse button does the same thing"));
 
         if (!is_read_only && (edition_number == 0)) {
             if (!item && (get_oper == 0))
-                m.setWhatsThis(m.insertItem(TR("New get operation"), 3),
-                               TR("to auto define the <i>get operation</i>"));
+                MenuFactory::addItem(m, QObject::tr("New get operation"), 3,
+                               QObject::tr("to auto define the <i>get operation</i>"));
 
             if (!item && (set_oper == 0))
-                m.setWhatsThis(m.insertItem(TR("New set operation"), 4),
-                               TR("to auto define the <i>set operation</i>"));
+                MenuFactory::addItem(m, QObject::tr("New set operation"), 4,
+                               QObject::tr("to auto define the <i>set operation</i>"));
 
             if (!item && (get_oper == 0) && (set_oper == 0))
-                m.setWhatsThis(m.insertItem(TR("New get and set operation"), 5),
-                               TR("to auto define the <i>get</i> and <i>set operation</i>s"));
+                MenuFactory::addItem(m, QObject::tr("New get and set operation"), 5,
+                               QObject::tr("to auto define the <i>get</i> and <i>set operation</i>s"));
 
-            m.setWhatsThis(m.insertItem(TR("Duplicate"), 6),
-                           TR("to copy the <i>attribute</i> in a new one"));
+            MenuFactory::addItem(m, QObject::tr("Duplicate"), 6,
+                           QObject::tr("to copy the <i>attribute</i> in a new one"));
         }
 
-        m.insertSeparator();
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), 7),
-                       TR("to know who reference the <i>class</i>"));
+        m.addSeparator();
+        MenuFactory::addItem(m, QObject::tr("Referenced by"), 7,
+                       QObject::tr("to know who reference the <i>class</i>"));
 
         if (!is_read_only && (edition_number == 0)) {
-            m.insertSeparator();
-            m.setWhatsThis(m.insertItem(TR("Delete"), 1),
-                           (item) ? TR("to delete the <i>item</i>. \
+            m.addSeparator();
+            MenuFactory::addItem(m, QObject::tr("Delete"), 1,
+                           (item) ? QObject::tr("to delete the <i>item</i>. \
                                        Note that you can undelete it after")
-                           : TR("to delete the <i>attribute</i>. \
+                           : QObject::tr("to delete the <i>attribute</i>. \
                                             Note that you can undelete it after"));
         }
 
-        mark_menu(m, TR("the attribute"), 90);
+        mark_menu(m, QObject::tr("the attribute").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
             Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+            m.addSeparator();
+            toolm.setTitle( QObject::tr("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0))
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 2),
-                       (item) ? TR("to undelete the <i>item</i>")
-                       : TR("to undelete the <i>attribute</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 2,
+                       (item) ? QObject::tr("to undelete the <i>item</i>")
+                       : QObject::tr("to undelete the <i>attribute</i>"));
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+        QAction *resultAction = m.exec(QCursor::pos());
+        if(resultAction)
+            exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserAttribute::exec_menu_choice(int rank)
@@ -342,7 +376,6 @@ void BrowserAttribute::exec_menu_choice(int rank)
         if (!strcmp(((BrowserNode *) parent())->get_data()->get_stereotype(),
                     "stereotype"))
             ProfiledStereotypes::deleted(this);
-
         delete_it();
         break;
 
@@ -353,7 +386,6 @@ void BrowserAttribute::exec_menu_choice(int rank)
                     "stereotype"))
             // the deletion was may be not propaged
             ProfiledStereotypes::recompute(TRUE);
-
         break;
 
     case 3:
@@ -369,8 +401,12 @@ void BrowserAttribute::exec_menu_choice(int rank)
         break;
 
     case 6:
-        ((BrowserClass *) parent())->add_attribute(this);
+    {
+        BrowserNode * attrDuplicate = ((BrowserClass *) parent())->duplicate_attribute(this);
+        move(attrDuplicate, this);
+        attrDuplicate->select_in_browser();
         return;
+    }
 
     case 7:
         ReferenceDialog::show(this);
@@ -384,7 +420,8 @@ void BrowserAttribute::exec_menu_choice(int rank)
     default:
         if (rank >= 99990)
             ProfiledStereotypes::choiceManagement(this, rank - 99990);
-        else if (rank >= 100)
+        else
+            if (rank >= 100)
             ToolCom::run(Tool::command(rank - 100), this);
         else
             mark_management(rank - 90);
@@ -459,6 +496,7 @@ void BrowserAttribute::modified()
 {
     repaint();
     ((BrowserNode *) parent())->modified();
+    def->modified();
 
     if (get_oper != 0)
         update_get_oper();
@@ -474,7 +512,7 @@ UmlCode BrowserAttribute::get_type() const
 
 QString BrowserAttribute::get_stype() const
 {
-    return TR("attribute");
+    return QObject::TR("attribute");
 }
 
 int BrowserAttribute::get_identifier() const
@@ -521,27 +559,26 @@ void BrowserAttribute::member_cpp_def(const QString & prefix, const QString &,
     }
 }
 
-void BrowserAttribute::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserAttribute::compute_referenced_by(QList<BrowserNode *> & l,
         BrowserNode * target)
 {
     IdIterator<BrowserAttribute> it(all);
-
-    while (it.current()) {
-        if (!it.current()->deletedp()) {
-            const AType & t = it.current()->def->get_type();
+    while(it.hasNext()){
+        it.next();
+        if(it.value())
+        if (!it.value()->deletedp()) {
+            const AType & t = it.value()->def->get_type();
 
             if (t.type == target)
-                l.append(it.current());
+                l.append(it.value());
         }
 
-        ++it;
     }
 }
 
-void BrowserAttribute::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete)
+void BrowserAttribute::referenced_by(QList<BrowserNode *> & l, bool ondelete)
 {
     BrowserNode::referenced_by(l, ondelete);
-
     if (! ondelete)
         BrowserActivityAction::compute_referenced_by(l, this);
 }
@@ -574,7 +611,9 @@ void BrowserAttribute::post_load()
     IdIterator<BrowserAttribute> it(all);
     BrowserAttribute * at;
 
-    while ((at = it.current()) != 0) {
+    while(it.hasNext()){
+        it.next();
+        if((at = it.value()) != 0)
         if ((at->get_oper != 0) && at->get_oper->is_undefined())
             // operation was deleted
             at->get_oper = 0;
@@ -582,8 +621,6 @@ void BrowserAttribute::post_load()
         if ((at->set_oper != 0) && at->set_oper->is_undefined())
             // operation was deleted
             at->set_oper = 0;
-
-        ++it;
     }
 }
 
@@ -610,7 +647,7 @@ void BrowserAttribute::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "attribute " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
 

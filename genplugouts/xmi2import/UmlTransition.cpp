@@ -8,7 +8,7 @@
 #include "Trigger.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 void UmlTransition::init()
 {
     declareFct("transition", "uml:Transition", &importIt);
@@ -19,13 +19,13 @@ void UmlTransition::init()
 
 void UmlTransition::solveThem()
 {
-    Q3ValueList<Transition>::Iterator iter;
+    QList<Transition>::Iterator iter;
 
     for (iter = All.begin(); iter != All.end(); ++iter) {
         Transition & transition = *iter;
 
-        QMap<WrapperStr, UmlItem *>::Iterator isrc = UmlItem::All.find(transition.source);
-        QMap<WrapperStr, UmlItem *>::Iterator itgt = UmlItem::All.find(transition.target);
+        QMap<QString, UmlItem *>::Iterator isrc = UmlItem::All.find(transition.source);
+        QMap<QString, UmlItem *>::Iterator itgt = UmlItem::All.find(transition.target);
 
         if ((isrc == UmlItem::All.end()) /*&&
 	((isrc = Outgoings.find(transition.id)) == Outgoings.end())*/) {
@@ -78,7 +78,7 @@ void UmlTransition::solveThem()
 
 void UmlTransition::importIt(FileIn & in, Token & token, UmlItem *)
 {
-    Transition & transition = *(All.append(Transition()));
+    Transition  transition;
     WrapperStr s;
 
     transition.id = token.xmiId();
@@ -151,7 +151,8 @@ void UmlTransition::importIt(FileIn & in, Token & token, UmlItem *)
                 in.finish(s);
         }
     }
+    All.append(transition);
 }
 
-Q3ValueList<UmlTransition::Transition> UmlTransition::All;
+QList<UmlTransition::Transition> UmlTransition::All;
 

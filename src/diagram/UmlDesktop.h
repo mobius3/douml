@@ -27,7 +27,7 @@
 
 // all is static ... I don't like singleton
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class UmlDesktop
 {

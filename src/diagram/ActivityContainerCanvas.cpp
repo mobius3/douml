@@ -37,7 +37,7 @@
 #include "ExpansionNodeCanvas.h"
 #include "ArrowPointCanvas.h"
 
-void ActivityContainerCanvas::force_inside(DiagramItem * di, Q3CanvasItem * ci,
+void ActivityContainerCanvas::force_inside(DiagramItem * di, QGraphicsItem * ci,
         BooL & need_sub_upper)
 {
     QRect r = rect();
@@ -62,14 +62,14 @@ void ActivityContainerCanvas::force_inside(DiagramItem * di, Q3CanvasItem * ci,
     if ((dx != 0) || (dy != 0))
         ci->moveBy(dx, dy);
 
-    need_sub_upper |= (ci->z() <= z());
+    need_sub_upper |= (ci->zValue() <= zValue());
 }
 
 // resize this to contain its sub elements
-void ActivityContainerCanvas::resize_to_contain(Q3CanvasItemList & all,
+void ActivityContainerCanvas::resize_to_contain(QList<QGraphicsItem*> & all,
         BooL & need_sub_upper)
 {
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*>::Iterator cit;
     BrowserNode * browser_node = get_bn();
     QRect r = rect();
     int resize_left = 0;
@@ -78,7 +78,7 @@ void ActivityContainerCanvas::resize_to_contain(Q3CanvasItemList & all,
     int resize_bottom = 0;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
-        if ((*cit)->visible() && !(*cit)->selected()) {
+        if ((*cit)->isVisible() && !(*cit)->isSelected()) {
             DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
             if ((di != 0) &&
@@ -86,7 +86,7 @@ void ActivityContainerCanvas::resize_to_contain(Q3CanvasItemList & all,
                 (((BrowserNode *) di->get_bn())->parent() == browser_node)) {
                 // must look at the type because some canvas items have browser_node
                 // attr equals to the diagram and the parent of the diagram is the activity
-                switch (di->type()) {
+                switch (di->typeUmlCode()) {
                 case UmlActivityObject:
                 case UmlActivityAction:
                 case UmlActivityPartition:
@@ -132,7 +132,7 @@ void ActivityContainerCanvas::resize_to_contain(Q3CanvasItemList & all,
                     }
                 }
 
-                need_sub_upper |= ((*cit)->z() <= z());
+                need_sub_upper |= ((*cit)->zValue() <= zValue());
                 break;
 
                 default:
@@ -173,14 +173,14 @@ void ActivityContainerCanvas::resize_to_contain(Q3CanvasItemList & all,
 }
 
 // update sub nodes position to be inside this
-void ActivityContainerCanvas::force_sub_inside(Q3CanvasItemList & all,
+void ActivityContainerCanvas::force_sub_inside(QList<QGraphicsItem*> & all,
         BooL & need_sub_upper)
 {
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*>::Iterator cit;
     BrowserNode * browser_node = get_bn();
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
-        if ((*cit)->visible()/* && !(*cit)->selected()*/) {
+        if ((*cit)->isVisible()/* && !(*cit)->isSelected()*/) {
             DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
             if ((di != 0) &&
@@ -188,7 +188,7 @@ void ActivityContainerCanvas::force_sub_inside(Q3CanvasItemList & all,
                 (((BrowserNode *) di->get_bn())->parent() == browser_node)) {
                 // must look at the type because some canvas items have browser_node
                 // attr equals to the diagram and the parent of the diagram is the activity
-                switch (di->type()) {
+                switch (di->typeUmlCode()) {
                 case UmlActivityObject:
                 case UmlActivityAction:
                 case UmlActivityPartition:
@@ -213,13 +213,13 @@ void ActivityContainerCanvas::force_sub_inside(Q3CanvasItemList & all,
 }
 
 // update sub nodes to be upper this, recursively
-void ActivityContainerCanvas::force_sub_upper(Q3CanvasItemList & all)
+void ActivityContainerCanvas::force_sub_upper(QList<QGraphicsItem*> & all)
 {
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*>::Iterator cit;
     BrowserNode * browser_node = get_bn();
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
-        if ((*cit)->visible()) {
+        if ((*cit)->isVisible()) {
             DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
             if ((di != 0) &&
@@ -227,7 +227,7 @@ void ActivityContainerCanvas::force_sub_upper(Q3CanvasItemList & all)
                 (((BrowserNode *) di->get_bn())->parent() == browser_node)) {
                 // must look at the type because some canvas items have browser_node
                 // attr equals to the diagram and the parent of the diagram is the activity
-                switch (di->type()) {
+                switch (di->typeUmlCode()) {
                 case UmlActivityObject:
                 case UmlActivityAction:
                 case UmlActivityPartition:
@@ -240,7 +240,7 @@ void ActivityContainerCanvas::force_sub_upper(Q3CanvasItemList & all)
                 case MergeAN:
                 case ForkAN:
                 case JoinAN:
-                    if ((*cit)->z() <= z())
+                    if ((*cit)->zValue() <= zValue())
                         ((DiagramCanvas *) di)->upper();
 
                     {
@@ -264,16 +264,16 @@ void ActivityContainerCanvas::force_sub_upper(Q3CanvasItemList & all)
 bool ActivityContainerCanvas::force_inside(DiagramCanvas * elt, bool part)
 {
     // if its parent is present, force inside it
-    Q3CanvasItemList all = elt->the_canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = elt->the_canvas()->items();
+    QList<QGraphicsItem*>::Iterator cit;
     BrowserNode * parent = (BrowserNode *) elt->get_bn()->parent();
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
-        if ((*cit)->visible()) {
+        if ((*cit)->isVisible()) {
             DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
             if ((di != 0) &&
-                IsaActivityContainer(di->type(), part) &&
+                IsaActivityContainer(di->typeUmlCode(), part) &&
                 (((ActivityContainerCanvas *) di)->get_bn() == parent)) {
                 BooL under = FALSE;
 
@@ -294,18 +294,16 @@ bool ActivityContainerCanvas::force_inside(DiagramCanvas * elt, bool part)
 // only for pin & parameter & expansion node
 static bool indirectly_selected(DiagramItem * di)
 {
-    switch (di->type()) {
-    case UmlActivityPin:
-        return ((PinCanvas *) di)->action_selected();
-
+    switch (di->typeUmlCode()) {
     case UmlParameter:
         return ((ParameterCanvas *) di)->activity_selected();
-
+    case UmlActivityPin:
+        return ((PinCanvas *) di)->action_selected();
     case UmlExpansionNode:
         return ((ExpansionNodeCanvas *) di)->region_selected();
-
     default:
         return FALSE;
+
     }
 }
 
@@ -313,12 +311,12 @@ void ActivityContainerCanvas::prepare_for_move(bool on_resize)
 {
     if (! on_resize) {
         // select all sub nodes
-        Q3CanvasItemList all = canvas()->allItems();
-        Q3CanvasItemList::Iterator cit;
+        QList<QGraphicsItem*> all = canvas()->items();
+        QList<QGraphicsItem*>::Iterator cit;
         UmlCanvas * canvas = the_canvas();
 
         for (cit = all.begin(); cit != all.end(); ++cit) {
-            if ((*cit)->visible() && !(*cit)->selected()) {
+            if ((*cit)->isVisible() && !(*cit)->isSelected()) {
                 DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
                 if ((di != 0) &&
@@ -326,7 +324,7 @@ void ActivityContainerCanvas::prepare_for_move(bool on_resize)
                     (((BrowserNode *) di->get_bn()->parent()) == browser_node)) {
                     // must look at the type because some canvas items have browser_node
                     // attr set to the diagram and the parent of the diagram is the activity
-                    switch (di->type()) {
+                    switch (di->typeUmlCode()) {
                     case UmlActivityObject:
                     case UmlActivityAction:
                     case UmlActivityPartition:
@@ -353,7 +351,7 @@ void ActivityContainerCanvas::prepare_for_move(bool on_resize)
         // select points on lines having the two extremities selected or
         // connecting pin/parameter/expansion node of element selected
         for (cit = all.begin(); cit != all.end(); ++cit) {
-            if ((*cit)->visible() && !(*cit)->selected() && isa_arrow(*cit)) {
+            if ((*cit)->isVisible() && !(*cit)->isSelected() && isa_arrow(*cit)) {
                 ArrowCanvas * ar = (ArrowCanvas *) *cit;
                 DiagramItem * b;
                 DiagramItem * e;
@@ -366,7 +364,7 @@ void ActivityContainerCanvas::prepare_for_move(bool on_resize)
 
                     if ((start->isSelected() || indirectly_selected(start)) &&
                         (dest->isSelected() || indirectly_selected(dest))) {
-                        while (b->type() == UmlArrowPoint) {
+                        while (b->typeUmlCode() == UmlArrowPoint) {
                             canvas->select((ArrowPointCanvas *) b);
                             ar = ((ArrowPointCanvas *) b)->get_other(ar);
                             ar->extremities(b, e);
@@ -375,7 +373,7 @@ void ActivityContainerCanvas::prepare_for_move(bool on_resize)
                         ar = (ArrowCanvas *) *cit;
                         ar->extremities(b, e);
 
-                        while (e->type() == UmlArrowPoint) {
+                        while (e->typeUmlCode() == UmlArrowPoint) {
                             canvas->select((ArrowPointCanvas *) e);
                             ar = ((ArrowPointCanvas *) e)->get_other(ar);
                             ar->extremities(b, e);

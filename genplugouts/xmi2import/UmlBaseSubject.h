@@ -1,9 +1,9 @@
 #ifndef _UMLBASESUBJECT_H
 #define _UMLBASESUBJECT_H
+#include <QByteArray>
 
 
 
-#include <q3ptrvector.h>
 
 class UmlSubject;
 
@@ -34,7 +34,7 @@ private:
 
 public:
     // internal
-    static UmlSubject * get_container_(int x, int y, int w, int h, const Q3PtrVector<UmlSubject> & subjects);
+    static UmlSubject * get_container_(int x, int y, int w, int h, const QVector<UmlSubject*> & subjects);
 
     friend class UmlBaseUseCaseDiagramDefinition;
 };

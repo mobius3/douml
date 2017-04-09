@@ -42,7 +42,7 @@ class QTextStream;
 
 #define COL_DIRS_SIZE 50
 
-#define isa_col_msg_dirs(x) ((x)->rtti() == RTTI_COL_MSG)
+#define isa_col_msg_dirs(x) (((x)->type()-DiagramItemTypeStart) == RTTI_COL_MSG)
 
 class CodDirsCanvas : public QObject, public DiagramCanvas, public CodMsgSupport,
     public MultipleDependency<BasicData>
@@ -55,6 +55,7 @@ protected:
     LabelCanvas * backward_label;
     CodLinkCanvas * link;	// to get start & end
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     CodDirsCanvas(UmlCanvas * canvas, CodLinkCanvas * l, int id);
     virtual ~CodDirsCanvas();
@@ -65,7 +66,7 @@ public:
     virtual void get_from_to(CodObjCanvas *& from, CodObjCanvas *& to,
                              bool forward);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual int rtti() const;
     virtual void open();
     virtual void menu(const QPoint &);
@@ -90,6 +91,7 @@ public:
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
     virtual void history_hide();
+    virtual int type() const;
 
 private slots:
     void modified();	// messages must be updated

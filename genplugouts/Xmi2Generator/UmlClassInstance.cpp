@@ -6,7 +6,7 @@
 #include "UmlAttribute.h"
 #include "UmlRelation.h"
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 void UmlClassInstance::write(FileOut & out)
 {
     const char * k = (_uml_20) ? "ownedMember" : "packagedElement";
@@ -34,8 +34,8 @@ void UmlClassInstance::write(FileOut & out)
         out << "/>\n";
     }
 
-    Q3ValueList<SlotAttribute> attrs;
-    Q3ValueList<SlotAttribute>::Iterator a_iter;
+    QList<SlotAttribute> attrs;
+    QList<SlotAttribute>::Iterator a_iter;
     unsigned rank;
 
     attributesValue(attrs);
@@ -62,8 +62,8 @@ void UmlClassInstance::write(FileOut & out)
         out << "</slot>\n";
     }
 
-    Q3ValueList<SlotRelation> rels;
-    Q3ValueList<SlotRelation>::Iterator r_iter;
+    QList<SlotRelation> rels;
+    QList<SlotRelation>::Iterator r_iter;
 
     relationsValue(rels);
 

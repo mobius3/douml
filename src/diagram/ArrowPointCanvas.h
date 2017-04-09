@@ -46,7 +46,7 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void change_scale();
     virtual void open();
     virtual void menu(const QPoint &);
@@ -58,6 +58,8 @@ public:
     virtual void prepare_for_move(bool on_resize);
     virtual void save(QTextStream & st, bool ref, QString & warning) const;
     static ArrowPointCanvas * read(char *& st, UmlCanvas * canvas, char * k);
+protected:
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 #endif

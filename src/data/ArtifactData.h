@@ -28,7 +28,7 @@
 #ifndef ARTIFACTDATA_H
 #define ARTIFACTDATA_H
 
-#include <q3ptrdict.h>
+#include <qhash.h>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -44,7 +44,7 @@ class ArtifactData : public SimpleData
 
 protected:
     // for the non <<source>>:
-    Q3PtrDict<BrowserArtifact> * associated;
+    QHash<void*, BrowserArtifact*> * associated;
 
     // for the <<sources>> (the majority of artifacts) :
 
@@ -72,7 +72,7 @@ protected:
     virtual void send_python_def(ToolCom * com);
     virtual void send_idl_def(ToolCom * com);
 
-    void update_associated(Q3PtrDict<BrowserArtifact> & d);
+    void update_associated(QHash<void *, BrowserArtifact *> &d);
 
 public:
     ArtifactData();
@@ -108,7 +108,7 @@ public:
     };
     void use_default_idl_src();
 
-    const Q3PtrDict<BrowserArtifact> * get_associated() {
+    const QHash<void*, BrowserArtifact*> * get_associated() {
         return associated;
     };
     void associate(BrowserArtifact *);

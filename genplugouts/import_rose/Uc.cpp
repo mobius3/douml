@@ -10,12 +10,13 @@
 #include "UmlSequenceDiagram.h"
 #include "UmlCollaborationDiagram.h"
 #include "UmlCom.h"
+#include "UmlClassDiagram.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 void Uc::import(File & f)
 {
     for (;;) {
-        Q3CString s;
+        QByteArray s;
 
         switch (f.read(s)) {
         case -1:
@@ -47,7 +48,7 @@ void Uc::import(File & f)
 void Uc::readObjects(File & f)
 {
     for (;;) {
-        Q3CString s;
+        QByteArray s;
 
         switch (f.read(s)) {
         case ')':
@@ -72,6 +73,8 @@ void Uc::readObjects(File & f)
             UmlUseCase::import(f, item());
         else if (s == "UseCaseDiagram")
             UmlUseCaseDiagram::import(f, item());
+        /*else if (s == "ClassDiagram")
+            UmlClassDiagram::import(f, item());*/
         else if (s == "InteractionDiagram")
             UmlSequenceDiagram::import(f, item());
         else if (s == "ObjectDiagram")
@@ -87,8 +90,8 @@ void Uc::readObjects(File & f)
         else {
             if ((s != "Association") &&	// actor -----> UC ...
                 (s != "Mechanism"))		// seq/col diagram
-                //UmlCom::trace("<br>" + s + " in " + Q3CString(f.name()) + " NOT MANAGED by UseCaseView::readObject()");//[jasa] original line
-                UmlCom::trace("<br>" + s + " in " + Q3CString(f.name().toAscii()) + " NOT MANAGED by UseCaseView::readObject()");//[jasa] conversion from QString to Q3CString
+                //UmlCom::trace("<br>" + s + " in " + QByteArray(f.name()) + " NOT MANAGED by UseCaseView::readObject()");//[jasa] original line
+                UmlCom::trace("<br>" + s + " in " + QByteArray(f.fileName().toLatin1()) + " NOT MANAGED by UseCaseView::readObject()");//[jasa] conversion from QString to QByteArray
 
             f.skipBlock();
         }

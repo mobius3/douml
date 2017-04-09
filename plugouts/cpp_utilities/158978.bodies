@@ -1,0 +1,3 @@
+class DebugOutputDestination
+!!!258946.cpp!!!	write(in message : QString) : void
+    QsDebugOutput::output(message);

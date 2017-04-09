@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseComponentDiagram.h"
-#include <q3cstring.h>
+
 #include "Vector.h"
 
 // This class manages 'ccomponent diagrams', notes that the class 'UmlDiagram'
@@ -14,10 +14,10 @@
 class UmlComponentDiagram : public UmlBaseComponentDiagram
 {
 public:
-    UmlComponentDiagram(void * id, const Q3CString & n) : UmlBaseComponentDiagram(id, n) {};
+    UmlComponentDiagram(void * id, const QByteArray & n) : UmlBaseComponentDiagram(id, n) {};
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QByteArray sKind();
 
     //set he html ref
     //set the diagrams list

@@ -34,24 +34,31 @@
 #include "anItemKind.h"
 #include "BrowserView.h"
 //Added by qt3to4:
-#include <Q3PtrCollection>
+
 
 BrowserNode::BrowserNode(BrowserView * parent, const char * n)
-    : TreeItem(parent, n)
+    : TreeItem(parent)
 {
+    setText(0,n);
 }
 
 BrowserNode::BrowserNode(BrowserNode * parent, const char * n)
-    : TreeItem(parent, n)
+    : TreeItem(parent)
 {
     // move it at end
-    TreeItem * child = parent->firstChild();
+    setText(0,n);
+    BrowserNode * child = parent->firstChild();
 
     while (child->nextSibling())
         child = child->nextSibling();
 
     if (child != this)
-        moveItem(child);
+    {
+        //moveItem(child);
+        parent->takeChild(parent->indexOfChild(this));
+        parent->insertChild(parent->indexOfChild(child)+1, this);
+
+    }
 }
 
 void BrowserNode::activated()
@@ -67,24 +74,63 @@ void BrowserNode::selected()
 void BrowserNodeList::search(BrowserNode * bn, int k,
                              const QString & s, bool cs)
 {
-    TreeItem * child;
+    BrowserNode * child;
 
     for (child = bn->firstChild(); child != 0; child = child->nextSibling()) {
         if ((k == aPackage)
             ? (((BrowserNode *) child)->isa_package() &&
-               (child->text(0).find(s, 0, cs) != -1))
+               (child->text(0).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1))
             : (!((BrowserNode *) child)->isa_package() &&
                ((k == aClass)
-                ? (child->text(0).find(s, 0, cs) != -1)
-                : (WrapperStr(((Class *) child)->get_description()).operator QString().find(s, 0, cs) != -1))))
+                ? (child->text(0).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1)
+                : (WrapperStr(((Class *) child)->get_description()).operator QString().indexOf(s, 0,(Qt::CaseSensitivity) cs) != -1))))
             append((BrowserNode *) child);
 
         search((BrowserNode *) child, k, s, cs);
     }
 }
 
-int BrowserNodeList::compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2)
+bool BrowserNodeList::lessThan(BrowserNode *a, BrowserNode *b)
 {
-    return ((BrowserNode *) item1)->text(0)
-           .compare(((BrowserNode *) item2)->text(0));
+    return a->text(0) < b->text(0);
 }
+
+void BrowserNodeList::sort()
+{
+    qSort(begin(), end(), lessThan);
+}
+BrowserNode *BrowserNode::nextSibling()
+{
+    for(int i = 0; i < parent()->childCount(); i++)
+    {
+        if(parent()->child(i) == this)
+        {
+            if((i+1)<parent()->childCount())
+                return (BrowserNode *)parent()->child(i+1);
+            break;
+        }
+    }
+    return NULL;
+}
+/*void BrowserNode::paintCell(QPainter * p, const QPalette & cg, int column,
+                            int width, int alignment)
+{
+    BrowserNode::data used instead
+    const QColor & bg = p->background().color();
+    QBrush backBrush = p->background();
+    if (is_marked) {
+        p->setBackgroundMode(::Qt::OpaqueMode);
+        backBrush.setColor(UmlRedColor);
+        p->setBackground(backBrush);
+    }
+
+    p->setFont((is_writable()) ? BoldFont : NormalFont);
+    QTreeWidgetItem::paintCell(p, cg, column, width, alignment);
+    if (is_marked) {
+        p->setBackgroundMode(::Qt::TransparentMode);
+        backBrush.setColor(bg);
+        p->setBackground(backBrush);
+    }
+
+
+}*/

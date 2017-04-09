@@ -41,7 +41,7 @@
 #include "DialogUtil.h"
 #include "EnvDialog.h"
 #include "translate.h"
-
+#include <QDir>
 static int Uid = -1;
 static int RootPermission;	// old Uid or 0
 
@@ -63,10 +63,11 @@ int user_id()
 
         if (dir.exists("all.lock")) {
             msg_critical("Douml",
-                         TR("\
+                         QObject::tr("\
                             The project is open in read-only mode because it is\n\
                             under the control of 'Project control' or 'Project merge'\n\
-                            (the directory '%1' exists", dir.absFilePath("all.lock")));
+                            (the directory '%1' exists").arg(dir.absoluteFilePath("all.lock")));
+
             force_read_only(TRUE);
         }
         else
@@ -83,17 +84,18 @@ int user_id()
 
             if (! dir.mkdir(fn)) {
                 if (!dir.exists(fn)) {
-                    msg_critical(TR("User Own Identifier"),
-                                 TR("Can't create directory '%1',\nthe project is open in read-only mode",
-                                    dir.absFilePath(fn)));
+                    msg_critical (QObject::TR("User Own Identifier"),
+                                 QObject::TR("Can't create directory '%1',\nthe project is open in read-only mode").arg(dir.absoluteFilePath(fn)));
+
                     force_read_only(TRUE);
                 }
                 else {
-                    int retCode = msg_critical(TR("User Own Identifier"),
-                                               TR("\It seems that you are already editing the project.\n\n"
+                    int retCode = QMessageBox::Ok;
+                   retCode = msg_critical (QObject::TR("User Own Identifier"),
+                                               QObject::TR("It seems that you are already editing the project %1.\n\n"
                                                   "If you're SURE that this is not the case and\n"
                                                   "another user does not have an identifier equal\n"
-                                                  "to yours you can gain ownership of the lock.").arg(dir.absFilePath(fn))
+                                                  "to yours you can gain ownership of the lock.").arg(dir.absoluteFilePath(fn))
                                                , QMessageBox::Ok, QMessageBox::Close);
 
                     if (retCode == QMessageBox::Ok) {
@@ -128,12 +130,12 @@ int root_permission()
 const char * user_name()
 {
     static bool done = FALSE;
-    static WrapperStr name;
+    static QByteArray name;
 
     if (! done) {
-        name = homeDir().dirName();
+        name = QDir::homePath().toLatin1();
         done = TRUE;
     }
 
-    return name;
+    return name.constData();
 }

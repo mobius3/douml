@@ -1,0 +1,13 @@
+window_sizes 1680 988 628 1047 806 104
+diagrams
+  active  classdiagram_ref 200490 // Adapting Table Model
+    1047 806 100 3 0 0
+end
+show_stereotypes
+selected class_ref 714666 // ItemController
+open
+  class_ref 714666 // ItemController
+  class_ref 741802 // TreeModel
+  deploymentview_ref 227626 // classes
+end
+end

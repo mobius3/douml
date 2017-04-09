@@ -48,7 +48,7 @@ bool manage_comment(QString comment, const char *& p,
         comment.isEmpty())
         return FALSE;
 
-    const char * co = comment;
+    const char * co = comment.toLatin1().constData();
 
     if (javadoc) {
         the_comment = "/**\n * ";
@@ -82,7 +82,7 @@ bool manage_comment(QString comment, const char *& p,
     }
 
     pp = p;
-    p = the_comment;
+    p = the_comment.toLatin1().constData();
     return TRUE;
 }
 
@@ -102,7 +102,7 @@ bool manage_description(QString comment, const char *& p, const char *& pp)
         the_comment += '\n';
 
     pp = p;
-    p = the_comment;
+    p = the_comment.toLatin1().constData();
     return TRUE;
 }
 
@@ -117,7 +117,7 @@ bool manage_python_comment(QString comment, const char *& p,
         comment.isEmpty())
         return FALSE;
 
-    const char * co = comment;
+    const char * co = comment.toLatin1().constData();
 
     the_comment = "#";
 
@@ -133,7 +133,7 @@ bool manage_python_comment(QString comment, const char *& p,
         the_comment += '\n';
 
     pp = p;
-    p = the_comment;
+    p = the_comment.toLatin1().constData();
     return TRUE;
 }
 
@@ -158,7 +158,7 @@ void manage_python_docstring(QString comment, const char *& p, const char *& pp,
 
     int index = 0;
 
-    while ((index = the_comment.find("\"\"\"", index)) != -1) {
+    while ((index = the_comment.indexOf("\"\"\"", index)) != -1) {
         the_comment.insert(index, "\\");
         index += 2;
     }
@@ -171,7 +171,7 @@ void manage_python_docstring(QString comment, const char *& p, const char *& pp,
     }
 
     pp = p;
-    p = the_comment;
+    p = the_comment.toLatin1().constData();
     saved_indent =  indent;
     indent = "";
 }
@@ -186,13 +186,13 @@ bool is_char_of_name(char c)
 
 QString extract_name(QString s)
 {
-    int index = s.find("${name}");
+    int index = s.indexOf("${name}");
 
     if (index == -1)
         // !!
         return QString();
 
-    const char * p = s;
+    const char * p = s.toLatin1().constData();
 
     int start = index;
 
@@ -212,26 +212,26 @@ QString true_name(const QString & name, const QString & decl)
     int index;
     QString n;
 
-    n = ((index = name.find(" ")) == -1)
+    n = ((index = name.indexOf(" ")) == -1)
         ? name
         : name.left(index);
 
     QString s = extract_name(decl);
 
-    return (s.isEmpty()) ? n : s.replace(s.find("${name}"), 7, n);
+    return (s.isEmpty()) ? n : s.replace(s.indexOf("${name}"), 7, n);
 }
 
 QString capitalize(const QString & s)
 {
     return (s.isEmpty())
            ? s
-           : s.left(1).upper() + s.mid(1);
+           : s.left(1).toUpper() + s.mid(1);
 }
 
 QString quote(QString s)
 {
     QString result;
-    const char * p = s;
+    const char * p = s.toLatin1().constData();
 
     for (;;) {
         switch (*p) {
@@ -268,12 +268,12 @@ void remove_comments(QString & s)
 {
     int index1 = 0;
 
-    while ((index1 = s.find('/', index1)) != -1) {
+    while ((index1 = s.indexOf('/', index1)) != -1) {
         int index2;
 
-        switch (((const char *) s)[index1 + 1]) {
+        switch (((const char *) s.toLatin1().constData())[index1 + 1]) {
         case '/':
-            if ((index2 = s.find('\n', index1 + 2)) != -1)
+            if ((index2 = s.indexOf('\n', index1 + 2)) != -1)
                 s.remove(index1, index2 - index1 + 1);
             else
                 s.truncate(index1);
@@ -281,7 +281,7 @@ void remove_comments(QString & s)
             break;
 
         case '*':
-            if ((index2 = s.find("*/", index1 + 2)) != -1)
+            if ((index2 = s.indexOf("*/", index1 + 2)) != -1)
                 s.replace(index1, index2 - index1 + 2, " ");
             else
                 s.truncate(index1);
@@ -312,10 +312,10 @@ void remove_python_comments(QString & s)
 {
     int index1 = 0;
 
-    while ((index1 = s.find('/', index1)) != -1) {
+    while ((index1 = s.indexOf('/', index1)) != -1) {
         int index2;
 
-        if ((index2 = s.find('\n', index1 + 2)) != -1)
+        if ((index2 = s.indexOf('\n', index1 + 2)) != -1)
             s.remove(index1, index2 - index1 + 1);
         else
             s.truncate(index1);
@@ -331,14 +331,14 @@ void remove_preprocessor(QString & s)
 {
     int index = 0;
 
-    while ((index = s.find('#', index)) != -1) {
+    while ((index = s.indexOf('#', index)) != -1) {
         // remove all up to the end of line
         int index2 = index + 1;
         int index3;
 
-        while ((index3 = s.find('\n', index2)) != -1) {
+        while ((index3 = s.indexOf('\n', index2)) != -1) {
             // manage multi lines #define
-            if (((const char *) s)[index3 - 1] != '\\')
+            if (((const char *) s.toLatin1().constData())[index3 - 1] != '\\')
                 break;
             else
                 index2 = index3 + 1;
@@ -357,11 +357,11 @@ QString java_multiplicity(QString m)
     QString r;
 
     if (! m.isEmpty()) {
-        if (*m != '[')
+        if (*m.toLatin1().constData() != '[')
             r += "[]";
         else {
             for (int index = 0; index != m.length(); index += 1) {
-                switch (m.at(index).latin1()) {
+                switch (m.at(index).toLatin1()) {
                 case '[':
                     r += '[';
                     break;

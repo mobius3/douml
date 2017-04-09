@@ -4,9 +4,9 @@
 
 // Internal enum
 enum PackageGlobalCmd {
-    findNamespaceCmd,
-    findPackageCmd,
-    findModuleCmd,
+    findCppNamespaceCmd,
+    findJavaPackageCmd,
+    findIdlModuleCmd,
     getProjectCmd,
     isProjectModifiedCmd,
     saveProjectCmd

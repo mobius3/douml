@@ -112,7 +112,10 @@ HEADERS		= ./UmlFinalState.h \
 		  ./UmlBaseShallowHistoryPseudoState.h \
 		  ./UmlBaseDeepHistoryPseudoState.h \
 		  ./UmlBaseDeployment.h \
-		  ./UmlExtraClassMember.h
+		  ./UmlExtraClassMember.h \
+    vvbox.h \
+    gridbox.h \
+    tabdialogwrapper.h
 SOURCES		= ./UmlFinalState.cpp \
 		  ./UmlBaseCollaborationDiagram.cpp \
 		  ./UmlBaseClassView.cpp \
@@ -225,12 +228,15 @@ SOURCES		= ./UmlFinalState.cpp \
 		  ./UmlBaseShallowHistoryPseudoState.cpp \
 		  ./UmlBaseDeepHistoryPseudoState.cpp \
 		  ./UmlBaseDeployment.cpp \
-		  ./UmlExtraClassMember.cpp
-#The following line was inserted by qt3to4
-QT += network  qt3support 
+		  ./UmlExtraClassMember.cpp \
+    vvbox.cpp \
+    gridbox.cpp \
+    tabdialogwrapper.cpp
+QT += network widgets
+DEFINES += TRUE=true FALSE=false
 
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
+QT += testlib
 Release{
 
 

@@ -1,10 +1,7 @@
 #ifndef _UMLBASEUSECASEASSOCIATION_H
 #define _UMLBASEUSECASEASSOCIATION_H
-
-
-#include <q3cstring.h>
-#include <q3ptrdict.h>
-
+#include <QByteArray>
+#include <QHash>
 class UmlUseCaseReference;
 class UmlClass;
 
@@ -13,12 +10,12 @@ class UmlBaseUseCaseAssociation
 {
 public:
     // return the name
-    const Q3CString & name() const {
+    const QByteArray & name() const {
         return _name;
     }
 
     // return the stereotype
-    const Q3CString & stereotype() const {
+    const QByteArray & stereotype() const {
         return _stereotype;
     }
 
@@ -43,14 +40,14 @@ private:
 
     UmlClass * _actor;
 
-    Q3CString _name;
+    QByteArray _name;
 
-    Q3CString _stereotype;
+    QByteArray _stereotype;
 
     bool _primary;
 
     // internal, don't call it
-    void read_(const Q3PtrDict<UmlUseCaseReference> & useCases);
+    void read_(const QHash<void*,UmlUseCaseReference*> & useCases);
 
     friend class UmlBaseUseCaseDiagramDefinition;
 };

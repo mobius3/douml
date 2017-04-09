@@ -1,0 +1,5 @@
+class DestinationFactory
+!!!258050.cpp!!!	MakeFileDestination(in filePath : QString) : DestinationPtr
+    return DestinationPtr(new FileDestination(filePath));
+!!!258178.cpp!!!	MakeDebugOutputDestination() : DestinationPtr
+    return DestinationPtr(new DebugOutputDestination);

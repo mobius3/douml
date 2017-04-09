@@ -63,7 +63,7 @@ bool UmlBaseClassMember::isCppVolatile()
 
 bool UmlBaseClassMember::set_isCppVolatile(bool y)
 {
-    return set_it_(_cpp_volatile, y, setIsCppVolatileCmd);
+    return set_it_(_cpp_volatile, y, setIsVolatileCmd);
 }
 #endif
 

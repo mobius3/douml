@@ -27,12 +27,7 @@
 
 #ifndef CLASSITEM_H
 #define CLASSITEM_H
-
-#include <q3ptrlist.h>
-//Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3PtrList>
-
 #include "UmlBaseClassItem.h"
 
 class UmlClassItem : public UmlBaseClassItem
@@ -61,7 +56,7 @@ public:
         useless = !y;
     }
     virtual bool set_roundtrip_expected();
-    virtual void mark_useless(Q3PtrList<UmlItem> & l);
+    virtual void mark_useless(QList<UmlItem *> & l);
 #endif
 };
 

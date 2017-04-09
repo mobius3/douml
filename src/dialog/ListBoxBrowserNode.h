@@ -28,17 +28,17 @@
 #ifndef LISTBOXBROWSERNODE_H
 #define LISTBOXBROWSERNODE_H
 
-#include <q3listbox.h>
+#include <QListWidget>
 
 class BrowserNode;
 
-class ListBoxBrowserNode : public Q3ListBoxText
+class ListBoxBrowserNode : public QListWidgetItem
 {
 public:
     BrowserNode * browser_node;
 
     ListBoxBrowserNode(BrowserNode * b, const QString & s)
-        : Q3ListBoxText(s), browser_node(b) {};
+        : QListWidgetItem(s), browser_node(b) {}
 };
 
 #endif

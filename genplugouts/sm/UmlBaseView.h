@@ -3,13 +3,13 @@
 
 
 #include "UmlItem.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlBaseView : public UmlItem
 {
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseView(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseView(void * id, const QByteArray & s) : UmlItem(id, s) {
     }
 
 };

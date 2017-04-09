@@ -105,7 +105,7 @@ public:
 
     static void drop(BrowserNode *, UmlCanvas *);
     static void drop(BrowserNode *, UmlCanvas *,
-                     Q3PtrDict<DiagramItem> & drawn);
+                     QHash<BasicData *, DiagramItem *> &drawn);
 
     virtual bool represents(BrowserNode *);
 

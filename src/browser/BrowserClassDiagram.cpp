@@ -29,12 +29,12 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 #include <QPixmap>
 
 #include "BrowserClassDiagram.h"
@@ -54,8 +54,8 @@
 #include "mu.h"
 #include "translate.h"
 
-Q3PtrList<BrowserClassDiagram> BrowserClassDiagram::imported;
-Q3ValueList<int> BrowserClassDiagram::imported_ids;
+QList<BrowserClassDiagram *> BrowserClassDiagram::imported;
+QList<int> BrowserClassDiagram::imported_ids;
 QStringList BrowserClassDiagram::its_default_stereotypes;	// unicode
 
 BrowserClassDiagram::BrowserClassDiagram(QString s, BrowserNode * p, int id)
@@ -80,7 +80,9 @@ BrowserClassDiagram::BrowserClassDiagram(BrowserClassDiagram * model, BrowserNod
     is_modified = TRUE;
 
     if (model->window != 0)
+    {
         model->window->duplicate(get_ident(), "diagram");
+    }
     else {
         char * diagram;
 
@@ -108,7 +110,7 @@ BrowserClassDiagram::~BrowserClassDiagram()
 
         QDir d = BrowserView::get_dir();
 
-        QFile::remove(d.absFilePath(fn));
+        QFile::remove(d.absoluteFilePath(fn));
     }
     window = 0;
     all.remove(get_ident());
@@ -141,21 +143,18 @@ void BrowserClassDiagram::set_name(const char * s)
     BrowserDiagram::set_name(s);
 
     if (window != 0)
-        window->setCaption(s);
+        window->setWindowTitle(s);
 }
 
 void BrowserClassDiagram::import()
 {
-    Q3ValueList<int>::Iterator it = imported_ids.begin();
-
-    while (!imported.isEmpty()) {
-        QString warning;
-        BrowserClassDiagram * d = imported.take(0);
-
-        (new ClassDiagramWindow(d->full_name(), d, *it))->close(TRUE);
-        it = imported_ids.remove(it);
+    QList<int>::Iterator it = imported_ids.begin();
+    foreach (BrowserClassDiagram *d, imported) {
+        (new ClassDiagramWindow(d->full_name(), d, *it))->close();
+        /*it = */imported_ids.removeOne(*it);
         d->is_modified = TRUE;
     }
+    imported.clear();
 }
 
 void BrowserClassDiagram::renumber(int phase)
@@ -173,6 +172,7 @@ void BrowserClassDiagram::delete_it()
 {
     if (window)
         delete window;
+    window = 0;
 
     BrowserNode::delete_it();
 }
@@ -181,7 +181,7 @@ BrowserNode * BrowserClassDiagram::duplicate(BrowserNode * p, QString name)
 {
     BrowserClassDiagram * result = new BrowserClassDiagram(this, p);
 
-    result->set_name((name.isEmpty()) ? get_name() : name);
+    result->set_name((name.isEmpty()) ? get_name().toLatin1().constData() : name.toLatin1().constData());
     result->update_stereotype();
 
     return result;
@@ -209,50 +209,52 @@ void BrowserClassDiagram::draw_svg() const
 
 void BrowserClassDiagram::menu()
 {
-    Q3PopupMenu m(0, name);
-    Q3PopupMenu toolm(0);
+    QMenu m(name,0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
-        m.setWhatsThis(m.insertItem("Show", 0),
+        MenuFactory::addItem(m, "Show", 0,
                        "to show and edit the <i>class diagram</i>");
 
         if (!is_edited) {
-            m.setWhatsThis(m.insertItem("Edit", 1),
+            MenuFactory::addItem(m, "Edit", 1,
                            "to edit the <i>class diagram</i>");
 
             if (!is_read_only) {
-                m.setWhatsThis(m.insertItem("Edit drawing settings", 2),
+                MenuFactory::addItem(m, "Edit drawing settings", 2,
                                "to set how the <i>class diagram</i>'s items must be drawn");
-                m.insertSeparator();
-                m.setWhatsThis(m.insertItem("Duplicate", 3),
+                m.addSeparator();
+                MenuFactory::addItem(m, "Duplicate", 3,
                                "to duplicate the <i>class diagram</i>");
 
                 if (edition_number == 0) {
-                    m.insertSeparator();
-                    m.setWhatsThis(m.insertItem("Delete", 4),
+                    m.addSeparator();
+                    MenuFactory::addItem(m, "Delete", 4,
                                    "to delete the <i>class diagram</i>. \
 Note that you can undelete it after");
                 }
             }
         }
 
-        mark_menu(m, TR("the class diagram"), 90);
+        mark_menu(m, QObject::tr("the class diagram").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
             Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem("Tool", &toolm);
+            m.addSeparator();
+            MenuFactory::insertItem(m,QObject::tr("Tool"), &toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0))
-        m.setWhatsThis(m.insertItem("Undelete", 5),
+        MenuFactory::addItem(m, "Undelete", 5,
                        "to undelete the <i>class diagram</i>");
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserClassDiagram::exec_menu_choice(int rank)
@@ -404,7 +406,7 @@ UmlCode BrowserClassDiagram::get_type() const
 
 QString BrowserClassDiagram::get_stype() const
 {
-    return TR("class diagram");
+    return QObject::TR("class diagram");
 }
 
 int BrowserClassDiagram::get_identifier() const
@@ -505,7 +507,7 @@ bool BrowserClassDiagram::tool_cmd(ToolCom * com, const char * args)
 
         QDir d = BrowserView::get_dir();
 
-        com->write_string(d.absFilePath(fn));
+        com->write_string(d.absoluteFilePath(fn));
     }
 
     return TRUE;
@@ -520,9 +522,8 @@ bool BrowserClassDiagram::tool_cmd(ToolCom * com, const char * args)
                                                     !w->get_view()->has_preferred_size_zoom(),
                                                     TRUE));
             w->dont_save();
-            w->close(TRUE);
+            w->close();
         }
-
         return TRUE;
 
     default:
@@ -531,7 +532,7 @@ bool BrowserClassDiagram::tool_cmd(ToolCom * com, const char * args)
     }
 }
 
-void BrowserClassDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserClassDiagram::compute_referenced_by(QList<BrowserNode *> & l,
         BrowserNode * bn,
         char const * kc,
         char const * kr)
@@ -541,16 +542,15 @@ void BrowserClassDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
              : bn->get_identifier();
     IdIterator<BrowserDiagram> it(all);
     BrowserDiagram * d;
-
-    while ((d = it.current()) != 0) {
+    while(it.hasNext()){
+        it.next();
+        if((d = it.value()) != 0)
         if (!d->deletedp() && (d->get_type() == UmlClassDiagram)) {
             if ((((BrowserClassDiagram *) d)->window != 0)
                 ? ((BrowserClassDiagram *) d)->window->get_view()->is_present(bn)
                 : is_referenced(read_definition(d->get_ident(), "diagram"), id, kc, kr))
                 l.append((BrowserClassDiagram *) d);
         }
-
-        ++it;
     }
 }
 
@@ -576,7 +576,7 @@ void BrowserClassDiagram::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "classdiagram " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
         settings.save(st);
@@ -594,7 +594,9 @@ void BrowserClassDiagram::save(QTextStream & st, bool ref, QString & warning)
             is_modified = FALSE;
 
             if (window)
+            {
                 window->save("diagram", warning, is_new);
+            }
             else
                 BrowserDiagram::save();
         }
@@ -654,7 +656,7 @@ BrowserClassDiagram * BrowserClassDiagram::read(char *& st, char * k,
         }
         else {
             r->set_parent(parent);
-            r->set_name(s);
+            r->set_name(s.toLatin1().constData());
         }
 
         r->is_defined = TRUE;

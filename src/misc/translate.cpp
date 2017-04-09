@@ -26,83 +26,46 @@
 // *************************************************************************
 
 #include <stdio.h>
-#include <q3dict.h>
+////
 #include <qmessagebox.h>
 
 #include "translate.h"
-
-static Q3Dict<QString> * CurrentTranslation = 0;
+#include <QApplication>
+#include <QTranslator>
+//static QMap<QString> * CurrentTranslation = 0;
 static QString CurrentLang;
-
+static QTranslator translator;
 QString current_lang()
 {
     return CurrentLang;
 }
-
 void set_lang(QString l)
 {
     if (l != CurrentLang) {
         if (l.isEmpty()) {
-            delete CurrentTranslation;
-            CurrentTranslation = 0;
             CurrentLang = "";
+            qApp->removeTranslator(&translator);
+            translator.load("");
+            qApp->installTranslator(&translator);
+
         }
         else {
-            FILE * fp = fopen((const char *) l, "rb");
-
-            if (fp == 0) {
+            qApp->removeTranslator(&translator);
+            if (!translator.load(l)) {
                 QMessageBox::critical(0, "Douml",
                                       "cannot open file " +
                                       l +
                                       "\n, still use " +
                                       ((CurrentLang.isEmpty()) ? "english" : CurrentLang));
-
+                qApp->installTranslator(&translator);
                 return;
             }
-
+            qApp->installTranslator(&translator);
             CurrentLang = l;
-
-            if (CurrentTranslation == 0) {
-                CurrentTranslation = new Q3Dict<QString>(997);
-                CurrentTranslation->setAutoDelete(TRUE);
-            }
-            else
-                CurrentTranslation->clear();
-
-            int len, c, i;
-
-            while ((len = fgetc(fp)) != EOF) {
-                len += (fgetc(fp) << 8);
-
-                QString en((const QChar *) 0, (unsigned) len);
-
-                for (i = 0; i != len; i += 1) {
-                    c = fgetc(fp);
-
-                    en[i] = QChar(fgetc(fp), c);
-                }
-
-                len = fgetc(fp);
-                len += (fgetc(fp) << 8);
-
-                if (len != 0) {
-                    QString * s = new QString((QChar *) 0, (unsigned) len); //[lgfreitas] why the const was here?
-
-                    for (i = 0; i != len; i += 1) {
-                        c = fgetc(fp);
-                        s->replace(i, 1, QChar(fgetc(fp), c));
-                        //s->at(i) = QChar(fgetc(fp), c); //[lgfreitas] at() now returns const
-                    }
-
-                    CurrentTranslation->insert(en, s);
-                }
-            }
-
-            fclose(fp);
         }
     }
 }
-
+/*
 static void translate(QString & s)
 {
     if (CurrentTranslation == 0)
@@ -211,3 +174,4 @@ QString TR(QString s, QString a1, QString a2, QString a3)
 
     return s;
 }
+*/

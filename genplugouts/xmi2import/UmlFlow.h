@@ -5,7 +5,7 @@
 #include "UmlBaseFlow.h"
 #include "UmlActivityItem.h"
 
-#include <q3valuelist.h>
+#include <QList.h>
 
 class FileIn;
 class Token;
@@ -48,7 +48,7 @@ public:
 
 
 protected:
-    static Q3ValueList<Flow> All;
+    static QList<Flow> All;
 
 };
 

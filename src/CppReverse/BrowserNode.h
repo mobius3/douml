@@ -29,11 +29,7 @@
 #define BROWSERNODE_H
 
 #include "TreeItem.h"
-//Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3PtrCollection>
-#include <Q3PtrList>
-
 #ifndef REVERSE
 class BrowserView;
 #endif
@@ -69,9 +65,9 @@ public:
 
 // a sortable list of BrowserNode
 
-#include <q3ptrlist.h>
 
-class BrowserNodeList : public Q3PtrList<BrowserNode>
+
+class BrowserNodeList : public QList<BrowserNode *>
 {
 public:
     void search(BrowserNode * bn, int k, const QString & s, bool cs);

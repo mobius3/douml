@@ -31,11 +31,11 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <q3tabdialog.h>
+#include <tabdialog.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 //Added by qt3to4:
-#include <Q3PtrList>
+//
 
 #include "BodyDialog.h"
 #include "UmlDesktop.h"
@@ -45,38 +45,40 @@
 
 QSize BodyDialog::previous_size;
 
-BodyDialog::BodyDialog(QString t, Q3TabDialog * d, post_edit pf,
-                       EditType k, QString what, Q3PtrList<BodyDialog> & edits)
-    : QDialog(d, what, d->isModal(), Qt::WDestructiveClose), dlg(d), f(pf), eds(edits)
+BodyDialog::BodyDialog(QString t, TabDialog * d, post_edit pf,
+                       EditType k, QString what, QList<BodyDialog *> & edits)
+    : QDialog(d/*, what, d->isModal(), Qt::WDestructiveClose*/), dlg(d), f(pf), eds(edits)
 {
+    setModal(d->isModal());
+    setWindowTitle(what);
     eds.append(this);
-    what.replace(what.findRev('_'), 1, " ");
+    what.replace(what.lastIndexOf('_'), 1, " ");
 
     switch (k) {
     case CppEdit:
-        setCaption(what + " (C++)");
+        setWindowTitle(what + " (C++)");
         break;
 
     case JavaEdit:
-        setCaption(what + " (Java)");
+        setWindowTitle(what + " (Java)");
         break;
 
     case PhpEdit:
-        setCaption(what + " (Php)");
+        setWindowTitle(what + " (Php)");
         break;
 
     case PythonEdit:
-        setCaption(what + " (Python)");
+        setWindowTitle(what + " (Python)");
         break;
 
     default:
-        setCaption(what);
+        setWindowTitle(what);
     }
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
-    vbox->addWidget(new QLabel((f == 0) ? TR("Note : operation bodies preserved")
-                               : TR("You can specify the editor through the environment dialog"),
+    vbox->addWidget(new QLabel((f == 0) ? QObject::tr("Note : operation bodies preserved")
+                               : QObject::tr("You can specify the editor through the environment dialog"),
                                this));
 
     e = new MultiLineEdit(this);
@@ -103,7 +105,7 @@ BodyDialog::~BodyDialog()
 {
     previous_size = size();
 
-    if (eds.remove(this) && (f != 0))
+    if (eds.removeOne(this) && (f != 0))
         // dialog still active
         f(dlg, e->text());
 

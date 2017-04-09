@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseDeploymentView.h"
-#include <q3cstring.h>
+
 
 // This class manages 'deployment view'
 //
@@ -13,7 +13,7 @@ class UmlDeploymentView : public UmlBaseDeploymentView
 public:
     virtual void sort();
 
-    UmlDeploymentView(void * id, const Q3CString & n) : UmlBaseDeploymentView(id, n) {};
+    UmlDeploymentView(void * id, const QByteArray & n) : UmlBaseDeploymentView(id, n) {};
 
     virtual int orderWeight();
 

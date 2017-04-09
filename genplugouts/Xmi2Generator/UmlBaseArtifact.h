@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3ptrvector.h>
+#include <QVector>
 
 
 #include "UmlClass.h"	// to avoid destructor problem
@@ -37,7 +37,7 @@ public:
 
     // returns (in Java a copy of) the optional associated classes
     // significant when the artifact is stereotyped <<source>>
-    const Q3PtrVector<UmlClass> & associatedClasses();
+    const QVector<UmlClass*> & associatedClasses();
 
     // adds 'cl' at the end of the associated classes list, returns false
     // if 'cl' is already an associate class.
@@ -56,11 +56,11 @@ public:
     // significant when the artifact is stereotyped <<source>>
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    bool set_AssociatedClasses(const Q3PtrVector<UmlClass> & l);
+    bool set_AssociatedClasses(const QVector<UmlClass*> & l);
 
     // returns (in Java a copy of) the associated artifacts list
     // significant when the artifact is not stereotyped <<source>>
-    const Q3PtrVector<UmlArtifact> & associatedArtifacts();
+    const QVector<UmlArtifact*> & associatedArtifacts();
 
     // adds an associated artifacts, returns false if 'cp' is already
     // an associate artifact.
@@ -147,9 +147,9 @@ public:
 private:
     UmlDeploymentDiagram * _assoc_diagram;
 
-    Q3PtrVector<UmlClass> _assoc_classes;
+    QVector<UmlClass*> _assoc_classes;
 
-    Q3PtrVector<UmlArtifact> _associated;
+    QVector<UmlArtifact*> _associated;
 
 #ifdef WITHCPP
     WrapperStr _cpp_h;

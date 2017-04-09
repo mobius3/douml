@@ -4,7 +4,7 @@
 
 bool UmlDeploymentView::write_if_needed(FileOut & out)
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
     bool used = FALSE;
 

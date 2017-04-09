@@ -2,7 +2,7 @@
 #define _UC_H
 
 
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlItem;
 class File;
@@ -14,7 +14,7 @@ public:
 
     virtual UmlItem * item() = 0;
 
-    virtual void readObject(File & f, Q3CString s) = 0;
+    virtual void readObject(File & f, QByteArray s) = 0;
 
     void import(File & f);
 

@@ -6,15 +6,15 @@
 #include "UmlBuiltin.h"
 #include "UmlStereotype.h"
 //Added by qt3to4:
-#include <Q3CString>
-Q3CString UmlSettings::artifactDescription()
+#include <QByteArray>
+QByteArray UmlSettings::artifactDescription()
 {
     read_if_needed_();
 
     return _artifact_default_description;
 }
 
-bool UmlSettings::set_ArtifactDescription(Q3CString v)
+bool UmlSettings::set_ArtifactDescription(QByteArray v)
 {
     UmlCom::send_cmd(umlSettingsCmd, setDefaultArtifactDescriptionCmd, (const char *)v); //[jasa] handle ambiguous call
 
@@ -26,14 +26,14 @@ bool UmlSettings::set_ArtifactDescription(Q3CString v)
         return FALSE;
 }
 
-Q3CString UmlSettings::classDescription()
+QByteArray UmlSettings::classDescription()
 {
     read_if_needed_();
 
     return _class_default_description;
 }
 
-bool UmlSettings::set_ClassDescription(Q3CString v)
+bool UmlSettings::set_ClassDescription(QByteArray v)
 {
     UmlCom::send_cmd(umlSettingsCmd, setDefaultClassDescriptionCmd, (const char *)v); //[jasa] handle ambiguous call
 
@@ -45,14 +45,14 @@ bool UmlSettings::set_ClassDescription(Q3CString v)
         return FALSE;
 }
 
-Q3CString UmlSettings::operationDescription()
+QByteArray UmlSettings::operationDescription()
 {
     read_if_needed_();
 
     return _operation_default_description;
 }
 
-bool UmlSettings::set_OperationDescription(Q3CString v)
+bool UmlSettings::set_OperationDescription(QByteArray v)
 {
     UmlCom::send_cmd(umlSettingsCmd, setDefaultOperationDescriptionCmd, (const char *)v);//[jasa] handle ambiguous call
 
@@ -64,14 +64,14 @@ bool UmlSettings::set_OperationDescription(Q3CString v)
         return FALSE;
 }
 
-Q3CString UmlSettings::attributeDescription()
+QByteArray UmlSettings::attributeDescription()
 {
     read_if_needed_();
 
     return _attribute_default_description;
 }
 
-bool UmlSettings::set_AttributeDescription(Q3CString v)
+bool UmlSettings::set_AttributeDescription(QByteArray v)
 {
     UmlCom::send_cmd(umlSettingsCmd, setDefaultAttributeDescriptionCmd, (const char *)v); //[jasa] handle ambiguous call
 
@@ -83,14 +83,14 @@ bool UmlSettings::set_AttributeDescription(Q3CString v)
         return FALSE;
 }
 
-Q3CString UmlSettings::relationDescription()
+QByteArray UmlSettings::relationDescription()
 {
     read_if_needed_();
 
     return _relation_default_description;
 }
 
-bool UmlSettings::set_RelationDescription(Q3CString v)
+bool UmlSettings::set_RelationDescription(QByteArray v)
 {
     UmlCom::send_cmd(umlSettingsCmd, setDefaultRelationDescriptionCmd, (const char *)v); //[jasa] handle ambiguous call
 
@@ -104,25 +104,25 @@ bool UmlSettings::set_RelationDescription(Q3CString v)
 
 bool UmlSettings::_defined;
 
-Q3CString UmlSettings::_artifact_default_description;
+QByteArray UmlSettings::_artifact_default_description;
 
-Q3CString UmlSettings::_class_default_description;
+QByteArray UmlSettings::_class_default_description;
 
-Q3CString UmlSettings::_operation_default_description;
+QByteArray UmlSettings::_operation_default_description;
 
-Q3CString UmlSettings::_attribute_default_description;
+QByteArray UmlSettings::_attribute_default_description;
 
-Q3CString UmlSettings::_relation_default_description;
+QByteArray UmlSettings::_relation_default_description;
 
-Q3Dict<UmlBuiltin> UmlSettings::_map_builtins;
+QHash<QByteArray,UmlBuiltin*> UmlSettings::_map_builtins;
 
 UmlBuiltin * UmlSettings::_builtins;
 
-Q3Dict<UmlStereotype> UmlSettings::_map_relation_stereotypes;
+QHash<QByteArray,UmlStereotype*> UmlSettings::_map_relation_stereotypes;
 
 UmlStereotype * UmlSettings::_relation_stereotypes;
 
-Q3Dict<UmlStereotype> UmlSettings::_map_class_stereotypes;
+QHash<QByteArray,UmlStereotype*> UmlSettings::_map_class_stereotypes;
 
 UmlStereotype * UmlSettings::_class_stereotypes;
 
@@ -136,7 +136,7 @@ void UmlSettings::read_()
     _builtins = new UmlBuiltin[n];
 
     if (n / 2 > _map_builtins.size())
-        _map_builtins.resize(_map_builtins.size() * 2 - 1);
+        _map_builtins.reserve(_map_builtins.size() * 2 - 1);
 
     for (index = 0; index != n; index += 1) {
         _builtins[index].uml = UmlCom::read_string();
@@ -148,7 +148,7 @@ void UmlSettings::read_()
     _relation_stereotypes = new UmlStereotype[n];
 
     if (n / 2 > _map_relation_stereotypes.size())
-        _map_relation_stereotypes.resize(_map_relation_stereotypes.size() * 2 - 1);
+        _map_relation_stereotypes.reserve(_map_relation_stereotypes.size() * 2 - 1);
 
     for (index = 0; index != n; index += 1) {
         _relation_stereotypes[index].uml = UmlCom::read_string();
@@ -161,7 +161,7 @@ void UmlSettings::read_()
     _class_stereotypes = new UmlStereotype[n];
 
     if (n / 2 > _map_class_stereotypes.size())
-        _map_class_stereotypes.resize(_map_class_stereotypes.size() * 2 - 1);
+        _map_class_stereotypes.reserve(_map_class_stereotypes.size() * 2 - 1);
 
     for (index = 0; index != n; index += 1) {
         _class_stereotypes[index].uml = UmlCom::read_string();
@@ -185,18 +185,18 @@ void UmlSettings::read_if_needed_()
     }
 }
 
-unsigned UmlSettings::multiplicity_column(const Q3CString & mult)
+unsigned UmlSettings::multiplicity_column(const QByteArray & mult)
 {
     if (mult.isEmpty() || (mult == "1"))
         return 0;
 
-    if ((mult == "*") || (mult.find("..") != -1))
+    if ((mult == "*") || (mult.indexOf("..") != -1))
         return 1;
 
     return 2;
 }
 
-Q3CString UmlSettings::uml_type(const Q3CString & t, Q3CString UmlBuiltin::* f)
+QByteArray UmlSettings::uml_type(const QByteArray & t, QByteArray UmlBuiltin::* f)
 {
     unsigned index = _map_builtins.count();
 
@@ -207,7 +207,7 @@ Q3CString UmlSettings::uml_type(const Q3CString & t, Q3CString UmlBuiltin::* f)
     return 0;
 }
 
-Q3CString UmlSettings::uml_rel_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f)
+QByteArray UmlSettings::uml_rel_stereotype(const QByteArray & t, QByteArray UmlStereotype::* f)
 {
     unsigned index = _map_relation_stereotypes.count();
 
@@ -218,7 +218,7 @@ Q3CString UmlSettings::uml_rel_stereotype(const Q3CString & t, Q3CString UmlSter
     return 0;
 }
 
-Q3CString UmlSettings::uml_class_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f)
+QByteArray UmlSettings::uml_class_stereotype(const QByteArray & t, QByteArray UmlStereotype::* f)
 {
     unsigned index = _map_class_stereotypes.count();
 
@@ -229,7 +229,7 @@ Q3CString UmlSettings::uml_class_stereotype(const Q3CString & t, Q3CString UmlSt
     return 0;
 }
 
-UmlBuiltin * UmlSettings::add_type(const Q3CString & s)
+UmlBuiltin * UmlSettings::add_type(const QByteArray & s)
 {
     unsigned n = _map_builtins.count();
     unsigned index;
@@ -237,7 +237,7 @@ UmlBuiltin * UmlSettings::add_type(const Q3CString & s)
     UmlBuiltin * builtins = new UmlBuiltin[n + 1];
 
     if (n / 2 > _map_builtins.size())
-        _map_builtins.resize(_map_builtins.size() * 2 - 1);
+        _map_builtins.reserve(_map_builtins.size() * 2 - 1);
 
     for (index = 0; index != n; index += 1)
         builtins[index] = _builtins[index];
@@ -265,7 +265,7 @@ UmlBuiltin * UmlSettings::add_type(const Q3CString & s)
 
 }
 
-UmlStereotype * UmlSettings::add_rel_stereotype(const Q3CString & s)
+UmlStereotype * UmlSettings::add_rel_stereotype(const QByteArray & s)
 {
     unsigned n = _map_relation_stereotypes.count();
     unsigned index;
@@ -273,7 +273,7 @@ UmlStereotype * UmlSettings::add_rel_stereotype(const Q3CString & s)
     UmlStereotype * relation_stereotypes = new UmlStereotype[n + 1];
 
     if (n / 2 > _map_relation_stereotypes.size())
-        _map_relation_stereotypes.resize(_map_relation_stereotypes.size() * 2 - 1);
+        _map_relation_stereotypes.reserve(_map_relation_stereotypes.size() * 2 - 1);
 
     for (index = 0; index != n; index += 1)
         relation_stereotypes[index] = _relation_stereotypes[index];
@@ -298,7 +298,7 @@ UmlStereotype * UmlSettings::add_rel_stereotype(const Q3CString & s)
 
 }
 
-UmlStereotype * UmlSettings::add_class_stereotype(const Q3CString & s)
+UmlStereotype * UmlSettings::add_class_stereotype(const QByteArray & s)
 {
     unsigned n = _map_class_stereotypes.count();
     unsigned index;
@@ -306,7 +306,7 @@ UmlStereotype * UmlSettings::add_class_stereotype(const Q3CString & s)
     UmlStereotype * class_stereotypes = new UmlStereotype[n + 1];
 
     if (n / 2 > _map_class_stereotypes.size())
-        _map_class_stereotypes.resize(_map_class_stereotypes.size() * 2 - 1);
+        _map_class_stereotypes.reserve(_map_class_stereotypes.size() * 2 - 1);
 
     for (index = 0; index != n; index += 1)
         class_stereotypes[index] = _class_stereotypes[index];

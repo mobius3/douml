@@ -31,11 +31,8 @@
 #include "ClassMemberData.h"
 #include "Labeled.h"
 #include "AType.h"
-//Added by qt3to4:
 #include <QTextStream>
-
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QHash>
 
 class QTextStream;
 
@@ -89,10 +86,11 @@ class RelationData : public ClassMemberData, public Labeled<RelationData>
     Q_OBJECT
 
     friend class RelationDialog;
+    friend class QuickEdit;
 
 protected:
     static IdDict<RelationData> all;
-    static Q3PtrList<RelationData> Unconsistent;
+    static QList<RelationData *> Unconsistent;
 
     // Uml
     bool is_deleted : 8;	// 1 useless here, 8 faster than 1 ?
@@ -101,11 +99,13 @@ protected:
     WrapperStr name;
     RoleData a;
     RoleData b;
-    BrowserRelation * start;
-    BrowserRelation * end;
+    BrowserRelation * start  = nullptr;
+    BrowserRelation * end = nullptr;
     BrowserNode * end_removed_from;
     AType association;		// class association
     int original_id;	// from project library
+
+    QHash<QString, RoleData*> dataForClass;
 
     virtual void send_uml_def(ToolCom * com, BrowserRelation * rel);
     virtual void send_cpp_def(ToolCom * com, BrowserRelation * rel);
@@ -118,6 +118,16 @@ public:
     RelationData(UmlCode e, int id = 0);
     RelationData(const BrowserRelation * model, BrowserRelation * r);
     virtual ~RelationData();
+    void IndexStartEnd();
+
+    void SetStart(BrowserRelation*);
+    void SetEnd(BrowserRelation*);
+    RoleData* GetDataForClass(QString node)
+    {
+        if(dataForClass.contains(node))
+                return dataForClass[node];
+    }
+
     void garbage(BrowserRelation * r);
     void copy(RelationData * model);
 

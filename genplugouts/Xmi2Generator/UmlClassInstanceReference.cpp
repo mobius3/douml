@@ -34,7 +34,7 @@ const char * UmlClassInstanceReference::lifeline()
     return s;
 }
 
-void UmlClassInstanceReference::write_lifelines(FileOut & out, UmlItem * diagram, const Q3PtrVector<UmlClassInstanceReference> & insts)
+void UmlClassInstanceReference::write_lifelines(FileOut & out, UmlItem * diagram, const QVector<UmlClassInstanceReference *> &insts)
 {
     unsigned sup = insts.size();
     unsigned index;
@@ -53,7 +53,7 @@ void UmlClassInstanceReference::write_lifelines(FileOut & out, UmlItem * diagram
     }
 }
 
-void UmlClassInstanceReference::write_attributes(FileOut & out, UmlItem * diagram, const Q3PtrVector<UmlClassInstanceReference> & insts)
+void UmlClassInstanceReference::write_attributes(FileOut & out, UmlItem * diagram, const QVector<UmlClassInstanceReference *> &insts)
 {
     unsigned sup = insts.size();
     unsigned index;

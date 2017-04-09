@@ -32,22 +32,21 @@
 #include <stdio.h>
 
 #include <qcursor.h>
-#include <q3grid.h>
-#include <q3vbox.h>
+#include <gridbox.h>
 #include <qlabel.h>
-#include <q3combobox.h>
-#include <q3buttongroup.h>
+#include <qcombobox.h>
+#include <bbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qtimer.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QDesktopWidget>
 #include <QHBoxLayout>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <QRegExp>
 #include <functional>
@@ -84,8 +83,10 @@
 #include "ui_operationwidgetcpp.h"
 #include "Tools/SignalBlockerWrapper.h"
 #include "CustomWidgets/EdgeMenuToolBar.h"
+#include "browserfunctions/operationfuncs.h"
+#include "menufactory.h"
+#include "vvbox.h"
 QSize OperationDialog::previous_size;
-QSharedPointer<OperationDialog> OperationDialog::instance;
 OperationDialog::OperationDialog(OperationData * o, DrawingLanguage )
     : EdgeMenuDialog(0, 0, FALSE), oper(o),
       cl((ClassData *)((BrowserClass *) o->browser_node->parent())->get_data())
@@ -94,38 +95,41 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage )
 
     SetDialogMode(o->browser_node->is_writable());
     //isWritable = hasOkButton();
-    setCaption(TR("Operation dialog"));
+    setWindowTitle(TR("Operation dialog"));
     SetCurrentNode(o->browser_node);
     //setWindowFlags(!Qt::WindowTitleHint);
     InitGui();
     FillGuiElements(oper);
 
-    connect(this, SIGNAL(currentChanged(QWidget *)),
-            this, SLOT(update_all_tabs(QWidget *)));
+
+
+    connect(m_tabWidget, SIGNAL(currentChanged(int)),
+            this, SLOT(update_all_tabs(int)));
     open_dialog(this);
 }
 
 OperationDialog::~OperationDialog()
 {
-//    if(oper->browser_node)
-//        oper->browser_node->edit_end();
+    //    if(oper->browser_node)
+    //        oper->browser_node->edit_end();
     previous_size = size();
 
-    while (!edits.isEmpty())
-        edits.take(0)->close();
-
+    foreach (BodyDialog *dialog, edits)
+        dialog->close();
+    edits.clear();
+#ifdef EDGETOOLENABLED
     if(toolbar)
     {
         toolbar->setParent(0);
         toolbar->hide();
     }
-
+#endif
     //close_dialog(this);
 }
 
 void OperationDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -147,9 +151,9 @@ void OperationDialog::init_get_set()
     if (oper->is_get_or_set)
     {
         BrowserOperation * br_op = (BrowserOperation *) oper->browser_node;
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
-        for (child = br_op->parent()->firstChild();
+        for (child = ((BrowserNode *)br_op->parent())->firstChild();
              child != 0;
              child = child->nextSibling()) {
             BrowserNode * br = (BrowserNode *) child;
@@ -188,79 +192,89 @@ void OperationDialog::init_get_set()
 // general tab
 void OperationDialog::init_uml()
 {
-    umlGrid = new Q3Grid(2, this);
+    umlGrid = new GridBox(2, this);
     umltab = umlGrid;
     RegisterTab("Uml", umltab);
     umlGrid->setSpacing(5);
     umlGrid->setMargin(5);
 
-    new QLabel(TR("class : "), umlGrid);
+    umlGrid->addWidget(new QLabel(TR("class : "), umlGrid));
     lblFullClassName = new QLabel(((BrowserNode *) oper->get_browser_node()->parent())->full_name(TRUE),
-                                  umlGrid); //todo
-
-    new QLabel(TR("name : "), umlGrid);
+                                  umlGrid);
+    umlGrid->addWidget(lblFullClassName);
+    umlGrid->addWidget(new QLabel(TR("name : "), umlGrid));
     edname = new LineEdit(oper->name(), umlGrid);
+    umlGrid->addWidget(edname);
 
+    umlGrid->addWidget(new QLabel(TR("stereotype : "), umlGrid));
+    edstereotype = new QComboBox(umlGrid);
+    umlGrid->addWidget(edstereotype);
+    edstereotype->setEditable(isWritable);
 
-    new QLabel(TR("stereotype : "), umlGrid);
-    edstereotype = new Q3ComboBox(isWritable, umlGrid);
-
-    pbValueType = new SmallPushButton(TR("value type :"), umlGrid);
+    umlGrid->addWidget(pbValueType = new SmallPushButton(TR("value type :"), umlGrid));
     connect(pbValueType, SIGNAL(clicked()), this, SLOT(menu_returntype()));
 
 
-    edreturn_type = new Q3ComboBox(isWritable, umlGrid);
+    edreturn_type = new QComboBox(umlGrid);
+    umlGrid->addWidget(edreturn_type);
+    edreturn_type->setEditable(isWritable);
+    umlGrid->addWidget(new QLabel("",umlGrid));
 
-    new QLabel(umlGrid);
-
-    htabBgUml = new Q3HBox(umlGrid);
+    htabBgUml = new HHBox(umlGrid);
+    umlGrid->addWidget(htabBgUml);
     bgUml1 = uml_visibility.init(htabBgUml, oper->get_uml_visibility(), TRUE);
+    htabBgUml->addWidget(bgUml1);
 
     htabBgUml->setStretchFactor(bgUml1, 1000);
+    QLabel *label;
+    htabBgUml->addWidget(label = new QLabel("  ", htabBgUml));
+    htabBgUml->setStretchFactor(label, 0);
 
-    htabBgUml->setStretchFactor(new QLabel("  ", htabBgUml), 0);
-
-    bgUml2 = new Q3ButtonGroup(2, Qt::Horizontal, QString(), htabBgUml);
+    htabBgUml->addWidget(bgUml2 = new BButtonGroup(2, Qt::Horizontal, QString(), htabBgUml));
 
     htabBgUml->setStretchFactor(bgUml2, 1000);
     classoperation_cb = new QCheckBox(TR("static"), bgUml2);
+    bgUml2->addWidget(classoperation_cb);
     abstract_cb = new QCheckBox(TR("abstract"), bgUml2);
+    bgUml2->addWidget(abstract_cb);
 
     connect(classoperation_cb, SIGNAL(toggled(bool)), SLOT(classoper_toggled(bool)));
     connect(abstract_cb, SIGNAL(toggled(bool)), SLOT(abstract_toggled(bool)));
+    htabBgUml->addWidget(label = new QLabel("  ", htabBgUml));
+    htabBgUml->setStretchFactor(label, 0);
 
-    htabBgUml->setStretchFactor(new QLabel("  ", htabBgUml), 0);
-
-    bgUml3 = new Q3ButtonGroup(1, Qt::Horizontal, QString(), htabBgUml);
+    bgUml3 = new BButtonGroup(1, Qt::Horizontal, QString(), htabBgUml);
+    htabBgUml->addWidget(bgUml3);
     htabBgUml->setStretchFactor(bgUml3, 1000);
     forcegenbody_cb = new QCheckBox(TR("force body generation"), bgUml3);
+    bgUml3->addWidget(forcegenbody_cb);
 
 
     connect(forcegenbody_cb, SIGNAL(toggled(bool)), SLOT(forcegenbody_toggled(bool)));
 
-    new QLabel(TR("parameters : "), umlGrid);
-    table = new ParamsTable(oper, umlGrid, list, this, !isWritable); //todo update the table
+    umlGrid->addWidget(new QLabel(TR("parameters : "), umlGrid));
+    umlGrid->addWidget(table = new ParamsTable(oper, umlGrid, list, this, !isWritable));
 
-    new QLabel(TR("exceptions : "), umlGrid);
-    etable = new ExceptionsTable(oper, umlGrid, list, !isWritable); //todo update the table
+    umlGrid->addWidget(new QLabel(TR("exceptions : "), umlGrid));
+    umlGrid->addWidget(etable = new ExceptionsTable(oper, umlGrid, list, !isWritable)); //todo update the table
 
-    Q3VBox * vtab = new Q3VBox(umlGrid);
-
-    new QLabel(TR("description :"), vtab);
-    pbEditor = new SmallPushButton(TR("Editor"), vtab);
-    pbDefault = new SmallPushButton(TR("Default"), vtab);
+    VVBox * vtab = new VVBox(umlGrid);
+    umlGrid->addWidget(vtab);
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
+    vtab->addWidget(pbEditor = new SmallPushButton(TR("Editor"), vtab));
+    vtab->addWidget(pbDefault = new SmallPushButton(TR("Default"), vtab));
 
     connect(pbEditor, SIGNAL(clicked()), this, SLOT(edit_description()));
     connect(pbDefault, SIGNAL(clicked()), this, SLOT(default_description()));
 
-    comment = new MultiLineEdit(umlGrid);
+    umlGrid->addWidget(comment = new MultiLineEdit(umlGrid));
 
-    vtab = new Q3VBox(umlGrid);
-    new QLabel(TR("constraint :"), vtab);
-    pbConstraintEditor = new SmallPushButton(TR("Editor"), vtab);
+    umlGrid->addWidget(vtab = new VVBox(umlGrid));
+    vtab->addWidget(new QLabel(TR("constraint :"), vtab));
+    vtab->addWidget(pbConstraintEditor = new SmallPushButton(TR("Editor"), vtab));
     connect(pbConstraintEditor, SIGNAL(clicked()), this, SLOT(edit_constraint()));
 
-    constraint = new MultiLineEdit(umlGrid);
+    umlGrid->addWidget(constraint = new MultiLineEdit(umlGrid));
 
     addTab(umlGrid, "Uml");
 }
@@ -275,21 +289,21 @@ void OperationDialog::FillUmlTab(OperationData * oper)
     edname->setText(operationName);
     edname->setReadOnly(!isWritable);
     edstereotype->clear();
-    edstereotype->insertItem(toUnicode(oper->stereotype));
+    edstereotype->addItem(toUnicode(oper->stereotype));
 
     if (oper->is_get_or_set) {
         edstereotype->setEnabled(FALSE);
     }
     else if (isWritable) {
         edstereotype->setEnabled(true);
-        edstereotype->insertStringList(BrowserOperation::default_stereotypes());
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlOperation));
+        edstereotype->addItems(BrowserOperation::default_stereotypes());
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlOperation));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
     if (oper->is_get_or_set)
@@ -299,7 +313,7 @@ void OperationDialog::FillUmlTab(OperationData * oper)
 
 
     edreturn_type->clear();
-    edreturn_type->insertItem(oper->get_return_type().get_full_type());
+    edreturn_type->addItem(oper->get_return_type().get_full_type());
 
     if (oper->is_get_or_set)
         edreturn_type->setEnabled(FALSE);
@@ -308,14 +322,14 @@ void OperationDialog::FillUmlTab(OperationData * oper)
         QStringList l = GenerationSettings::basic_types();
 
         cl->addFormals(l);
-        edreturn_type->insertStringList(l);
+        edreturn_type->addItems(l);
         edreturn_type_offset = edreturn_type->count();
-        edreturn_type->insertStringList(list);
+        edreturn_type->addItems(list);
         edreturn_type->setAutoCompletion(completion());
         view = oper->browser_node->container(UmlClass);
     }
 
-    edreturn_type->setCurrentItem(0);
+    edreturn_type->setCurrentIndex(0);
 
     edreturn_type->setSizePolicy(sp);
 
@@ -352,14 +366,17 @@ void OperationDialog::FillUmlTab(OperationData * oper)
         forcegenbody_cb->setChecked(false);
 
     init_get_set();
-    table->update(oper, list, this, !isWritable); //todo update the table
+    table->update(oper, list, this, !isWritable);
     if (oper->is_get_or_set)
         table->setEnabled(FALSE);
     else
         table->setEnabled(true);
 
-    //etable->update(oper,oper->browser_node->children(inh, UmlGeneralisation, UmlRealize));
-            //= new ExceptionsTable(oper, umlGrid, list, !isWritable); //todo update the table
+    etable->Reinitialize(oper,list, isWritable);
+
+    //    BrowserNodeList inh;
+    //    cl->get_browser_node()->children(inh, UmlGeneralisation, UmlRealize);
+    //    etable->update(oper,inh);
     pbEditor->setEnabled(isWritable);
     pbDefault->setEnabled(isWritable);
     comment->setText(oper->get_browser_node()->get_comment());
@@ -388,17 +405,21 @@ void OperationDialog::init_cpp()
 
     RegisterTab("C++", cppTab);
 
-    tabBgCppModifiers = new Q3HBox();
-    tabBgCppModifiers->setStretchFactor(new QLabel("      ", tabBgCppModifiers), 0);
+    tabBgCppModifiers = new HHBox();
+    QLabel *label;
+    tabBgCppModifiers->addWidget(label = new QLabel("      ", tabBgCppModifiers));
+    tabBgCppModifiers->setStretchFactor(label, 0);
 
 
     visibilityBg = cpp_visibility.init(tabBgCppModifiers, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml")); // update this
-    bgCppModifiers = new Q3ButtonGroup(5, Qt::Horizontal, QString(), tabBgCppModifiers);
-    cbCppConst = new QCheckBox("const", bgCppModifiers);
-    cbCppVolatile = new QCheckBox("volatile", bgCppModifiers);
-    cbCppFriend = new QCheckBox("friend", bgCppModifiers);
-    cbCppVirtual = new QCheckBox("virtual", bgCppModifiers);
-    cbCppInline = new QCheckBox("inline", bgCppModifiers);
+    tabBgCppModifiers->addWidget(visibilityBg);
+    bgCppModifiers = new BButtonGroup(5, Qt::Horizontal, QString(), tabBgCppModifiers);
+    tabBgCppModifiers->addWidget(bgCppModifiers);
+    bgCppModifiers->addWidget(cbCppConst = new QCheckBox("const", bgCppModifiers));
+    bgCppModifiers->addWidget(cbCppVolatile = new QCheckBox("volatile", bgCppModifiers));
+    bgCppModifiers->addWidget(cbCppFriend = new QCheckBox("friend", bgCppModifiers));
+    bgCppModifiers->addWidget(cbCppVirtual = new QCheckBox("virtual", bgCppModifiers));
+    bgCppModifiers->addWidget(cbCppInline = new QCheckBox("inline", bgCppModifiers));
     QHBoxLayout * layout = new QHBoxLayout();
     layout->addWidget(tabBgCppModifiers);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -499,6 +520,9 @@ void OperationDialog::FillcppTab(OperationData * oper)
     cppTab->ui->pbNotGeneratedInCpp->setEnabled(isWritable && !oper->is_get_or_set);
     cppTab->ui->pbEditParameters->setEnabled(isWritable);
 
+    //    if(oper->get_is_abstract())
+    //        cpp_default_def();
+    //    else
     cppTab->ui->edCppDefProto->setText(oper->get_cppdef());
     cppTab->ui->edCppDefProto->setFont(comment->font());
     cppTab->ui->edCppDefProto->setReadOnly(!isWritable);
@@ -521,6 +545,7 @@ void OperationDialog::FillcppTab(OperationData * oper)
         delete [] b;
     }
 
+    //cppTab->ui->edCppDefProto
     cppTab->ui->pbDefaultDefinition->setEnabled(isWritable);
     cppTab->ui->pbFromDeclaration->setEnabled(isWritable);
     cppTab->ui->pb2NotGeneratedInCpp->setEnabled(isWritable && !oper->is_get_or_set);
@@ -544,46 +569,48 @@ void OperationDialog::FillcppTab(OperationData * oper)
 void OperationDialog::init_java()
 {
 
-    Q3Grid * grid;
-    Q3HBox * htab = 0;
-    Q3ButtonGroup * bg;
+    GridBox * grid;
+    HHBox * htab = 0;
+    BButtonGroup * bg;
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     javatab = grid;
     RegisterTab("Java", javatab);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    javafrozen_cb = new QCheckBox(TR("frozen"), grid);
+    grid->addWidget(javafrozen_cb = new QCheckBox(TR("frozen"), grid));
 
-    bg = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
+    grid->addWidget(bg = new BButtonGroup(2, Qt::Horizontal, QString(), grid));
 
-    javafinal_cb = new QCheckBox("final", bg);
+    bg->addWidget(javafinal_cb = new QCheckBox("final", bg));
 
     connect(javafinal_cb, SIGNAL(toggled(bool)), SLOT(java_finalsynchronized_toggled(bool)));
 
-    synchronized_cb = new QCheckBox("synchronized", bg);
+    bg->addWidget(synchronized_cb = new QCheckBox("synchronized", bg));
 
     connect(synchronized_cb, SIGNAL(toggled(bool)), SLOT(java_finalsynchronized_toggled(bool)));
 
-    lblNameFormJava = new QLabel(TR("Name form : "), grid);
-    namespecTab = new Q3HBox(grid);
-    edjavanamespec = new LineEdit(htab);
+    grid->addWidget(lblNameFormJava = new QLabel(TR("Name form : "), grid));
+    grid->addWidget(namespecTab = new HHBox(grid));
+            htab = namespecTab;
+    htab->addWidget(edjavanamespec = new LineEdit(htab));
 
 
-    new QLabel(TR("Definition :"), grid);
-    edjavadef = new MultiLineEdit(grid);
+    grid->addWidget(new QLabel(TR("Definition :"), grid));
+    grid->addWidget(edjavadef = new MultiLineEdit(grid));
     connect(edjavadef, SIGNAL(textChanged()), this, SLOT(java_update_def()));
 
-    Q3VBox * vtab = new Q3VBox(grid);
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
 
-    new QLabel(TR("Result after\nsubstitution : "), vtab);
+    vtab->addWidget(new QLabel(TR("Result after\nsubstitution : "), vtab));
 
-    indentjavabody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
+    vtab->addWidget(indentjavabody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab));
 
-    showjavadef = new MultiLineEdit(grid);
+    grid->addWidget(showjavadef = new MultiLineEdit(grid));
 
-    editjavabody = new QPushButton("",  grid);
+    grid->addWidget(editjavabody = new QPushButton("",  grid));
     connect(editjavabody, SIGNAL(clicked()), this, SLOT(java_edit_body()));
 
     char * b = oper->get_body('j');
@@ -593,14 +620,14 @@ void OperationDialog::init_java()
         delete [] b;
     }
 
-    htab = new Q3HBox(grid);
+    grid->addWidget(htab = new HHBox(grid));
 
-    pbDefaultDeclarationJava = new QPushButton(TR("Default declaration"), htab);
-    pbNotGeneratedInJava = new QPushButton(TR("Not generated in Java"), htab);
+    htab->addWidget(pbDefaultDeclarationJava = new QPushButton(TR("Default declaration"), htab));
+    htab->addWidget(pbNotGeneratedInJava = new QPushButton(TR("Not generated in Java"), htab));
     connect(pbDefaultDeclarationJava, SIGNAL(clicked()), this, SLOT(java_default_def()));
     connect(pbNotGeneratedInJava, SIGNAL(clicked()), this, SLOT(java_unmapped_def()));
 
-    editjavaannotation = new QPushButton(" ", htab);
+    htab->addWidget(editjavaannotation = new QPushButton(" ", htab));
     connect(editjavaannotation, SIGNAL(clicked()), this, SLOT(java_edit_annotation()));
 
     addTab(grid, "Java");
@@ -674,42 +701,44 @@ void OperationDialog::FillJavaTab(OperationData * oper)
 // Php
 void OperationDialog::init_php()
 {
-    Q3Grid * grid;
-    Q3HBox * htab = 0;
-    Q3ButtonGroup * bgPhp;
+    GridBox * grid;
+    HHBox * htab = 0;
+    BButtonGroup * bgPhp;
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     phptab = grid;
     RegisterTab("Php", phptab);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    phpfrozen_cb = new QCheckBox(TR("frozen"), grid);
+    grid->addWidget(phpfrozen_cb = new QCheckBox(TR("frozen"), grid));
 
-    bgPhp = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
+    grid->addWidget(bgPhp = new BButtonGroup(2, Qt::Horizontal, QString(), grid));
 
-    phpfinal_cb = new QCheckBox("final", bgPhp);
+    bgPhp->addWidget(phpfinal_cb = new QCheckBox("final", bgPhp));
 
     connect(phpfinal_cb, SIGNAL(toggled(bool)), SLOT(php_final_toggled(bool)));
 
-    lblNameFormPhp = new QLabel(TR("Name form : "), grid);
-    namespecTab = new Q3HBox(grid);
-    edphpnamespec = new LineEdit(htab);
+    grid->addWidget(lblNameFormPhp = new QLabel(TR("Name form : "), grid));
+    grid->addWidget(namespecTab = new HHBox(grid));
+            htab = namespecTab;
+    htab->addWidget(edphpnamespec = new LineEdit(htab));
 
 
-    new QLabel(TR("Definition :"), grid);
-    edphpdef = new MultiLineEdit(grid);
+    grid->addWidget(new QLabel(TR("Definition :"), grid));
+    grid->addWidget(edphpdef = new MultiLineEdit(grid));
     connect(edphpdef, SIGNAL(textChanged()), this, SLOT(php_update_def()));
 
-    Q3VBox * vtab = new Q3VBox(grid);
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
 
-    new QLabel(TR("Result after\nsubstitution : "), vtab);
+    vtab->addWidget(new QLabel(TR("Result after\nsubstitution : "), vtab));
 
-    indentphpbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
+    vtab->addWidget(indentphpbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab));
 
-    showphpdef = new MultiLineEdit(grid);
+    grid->addWidget(showphpdef = new MultiLineEdit(grid));
 
-    editphpbody = new QPushButton("",  grid);
+    grid->addWidget(editphpbody = new QPushButton("",  grid));
     connect(editphpbody, SIGNAL(clicked()), this, SLOT(php_edit_body()));
 
     char * b = oper->get_body('p');
@@ -719,11 +748,11 @@ void OperationDialog::init_php()
         delete [] b;
     }
 
-    htab = new Q3HBox(grid);
+    grid->addWidget(htab = new HHBox(grid));
 
-    pbDefaultDeclarationPhp = new QPushButton(TR("Default declaration"), htab);
-    pbNotGeneratedInPhp = new QPushButton(TR("Not generated in Php"), htab);
-    pbEditParametersPhp = new QPushButton(TR("Edit parameters"), htab);
+    htab->addWidget(pbDefaultDeclarationPhp = new QPushButton(TR("Default declaration"), htab));
+    htab->addWidget(pbNotGeneratedInPhp = new QPushButton(TR("Not generated in Php"), htab));
+    htab->addWidget(pbEditParametersPhp = new QPushButton(TR("Edit parameters"), htab));
     connect(pbDefaultDeclarationPhp, SIGNAL(clicked()), this, SLOT(php_default_def()));
     connect(pbNotGeneratedInPhp, SIGNAL(clicked()), this, SLOT(php_unmapped_def()));
     connect(pbEditParametersPhp, SIGNAL(clicked()), this, SLOT(php_edit_param()));
@@ -803,36 +832,38 @@ void OperationDialog::FillPhpTab(OperationData *)
 // Python_1
 void OperationDialog::init_python()
 {
-    Q3Grid * grid;
-    Q3HBox * htab = 0;
-    grid = new Q3Grid(2, this);
+    GridBox * grid;
+    HHBox * htab = 0;
+    grid = new GridBox(2, this);
     pythontab = grid;
     RegisterTab("Python", pythontab);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    pythonfrozen_cb = new QCheckBox(TR("frozen"), grid);
+    grid->addWidget(pythonfrozen_cb = new QCheckBox(TR("frozen"), grid));
 
-    bgPython = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
+    grid->addWidget(bgPython = new BButtonGroup(2, Qt::Horizontal, QString(), grid));
 
-    lblNameFormPython = new QLabel(TR("Name form : "), grid);
-    pythonNamespecTab = new Q3HBox(grid);
-    edpythonnamespec = new LineEdit(htab);
+    grid->addWidget(lblNameFormPython = new QLabel(TR("Name form : "), grid));
+    grid->addWidget(pythonNamespecTab = new HHBox(grid));
+            htab = pythonNamespecTab;
+    htab->addWidget(edpythonnamespec = new LineEdit(htab));
 
 
-    new QLabel(TR("Definition :"), grid);
-    edpythondef = new MultiLineEdit(grid);
+    grid->addWidget(new QLabel(TR("Definition :"), grid));
+    grid->addWidget(edpythondef = new MultiLineEdit(grid));
     connect(edpythondef, SIGNAL(textChanged()), this, SLOT(python_update_def()));
 
-    Q3VBox * vtab = new Q3VBox(grid);
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
 
-    new QLabel(TR("Result after\nsubstitution : "), vtab);
+    vtab->addWidget(new QLabel(TR("Result after\nsubstitution : "), vtab));
 
-    indentpythonbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
+    vtab->addWidget(indentpythonbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab));
 
-    showpythondef = new MultiLineEdit(grid);
+    grid->addWidget(showpythondef = new MultiLineEdit(grid));
 
-    editpythonbody = new QPushButton("",  grid);
+    grid->addWidget(editpythonbody = new QPushButton("",  grid));
     connect(editpythonbody, SIGNAL(clicked()), this, SLOT(python_edit_body()));
 
     char * b = oper->get_body('y');
@@ -842,17 +873,17 @@ void OperationDialog::init_python()
         delete [] b;
     }
 
-    htab = new Q3HBox(grid);
+    grid->addWidget(htab = new HHBox(grid));
 
-    pbDefaultDeclarationPython = new QPushButton(TR("Default declaration"), htab);
-    pbNotGeneratedInPython = new QPushButton(TR("Not generated in Python"), htab);
-    pbEditParamsPython = new QPushButton(TR("Edit parameters"), htab);
+    htab->addWidget(pbDefaultDeclarationPython = new QPushButton(TR("Default declaration"), htab));
+    htab->addWidget(pbNotGeneratedInPython = new QPushButton(TR("Not generated in Python"), htab));
+    htab->addWidget(pbEditParamsPython = new QPushButton(TR("Edit parameters"), htab));
     connect(pbDefaultDeclarationPython, SIGNAL(clicked()), this, SLOT(python_default_def()));
     connect(pbNotGeneratedInPython, SIGNAL(clicked()), this, SLOT(python_unmapped_def()));
     connect(pbEditParamsPython, SIGNAL(clicked()), this, SLOT(python_edit_param()));
 
     pythondecorator = (const char *) oper->python_decorator;
-    editpythondecorator = new QPushButton("",  htab);
+    htab->addWidget(editpythondecorator = new QPushButton("",  htab));
     connect(editpythondecorator, SIGNAL(clicked()), this, SLOT(python_edit_decorator()));
 
     addTab(pythontab, "Python");
@@ -933,45 +964,48 @@ void OperationDialog::FillPythonTab(OperationData *)
 // idl
 void OperationDialog::init_idl()
 {
-    Q3Grid * grid;
-    Q3HBox * htab = 0;
+    GridBox * grid;
+    HHBox * htab = 0;
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     idltab = grid;
     RegisterTab("Idl", idltab);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    idlfrozen_cb = new QCheckBox(TR("frozen"), grid);
+    grid->addWidget(idlfrozen_cb = new QCheckBox(TR("frozen"), grid));
 
-    bgIdl = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
+    grid->addWidget(bgIdl = new BButtonGroup(2, Qt::Horizontal, QString(), grid));
 
-    oneway_cb = new QCheckBox("final", bgIdl);
+    bgIdl->addWidget(oneway_cb = new QCheckBox("final", bgIdl));
 
     connect(oneway_cb, SIGNAL(toggled(bool)), SLOT(oneway_toggled(bool)));
 
-    lblNameFormIdl = new QLabel(TR("Name form : "), grid);
-    namespecTabIdl = new Q3HBox(grid);
-    edidlnamespec = new LineEdit(htab);
+    grid->addWidget(lblNameFormIdl = new QLabel(TR("Name form : "), grid));
+    grid->addWidget(namespecTabIdl = new HHBox(grid));
+           htab = namespecTabIdl;
+    htab->addWidget(edidlnamespec = new LineEdit(htab));
 
 
-    new QLabel(TR("Definition :"), grid);
-    edidldecl = new MultiLineEdit(grid);
+    grid->addWidget(new QLabel(TR("Definition :"), grid));
+    grid->addWidget(edidldecl = new MultiLineEdit(grid));
     connect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update_decl()));
 
-    Q3VBox * vtab = new Q3VBox(grid);
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
 
-    new QLabel(TR("Result after\nsubstitution : "), vtab);
+    vtab->addWidget(new QLabel(TR("Result after\nsubstitution : "), vtab));
 
-    showidldecl = new MultiLineEdit(grid);
+    grid->addWidget(showidldecl = new MultiLineEdit(grid));
 
-//    editidlbody = new QPushButton("",  grid);
-//    connect(editidlbody, SIGNAL(clicked()), this, SLOT(idl_edit_body()));
+    //    editidlbody = new QPushButton("",  grid));
+    //    connect(editidlbody, SIGNAL(clicked()), this, SLOT(idl_edit_body()));
 
-    htab = new Q3HBox(grid);
+    grid->addWidget(new QLabel("", grid));
+    grid->addWidget(htab = new HHBox(grid));
 
-    pbDefaultDeclarationIdl = new QPushButton(TR("Default declaration"), htab);
-    pbNotGeneratedInIdl = new QPushButton(TR("Not generated in Idl"), htab);
+    htab->addWidget(pbDefaultDeclarationIdl = new QPushButton(TR("Default declaration"), htab));
+    htab->addWidget(pbNotGeneratedInIdl = new QPushButton(TR("Not generated in Idl"), htab));
     connect(pbDefaultDeclarationIdl, SIGNAL(clicked()), this, SLOT(idl_default_def()));
     connect(pbNotGeneratedInIdl, SIGNAL(clicked()), this, SLOT(idl_unmapped_def()));
     addTab(grid, "Idl");
@@ -1050,28 +1084,28 @@ void OperationDialog::FillGeneric(/*OperationData * oper*/)
 
 
     unique = (GenerationSettings::cpp_get_default_defs())
-             ? ((cppTab != 0) ? CppView : DefaultDrawingLanguage)
-                 : UmlView;
+            ? ((cppTab != 0) ? CppView : DefaultDrawingLanguage)
+            : UmlView;
 
     if (GenerationSettings::java_get_default_defs())
         unique = ((unique == UmlView) && (javatab != 0))
-                 ? JavaView
-                 : DefaultDrawingLanguage;
+                ? JavaView
+                : DefaultDrawingLanguage;
 
     if (GenerationSettings::php_get_default_defs())
         unique = ((unique == UmlView) && (phptab != 0))
-                 ? PhpView
-                 : DefaultDrawingLanguage;
+                ? PhpView
+                : DefaultDrawingLanguage;
 
     if (GenerationSettings::python_get_default_defs())
         unique = ((unique == UmlView) && (pythontab != 0))
-                 ? PythonView
-                 : DefaultDrawingLanguage;
+                ? PythonView
+                : DefaultDrawingLanguage;
 
     if (GenerationSettings::idl_get_default_defs())
         unique = ((unique == UmlView) && (idltab != 0))
-                 ? IdlView
-                 : DefaultDrawingLanguage;
+                ? IdlView
+                : DefaultDrawingLanguage;
 
     if (unique == DefaultDrawingLanguage)
         unique = UmlView;
@@ -1120,15 +1154,15 @@ void OperationDialog::FillGeneric(/*OperationData * oper*/)
 
 void OperationDialog::menu_returntype()
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
-    m.insertItem(TR("Choose"), -1);
-    m.insertSeparator();
+    MenuFactory::addItem(m, TR("Choose"), -1);
+    m.addSeparator();
 
-    int index = list.findIndex(edreturn_type->currentText().stripWhiteSpace());
+    int index = list.indexOf(edreturn_type->currentText().trimmed());
 
     if (index != -1)
-        m.insertItem(TR("Select in browser"), 0);
+        MenuFactory::addItem(m, TR("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -1136,50 +1170,52 @@ void OperationDialog::menu_returntype()
         bn = BrowserView::selected_item();
 
         if ((bn != 0) && (bn->get_type() == UmlClass) && !bn->deletedp())
-            m.insertItem(TR("Choose class selected in browser"), 1);
+            MenuFactory::addItem(m, TR("Choose class selected in browser"), 1);
         else
             bn = 0;
 
-        m.insertItem(TR("Create class and choose it"), 2);
+        MenuFactory::addItem(m, TR("Create class and choose it"), 2);
     }
 
     if (isWritable || (index != -1) || (bn != 0)) {
-        switch (m.exec(QCursor::pos())) {
-        case 0:
-            nodes.at(index)->select_in_browser();
-            break;
+        QAction *retAction = m.exec(QCursor::pos());
+        if(retAction)
+            switch (retAction->data().toInt()) {
+            case 0:
+                nodes.at(index)->select_in_browser();
+                break;
 
-        case 2:
-            bn = BrowserClass::add_class(FALSE, view);
+            case 2:
+                bn = BrowserClass::add_class(FALSE, view);
 
-            if (bn == 0)
-                return;
+                if (bn == 0)
+                    return;
 
-            bn->select_in_browser();
+                bn->select_in_browser();
 
-            // no break
-        case 1: {
-            QString s = bn->full_name(TRUE);
+                // no break
+            case 1: {
+                QString s = bn->full_name(TRUE);
 
-            if ((index = list.findIndex(s)) == -1) {
-                // new class, may be created through an other dialog
-                index = 0;
-                QStringList::Iterator iter = list.begin();
-                QStringList::Iterator iter_end = list.end();
+                if ((index = list.indexOf(s)) == -1) {
+                    // new class, may be created through an other dialog
+                    index = 0;
+                    QStringList::Iterator iter = list.begin();
+                    QStringList::Iterator iter_end = list.end();
 
-                while ((iter != iter_end) && (*iter < s)) {
-                    ++iter;
-                    index += 1;
+                    while ((iter != iter_end) && (*iter < s)) {
+                        ++iter;
+                        index += 1;
+                    }
+
+                    nodes.insert((unsigned) index, bn);
+                    list.insert(iter, s);
+                    edreturn_type->addItem(s, index + edreturn_type_offset);
                 }
-
-                nodes.insert((unsigned) index, bn);
-                list.insert(iter, s);
-                edreturn_type->insertItem(s, index + edreturn_type_offset);
             }
-        }
 
-        edreturn_type->setCurrentItem(index + edreturn_type_offset);
-        }
+                edreturn_type->setCurrentIndex(index + edreturn_type_offset);
+            }
     }
 }
 
@@ -1190,7 +1226,7 @@ void OperationDialog::default_description()
 
 void OperationDialog::edit_description()
 {
-    edit(comment->text(), edname->text().stripWhiteSpace() + "_description",
+    edit(comment->text(), edname->text().trimmed() + "_description",
          oper, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
 
@@ -1201,7 +1237,7 @@ void OperationDialog::post_edit_description(OperationDialog * d, QString s)
 
 void OperationDialog::edit_constraint()
 {
-    edit(constraint->text(), edname->text().stripWhiteSpace() + "_constraint",
+    edit(constraint->text(), edname->text().trimmed() + "_constraint",
          oper, TxtEdit, this, (post_edit) post_edit_constraint, edits);
 }
 
@@ -1214,7 +1250,7 @@ void OperationDialog::accept()
 {
 
     if(SaveData())
-        Q3TabDialog::accept();
+        TabDialog::accept();
 }
 
 void OperationDialog::classoper_toggled(bool on)
@@ -1269,8 +1305,9 @@ void OperationDialog::forcegenbody_toggled(bool on)
     }
 }
 
-void OperationDialog::update_all_tabs(QWidget * w)
+void OperationDialog::update_all_tabs(int index)
 {
+    QWidget * w = m_tabWidget->widget(index);
     table->forceUpdateCells();
     etable->forceUpdateCells();
 
@@ -1443,11 +1480,11 @@ void OperationDialog::cpp_default_decl()
     }
     else
     {
-        QString s = oper->default_cpp_decl(edname->text().stripWhiteSpace());
+        QString s = oper->default_cpp_decl(edname->text().trimmed());
 
         GenerationSettings::set_cpp_return_type(the_type(edreturn_type->currentText()
-                                                .stripWhiteSpace(),
-                                                list, nodes),
+                                                         .trimmed(),
+                                                         list, nodes),
                                                 s);
 
         int index;
@@ -1457,11 +1494,11 @@ void OperationDialog::cpp_default_decl()
 
         for (index = 0; index != nparams; index += 1, sep = ", ")
             params += sep + GenerationSettings::cpp(the_type(table->type(index),
-                                                    list, nodes),
+                                                             list, nodes),
                                                     table->dir(index), index)
-                      + "${v" + QString().setNum(index) + "}";
+                    + "${v" + QString().setNum(index) + "}";
 
-        if ((index = s.find("${)}")) != -1)
+        if ((index = s.indexOf("${)}")) != -1)
             s.insert(index, params);
 
         cppTab->ui->edCppDeclProto->setText(s);
@@ -1480,7 +1517,7 @@ void OperationDialog::cpp_unmapped_decl()
 
 void OperationDialog::cpp_decl_from_def()
 {
-    QString dcl = oper->default_cpp_decl(edname->text().stripWhiteSpace());
+    QString dcl = oper->default_cpp_decl(edname->text().trimmed());
     QString def = cppTab->ui->edCppDefProto->text();
     int index1;
     int index2;
@@ -1488,10 +1525,10 @@ void OperationDialog::cpp_decl_from_def()
     int index4;
 
     // copy args
-    if (((index1 = def.find("${(}") + 4) == (-1 + 4)) ||
-        ((index2 = def.find("${)}", index1)) == -1) ||
-        ((index3 = dcl.find("${(}") + 4) == (-1 + 4)) ||
-        ((index4 = dcl.find("${)}", index3)) == -1))
+    if (((index1 = def.indexOf("${(}") + 4) == (-1 + 4)) ||
+            ((index2 = def.indexOf("${)}", index1)) == -1) ||
+            ((index3 = dcl.indexOf("${(}") + 4) == (-1 + 4)) ||
+            ((index4 = dcl.indexOf("${)}", index3)) == -1))
         // wrong specification(s)
         return;
 
@@ -1502,10 +1539,10 @@ void OperationDialog::cpp_decl_from_def()
         dcl.insert(index3, def.mid(index1, index2 - index1));
 
     // copy return type modifications
-    if (((index1 = def.find("${type}")) != -1) &&
-        ((index2 = def.find("${class}", index1 + 7)) != -1) &&
-        ((index3 = dcl.find("${type}")) != -1) &&
-        ((index4 = dcl.find("${name}", index3 + 7)) != -1)) {
+    if (((index1 = def.indexOf("${type}")) != -1) &&
+            ((index2 = def.indexOf("${class}", index1 + 7)) != -1) &&
+            ((index3 = dcl.indexOf("${type}")) != -1) &&
+            ((index4 = dcl.indexOf("${name}", index3 + 7)) != -1)) {
         // valid specification
         while ((index1 != 0) && (def.at(index1 - 1) != QChar('}')))
             index1 -= 1;
@@ -1518,22 +1555,22 @@ void OperationDialog::cpp_decl_from_def()
     }
 
     // manage const
-    if ((def.find("${const}") == -1) && // const removed
-        ((index1 = dcl.find("${const}")) != -1))
+    if ((def.indexOf("${const}") == -1) && // const removed
+            ((index1 = dcl.indexOf("${const}")) != -1))
         // remove const
         dcl.remove(index1, 8);
 
     // manage throw
-    if ((def.find("${throw}") == -1) && // throw removed
-        ((index1 = dcl.find("${throw}")) != -1))
+    if ((def.indexOf("${throw}") == -1) && // throw removed
+            ((index1 = dcl.indexOf("${throw}")) != -1))
         // remove throw
         dcl.remove(index1, 8);
 
     //add default param value
     index1 = 0;
 
-    while (((index2 = dcl.find("${p", index1)) != -1) &&
-           ((index3 = dcl.find('}', index2 + 3)) != -1)) {
+    while (((index2 = dcl.indexOf("${p", index1)) != -1) &&
+           ((index3 = dcl.indexOf('}', index2 + 3)) != -1)) {
         dcl.insert(index3 + 1, "${v" + dcl.mid(index2 + 3, index3 - index2 - 2));
         index1 = index3 + index3 - index2 + 2;
     }
@@ -1548,8 +1585,9 @@ void OperationDialog::cpp_edit_param_decl()
     QString form = cppTab->ui->edCppDeclProto->text();
     int index;
 
-    if (((index = form.find("${(}")) != 0) &&
-        (form.find("${)}", index + 4) != 0)) {
+    if (((index = form.indexOf("${(}")) != 0) &&
+            (form.indexOf("${)}", index + 4) != 0))
+    {
         CppParamsDialog d(this, table, cppTab->ui->edCppDeclProto, TRUE);
 
         if (d.exec() == QDialog::Accepted)
@@ -1590,12 +1628,12 @@ QString OperationDialog::compute_name(LineEdit * spec)
 {
     if (spec->isVisible())
     {
-        QString s = spec->text().stripWhiteSpace();
+        QString s = spec->text().trimmed();
         int index;
 
-        if ((index = s.find("${name}")) != -1)
+        if ((index = s.indexOf("${name}")) != -1)
             s.replace(index, 7, ((BrowserOperation *) oper->browser_node)->get_of_name());
-        else if ((index = s.find("${Name}")) != -1)
+        else if ((index = s.indexOf("${Name}")) != -1)
             s.replace(index, 7,
                       capitalize(((BrowserOperation *) oper->browser_node)->get_of_name()));
 
@@ -1608,7 +1646,7 @@ QString OperationDialog::compute_name(LineEdit * spec)
 void OperationDialog::manage_init(unsigned rank, QString & s)
 {
     if (rank < table->nparams()) {
-        QString v = table->value(rank).stripWhiteSpace();
+        QString v = table->value(rank).trimmed();
 
         if (! v.isEmpty())
             s += " = " + v;
@@ -1646,7 +1684,7 @@ bool CompareAgainstTag(QString & currentTag, QString tagToCompare, const char * 
     currentTag = tagToCompare;
     tagToCompare = "${" + tagToCompare + "}";
 
-    if (!strncmp(p, tagToCompare, tagToCompare.length()))
+    if (!strncmp(p, tagToCompare.toLatin1().constData(), tagToCompare.length()))
         return true;
 
     return false;
@@ -1660,7 +1698,8 @@ void OperationDialog::cpp_update_decl()
     //	const char * p = edcppdecl->text();
     // because the QString is immediatly destroyed !
     QString def = cppTab->ui->edCppDeclProto->text();
-    const char * p = def;
+    QByteArray defArray = def.toLatin1();
+    const char * p = defArray.constData();
     const char * pp = 0;
     QString indent = "";
     QString s;
@@ -1724,7 +1763,7 @@ void OperationDialog::cpp_update_decl()
         }
         else if (!strncmp(p, "${type}", 7)) {
             p += 7;
-            s += get_cpp_name(the_type(edreturn_type->currentText().stripWhiteSpace(),
+            s += get_cpp_name(the_type(edreturn_type->currentText().trimmed(),
                                        list, nodes));
         }
         else if (!strncmp(p, "${name}", 7)) {
@@ -1885,7 +1924,7 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
             break;
         else if (sscanf(p, "${t%u}", &rank) == 1) {
             if (rank < d->nparams)
-                s += GenerationSettings::cpp_type(d->params[rank].get_type().get_type(mode));
+                s += GenerationSettings::cpp_type(d->params[rank]->get_type().get_type(mode));
             else {
                 s += "${t";
                 s += QString::number(rank);
@@ -1897,7 +1936,7 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
         else if (sscanf(p, "${p%u}", &rank) == 1) {
             if (withname) {
                 if (rank < d->nparams)
-                    s += d->params[rank].get_name();
+                    s += d->params[rank]->get_name();
                 else {
                     s += "${p";
                     s += QString::number(rank);
@@ -1909,7 +1948,7 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${v%u}", &rank) == 1) {
             if (rank < d->nparams) {
-                WrapperStr v = d->params[rank].get_default_value();
+                WrapperStr v = d->params[rank]->get_default_value();
 
                 if (!v.isEmpty())
                     s += " = " + v;
@@ -1998,11 +2037,11 @@ void OperationDialog::cpp_default_def()
         cppTab->ui->edCppDefProto->setText(def);
     }
     else {
-        QString s = oper->default_cpp_def(edname->text().stripWhiteSpace());
+        QString s = oper->default_cpp_def(edname->text().trimmed());
 
         GenerationSettings::set_cpp_return_type(the_type(edreturn_type->currentText()
-                                                .stripWhiteSpace(),
-                                                list, nodes),
+                                                         .trimmed(),
+                                                         list, nodes),
                                                 s);
 
         QString params;
@@ -2012,10 +2051,10 @@ void OperationDialog::cpp_default_def()
 
         for (index = 0; index != nparams; index += 1, sep = ", ")
             params += sep + GenerationSettings::cpp(the_type(table->type(index),
-                                                    list, nodes),
+                                                             list, nodes),
                                                     table->dir(index), index);
 
-        if ((index = s.find("${)}")) != -1)
+        if ((index = s.indexOf("${)}")) != -1)
             s.insert(index, params);
 
         cppTab->ui->edCppDefProto->setText(s);
@@ -2032,7 +2071,7 @@ void OperationDialog::cpp_unmapped_def()
 struct UserTag
 {
     UserTag(QString _tag, QString _leftContext,QString _rightContext):
-         leftContext(_leftContext),rightContext(_rightContext),tag(_tag)
+        leftContext(_leftContext),rightContext(_rightContext),tag(_tag)
     {}
     QString leftContext;
     QString rightContext;
@@ -2059,21 +2098,21 @@ void OperationDialog::cpp_def_from_decl()
 
 
     // manage abstract
-    if ((dcl.find("${abstract}") == -1) || // abstract removed
-        !abstract_cb->isChecked()) {
+    if (/*(dcl.indexOf("${abstract}") == -1) || !abstract_cb->isChecked()*/true)
+    {
         // probably not abstract
         int index1;
         int index2;
         int index3;
         int index4;
 
-        def = oper->default_cpp_def(edname->text().stripWhiteSpace());
+        def = oper->default_cpp_def(edname->text().trimmed());
 
         // copy args
-        if (((index1 = dcl.find("${(}") + 4) == (-1 + 4)) ||
-            ((index2 = dcl.find("${)}", index1)) == -1) ||
-            ((index3 = def.find("${(}") + 4) == (-1 + 4)) ||
-            ((index4 = def.find("${)}", index3)) == -1))
+        if (((index1 = dcl.indexOf("${(}") + 4) == (-1 + 4)) ||
+                ((index2 = dcl.indexOf("${)}", index1)) == -1) ||
+                ((index3 = def.indexOf("${(}") + 4) == (-1 + 4)) ||
+                ((index4 = def.indexOf("${)}", index3)) == -1))
             // wrong specification(s)
             return;
 
@@ -2084,10 +2123,10 @@ void OperationDialog::cpp_def_from_decl()
             def.insert(index3, dcl.mid(index1, index2 - index1));
 
         // copy return type modifications
-        if (((index1 = dcl.find("${type}")) != -1) &&
-            ((index2 = dcl.find("${name}", index1 + 7)) != -1) &&
-            ((index3 = def.find("${type}")) != -1) &&
-            ((index4 = def.find("${class}", index3 + 7)) != -1)) {
+        if (((index1 = dcl.indexOf("${type}")) != -1) &&
+                ((index2 = dcl.indexOf("${name}", index1 + 7)) != -1) &&
+                ((index3 = def.indexOf("${type}")) != -1) &&
+                ((index4 = def.indexOf("${class}", index3 + 7)) != -1)) {
             // valid specifications
             while ((index1 != 0) && (dcl.at(index1 - 1) != QChar('}')))
                 index1 -= 1;
@@ -2100,31 +2139,35 @@ void OperationDialog::cpp_def_from_decl()
         }
 
         // manage const
-        if ((dcl.find("${const}") == -1) && // const removed
-            ((index1 = def.find("${const}")) != -1))
+        if ((dcl.indexOf("${const}") == -1) && // const removed
+                ((index1 = def.indexOf("${const}")) != -1))
             // remove const
             def.remove(index1, 8);
 
         // manage throw
-        if ((dcl.find("${throw}") == -1) && // throws removed
-            ((index1 = def.find("${throw}")) != -1))
+        if ((dcl.indexOf("${throw}") == -1) && // throws removed
+                ((index1 = def.indexOf("${throw}")) != -1))
             // remove throw
             def.remove(index1, 8);
 
         // remove inits
-        index1 = def.find("${(}");
-        index4 = def.find("${)}", index1 + 4);
+        index1 = def.indexOf("${(}");
+        index4 = def.indexOf("${)}", index1 + 4);
 
-        while (((index2 = def.find("${v", index1)) != -1) &&
+        while (((index2 = def.indexOf("${v", index1)) != -1) &&
                (index2 < index4) &&
-               ((index3 = def.find('}', index2 + 3)) != -1)) {
+               ((index3 = def.indexOf('}', index2 + 3)) != -1)) {
             def.remove(index2, index3 - index2 + 1);
             index1 = index2;
         }
     }
+
     QList<UserTag> failedTags;
     for(auto tag : tags)
     {
+        //we remove all instances of the tag that might have been left
+        def = def.replace(QString("@{") + tag.tag + QString("}"), "");
+
         //first we try to find left context in the new definition
         QRegExp rx(QRegExp::escape(tag.leftContext));
         int index = rx.indexIn(def);
@@ -2150,11 +2193,14 @@ void OperationDialog::cpp_def_from_decl()
             tagString.append(tag.tag + tr(","));
         if(tagString.length() > 0)
             tagString.chop(1);
-        QMessageBox::critical(0, tr("Warning!"), tr("Could not find correct place for these tags: " + tagString), QMessageBox::Ok);
+        QMessageBox::critical(0, tr("Warning!"), tr("Could not find correct place for these tags: ").arg(tagString), QMessageBox::Ok);
     }
+
 
     // update def
     cppTab->ui->edCppDefProto->setText(def);
+    if(oper->is_abstract)
+        return;
     cpp_update_def();
 }
 
@@ -2163,8 +2209,8 @@ void OperationDialog::cpp_edit_param_def()
     QString form = cppTab->ui->edCppDefProto->text();
     int index;
 
-    if (((index = form.find("${(}")) != 0) &&
-        (form.find("${)}", index + 4) != 0)) {
+    if (((index = form.indexOf("${(}")) != 0) &&
+            (form.indexOf("${)}", index + 4) != 0)) {
         CppParamsDialog d(this, table, cppTab->ui->edCppDefProto, FALSE);
 
         d.raise();
@@ -2256,21 +2302,22 @@ void OperationDialog::cpp_update_def()
     QString def = cppTab->ui->edCppDefProto->text();
 
     if (cppTab->ui->cbCppDefaulted->isChecked() ||
-        cppTab->ui->cbCppDeleted->isChecked()) {
+            cppTab->ui->cbCppDeleted->isChecked()) {
         cppTab->ui->edCppDefActual->setText("");
         forcegenbody_toggled(forcegenbody_cb->isChecked());	// update indent*body_cb
         return;
     }
 
     bool template_oper = cppTab->ui->edCppDeclProto->text().isEmpty()
-                         && oper->is_template_operation(def);
+            && oper->is_template_operation(def);
     QString s;
 
     if (!abstract_cb->isChecked()) {
         // do NOT write
         //	const char * p = edcppdef->text()
         // because the QString is immediatly destroyed !
-        const char * p = def;
+        QByteArray defArray = def.toLatin1();
+        const char * p = defArray.constData();
         const char * pp = 0;
         QString indent = "";
         unsigned rank;
@@ -2279,8 +2326,8 @@ void OperationDialog::cpp_update_def()
             indent += *p++;
 
         bool re_template = !templates.isEmpty() &&
-                           insert_template((template_oper) ? templates_tmplop : templates,
-                                           p, s, indent);
+                insert_template((template_oper) ? templates_tmplop : templates,
+                                p, s, indent);
 
         if (*p != '#')
             s += indent;
@@ -2308,7 +2355,7 @@ void OperationDialog::cpp_update_def()
             if (!strncmp(p, "${comment}", 10)) {
                 if (!manage_comment(comment->text(), p, pp,
                                     GenerationSettings::cpp_javadoc_style())
-                    && re_template)
+                        && re_template)
                     s += templates;
             }
             else if (!strncmp(p, "${description}", 14)) {
@@ -2323,7 +2370,7 @@ void OperationDialog::cpp_update_def()
             }
             else if (!strncmp(p, "${type}", 7)) {
                 p += 7;
-                s += get_cpp_name(the_type(edreturn_type->currentText().stripWhiteSpace(),
+                s += get_cpp_name(the_type(edreturn_type->currentText().trimmed(),
                                            list, nodes));
             }
             else if (!strncmp(p, "${class}", 8)) {
@@ -2398,12 +2445,14 @@ void OperationDialog::cpp_update_def()
                     s += indent;
             }
             else if (*p == '@')
+            {
                 manage_alias(oper->browser_node, p, s, kvtable);
+            }
             else
                 s += *p++;
         }
 
-        cppTab->ui->editcppbody->setEnabled(def.find("${body}") != -1);
+        cppTab->ui->editcppbody->setEnabled(def.indexOf("${body}") != -1);
     }
     else
         cppTab->ui->editcppbody->setEnabled(FALSE);
@@ -2417,16 +2466,16 @@ static QString Marker = " ---- header including this line will be automatically 
 
 static QString add_profile(QString b, const char * comment = "//")
 {
-    return b.left(b.find("${body}")) + comment + Marker;
+    return b.left(b.indexOf("${body}")) + comment + Marker;
 }
 
 static QString remove_profile(QString b)
 {
-    int index = b.find(Marker);
+    int index = b.indexOf(Marker);
 
     return (index == -1)
-           ? b
-           : b.mid(index + Marker.length());
+            ? b
+            : b.mid(index + Marker.length());
 }
 
 void OperationDialog::cpp_edit_body()
@@ -2438,7 +2487,7 @@ void OperationDialog::cpp_edit_body()
     else
         b = cppbody;
 
-    edit(b, edname->text().stripWhiteSpace() + "_body",
+    edit(b, edname->text().trimmed() + "_body",
          oper, CppEdit, this,
          (preserve_bodies() && !forcegenbody_cb->isChecked())
          ? (post_edit) 0
@@ -2523,7 +2572,7 @@ void OperationDialog::java_default_def()
         edjavadef->setText(def);
     }
     else {
-        QString s = oper->default_java_def(edname->text().stripWhiteSpace());
+        QString s = oper->default_java_def(edname->text().trimmed());
         QString params;
         int index;
         int nparams = (int) table->nparams();
@@ -2536,7 +2585,7 @@ void OperationDialog::java_default_def()
             params += p;
         }
 
-        if ((index = s.find("${)}")) != -1)
+        if ((index = s.indexOf("${)}")) != -1)
             s.insert(index, params);
 
         edjavadef->setText(s);
@@ -2579,7 +2628,8 @@ void OperationDialog::java_update_def()
     QString ste = GenerationSettings::java_class_stereotype(cl->get_stereotype());
     bool interf = (ste == "interface") || (ste == "@interface");
     bool nobody = (abstract_cb->isChecked() || interf);
-    const char * p = def;
+    QByteArray defArray = def.toLatin1();
+    const char * p = defArray.constData();
     const char * pp = 0;
     const char * afterparam = 0;
     QString indent = "";
@@ -2643,7 +2693,7 @@ void OperationDialog::java_update_def()
         }
         else if (!strncmp(p, "${type}", 7)) {
             p += 7;
-            s += get_java_name(the_type(edreturn_type->currentText().stripWhiteSpace(),
+            s += get_java_name(the_type(edreturn_type->currentText().trimmed(),
                                         list, nodes));
         }
         else if (!strncmp(p, "${name}", 7)) {
@@ -2701,7 +2751,7 @@ void OperationDialog::java_update_def()
         else if ((*p == '{') && nobody) {
             if (afterparam != 0) {
                 if ((ste == "@interface") &&
-                    (strstr(afterparam, "default") != 0))
+                        (strstr(afterparam, "default") != 0))
                     afterparam = 0;
                 else {
                     s += ';';
@@ -2719,7 +2769,7 @@ void OperationDialog::java_update_def()
                 s += "${@}";
             else if (! javaannotation.isEmpty()) {
                 pp = p;
-                p = javaannotation;
+                p = javaannotation.toLatin1().constData();
             }
         }
         else if (*p == '@')
@@ -2728,8 +2778,8 @@ void OperationDialog::java_update_def()
             s += *p++;
     }
 
-    editjavabody->setEnabled(!nobody && (def.find("${body}") != -1));
-    editjavaannotation->setEnabled(def.find("${@}") != -1);
+    editjavabody->setEnabled(!nobody && (def.indexOf("${body}") != -1));
+    editjavaannotation->setEnabled(def.indexOf("${@}") != -1);
 
     showjavadef->setText(s);
 
@@ -2790,7 +2840,7 @@ QString OperationDialog::java_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${t%u}", &rank) == 1) {
             if (rank < d->nparams)
-                s += GenerationSettings::java_type(d->params[rank].get_type().get_type(mode));
+                s += GenerationSettings::java_type(d->params[rank]->get_type().get_type(mode));
             else {
                 s += "${t";
                 s += QString::number(rank);
@@ -2802,7 +2852,7 @@ QString OperationDialog::java_decl(const BrowserOperation * op, bool withname,
         else if (sscanf(p, "${p%u}", &rank) == 1) {
             if (withname) {
                 if (rank < d->nparams)
-                    s += d->params[rank].get_name();
+                    s += d->params[rank]->get_name();
                 else {
                     s += "${p";
                     s += QString::number(rank);
@@ -2852,7 +2902,7 @@ void OperationDialog::java_edit_body()
     else
         b = javabody;
 
-    edit(b, edname->text().stripWhiteSpace() + "_body",
+    edit(b, edname->text().trimmed() + "_body",
          oper, JavaEdit, this,
          (preserve_bodies() && !forcegenbody_cb->isChecked())
          ? (post_edit) 0
@@ -2924,7 +2974,7 @@ void OperationDialog::php_default_def()
     }
     else {
         QString ste = GenerationSettings::php_class_stereotype(cl->get_stereotype());
-        QString s = oper->default_php_def(edname->text().stripWhiteSpace(),
+        QString s = oper->default_php_def(edname->text().trimmed(),
                                           abstract_cb->isChecked() || (ste == "interface"));
         QString params;
         int index;
@@ -2938,7 +2988,7 @@ void OperationDialog::php_default_def()
             params += p;
         }
 
-        if ((index = s.find("${)}")) != -1)
+        if ((index = s.indexOf("${)}")) != -1)
             s.insert(index, params);
 
         edphpdef->setText(s);
@@ -2962,7 +3012,8 @@ void OperationDialog::php_update_def()
     QString ste = GenerationSettings::php_class_stereotype(cl->get_stereotype());
     bool interf = (ste == "interface");
     bool nobody = (abstract_cb->isChecked() || interf);
-    const char * p = def;
+    QByteArray defArray = def.toLatin1();
+    const char * p = defArray.constData();
     const char * pp = 0;
     QString indent = "";
     QString s;
@@ -3068,14 +3119,14 @@ void OperationDialog::php_update_def()
         else if (!strncmp(p, "${type}", 7)) {
             // for comment
             p += 7;
-            s += get_php_name(the_type(edreturn_type->currentText().stripWhiteSpace(),
+            s += get_php_name(the_type(edreturn_type->currentText().trimmed(),
                                        list, nodes));
         }
         else
             s += *p++;
     }
 
-    editphpbody->setEnabled(!nobody && (def.find("${body}") != -1));
+    editphpbody->setEnabled(!nobody && (def.indexOf("${body}") != -1));
 
     showphpdef->setText(s);
 
@@ -3133,7 +3184,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${t%u}", &rank) == 1) {
             if (rank < d->nparams)
-                s += d->params[rank].get_type().get_type(mode);
+                s += d->params[rank]->get_type().get_type(mode);
             else {
                 s += "${t";
                 s += QString::number(rank);
@@ -3145,7 +3196,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
         else if (sscanf(p, "${p%u}", &rank) == 1) {
             if (withname) {
                 if (rank < d->nparams)
-                    s += WrapperStr("$") + d->params[rank].get_name();
+                    s += WrapperStr("$") + d->params[rank]->get_name();
                 else {
                     s += "${p";
                     s += QString::number(rank);
@@ -3157,7 +3208,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${v%u}", &rank) == 1) {
             if (rank < d->nparams) {
-                WrapperStr v = d->params[rank].get_default_value();
+                WrapperStr v = d->params[rank]->get_default_value();
 
                 if (!v.isEmpty())
                     s += " = " + v;
@@ -3202,7 +3253,7 @@ void OperationDialog::php_edit_body()
     else
         b = phpbody;
 
-    edit(b, edname->text().stripWhiteSpace() + "_body",
+    edit(b, edname->text().trimmed() + "_body",
          oper, PhpEdit, this,
          (preserve_bodies() && !forcegenbody_cb->isChecked())
          ? (post_edit) 0
@@ -3217,18 +3268,21 @@ void OperationDialog::post_php_edit_body(OperationDialog * d, QString s)
 
 bool OperationDialog::SaveData()
 {
+
     BrowserClass* containingClass = static_cast<BrowserClass*>(oper->browser_node->get_container(UmlClass));
     QList<BrowserNode *>  passedNodes;
-    QList<OperationData*> inheritanceSiblings;
     bool goBack = true;
+    QList<OperationData*> inheritanceSiblings;
     inheritanceSiblings = containingClass->CollectSameThroughInheritance(oper, passedNodes, goBack);
     bool propagateThroughInheritance = false;
     OperationData* operCopy = new OperationData(oper, (BrowserOperation*)oper->get_browser_node());
 
     SaveData(operCopy);
-    bool equals = *oper == *operCopy;
-    bool newst = operCopy->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+    bool equals = *oper == *operCopy && kvtable->EqualData(static_cast<HaveKeyValueData*>(oper->browser_node));
+    bool newst = operCopy->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
     delete operCopy;
+    if(equals)
+        return true;
 
     if(!inheritanceSiblings.isEmpty() && !equals)
     {
@@ -3264,9 +3318,10 @@ bool OperationDialog::SaveData()
             inheritanceSiblings = containingClass->CollectSameThroughInheritance(oper,passedNodes, goBack);
         }
     }
+    kvtable->updateNodeFromThis(oper->get_browser_node());
     SaveData(oper);
     // user
-    kvtable->updateNodeFromThis(oper->get_browser_node());
+
 
     ProfiledStereotypes::modified(oper->get_browser_node(), newst);
 
@@ -3297,12 +3352,12 @@ bool OperationDialog::SaveData(OperationData *oper)
         return true;
 
     BrowserNode * bn = oper->browser_node;
-    QString s = edname->text().stripWhiteSpace();
+    QString s = edname->text().trimmed();
 
     if ((s != oper->name()) &&
-        ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlOperation,
-                bn->allow_spaces(),
-                bn->allow_empty()))
+            ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlOperation,
+                                                             bn->allow_spaces(),
+                                                             bn->allow_empty()))
         msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
     else
     {
@@ -3311,10 +3366,10 @@ bool OperationDialog::SaveData(OperationData *oper)
         {
             AType t;
 
-            s = edreturn_type->currentText().stripWhiteSpace();
+            s = edreturn_type->currentText().trimmed();
 
             if (! s.isEmpty()) {
-                int index = list.findIndex(edreturn_type->currentText());
+                int index = list.indexOf(edreturn_type->currentText());
 
                 if (index >= 0)
                     t.type = (BrowserClass *) nodes.at(index);
@@ -3324,7 +3379,7 @@ bool OperationDialog::SaveData(OperationData *oper)
 
             oper->set_return_type(t);
 
-            bool newst = oper->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+            bool newst = oper->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
             Q_UNUSED(newst);
         }
 
@@ -3341,20 +3396,22 @@ bool OperationDialog::SaveData(OperationData *oper)
         bn->set_comment(comment->text());
         UmlWindow::update_comment_if_needed(bn);
 
-        oper->constraint = constraint->stripWhiteSpaceText();
+        oper->constraint = constraint->trimmedText();
 
         // C++
 
-        if (cpp_undef) {
+        if (cpp_undef)
+        {
             oper->cpp_decl = QString();
-            oper->cpp_def.assign(QString(), TRUE);
+            oper->cpp_def.assign(QString().toLatin1().constData(), TRUE);
 
             if (!oldcppbody.isEmpty())
                 oper->new_body(QString(), 'c');
         }
         else {
-            if (oper->is_get_or_set) {
-                oper->cpp_name_spec = cppTab->ui->leCppNamespec->text().stripWhiteSpace();
+            if (oper->is_get_or_set)
+            {
+                oper->cpp_name_spec = cppTab->ui->leCppNamespec->text().trimmed();
                 oper->cpp_body.length = 0;
                 oper->cpp_get_set_frozen = cppTab->ui->cbCppFrozen->isChecked();
             }
@@ -3362,14 +3419,15 @@ bool OperationDialog::SaveData(OperationData *oper)
                 oper->cpp_indent_body = cppTab->ui->cbIndentCppBody->isChecked();
 
             if (!abstract_cb->isChecked() &&
-                (cppTab->ui->edCppDefProto->text().find("${body}") != -1)) {
+                    (cppTab->ui->edCppDefProto->text().indexOf("${body}") != -1))
+            {
                 if (cppbody != oldcppbody)
                     oper->new_body(cppbody, 'c');
             }
             else if (!oldcppbody.isEmpty())
                 oper->new_body(QString(), 'c');
 
-            oper->cpp_decl = cppTab->ui->edCppDeclProto->text();
+
             oper->cpp_visibility = cpp_visibility.value();
 
             oper->cpp_const = cbCppConst->isChecked();
@@ -3381,22 +3439,23 @@ bool OperationDialog::SaveData(OperationData *oper)
             oper->cpp_delete = cppTab->ui->cbCppDeleted->isChecked();
             oper->cpp_override = cppTab->ui->cbCppOverride->isChecked();
             oper->cpp_final = cppTab->ui->cbCppFinal->isChecked();
-            oper->cpp_def.assign(cppTab->ui->edCppDefProto->text(),
+            oper->cpp_decl = cppTab->ui->edCppDeclProto->text();
+            oper->cpp_def.assign(cppTab->ui->edCppDefProto->text().toLatin1().constData(),
                                  abstract_cb->isChecked() ||
-                                 (cppTab->ui->edCppDefProto->text().find("${body}") != -1));
+                                 (cppTab->ui->edCppDefProto->text().indexOf("${body}") != -1));
         }
 
         // java
 
         if (java_undef) {
-            oper->java_def.assign(QString(), TRUE);
+            oper->java_def.assign("", TRUE);
 
             if (!oldjavabody.isEmpty())
                 oper->new_body(QString(), 'j');
         }
         else {
             if (oper->is_get_or_set) {
-                oper->java_name_spec = edjavanamespec->text().stripWhiteSpace();
+                oper->java_name_spec = edjavanamespec->text().trimmed();
                 oper->java_get_set_frozen = javafrozen_cb->isChecked();
             }
             else
@@ -3406,7 +3465,7 @@ bool OperationDialog::SaveData(OperationData *oper)
             bool interf = (ste == "interface") || (ste == "@interface");
 
             if (!abstract_cb->isChecked() && !interf &&
-                (edjavadef->text().find("${body}") != -1)) {
+                    (edjavadef->text().indexOf("${body}") != -1)) {
                 if (javabody != oldjavabody)
                     oper->new_body(javabody, 'j');
             }
@@ -3415,9 +3474,9 @@ bool OperationDialog::SaveData(OperationData *oper)
 
             oper->java_final = javafinal_cb->isChecked();
             oper->java_synchronized = synchronized_cb->isChecked();
-            oper->java_def.assign(edjavadef->text(),
+            oper->java_def.assign(edjavadef->text().toLatin1().constData(),
                                   abstract_cb->isChecked() || interf ||
-                                  (edjavadef->text().find("${body}") != -1));
+                                  (edjavadef->text().indexOf("${body}") != -1));
 
             oper->java_annotation = javaannotation;
         }
@@ -3425,14 +3484,14 @@ bool OperationDialog::SaveData(OperationData *oper)
         // php
 
         if (php_undef) {
-            oper->php_def.assign(QString(), TRUE);
+            oper->php_def.assign("", TRUE);
 
             if (!oldphpbody.isEmpty())
                 oper->new_body(QString(), 'p');
         }
         else {
             if (oper->is_get_or_set) {
-                oper->php_name_spec = edphpnamespec->text().stripWhiteSpace();
+                oper->php_name_spec = edphpnamespec->text().trimmed();
                 oper->php_get_set_frozen = phpfrozen_cb->isChecked();
             }
             else
@@ -3442,7 +3501,7 @@ bool OperationDialog::SaveData(OperationData *oper)
             bool interf = (ste == "interface");
 
             if (!abstract_cb->isChecked() && !interf &&
-                (edphpdef->text().find("${body}") != -1)) {
+                    (edphpdef->text().indexOf("${body}") != -1)) {
                 if (phpbody != oldphpbody)
                     oper->new_body(phpbody, 'p');
             }
@@ -3450,38 +3509,38 @@ bool OperationDialog::SaveData(OperationData *oper)
                 oper->new_body(QString(), 'p');
 
             oper->php_final = phpfinal_cb->isChecked();
-            oper->php_def.assign(edphpdef->text(),
+            oper->php_def.assign(edphpdef->text().toLatin1().constData(),
                                  abstract_cb->isChecked() || interf ||
-                                 (edphpdef->text().find("${body}") != -1));
+                                 (edphpdef->text().indexOf("${body}") != -1));
         }
 
         // python
 
         if (python_undef) {
-            oper->python_def.assign(QString(), TRUE);
+            oper->python_def.assign("", TRUE);
 
             if (!oldpythonbody.isEmpty())
                 oper->new_body(QString(), 'y');
         }
         else {
             if (oper->is_get_or_set) {
-                oper->python_name_spec = edpythonnamespec->text().stripWhiteSpace();
+                oper->python_name_spec = edpythonnamespec->text().trimmed();
                 oper->python_get_set_frozen = pythonfrozen_cb->isChecked();
             }
             else
                 oper->python_indent_body = indentpythonbody_cb->isChecked();
 
             // rmq : abstractmethod have body !
-            if (edpythondef->text().find("${body}") != -1) {
+            if (edpythondef->text().indexOf("${body}") != -1) {
                 if (pythonbody != oldpythonbody)
                     oper->new_body(pythonbody, 'y');
             }
             else if (!oldpythonbody.isEmpty())
                 oper->new_body(QString(), 'y');
 
-            oper->python_def.assign(edpythondef->text(),
+            oper->python_def.assign(edpythondef->text().toLatin1().constData(),
                                     // rmq : abstractmethod have body !
-                                    (edpythondef->text().find("${body}") != -1));
+                                    (edpythondef->text().indexOf("${body}") != -1));
 
             oper->python_decorator = pythondecorator;
         }
@@ -3492,7 +3551,7 @@ bool OperationDialog::SaveData(OperationData *oper)
             oper->idl_decl = QString();
         else {
             if (oper->is_get_or_set) {
-                oper->idl_name_spec = edidlnamespec->text().stripWhiteSpace();
+                oper->idl_name_spec = edidlnamespec->text().trimmed();
                 oper->idl_get_set_frozen = idlfrozen_cb->isChecked();
             }
 
@@ -3510,8 +3569,8 @@ void OperationDialog::php_edit_param()
     QString form = edphpdef->text();
     int index;
 
-    if (((index = form.find("${(}")) != 0) &&
-        (form.find("${)}", index + 4) != 0)) {
+    if (((index = form.indexOf("${(}")) != 0) &&
+            (form.indexOf("${)}", index + 4) != 0)) {
         PhpParamsDialog d(this, table, edphpdef);
 
         if (d.exec() == QDialog::Accepted)
@@ -3581,7 +3640,7 @@ void OperationDialog::python_default_def()
     }
     else {
         // rmq : abstractmethod have body !
-        QString s = oper->default_python_def(edname->text().stripWhiteSpace());
+        QString s = oper->default_python_def(edname->text().trimmed());
         QString params;
         int index;
         int nparams = (int) table->nparams();
@@ -3604,12 +3663,12 @@ void OperationDialog::python_default_def()
             }
         }
 
-        int index2;
+        int index2 = -1;
 
-        if (((index = s.find("${(}") + 4) != (-1 + 4)) &&
-            ((index2 = s.find("${)}", index)) != -1)) {
-            int index3 = s.find("${type}", index2 + 4);
-            int index4 = s.find(":", index2 + 4);
+        if (((index = s.indexOf("${(}") + 4) != (-1 + 4)) &&
+                ((index2 = s.indexOf("${)}", index)) != -1)) {
+            int index3 = s.indexOf("${type}", index2 + 4);
+            int index4 = s.indexOf(":", index2 + 4);
 
             if (GenerationSettings::python_default_operation3()) {
                 if ((index3 == -1) || (index3 > index4))
@@ -3643,7 +3702,7 @@ void OperationDialog::manage_decorators(QString & s, QString indent,
         int index = 0;
         int index2;
 
-        while ((index2 = pythondecorator.find("\n", index)) != -1) {
+        while ((index2 = pythondecorator.indexOf("\n", index)) != -1) {
             if (indent_needed)
                 s += indent;
             else
@@ -3670,7 +3729,8 @@ void OperationDialog::python_update_def()
     //	const char * p = edpythondef->text();
     // because the QString is immediatly destroyed !
     QString def = edpythondef->text();
-    const char * p = def;
+    QByteArray defArray = def.toLatin1();
+    const char * p = defArray.constData();
 
     if (p == 0)
         return;
@@ -3682,7 +3742,7 @@ void OperationDialog::python_update_def()
     QString indent;
     QString saved_indent = indent;
     QString indent_step =
-        GenerationSettings::python_get_indent_step();
+            GenerationSettings::python_get_indent_step();
     QString s;
     unsigned rank;
 
@@ -3779,7 +3839,7 @@ void OperationDialog::python_update_def()
         else if (*p == '@')
             manage_alias(oper->browser_node, p, s, kvtable);
         else if (!strncmp(p, "${body}", 7)) {
-            if (edname->text().stripWhiteSpace() == "__init__")
+            if (edname->text().trimmed() == "__init__")
                 s += ClassDialog::python_instance_att_rel(cl->get_browser_node());
 
             s += "${body}";
@@ -3789,7 +3849,7 @@ void OperationDialog::python_update_def()
         else if (!strncmp(p, "${type}", 7)) {
             p += 7;
 
-            QString t = get_python_name(the_type(edreturn_type->currentText().stripWhiteSpace(),
+            QString t = get_python_name(the_type(edreturn_type->currentText().trimmed(),
                                                  list, nodes));
 
             if (!t.isEmpty())
@@ -3805,7 +3865,7 @@ void OperationDialog::python_update_def()
 
             // get/set with multiplicity > 1
             s += ((BrowserOperation *) oper->browser_node)
-                 ->get_of_association().get_type();
+                    ->get_of_association().get_type();
         }
         else {
             if (indent_needed) {
@@ -3832,8 +3892,8 @@ void OperationDialog::python_update_def()
         }
     }
 
-    editpythonbody->setEnabled(!nobody && (def.find("${body}") != -1));
-    editpythondecorator->setEnabled(def.find("${@}") != -1);
+    editpythonbody->setEnabled(!nobody && (def.indexOf("${body}") != -1));
+    editpythondecorator->setEnabled(def.indexOf("${@}") != -1);
 
     showpythondef->setText(s);
 
@@ -3895,7 +3955,7 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${t%u}", &rank) == 1) {
             if (rank < d->nparams) {
-                QString t = d->params[rank].get_type().get_type(mode);
+                QString t = d->params[rank]->get_type().get_type(mode);
 
                 if (!t.isEmpty()) {
                     if (in_params)
@@ -3915,7 +3975,7 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
         else if (sscanf(p, "${p%u}", &rank) == 1) {
             if (withname) {
                 if (rank < d->nparams)
-                    s += d->params[rank].get_name();
+                    s += d->params[rank]->get_name();
                 else {
                     s += "${p";
                     s += QString::number(rank);
@@ -3927,7 +3987,7 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${v%u}", &rank) == 1) {
             if (rank < d->nparams) {
-                WrapperStr v = d->params[rank].get_default_value();
+                WrapperStr v = d->params[rank]->get_default_value();
 
                 if (!v.isEmpty())
                     s += " = " + v;
@@ -3967,7 +4027,7 @@ void OperationDialog::python_edit_body()
     else
         b = pythonbody;
 
-    edit(b, edname->text().stripWhiteSpace() + "_body",
+    edit(b, edname->text().trimmed() + "_body",
          oper, PythonEdit, this,
          (preserve_bodies() && !forcegenbody_cb->isChecked())
          ? (post_edit) 0
@@ -3985,8 +4045,8 @@ void OperationDialog::python_edit_param()
     QString form = edpythondef->text();
     int index;
 
-    if (((index = form.find("${(}")) != 0) &&
-        (form.find("${)}", index + 4) != 0)) {
+    if (((index = form.indexOf("${(}")) != 0) &&
+            (form.indexOf("${)}", index + 4) != 0)) {
         PythonParamsDialog d(this, table, edpythondef);
 
         if (d.exec() == QDialog::Accepted)
@@ -4094,7 +4154,7 @@ void OperationDialog::idl_default_def()
         edidldecl->setText(decl);
     }
     else {
-        QString s = oper->default_idl_decl(edname->text().stripWhiteSpace());
+        QString s = oper->default_idl_decl(edname->text().trimmed());
         QString params;
         int index;
         int nparams = (int) table->nparams();
@@ -4107,7 +4167,7 @@ void OperationDialog::idl_default_def()
             params += p;
         }
 
-        if ((index = s.find("${)}")) != -1)
+        if ((index = s.indexOf("${)}")) != -1)
             s.insert(index, params);
 
         edidldecl->setText(s);
@@ -4128,7 +4188,8 @@ void OperationDialog::idl_update_decl()
     //	const char * p = edidldecl->text();
     // because the QString is immediatly destroyed !
     QString def = edidldecl->text();
-    const char * p = def;
+    QByteArray defArray = def.toLatin1();
+    const char * p = defArray.constData();
     const char * pp = 0;
     QString indent = "";
     QString s;
@@ -4166,7 +4227,7 @@ void OperationDialog::idl_update_decl()
         }
         else if (!strncmp(p, "${type}", 7)) {
             p += 7;
-            s += get_idl_name(the_type(edreturn_type->currentText().stripWhiteSpace(),
+            s += get_idl_name(the_type(edreturn_type->currentText().trimmed(),
                                        list, nodes));
         }
         else if (!strncmp(p, "${name}", 7)) {
@@ -4273,7 +4334,7 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
         else if (sscanf(p, "${d%u}", &rank) == 1) {
             if (withdir) {
                 if (rank < d->nparams)
-                    switch (d->params[rank].get_dir()) {
+                    switch (d->params[rank]->get_dir()) {
                     case UmlIn:
                         s += "in";
                         break;
@@ -4298,7 +4359,7 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
         else if (sscanf(p, "${t%u}", &rank) == 1) {
             if (withname) {
                 if (rank < d->nparams)
-                    s += GenerationSettings::idl_type(d->params[rank].get_type().get_type(mode));
+                    s += GenerationSettings::idl_type(d->params[rank]->get_type().get_type(mode));
                 else {
                     s += "${t";
                     s += QString::number(rank);
@@ -4310,7 +4371,7 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
         }
         else if (sscanf(p, "${p%u}", &rank) == 1) {
             if (rank < d->nparams)
-                s += d->params[rank].get_name();
+                s += d->params[rank]->get_name();
             else {
                 s += "${p";
                 s += QString::number(rank);
@@ -4354,220 +4415,6 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
     return s;
 }
 
-// automatic add / remove param when only one language is set
-
-static int bypass_string(const char * s, int index)
-{
-    // index is just after the "
-    for (;;) {
-        switch (s[index]) {
-        case '"':
-            return index + 1;
-
-        case '\\':
-            if (s[index + 1] == 0)
-                return index + 1;
-
-            index += 2;
-            break;
-
-        case 0:
-            return index;
-
-        default:
-            index += 1;
-        }
-    }
-}
-
-static int bypass_char(const char * s, int index)
-{
-    // index is just after the '
-    for (;;) {
-        switch (s[index]) {
-        case '\'':
-            return index + 1;
-
-        case '\\':
-            if (s[index + 1] == 0)
-                return index + 1;
-
-            index += 2;
-            break;
-
-        case 0:
-            return index;
-
-        default:
-            index += 1;
-        }
-    }
-}
-
-static int bypass_cpp_comment(const char * s, int index)
-{
-    // index is just after the //
-    const char * p = strchr(s, '\n');
-
-    return (p == 0)
-           ? index + strlen(s + index)
-           : p - s;
-}
-
-static int bypass_c_comment(const char * s, int index)
-{
-    // index is just after the /*
-    for (;;) {
-        switch (s[index]) {
-        case '*':
-            if (s[index + 1] == '/')
-                return index + 2;
-
-            break;
-
-        case 0:
-            return index;
-        }
-
-        index += 1;
-    }
-}
-
-static int supOf(const char * s, int index)
-{
-    // return the index after of the parameter form
-    // s at least contains ${)}
-    int ouvr = 0;
-
-    for (;;) {
-        switch (s[index]) {
-        case '$':
-            if (strncmp(s + index, "${)}", 4) == 0)
-                return index;
-
-            index += 1;
-            break;
-
-        case '(':
-        case '[':
-        case '{':
-            ouvr += 1;
-            index += 1;
-            break;
-
-        case ')':
-        case ']':
-        case '}':
-            ouvr -= 1;
-            index += 1;
-            break;
-
-        case '"':
-            index = bypass_string(s, index + 1);
-            break;
-
-        case '\'':
-            index = bypass_char(s, index + 1);
-            break;
-
-        case '/':
-            switch (s[index + 1]) {
-            case '/':
-                index = bypass_cpp_comment(s, index + 2);
-                break;
-
-            case '*':
-                index = bypass_c_comment(s, index + 2);
-                break;
-
-            default:
-                index += 1;
-            }
-
-            break;
-
-        case 0:
-            // in case ${)} is in a comment etc ...
-            return index;
-
-        case ',':
-            if (ouvr == 0)
-                return index;
-
-            // no break
-        default:
-            index += 1;
-        }
-    }
-}
-
-static int param_begin(QString s, int rank)
-{
-    // return position of ',' or '}' (inside ${(}),
-    // or '$' (inside ${)}) or -1 on error
-    const char * p = s;
-    const char * b = strstr(p, "${(}");
-
-    if ((b == 0) || (strstr(b + 4, "${)}") == 0))
-        return -1;
-
-    int index  = (b - p) + 3;	// '}'
-
-    while (rank != 0) {
-        int end = supOf(p, index + 1);
-
-        switch (p[end]) {
-        case ',':
-            index = end;
-            break;
-
-        case '$': // ${)}
-            return (rank == 1) ? end : -1;
-
-        default:
-            return -1;
-        }
-
-        rank -= 1;
-    }
-
-    return index;
-}
-
-static void renumber(QString & form, int rank,
-                     int delta, bool equal = FALSE)
-{
-    int index = form.find("${(}");
-
-    if (index == -1)
-        return;
-
-    index += 4;
-
-    int index_sup = form.find("${)}", index);
-
-    while (index < index_sup) {
-        index = form.find("${", index);
-
-        if (index == -1)
-            break;
-
-        int index2 = form.find('}', index + 3);
-        QString n = form.mid(index + 3, index2 - index - 3);
-        bool ok = FALSE;
-        int r = n.toInt(&ok);
-
-        if (!ok || ((equal) ? (r != rank) : (r < rank)))
-            index = index2 + 1;
-        else {
-            char nn[16];
-
-            sprintf(nn, "%d", r + delta);
-            form.replace(index + 3, n.length(), nn);
-            index = form.find('}', index + 3) + 1;
-        }
-    }
-}
 
 void OperationDialog::force_param(int rank, bool recompute)
 {
@@ -4583,12 +4430,12 @@ void OperationDialog::force_param(int rank, bool recompute)
     switch (unique) {
     case CppView: {
         QString theo =
-            GenerationSettings::cpp(the_type(table->type(rank), list, nodes),
-                                    table->dir(rank), rank);
+                GenerationSettings::cpp(the_type(table->type(rank), list, nodes),
+                                        table->dir(rank), rank);
 
         s = cppTab->ui->edCppDeclProto->text();
 
-        if ((s.find(t) == -1) && (s.find(p) == -1)) {
+        if ((s.indexOf(t) == -1) && (s.indexOf(p) == -1)) {
             add_param(s, rank, theo + QString(v));
             cppTab->ui->edCppDeclProto->setText(s);
         }
@@ -4599,7 +4446,7 @@ void OperationDialog::force_param(int rank, bool recompute)
 
         s = cppTab->ui->edCppDefProto->text();
 
-        if ((s.find(t) == -1) && (s.find(p) == -1)) {
+        if ((s.indexOf(t) == -1) && (s.indexOf(p) == -1)) {
             add_param(s, rank, theo);
             cppTab->ui->edCppDefProto->setText(s);
         }
@@ -4608,12 +4455,12 @@ void OperationDialog::force_param(int rank, bool recompute)
             cppTab->ui->edCppDefProto->setText(s);
         }
     }
-    break;
+        break;
 
     case JavaView:
         s = edjavadef->text();
 
-        if ((s.find(t) == -1) && (s.find(p) == -1)) {
+        if ((s.indexOf(t) == -1) && (s.indexOf(p) == -1)) {
             add_param(s, rank, QString(t) + QString(" ") + QString(p));
             edjavadef->setText(s);
         }
@@ -4623,7 +4470,7 @@ void OperationDialog::force_param(int rank, bool recompute)
     case PhpView:
         s = edphpdef->text();
 
-        if (s.find(p) == -1) {
+        if (s.indexOf(p) == -1) {
             add_param(s, rank, QString(p) + QString(v));
             edphpdef->setText(s);
         }
@@ -4633,7 +4480,7 @@ void OperationDialog::force_param(int rank, bool recompute)
     case PythonView:
         s = edpythondef->text();
 
-        if (s.find(p) == -1) {
+        if (s.indexOf(p) == -1) {
             add_param(s, rank, QString(p) + QString(v));
             edpythondef->setText(s);
         }
@@ -4643,7 +4490,7 @@ void OperationDialog::force_param(int rank, bool recompute)
     case IdlView:
         s = edidldecl->text();
 
-        if ((s.find(t) == -1) && (s.find(p) == -1)) {
+        if ((s.indexOf(t) == -1) && (s.indexOf(p) == -1)) {
             char d[16];
 
             sprintf(d, "${d%d}", rank);
@@ -4660,7 +4507,7 @@ void OperationDialog::force_param(int rank, bool recompute)
 
 void OperationDialog::add_param(QString & form, int rank, QString s)
 {
-    int index = param_begin(form, rank);
+    int index = OperationFuncs::param_begin(form, rank);
 
     if (index == -1)
         return;
@@ -4681,12 +4528,12 @@ void OperationDialog::add_param(QString & form, int rank, QString s)
 
 void OperationDialog::replace_param(QString & form, int rank, QString s)
 {
-    int index_start = param_begin(form, rank);
+    int index_start = OperationFuncs::param_begin(form, rank);
 
     if (index_start == -1)
         return;
 
-    const char * p = form;
+    const char * p = form.toLatin1().constData();
 
     switch (p[index_start]) {
     case '$':
@@ -4704,7 +4551,7 @@ void OperationDialog::replace_param(QString & form, int rank, QString s)
         index_start += 1;
     }
 
-    int index_sup = supOf(p, index_start);
+    int index_sup = OperationFuncs::supOf(p, index_start);
 
     switch (p[index_sup]) {
     case ',':
@@ -4754,7 +4601,7 @@ void OperationDialog::insert_param(int rank, MultiLineEdit * ed)
     // just renumber
     QString form = ed->text();
 
-    renumber(form, rank, 1);
+    OperationFuncs::renumber(form, rank, 1);
     ed->setText(form);
 }
 
@@ -4792,12 +4639,12 @@ QString OperationDialog::delete_param(int rank, MultiLineEdit * ed)
 {
     // remove
     QString form = ed->text();
-    int index = param_begin(form, rank);
+    int index = OperationFuncs::param_begin(form, rank);
 
     if (index == -1)
         return "";
 
-    const char * p = form;
+    const char * p = form.toLatin1().constData();
     int index_sup;
 
     switch (p[index]) {
@@ -4807,12 +4654,12 @@ QString OperationDialog::delete_param(int rank, MultiLineEdit * ed)
         return "";
 
     case ',':
-        index_sup = supOf(p, index + 1);
+        index_sup = OperationFuncs::supOf(p, index + 1);
         break;
 
     default: // first param, index point to '}' ending ${(}
         index += 1;
-        index_sup = supOf(p, index);
+        index_sup = OperationFuncs::supOf(p, index);
         break;
     }
 
@@ -4856,7 +4703,7 @@ QString OperationDialog::delete_param(int rank, MultiLineEdit * ed)
     form.remove(index, index_sup - index);
 
     // renumber
-    renumber(form, rank, -1);
+    OperationFuncs::renumber(form, rank, -1);
 
     ed->setText(form);
     return result;
@@ -4900,11 +4747,11 @@ void OperationDialog::move_param(int old_rank, int new_rank,
         return;
 
     s = "${(}" + s + "${)}";
-    renumber(s, old_rank, new_rank - old_rank, TRUE);
+    OperationFuncs::renumber(s, old_rank, new_rank - old_rank, TRUE);
 
     QString form = ed->text();
 
-    renumber(form, new_rank, 1);
+    OperationFuncs::renumber(form, new_rank, 1);
     add_param(form, new_rank, s.mid(4, s.length() - 8));
 
     ed->setText(form);
@@ -4931,28 +4778,33 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
     int index;
     int sup = o->get_n_params();
 
-    setSorting(-1);
+    setSortingEnabled(false);
     setSelectionMode(NoSelection);	// single does not work
-    setRowMovingEnabled(TRUE);
-    horizontalHeader()->setLabel(0, TR("Direction"));
-    horizontalHeader()->setLabel(1, TR("Name"));
-    horizontalHeader()->setLabel(2, TR("Type"));
-    horizontalHeader()->setLabel(3, TR("Default value"));
+    verticalHeader()->setSectionsMovable(true);
+    QStringList headerList;
+    headerList<<TR("Direction")
+             <<TR("Name")
+            <<TR("Type")
+           <<TR("Default value");
 
+    m_delegate = new TableWidgetItemDelegate(this);
+    setItemDelegateForColumn(0,m_delegate);
+    setItemDelegateForColumn(2,m_delegate);
     if (isReadOnly) {
         for (index = 0; index < sup; index += 1) {
-            setItem(index, 0, new TableItem(this, Q3TableItem::Never, stringify(o->get_param_dir(index))));
-            setItem(index, 1, new TableItem(this, Q3TableItem::Never, o->get_param_name(index)));
-            setItem(index, 2, new TableItem(this, Q3TableItem::Never, o->get_param_type(index).get_full_type()));
-            setItem(index, 3, new TableItem(this, Q3TableItem::Never, o->get_param_default_value(index)));
+            setItem(index, 0, new TableItem(this, TableItem::Never, stringify(o->get_param_dir(index)), TableItem::TableItemType));
+            setItem(index, 1, new TableItem(this, TableItem::Never, o->get_param_name(index), TableItem::TableItemType));
+            setItem(index, 2, new TableItem(this, TableItem::Never, o->get_param_type(index).get_full_type(), TableItem::TableItemType));
+            setItem(index, 3, new TableItem(this, TableItem::Never, o->get_param_default_value(index), TableItem::TableItemType));
         }
     }
     else {
-        horizontalHeader()->setLabel(4, TR("do"));
+        //setHorizontalHeaderLabel(4, TR("do"));
+        headerList << TR("do");
 
         alltypes = GenerationSettings::basic_types();
         ((ClassData *)((BrowserNode *) o->get_browser_node()->parent())->get_data())
-        ->addFormals(alltypes);
+                ->addFormals(alltypes);
 
         for (QStringList::ConstIterator it = list.begin(); it != list.end(); ++it)
             alltypes.append(*it);
@@ -4982,21 +4834,21 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
         setText(index, 3, QString());
         setText(index, 4, QString());
     }
-
-    adjustColumn(0);
+    setHorizontalHeaderLabels(headerList);
+    ////adjustColumn(0);
     //setColumnStretchable (1, TRUE);
-    horizontalHeader()->setResizeEnabled(TRUE, 1);
+    //  horizontalHeader()->setResizeEnabled(TRUE, 1);
     setColumnStretchable(2, TRUE);
     //setColumnStretchable (3, TRUE);
-    horizontalHeader()->setResizeEnabled(TRUE, 3);
+    // horizontalHeader()->setResizeEnabled(TRUE, 3);
 
     if (!isReadOnly) {
-        adjustColumn(4);
+        //adjustColumn(4);
         setColumnStretchable(4, FALSE);
 
-        connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-                this, SLOT(button_pressed(int, int, int, const QPoint &)));
-        connect(this, SIGNAL(valueChanged(int, int)),
+        connect(this, SIGNAL(pressed(QModelIndex)),
+                this, SLOT(button_pressed(QModelIndex)));
+        connect(this, SIGNAL(cellChanged(int, int)),
                 this, SLOT(value_changed(int, int)));
     }
 }
@@ -5006,13 +4858,13 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
 
     if (!isReadOnly)
     {
-        if(numCols() == 4)
-            insertColumns(4);
-        horizontalHeader()->setLabel(4, TR("do"));
+        if(columnCount() == 4)
+            insertColumn(4);
+        setHorizontalHeaderLabel(4, TR("do"));
     }
     else
     {
-        if(numCols() == 5)
+        if(columnCount() == 5)
             removeColumn(4);
     }
 
@@ -5020,39 +4872,39 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
     int index;
     int sup = o->get_n_params();
 
-    setSorting(-1);
+    setSortingEnabled(false);
     setSelectionMode(NoSelection);	// single does not work
-    setRowMovingEnabled(TRUE);
+    verticalHeader()->setSectionsMovable(true);
 
-    disconnect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-            this, SLOT(button_pressed(int, int, int, const QPoint &)));
-    disconnect(this, SIGNAL(valueChanged(int, int)),
-            this, SLOT(value_changed(int, int)));
+    disconnect(this, SIGNAL(pressed(QModelIndex)),
+               this, SLOT(button_pressed(QModelIndex)));
+    disconnect(this, SIGNAL(cellChanged(int, int)),
+               this, SLOT(value_changed(int, int)));
 
-    int rowCount = numRows();
-    for (index = rowCount - 1; index > sup; index -= 1)
+    int rowC = rowCount();
+    for (index = rowC - 1; index > sup; index -= 1)
         removeRow(index);
 
     if (isReadOnly)
     {
         for (index = 0; index < sup; index += 1)
         {
-            if(index == numRows())
-                insertRows(numRows());
+            if(index == rowCount())
+                insertRow(rowCount());
 
-            setItem(index, 0, new TableItem(this, Q3TableItem::Never, stringify(o->get_param_dir(index))));
-            setItem(index, 1, new TableItem(this, Q3TableItem::Never, o->get_param_name(index)));
-            setItem(index, 2, new TableItem(this, Q3TableItem::Never, o->get_param_type(index).get_full_type()));
-            setItem(index, 3, new TableItem(this, Q3TableItem::Never, o->get_param_default_value(index)));
+            setItem(index, 0, new TableItem(this, TableItem::Never, stringify(o->get_param_dir(index)), TableItem::TableItemType));
+            setItem(index, 1, new TableItem(this, TableItem::Never, o->get_param_name(index), TableItem::TableItemType));
+            setItem(index, 2, new TableItem(this, TableItem::Never, o->get_param_type(index).get_full_type(), TableItem::TableItemType));
+            setItem(index, 3, new TableItem(this, TableItem::Never, o->get_param_default_value(index), TableItem::TableItemType));
         }
     }
     else
     {
-        horizontalHeader()->setLabel(4, TR("do"));
+        setHorizontalHeaderLabel(4, TR("do"));
 
         alltypes = GenerationSettings::basic_types();
         ((ClassData *)((BrowserNode *) o->get_browser_node()->parent())->get_data())
-        ->addFormals(alltypes);
+                ->addFormals(alltypes);
 
         for (QStringList::ConstIterator it = list.begin(); it != list.end(); ++it)
             alltypes.append(*it);
@@ -5071,8 +4923,8 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
 
         for (index = 0; index < sup; index += 1)
         {
-            if(index == numRows())
-                insertRows(numRows());
+            if(index == rowCount())
+                insertRow(rowCount());
 
             setItem(index, 0, new ComboItem(this, stringify(o->get_param_dir(index)), DirList, FALSE));
             setText(index, 1, o->get_param_name(index));
@@ -5082,8 +4934,8 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
         }
 
         //int columnCount = numCols();
-        if(index == numRows())
-            insertRows(numRows());
+        if(index == rowCount())
+            insertRow(rowCount());
         setItem(index, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
         setText(index, 1, QString());
         setItem(index, 2, new ComboItem(this, QString(), alltypes));
@@ -5092,21 +4944,21 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
 
 
 
-        connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-                this, SLOT(button_pressed(int, int, int, const QPoint &)));
-        connect(this, SIGNAL(valueChanged(int, int)),
+        connect(this, SIGNAL(pressed(QModelIndex)),
+                this, SLOT(button_pressed(QModelIndex)));
+        connect(this, SIGNAL(cellChanged(int, int)),
                 this, SLOT(value_changed(int, int)));
     }
 
-    adjustColumn(0);
+    ////adjustColumn(0);
     //setColumnStretchable (1, TRUE);
-    horizontalHeader()->setResizeEnabled(TRUE, 1);
+    // horizontalHeader()->setResizeEnabled(TRUE, 1);
     setColumnStretchable(2, TRUE);
     //setColumnStretchable (3, TRUE);
-    horizontalHeader()->setResizeEnabled(TRUE, 3);
+    //horizontalHeader()->setResizeEnabled(TRUE, 3);
 
     if (!isReadOnly) {
-        adjustColumn(4);
+        //adjustColumn(4);
         setColumnStretchable(4, FALSE);
     }
 }
@@ -5118,9 +4970,9 @@ void ParamsTable::activateNextCell()
 
     if (col == 3) {
         // goto next line
-        if (++row == numRows()) {
+        if (++row == rowCount()) {
             // adds a new line
-            setNumRows(row + 1);
+            setRowCount(row + 1);
             setItem(row, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
             setText(row, 1, QString());
             setItem(row, 2, new ComboItem(this, QString(), alltypes));
@@ -5136,154 +4988,131 @@ void ParamsTable::activateNextCell()
 
 void ParamsTable::value_changed(int row, int col)
 {
-    if ((row == (numRows() - 1)) && (col != 0) && !text(row, col).isEmpty())
+    if ((row == (rowCount() - 1)) && (col != 0) && !text(row, col).isEmpty())
         insert_row_after(row);
 
     if ((col <= 3) && (!text(row, 1).isEmpty() || !text(row, 2).isEmpty()))
         dialog->force_param(row, col != 1);
 }
 
-void ParamsTable::button_pressed(int row, int col, int, const QPoint &)
+void ParamsTable::button_pressed(const QModelIndex &index)
 {
+    int row = index.row();
+    int col = index.column();
     if (col == 4) {
         int n = nparams();
         char s[16];
-        Q3PopupMenu m;
+        QMenu m;
 
         sprintf(s, "%d", row + 1);
-        m.insertItem(TR("param %1", s), -1);
-        m.insertSeparator();
+        MenuFactory::addItem(m, TR("param %1", s), -1);
+        m.addSeparator();
 
         if (row < n) {
-            m.insertItem(TR("Insert param before"), 0);
-            m.insertItem(TR("Insert param after"), 1);
-            m.insertSeparator();
-            m.insertItem(TR("Delete param"), 2);
-            m.insertSeparator();
-            m.insertItem(TR("Copy param"), 3);
-            m.insertItem(TR("Cut param"), 4);
+            MenuFactory::addItem(m, TR("Insert param before"), 0);
+            MenuFactory::addItem(m, TR("Insert param after"), 1);
+            m.addSeparator();
+            MenuFactory::addItem(m, TR("Delete param"), 2);
+            m.addSeparator();
+            MenuFactory::addItem(m, TR("Copy param"), 3);
+            MenuFactory::addItem(m, TR("Cut param"), 4);
         }
 
         if (!name_copy.isEmpty() || !type_copy.isEmpty())
-            m.insertItem(TR("Paste param"), 5);
+            MenuFactory::addItem(m, TR("Paste param"), 5);
 
-        Q3PopupMenu mv;
+        QMenu mv;
         int rank;
 
         if (row < n) {
             for (rank = 0; rank != n; rank += 1)
                 if (rank != row)
-                    mv.insertItem(QString::number(rank + 1), 10 + rank);
+                    MenuFactory::addItem(mv, QString::number(rank + 1), 10 + rank);
 
-            if (mv.count() != 0) {
-                m.insertSeparator();
-                m.insertItem(TR("Move param"), &mv);
+            if (mv.actions().count() != 0) {
+                m.addSeparator();
+                MenuFactory::insertItem(m, TR("Move param"), &mv);
             }
         }
+        QAction *retAction = m.exec(QCursor::pos());
+        if(retAction)
+            switch (rank = retAction->data().toInt()) {
+            case 0:
+                insert_row_before(row);
+                dialog->insert_param(row);
+                dialog->force_param(row, TRUE);
+                break;
 
-        switch (rank = m.exec(QCursor::pos())) {
-        case 0:
-            insert_row_before(row);
-            dialog->insert_param(row);
-            dialog->force_param(row, TRUE);
-            break;
+            case 1:
+                insert_row_after(row);
+                dialog->insert_param(row + 1);
+                dialog->force_param(row + 1, TRUE);
+                break;
 
-        case 1:
-            insert_row_after(row);
-            dialog->insert_param(row + 1);
-            dialog->force_param(row + 1, TRUE);
-            break;
+            case 2:
+                delete_row(row);
+                dialog->delete_param(row);
+                break;
 
-        case 2:
-            delete_row(row);
-            dialog->delete_param(row);
-            break;
+            case 3:
+                copy_row(row);
+                break;
 
-        case 3:
-            copy_row(row);
-            break;
+            case 4:
+                cut_row(row);
+                dialog->delete_param(row);
+                break;
 
-        case 4:
-            cut_row(row);
-            dialog->delete_param(row);
-            break;
+            case 5:
+                paste_row(row);
+                dialog->force_param(row, TRUE);
+                break;
 
-        case 5:
-            paste_row(row);
-            dialog->force_param(row, TRUE);
-            break;
+            default:
+                if (rank >= 10) {
+                    move_row(row, rank - 10);
+                    dialog->move_param(row, rank - 10);
+                }
 
-        default:
-            if (rank >= 10) {
-                move_row(row, rank - 10);
-                dialog->move_param(row, rank - 10);
+                break;
             }
-
-            break;
-        }
     }
 }
 
 void ParamsTable::insert_row_before(int row)
 {
-    int n = numRows();
-    int index;
-
-    setNumRows(n + 1);
-
-    for (index = n; index != row; index -= 1) {
-        Q3TableItem * it;
-
-        it = item(index - 1, 0);
-        takeItem(it);
-        setItem(index, 0, it);
-        setText(index, 1, text(index - 1, 1));
-        it = item(index - 1, 2);
-        takeItem(it);
-        setItem(index, 2, it);
-        setText(index, 3, text(index - 1, 3));
-    }
-
+    blockSignals(true);
+    DISABLESORTINGMYTABLE;
+    insertRow(row);
     setItem(row, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
     setText(row, 1, QString());
     setItem(row, 2, new ComboItem(this, QString(), alltypes));
     setText(row, 3, QString());
     setText(row, 4, QString());
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
 }
 
 void ParamsTable::insert_row_after(int row)
 {
-    int n = numRows();
-    int index;
-
-    setNumRows(n + 1);
-
-    for (index = n; index > row + 1; index -= 1) {
-        Q3TableItem * it;
-
-        it = item(index - 1, 0);
-        takeItem(it);
-        setItem(index, 0, it);
-        setText(index, 1, text(index - 1, 1));
-        it = item(index - 1, 2);
-        takeItem(it);
-        setItem(index, 2, it);
-        setText(index, 3, text(index - 1, 3));
-    }
-
+    blockSignals(true);
+    DISABLESORTINGMYTABLE;
+    insertRow(row+1);
     setItem(row + 1, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
     setText(row + 1, 1, QString());
     setItem(row + 1, 2, new ComboItem(this, QString(), alltypes));
     setText(row + 1, 3, QString());
     setText(row + 1, 4, QString());
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
 }
 
 void ParamsTable::delete_row(int row)
 {
-    int n = numRows();
+    int n = rowCount();
     int index;
 
-    clearCellWidget(row, 1);
+    removeCellWidget(row, 1);
 
     if (row == (n - 1)) {
         // the last line : empty it
@@ -5294,19 +5123,19 @@ void ParamsTable::delete_row(int row)
     }
     else {
         for (index = row; index != n - 1; index += 1) {
-            Q3TableItem * it;
+            QTableWidgetItem * it;
 
             it = item(index + 1, 0);
-            takeItem(it);
+            takeItem(it->row(), it->column());
             setItem(index, 0, it);
             setText(index, 1, text(index + 1, 1));
             it = item(index + 1, 2);
-            takeItem(it);
+            takeItem(it->row(), it->column());
             setItem(index, 2, it);
             setText(index, 3, text(index + 1, 3));
         }
 
-        setNumRows(n - 1);
+        setRowCount(n - 1);
     }
 }
 
@@ -5331,10 +5160,10 @@ void ParamsTable::paste_row(int row)
     setText(row, 2, type_copy);
     setText(row, 3, default_value_copy);
 
-    if ((row == (numRows() - 1)) &&
-        (!dir_copy.isEmpty() ||
-         !name_copy.isEmpty() ||
-         !type_copy.isEmpty()))
+    if ((row == (rowCount() - 1)) &&
+            (!dir_copy.isEmpty() ||
+             !name_copy.isEmpty() ||
+             !type_copy.isEmpty()))
         insert_row_after(row);
 }
 
@@ -5371,15 +5200,15 @@ void ParamsTable::update(OperationData * oper,
     oper->set_n_params(n);
 
     for (index = 0; index != n; index += 1) {
-        oper->set_param_dir(index, (UmlParamDirection) DirList.findIndex(text(index, 0)));
+        oper->set_param_dir(index, (UmlParamDirection) DirList.indexOf(text(index, 0)));
 
-        oper->set_param_name(index, text(index, 1).stripWhiteSpace());
+        oper->set_param_name(index, text(index, 1).trimmed().toLatin1().constData());
 
         AType t;
-        QString s = text(index, 2).stripWhiteSpace();
+        QString s = text(index, 2).trimmed();
 
         if (! s.isEmpty()) {
-            int rank = types.findIndex(s);
+            int rank = types.indexOf(s);
 
             if (rank != -1)
                 t.type = (BrowserClass *) nodes.at(rank);
@@ -5389,13 +5218,13 @@ void ParamsTable::update(OperationData * oper,
 
         oper->set_param_type(index, t);
 
-        oper->set_param_default_value(index, text(index, 3).stripWhiteSpace());
+        oper->set_param_default_value(index, text(index, 3).trimmed().toLatin1().constData());
     }
 }
 
 unsigned ParamsTable::nparams() const
 {
-    int n = numRows();
+    int n = rowCount();
 
     while (n && text(n - 1, 1).isEmpty() && text(n - 1, 2).isEmpty())
         n -= 1;
@@ -5415,7 +5244,7 @@ QString ParamsTable::type(unsigned rank) const
 
 UmlParamDirection ParamsTable::dir(unsigned rank) const
 {
-    return (UmlParamDirection) DirList.findIndex(text(rank, 0));
+    return (UmlParamDirection) DirList.indexOf(text(rank, 0));
 }
 
 QString ParamsTable::value(unsigned rank) const
@@ -5461,23 +5290,27 @@ QStringList ParamsTable::all_values()
 QString ExceptionsTable::type_copy;
 
 ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
-                                 const QStringList & list, bool visit)
+                                 QStringList & list, bool visit)
     : MyTable(o->get_n_exceptions() + 1, (visit) ? 1 : 2, parent), types(list)
 {
     int index;
     int sup = o->get_n_exceptions();
 
-    setSorting(-1);
+    setSortingEnabled(false);
     setSelectionMode(NoSelection);	// single does not work
-    setRowMovingEnabled(TRUE);
-    horizontalHeader()->setLabel(0, TR("Type"));
+    verticalHeader()->setSectionsMovable(true);
+    setHorizontalHeaderLabel(0, TR("Type"));
 
-    if (visit) {
+
+    m_delegate = new TableWidgetItemDelegate(this);
+    setItemDelegateForColumn(0,m_delegate);
+    if (visit)
+    {
         for (index = 0; index < sup; index += 1)
-            setItem(index, 0, new TableItem(this, Q3TableItem::Never, o->get_exception(index).get_full_type()));
+            setItem(index, 0, new TableItem(this, TableItem::Never, o->get_exception(index).get_full_type(), TableItem::TableItemType));
     }
     else {
-        horizontalHeader()->setLabel(1, TR("do"));
+        setHorizontalHeaderLabel(1, TR("do"));
 
         for (index = 0; index < sup; index += 1) {
             setItem(index, 0, new ComboItem(this, o->get_exception(index).get_full_type(), types));
@@ -5491,13 +5324,85 @@ ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
     setColumnStretchable(0, TRUE);
 
     if (!visit) {
-        adjustColumn(1);
+        //adjustColumn(1);
         setColumnStretchable(1, FALSE);
 
-        connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-                this, SLOT(button_pressed(int, int, int, const QPoint &)));
-        connect(this, SIGNAL(valueChanged(int, int)),
+        connect(this, SIGNAL(pressed(QModelIndex)),
+                this, SLOT(button_pressed(QModelIndex)));
+        connect(this, SIGNAL(cellChanged(int, int)),
                 this, SLOT(value_changed(int, int)));
+    }
+}
+
+void ExceptionsTable::Reinitialize(OperationData *o, QStringList &list, bool isWritable)
+{
+    types = list;
+    int oldRowCount = rowCount()-1;
+    for (int index =  oldRowCount; index > -1; index -= 1) {
+        removeRow(index);
+    }
+    int sup = o->get_n_exceptions();
+    setRowCount(sup+1);
+
+    if (!isWritable)
+    {
+        disconnect(this, SIGNAL(pressed(QModelIndex)),
+                   this, SLOT(button_pressed(QModelIndex)));
+        disconnect(this, SIGNAL(cellChanged(int, int)),
+                   this, SLOT(value_changed(int, int)));
+        setColumnCount(1);
+        for (int index = 0; index < sup; index += 1)
+            setItem(index, 0, new TableItem(this, TableItem::Never, o->get_exception(index).get_full_type(), TableItem::TableItemType));
+    }
+    else
+    {
+        setColumnCount(2);
+        setHorizontalHeaderLabel(1, TR("do"));
+        setColumnStretchable(1, FALSE);
+        //adjustColumn(1);
+
+        int index;
+        for (index = 0; index < sup; index += 1) {
+            setItem(index, 0, new ComboItem(this, o->get_exception(index).get_full_type(), types));
+            setText(index, 1, QString());
+        }
+
+        setItem(index, 0, new ComboItem(this, QString(), types));
+        setText(index, 1, QString());
+        connect(this, SIGNAL(pressed(QModelIndex)),
+                this, SLOT(button_pressed(QModelIndex)));
+        connect(this, SIGNAL(cellChanged(int, int)),
+                this, SLOT(value_changed(int, int)));
+
+    }
+
+}
+
+
+void ExceptionsTable::update(OperationData * oper,
+                             BrowserNodeList & nodes)
+{
+    forceUpdateCells();
+
+    int n = nexceptions();
+    int index;
+
+    oper->set_n_exceptions(n);
+
+    for (index = 0; index != n; index += 1) {
+        AType t;
+        QString s = text(index, 0).trimmed();
+
+        if (!s.isEmpty()) {
+            int rank = types.indexOf(s);
+
+            if (rank != -1)
+                t.type = (BrowserClass *) nodes.at(rank);
+            else
+                t.explicit_type = s;
+        }
+
+        oper->set_exception(index, t);
     }
 }
 
@@ -5506,9 +5411,9 @@ void ExceptionsTable::activateNextCell()
     int row = currentRow();
 
     // goto next line
-    if (++row == numRows()) {
+    if (++row == rowCount()) {
         // adds a new line
-        setNumRows(row + 1);
+        setRowCount(row + 1);
         setItem(row, 0, new ComboItem(this, QString(), types));
         setText(row, 1, QString());
     }
@@ -5518,124 +5423,139 @@ void ExceptionsTable::activateNextCell()
 
 void ExceptionsTable::value_changed(int row, int col)
 {
-    if ((row == (numRows() - 1)) && !text(row, col).isEmpty())
+    if ((row == (rowCount() - 1)) && !text(row, col).isEmpty())
         insert_row_after(row);
 }
 
-void ExceptionsTable::button_pressed(int row, int col, int, const QPoint &)
+void ExceptionsTable::button_pressed(const QModelIndex &index)
 {
+    int row = index.row();
+    int col = index.column();
     if (col == 1) {
         int n = nexceptions();
         char s[16];
-        Q3PopupMenu m;
+        QMenu m;
 
         sprintf(s, "%d", row + 1);
-        m.insertItem(TR("exception %1", s), -1);
-        m.insertSeparator();
+        MenuFactory::addItem(m, TR("exception %1", s), -1);
+        m.addSeparator();
 
         if (row < n) {
-            m.insertItem(TR("Insert exception before"), 0);
-            m.insertItem(TR("Insert exception after"), 1);
-            m.insertSeparator();
-            m.insertItem(TR("Delete exception"), 2);
-            m.insertSeparator();
-            m.insertItem(TR("Copy exception"), 3);
-            m.insertItem(TR("Cut exception"), 4);
+            MenuFactory::addItem(m, TR("Insert exception before"), 0);
+            MenuFactory::addItem(m, TR("Insert exception after"), 1);
+            m.addSeparator();
+            MenuFactory::addItem(m, TR("Delete exception"), 2);
+            m.addSeparator();
+            MenuFactory::addItem(m, TR("Copy exception"), 3);
+            MenuFactory::addItem(m, TR("Cut exception"), 4);
         }
 
         if (!type_copy.isEmpty())
-            m.insertItem(TR("Paste exception"), 5);
+            MenuFactory::addItem(m, TR("Paste exception"), 5);
 
-        Q3PopupMenu mv;
+        QMenu mv;
         int rank;
 
         if (row < n) {
             for (rank = 0; rank != n; rank += 1)
                 if (rank != row)
-                    mv.insertItem(QString::number(rank + 1), 10 + rank);
+                    MenuFactory::addItem(mv, QString::number(rank + 1), 10 + rank);
 
-            if (mv.count() != 0) {
-                m.insertSeparator();
-                m.insertItem(TR("Move exception"), &mv);
+            if (mv.actions().count() != 0) {
+                m.addSeparator();
+                MenuFactory::insertItem(m, TR("Move exception"), &mv);
             }
         }
 
-        switch (rank = m.exec(QCursor::pos())) {
-        case 0:
-            insert_row_before(row);
-            break;
+        QAction *retAction = m.exec(QCursor::pos());
+        if(retAction)
+            switch (rank = retAction->data().toInt()){
+            case 0:
+                insert_row_before(row);
+                break;
 
-        case 1:
-            insert_row_after(row);
-            break;
+            case 1:
+                insert_row_after(row);
+                break;
 
-        case 2:
-            delete_row(row);
-            break;
+            case 2:
+                delete_row(row);
+                break;
 
-        case 3:
-            copy_row(row);
-            break;
+            case 3:
+                copy_row(row);
+                break;
 
-        case 4:
-            cut_row(row);
-            break;
+            case 4:
+                cut_row(row);
+                break;
 
-        case 5:
-            paste_row(row);
-            break;
+            case 5:
+                paste_row(row);
+                break;
 
-        default:
-            if (rank >= 10)
-                move_row(row, rank - 10);
+            default:
+                if (rank >= 10)
+                    move_row(row, rank - 10);
 
-            break;
-        }
+                break;
+            }
     }
 }
 
 void ExceptionsTable::insert_row_before(int row)
 {
-    int n = numRows();
+    /*int n = rowCount();
     int index;
 
-    setNumRows(n + 1);
+    setRowCount(n + 1);
 
     for (index = n; index != row; index -= 1) {
-        Q3TableItem * it = item(index - 1, 0);
+        QTableWidgetItem * it = item(index - 1, 0);
 
-        takeItem(it);
-        setItem(index, 0, it);
-    }
-
+        if(it)
+        {
+            takeItem(it->row(), it->column());
+            setItem(index, 0, it);
+        }
+    }*/
+    blockSignals(true);
+    DISABLESORTINGMYTABLE;
+    insertRow(row);
     setItem(row, 0, new ComboItem(this, QString(), types));
     setText(row, 1, QString());
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
 }
 
 void ExceptionsTable::insert_row_after(int row)
 {
-    int n = numRows();
+    /*int n = rowCount();
     int index;
 
-    setNumRows(n + 1);
+    setRowCount(n + 1);
 
     for (index = n; index > row + 1; index -= 1) {
-        Q3TableItem * it = item(index - 1, 0);
+        QTableWidgetItem * it = item(index - 1, 0);
 
-        takeItem(it);
+        takeItem(it->row(), it->column());
         setItem(index, 0, it);
-    }
-
+    }*/
+    blockSignals(true);
+    DISABLESORTINGMYTABLE;
+    insertRow(row+1);
     setItem(row + 1, 0, new ComboItem(this, QString(), types));
     setText(row + 1, 1, QString());
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
 }
 
 void ExceptionsTable::delete_row(int row)
 {
-    int n = numRows();
+    int n = rowCount();
     int index;
 
-    clearCellWidget(row, 1);
+    removeCellWidget(row, 1);
 
     if (row == (n - 1)) {
         // the last line : empty it
@@ -5644,12 +5564,12 @@ void ExceptionsTable::delete_row(int row)
     }
     else {
         for (index = row; index != n - 1; index += 1) {
-            Q3TableItem * it = item(index + 1, 0);
-            takeItem(it);
+            QTableWidgetItem * it = item(index + 1, 0);
+            takeItem(it->row(), it->column());
             setItem(index, 0, it);
         }
 
-        setNumRows(n - 1);
+        setRowCount(n - 1);
     }
 }
 
@@ -5668,7 +5588,7 @@ void ExceptionsTable::paste_row(int row)
 {
     setText(row, 0, type_copy);
 
-    if ((row == (numRows() - 1)) && !type_copy.isEmpty())
+    if ((row == (rowCount() - 1)) && !type_copy.isEmpty())
         insert_row_after(row);
 }
 
@@ -5688,36 +5608,10 @@ void ExceptionsTable::move_row(int from, int to)
     type_copy = save_type_copy;
 }
 
-void ExceptionsTable::update(OperationData * oper,
-                             BrowserNodeList & nodes)
-{
-    forceUpdateCells();
-
-    int n = nexceptions();
-    int index;
-
-    oper->set_n_exceptions(n);
-
-    for (index = 0; index != n; index += 1) {
-        AType t;
-        QString s = text(index, 0).stripWhiteSpace();
-
-        if (!s.isEmpty()) {
-            int rank = types.findIndex(s);
-
-            if (rank != -1)
-                t.type = (BrowserClass *) nodes.at(rank);
-            else
-                t.explicit_type = s;
-        }
-
-        oper->set_exception(index, t);
-    }
-}
 
 unsigned ExceptionsTable::nexceptions() const
 {
-    int n = numRows();
+    int n = rowCount();
 
     while (n && text(n - 1, 0).isEmpty())
         n -= 1;
@@ -5748,45 +5642,52 @@ CppParamsTable::CppParamsTable(ParamsTable * p, MultiLineEdit * f,
     : MyTable(0, (decl) ? 8 : 7, parent), params(p), edform(f), dcl(decl)
 {
 
-    setSorting(-1);
+    m_delegate = new TableWidgetItemDelegate(this);
+    setItemDelegateForColumn(1,m_delegate);
+    setItemDelegateForColumn(2,m_delegate);
+    setItemDelegateForColumn(3,m_delegate);
+    setItemDelegateForColumn(4,m_delegate);
+    setItemDelegateForColumn(5,m_delegate);
+
+    setSortingEnabled(false);
     setSelectionMode(NoSelection);	// single does not work
-    setRowMovingEnabled(TRUE);
-    horizontalHeader()->setLabel(0, TR("Name"));
-    horizontalHeader()->setLabel(1, TR("Specifier"));
-    horizontalHeader()->setLabel(2, "${t<i>}");
-    horizontalHeader()->setLabel(3, TR("Pointer"));
-    horizontalHeader()->setLabel(4, "${p<i>}");
+    verticalHeader()->setSectionsMovable(true);
+    setHorizontalHeaderLabel(0, TR("Name"));
+    setHorizontalHeaderLabel(1, TR("Specifier"));
+    setHorizontalHeaderLabel(2, "${t<i>}");
+    setHorizontalHeaderLabel(3, TR("Pointer"));
+    setHorizontalHeaderLabel(4, "${p<i>}");
 
     if (decl) {
-        horizontalHeader()->setLabel(5, "${v<i>}");
-        horizontalHeader()->setLabel(6, TR("Modifier"));
-        horizontalHeader()->setLabel(7, TR("do"));
+        setHorizontalHeaderLabel(5, "${v<i>}");
+        setHorizontalHeaderLabel(6, TR("Modifier"));
+        setHorizontalHeaderLabel(7, TR("do"));
     }
     else {
-        horizontalHeader()->setLabel(5, TR("Modifier"));
-        horizontalHeader()->setLabel(6, TR("do"));
+        setHorizontalHeaderLabel(5, TR("Modifier"));
+        setHorizontalHeaderLabel(6, TR("do"));
     }
 
     setColumnStretchable(0, TRUE);
     setColumnStretchable(1, TRUE);
     setColumnStretchable(2, TRUE);
-    adjustColumn(3);
+    //adjustColumn(3);
     setColumnStretchable(4, TRUE);
     setColumnStretchable(5, TRUE);
 
     if (decl) {
         setColumnStretchable(6, TRUE);
-        adjustColumn(7);
+        //adjustColumn(7);
         setColumnStretchable(7, FALSE);
     }
     else {
-        adjustColumn(6);
+        //adjustColumn(6);
         setColumnStretchable(6, FALSE);
     }
 
     QString form = edform->text();
     //the presence of ${(} and ${)} was checked
-    int form_index = form.find("${(}") + 4;
+    int form_index = form.indexOf("${(}") + 4;
     int tbl_index = 0;
 
     while (extract(tbl_index, form_index, form)) {
@@ -5797,8 +5698,8 @@ CppParamsTable::CppParamsTable(ParamsTable * p, MultiLineEdit * f,
     if (tbl_index == 0)
         insert_row_before(0);
 
-    connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-            this, SLOT(button_pressed(int, int, int, const QPoint &)));
+    connect(this, SIGNAL(pressed(QModelIndex)),
+            this, SLOT(button_pressed(QModelIndex)));
 
     if (SpecifierList.isEmpty()) {
         SpecifierList.append("");
@@ -5817,7 +5718,7 @@ CppParamsTable::CppParamsTable(ParamsTable * p, MultiLineEdit * f,
     ParamRankList.clear();
     ValueRankList.clear();
 
-    for (int rank = 0; rank != params->numRows(); rank += 1) {
+    for (int rank = 0; rank != params->rowCount(); rank += 1) {
         if (!params->name(rank).isEmpty() || !params->type(rank).isEmpty()) {
             QString s;
 
@@ -5833,7 +5734,7 @@ CppParamsTable::CppParamsTable(ParamsTable * p, MultiLineEdit * f,
 
 void CppParamsTable::init_row(int row)
 {
-    setItem(row, 0, new Q3TableItem(this, Q3TableItem::Never, QString()));
+    setItem(row, 0, new QTableWidgetItem(/*this, TableItem::Never,*/ QString()));
     setItem(row, 1, new ComboItem(this, QString(), SpecifierList));
     setItem(row, 2, new ComboItem(this, QString(), TypeRankList));
     setItem(row, 3, new ComboItem(this, QString(), PtrList));
@@ -5856,9 +5757,9 @@ bool CppParamsTable::extract(int tblindex, int & strindex, QString s)
     while (s.at(strindex).isSpace())
         strindex += 1;
 
-    int sup = supOf(s, strindex);
+    int sup = OperationFuncs::supOf(s.toLatin1().constData(), strindex);
 
-    if (s.mid(strindex, sup - strindex).stripWhiteSpace().isEmpty())
+    if (s.mid(strindex, sup - strindex).trimmed().isEmpty())
         return FALSE;
 
     QString specifier;
@@ -5866,75 +5767,75 @@ bool CppParamsTable::extract(int tblindex, int & strindex, QString s)
     QString ptr;
     QString p_i;
     QString modifier;
-    int index = s.find("${t", strindex);
+    int index = s.indexOf("${t", strindex);
 
     if ((index == -1) || (index >= sup)) {
         // no $type
-        index = s.find("${p", strindex);
+        index = s.indexOf("${p", strindex);
 
         if ((index == -1) || (index >= sup))
             // no $type, no $name
-            specifier = s.mid(strindex, sup - strindex).stripWhiteSpace();
+            specifier = s.mid(strindex, sup - strindex).trimmed();
         else {
             // no $type
-            t_i = s.mid(strindex, index - strindex).stripWhiteSpace();
+            t_i = s.mid(strindex, index - strindex).trimmed();
 
             // extract ptr
-            int ip = t_i.find('*');
-            int ir = t_i.find('&');
+            int ip = t_i.indexOf('*');
+            int ir = t_i.indexOf('&');
 
             if (ip != -1) {
                 if ((ir != -1) && (ir < ip)) {
-                    ptr = t_i.mid(ir).stripWhiteSpace();
-                    t_i = t_i.left(ir).stripWhiteSpace();
+                    ptr = t_i.mid(ir).trimmed();
+                    t_i = t_i.left(ir).trimmed();
                 }
                 else  {
-                    ptr = t_i.mid(ip).stripWhiteSpace();
-                    t_i = t_i.left(ip).stripWhiteSpace();
+                    ptr = t_i.mid(ip).trimmed();
+                    t_i = t_i.left(ip).trimmed();
                 }
             }
             else if (ir != -1) {
-                ptr = t_i.mid(ir).stripWhiteSpace();
-                t_i = t_i.left(ir).stripWhiteSpace();
+                ptr = t_i.mid(ir).trimmed();
+                t_i = t_i.left(ir).trimmed();
             }
 
-            if (((strindex = s.find('}', index + 2)) == -1) || (strindex >= sup))
+            if (((strindex = s.indexOf('}', index + 2)) == -1) || (strindex >= sup))
                 return FALSE;
             else {
                 strindex += 1;
                 p_i = s.mid(index, strindex - index);
-                modifier = s.mid(strindex, sup - strindex).stripWhiteSpace();
+                modifier = s.mid(strindex, sup - strindex).trimmed();
             }
         }
     }
     else {
-        specifier = s.mid(strindex, index - strindex).stripWhiteSpace();
+        specifier = s.mid(strindex, index - strindex).trimmed();
 
-        if (((strindex = s.find('}', index + 2)) == -1) || (strindex >= sup))
+        if (((strindex = s.indexOf('}', index + 2)) == -1) || (strindex >= sup))
             return FALSE;
 
         strindex += 1;
         t_i = s.mid(index, strindex - index);
 
-        index = s.find("${p", strindex);
+        index = s.indexOf("${p", strindex);
 
         if ((index == -1) || (index >= sup))
             // unnamed
-            modifier = s.mid(strindex, sup - strindex).stripWhiteSpace();
+            modifier = s.mid(strindex, sup - strindex).trimmed();
         else {
-            ptr = s.mid(strindex, index - strindex).stripWhiteSpace();
+            ptr = s.mid(strindex, index - strindex).trimmed();
 
-            if (((strindex = s.find('}', index + 2)) == -1) || (strindex >= sup))
+            if (((strindex = s.indexOf('}', index + 2)) == -1) || (strindex >= sup))
                 return FALSE;
             else {
                 strindex += 1;
                 p_i = s.mid(index, strindex - index);
-                modifier = s.mid(strindex, sup - strindex).stripWhiteSpace();
+                modifier = s.mid(strindex, sup - strindex).trimmed();
             }
         }
     }
 
-    setNumRows(tblindex + 1);
+    setRowCount(tblindex + 1);
 
     setItem(tblindex, 1, new ComboItem(this, specifier, SpecifierList));
     setItem(tblindex, 2, new ComboItem(this, t_i, TypeRankList));
@@ -5945,7 +5846,7 @@ bool CppParamsTable::extract(int tblindex, int & strindex, QString s)
         QString v_i;
 
         if ((modifier.length() >= 5) && (modifier.left(3) == "${v")) {
-            if ((strindex = modifier.find('}', 3)) == -1)
+            if ((strindex = modifier.indexOf('}', 3)) == -1)
                 return FALSE;
             else {
                 strindex += 1;
@@ -5965,9 +5866,9 @@ bool CppParamsTable::extract(int tblindex, int & strindex, QString s)
     return TRUE;
 }
 
-void CppParamsTable::setItem(int row, int col, Q3TableItem * item)
+void CppParamsTable::setItem(int row, int col, QTableWidgetItem *item)
 {
-    Q3Table::setItem(row, col, item);
+    QTableWidget::setItem(row, col, item);
 
     if ((col == 2) || (col == 4))
         update_name(row);
@@ -5975,13 +5876,13 @@ void CppParamsTable::setItem(int row, int col, Q3TableItem * item)
 
 void CppParamsTable::setCurrentCell(int row, int col)
 {
-    Q3Table::setCurrentCell(row, col);
+    QTableWidget::setCurrentCell(row, col);
     update_names();
 }
 
 void CppParamsTable::update_names()
 {
-    int n = numRows();
+    int n = rowCount();
     int row;
 
     for (row = 0; row != n; row += 1)
@@ -5996,197 +5897,214 @@ void CppParamsTable::update_name(int row)
     unsigned p_i;
 
     if (!text(row, 2).isEmpty() &&
-        (sscanf((const char *) text(row, 2), "${t%u}", &t_i) == 1))
+            (sscanf((const char *) text(row, 2).toLatin1().constData(), "${t%u}", &t_i) == 1))
         t_set = TRUE;
     else
         t_set = FALSE;
 
     if (!text(row, 4).isEmpty() &&
-        (sscanf((const char *) text(row, 4), "${p%u}", &p_i) == 1))
+            (sscanf((const char *) text(row, 4).toLatin1().constData(), "${p%u}", &p_i) == 1))
         p_set = TRUE;
     else
         p_set = FALSE;
 
     if (t_set) {
         if (p_set)
-            Q3Table::setItem(row, 0,
-                             new Q3TableItem(this, Q3TableItem::Never,
-                                             ((t_i == p_i) && (t_i < params->nparams()))
-                                             ? params->name(t_i) : QString()));
+            QTableWidget::setItem(row, 0,
+                                  new QTableWidgetItem(/*this, TableItem::Never,*/
+                                                       ((t_i == p_i) && (t_i < params->nparams()))
+                                                       ? params->name(t_i) : QString()));
         else
-            Q3Table::setItem(row, 0,
-                             new Q3TableItem(this, Q3TableItem::Never,
-                                             (t_i < params->nparams())
-                                             ? params->name(t_i) : QString()));
+            QTableWidget::setItem(row, 0,
+                                  new QTableWidgetItem(/*this, TableItem::Never,*/
+                                                       (t_i < params->nparams())
+                                                       ? params->name(t_i) : QString()));
     }
     else
-        Q3Table::setItem(row, 0,
-                         new Q3TableItem(this, Q3TableItem::Never,
-                                         (p_set && (p_i < params->nparams()))
-                                         ? params->name(p_i) : QString()));
+        QTableWidget::setItem(row, 0,
+                              new QTableWidgetItem(/*this, TableItem::Never,*/
+                                                   (p_set && (p_i < params->nparams()))
+                                                   ? params->name(p_i) : QString()));
 }
 
-void CppParamsTable::button_pressed(int row, int col, int, const QPoint &)
+void CppParamsTable::button_pressed(const QModelIndex &index)
 {
+    int row = index.row();
+    int col = index.column();
     if (col == ((dcl) ? 7 : 6)) {
         char s[16];
-        Q3PopupMenu m;
+        QMenu m;
 
         sprintf(s, "%d", row + 1);
-        m.insertItem(TR("param %1", s), -1);
-        m.insertSeparator();
-        m.insertItem(TR("Insert param before"), 0);
-        m.insertItem(TR("Insert param after"), 1);
-        m.insertSeparator();
-        m.insertItem(TR("Delete param"), 2);
-        m.insertSeparator();
-        m.insertItem(TR("Copy param"), 3);
-        m.insertItem(TR("Cut param"), 4);
-        m.insertItem(TR("Paste param"), 5);
-        m.insertSeparator();
+        MenuFactory::addItem(m, TR("param %1", s), -1);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Insert param before"), 0);
+        MenuFactory::addItem(m, TR("Insert param after"), 1);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Delete param"), 2);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Copy param"), 3);
+        MenuFactory::addItem(m, TR("Cut param"), 4);
+        MenuFactory::addItem(m, TR("Paste param"), 5);
+        m.addSeparator();
 
-        Q3PopupMenu mv;
+        QMenu mv;
         int rank;
 
-        for (rank = 0; rank != numRows(); rank += 1)
+        for (rank = 0; rank != rowCount(); rank += 1)
             if (rank != row)
-                mv.insertItem(QString::number(rank + 1), 10 + rank);
+                MenuFactory::addItem(mv, QString::number(rank + 1), 10 + rank);
 
-        m.insertItem(TR("Move param"), &mv);
-        m.insertSeparator();
+        MenuFactory::insertItem(m, TR("Move param"), &mv);
+        m.addSeparator();
 
-        Q3PopupMenu rk;
+        QMenu rk;
         int t_i;
         int p_i;
         int v_i;
 
         if (text(row, 2).isEmpty() ||
-            (sscanf((const char *) text(row, 2), "${t%d}", &t_i) != 1))
+                (sscanf((const char *) text(row, 2).toLatin1().constData(), "${t%d}", &t_i) != 1))
             t_i = -1;
 
         if (text(row, 4).isEmpty() ||
-            (sscanf((const char *) text(row, 4), "${p%d}", &p_i) != 1))
+                (sscanf((const char *) text(row, 4).toLatin1().constData(), "${p%d}", &p_i) != 1))
             p_i = -1;
 
         if (!dcl ||
-            text(row, 5).isEmpty() ||
-            (sscanf((const char *) text(row, 5), "${v%d}", &v_i) != 1))
+                text(row, 5).isEmpty() ||
+                (sscanf((const char *) text(row, 5).toLatin1().constData(), "${v%d}", &v_i) != 1))
             v_i = -1;
 
-        for (rank = 0; rank != params->numRows(); rank += 1)
+        for (rank = 0; rank != params->rowCount(); rank += 1)
             if ((!params->name(rank).isEmpty() || !params->type(rank).isEmpty()) &&
-                ((rank != t_i) || (rank != p_i)))
-                rk.insertItem(QString::number(rank), 100 + rank);
+                    ((rank != t_i) || (rank != p_i)))
+                MenuFactory::addItem(rk,QString::number(rank), 100 + rank);
 
-        m.insertItem(TR("Set rank <i>"), &rk);
+        MenuFactory::insertItem(m, TR("Set rank <i>"), &rk);
 
-        switch (rank = m.exec(QCursor::pos())) {
-        case 0:
-            insert_row_before(row);
-            break;
+        QAction *retAction = m.exec(QCursor::pos());
+        if(retAction)
+            switch (rank = retAction->data().toInt()) {
+            case 0:
+                insert_row_before(row);
+                break;
 
-        case 1:
-            insert_row_after(row);
-            break;
+            case 1:
+                insert_row_after(row);
+                break;
 
-        case 2:
-            delete_row(row);
-            break;
+            case 2:
+                delete_row(row);
+                break;
 
-        case 3:
-            copy_row(row);
-            break;
+            case 3:
+                copy_row(row);
+                break;
 
-        case 4:
-            cut_row(row);
-            break;
+            case 4:
+                cut_row(row);
+                break;
 
-        case 5:
-            paste_row(row);
-            break;
+            case 5:
+                paste_row(row);
+                break;
 
-        default:
-            if (rank >= 100) {
-                char s[32];
+            default:
+                if (rank >= 100) {
+                    char s[32];
 
-                if (t_i != -1) {
-                    sprintf(s, "${t%d}", rank - 100);
-                    setItem(row, 2, new ComboItem(this, s, TypeRankList));
+                    if (t_i != -1) {
+                        sprintf(s, "${t%d}", rank - 100);
+                        setItem(row, 2, new ComboItem(this, s, TypeRankList));
+                    }
+
+                    if (p_i != -1) {
+                        sprintf(s, "${p%d}", rank - 100);
+                        setItem(row, 4, new ComboItem(this, s, ParamRankList));
+                    }
+
+                    if (v_i != -1) {
+                        sprintf(s, "${v%d}", rank - 100);
+                        setItem(row, 5, new ComboItem(this, s, ParamRankList));
+                    }
                 }
+                else if (rank >= 10)
+                    move_row(row, rank - 10);
 
-                if (p_i != -1) {
-                    sprintf(s, "${p%d}", rank - 100);
-                    setItem(row, 4, new ComboItem(this, s, ParamRankList));
-                }
-
-                if (v_i != -1) {
-                    sprintf(s, "${v%d}", rank - 100);
-                    setItem(row, 5, new ComboItem(this, s, ParamRankList));
-                }
+                break;
             }
-            else if (rank >= 10)
-                move_row(row, rank - 10);
-
-            break;
-        }
     }
 }
 
 void CppParamsTable::insert_row_before(int row)
 {
-    int n = numRows();
+    /*int n = rowCount();
     int index;
     int col;
     int mcol = ((dcl) ? 6 : 5);
 
-    setNumRows(n + 1);
+    setRowCount(n + 1);
 
     for (index = n; index != row; index -= 1) {
         for (col = 0; col != mcol; col += 1) {
-            Q3TableItem * it = item(index - 1, col);
+            QTableWidgetItem * it = item(index - 1, col);
 
-            takeItem(it);
-            setItem(index, col, it);
+            if(it)
+            {
+                takeItem(it->row(), it->column());
+                setItem(index, col, it);
+            }
         }
 
         setText(index, mcol, text(index - 1, mcol));
         setText(index, mcol + 1, text(index - 1, mcol + 1));
     }
-
+    */
+    blockSignals(true);
+    DISABLESORTINGMYTABLE;
+    insertRow(row);
     init_row(row);
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
 }
 
 void CppParamsTable::insert_row_after(int row)
 {
-    int n = numRows();
+    /*int n = rowCount();
     int index;
     int col;
     int mcol = ((dcl) ? 6 : 5);
 
-    setNumRows(n + 1);
+    setRowCount(n + 1);
 
     for (index = n; index > row + 1; index -= 1) {
         for (col = 0; col != mcol; col += 1) {
-            Q3TableItem * it = item(index - 1, col);
+            QTableWidgetItem * it = item(index - 1, col);
 
-            takeItem(it);
+            takeItem(it->row(), it->column());
             setItem(index, col, it);
         }
 
         setText(index, mcol, text(index - 1, col));
         setText(index, mcol + 1, text(index - 1, col));
     }
-
+    */
+    blockSignals(true);
+    DISABLESORTINGMYTABLE;
+    insertRow(row+1);
     init_row(row + 1);
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
 }
 
 void CppParamsTable::delete_row(int row)
 {
-    int n = numRows();
+    int n = rowCount();
     int index;
     int col;
 
-    clearCellWidget(row, 1);
+    removeCellWidget(row, 1);
 
     if (row == (n - 1)) {
         // the last line : empty it
@@ -6197,9 +6115,9 @@ void CppParamsTable::delete_row(int row)
 
         for (index = row; index != n - 1; index += 1) {
             for (col = 0; col != mcol; col += 1) {
-                Q3TableItem * it = item(index + 1, col);
+                QTableWidgetItem * it = item(index + 1, col);
 
-                takeItem(it);
+                takeItem(it->row(), it->column());
                 setItem(index, col, it);
             }
 
@@ -6207,7 +6125,7 @@ void CppParamsTable::delete_row(int row)
             setText(index, mcol + 1, text(index + 1, col));
         }
 
-        setNumRows(n - 1);
+        setRowCount(n - 1);
     }
 }
 
@@ -6264,7 +6182,7 @@ void CppParamsTable::update_edform()
     QString s;
     const char * sep = "";
 
-    int n = numRows();
+    int n = rowCount();
     int index;
     int mcol = ((dcl) ? 6 : 5);
 
@@ -6293,7 +6211,7 @@ void CppParamsTable::update_edform()
                 p += " " + text(index, mcol);
         }
 
-        p = p.stripWhiteSpace();
+        p = p.trimmed();
 
         if (! p.isEmpty()) {
             s += sep + p;
@@ -6303,9 +6221,9 @@ void CppParamsTable::update_edform()
 
     QString form = edform->text();
 
-    index = form.find("${(}");
+    index = form.indexOf("${(}");
 
-    form.replace(index + 4, form.find("${)}") - index - 4, s);
+    form.replace(index + 4, form.indexOf("${)}") - index - 4, s);
     edform->setText(form);
 }
 
@@ -6317,18 +6235,19 @@ QSize CppParamsDialog::previous_size;
 
 CppParamsDialog::CppParamsDialog(QWidget * parent, ParamsTable * params,
                                  MultiLineEdit * form, bool decl)
-    : QDialog(parent, "C++ parameters dialog", TRUE)
+    : QDialog(parent/*, "C++ parameters dialog", TRUE*/)
 {
-    setCaption(TR("C++ parameters dialog"));
+    setWindowTitle(TR("C++ parameters dialog"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
     vbox->setMargin(5);
 
     tbl = new CppParamsTable(params, form, this, decl);
     vbox->addWidget(tbl);
 
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+    QHBoxLayout * hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * accept = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -6352,7 +6271,7 @@ CppParamsDialog::~CppParamsDialog()
 
 void CppParamsDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -6379,26 +6298,32 @@ PhpParamsTable::PhpParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit 
     : MyTable(0, 6, parent), params(p), edform(f)
 {
 
-    setSorting(-1);
+    m_delegate = new TableWidgetItemDelegate(this);
+    setItemDelegateForColumn(1,m_delegate);
+    setItemDelegateForColumn(2,m_delegate);
+    setItemDelegateForColumn(3,m_delegate);
+    setItemDelegateForColumn(4,m_delegate);
+
+    setSortingEnabled(false);
     setSelectionMode(NoSelection);	// single does not work
-    setRowMovingEnabled(TRUE);
-    horizontalHeader()->setLabel(0, TR("Name"));
-    horizontalHeader()->setLabel(1, "${t<i>}/array");
-    horizontalHeader()->setLabel(2, TR("Ref."));
-    horizontalHeader()->setLabel(3, "${p<i>}");
-    horizontalHeader()->setLabel(4, "${v<i>}");
-    horizontalHeader()->setLabel(5, TR("do"));
+    verticalHeader()->setSectionsMovable(true);
+    setHorizontalHeaderLabel(0, TR("Name"));
+    setHorizontalHeaderLabel(1, "${t<i>}/array");
+    setHorizontalHeaderLabel(2, TR("Ref."));
+    setHorizontalHeaderLabel(3, "${p<i>}");
+    setHorizontalHeaderLabel(4, "${v<i>}");
+    setHorizontalHeaderLabel(5, TR("do"));
     setColumnStretchable(0, TRUE);
     setColumnStretchable(1, TRUE);
-    adjustColumn(2);
+    //adjustColumn(2);
     setColumnStretchable(3, TRUE);
     setColumnStretchable(4, TRUE);
-    adjustColumn(5);
+    //adjustColumn(5);
 
 
     QString form = edform->text();
     //the presence of ${(} and ${)} was checked
-    int form_index = form.find("${(}") + 4;
+    int form_index = form.indexOf("${(}") + 4;
     int tbl_index = 0;
 
     while (extract(tbl_index, form_index, form)) {
@@ -6409,8 +6334,8 @@ PhpParamsTable::PhpParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit 
     if (tbl_index == 0)
         insert_row_before(0);
 
-    connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-            this, SLOT(button_pressed(int, int, int, const QPoint &)));
+    connect(this, SIGNAL(pressed(QModelIndex)),
+            this, SLOT(button_pressed(QModelIndex)));
 
     if (PhpRefList.isEmpty()) {
         PhpRefList.append("");
@@ -6421,7 +6346,7 @@ PhpParamsTable::PhpParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit 
     PhpParamRankList.clear();
     PhpValueRankList.clear();
 
-    for (int rank = 0; rank != params->numRows(); rank += 1) {
+    for (int rank = 0; rank != params->rowCount(); rank += 1) {
         if (!params->name(rank).isEmpty() || !params->type(rank).isEmpty()) {
             QString s;
 
@@ -6439,7 +6364,7 @@ PhpParamsTable::PhpParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit 
 
 void PhpParamsTable::init_row(int row)
 {
-    setItem(row, 0, new Q3TableItem(this, Q3TableItem::Never, QString()));
+    setItem(row, 0, new QTableWidgetItem(/*this, TableItem::Never,*/ QString()));
     setItem(row, 1, new ComboItem(this, QString(), PhpTypeRankList));
     setItem(row, 2, new ComboItem(this, QString(), PhpRefList));
     setItem(row, 3, new ComboItem(this, QString(), PhpParamRankList));
@@ -6453,34 +6378,34 @@ bool PhpParamsTable::extract(int tblindex, int & strindex, QString s)
     while (s.at(strindex).isSpace())
         strindex += 1;
 
-    int sup = supOf(s, strindex);
+    int sup = OperationFuncs::supOf(s.toLatin1().constData(), strindex);
 
-    if (s.mid(strindex, sup - strindex).stripWhiteSpace().isEmpty())
+    if (s.mid(strindex, sup - strindex).trimmed().isEmpty())
         return FALSE;
 
     QString t_i;
     QString ptr;
     QString p_i;
     QString v_i;
-    int index = s.find("${t", strindex);
+    int index = s.indexOf("${t", strindex);
 
     if ((index == -1) || (index >= sup)) {
         // no $type
-        index = s.find("${p", strindex);
+        index = s.indexOf("${p", strindex);
 
         if ((index != -1) && (index < sup)) {
             // no $type, have name
-            t_i = s.mid(strindex, index - strindex).stripWhiteSpace();
+            t_i = s.mid(strindex, index - strindex).trimmed();
 
             // extract ptr
-            int ir = t_i.find('&');
+            int ir = t_i.indexOf('&');
 
             if (ir != -1) {
-                ptr = t_i.mid(ir).stripWhiteSpace();
-                t_i = t_i.left(ir).stripWhiteSpace();
+                ptr = t_i.mid(ir).trimmed();
+                t_i = t_i.left(ir).trimmed();
             }
 
-            if (((strindex = s.find('}', index + 2)) == -1) || (strindex >= sup))
+            if (((strindex = s.indexOf('}', index + 2)) == -1) || (strindex >= sup))
                 return FALSE;
             else {
                 strindex += 1;
@@ -6490,19 +6415,19 @@ bool PhpParamsTable::extract(int tblindex, int & strindex, QString s)
         }
     }
     else {
-        if (((strindex = s.find('}', index + 2)) == -1) || (strindex >= sup))
+        if (((strindex = s.indexOf('}', index + 2)) == -1) || (strindex >= sup))
             return FALSE;
 
         strindex += 1;
         t_i = s.mid(index, strindex - index);
 
-        index = s.find("${p", strindex);
+        index = s.indexOf("${p", strindex);
 
         if ((index != -1) && (index < sup)) {
             // named
-            ptr = s.mid(strindex, index - strindex).stripWhiteSpace();
+            ptr = s.mid(strindex, index - strindex).trimmed();
 
-            if (((strindex = s.find('}', index + 2)) == -1) || (strindex >= sup))
+            if (((strindex = s.indexOf('}', index + 2)) == -1) || (strindex >= sup))
                 return FALSE;
             else {
                 strindex += 1;
@@ -6513,7 +6438,7 @@ bool PhpParamsTable::extract(int tblindex, int & strindex, QString s)
     }
 
     if ((v_i.length() >= 5) && (v_i.left(3) == "${v")) {
-        if ((strindex = v_i.find('}', 3)) == -1)
+        if ((strindex = v_i.indexOf('}', 3)) == -1)
             return FALSE;
         else
             v_i = v_i.left(strindex + 1);
@@ -6521,7 +6446,7 @@ bool PhpParamsTable::extract(int tblindex, int & strindex, QString s)
     else
         v_i = "";
 
-    setNumRows(tblindex + 1);
+    setRowCount(tblindex + 1);
 
     setItem(tblindex, 1, new ComboItem(this, t_i, PhpTypeRankList));
     setItem(tblindex, 2, new ComboItem(this, ptr, PhpRefList));
@@ -6533,9 +6458,9 @@ bool PhpParamsTable::extract(int tblindex, int & strindex, QString s)
     return TRUE;
 }
 
-void PhpParamsTable::setItem(int row, int col, Q3TableItem * item)
+void PhpParamsTable::setItem(int row, int col, QTableWidgetItem * item)
 {
-    Q3Table::setItem(row, col, item);
+    QTableWidget::setItem(row, col, item);
 
     if ((col == 1) || (col == 3))
         update_name(row);
@@ -6543,13 +6468,13 @@ void PhpParamsTable::setItem(int row, int col, Q3TableItem * item)
 
 void PhpParamsTable::setCurrentCell(int row, int col)
 {
-    Q3Table::setCurrentCell(row, col);
+    QTableWidget::setCurrentCell(row, col);
     update_names();
 }
 
 void PhpParamsTable::update_names()
 {
-    int n = numRows();
+    int n = rowCount();
     int row;
 
     for (row = 0; row != n; row += 1)
@@ -6564,192 +6489,209 @@ void PhpParamsTable::update_name(int row)
     unsigned p_i;
 
     if (!text(row, 1).isEmpty() &&
-        (sscanf((const char *) text(row, 1), "${t%u}", &t_i) == 1))
+            (sscanf((const char *) text(row, 1).toLatin1().constData(), "${t%u}", &t_i) == 1))
         t_set = TRUE;
     else
         t_set = FALSE;
 
     if (!text(row, 3).isEmpty() &&
-        (sscanf((const char *) text(row, 3), "${p%u}", &p_i) == 1))
+            (sscanf((const char *) text(row, 3).toLatin1().constData(), "${p%u}", &p_i) == 1))
         p_set = TRUE;
     else
         p_set = FALSE;
 
     if (t_set) {
         if (p_set)
-            Q3Table::setItem(row, 0,
-                             new Q3TableItem(this, Q3TableItem::Never,
-                                             ((t_i == p_i) && (t_i < params->nparams()))
-                                             ? params->name(t_i) : QString()));
+            QTableWidget::setItem(row, 0,
+                                  new QTableWidgetItem(/*this, TableItem::Never,*/
+                                                       ((t_i == p_i) && (t_i < params->nparams()))
+                                                       ? params->name(t_i) : QString()));
         else
-            Q3Table::setItem(row, 0,
-                             new Q3TableItem(this, Q3TableItem::Never,
-                                             (t_i < params->nparams())
-                                             ? params->name(t_i) : QString()));
+            QTableWidget::setItem(row, 0,
+                                  new QTableWidgetItem(/*this, TableItem::Never,*/
+                                                       (t_i < params->nparams())
+                                                       ? params->name(t_i) : QString()));
     }
     else
-        Q3Table::setItem(row, 0,
-                         new Q3TableItem(this, Q3TableItem::Never,
-                                         (p_set && (p_i < params->nparams()))
-                                         ? params->name(p_i) : QString()));
+        QTableWidget::setItem(row, 0,
+                              new QTableWidgetItem(/*this, TableItem::Never,*/
+                                                   (p_set && (p_i < params->nparams()))
+                                                   ? params->name(p_i) : QString()));
 }
 
-void PhpParamsTable::button_pressed(int row, int col, int, const QPoint &)
+void PhpParamsTable::button_pressed(const QModelIndex &index)
 {
+    int row = index.row();
+    int col = index.column();
     if (col == 5) {
         char s[16];
-        Q3PopupMenu m;
+        QMenu m;
 
         sprintf(s, "%d", row + 1);
-        m.insertItem(TR("param %1", s), -1);
-        m.insertSeparator();
-        m.insertItem(TR("Insert param before"), 0);
-        m.insertItem(TR("Insert param after"), 1);
-        m.insertSeparator();
-        m.insertItem(TR("Delete param"), 2);
-        m.insertSeparator();
-        m.insertItem(TR("Copy param"), 3);
-        m.insertItem(TR("Cut param"), 4);
-        m.insertItem(TR("Paste param"), 5);
-        m.insertSeparator();
+        MenuFactory::addItem(m, TR("param %1", s), -1);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Insert param before"), 0);
+        MenuFactory::addItem(m, TR("Insert param after"), 1);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Delete param"), 2);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Copy param"), 3);
+        MenuFactory::addItem(m, TR("Cut param"), 4);
+        MenuFactory::addItem(m, TR("Paste param"), 5);
+        m.addSeparator();
 
-        Q3PopupMenu mv;
+        QMenu mv;
         int rank;
 
-        for (rank = 0; rank != numRows(); rank += 1)
+        for (rank = 0; rank != rowCount(); rank += 1)
             if (rank != row)
-                mv.insertItem(QString::number(rank + 1), 10 + rank);
+                MenuFactory::addItem(mv, QString::number(rank + 1), 10 + rank);
 
-        m.insertItem(TR("Move param"), &mv);
-        m.insertSeparator();
+        MenuFactory::insertItem(m, TR("Move param"), &mv);
+        m.addSeparator();
 
-        Q3PopupMenu rk;
+        QMenu rk;
         int t_i;
         int p_i;
         int v_i;
 
         if (text(row, 1).isEmpty() ||
-            (sscanf((const char *) text(row, 1), "${t%d}", &t_i) != 1))
+                (sscanf((const char *) text(row, 1).toLatin1().constData(), "${t%d}", &t_i) != 1))
             t_i = -1;
 
         if (text(row, 3).isEmpty() ||
-            (sscanf((const char *) text(row, 3), "${p%d}", &p_i) != 1))
+                (sscanf((const char *) text(row, 3).toLatin1().constData(), "${p%d}", &p_i) != 1))
             p_i = -1;
 
         if (text(row, 4).isEmpty() ||
-            (sscanf((const char *) text(row, 4), "${v%d}", &v_i) != 1))
+                (sscanf((const char *) text(row, 4).toLatin1().constData(), "${v%d}", &v_i) != 1))
             v_i = -1;
 
-        for (rank = 0; rank != params->numRows(); rank += 1)
+        for (rank = 0; rank != params->rowCount(); rank += 1)
             if ((!params->name(rank).isEmpty() || !params->type(rank).isEmpty()) &&
-                ((rank != t_i) || (rank != p_i)))
-                rk.insertItem(QString::number(rank), 100 + rank);
+                    ((rank != t_i) || (rank != p_i)))
+                MenuFactory::addItem(rk,QString::number(rank), 100 + rank);
 
-        m.insertItem(TR("Set rank <i>"), &rk);
+        MenuFactory::insertItem(m, TR("Set rank <i>"), &rk);
 
-        switch (rank = m.exec(QCursor::pos())) {
-        case 0:
-            insert_row_before(row);
-            break;
+        QAction *retAction = m.exec(QCursor::pos());
+        if(retAction)
+            switch (rank = retAction->data().toInt()){
+            case 0:
+                insert_row_before(row);
+                break;
 
-        case 1:
-            insert_row_after(row);
-            break;
+            case 1:
+                insert_row_after(row);
+                break;
 
-        case 2:
-            delete_row(row);
-            break;
+            case 2:
+                delete_row(row);
+                break;
 
-        case 3:
-            copy_row(row);
-            break;
+            case 3:
+                copy_row(row);
+                break;
 
-        case 4:
-            cut_row(row);
-            break;
+            case 4:
+                cut_row(row);
+                break;
 
-        case 5:
-            paste_row(row);
-            break;
+            case 5:
+                paste_row(row);
+                break;
 
-        default:
-            if (rank >= 100) {
-                char s[32];
+            default:
+                if (rank >= 100) {
+                    char s[32];
 
-                if (t_i != -1) {
-                    sprintf(s, "${t%d}", rank - 100);
-                    setItem(row, 1, new ComboItem(this, s, PhpTypeRankList));
+                    if (t_i != -1) {
+                        sprintf(s, "${t%d}", rank - 100);
+                        setItem(row, 1, new ComboItem(this, s, PhpTypeRankList));
+                    }
+
+                    if (p_i != -1) {
+                        sprintf(s, "${p%d}", rank - 100);
+                        setItem(row, 3, new ComboItem(this, s, PhpParamRankList));
+                    }
+
+                    if (v_i != -1) {
+                        sprintf(s, "${v%d}", rank - 100);
+                        setItem(row, 4, new ComboItem(this, s, PhpValueRankList));
+                    }
                 }
+                else if (rank >= 10)
+                    move_row(row, rank - 10);
 
-                if (p_i != -1) {
-                    sprintf(s, "${p%d}", rank - 100);
-                    setItem(row, 3, new ComboItem(this, s, PhpParamRankList));
-                }
-
-                if (v_i != -1) {
-                    sprintf(s, "${v%d}", rank - 100);
-                    setItem(row, 4, new ComboItem(this, s, PhpValueRankList));
-                }
+                break;
             }
-            else if (rank >= 10)
-                move_row(row, rank - 10);
-
-            break;
-        }
     }
 }
 
 void PhpParamsTable::insert_row_before(int row)
 {
-    int n = numRows();
+    /*int n = rowCount();
     int index;
     int col;
 
-    setNumRows(n + 1);
+    setRowCount(n + 1);
 
     for (index = n; index != row; index -= 1) {
         for (col = 0; col != 5; col += 1) {
-            Q3TableItem * it = item(index - 1, col);
-
-            takeItem(it);
-            setItem(index, col, it);
+            QTableWidgetItem * it = item(index - 1, col);
+            if(it)
+            {
+                takeItem(it->row(), it->column());
+                setItem(index, col, it);
+            }
         }
 
         setText(index, 5, text(index - 1, 5));
     }
-
+    */
+    blockSignals(true);
+    DISABLESORTINGMYTABLE;
+    insertRow(row);
     init_row(row);
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
+
 }
 
 void PhpParamsTable::insert_row_after(int row)
 {
-    int n = numRows();
+    /*int n = rowCount();
     int index;
     int col;
 
-    setNumRows(n + 1);
+    setRowCount(n + 1);
 
     for (index = n; index > row + 1; index -= 1) {
         for (col = 0; col != 5; col += 1) {
-            Q3TableItem * it = item(index - 1, col);
+            QTableWidgetItem * it = item(index - 1, col);
 
-            takeItem(it);
+            takeItem(it->row(), it->column());
             setItem(index, col, it);
         }
 
         setText(index, 5, text(index - 1, col));
     }
-
+    */
+    blockSignals(true);
+    DISABLESORTINGMYTABLE;
+    insertRow(row+1);
     init_row(row + 1);
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
 }
 
 void PhpParamsTable::delete_row(int row)
 {
-    int n = numRows();
+    int n = rowCount();
     int index;
     int col;
 
-    clearCellWidget(row, 1);
+    removeCellWidget(row, 1);
 
     if (row == (n - 1)) {
         // the last line : empty it
@@ -6758,16 +6700,16 @@ void PhpParamsTable::delete_row(int row)
     else {
         for (index = row; index != n - 1; index += 1) {
             for (col = 0; col != 5; col += 1) {
-                Q3TableItem * it = item(index + 1, col);
+                QTableWidgetItem * it = item(index + 1, col);
 
-                takeItem(it);
+                takeItem(it->row(), it->column());
                 setItem(index, col, it);
             }
 
             setText(index, 5, text(index + 1, col));
         }
 
-        setNumRows(n - 1);
+        setRowCount(n - 1);
     }
 }
 
@@ -6821,7 +6763,7 @@ void PhpParamsTable::update_edform()
     QString s;
     const char * sep = "";
 
-    int n = numRows();
+    int n = rowCount();
     int index;
 
     for (index = 0; index != n; index += 1) {
@@ -6842,7 +6784,7 @@ void PhpParamsTable::update_edform()
             }
         }
 
-        p = p.stripWhiteSpace();
+        p = p.trimmed();
 
         if (! p.isEmpty()) {
             s += sep + p;
@@ -6852,9 +6794,9 @@ void PhpParamsTable::update_edform()
 
     QString form = edform->text();
 
-    index = form.find("${(}");
+    index = form.indexOf("${(}");
 
-    form.replace(index + 4, form.find("${)}") - index - 4, s);
+    form.replace(index + 4, form.indexOf("${)}") - index - 4, s);
     edform->setText(form);
 }
 
@@ -6865,18 +6807,19 @@ void PhpParamsTable::update_edform()
 QSize PhpParamsDialog::previous_size;
 
 PhpParamsDialog::PhpParamsDialog(QWidget * parent, ParamsTable * params, MultiLineEdit * form)
-    : QDialog(parent, "Php parameters dialog", TRUE)
+    : QDialog(parent/*, "Php parameters dialog", TRUE*/)
 {
-    setCaption(TR("Php parameters dialog"));
+    setWindowTitle(TR("Php parameters dialog"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
     vbox->setMargin(5);
 
     tbl = new PhpParamsTable(this, params, form);
     vbox->addWidget(tbl);
 
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+    QHBoxLayout * hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * accept = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -6900,7 +6843,7 @@ PhpParamsDialog::~PhpParamsDialog()
 
 void PhpParamsDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -6928,26 +6871,32 @@ PythonParamsTable::PythonParamsTable(QWidget * parent, ParamsTable * p, MultiLin
     : MyTable(0, 6, parent), params(p), edform(f)
 {
 
-    setSorting(-1);
+    m_delegate = new TableWidgetItemDelegate(this);
+    setItemDelegateForColumn(1,m_delegate);
+    setItemDelegateForColumn(2,m_delegate);
+    setItemDelegateForColumn(3,m_delegate);
+    setItemDelegateForColumn(4,m_delegate);
+
+    setSortingEnabled(false);
     setSelectionMode(NoSelection);	// single does not work
-    setRowMovingEnabled(TRUE);
-    horizontalHeader()->setLabel(0, TR("Name"));
-    horizontalHeader()->setLabel(1, TR("Modifier"));
-    horizontalHeader()->setLabel(2, "${p<i>}");
-    horizontalHeader()->setLabel(3, "${t<i>}");
-    horizontalHeader()->setLabel(4, "${v<i>}");
-    horizontalHeader()->setLabel(5, TR("do"));
+    verticalHeader()->setSectionsMovable(true);
+    setHorizontalHeaderLabel(0, TR("Name"));
+    setHorizontalHeaderLabel(1, TR("Modifier"));
+    setHorizontalHeaderLabel(2, "${p<i>}");
+    setHorizontalHeaderLabel(3, "${t<i>}");
+    setHorizontalHeaderLabel(4, "${v<i>}");
+    setHorizontalHeaderLabel(5, TR("do"));
     setColumnStretchable(0, TRUE);
-    adjustColumn(1);
+    //adjustColumn(1);
     setColumnStretchable(2, TRUE);
     setColumnStretchable(3, TRUE);
     setColumnStretchable(4, TRUE);
-    adjustColumn(5);
+    //adjustColumn(5);
 
 
     QString form = edform->text();
     //the presence of ${(} and ${)} was checked
-    int form_index = form.find("${(}") + 4;
+    int form_index = form.indexOf("${(}") + 4;
     int tbl_index = 0;
 
     while (extract(tbl_index, form_index, form)) {
@@ -6958,8 +6907,8 @@ PythonParamsTable::PythonParamsTable(QWidget * parent, ParamsTable * p, MultiLin
     if (tbl_index == 0)
         insert_row_before(0);
 
-    connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-            this, SLOT(button_pressed(int, int, int, const QPoint &)));
+    connect(this, SIGNAL(pressed(QModelIndex)),
+            this, SLOT(button_pressed(QModelIndex)));
 
     if (PythonModList.isEmpty()) {
         PythonModList.append("");
@@ -6971,7 +6920,7 @@ PythonParamsTable::PythonParamsTable(QWidget * parent, ParamsTable * p, MultiLin
     PythonTypeRankList.clear();
     PythonValueRankList.clear();
 
-    for (int rank = 0; rank != params->numRows(); rank += 1) {
+    for (int rank = 0; rank != params->rowCount(); rank += 1) {
         if (!params->name(rank).isEmpty()) {
             QString s;
 
@@ -6989,7 +6938,7 @@ PythonParamsTable::PythonParamsTable(QWidget * parent, ParamsTable * p, MultiLin
 
 void PythonParamsTable::init_row(int row)
 {
-    setItem(row, 0, new Q3TableItem(this, Q3TableItem::Never, QString()));
+    setItem(row, 0, new QTableWidgetItem(/*this, TableItem::Never,*/ QString()));
     setItem(row, 1, new ComboItem(this, QString(), PythonModList));
     setItem(row, 2, new ComboItem(this, QString(), PythonParamRankList));
     setItem(row, 3, new ComboItem(this, QString(), PythonTypeRankList));
@@ -7003,9 +6952,9 @@ bool PythonParamsTable::extract(int tblindex, int & strindex, QString s)
     while (s.at(strindex).isSpace())
         strindex += 1;
 
-    int sup = supOf(s, strindex);
+    int sup = OperationFuncs::supOf(s.toLatin1().constData(), strindex);
 
-    if (s.mid(strindex, sup - strindex).stripWhiteSpace().isEmpty())
+    if (s.mid(strindex, sup - strindex).trimmed().isEmpty())
         return FALSE;
 
     QString p_i;
@@ -7013,19 +6962,19 @@ bool PythonParamsTable::extract(int tblindex, int & strindex, QString s)
     QString v_i;
     QString ptr;
     QString m_i;
-    int index = s.find("${p", strindex);
+    int index = s.indexOf("${p", strindex);
 
     if ((index != -1) && (index < sup)) {
         // have name
-        m_i = s.mid(strindex, index - strindex).stripWhiteSpace();
+        m_i = s.mid(strindex, index - strindex).trimmed();
 
         // extract modifier
-        if (m_i.find("**") != -1)
+        if (m_i.indexOf("**") != -1)
             m_i = "**";
-        else if (m_i.find("*") != -1)
+        else if (m_i.indexOf("*") != -1)
             m_i = "*";
 
-        if (((strindex = s.find('}', index + 2)) == -1) || (strindex >= sup))
+        if (((strindex = s.indexOf('}', index + 2)) == -1) || (strindex >= sup))
             return FALSE;
         else {
             strindex += 1;
@@ -7037,7 +6986,7 @@ bool PythonParamsTable::extract(int tblindex, int & strindex, QString s)
         return FALSE;
 
     if ((t_i.length() >= 5) && (t_i.left(3) == "${t")) {
-        if ((strindex = t_i.find('}', 3)) == -1)
+        if ((strindex = t_i.indexOf('}', 3)) == -1)
             return FALSE;
         else {
             strindex += 1;
@@ -7051,7 +7000,7 @@ bool PythonParamsTable::extract(int tblindex, int & strindex, QString s)
     }
 
     if ((v_i.length() >= 5) && (v_i.left(3) == "${v")) {
-        if ((strindex = v_i.find('}', 3)) == -1)
+        if ((strindex = v_i.indexOf('}', 3)) == -1)
             return FALSE;
         else
             v_i = v_i.left(strindex + 1);
@@ -7059,7 +7008,7 @@ bool PythonParamsTable::extract(int tblindex, int & strindex, QString s)
     else
         v_i = "";
 
-    setNumRows(tblindex + 1);
+    setRowCount(tblindex + 1);
 
     setItem(tblindex, 1, new ComboItem(this, m_i, PythonModList));
     setItem(tblindex, 2, new ComboItem(this, p_i, PythonParamRankList));
@@ -7071,9 +7020,9 @@ bool PythonParamsTable::extract(int tblindex, int & strindex, QString s)
     return TRUE;
 }
 
-void PythonParamsTable::setItem(int row, int col, Q3TableItem * item)
+void PythonParamsTable::setItem(int row, int col, QTableWidgetItem * item)
 {
-    Q3Table::setItem(row, col, item);
+    QTableWidget::setItem(row, col, item);
 
     if (col == 2)
         update_name(row);
@@ -7081,13 +7030,13 @@ void PythonParamsTable::setItem(int row, int col, Q3TableItem * item)
 
 void PythonParamsTable::setCurrentCell(int row, int col)
 {
-    Q3Table::setCurrentCell(row, col);
+    QTableWidget::setCurrentCell(row, col);
     update_names();
 }
 
 void PythonParamsTable::update_names()
 {
-    int n = numRows();
+    int n = rowCount();
     int row;
 
     for (row = 0; row != n; row += 1)
@@ -7100,172 +7049,190 @@ void PythonParamsTable::update_name(int row)
     unsigned p_i;
 
     if (!text(row, 2).isEmpty() &&
-        (sscanf((const char *) text(row, 2), "${p%u}", &p_i) == 1))
+            (sscanf((const char *) text(row, 2).toLatin1().constData(), "${p%u}", &p_i) == 1))
         p_set = TRUE;
     else
         p_set = FALSE;
 
-    Q3Table::setItem(row, 0,
-                     new Q3TableItem(this, Q3TableItem::Never,
-                                     (p_set && (p_i < params->nparams()))
-                                     ? params->name(p_i) : QString()));
+    QTableWidget::setItem(row, 0,
+                          new QTableWidgetItem(/*this, TableItem::Never,*/
+                                               (p_set && (p_i < params->nparams()))
+                                               ? params->name(p_i) : QString()));
 }
 
-void PythonParamsTable::button_pressed(int row, int col, int, const QPoint &)
+void PythonParamsTable::button_pressed(const QModelIndex &index)
 {
+    int row = index.row();
+    int col = index.column();
     if (col == 5) {
         char s[16];
-        Q3PopupMenu m;
+        QMenu m;
 
         sprintf(s, "%d", row + 1);
-        m.insertItem(TR("param %1", s), -1);
-        m.insertSeparator();
-        m.insertItem(TR("Insert param before"), 0);
-        m.insertItem(TR("Insert param after"), 1);
-        m.insertSeparator();
-        m.insertItem(TR("Delete param"), 2);
-        m.insertSeparator();
-        m.insertItem(TR("Copy param"), 3);
-        m.insertItem(TR("Cut param"), 4);
-        m.insertItem(TR("Paste param"), 5);
-        m.insertSeparator();
+        MenuFactory::addItem(m, TR("param %1", s), -1);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Insert param before"), 0);
+        MenuFactory::addItem(m, TR("Insert param after"), 1);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Delete param"), 2);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Copy param"), 3);
+        MenuFactory::addItem(m, TR("Cut param"), 4);
+        MenuFactory::addItem(m, TR("Paste param"), 5);
+        m.addSeparator();
 
-        Q3PopupMenu mv;
+        QMenu mv;
         int rank;
 
-        for (rank = 0; rank != numRows(); rank += 1)
+        for (rank = 0; rank != rowCount(); rank += 1)
             if (rank != row)
-                mv.insertItem(QString::number(rank + 1), 10 + rank);
+                MenuFactory::addItem(mv, QString::number(rank + 1), 10 + rank);
 
-        m.insertItem(TR("Move param"), &mv);
-        m.insertSeparator();
+        MenuFactory::insertItem(m, TR("Move param"), &mv);
+        m.addSeparator();
 
-        Q3PopupMenu rk;
+        QMenu rk;
         int p_i;
         int v_i;
         int t_i;
 
         if (text(row, 2).isEmpty() ||
-            (sscanf((const char *) text(row, 2), "${p%d}", &p_i) != 1))
+                (sscanf((const char *) text(row, 2).toLatin1().constData(), "${p%d}", &p_i) != 1))
             p_i = -1;
 
         if (text(row, 3).isEmpty() ||
-            (sscanf((const char *) text(row, 3), "${t%d}", &t_i) != 1))
+                (sscanf((const char *) text(row, 3).toLatin1().constData(), "${t%d}", &t_i) != 1))
             t_i = -1;
 
         if (text(row, 4).isEmpty() ||
-            (sscanf((const char *) text(row, 4), "${v%d}", &v_i) != 1))
+                (sscanf((const char *) text(row, 4).toLatin1().constData(), "${v%d}", &v_i) != 1))
             v_i = -1;
 
-        for (rank = 0; rank != params->numRows(); rank += 1)
+        for (rank = 0; rank != params->rowCount(); rank += 1)
             if (!params->name(rank).isEmpty() && (rank != p_i))
-                rk.insertItem(QString::number(rank), 100 + rank);
+                MenuFactory::addItem(rk,QString::number(rank), 100 + rank);
 
-        m.insertItem(TR("Set rank <i>"), &rk);
+        MenuFactory::insertItem(m, TR("Set rank <i>"), &rk);
 
-        switch (rank = m.exec(QCursor::pos())) {
-        case 0:
-            insert_row_before(row);
-            break;
+        QAction *retAction = m.exec(QCursor::pos());
+        if(retAction)
+            switch (rank = retAction->data().toInt()){
+            case 0:
+                insert_row_before(row);
+                break;
 
-        case 1:
-            insert_row_after(row);
-            break;
+            case 1:
+                insert_row_after(row);
+                break;
 
-        case 2:
-            delete_row(row);
-            break;
+            case 2:
+                delete_row(row);
+                break;
 
-        case 3:
-            copy_row(row);
-            break;
+            case 3:
+                copy_row(row);
+                break;
 
-        case 4:
-            cut_row(row);
-            break;
+            case 4:
+                cut_row(row);
+                break;
 
-        case 5:
-            paste_row(row);
-            break;
+            case 5:
+                paste_row(row);
+                break;
 
-        default:
-            if (rank >= 100) {
-                char s[32];
+            default:
+                if (rank >= 100) {
+                    char s[32];
 
-                if (p_i != -1) {
-                    sprintf(s, "${p%d}", rank - 100);
-                    setItem(row, 2, new ComboItem(this, s, PythonParamRankList));
+                    if (p_i != -1) {
+                        sprintf(s, "${p%d}", rank - 100);
+                        setItem(row, 2, new ComboItem(this, s, PythonParamRankList));
+                    }
+
+                    if (v_i != -1) {
+                        sprintf(s, "${t%d}", rank - 100);
+                        setItem(row, 3, new ComboItem(this, s, PythonTypeRankList));
+                    }
+
+                    if (v_i != -1) {
+                        sprintf(s, "${v%d}", rank - 100);
+                        setItem(row, 4, new ComboItem(this, s, PythonValueRankList));
+                    }
                 }
+                else if (rank >= 10)
+                    move_row(row, rank - 10);
 
-                if (v_i != -1) {
-                    sprintf(s, "${t%d}", rank - 100);
-                    setItem(row, 3, new ComboItem(this, s, PythonTypeRankList));
-                }
-
-                if (v_i != -1) {
-                    sprintf(s, "${v%d}", rank - 100);
-                    setItem(row, 4, new ComboItem(this, s, PythonValueRankList));
-                }
+                break;
             }
-            else if (rank >= 10)
-                move_row(row, rank - 10);
-
-            break;
-        }
     }
 }
 
 void PythonParamsTable::insert_row_before(int row)
 {
-    int n = numRows();
+    /*int n = rowCount();
     int index;
     int col;
 
-    setNumRows(n + 1);
+    setRowCount(n + 1);
 
     for (index = n; index != row; index -= 1) {
         for (col = 0; col != 5; col += 1) {
-            Q3TableItem * it = item(index - 1, col);
+            QTableWidgetItem * it = item(index - 1, col);
 
-            takeItem(it);
-            setItem(index, col, it);
+            if(it)
+            {
+                takeItem(it->row(), it->column());
+                setItem(index, col, it);
+            }
         }
 
         setText(index, col, text(index - 1, col));
-    }
-
+    }*/
+    blockSignals(true);
+    DISABLESORTINGMYTABLE;
+    insertRow(row);
     init_row(row);
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
 }
 
 void PythonParamsTable::insert_row_after(int row)
 {
-    int n = numRows();
+    /*int n = rowCount();
     int index;
     int col;
 
-    setNumRows(n + 1);
+    setRowCount(n + 1);
 
     for (index = n; index > row + 1; index -= 1) {
         for (col = 0; col != 5; col += 1) {
-            Q3TableItem * it = item(index - 1, col);
+            QTableWidgetItem * it = item(index - 1, col);
 
-            takeItem(it);
-            setItem(index, col, it);
+            if(it)
+            {
+                takeItem(it->row(), it->column());
+                setItem(index, col, it);
+            }
         }
 
         setText(index, col, text(index - 1, col));
-    }
-
+    }*/
+    blockSignals(true);
+    DISABLESORTINGMYTABLE;
+    insertRow(row+1);
     init_row(row + 1);
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
 }
 
 void PythonParamsTable::delete_row(int row)
 {
-    int n = numRows();
+    int n = rowCount();
     int index;
     int col;
 
-    clearCellWidget(row, 1);
+    removeCellWidget(row, 1);
 
     if (row == (n - 1)) {
         // the last line : empty it
@@ -7274,16 +7241,16 @@ void PythonParamsTable::delete_row(int row)
     else {
         for (index = row; index != n - 1; index += 1) {
             for (col = 0; col != 5; col += 1) {
-                Q3TableItem * it = item(index + 1, col);
+                QTableWidgetItem * it = item(index + 1, col);
 
-                takeItem(it);
+                takeItem(it->row(), it->column());
                 setItem(index, col, it);
             }
 
             setText(index, col, text(index + 1, col));
         }
 
-        setNumRows(n - 1);
+        setRowCount(n - 1);
     }
 }
 
@@ -7337,7 +7304,7 @@ void PythonParamsTable::update_edform()
     QString s;
     const char * sep = "";
 
-    int n = numRows();
+    int n = rowCount();
     int index;
 
     for (index = 0; index != n; index += 1) {
@@ -7348,7 +7315,7 @@ void PythonParamsTable::update_edform()
             if (!text(index, col).isEmpty())
                 p += text(index, col);
 
-        p = p.stripWhiteSpace();
+        p = p.trimmed();
 
         if (! p.isEmpty()) {
             s += sep + p;
@@ -7358,9 +7325,9 @@ void PythonParamsTable::update_edform()
 
     QString form = edform->text();
 
-    index = form.find("${(}");
+    index = form.indexOf("${(}");
 
-    form.replace(index + 4, form.find("${)}") - index - 4, s);
+    form.replace(index + 4, form.indexOf("${)}") - index - 4, s);
     edform->setText(form);
 }
 
@@ -7371,18 +7338,19 @@ void PythonParamsTable::update_edform()
 QSize PythonParamsDialog::previous_size;
 
 PythonParamsDialog::PythonParamsDialog(QWidget * parent, ParamsTable * params, MultiLineEdit * form)
-    : QDialog(parent, "Python parameters dialog", TRUE)
+    : QDialog(parent/*, "Python parameters dialog", TRUE*/)
 {
-    setCaption(TR("Python parameters dialog"));
+    setWindowTitle(TR("Python parameters dialog"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
     vbox->setMargin(5);
 
     tbl = new PythonParamsTable(this, params, form);
     vbox->addWidget(tbl);
 
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+    QHBoxLayout * hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * accept = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -7406,7 +7374,7 @@ PythonParamsDialog::~PythonParamsDialog()
 
 void PythonParamsDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -7421,13 +7389,12 @@ void PythonParamsDialog::accept()
 void OperationDialog::InitGui()
 {
     init_uml();
-
-    InitPropertiesTab();
     init_cpp();
     init_java();
     init_php();
     init_python();
     init_idl();
+    InitPropertiesTab();
 
 }
 
@@ -7481,29 +7448,26 @@ uint OperationDialog::TypeID()
     return TypeIdentifier<OperationDialog>::id();
 }
 
-QSharedPointer<OperationDialog> OperationDialog::Instance(OperationData * o, DrawingLanguage l)
+OperationDialog* OperationDialog::Instance(OperationData * o, DrawingLanguage l)
 {
-    if (instance.isNull())
-        instance = QSharedPointer<OperationDialog>(new OperationDialog(o, l));
-    else {
-        instance->drawingLanguage = l;
-        instance->FillGuiElements(o);
-    }
-
-    return instance;
+    OperationDialog* dialog = new OperationDialog(o, l);
+    //dialog->setWindowFlags(Qt::WDestructiveClose);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    return dialog;
 }
 
 void OperationDialog::InitPropertiesTab()
 {
     // USER : list key - value
 
-    Q3Grid  *  grid = new Q3Grid(2, this);
+    GridBox  *  grid = new GridBox(2, this);
 
-    grid->setMargin(5);
-    grid->setSpacing(5);
+    RegisterTab("Properties", grid);
+    grid->setMargin(1);
+    grid->setSpacing(1);
 
     kvtable = new KeyValuesTable(oper->get_browser_node(), grid, !isWritable); //update this table
-    RegisterTab("Properties", grid);
+    grid->addWidget(kvtable);
     addTab(grid, TR("Properties"));
 
 }
@@ -7511,6 +7475,7 @@ void OperationDialog::InitPropertiesTab()
 void OperationDialog::FillPropertiesTab(OperationData * o)
 {
     kvtable->updateThisFromNode(o->browser_node, !isWritable);
+    ShowTab("Properties");
 }
 
 

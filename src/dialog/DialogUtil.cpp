@@ -39,29 +39,28 @@
 #include <qlabel.h>
 #include <QTextStream>
 #include <qfontmetrics.h>
-#include <q3popupmenu.h>
-#include <q3tabdialog.h>
+//#include <q3popupmenu.h>
+//#include <tabdialog.h>
 #include <qapplication.h>
 #include <QWidget>
 
 //Added by qt3to4:
-#include <Q3PtrList>
-
+//
 #include "BrowserClass.h"
 #include "ClassData.h"
+
 #include "DialogUtil.h"
 #include "BodyDialog.h"
-#include "DialogTimer.h"
 #include "BrowserView.h"
-#include "MenuFont.h"
+#include "DialogTimer.h"
 #include "UmlCanvas.h"
-#include "mu.h"
 #include "KeyValueTable.h"
 #include "GenerationSettings.h"
 #include "strutil.h"
+#include "mu.h"
 #include "UmlDesktop.h"
 #include "translate.h"
-
+#include "menufactory.h"
 static QString DoumlEditor;
 
 SmallPushButton::SmallPushButton(const QString & text, QWidget * parent)
@@ -79,42 +78,40 @@ QSize SmallPushButton::sizeHint() const
 }
 
 MultiLineEdit::MultiLineEdit(QWidget * w, const char * name)
-    : Q3TextEdit(w, name)
+    : QPlainTextEdit(name,w)
 {
-    Q3TextEdit::setTextFormat(Qt::PlainText);
+    //QTextEdit::setTextFormat(Qt::PlainText);
 }
 
 // setText() redefinition
 void MultiLineEdit::setText(const QString & s)
 {
-    Q3TextEdit::setText(toUnicode(s));
+    QPlainTextEdit::setPlainText(s.toUtf8());
 }
 
 QString MultiLineEdit::theText() const
 {
     // no fromUnicode
-    return Q3TextEdit::text();
+    return QPlainTextEdit::toPlainText();
 }
 
 void MultiLineEdit::setTheText(const QString & s)
 {
     // no toUnicode
-    Q3TextEdit::setText(s);
+    QPlainTextEdit::setPlainText(s);
 }
 
 // text() redefinition
 QString MultiLineEdit::text() const
 {
-    QString t = Q3TextEdit::text();
+    QString t = QPlainTextEdit::toPlainText();
 
-    return fromUnicode(t);
+    return QString::fromUtf8(t.toUtf8());
 }
 
-QString MultiLineEdit::stripWhiteSpaceText() const
+QString MultiLineEdit::trimmedText() const
 {
-    QString t = Q3TextEdit::text();
-
-    return fromUnicode(t.stripWhiteSpace());
+        return QString::fromUtf8(toPlainText().trimmed().toUtf8());
 }
 
 LineEdit::LineEdit(QWidget * w)
@@ -123,14 +120,15 @@ LineEdit::LineEdit(QWidget * w)
 }
 
 LineEdit::LineEdit(const QString & s, QWidget * parent, const char * name)
-    : QLineEdit(s, parent, name)
+    : QLineEdit(s, parent/*, name*/)
 {
+    setWindowTitle(name);
 }
 
 // setText() redefinition
 void LineEdit::setText(const QString & s)
 {
-    QLineEdit::setText(toUnicode(s));
+    QLineEdit::setText(toUnicode(s.toLatin1().constData()));
 }
 
 // text() redefinition
@@ -152,10 +150,9 @@ QString LineEdit::theText() const
     // no fromUnicode
     return QLineEdit::text();
 }
-
 //
 
-void init_font_menu(Q3PopupMenu & fontsubm, UmlCanvas * canvas, int index)
+void init_font_menu(QMenu & fontsubm, UmlCanvas * canvas, int index)
 {
     int f;
 
@@ -163,14 +160,15 @@ void init_font_menu(Q3PopupMenu & fontsubm, UmlCanvas * canvas, int index)
         QString s = stringify((UmlFont) f);
         int i = 0;
 
-        while ((i = s.find('_', i)) != -1)
+        while ((i = s.indexOf('_', i)) != -1)
             s.replace(i, 1, " ");
-
-        fontsubm.insertItem(new MenuFont(s, canvas->get_font((UmlFont) f)),
-                            index++);
+        //fontsubm.insertItem(new MenuFont(s, canvas->get_font((UmlFont) f)),
+         //                   index++);
+        MenuFactory::addItem(fontsubm,s,index);
+        MenuFactory::findAction(fontsubm, index)->setFont(canvas->get_font((UmlFont) f));
+        index++;
     }
 }
-
 void same_width(QWidget * l1, QWidget * l2)
 {
     int w1 = l1->sizeHint().width();
@@ -245,9 +243,8 @@ void same_width(QWidget * l1, QWidget * l2, QWidget * l3,
     l4-> setFixedWidth(w1);
     l5-> setFixedWidth(w1);
 }
-
 void edit(const QString & s, QString name, void * id, EditType k,
-          Q3TabDialog * d, post_edit pf, Q3PtrList<BodyDialog> & edits)
+          TabDialog * d, post_edit pf, QList<BodyDialog *> & edits)
 {
     QString ed = DoumlEditor;
 
@@ -291,18 +288,18 @@ void edit(const QString & s, QString name, void * id, EditType k,
             if (!f[index].isLetterOrNumber())
                 f.replace(index, 1, "_");
 
-        QString path = BrowserView::get_dir().absFilePath(f);
+        QString path = BrowserView::get_dir().absoluteFilePath(f);
 
-        FILE * fp = fopen((const char *) path, "wb");
+        FILE * fp = fopen((const char *) path.toLatin1().constData(), "wb");
 
         if (fp != 0) {
             if (!s.isEmpty())
-                fputs((const char *) s, fp);
+                fputs((const char *) s.toLatin1().constData(), fp);
 
             fclose(fp);
 
             ed += " \"" + path + "\"&";
-            (void) system(ed);
+            (void) system(ed.toLatin1().constData());
 
             if (d->hasOkButton() && (pf != 0))
                 (new DialogTimer(s, path, d, pf))->start(1000);
@@ -310,7 +307,7 @@ void edit(const QString & s, QString name, void * id, EditType k,
             return;
         }
         else
-            msg_critical("Error", TR("Cannot open '%1'", path));
+            msg_critical("Error", QObject::tr("Cannot open '%1'").arg(path));
     }
     else if (d->isModal()) {
         BodyDialog * bd = new BodyDialog(s, d, pf, k, name, edits);
@@ -321,13 +318,13 @@ void edit(const QString & s, QString name, void * id, EditType k,
         (new BodyDialog(s, d, pf, k, name, edits))->show();
 }
 
-bool check_edits(Q3PtrList<BodyDialog> & edits)
+bool check_edits(QList<BodyDialog *> & edits)
 {
     if (edits.isEmpty())
         return TRUE;
 
     return (msg_critical("Douml",
-                         TR("Sub dialog(s) still opened\n"
+                         QObject::tr("Sub dialog(s) still opened\n"
                             "If you choose 'Ok' the dialog will be closed\n"
                             "without taking into account it content"),
                          QMessageBox::Ok, QMessageBox::Abort)
@@ -338,7 +335,7 @@ AType the_type(const QString & t, const QStringList & types,
                BrowserNodeList & nodes)
 {
     AType result;
-    int rank = types.findIndex(t);
+    int rank = types.indexOf(t);
 
     if (rank != -1)
         result.type = ((BrowserClass *) nodes.at(rank));
@@ -351,7 +348,7 @@ AType the_type(const QString & t, const QStringList & types,
 QString type(const QString & t, const QStringList & types,
              BrowserNodeList & nodes)
 {
-    int rank = types.findIndex(t);
+    int rank = types.indexOf(t);
 
     return (rank != -1)
            ? QString(((BrowserClass *) nodes.at(rank))->get_name())
@@ -367,19 +364,19 @@ QString get_cpp_name(const BrowserClass * cl, ShowContextMode mode)
 
     QString name = cl->get_name();
     QString s = d->get_cppdecl();
-    int index = s.find('\n');
+    int index = s.indexOf('\n');
 
-    s = (index == -1) ? s.stripWhiteSpace()
-        : s.left(index).stripWhiteSpace();
+    s = (index == -1) ? s.trimmed()
+        : s.left(index).trimmed();
 
-    if ((index = s.find("${name}")) != -1)
+    if ((index = s.indexOf("${name}")) != -1)
         s.replace(index, 7, name);
-    else if ((index = s.find("${Name}")) != -1)
+    else if ((index = s.indexOf("${Name}")) != -1)
         s.replace(index, 7, capitalize(name));
-    else if ((index = s.find("${NAME}")) != -1)
-        s.replace(index, 7, name.upper());
-    else if ((index = s.find("${nAME}")) != -1)
-        s.replace(index, 7, name.lower());
+    else if ((index = s.indexOf("${NAME}")) != -1)
+        s.replace(index, 7, name.toUpper());
+    else if ((index = s.indexOf("${nAME}")) != -1)
+        s.replace(index, 7, name.toLower());
 
     return s;
 }
@@ -393,19 +390,19 @@ QString get_java_name(const BrowserClass * cl, ShowContextMode mode)
 
     QString name = cl->get_name();
     QString s = d->get_javadecl();
-    int index = s.find('\n');
+    int index = s.indexOf('\n');
 
-    s = (index == -1) ? s.stripWhiteSpace()
-        : s.left(index).stripWhiteSpace();
+    s = (index == -1) ? s.trimmed()
+        : s.left(index).trimmed();
 
-    if ((index = s.find("${name}")) != -1)
+    if ((index = s.indexOf("${name}")) != -1)
         s.replace(index, 7, name);
-    else if ((index = s.find("${Name}")) != -1)
+    else if ((index = s.indexOf("${Name}")) != -1)
         s.replace(index, 7, capitalize(name));
-    else if ((index = s.find("${NAME}")) != -1)
-        s.replace(index, 7, name.upper());
-    else if ((index = s.find("${nAME}")) != -1)
-        s.replace(index, 7, name.lower());
+    else if ((index = s.indexOf("${NAME}")) != -1)
+        s.replace(index, 7, name.toUpper());
+    else if ((index = s.indexOf("${nAME}")) != -1)
+        s.replace(index, 7, name.toLower());
 
     return s;
 }
@@ -419,19 +416,19 @@ QString get_php_name(const BrowserClass * cl, ShowContextMode mode)
 
     QString name = cl->get_name();
     QString s = d->get_phpdecl();
-    int index = s.find('\n');
+    int index = s.indexOf('\n');
 
-    s = (index == -1) ? s.stripWhiteSpace()
-        : s.left(index).stripWhiteSpace();
+    s = (index == -1) ? s.trimmed()
+        : s.left(index).trimmed();
 
-    if ((index = s.find("${name}")) != -1)
+    if ((index = s.indexOf("${name}")) != -1)
         s.replace(index, 7, name);
-    else if ((index = s.find("${Name}")) != -1)
+    else if ((index = s.indexOf("${Name}")) != -1)
         s.replace(index, 7, capitalize(name));
-    else if ((index = s.find("${NAME}")) != -1)
-        s.replace(index, 7, name.upper());
-    else if ((index = s.find("${nAME}")) != -1)
-        s.replace(index, 7, name.lower());
+    else if ((index = s.indexOf("${NAME}")) != -1)
+        s.replace(index, 7, name.toUpper());
+    else if ((index = s.indexOf("${nAME}")) != -1)
+        s.replace(index, 7, name.toLower());
 
     return s;
 }
@@ -445,19 +442,19 @@ QString get_python_name(const BrowserClass * cl, ShowContextMode mode)
 
     QString name = cl->get_name();
     QString s = d->get_pythondecl();
-    int index = s.find('\n');
+    int index = s.indexOf('\n');
 
-    s = (index == -1) ? s.stripWhiteSpace()
-        : s.left(index).stripWhiteSpace();
+    s = (index == -1) ? s.trimmed()
+        : s.left(index).trimmed();
 
-    if ((index = s.find("${name}")) != -1)
+    if ((index = s.indexOf("${name}")) != -1)
         s.replace(index, 7, name);
-    else if ((index = s.find("${Name}")) != -1)
+    else if ((index = s.indexOf("${Name}")) != -1)
         s.replace(index, 7, capitalize(name));
-    else if ((index = s.find("${NAME}")) != -1)
-        s.replace(index, 7, name.upper());
-    else if ((index = s.find("${nAME}")) != -1)
-        s.replace(index, 7, name.lower());
+    else if ((index = s.indexOf("${NAME}")) != -1)
+        s.replace(index, 7, name.toUpper());
+    else if ((index = s.indexOf("${nAME}")) != -1)
+        s.replace(index, 7, name.toLower());
 
     return s;
 }
@@ -471,19 +468,19 @@ QString get_idl_name(const BrowserClass * cl, ShowContextMode mode)
 
     QString name = cl->get_name();
     QString s = d->get_idldecl();
-    int index = s.find('\n');
+    int index = s.indexOf('\n');
 
-    s = (index == -1) ? s.stripWhiteSpace()
-        : s.left(index).stripWhiteSpace();
+    s = (index == -1) ? s.trimmed()
+        : s.left(index).trimmed();
 
-    if ((index = s.find("${name}")) != -1)
+    if ((index = s.indexOf("${name}")) != -1)
         s.replace(index, 7, name);
-    else if ((index = s.find("${Name}")) != -1)
+    else if ((index = s.indexOf("${Name}")) != -1)
         s.replace(index, 7, capitalize(name));
-    else if ((index = s.find("${NAME}")) != -1)
-        s.replace(index, 7, name.upper());
-    else if ((index = s.find("${nAME}")) != -1)
-        s.replace(index, 7, name.lower());
+    else if ((index = s.indexOf("${NAME}")) != -1)
+        s.replace(index, 7, name.toUpper());
+    else if ((index = s.indexOf("${nAME}")) != -1)
+        s.replace(index, 7, name.toLower());
 
     return s;
 }
@@ -660,7 +657,7 @@ int msg_warning(QString caption, QString text,
                 int button0, int button1, int button2)
 {
     if (UmlDesktop::nogui() && (button1 == 0)) {
-        printf("warning\n%s\n%s\n", (const char *) caption, (const char *) text);
+        printf("warning\n%s\n%s\n", (const char *) caption.toLatin1().constData(), (const char *) text.toLatin1().constData());
         return 0;
     }
 
@@ -671,7 +668,7 @@ int msg_critical(QString caption, QString text,
                  int button0, int button1, int button2)
 {
     if (UmlDesktop::nogui() && (button1 == 0)) {
-        printf("critical\n%s\n%s\n", (const char *) caption, (const char *) text);
+        printf("critical\n%s\n%s\n", (const char *) caption.toLatin1().constData(), (const char *) text.toLatin1().constData());
         return 0;
     }
 
@@ -682,13 +679,12 @@ int msg_information(QString caption, QString text,
                     int button0, int button1, int button2)
 {
     if (UmlDesktop::nogui() && (button1 == 0)) {
-        printf("information\n%s\n%s\n", (const char *) caption, (const char *) text);
+        printf("information\n%s\n%s\n", (const char *) caption.toLatin1().constData(), (const char *) text.toLatin1().constData());
         return 0;
     }
 
     return msg_msg(QMessageBox::Information, caption, text, button0, button1, button2);
 }
-
 //
 
 QString editor()
@@ -716,22 +712,21 @@ bool completion()
 }
 
 //
-
 static QWidgetList NonModalDialogs;
 
 void open_dialog(QWidget * w)
 {
-    NonModalDialogs.append(w);
+    if(!NonModalDialogs.contains(w))
+        NonModalDialogs.append(w);
 }
 
 
 void close_dialog(QWidget * w)
 {
-    NonModalDialogs.remove(w);
+    NonModalDialogs.removeOne(w);
 }
 
 QWidgetList dialogs()
 {
     return NonModalDialogs;
 }
-

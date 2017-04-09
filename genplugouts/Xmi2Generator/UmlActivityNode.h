@@ -6,7 +6,7 @@
 #include "UmlBaseActivityNode.h"
 #include "UmlActivityItem.h"
 
-#include <q3ptrlist.h>
+
 
 class UmlFlow;
 class FileOut;
@@ -35,7 +35,7 @@ public:
 
 protected:
     //the flows whose target is the object
-    Q3PtrList<UmlFlow> _incoming_flows;
+    QList<UmlFlow*> _incoming_flows;
 
 
 public:

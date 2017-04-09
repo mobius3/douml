@@ -4,7 +4,7 @@
 
 #include "UmlPseudoState.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+
 
 class UmlExitPointPseudoState;
 class UmlItem;
@@ -25,7 +25,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseExitPointPseudoState(void * id, const Q3CString & s) : UmlPseudoState(id, s) {
+    UmlBaseExitPointPseudoState(void * id, const QByteArray & s) : UmlPseudoState(id, s) {
     }
 
 };

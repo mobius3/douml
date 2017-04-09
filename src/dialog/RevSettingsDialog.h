@@ -31,7 +31,7 @@
 #include <qdialog.h>
 
 class QCheckBox;
-class Q3ComboBox;
+class QComboBox;
 class LineEdit;
 
 class RevSettingsDialog : public QDialog
@@ -43,20 +43,20 @@ protected:
     LineEdit * cpp_file;
     QCheckBox * cpp_dir_case_sensitive;
     QCheckBox * cpp_file_case_sensitive;
-    Q3ComboBox * edcpp_h_extension;
-    Q3ComboBox * edcpp_src_extension;
+    QComboBox * edcpp_h_extension;
+    QComboBox * edcpp_src_extension;
 
     LineEdit * java_dir;
     LineEdit * java_file;
     QCheckBox * java_dir_case_sensitive;
     QCheckBox * java_file_case_sensitive;
-    Q3ComboBox * edjava_extension;
+    QComboBox * edjava_extension;
 
     LineEdit * php_dir;
     LineEdit * php_file;
     QCheckBox * php_dir_case_sensitive;
     QCheckBox * php_file_case_sensitive;
-    Q3ComboBox * edphp_extension;
+    QComboBox * edphp_extension;
 
     static QSize previous_size;
 

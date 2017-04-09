@@ -33,21 +33,21 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 // an empty string is != a null string in Qt !
-bool inline neq(const WrapperStr & s1, const WrapperStr & s2)
-{
-    return (s1.isEmpty()) ? !s2.isEmpty() : (s1 != s2);
-}
+//bool inline neq(const WrapperStr & s1, const WrapperStr & s2)
+//{
+//    return (s1.isEmpty()) ? !s2.isEmpty() : (s1 != s2);
+//}
 
 void UmlExtraClassMember::add_init(UmlClass * cl, WrapperStr def, bool roundtrip,
-                                   Q3PtrList<UmlItem> & expected_order)
+                                   QList<UmlItem *> & expected_order)
 {
     if (roundtrip) {
-        const Q3PtrVector<UmlItem> & ch = cl->children();
-        UmlItem ** v = ch.data();
-        UmlItem ** const vsup = v + ch.size();
+        const QVector<UmlItem*> & ch = cl->children();
+        UmlItem *const* v = ch.data();
+        UmlItem *const*  vsup = v + ch.size();
         UmlItem * x;
 
         for (; v != vsup; v += 1) {

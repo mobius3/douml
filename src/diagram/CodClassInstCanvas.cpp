@@ -24,17 +24,8 @@
 // home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
-
-
-
-
-
-#include <q3popupmenu.h>
 #include <qcursor.h>
-//Added by qt3to4:
 #include <QTextStream>
-
-
 #include "CodClassInstCanvas.h"
 #include "CodSelfLinkCanvas.h"
 #include "BrowserClass.h"
@@ -146,7 +137,10 @@ void CodClassInstCanvas::draw(QPainter & p)
             show_mark(p, rect());
     }
 }
-
+void CodClassInstCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
 // all cases
 QString CodClassInstCanvas::get_name() const
 {
@@ -162,7 +156,7 @@ void CodClassInstCanvas::set_name(const QString & s)
 }
 
 // UmlClass or UmlClassInstance
-UmlCode CodClassInstCanvas::type() const
+UmlCode CodClassInstCanvas::typeUmlCode() const
 {
     return browser_node->get_type();
 }
@@ -231,47 +225,50 @@ void CodClassInstCanvas::open()
 
 void CodClassInstCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
     bool modelized = (browser_node->get_type() == UmlClassInstance);
 
     MenuFactory::createTitle(m, full_name());
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 3);
-    m.insertSeparator();
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit"), 3);
+    m.addSeparator();
 
     if (modelized)
-        m.insertItem(TR("Select in browser"), 4);
+        MenuFactory::addItem(m, TR("Select in browser"), 4);
 
-    m.insertItem(TR("Select class in browser"), 5);
+    MenuFactory::addItem(m, TR("Select class in browser"), 5);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 6);
+        MenuFactory::addItem(m, TR("Select linked items"), 6);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (modelized)
-        m.insertItem(TR("Exit from model"), 9);
+        MenuFactory::addItem(m, TR("Exit from model"), 9);
     else {
         if (container(UmlClass)->is_writable())
-            m.insertItem(TR("Insert in model"), 10);
+            MenuFactory::addItem(m, TR("Insert in model"), 10);
 
-        m.insertItem(TR("Replace it"), 11);
+        MenuFactory::addItem(m, TR("Replace it"), 11);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 7);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
 
     if (modelized && browser_node->is_writable())
-        m.insertItem(TR("Delete from model"), 8);
+        MenuFactory::addItem(m, TR("Delete from model"), 8);
 
-    switch (m.exec(QCursor::pos())) {
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    switch (retAction->data().toInt()) {
     case 0:
         upper();
         modified();	// call package_modified
@@ -375,6 +372,7 @@ void CodClassInstCanvas::menu(const QPoint &)
     default:
         return;
     }
+    }
 
     package_modified();
 }
@@ -441,7 +439,7 @@ bool CodClassInstCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void CodClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void CodClassInstCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         StateSpecVector st(2);
@@ -459,21 +457,20 @@ void CodClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
+            foreach (DiagramItem *item, l) {
+                CodClassInstCanvas *canvas = (CodClassInstCanvas *)item;
                 if (!st[0].name.isEmpty())
-                    ((CodClassInstCanvas *) it.current())->write_horizontally =
+                    canvas->write_horizontally =
                         write_horizontally;
 
                 if (!st[1].name.isEmpty())
-                    ((CodClassInstCanvas *) it.current())->show_context_mode =
+                    canvas->show_context_mode =
                         show_context_mode;
 
                 if (!co[0].name.isEmpty())
-                    ((CodClassInstCanvas *) it.current())->itscolor = itscolor;
+                    canvas->itscolor = itscolor;
 
-                ((CodClassInstCanvas *) it.current())->modified();	// call package_modified()
+                canvas->modified();	// call package_modified()
             }
         }
 
@@ -482,20 +479,13 @@ void CodClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void CodClassInstCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void CodClassInstCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    CodClassInstCanvas * x = (CodClassInstCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        CodClassInstCanvas * o = (CodClassInstCanvas *) it.current();
-
-        o->write_horizontally = x->write_horizontally;
-        o->show_context_mode = x->show_context_mode;
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const CodClassInstCanvas * x = (const CodClassInstCanvas *) src;
+    write_horizontally = x->write_horizontally;
+    show_context_mode = x->show_context_mode;
+    itscolor = x->itscolor;
+    modified();
 }
 
 bool CodClassInstCanvas::get_show_stereotype_properties() const
@@ -525,7 +515,7 @@ void CodClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) con
         nl_indent(st);
         ClassInstCanvas::save(st);
         st << " name ";
-        save_string(iname, st);
+        save_string(iname.toLatin1().constData(), st);
         st << " ";
         save_xyz(st, this, " xyz");
     }
@@ -592,7 +582,7 @@ CodClassInstCanvas * CodClassInstCanvas::read(char *& st, UmlCanvas * canvas,
         CodClassInstCanvas * result =
             new CodClassInstCanvas(icl, canvas, x, (int) read_double(st), id);
 
-        result->setZ(read_double(st));
+        result->setZValue(read_double(st));
 
         result->ClassInstCanvas::read(st, k);	// update k
 
@@ -620,7 +610,7 @@ CodClassInstCanvas * CodClassInstCanvas::read(char *& st, UmlCanvas * canvas,
 
 void CodClassInstCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(browser_node->get_data(), 0, this, 0);
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }
@@ -635,16 +625,16 @@ void CodClassInstCanvas::history_load(QBuffer & b)
 
 // for plug outs
 
-void CodClassInstCanvas::send(ToolCom * com, Q3CanvasItemList & all)
+void CodClassInstCanvas::send(ToolCom * com, QList<QGraphicsItem*> & all)
 {
-    Q3PtrList<CodClassInstCanvas> l;
-    Q3CanvasItemList::Iterator cit;
+    QList<CodClassInstCanvas *> l;
+    QList<QGraphicsItem*>::Iterator cit;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
         DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
-        if ((di != 0) && (*cit)->visible()) {
-            switch (di->type()) {
+        if ((di != 0) && (*cit)->isVisible()) {
+            switch (di->typeUmlCode()) {
             case UmlClass:
             case UmlClassInstance:
                 l.append((CodClassInstCanvas *) di);
@@ -658,11 +648,7 @@ void CodClassInstCanvas::send(ToolCom * com, Q3CanvasItemList & all)
 
     com->write_unsigned(l.count());
 
-    Q3PtrListIterator<CodClassInstCanvas> it(l);
-
-    for (; it.current(); ++it) {
-        CodClassInstCanvas * i = it.current();
-
+    foreach (CodClassInstCanvas *i, l) {
         com->write_unsigned((unsigned) i->get_ident());
 
         if (i->browser_node->get_type() == UmlClass) {

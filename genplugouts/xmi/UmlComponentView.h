@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseComponentView.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class FileOut;
 
@@ -13,7 +13,7 @@ class FileOut;
 class UmlComponentView : public UmlBaseComponentView
 {
 public:
-    UmlComponentView(void * id, const Q3CString & n) : UmlBaseComponentView(id, n) {};
+    UmlComponentView(void * id, const QByteArray & n) : UmlBaseComponentView(id, n) {};
 
     virtual bool write_if_needed(FileOut & out);
 

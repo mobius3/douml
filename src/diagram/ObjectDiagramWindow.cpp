@@ -30,10 +30,10 @@
 
 
 #include <qapplication.h>
-#include <qworkspace.h>
-#include <q3toolbar.h>
+#include <QMdiArea>
+#include <qtoolbar.h>
 #include <qtoolbutton.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qspinbox.h>
 
@@ -44,6 +44,7 @@
 #include "UmlPixmap.h"
 #include "myio.h"
 #include "translate.h"
+#include "toolbarfactory.h"
 
 extern QString addmodeledclassinstanceText();
 extern QString addclassinstanceText();
@@ -53,7 +54,7 @@ extern QString noteText();
 extern QString anchorText();
 static QString linkText()
 {
-    return TR("Click this button to add a <i>link</i> between instances");
+    return  QObject::tr("Click this button to add a <i>link</i> between instances");
 }
 extern QString textText();
 extern QString imageText();
@@ -63,72 +64,74 @@ ObjectDiagramWindow::ObjectDiagramWindow(const QString & s, BrowserObjectDiagram
     : DiagramWindow(b, s), view(0)
 {
     b->set_diagram_window(this);
-    Q3ToolBar * toolbar = new Q3ToolBar(this, "object diagram operations");
-    addToolBar(toolbar, TR("Toolbar"), Qt::DockTop, TRUE);
+    QToolBar * toolbar = new QToolBar("object diagram operations", this);
+    toolbar->setMinimumHeight(50);
+    toolbar->setOrientation(Qt::Horizontal);
+    addToolBar(Qt::TopToolBarArea, toolbar);
 
     add_edit_button(toolbar);
 
     select =
-        new QToolButton(*selectButton, TR("Select"), QString(),
+        ToolBarFactory::createToolButton(*selectButton, TR("Select"), QString(),
                         this, SLOT(hit_select()), toolbar, "select");
-    select->setToggleButton(TRUE);
-    select->setOn(TRUE);
+    select->setCheckable(TRUE);
+    select->setChecked(TRUE);
     current_button = UmlSelect;
 
     addPackage
-        = new QToolButton(*packageButton, TR("Add Package"), QString(),
+        = ToolBarFactory::createToolButton(*packageButton, TR("Add Package"), QString(),
                           this, SLOT(hit_package()), toolbar, "add package");
-    addPackage->setToggleButton(TRUE);
-    Q3WhatsThis::add(addPackage, addpackageText());
+    addPackage->setCheckable(TRUE);
+    addPackage->setWhatsThis(addpackageText());
 
     addFragment
-        = new QToolButton(*fragmentButton, TR("Add Fragment"), QString(),
+        = ToolBarFactory::createToolButton(*fragmentButton, TR("Add Fragment"), QString(),
                           this, SLOT(hit_fragment()), toolbar, "add fragment");
-    addFragment->setToggleButton(TRUE);
-    Q3WhatsThis::add(addFragment, addfragmentText());
+    addFragment->setCheckable(TRUE);
+    addFragment->setWhatsThis(addfragmentText());
 
     addClassInstance
-        = new QToolButton(*classinstanceButton, TR("Add modeled Class instance"), QString(),
+        = ToolBarFactory::createToolButton(*classinstanceButton, TR("Add modeled Class instance"), QString(),
                           this, SLOT(hit_classinstance()), toolbar,
                           "add modeled class instance");
-    addClassInstance->setToggleButton(TRUE);
-    Q3WhatsThis::add(addClassInstance, addmodeledclassinstanceText());
+    addClassInstance->setCheckable(TRUE);
+    addClassInstance->setWhatsThis(addmodeledclassinstanceText());
 
     addClass
-        = new QToolButton(*classButton, TR("Add Class instance"), QString(),
+        = ToolBarFactory::createToolButton(*classButton, TR("Add Class instance"), QString(),
                           this, SLOT(hit_class()), toolbar, "add class instance");
-    addClass->setToggleButton(TRUE);
-    Q3WhatsThis::add(addClass, addclassinstanceText());
+    addClass->setCheckable(TRUE);
+    addClass->setWhatsThis(addclassinstanceText());
 
     addLink =
-        new QToolButton(*associationButton, TR("Add Link between instances"), QString(),
+        ToolBarFactory::createToolButton(*associationButton, TR("Add Link between instances"), QString(),
                         this, SLOT(hit_link()), toolbar, "add link between instances");
-    addLink->setToggleButton(TRUE);
-    Q3WhatsThis::add(addLink, linkText());
+    addLink->setCheckable(TRUE);
+    addLink->setWhatsThis(linkText());
 
     note =
-        new QToolButton(*noteButton, TR("Note"), QString(),
+        ToolBarFactory::createToolButton(*noteButton, TR("Note"), QString(),
                         this, SLOT(hit_note()), toolbar, "note");
-    note->setToggleButton(TRUE);
-    Q3WhatsThis::add(note, noteText());
+    note->setCheckable(TRUE);
+    note->setWhatsThis(noteText());
 
     anchor =
-        new QToolButton(*anchorButton, TR("Anchor"), QString(),
+        ToolBarFactory::createToolButton(*anchorButton, TR("Anchor"), QString(),
                         this, SLOT(hit_anchor()), toolbar, "anchor");
-    anchor->setToggleButton(TRUE);
-    Q3WhatsThis::add(anchor, anchorText());
+    anchor->setCheckable(TRUE);
+    anchor->setWhatsThis(anchorText());
 
     text =
-        new QToolButton(*textButton, TR("Text"), QString(),
+        ToolBarFactory::createToolButton(*textButton, TR("Text"), QString(),
                         this, SLOT(hit_text()), toolbar, "text");
-    text->setToggleButton(TRUE);
-    Q3WhatsThis::add(text, textText());
+    text->setCheckable(TRUE);
+    text->setWhatsThis(textText());
 
     image =
-        new QToolButton(*imageButton, TR("Image"), QString(),
+        ToolBarFactory::createToolButton(*imageButton, TR("Image"), QString(),
                         this, SLOT(hit_image()), toolbar, "image");
-    image->setToggleButton(TRUE);
-    Q3WhatsThis::add(image, imageText());
+    image->setCheckable(TRUE);
+    image->setWhatsThis(imageText());
 
     toolbar->addSeparator();
 
@@ -142,9 +145,9 @@ ObjectDiagramWindow::ObjectDiagramWindow(const QString & s, BrowserObjectDiagram
 
     //qApp->setMainWidget(this);
 
-    QWorkspace * w = UmlWindow::get_workspace();
+    QMdiArea * w = UmlWindow::get_workspace();
 
-    resize((w->width() * 4) / 5, (w->height() * 4) / 5);
+    m_containingSubWindow->resize((w->width() * 4) / 5, (w->height() * 4) / 5);
 
     /*if (w->windowList().isEmpty())
       showMaximized();
@@ -183,18 +186,18 @@ void ObjectDiagramWindow::hit_button(UmlCode c, QToolButton * b)
 {
     view->abort_line_construction();
 
-    select->setOn(FALSE);
-    addPackage->setOn(FALSE);
-    addFragment->setOn(FALSE);
-    addClass->setOn(FALSE);
-    addClassInstance->setOn(FALSE);
-    addLink->setOn(FALSE);
-    note->setOn(FALSE);
-    anchor->setOn(FALSE);
-    text->setOn(FALSE);
-    image->setOn(FALSE);
+    select->setChecked(FALSE);
+    addPackage->setChecked(FALSE);
+    addFragment->setChecked(FALSE);
+    addClass->setChecked(FALSE);
+    addClassInstance->setChecked(FALSE);
+    addLink->setChecked(FALSE);
+    note->setChecked(FALSE);
+    anchor->setChecked(FALSE);
+    text->setChecked(FALSE);
+    image->setChecked(FALSE);
 
-    b->setOn(TRUE);
+    b->setChecked(TRUE);
     current_button = c;
 }
 

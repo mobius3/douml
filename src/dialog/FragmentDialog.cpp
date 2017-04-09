@@ -32,12 +32,12 @@
 #include <qcursor.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include "FragmentDialog.h"
 #include "BrowserDiagram.h"
@@ -45,57 +45,60 @@
 #include "UmlDesktop.h"
 #include "BrowserView.h"
 #include "translate.h"
-
+#include "menufactory.h"
 QSize FragmentDialog::previous_size;
 
 FragmentDialog::FragmentDialog(const QStringList & defaults, QString & s,
                                QString & fo, BrowserNode *& d)
-    : QDialog(0, "Fragment dialog", TRUE), name(s), form(fo), refer(d)
+    : QDialog(0/*, "Fragment dialog", TRUE*/), name(s), form(fo), refer(d)
 {
-    setCaption(TR("Fragment dialog"));
+    setWindowTitle(TR("Fragment dialog"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
     QLabel * lbl1;
     QLabel * lbl2;
     SmallPushButton * refer_bt;
-    BrowserNode * bn;
 
     vbox->setMargin(5);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     hbox->addWidget(lbl1 = new QLabel(TR("name : "), this));
-    name_cb = new Q3ComboBox(TRUE, this);
-    name_cb->insertItem(name);
-    name_cb->setCurrentItem(0);
-    name_cb->insertStringList(defaults);
+    name_cb = new QComboBox(this);
+    name_cb->setEditable(true);
+    name_cb->addItem(name);
+    name_cb->setCurrentIndex(0);
+    name_cb->addItems(defaults);
     name_cb->setAutoCompletion(completion());
     hbox->addWidget(name_cb);
 
     QSizePolicy sp = name_cb->sizePolicy();
 
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     name_cb->setSizePolicy(sp);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     hbox->addWidget(refer_bt = new SmallPushButton(TR("refer to : "), this));
     connect(refer_bt, SIGNAL(clicked()), this, SLOT(menu_refer()));
-    diag_cb = new Q3ComboBox(FALSE, this);
+    diag_cb = new QComboBox(this);
     BrowserDiagram::instances(nodes, TRUE);
-    diag_cb->insertItem("");
+    diag_cb->addItem("");
 
-    for (bn = nodes.first(); bn != 0; bn = nodes.next())
-        diag_cb->insertItem(*(bn->pixmap(0)), bn->full_name(TRUE));
+    foreach (BrowserNode *bn, nodes)
+        diag_cb->addItem(*(bn->pixmap(0)), bn->full_name(TRUE));
 
-    diag_cb->setCurrentItem((refer == 0)
+    diag_cb->setCurrentIndex((refer == 0)
                             ? 0
-                            : nodes.findRef(refer) + 1);
+                            : nodes.indexOf(refer) + 1);
     diag_cb->setSizePolicy(sp);
     hbox->addWidget(diag_cb);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     hbox->addWidget(lbl2 = new QLabel(TR("arguments \n/ value : "), this));
     hbox->addWidget(ed_form = new LineEdit(this));
@@ -103,7 +106,8 @@ FragmentDialog::FragmentDialog(const QStringList & defaults, QString & s,
 
     same_width(lbl1, lbl2, refer_bt);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * accept = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -122,7 +126,7 @@ FragmentDialog::FragmentDialog(const QStringList & defaults, QString & s,
 
 void FragmentDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -133,15 +137,15 @@ FragmentDialog::~FragmentDialog()
 
 void FragmentDialog::menu_refer()
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
     bool used = FALSE;
 
-    m.insertItem(TR("Choose"), -1);
-    m.insertSeparator();
+    MenuFactory::addItem(m, TR("Choose"), -1);
+    m.addSeparator();
 
-    if (diag_cb->currentItem() != 0) {
+    if (diag_cb->currentIndex() != 0) {
         used = TRUE;
-        m.insertItem(TR("Select in browser"), 0);
+        MenuFactory::addItem(m, TR("Select in browser"), 0);
     }
 
     BrowserNode * bn = BrowserView::selected_item();
@@ -149,34 +153,39 @@ void FragmentDialog::menu_refer()
     if ((bn != 0) &&
         !bn->deletedp() &&
         (dynamic_cast<BrowserDiagram *>(bn) != 0)) {
-        m.insertItem(TR("Choose diagram selected in browser"), 1);
+        MenuFactory::addItem(m, TR("Choose diagram selected in browser"), 1);
         used = TRUE;
     }
     else
         bn = 0;
 
     if (used) {
-        switch (m.exec(QCursor::pos())) {
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+        int index = retAction->data().toInt();
+        switch (index) {
         case 0:
-            nodes.at(diag_cb->currentItem() - 1)->select_in_browser();
+            nodes.at(diag_cb->currentIndex() - 1)->select_in_browser();
             break;
 
         case 1:
-            diag_cb->setCurrentItem(nodes.findRef(bn) + 1);
+            diag_cb->setCurrentIndex(nodes.indexOf(bn) + 1);
             break;
 
         default:
             break;
+        }
         }
     }
 }
 
 void FragmentDialog::accept()
 {
-    name = name_cb->currentText().stripWhiteSpace();
-    form = ed_form->text().stripWhiteSpace();
-    refer = (diag_cb->currentItem() == 0)
-            ? (BrowserNode *) 0 : nodes.at(diag_cb->currentItem() - 1);
+    name = name_cb->currentText().trimmed();
+    form = ed_form->text().trimmed();
+    refer = (diag_cb->currentIndex() == 0)
+            ? (BrowserNode *) 0 : nodes.at(diag_cb->currentIndex() - 1);
 
     QDialog::accept();
 }

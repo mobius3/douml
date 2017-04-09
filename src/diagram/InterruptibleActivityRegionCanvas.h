@@ -33,10 +33,8 @@
 
 
 #include <qobject.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QTextStream>
-
 #include "ActivityContainerCanvas.h"
 
 #define INTERRUPTIBLE_ACTIVITY_REGION_CANVAS_MIN_SIZE 40
@@ -52,6 +50,7 @@ protected:
 protected:
     InterruptibleActivityRegionCanvas(UmlCanvas * canvas, int id);
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     InterruptibleActivityRegionCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~InterruptibleActivityRegionCanvas();
@@ -64,7 +63,7 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
@@ -80,8 +79,8 @@ public:
     virtual bool move_with_its_package() const;
 
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem *> &);
+    virtual void clone_drawing_settings(const DiagramItem *src);
     void edit_drawing_settings();
 
     virtual void apply_shortcut(QString s);

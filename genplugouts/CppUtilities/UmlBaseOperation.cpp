@@ -8,8 +8,8 @@
 #include "UmlBaseClass.h"
 #include "UmlClassMember.h"
 //Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
+#include <QByteArray>
+#include <QList>
 #include "Logging/QsLog.h"
 UmlOperation * UmlBaseOperation::create(UmlClass * parent, const char * s)
 {
@@ -64,7 +64,7 @@ bool UmlBaseOperation::set_ReturnType(const UmlTypeSpec & t) {
   return set_it_(_return_type, t, setReturnTypeCmd);
 }
 
-const Q3ValueList<UmlParameter> UmlBaseOperation::params() {
+const QList<UmlParameter> UmlBaseOperation::params() {
   read_if_needed_();
     
   return _params;
@@ -75,7 +75,7 @@ bool UmlBaseOperation::addParameter(unsigned rank, const UmlParameter & p) {
 		   p.default_value, p.type);
   if (UmlCom::read_bool()) {
     if (_defined)
-      _params.insert(_params.at(rank), p);
+      _params.insert(rank, p);
     return TRUE;
   }
   else
@@ -86,7 +86,7 @@ bool UmlBaseOperation::removeParameter(unsigned rank) {
   UmlCom::send_cmd(_identifier, removeParameterCmd, rank);
   if (UmlCom::read_bool()) {
     if (_defined)
-      _params.remove(_params.at(rank));
+      _params.removeAt(rank);
     return TRUE;
   }
   else
@@ -105,7 +105,7 @@ bool UmlBaseOperation::replaceParameter(unsigned rank, const UmlParameter & p) {
     return FALSE;
 }
 
-const Q3ValueList<UmlTypeSpec> UmlBaseOperation::exceptions() {
+const QList<UmlTypeSpec> UmlBaseOperation::exceptions() {
   read_if_needed_();
     
   return _exceptions;
@@ -115,7 +115,7 @@ bool UmlBaseOperation::addException(unsigned rank, const UmlTypeSpec & t) {
   UmlCom::send_cmd(_identifier, addExceptionCmd, rank, t);
   if (UmlCom::read_bool()) {
     if (_defined)
-      _exceptions.insert(_exceptions.at(rank), t);
+      _exceptions.insert(rank, t);
     return TRUE;
   }
   else
@@ -126,7 +126,7 @@ bool UmlBaseOperation::removeException(unsigned rank) {
   UmlCom::send_cmd(_identifier, removeExceptionCmd, rank);
   if (UmlCom::read_bool()) {
     if (_defined)
-      _exceptions.remove(_exceptions.at(rank));
+      _exceptions.removeAt(rank);
     return TRUE;
   }
   else
@@ -144,8 +144,8 @@ bool UmlBaseOperation::replaceException(unsigned rank, const UmlTypeSpec & t) {
     return FALSE;
 }
 
-const Q3PtrVector<UmlItem> UmlBaseOperation::methods() const {
-  Q3PtrVector<UmlItem> l;
+const QVector<UmlItem*> UmlBaseOperation::methods() const {
+  QVector<UmlItem*> l;
 
   UmlCom::send_cmd(_identifier, sideCmd);
   UmlCom::read_item_list(l);
@@ -233,7 +233,7 @@ bool UmlBaseOperation::set_isCppInline(bool y) {
     return FALSE;
 }
 
-const Q3CString & UmlBaseOperation::cppDef() {
+const QByteArray & UmlBaseOperation::cppDef() {
   read_if_needed_();
     
   return _cpp_def;
@@ -243,7 +243,7 @@ bool UmlBaseOperation::set_CppDef(const char * s) {
   return set_it_(_cpp_def, s, setCppDefCmd);
 }
 
-Q3CString UmlBaseOperation::cppBody() {
+QByteArray UmlBaseOperation::cppBody() {
   // not memorized in the instance for memory size reason
   UmlCom::send_cmd(_identifier, cppBodyCmd);
   return UmlCom::read_string();
@@ -255,7 +255,7 @@ bool UmlBaseOperation::set_CppBody(const char * s) {
   return UmlCom::read_bool();
 }
 
-const Q3CString & UmlBaseOperation::cppNameSpec() {
+const QByteArray & UmlBaseOperation::cppNameSpec() {
   read_if_needed_();
     
   return _cpp_name_spec;
@@ -335,7 +335,7 @@ bool UmlBaseOperation::set_isJavaSynchronized(bool y) {
     return FALSE;
 }
 
-const Q3CString & UmlBaseOperation::javaDef() {
+const QByteArray & UmlBaseOperation::javaDef() {
   return javaDecl();
 }
 
@@ -343,7 +343,7 @@ bool UmlBaseOperation::set_JavaDef(const char * s) {
   return set_JavaDecl(s);
 }
 
-Q3CString UmlBaseOperation::javaBody() {
+QByteArray UmlBaseOperation::javaBody() {
   // not memorized in the instance for memory size reason
   UmlCom::send_cmd(_identifier, javaBodyCmd);
   return UmlCom::read_string();
@@ -355,7 +355,7 @@ bool UmlBaseOperation::set_JavaBody(const char * s) {
   return UmlCom::read_bool();
 }
 
-const Q3CString & UmlBaseOperation::javaNameSpec() {
+const QByteArray & UmlBaseOperation::javaNameSpec() {
   read_if_needed_();
     
   return _java_name_spec;
@@ -418,7 +418,7 @@ bool UmlBaseOperation::set_isPhpFinal(bool y) {
     return FALSE;
 }
 
-const Q3CString & UmlBaseOperation::phpDef() {
+const QByteArray & UmlBaseOperation::phpDef() {
   return phpDecl();
 }
 
@@ -426,7 +426,7 @@ bool UmlBaseOperation::set_PhpDef(const char * s) {
   return set_PhpDecl(s);
 }
 
-Q3CString UmlBaseOperation::phpBody() {
+QByteArray UmlBaseOperation::phpBody() {
   // not memorized in the instance for memory size reason
   UmlCom::send_cmd(_identifier, phpBodyCmd);
   return UmlCom::read_string();
@@ -438,7 +438,7 @@ bool UmlBaseOperation::set_PhpBody(const char * s) {
   return UmlCom::read_bool();
 }
 
-const Q3CString & UmlBaseOperation::phpNameSpec() {
+const QByteArray & UmlBaseOperation::phpNameSpec() {
   read_if_needed_();
     
   return _php_name_spec;
@@ -484,7 +484,7 @@ bool UmlBaseOperation::set_PhpContextualBodyIndent(bool v) {
 #endif
 
 #ifdef WITHPYTHON
-const Q3CString & UmlBaseOperation::pythonDef() {
+const QByteArray & UmlBaseOperation::pythonDef() {
   return pythonDecl();
 }
 
@@ -492,7 +492,7 @@ bool UmlBaseOperation::set_PythonDef(const char * s) {
   return set_PythonDecl(s);
 }
 
-Q3CString UmlBaseOperation::pythonBody() {
+QByteArray UmlBaseOperation::pythonBody() {
   // not memorized in the instance for memory size reason
   UmlCom::send_cmd(_identifier, pythonBodyCmd);
   return UmlCom::read_string();
@@ -504,7 +504,7 @@ bool UmlBaseOperation::set_PythonBody(const char * s) {
   return UmlCom::read_bool();
 }
 
-const Q3CString & UmlBaseOperation::pythonNameSpec() {
+const QByteArray & UmlBaseOperation::pythonNameSpec() {
   read_if_needed_();
     
   return _python_name_spec;
@@ -550,7 +550,7 @@ bool UmlBaseOperation::set_PythonContextualBodyIndent(bool v) {
 #endif
 
 #ifdef WITHPYTHON
-const Q3CString & UmlBaseOperation::pythonDecorators() {
+const QByteArray & UmlBaseOperation::pythonDecorators() {
   read_if_needed_();
   return _python_decorators;
 }
@@ -578,7 +578,7 @@ bool UmlBaseOperation::set_isIdlOneway(bool y) {
     return FALSE;
 }
 
-const Q3CString & UmlBaseOperation::idlNameSpec() {
+const QByteArray & UmlBaseOperation::idlNameSpec() {
   read_if_needed_();
     
   return _idl_name_spec;

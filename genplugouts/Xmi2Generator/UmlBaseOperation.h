@@ -5,8 +5,8 @@
 #include "UmlClassMember.h"
 #include "anItemKind.h"
 #include "UmlTypeSpec.h"
-#include <q3valuelist.h>
-#include <q3ptrvector.h>
+#include <QList.h>
+
 
 
 #include "UmlParameter.h"
@@ -54,7 +54,7 @@ public:
     bool set_ReturnType(const UmlTypeSpec & t);
 
     // returns (in java a copy of) the parameters list
-    const Q3ValueList<UmlParameter> params();
+    const QList<UmlParameter> params();
 
     // adds a parameter at the given rank (0...)
     //
@@ -72,7 +72,7 @@ public:
     bool replaceParameter(unsigned rank, const UmlParameter & p);
 
     // returns the exceptions
-    const Q3ValueList<UmlTypeSpec> exceptions();
+    const QList<UmlTypeSpec> exceptions();
 
     // adds the exception at the given rank (0...)
     //
@@ -90,7 +90,7 @@ public:
     bool replaceException(unsigned rank, const UmlTypeSpec & t);
 
     // return the behaviors (state and activities) implementing the operation
-    const Q3PtrVector<UmlItem> methods() const;
+    const QVector<UmlItem*> methods() const;
 
     // in case the operation is a 'get' operation, returns the associated
     // attribute or relation
@@ -483,9 +483,9 @@ private:
 
     UmlTypeSpec _return_type;
 
-    Q3ValueList<UmlParameter> _params;
+    QList<UmlParameter> _params;
 
-    Q3ValueList<UmlTypeSpec> _exceptions;
+    QList<UmlTypeSpec> _exceptions;
 
 #ifdef WITHCPP
     WrapperStr _cpp_def;

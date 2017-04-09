@@ -73,7 +73,7 @@ void UmlClass::generate(QTextStream & f, WrapperStr indent)
     if (stereotype == "ignored")
         return;
 
-    Q3PtrVector<UmlItem> ch = children();
+    QVector<UmlItem*> ch = children();
     const unsigned sup = ch.size();
     bool an_enum = (stereotype == "enum");
     int enum_item_rank = 0;
@@ -220,7 +220,7 @@ void UmlClass::generate(QTextStream &, const WrapperStr &, WrapperStr, int &)
 void UmlClass::generate_require_onces(QTextStream & f, WrapperStr & made)
 {
     if (!phpDecl().isEmpty()) {
-        Q3PtrVector<UmlItem> ch = children();
+        QVector<UmlItem*> ch = children();
         unsigned index;
         const unsigned sup = ch.size();
 
@@ -255,9 +255,9 @@ void UmlClass::generate_require_onces(QTextStream & f, WrapperStr & made,
             else if ((index = s.find("${Name}")) != -1)
                 s.replace(index, 7, capitalize(name()));
             else if ((index = s.find("${NAME}")) != -1)
-                s.replace(index, 7, name().upper());
+                s.replace(index, 7, name().upper().toLatin1().constData());
             else if ((index = s.find("${nAME}")) != -1)
-                s.replace(index, 7, name().lower());
+                s.replace(index, 7, name().lower().toLatin1().constData());
             else
                 break;
         }
@@ -343,9 +343,9 @@ void UmlClass::write(QTextStream & f)
         else if ((index = s.find("${Name}")) != -1)
             s.replace(index, 7, capitalize(name()));
         else if ((index = s.find("${NAME}")) != -1)
-            s.replace(index, 7, name().upper());
+            s.replace(index, 7, name().upper().toLatin1().constData());
         else if ((index = s.find("${nAME}")) != -1)
-            s.replace(index, 7, name().lower());
+            s.replace(index, 7, name().lower().toLatin1().constData());
 
         f << s;
     }

@@ -29,7 +29,7 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
@@ -173,12 +173,12 @@ void PseudoStateCanvas::set_xpm()
         return;
     }
 
-    setSize(xpm->width(), xpm->height());
+    setRect(0,0,xpm->width(), xpm->height());
 }
 
 void PseudoStateCanvas::change_scale()
 {
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
 
     if (manual_size) {
         double scale = the_canvas()->zoom();
@@ -189,7 +189,7 @@ void PseudoStateCanvas::change_scale()
             if (w < MIN_FORK_JOIN_LARGESIDE)
                 w = MIN_FORK_JOIN_LARGESIDE;
 
-            setSize(w | 1, FORK_JOIN_SMALLSIDE);
+            setRect(0,0,w | 1, FORK_JOIN_SMALLSIDE);
         }
         else {
             int h = (int)(height_scale100 * scale);
@@ -197,7 +197,7 @@ void PseudoStateCanvas::change_scale()
             if (h < MIN_FORK_JOIN_LARGESIDE)
                 h = MIN_FORK_JOIN_LARGESIDE;
 
-            setSize(FORK_JOIN_SMALLSIDE, h | 1);
+            setRect(0,0,FORK_JOIN_SMALLSIDE, h | 1);
         }
 
         DiagramCanvas::resize(width(), height());
@@ -207,7 +207,7 @@ void PseudoStateCanvas::change_scale()
         set_xpm();
 
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 aCorner PseudoStateCanvas::on_resize_point(const QPoint & p)
@@ -565,8 +565,11 @@ void PseudoStateCanvas::draw(QPainter & p)
         }
     }
 }
-
-UmlCode PseudoStateCanvas::type() const
+void PseudoStateCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode PseudoStateCanvas::typeUmlCode() const
 {
     return browser_node->get_type();
 }
@@ -594,55 +597,58 @@ void PseudoStateCanvas::open()
 
 void PseudoStateCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
     int index;
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
 
     switch (browser_node->get_type()) {
     case ForkPS:
     case JoinPS:
-        m.insertItem((horiz) ? TR("draw vertically") : TR("draw horizontally"), 2);
-        m.insertSeparator();
+        MenuFactory::addItem(m, (horiz) ? TR("draw vertically") : TR("draw horizontally"), 2);
+        m.addSeparator();
         break;
 
     default:
         break;
     }
 
-    /*m.insertItem("Edit drawing settings", 2);
-    m.insertSeparator();*/
-    m.insertItem(TR("Edit pseudo state"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Select in browser"), 4);
+    /*MenuFactory::addItem(m, "Edit drawing settings", 2);
+    m.addSeparator();*/
+    MenuFactory::addItem(m, TR("Edit pseudo state"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select in browser"), 4);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 5);
+        MenuFactory::addItem(m, TR("Select linked items"), 5);
 
-    m.insertSeparator();
+    m.addSeparator();
     /*if (browser_node->is_writable())
       if (browser_node->get_associated() !=
     (BrowserNode *) the_canvas()->browser_diagram())
-        m.insertItem(TR("Set associated diagram"),6);
-    m.insertSeparator();*/
-    m.insertItem(TR("Remove from diagram"), 7);
+        MenuFactory::addItem(m, TR("Set associated diagram"),6);
+    m.addSeparator();*/
+    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        m.insertItem(TR("Delete from model"), 8);
+        MenuFactory::addItem(m, TR("Delete from model"), 8);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (Tool::menu_insert(&toolm, browser_node->get_type(), 20))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
-    switch (index = m.exec(QCursor::pos())) {
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    switch (index = retAction->data().toInt()) {
     case 0:
         upper();
         modified();	// call package_modified()
@@ -669,7 +675,7 @@ void PseudoStateCanvas::menu(const QPoint &)
         if (!manual_size)
             set_xpm();
         else {
-            setSize(height(), width());
+            setRect(0,0,height(), width());
             DiagramCanvas::resize(width(), height());
         }
 
@@ -704,6 +710,7 @@ void PseudoStateCanvas::menu(const QPoint &)
             ToolCom::run(Tool::command(index - 20), browser_node);
 
         return;
+    }
     }
 
     package_modified();
@@ -751,7 +758,7 @@ QString PseudoStateCanvas::may_connect(UmlCode & l, const DiagramItem * dest) co
     if (l == UmlAnchor)
         return dest->may_start(l);
 
-    switch (dest->type()) {
+    switch (dest->typeUmlCode()) {
     case UmlState:
     case UmlStateAction:
     case FinalPS:
@@ -839,7 +846,7 @@ PseudoStateCanvas * PseudoStateCanvas::read(char *& st, UmlCanvas * canvas,
             result->label = new LabelCanvas(ps->get_name(), canvas, 0, 0);
             read_keyword(st, "label_xy");
             read_xy(st, result->label);
-            result->label->setZ(result->z());
+            result->label->setZValue(result->zValue());
             result->label->set_center100();
         }
 
@@ -873,7 +880,7 @@ PseudoStateCanvas * PseudoStateCanvas::read(char *& st, UmlCanvas * canvas,
 
 void PseudoStateCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(browser_node->get_data(), 0, this, 0);
 }
 
@@ -907,7 +914,7 @@ void PseudoStateCanvas::history_load(QBuffer & b)
 
         ::load(w, b);
         ::load(h, b);
-        Q3CanvasRectangle::setSize(w, h);
+        QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
     }
 
     connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));

@@ -3,7 +3,7 @@
 
 
 
-#include <q3valuelist.h>
+#include <QList.h>
 #include "UmlBaseItem.h"
 #include <qstring.h>
 #include "anItemKind.h"
@@ -37,9 +37,9 @@ protected:
 
     WrapperStr constraint;
 
-    static Q3ValueList<Unresolved> Generalizations;
+    static QList<Unresolved> Generalizations;
 
-    static Q3ValueList<Unresolved> Refs;
+    static QList<Unresolved> Refs;
 
 
 public:
@@ -68,7 +68,7 @@ protected:
 
     int context;
 
-    static Q3ValueList<UnresolvedWithContext> All;
+    static QList<UnresolvedWithContext> All;
 
 };
 
@@ -95,7 +95,7 @@ protected:
 
     WrapperStr constraint;
 
-    static Q3ValueList<UnresolvedRelation> All;
+    static QList<UnresolvedRelation> All;
 
 
 public:
@@ -225,17 +225,17 @@ protected:
 
 
 public:
-    static QMap<WrapperStr, UmlItem *> All;
+    static QMap<QString, UmlItem *> All;
 
 
 protected:
-    static QMap<WrapperStr, PFunc> Functions;
+    static QMap<QString, PFunc> Functions;
 
-    static QMap<WrapperStr, UmlTypeSpec> PrimitiveTypes;
+    static QMap<QString, UmlTypeSpec> PrimitiveTypes;
 
-    static QMap<WrapperStr, UmlItem *> Incomings;
+    static QMap<QString, UmlItem *> Incomings;
 
-    static QMap<WrapperStr, UmlItem *> Outgoings;
+    static QMap<QString, UmlItem *> Outgoings;
 
 
 private:

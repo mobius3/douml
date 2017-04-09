@@ -118,7 +118,7 @@ bool Lex::open(const QString & f)
 
     unsigned offset = 0;
 
-    do offset += in.readBlock(context.buffer + offset, sz - offset);
+    do offset += in.read(context.buffer + offset, sz - offset);
 
     while (offset != sz);
 
@@ -374,7 +374,7 @@ WrapperStr Lex::manage_operator(QString & result, int c)
 #ifdef TRACE
     QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
-    return WrapperStr(result.toAscii().constData());
+    return WrapperStr(result.toLatin1().constData());
 }
 
 char Lex::bypass_operator(int c)
@@ -446,7 +446,7 @@ WrapperStr Lex::read_string()
             break;
 
         case '"':
-            return WrapperStr((result += c).toAscii().constData());
+            return WrapperStr((result += c).toLatin1().constData());
 
         default:
             result += c;
@@ -771,7 +771,7 @@ WrapperStr Lex::read_word(bool in_templ)
 #ifdef TRACE
     QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
-    return WrapperStr(result.toAscii().constData());
+    return WrapperStr(result.toLatin1().constData());
 }
 
 char Lex::read_word_bis(bool in_templ)
@@ -785,7 +785,7 @@ char Lex::read_word_bis(bool in_templ)
             result = '>';
         }
         else {
-            result = context.reread.latin1()[0];
+            result = context.reread.toLatin1()[0];
             context.reread = QString();
         }
     }
@@ -938,7 +938,7 @@ void Lex::finish_line()
 
 WrapperStr Lex::get_comments()
 {
-    WrapperStr result = WrapperStr(context.comments.toAscii().constData());
+    WrapperStr result = WrapperStr(context.comments.toLatin1().constData());
 
     context.comments = QString();
     return result;
@@ -946,7 +946,7 @@ WrapperStr Lex::get_comments()
 
 WrapperStr Lex::get_comments(WrapperStr & co)
 {
-    WrapperStr result = WrapperStr(context.comments.toAscii().constData());
+    WrapperStr result = WrapperStr(context.comments.toLatin1().constData());
 
     context.comments = QString();
 
@@ -957,7 +957,7 @@ WrapperStr Lex::get_comments(WrapperStr & co)
 
 WrapperStr Lex::get_description()
 {
-    WrapperStr result = WrapperStr(context.description.toAscii().constData());
+    WrapperStr result = WrapperStr(context.description.toLatin1().constData());
 
     context.description = QString();
     return result;
@@ -965,7 +965,7 @@ WrapperStr Lex::get_description()
 
 WrapperStr Lex::get_description(WrapperStr & co)
 {
-    WrapperStr result = WrapperStr(context.description.toAscii().constData());
+    WrapperStr result = WrapperStr(context.description.toLatin1().constData());
 
     context.description = QString();
 
@@ -1007,7 +1007,7 @@ WrapperStr Lex::region()
 void Lex::syntax_error(WrapperStr s)
 {
     JavaCatWindow::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
-                         + WrapperStr(context.filename.toAscii().constData()) + "</i> line " +
+                         + WrapperStr(context.filename.toLatin1().constData()) + "</i> line " +
                          WrapperStr().setNum(context.line_number) + " <b>"
                          + s + "</b></font><br>");
 
@@ -1023,7 +1023,7 @@ void Lex::syntax_error(WrapperStr s)
 void Lex::premature_eof()
 {
     JavaCatWindow::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
-                         + WrapperStr(context.filename.toAscii().constData()) + "</i> line " +
+                         + WrapperStr(context.filename.toLatin1().constData()) + "</i> line " +
                          WrapperStr().setNum(context.line_number) +
                          " <b>premature eof</b></font><br>");
 
@@ -1039,7 +1039,7 @@ void Lex::premature_eof()
 void Lex::error_near(WrapperStr s, const char * m)
 {
     JavaCatWindow::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
-                         + WrapperStr(context.filename.toAscii().constData()) + "</i> line " +
+                         + WrapperStr(context.filename.toLatin1().constData()) + "</i> line " +
                          WrapperStr().setNum(context.line_number) + " <b>near <font color =\"red\">"
                          + quote(s) + "</font></b>" + m + "</font><br>");
 

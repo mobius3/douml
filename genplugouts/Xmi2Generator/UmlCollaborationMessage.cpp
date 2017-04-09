@@ -2,13 +2,13 @@
 #include "UmlCollaborationMessage.h"
 #include "FileOut.h"
 #include "UmlItem.h"
-
+#include "../src/misc/mystr.h"
 #include "UmlPackage.h"
 #include "UmlOperation.h"
 #include "UmlClassInstanceReference.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-void UmlCollaborationMessage::write(FileOut & out, UmlItem * diagram, const Q3PtrVector< UmlCollaborationMessage > & msgs, unsigned & index)
+void UmlCollaborationMessage::write(FileOut & out, UmlItem * diagram, const QVector< UmlCollaborationMessage* > & msgs, unsigned & index)
 {
     unsigned sup = msgs.size();
     UmlPackage * prj = UmlPackage::getProject();

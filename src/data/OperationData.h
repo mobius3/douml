@@ -28,9 +28,10 @@
 #ifndef OPERATIONDATA_H
 #define OPERATIONDATA_H
 
-#include <q3memarray.h>
+//#include <q3memarray.h>
 //Added by qt3to4:
 #include <QTextStream>
+#include  <memory>
 
 
 #include "UmlEnum.h"
@@ -45,7 +46,9 @@ class ExceptionData;
 class KeyValueData;
 class BrowserClass;
 class BrowserOperation;
-
+class BrowserOperationAttribute;
+class BrowserOperationReturnType;
+class QuickEdit;
 class OperationBody
 {
 public:
@@ -62,6 +65,10 @@ class OperationData : public ClassMemberData,
     Q_OBJECT
 
     friend class OperationDialog;
+    friend class BrowserOperation;
+    friend class QuickEdit;
+    friend class BrowserOperationAttribute;
+    friend class BrowserOperationReturnType;
 
 protected:
     static IdDict<OperationData> all;
@@ -100,7 +107,8 @@ protected:
     unsigned short nexceptions;
     AType return_type;
     WrapperStr originClass = QString("0");
-    ParamData * params = nullptr;			// remark : do NOT use QArray
+    QList<std::shared_ptr<ParamData>> params;
+    //ParamData * params = nullptr;			// remark : do NOT use QArray
     ExceptionData * exceptions;
     WrapperStr constraint;
 
@@ -132,6 +140,7 @@ protected:
     WrapperStr idl_name_spec;	// get_${name}
 
     friend bool operator==(const OperationData & , const OperationData & );
+    friend bool PropagationEquality(const OperationData & origin, const OperationData & another);
 
     void depend_on(BrowserClass * cl);
     void no_longer_depend_on(BrowserClass * cl);
@@ -147,6 +156,7 @@ protected:
     void set_bodies_info();
     static char * set_bodies_info(BrowserClass * cl, int id);
 
+
 public:
     OperationData(int id = 0);
     OperationData(OperationData * model, BrowserNode *);
@@ -155,6 +165,9 @@ public:
 
     virtual bool deletedp() const;
     virtual void set_deletedp(bool y);
+
+    void remove_param(std::shared_ptr<ParamData>);
+    void insert_param(int position, std::shared_ptr<ParamData> param);
 
     void set_browser_node(BrowserOperation *, bool update);
 
@@ -174,6 +187,9 @@ public:
     bool get_isa_class_operation() const {
         return isa_class_operation;
     };
+    void set_isa_class_operation(bool value) {
+        isa_class_operation = value;
+    };
 
     bool get_is_abstract() const {
         return is_abstract;
@@ -182,8 +198,10 @@ public:
 
     bool get_is_volatile() const {
         return is_volatile;
-    };
-
+    }
+    void set_is_volatile(bool value){
+        is_volatile = value;
+    }
     bool body_generation_forced() const {
         return force_body_gen;
     };
@@ -191,51 +209,89 @@ public:
     bool get_cpp_const() const {
         return cpp_const;
     };
-
+    void set_cpp_const(bool value){
+        cpp_const = value;
+    }
     bool get_cpp_friend() const {
         return cpp_friend;
     };
-
+    void set_cpp_friend(bool value){
+        cpp_friend = value;
+    }
     bool get_cpp_virtual() const {
         return cpp_virtual;
     };
-
+    void set_cpp_virtual(bool value){
+        cpp_virtual = value;
+    }
     bool get_cpp_inline() const {
         return cpp_inline;
     };
-
+    void set_cpp_inline(bool value){
+        cpp_inline = value;
+    }
     bool get_cpp_default() const {
         return cpp_default;
     };
+    void set_cpp_default(bool value){
+        cpp_default = value;
+    }
     bool get_cpp_delete() const {
         return cpp_delete;
-    };
+    }
+    void set_cpp_delete(bool value){
+        cpp_delete = value;
+    }
     bool get_cpp_override() const {
         return cpp_override;
     };
+    void set_cpp_override(bool value){
+        cpp_override = value;
+    }
     bool get_cpp_final() const {
         return cpp_final;
     };
+    void set_cpp_final(bool value){
+        cpp_final = value;
+    }
     QString get_cpp_name_spec() const {
         return cpp_name_spec;
-    };
+    }
+    void set_cpp_pass_type(QString value)
+    {
+        value = value;
+        //do nothing, yet
+    }
+    QString get_cpp_pass_type() const
+    {
+        return QString();
+    }
 
     bool get_java_final() const {
         return java_final;
     };
-
+    void set_java_final(bool value){
+        java_final = value;
+    }
     bool get_java_synchronized() const {
         return java_synchronized;
     };
-
+    void set_java_synchronized(bool value){
+        java_synchronized = value;
+    }
     bool get_php_final() const {
         return php_final;
     };
+    void set_php_final(bool value){
+        php_final = value;
+    }
 
     bool get_idl_oneway() const {
         return idl_oneway;
     };
-
+    void set_idl_oneway(bool value){
+        idl_oneway = value;
+    }
     WrapperStr get_origin_class() { return originClass;}
 
     UmlVisibility get_uml_visibility() const {
@@ -247,11 +303,13 @@ public:
     };
     void set_uml_visibility(UmlVisibility v);
     void set_cpp_visibility(UmlVisibility v);
+    void set_cpp_visibility(int v);
     void set_origin_class(WrapperStr value){originClass = value;}
     const AType & get_return_type() const {
         return return_type;
     };
     void set_return_type(const AType & t);
+    void set_return_type(const QString & value);
 
     const char * get_param_name(int rank) const;
     QStringList get_param_names() const;
@@ -276,34 +334,41 @@ public:
     };
     void set_n_exceptions(unsigned n);	// the old exceptions are lost
 
-    const char * get_cppdecl() const {
+    const char * get_cppdecl() const
+    {
         return cpp_decl;
     };
-    const char * get_cppdef() const {
-        return cpp_def;
+    const char * get_cppdef() const
+    {
+            return cpp_def;
     };
     void set_cppdef(QString value){cpp_def = value;}
+    void set_cppdecl(QString value){cpp_decl = value;}
     QString default_cpp_decl(const QString & name);
     QString default_cpp_def(const QString & name);
 
     const char * get_javadef() const {
         return java_def;
     };
+    void set_javadef(QString value){java_def = value;}
     QString default_java_def(const QString & name);
 
     const char * get_phpdef() const {
         return php_def;
     };
+    void set_phpdef(QString value){php_def = value;}
     QString default_php_def(const QString & name, bool nobody);
 
     const char * get_pythondef() const {
         return python_def;
     };
+    void set_pythondef(QString value){python_def = value;}
     QString default_python_def(const QString & name);
 
     const char * get_idldecl() const {
         return idl_decl;
     };
+    void set_idldecl(QString value){idl_decl = value;}
     QString default_idl_decl(const QString & name);
 
     void edit(DrawingLanguage);
@@ -387,6 +452,7 @@ protected slots:
 };
 
 bool operator==(const OperationData & s1, const OperationData & s2);
+bool PropagationEquality(const OperationData & origin, const OperationData & another);
 //bool operator!=(const OperationData & s1, const OperationData & s2);
 #endif
 

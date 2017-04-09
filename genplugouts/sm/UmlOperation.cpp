@@ -4,7 +4,7 @@
 
 #include "CppSettings.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 void UmlOperation::defaultDef()
 {
@@ -26,16 +26,16 @@ void UmlOperation::setType(const char * type, const char * s)
     t.explicit_type = type;
     set_ReturnType(t);
 
-    static const Q3CString sep = " \t\n\r";
-    Q3CString d;
+    static const QByteArray sep = " \t\n\r";
+    QByteArray d;
     int typeindex;
     int nameindex;
 
     d = cppDecl();
 
-    if (((typeindex = d.find("${type}")) != -1) &&
-        ((nameindex = d.find(" ${name}", typeindex + 7)) != -1)) {
-        while (sep.find(d[nameindex - 1]) != -1)
+    if (((typeindex = d.indexOf("${type}")) != -1) &&
+        ((nameindex = d.indexOf(" ${name}", typeindex + 7)) != -1)) {
+        while (sep.indexOf(d[nameindex - 1]) != -1)
             nameindex -= 1;
 
         d.replace(typeindex, nameindex - typeindex, s);
@@ -45,9 +45,9 @@ void UmlOperation::setType(const char * type, const char * s)
     if (! isAbstract()) {
         d = cppDef();
 
-        if (((typeindex = d.find("${type}")) != -1) &&
-            ((nameindex = d.find(" ${class}", typeindex + 7)) != -1)) {
-            while (sep.find(d[nameindex - 1]) != -1)
+        if (((typeindex = d.indexOf("${type}")) != -1) &&
+            ((nameindex = d.indexOf(" ${class}", typeindex + 7)) != -1)) {
+            while (sep.indexOf(d[nameindex - 1]) != -1)
                 nameindex -= 1;
 
             d.replace(typeindex, nameindex - typeindex, s);
@@ -63,16 +63,16 @@ void UmlOperation::setType(UmlClass * type, const char * s)
     t.type = type;
     set_ReturnType(t);
 
-    static const Q3CString sep = " \t\n\r";
-    Q3CString d;
+    static const QByteArray sep = " \t\n\r";
+    QByteArray d;
     int typeindex;
     int nameindex;
 
     d = cppDecl();
 
-    if (((typeindex = d.find("${type}")) != -1) &&
-        ((nameindex = d.find("${name}", typeindex + 7)) != -1)) {
-        while (sep.find(d[nameindex - 1]) != -1)
+    if (((typeindex = d.indexOf("${type}")) != -1) &&
+        ((nameindex = d.indexOf("${name}", typeindex + 7)) != -1)) {
+        while (sep.indexOf(d[nameindex - 1]) != -1)
             nameindex -= 1;
 
         d.replace(typeindex, nameindex - typeindex, s);
@@ -82,9 +82,9 @@ void UmlOperation::setType(UmlClass * type, const char * s)
     if (! isAbstract()) {
         d = cppDef();
 
-        if (((typeindex = d.find("${type}")) != -1) &&
-            ((nameindex = d.find("${class}", typeindex + 7)) != -1)) {
-            while (sep.find(d[nameindex - 1]) != -1)
+        if (((typeindex = d.indexOf("${type}")) != -1) &&
+            ((nameindex = d.indexOf("${class}", typeindex + 7)) != -1)) {
+            while (sep.indexOf(d[nameindex - 1]) != -1)
                 nameindex -= 1;
 
             d.replace(typeindex, nameindex - typeindex, s);
@@ -109,22 +109,22 @@ void UmlOperation::addParam(int rank, aDirection dir, const char * name, UmlClas
 
 void UmlOperation::setParams(const char * s)
 {
-    Q3CString d;
+    QByteArray d;
     int index;
 
     d = cppDecl();
 
-    if (((index = d.find("${(}")) != -1) &&
+    if (((index = d.indexOf("${(}")) != -1) &&
         (d.mid(index + 4, 4) == "${)}")) {
-        d.insert(d.find("${(}") + 4, s);
+        d.insert(d.indexOf("${(}") + 4, s);
         set_CppDecl(d);
     }
 
     d = cppDef();
 
-    if (((index = d.find("${(}")) != -1) &&
+    if (((index = d.indexOf("${(}")) != -1) &&
         (d.mid(index + 4, 4) == "${)}")) {
-        d.insert(d.find("${(}") + 4, s);
+        d.insert(d.indexOf("${(}") + 4, s);
         set_CppDef(d);
     }
 }

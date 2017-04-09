@@ -44,14 +44,16 @@ class ToolCom;
 
 class ColMsg;
 //[lgfreitas] replacing qcollection by q3ptrcollection
-#include <q3ptrcollection.h>
+//#include <q3ptrcollection.h>
 //[lgfreitas] q3ptrlist needed
-#include <q3ptrlist.h>
+//
 
-class ColMsgList : public Q3PtrList<ColMsg>
+class ColMsgList : public QList<ColMsg *>
 {
+public:
+    void sort();
 protected:
-    virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
+    static bool compareItems(ColMsg *a, ColMsg *b);
 };
 
 

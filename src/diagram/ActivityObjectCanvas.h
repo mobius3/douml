@@ -60,6 +60,7 @@ protected:
     ActivityObjectCanvas(UmlCanvas * canvas, int id);
     void check_selection();
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     ActivityObjectCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ActivityObjectCanvas();
@@ -72,7 +73,7 @@ public:
     void compute_size();
     bool force_inside();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void open();
     virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
@@ -86,8 +87,8 @@ public:
     virtual void remove(bool from_model);
 
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem *> &);
+    virtual void clone_drawing_settings(const DiagramItem *src);
 
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();

@@ -81,12 +81,12 @@ void SdObjCanvas::moveBy(double dx, double dy)
 
 QString SdObjCanvas::may_start(UmlCode & l) const
 {
-    return (l == UmlAnchor) ? QString() : TR("illegal");
+    return (l == UmlAnchor) ? QString() :  QObject::tr("illegal");
 }
 
 QString SdObjCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 {
-    return (l == UmlAnchor) ? dest->may_start(l) : TR("illegal");
+    return (l == UmlAnchor) ? dest->may_start(l) :  QObject::tr("illegal");
 }
 
 void SdObjCanvas::set_mortal(bool y)
@@ -111,7 +111,7 @@ void SdObjCanvas::save(QTextStream & st) const
     if (life_line->is_masked())
         st << " life_line_masked";
 
-    st << " life_line_z " << life_line->z();
+    st << " life_line_z " << life_line->zValue();
 }
 
 void SdObjCanvas::read(char *& st, const char * k)
@@ -134,7 +134,7 @@ void SdObjCanvas::read(char *& st, const char * k)
         if (strcmp(k, "life_line_z"))
             wrong_keyword(k, "life_line_z");
 
-        life_line->setZ(read_double(st));
+        life_line->setZValue(read_double(st));
     }
     else if (!strcmp(k, "xy"))
         read_xy(st, this);

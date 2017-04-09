@@ -5,8 +5,8 @@
 #include "UmlClassMember.h"
 #include "anItemKind.h"
 #include "UmlTypeSpec.h"
-#include <q3valuelist.h>
-#include <q3cstring.h>
+#include <QList>
+#include <QByteArray>
 
 #include "UmlParameter.h"
 class UmlOperation;
@@ -14,9 +14,8 @@ class UmlClass;
 struct UmlParameter;
 
 //  Manage the class's operations
-class UmlBaseOperation : public UmlClassMember
-{
-public:
+class UmlBaseOperation : public UmlClassMember {
+  public:
     // returns a new operation named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -31,7 +30,7 @@ public:
     bool isAbstract();
 
     // to set the 'abstract' flag
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isAbstract(bool y);
 
@@ -39,12 +38,12 @@ public:
     const UmlTypeSpec & returnType();
 
     // to set the operation value type
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_ReturnType(const UmlTypeSpec & t);
 
     // returns (in java a copy of) the parameters list
-    const Q3ValueList<UmlParameter> params();
+    const QList<UmlParameter> params();
 
     // adds a parameter at the given rank (0...)
     //
@@ -62,7 +61,7 @@ public:
     bool replaceParameter(unsigned rank, const UmlParameter & p);
 
     // returns the exceptions
-    const Q3ValueList<UmlTypeSpec> exceptions();
+    const QList<UmlTypeSpec> exceptions();
 
     // adds the exception at the given rank (0...)
     //
@@ -92,7 +91,7 @@ public:
     bool isCppConst();
 
     // to set if the operation is declared const in C++
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isCppConst(bool y);
 
@@ -100,7 +99,7 @@ public:
     bool isCppFriend();
 
     // to set if the operation is a friend in C++
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isCppFriend(bool y);
 
@@ -108,7 +107,7 @@ public:
     bool isCppVirtual();
 
     // to set if the operation is declared virtual in C++
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isCppVirtual(bool y);
 
@@ -116,13 +115,13 @@ public:
     bool isCppInline();
 
     // to set if the operation is declared inline in C++
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isCppInline(bool y);
 
     // returns the operation's definition in C++, notes that the declaration
     // is returned by the inherited ClassItemBase::CppDecl() operation
-    const Q3CString & cppDef();
+    const QByteArray & cppDef();
 
     // sets the operation's definition in C++, notes that the declaration
     // is set through the inherited ClassItemBase::set_CppDecl() operation
@@ -133,9 +132,9 @@ public:
     // returns the operation's body in C++, useless if the def does not
     // contains ${body}. Note that the body is get each time from BOUML
     // for memory size reason
-    Q3CString cppBody();
+    QByteArray cppBody();
 
-    // sets the operation's body in C++, useless if the def does not
+    // sets the operation's body in C++, useless if the def does not 
     // contains ${body}
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
@@ -143,11 +142,11 @@ public:
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's C++ name must be generated
-    const Q3CString & cppNameSpec();
+    const QByteArray & cppNameSpec();
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's C++ name must be generated
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_CppNameSpec(const char * s);
 #endif
@@ -157,7 +156,7 @@ public:
     bool isJavaFinal();
 
     // to set if the operation is declared final in JAVA
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isJavaFinal(bool y);
 
@@ -165,13 +164,13 @@ public:
     bool isJavaSynchronized();
 
     // to set if the operation is declared synchronized in JAVA
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isJavaSynchronized(bool y);
 
     // returns the operation's definition in Java, notes that it is
     // already made by the inherited JavaDecl operation
-    const Q3CString & javaDef();
+    const QByteArray & javaDef();
 
     // sets the operation's definition in Java, notes that it is
     // already made by the inherited set_JavaDecl operation
@@ -182,9 +181,9 @@ public:
     // returns the operation's body in Java++, useless if the def does
     // not contains ${body} Note that the body is get each time from BOUML
     // for memory size reason
-    Q3CString javaBody();
+    QByteArray javaBody();
 
-    // sets the operation's body in Java, useless if the def does not
+    // sets the operation's body in Java, useless if the def does not 
     // contains ${body}
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
@@ -192,11 +191,11 @@ public:
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's JAVA name must be generated
-    const Q3CString & javaNameSpec();
+    const QByteArray & javaNameSpec();
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's JAVA name must be generated
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_JavaNameSpec(const char * s);
 #endif
@@ -212,11 +211,11 @@ public:
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's IDL name must be generated
-    const Q3CString & idlNameSpec();
+    const QByteArray & idlNameSpec();
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's IDL name must be generated
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_IdlNameSpec(const char * s);
 #endif
@@ -226,7 +225,7 @@ public:
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-private:
+  private:
     bool _abstract : 1;
 
 #ifdef WITHCPP
@@ -237,39 +236,85 @@ private:
     bool _cpp_virtual : 1;
 
     bool _cpp_inline : 1;
-    bool _cpp_default : 1;
-    bool _cpp_delete : 1;
-    bool _cpp_override : 1;
-    bool _cpp_final : 1;
 #endif
+
 #ifdef WITHJAVA
     bool _java_final : 1;
 
     bool _java_synchronized : 1;
 #endif
 
+#ifdef WITHPHP
+    bool _php_final : 1;
+#endif
 #ifdef WITHIDL
     bool _idl_oneway : 1;
 #endif
 
-    UmlTypeSpec _return_type;
-
-    Q3ValueList<UmlParameter> _params;
-
-    Q3ValueList<UmlTypeSpec> _exceptions;
-
 #ifdef WITHCPP
-    Q3CString _cpp_def;
-
-    Q3CString _cpp_name_spec;
+    bool _cpp_get_set_frozen : 1;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_name_spec;
+    bool _java_get_set_frozen : 1;
+#endif
+
+#ifdef WITHPHP
+    bool _php_get_set_frozen : 1;
+#endif
+
+#ifdef WITHPYTHON
+    bool _python_get_set_frozen : 1;
 #endif
 
 #ifdef WITHIDL
-    Q3CString _idl_name_spec;
+    bool _idl_get_set_frozen : 1;
+#endif
+
+#ifdef WITHCPP
+    bool _cpp_contextual_body_indent : 1;
+#endif
+
+#ifdef WITHJAVA
+    bool _java_contextual_body_indent : 1;
+#endif
+
+#ifdef WITHPHP
+    bool _php_contextual_body_indent : 1;
+#endif
+
+#ifdef WITHPYTHON
+    bool _python_contextual_body_indent : 1;
+#endif
+
+    UmlTypeSpec _return_type;
+
+    QList<UmlParameter> _params;
+
+    QList<UmlTypeSpec> _exceptions;
+
+#ifdef WITHCPP
+    QByteArray _cpp_def;
+
+    QByteArray _cpp_name_spec;
+#endif
+
+#ifdef WITHJAVA
+    QByteArray _java_name_spec;
+#endif
+
+#ifdef WITHPHP
+    QByteArray _php_name_spec;
+#endif
+
+#ifdef WITHPYTHON
+    QByteArray _python_name_spec;
+
+    QByteArray _python_decorators;
+#endif
+
+#ifdef WITHIDL
+    QByteArray _idl_name_spec;
 #endif
 
     // exclusive with set_of
@@ -279,9 +324,9 @@ private:
     UmlClassMember * _set_of;
 
 
-protected:
+  protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseOperation(void * id, const Q3CString & n);
+    UmlBaseOperation(void * id, const QByteArray & n);
 
     virtual void read_uml_();
 
@@ -293,16 +338,27 @@ protected:
     virtual void read_java_();
 #endif
 
+#ifdef WITHPHP
+    //internal, do NOT use it
+
+    virtual void read_php_();
+#endif
+
+#ifdef WITHPYTHON
+    //internal, do NOT use it
+
+    virtual void read_python_();
+#endif
+
 #ifdef WITHIDL
     virtual void read_idl_();
 #endif
 
 };
 
-inline UmlBaseOperation::UmlBaseOperation(void * id, const Q3CString & n) : UmlClassMember(id, n)
-{
-    _get_of = 0;
-    _set_of = 0;
+inline UmlBaseOperation::UmlBaseOperation(void * id, const QByteArray & n) : UmlClassMember(id, n) {
+  _get_of = 0;
+  _set_of = 0;
 }
 
 #endif

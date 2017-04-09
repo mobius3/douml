@@ -33,7 +33,7 @@
 #include "DialogUtil.h"
 #include "BrowserNode.h"
 
-class Q3ComboBox;
+class QComboBox;
 class MultiLineEdit;
 
 class AnnotationDialog : public QDialog
@@ -43,7 +43,7 @@ class AnnotationDialog : public QDialog
 protected:
     QString & value;
     MultiLineEdit * e;
-    Q3ComboBox * cb;
+    QComboBox * cb;
     BrowserNodeList annotations;
 
     static QSize previous_size;

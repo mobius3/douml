@@ -2,10 +2,8 @@
 #include "UmlClassMember.h"
 #include "FileOut.h"
 #include "UmlTypeSpec.h"
-
 #include "UmlClass.h"
-//Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 void UmlClassMember::write_scope(FileOut & out, const char * who)
 {
     out << " "
@@ -61,7 +59,7 @@ void UmlClassMember::write_visibility(FileOut & out, aVisibility v)
 void UmlClassMember::write_annotation(FileOut & out)
 {
     if (_lang == Java) {
-        Q3CString a = javaAnnotations();
+        QByteArray a = javaAnnotations();
 
         if (!a.isEmpty()) {
             switch (_taggedvalue_mode) {
@@ -92,9 +90,9 @@ void UmlClassMember::write_annotation(FileOut & out)
     }
 }
 
-Q3CString UmlClassMember::true_name(Q3CString decl)
+QByteArray UmlClassMember::true_name(QByteArray decl)
 {
-    int index = decl.find("${name}", 0); //[rageek] Removed CS=FALSE param - rethink this, case sensitive
+    int index = decl.indexOf("${name}", 0); //[rageek] Removed CS=FALSE param - rethink this, case sensitive
 
     if (index == -1)
         // too complicated, return the Uml one
@@ -110,16 +108,16 @@ Q3CString UmlClassMember::true_name(Q3CString decl)
     while (identChar(decl[sup]))
         sup += 1;
 
-    Q3CString r = decl.mid(begin, index - begin);
-    Q3CString k = decl.mid(index + 2, 4);
+    QByteArray r = decl.mid(begin, index - begin);
+    QByteArray k = decl.mid(index + 2, 4);
 
     if (k == "name")
         r += name();
     else if (k == "Name")
-        r += name().left(1).upper() + name().mid(1);
+        r += name().left(1).toUpper() + name().mid(1);
     else
         // NAME
-        r += name().upper();
+        r += name().toUpper();
 
     r += decl.mid(index + 7, sup - index - 7);
 
@@ -134,14 +132,14 @@ bool UmlClassMember::identChar(char c)
             (c == '_'));
 }
 
-void UmlClassMember::write_type(FileOut & out, const UmlTypeSpec & t, Q3CString s, const char * k_name, const char * k_type)
+void UmlClassMember::write_type(FileOut & out, const UmlTypeSpec & t, QByteArray s, const char * k_name, const char * k_type)
 {
-    s = s.simplifyWhiteSpace();
+    s = s.simplified();
 
     int index;
 
     // remove k_name and all after it except []
-    if (k_name && *k_name && ((index = s.find(k_name, 0)) != -1)) {//[rageek] Removed CS=FALSE - rethink this, case sensitive
+    if (k_name && *k_name && ((index = s.indexOf(k_name, 0)) != -1)) {//[rageek] Removed CS=FALSE - rethink this, case sensitive
         //remove name
         s.remove(index, strlen(k_name));
 
@@ -156,7 +154,7 @@ void UmlClassMember::write_type(FileOut & out, const UmlTypeSpec & t, Q3CString 
 
             int index2;
 
-            if ((index2 = s.find(index, ']')) == -1)
+            if ((index2 = s.indexOf(index, ']')) == -1)
                 break;
 
             index = index2 + 1;
@@ -164,12 +162,12 @@ void UmlClassMember::write_type(FileOut & out, const UmlTypeSpec & t, Q3CString 
 
         s.resize(index);
     }
-    else if ((index = s.find('=')) != -1) {
+    else if ((index = s.indexOf('=')) != -1) {
         s.resize(index);
-        s = s.simplifyWhiteSpace();
+        s = s.simplified();
     }
 
-    if (k_type && *k_type && ((index = s.find(k_type)) == -1))
+    if (k_type && *k_type && ((index = s.indexOf(k_type)) == -1))
         out.idref_datatype(s);
     else if (s != k_type) {
         // have modifiers
@@ -186,17 +184,17 @@ void UmlClassMember::write_type(FileOut & out, const UmlTypeSpec & t, Q3CString 
         out.idref_datatype(t.explicit_type);
 }
 
-void UmlClassMember::remove_comments(Q3CString & s)
+void UmlClassMember::remove_comments(QByteArray & s)
 {
     int index;
 
-    if ((index = s.find("${comment}")) != -1)
+    if ((index = s.indexOf("${comment}")) != -1)
         s.replace(index, 10, " ");
 
     index = 0;
 
-    while ((index = s.find('#', index)) != -1) {
-        int index2 = s.find('\n', index + 1);
+    while ((index = s.indexOf('#', index)) != -1) {
+        int index2 = s.indexOf('\n', index + 1);
 
         if (index2 == -1) {
             s.resize(index);
@@ -208,8 +206,8 @@ void UmlClassMember::remove_comments(Q3CString & s)
 
     index = 0;
 
-    while ((index = s.find("//", index)) != -1) {
-        int index2 = s.find('\n', index + 2);
+    while ((index = s.indexOf("//", index)) != -1) {
+        int index2 = s.indexOf('\n', index + 2);
 
         if (index2 == -1) {
             s.resize(index);
@@ -221,8 +219,8 @@ void UmlClassMember::remove_comments(Q3CString & s)
 
     index = 0;
 
-    while ((index = s.find("/*", index)) != -1) {
-        int index2 = s.find("*/", index + 2);
+    while ((index = s.indexOf("/*", index)) != -1) {
+        int index2 = s.indexOf("*/", index + 2);
 
         if (index2 == -1) {
             s.resize(index);
@@ -232,6 +230,6 @@ void UmlClassMember::remove_comments(Q3CString & s)
         s.replace(index, index2 + 2 - index, " ");
     }
 
-    s = s.simplifyWhiteSpace();
+    s = s.simplified();
 }
 

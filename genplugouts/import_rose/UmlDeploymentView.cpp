@@ -7,10 +7,10 @@
 #include "UmlDeploymentDiagram.h"
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 void UmlDeploymentView::import(File & f)
 {
-    Q3CString s;
+    QByteArray s;
 
     for (;;) {
         switch (f.read(s)) {
@@ -41,7 +41,7 @@ void UmlDeploymentView::import(File & f)
 void UmlDeploymentView::readObjects(File & f)
 {
     for (;;) {
-        Q3CString s;
+        QByteArray s;
 
         switch (f.read(s)) {
         case ')':
@@ -60,18 +60,18 @@ void UmlDeploymentView::readObjects(File & f)
             f.syntaxError(s, "an atom");
 
         if ((s == "Processor") || (s == "Device"))
-            UmlNode::import(f, this, s.lower());
+            UmlNode::import(f, this, s.toLower());
         else if (s == "Process_Diagram")
             UmlDeploymentDiagram::import(f, this);
         else {
-            //UmlCom::trace("<br>" + s + " in " + Q3CString(f.name()) + " NOT MANAGED by DeploymentView::readObject()");//[jasa] original line
-            UmlCom::trace("<br>" + s + " in " + Q3CString(f.name().toAscii()) + " NOT MANAGED by DeploymentView::readObject()");//[jasa] go from QFile to QString name to const char* for Q3CString constructor
+            //UmlCom::trace("<br>" + s + " in " + QByteArray(f.name()) + " NOT MANAGED by DeploymentView::readObject()");//[jasa] original line
+            UmlCom::trace("<br>" + s + " in " + QByteArray(f.fileName().toLatin1()) + " NOT MANAGED by DeploymentView::readObject()");//[jasa] go from QFile to QString name to const char* for QByteArray constructor
             f.skipBlock();
         }
     }
 }
 
-UmlDeploymentView * UmlDeploymentView::create(UmlPackage * parent, const char * s, Q3CString bn)
+UmlDeploymentView * UmlDeploymentView::create(UmlPackage * parent, const char * s, QByteArray bn)
 {
     UmlDeploymentView * r = UmlBaseDeploymentView::create(parent, s);
 
@@ -83,11 +83,11 @@ UmlDeploymentView * UmlDeploymentView::create(UmlPackage * parent, const char * 
 
 void UmlDeploymentView::import(UmlPackage * parent, File & f)
 {
-    Q3CString s;
-    Q3CString id;
-    Q3CString ste;
-    Q3CString doc;
-    Q3Dict<Q3CString> prop;
+    QByteArray s;
+    QByteArray id;
+    QByteArray ste;
+    QByteArray doc;
+    QHash<QByteArray, QByteArray*> prop;
     int k;
 
     for (;;) {
@@ -97,11 +97,11 @@ void UmlDeploymentView::import(UmlPackage * parent, File & f)
             if (f.read(s) != STRING)
                 f.syntaxError(s, "a filename");
 
-            File f2(s, f.name());
+            File f2(s, f.fileName());
 
             if (! f2.open(QIODevice::ReadOnly))
                 UmlCom::trace("<br>cannot open '" + s + "' referenced in "
-                              + Q3CString(f.name().toAscii()));//[jasa] QString to Q3CString conversion (.ascii())
+                              + QByteArray(f.fileName().toLatin1()));//[jasa] QString to QByteArray conversion (.ascii())
             else {
                 f2.read("(");
                 f2.read("object");

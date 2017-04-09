@@ -30,7 +30,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 using namespace std;
 #endif
@@ -98,7 +98,7 @@ bool UmlRelation::new_one(Class * container, const WrapperStr & name,
                           WrapperStr comment, WrapperStr description,
                           WrapperStr annotation
 #ifdef ROUNDTRIP
-                          , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                          , bool roundtrip, QList<UmlItem *> & expected_order
 #endif
                          )
 {
@@ -281,7 +281,7 @@ bool UmlRelation::new_one(Class * container, const WrapperStr & name,
                               WrapperStr comment, WrapperStr description,
                               WrapperStr annotation
 #ifdef ROUNDTRIP
-                              , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                              , bool roundtrip, QList<UmlItem *> & expected_order
 #endif
                              )
     {
@@ -489,7 +489,7 @@ bool UmlRelation::new_one(Class * container, const WrapperStr & name,
             UmlRelation * r2 = (r1 != this) ? this : side(FALSE);
 
             if (r1->isReadOnly() || r2->isReadOnly()) {
-                UmlCom::trace(WrapperStr("<font face=helvetica>in <i>") + WrapperStr(Lex::filename().toAscii().constData())
+                UmlCom::trace(WrapperStr("<font face=helvetica>in <i>") + WrapperStr(Lex::filename().toLatin1().constData())
                               + "</i> line " + WrapperStr().setNum(Lex::line_number())
                               + " <b>cannot remove relation between classes <i>"
                               + roleType()->name() + "</i> and <i>" + parent()->name()

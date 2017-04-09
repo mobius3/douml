@@ -35,7 +35,7 @@
 #include <qobject.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 #include "DiagramCanvas.h"
 #include "MultipleDependency.h"
@@ -63,13 +63,14 @@ protected:
     int width_min;
     int height_min;
     QString full_name;
-    Q3ValueList<BrowserNode *> hidden_visible_attributes;
-    Q3ValueList<BrowserNode *> hidden_visible_operations;
+    QList<BrowserNode *> hidden_visible_attributes;
+    QList<BrowserNode *> hidden_visible_operations;
     ConstraintCanvas * constraint;
 
 protected:
     CdClassCanvas(UmlCanvas * canvas, int id);
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     CdClassCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~CdClassCanvas();
@@ -90,7 +91,7 @@ public:
     virtual void draw(QPainter & p);
     virtual void change_scale();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
@@ -112,8 +113,8 @@ public:
     virtual void history_hide();
 
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem *> &);
+    virtual void clone_drawing_settings(const DiagramItem *src);
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
 

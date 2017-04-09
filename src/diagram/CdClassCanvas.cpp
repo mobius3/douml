@@ -29,12 +29,12 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3ValueList>
+#include <QList>
 #include <QTextStream>
 
 #include "CdClassCanvas.h"
@@ -43,6 +43,8 @@
 #include "SimpleRelationCanvas.h"
 #include "ArrowPointCanvas.h"
 #include "ConstraintCanvas.h"
+#include "HideShowDialog.h"
+#include "OperationListDialog.h"
 #include "BrowserClass.h"
 #include "BrowserOperation.h"
 #include "UmlPixmap.h"
@@ -55,12 +57,10 @@
 #include "PackageData.h"
 #include "DiagramView.h"
 #include "SettingsDialog.h"
-#include "HideShowDialog.h"
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
 #include "ui/menufactory.h"
-#include "OperationListDialog.h"
 #include "BrowserClassDiagram.h"
 #include "strutil.h"
 #include "GenerationSettings.h"
@@ -131,10 +131,8 @@ void CdClassCanvas::delete_it()
 
     if (templ)
         templ->delete_it();
-
     if (constraint)
         constraint->delete_it();
-
     DiagramCanvas::delete_it();
 }
 
@@ -170,7 +168,7 @@ void CdClassCanvas::check_size()
     const ClassData * data = ((ClassData *) browser_node->get_data());
     int wi =
         (data->get_is_abstract()) ? fbim.width(full_name) : fbm.width(full_name);
-    Q3ListViewItem * child;
+    BrowserNode * child;
     int natt = 0;
     int noper = 0;
     bool full_members = (used_settings.show_full_members_definition == UmlYes);
@@ -229,8 +227,8 @@ void CdClassCanvas::check_size()
 
                     if (hide_attrs ||
                         ((indicate_visible_attr)
-                         ? (hidden_visible_attributes.findIndex((BrowserNode *) child) == -1)
-                         : (hidden_visible_attributes.findIndex((BrowserNode *) child) != -1)))
+                         ? (hidden_visible_attributes.indexOf((BrowserNode *) child) == -1)
+                         : (hidden_visible_attributes.indexOf((BrowserNode *) child) != -1)))
                         continue;
 
                     s = ((AttributeData *) child_data)
@@ -261,8 +259,8 @@ void CdClassCanvas::check_size()
                     if (hide_opers ||
                         (hide_getset_opers && ((OperationData *) child_data)->get_or_set()) ||
                         ((indicate_visible_oper)
-                         ? (hidden_visible_operations.findIndex((BrowserNode *) child) == -1)
-                         : (hidden_visible_operations.findIndex((BrowserNode *) child) != -1)))
+                         ? (hidden_visible_operations.indexOf((BrowserNode *) child) == -1)
+                         : (hidden_visible_operations.indexOf((BrowserNode *) child) != -1)))
                         continue;
 
                     s = ((OperationData *) child_data)
@@ -526,32 +524,22 @@ void CdClassCanvas::post_loaded()
 
 void CdClassCanvas::check_inner()
 {
-    Q3PtrListIterator<ArrowCanvas> it(lines);
-
-    while (it.current()) {
-        if (it.current()->type() == UmlInner) {
-            DiagramItem * b = ((ArrowCanvas *) it.current())->get_start();
-            DiagramItem * e = ((ArrowCanvas *) it.current())->get_end();
+    foreach (ArrowCanvas *canvas, lines) {
+        if (canvas->typeUmlCode() == UmlInner) {
+            DiagramItem * b = canvas->get_start();
+            DiagramItem * e = canvas->get_end();
 
             if (((BrowserNode *) b->get_bn()->parent()) != e->get_bn())
-                it.current()->delete_it();
-            else
-                ++it;
+                canvas->delete_it();
         }
-        else
-            ++it;
     }
 }
 bool CdClassCanvas::has_relation(BasicData * def) const
 {
-    Q3PtrListIterator<ArrowCanvas> it(lines);
-
-    while (it.current()) {
-        if (IsaRelation(it.current()->type()) &&
-            (((RelationCanvas *) it.current())->get_data() == def))
+    foreach (ArrowCanvas *canvas, lines) {
+        if (IsaRelation(canvas->typeUmlCode()) &&
+            (((RelationCanvas *) canvas)->get_data() == def))
             return TRUE;
-
-        ++it;
     }
 
     return FALSE;
@@ -559,14 +547,10 @@ bool CdClassCanvas::has_relation(BasicData * def) const
 
 bool CdClassCanvas::has_inner(DiagramItem * end) const
 {
-    Q3PtrListIterator<ArrowCanvas> it(lines);
-
-    while (it.current()) {
-        if ((it.current()->type() == UmlInner) &&
-            (((ArrowCanvas *) it.current())->get_end() == end))
+    foreach (ArrowCanvas *canvas, lines) {
+        if ((canvas->typeUmlCode() == UmlInner) &&
+            (canvas->get_end() == end))
             return TRUE;
-
-        ++it;
     }
 
     return FALSE;
@@ -574,9 +558,9 @@ bool CdClassCanvas::has_inner(DiagramItem * end) const
 
 void CdClassCanvas::draw_all_relations(CdClassCanvas * end)
 {
-    Q3ListViewItem * child;
-    Q3CanvasItemList all = canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    BrowserNode * child;
+    QList<QGraphicsItem*> all = canvas()->items();
+    QList<QGraphicsItem*>::Iterator cit;
 
     for (child = browser_node->firstChild(); child; child = child->nextSibling()) {
         if (!((BrowserNode *) child)->deletedp()) {
@@ -603,9 +587,9 @@ void CdClassCanvas::draw_all_relations(CdClassCanvas * end)
                             DiagramItem * adi = QCanvasItemToDiagramItem(*cit);
 
                             if ((adi != 0) &&		// an uml canvas item
-                                (adi->type() == UmlClass) &&
+                                (adi->typeUmlCode() == UmlClass) &&
                                 (((CdClassCanvas *) adi)->browser_node == end_class) &&
-                                ((((CdClassCanvas *) adi) == end) || (*cit)->visible())) {
+                                ((((CdClassCanvas *) adi) == end) || (*cit)->isVisible())) {
                                 // other class canvas find
                                 di = adi;
                                 break;
@@ -624,9 +608,9 @@ void CdClassCanvas::draw_all_relations(CdClassCanvas * end)
                     DiagramItem * adi = QCanvasItemToDiagramItem(*cit);
 
                     if ((adi != 0) &&		// an uml canvas item
-                        (adi->type() == UmlClass) &&
+                        (adi->typeUmlCode() == UmlClass) &&
                         (((CdClassCanvas *) adi)->browser_node == child) &&
-                        ((((CdClassCanvas *) adi) == end) || (*cit)->visible())) {
+                        ((((CdClassCanvas *) adi) == end) || (*cit)->isVisible())) {
                         if (!((CdClassCanvas *) adi)->has_inner(this))
                             (new ArrowCanvas(the_canvas(), adi, this, UmlInner, 0, FALSE, -1.0, -1.0))
                             ->show();
@@ -645,10 +629,10 @@ void CdClassCanvas::draw_all_relations(CdClassCanvas * end)
             DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
             if ((di != 0) &&	// an uml canvas item
-                (di->type() == UmlClass) &&
+                (di->typeUmlCode() == UmlClass) &&
                 (((CdClassCanvas *) di) != this) &&
                 !((CdClassCanvas *) di)->browser_node->deletedp() &&
-                ((CdClassCanvas *) di)->visible()) {
+                ((CdClassCanvas *) di)->isVisible()) {
                 ((CdClassCanvas *) di)->draw_all_relations(this);
             }
         }
@@ -660,13 +644,13 @@ void CdClassCanvas::draw_all_relations(CdClassCanvas * end)
 
 void CdClassCanvas::draw_all_class_assoc()
 {
-    Q3CanvasItemList all = canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = canvas()->items();
+    QList<QGraphicsItem*>::Iterator cit;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
-        if ((*cit)->visible() &&
+        if ((*cit)->isVisible() &&
             isa_arrow(*cit) &&
-            IsaRelation(((ArrowCanvas *) *cit)->type())) {
+            IsaRelation(((ArrowCanvas *) *cit)->typeUmlCode())) {
             RelationCanvas * r = (RelationCanvas *) *cit;
             BrowserNode * assoc =
                 ((RelationData *) r->get_data())->get_association().type;
@@ -697,7 +681,7 @@ void CdClassCanvas::check_constraint()
             constraint = c;
             constraint->upper();
 
-            constraint->move((int)(x() + width() + the_canvas()->zoom() * 20),
+            constraint->moveBy((int)(x() + width() + the_canvas()->zoom() * 20),
                              (int) y() + height());
             constraint->show();
             (new ArrowCanvas(the_canvas(), this, constraint, UmlAnchor, 0, FALSE, -1.0, -1.0))->show();
@@ -726,12 +710,11 @@ bool CdClassCanvas::get_show_stereotype_properties() const
 
 void CdClassCanvas::change_scale()
 {
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
 
     if (manual_size) {
         double scale = the_canvas()->zoom();
-
-        setSize((int)(width_scale100 * scale), (int)(height_scale100 * scale));
+        setRect(0,0,(int)(width_scale100 * scale), (int)(height_scale100 * scale));
     }
 
     check_size();
@@ -740,7 +723,7 @@ void CdClassCanvas::change_scale()
     if (templ != 0)
         templ->update();
 
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void CdClassCanvas::moveBy(double dx, double dy)
@@ -749,7 +732,6 @@ void CdClassCanvas::moveBy(double dx, double dy)
 
     if (templ != 0)
         templ->update();
-
     if ((constraint != 0) && !constraint->selected())
         constraint->moveBy(dx, dy);
 }
@@ -761,7 +743,7 @@ bool CdClassCanvas::move_with_its_package() const
 
 void CdClassCanvas::set_z(double z)
 {
-    setZ(z);
+    setZValue(z);
 
     if (templ)
         templ->update();
@@ -819,17 +801,17 @@ void write_member_st_prop(QPainter & p, FILE * fp, QRect & r,
 
 void CdClassCanvas::draw(QPainter & p)
 {
-    if (! visible()) return;
+    if (! isVisible()) return;
 
     p.setRenderHint(QPainter::Antialiasing, true);
     QRect r = rect();
     QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
     QFontMetrics fbm(the_canvas()->get_font(UmlNormalBoldFont));
     QFontMetrics fbim(the_canvas()->get_font(UmlNormalBoldItalicFont));
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
     double zoom = the_canvas()->zoom();
     FILE * fp = svg();
-
+    QBrush backBrush = p.background();
     if (fp != 0)
         fputs("<g>\n", fp);
 
@@ -867,7 +849,8 @@ void CdClassCanvas::draw(QPainter & p)
             }
         }
 
-        p.setBackgroundColor(co);
+        backBrush.setColor(co);
+        p.setBackground(backBrush);
 
         if (used_color != UmlTransparent) {
             p.fillRect(r, co);
@@ -1008,7 +991,7 @@ void CdClassCanvas::draw(QPainter & p)
     int left1 = left0 + (int)(4 * zoom);
     int left2 = left1 + fbim.width("#_");
     int space = fm.width("_");
-    Q3ListViewItem * child;
+    BrowserNode * child;
     bool full_members = (used_settings.show_full_members_definition == UmlYes);
     bool show_visibility = (used_settings.show_members_visibility == UmlYes);
     bool show_stereotype = (used_settings.show_members_stereotype == UmlYes);
@@ -1032,8 +1015,8 @@ void CdClassCanvas::draw(QPainter & p)
             if (!((BrowserNode *) child)->deletedp() &&
                 (((BrowserNode *) child)->get_type() == UmlAttribute) &&
                 ((indicate_visible_attr)
-                 ? (hidden_visible_attributes.findIndex((BrowserNode *) child) != -1)
-                 : (hidden_visible_attributes.findIndex((BrowserNode *) child) == -1))) {
+                 ? (hidden_visible_attributes.indexOf((BrowserNode *) child) != -1)
+                 : (hidden_visible_attributes.indexOf((BrowserNode *) child) == -1))) {
                 AttributeData * data =
                     ((AttributeData *)((BrowserNode *) child)->get_data());
                 QString s = data->definition(full_members, show_multiplicity, show_initialization,
@@ -1124,8 +1107,8 @@ void CdClassCanvas::draw(QPainter & p)
             if (!((BrowserNode *) child)->deletedp() &&
                 (((BrowserNode *) child)->get_type() == UmlOperation) &&
                 ((indicate_visible_oper)
-                 ? (hidden_visible_operations.findIndex((BrowserNode *) child) != -1)
-                 : (hidden_visible_operations.findIndex((BrowserNode *) child) == -1))) {
+                 ? (hidden_visible_operations.indexOf((BrowserNode *) child) != -1)
+                 : (hidden_visible_operations.indexOf((BrowserNode *) child) == -1))) {
                 OperationData * data =
                     ((OperationData *)((BrowserNode *) child)->get_data());
 
@@ -1206,13 +1189,18 @@ void CdClassCanvas::draw(QPainter & p)
     if (fp != 0)
         fputs("</g>\n", fp);
 
-    p.setBackgroundColor(bckgrnd);
+    backBrush.setColor(bckgrnd);
+    p.setBackground(backBrush);
 
     if (selected())
         show_mark(p, rect());
 }
+void CdClassCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
 
-UmlCode CdClassCanvas::type() const
+UmlCode CdClassCanvas::typeUmlCode() const
 {
     return UmlClass;
 }
@@ -1248,11 +1236,11 @@ static CdClassCanvas * container_class_without_inner(CdClassCanvas * cln)
     if (p->get_type() != UmlClass)
         return 0;
 
-    Q3CanvasItemList all = cln->canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = cln->canvas()->items();
+    QList<QGraphicsItem*>::Iterator cit;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
-        if ((*cit)->visible()) {
+        if ((*cit)->isVisible()) {
             CdClassCanvas * cn = dynamic_cast<CdClassCanvas *>(*cit);
 
             if ((cn != 0) && (cn->get_bn() == p))
@@ -1265,14 +1253,14 @@ static CdClassCanvas * container_class_without_inner(CdClassCanvas * cln)
 
 void CdClassCanvas::menu(const QPoint &)
 {
-    Q3PtrList<BrowserOperation> l =
+    QList<BrowserOperation *> l =
         ((BrowserClass *) browser_node)->inherited_operations(21);
-    Q3PopupMenu m(0);
-    Q3PopupMenu gensubm(0);
-    Q3PopupMenu attrsubm(0);
-    Q3PopupMenu opersubm(0);
-    Q3PopupMenu inhopersubm(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu gensubm(0);
+    QMenu attrsubm(0);
+    QMenu opersubm(0);
+    QMenu inhopersubm(0);
+    QMenu toolm(0);
     const char * stereotype = browser_node->get_data()->get_stereotype();
     CdClassCanvas * nesting_cl = container_class_without_inner(this);
     BrowserNodeList attributes;
@@ -1285,123 +1273,121 @@ void CdClassCanvas::menu(const QPoint &)
     browser_node->children(operations, UmlOperation);
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 21);
-    m.insertItem(TR("Go down"), 22);
-    m.insertSeparator();
-    m.insertItem(TR("Add related elements"), 5);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 21);
+    MenuFactory::addItem(m, TR("Go down"), 22);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Add related elements"), 5);
 
     if (nesting_cl != 0)
-        m.insertItem(TR("Show nesting relation"), 23);
+        MenuFactory::addItem(m, TR("Show nesting relation"), 23);
 
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
 
     if (attributes.count() != 0)
-        m.insertItem(TR("Individual attribute visibility"), 3);
+        MenuFactory::addItem(m, TR("Individual attribute visibility"), 3);
 
     if (operations.count() != 0)
-        m.insertItem(TR("Individual operation visibility"), 4);
+        MenuFactory::addItem(m, TR("Individual operation visibility"), 4);
 
-    m.insertSeparator();
-    m.insertItem(TR("Edit class"), 6);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit class"), 6);
 
     if (!strcmp(stereotype, "enum")) {
         if (browser_node->is_writable()) {
-            m.insertItem(TR("Add item"), 7);
-            m.insertItem(TR("Add attribute"), 9);
+            MenuFactory::addItem(m, TR("Add item"), 7);
+            MenuFactory::addItem(m, TR("Add attribute"), 9);
         }
 
         if (attributes.count() != 0)
-            m.insertItem(TR("Edit item or attribute"), &attrsubm);
+            MenuFactory::insertItem(m, TR("Edit item or attribute"), &attrsubm);
 
         if (browser_node->is_writable())
-            m.insertItem(TR("Add operation"), 8);
+            MenuFactory::addItem(m, TR("Add operation"), 8);
     }
     else if (!strcmp(stereotype, "enum_pattern")) {
         if (browser_node->is_writable()) {
-            m.insertItem(TR("Add item"), 7);
+            MenuFactory::addItem(m, TR("Add item"), 7);
         }
 
         if (attributes.count() != 0)
-            m.insertItem(TR("Edit item"), &attrsubm);
+            MenuFactory::insertItem(m, TR("Edit item"), &attrsubm);
     }
     else if (strcmp(stereotype, "typedef")) {
         if (browser_node->is_writable())
-            m.insertItem(TR("Add attribute"), 9);
+            MenuFactory::addItem(m, TR("Add attribute"), 9);
 
         if (attributes.count() != 0)
-            m.insertItem(TR("Edit attribute"), &attrsubm);
+            MenuFactory::insertItem(m, TR("Edit attribute"), &attrsubm);
 
         if (browser_node->is_writable())
-            m.insertItem(TR("Add operation"), 8);
+            MenuFactory::addItem(m, TR("Add operation"), 8);
 
         if (browser_node->is_writable() &&
             strcmp(stereotype, "union") &&
             (l.count() != 0)) {
             if (l.count() > 20)
-                m.insertItem(TR("Add inherited operation"), 2999);
+                MenuFactory::addItem(m, TR("Add inherited operation"), 2999);
             else {
-                BrowserOperation * oper;
-
                 MenuFactory::createTitle(inhopersubm, TR("Choose operation"));
-                inhopersubm.insertSeparator();
+                inhopersubm.addSeparator();
 
-                for (oper = l.first(), index = 3000;
-                     oper;
-                     oper = l.next(), index += 1) {
+                index = 3000;
+                foreach (BrowserOperation *oper, l) {
                     QString menuItemText = ((BrowserNode *) oper->parent())->get_name() +
                             QString("::") + oper->get_data()->definition(TRUE, FALSE);
                     if (((OperationData *) oper->get_data())->get_is_abstract())
                     {
                         QFont font = inhopersubm.font();
                         font.setItalic(true);
-                        inhopersubm.insertItem(menuItemText, index);
+                        MenuFactory::addItem(inhopersubm, menuItemText, index);
                         //somewhat hackish but seems to work
                         inhopersubm.actions().last()->setFont(font);
                     }
                     else
-                        inhopersubm.insertItem(menuItemText,index);
+                        MenuFactory::addItem(inhopersubm, menuItemText,index);
+                    ++index;
                 }
 
-                m.insertItem(TR("Add inherited operation"), &inhopersubm);
+                MenuFactory::insertItem(m, TR("Add inherited operation"), &inhopersubm);
             }
         }
 
         if (operations.count() != 0) {
             if (operations.count() <= 20)
-                m.insertItem(TR("Edit operation"), &opersubm);
+                MenuFactory::insertItem(m, TR("Edit operation"), &opersubm);
             else
-                m.insertItem(TR("Edit operation"), 1999);
+                MenuFactory::addItem(m, TR("Edit operation"), 1999);
         }
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Select in browser"), 10);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select in browser"), 10);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 17);
+        MenuFactory::addItem(m, TR("Select linked items"), 17);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (browser_node->is_writable()) {
         if (browser_node->get_associated() !=
             (BrowserNode *) the_canvas()->browser_diagram())
-            m.insertItem(TR("Set associated diagram"), 11);
+            MenuFactory::addItem(m, TR("Set associated diagram"), 11);
 
         if (browser_node->get_associated())
-            m.insertItem(TR("Remove diagram association"), 18);
+            MenuFactory::addItem(m, TR("Remove diagram association"), 18);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 12);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 12);
 
     if (browser_node->is_writable())
-        m.insertItem(TR("Delete from model"), 13);
+        MenuFactory::addItem(m, TR("Delete from model"), 13);
 
-    m.insertSeparator();
+    m.addSeparator();
     bool cpp = GenerationSettings::cpp_get_default_defs();
     bool java = GenerationSettings::java_get_default_defs();
     bool php = GenerationSettings::php_get_default_defs();
@@ -1409,25 +1395,25 @@ void CdClassCanvas::menu(const QPoint &)
     bool idl = GenerationSettings::idl_get_default_defs();
 
     if (cpp || java || php || python || idl)
-        m.insertItem(TR("Generate"), &gensubm);
+        MenuFactory::insertItem(m, TR("Generate"), &gensubm);
 
     if (Tool::menu_insert(&toolm, UmlClass, 30))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
     if (cpp)
-        gensubm.insertItem("C++", 14);
+        MenuFactory::addItem(gensubm, "C++", 14);
 
     if (java)
-        gensubm.insertItem("Java", 15);
+        MenuFactory::addItem(gensubm, "Java", 15);
 
     if (php)
-        gensubm.insertItem("Php", 19);
+        MenuFactory::addItem(gensubm, "Php", 19);
 
     if (python)
-        gensubm.insertItem("Python", 20);
+        MenuFactory::addItem(gensubm, "Python", 20);
 
     if (idl)
-        gensubm.insertItem("Idl", 16);
+        MenuFactory::addItem(gensubm, "Idl", 16);
 
     QStringList::Iterator it;
 
@@ -1436,7 +1422,7 @@ void CdClassCanvas::menu(const QPoint &)
         index = 1000;
 
         for (it = attributes_def.begin(); it != attributes_def.end(); ++it)
-            attrsubm.insertItem(*it, index++);
+            MenuFactory::addItem(attrsubm, *it, index++);
     }
 
     if ((operations.count() != 0) && (operations.count() <= 20)) {
@@ -1444,10 +1430,14 @@ void CdClassCanvas::menu(const QPoint &)
         index = 2000;
 
         for (it = operations_def.begin(); it != operations_def.end(); ++it)
-            opersubm.insertItem(*it, index++);
+            MenuFactory::addItem(opersubm,*it, index++);
     }
 
-    switch (index = m.exec(QCursor::pos())) {
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        int index = retAction->data().toInt();
+    switch ( index) {
     case 0:
         upper();
         break;
@@ -1570,8 +1560,8 @@ void CdClassCanvas::menu(const QPoint &)
         break;
 
     case 1999: {
-        OperationListDialog dialog(TR("Choose operation to edit"),
-                                   (Q3PtrList<BrowserOperation> &) operations);
+        OperationListDialog dialog(QObject::tr("Choose operation to edit").toLatin1().constData(),
+                                   (QList<BrowserOperation *> &) operations);
 
         dialog.raise();
 
@@ -1584,7 +1574,7 @@ void CdClassCanvas::menu(const QPoint &)
     case 2999: {
         l = ((BrowserClass *) browser_node)->inherited_operations(~0u);
 
-        OperationListDialog dialog(TR("Choose inherited operation to add it"), l);
+        OperationListDialog dialog(QObject::tr("Choose inherited operation to add it").toLatin1().constData(), l);
 
         dialog.raise();
 
@@ -1608,6 +1598,7 @@ void CdClassCanvas::menu(const QPoint &)
             ToolCom::run(Tool::command(index - 30), browser_node);
 
         return;
+    }
     }
 
     modified();
@@ -1675,7 +1666,7 @@ bool CdClassCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void CdClassCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void CdClassCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         StateSpecVector st;
@@ -1692,15 +1683,14 @@ void CdClassCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
+            foreach (DiagramItem *item, l) {
+                CdClassCanvas *canvas = (CdClassCanvas *)item;
                 if (!co[0].name.isEmpty())
-                    ((CdClassCanvas *) it.current())->itscolor = itscolor;
+                    canvas->itscolor = itscolor;
 
-                ((CdClassCanvas *) it.current())->settings.set(st, 0);
-                ((CdClassCanvas *) it.current())->modified();
-                ((CdClassCanvas *) it.current())->package_modified();
+                canvas->settings.set(st, 0);
+                canvas->modified();
+                canvas->package_modified();
             }
         }
 
@@ -1709,20 +1699,13 @@ void CdClassCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void CdClassCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void CdClassCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    CdClassCanvas * x = (CdClassCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        CdClassCanvas * o = (CdClassCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->settings = x->settings;
-        o->modified();
-        o->package_modified();
-    }
+    const CdClassCanvas * x = (const CdClassCanvas *) src;
+    itscolor = x->itscolor;
+    settings = x->settings;
+    modified();
+    package_modified();
 }
 
 QString CdClassCanvas::may_start(UmlCode & l) const
@@ -1733,11 +1716,11 @@ QString CdClassCanvas::may_start(UmlCode & l) const
 QString CdClassCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 {
     if (l == UmlAnchor)
-        return (IsaRelation(dest->type()))
+        return (IsaRelation(dest->typeUmlCode()))
                ? ((RelationCanvas *) dest)->may_connect(l, this)
                : dest->may_start(l);
 
-    switch (dest->type()) {
+    switch (dest->typeUmlCode()) {
     case UmlClass:
         return ((BrowserClass *) browser_node)
                ->may_connect(l, (BrowserClass *) dest->get_bn());
@@ -1761,7 +1744,7 @@ void CdClassCanvas::post_connexion(UmlCode l, DiagramItem * dest)
 {
     switch (l) {
     case UmlAnchor:
-        if (IsaRelation(dest->type()))
+        if (IsaRelation(dest->typeUmlCode()))
             ((RelationCanvas *) dest)->post_connexion(l, this);
 
         break;
@@ -1837,18 +1820,16 @@ void CdClassCanvas::resize(const QSize & sz, bool w, bool h)
 
 static void save_hidden_list(BrowserNode * bn, UmlCode c, QTextStream & st,
                              const char * s,
-                             const Q3ValueList<BrowserNode *> & hidden_visible)
+                             const QList<BrowserNode *> & hidden_visible)
 {
     BrowserNodeList l;
 
     bn->children(l, c);
 
-    Q3PtrListIterator<BrowserNode> it(l);
-
-    while (it.current() != 0) {
+    foreach (BrowserNode *node, l) {
         QString dummy;
 
-        if (hidden_visible.findIndex(it.current()) != -1) {
+        if (hidden_visible.indexOf(node) != -1) {
             if (s != 0) {
                 nl_indent(st);
                 st << s;
@@ -1857,10 +1838,8 @@ static void save_hidden_list(BrowserNode * bn, UmlCode c, QTextStream & st,
 
             nl_indent(st);
             st << "  ";
-            it.current()->save(st, TRUE, dummy);
+            node->save(st, TRUE, dummy);
         }
-
-        ++it;
     }
 
     if ((s != 0) && (*s == 'v')) {
@@ -1901,10 +1880,8 @@ void CdClassCanvas::save(QTextStream & st, bool ref, QString & warning) const
             save_xyzwh(st, this, "xyzwh");
         else
             save_xyz(st, this, "xyz");
-
         if (constraint != 0)
             constraint->save(st, FALSE, warning);
-
         save_stereotype_property(st, warning);
 
         indent(-1);
@@ -1953,7 +1930,7 @@ CdClassCanvas * CdClassCanvas::read(char *& st, UmlCanvas * canvas,
                    strcmp(k, "xyz")) {
                 BrowserNode * b = BrowserAttribute::read(st, k, 0, FALSE);
 
-                if ((b != 0) && (l.findRef(b) != -1))
+                if ((b != 0) && (l.contains(b)))
                     result->hidden_visible_attributes.append(b);
             }
         }
@@ -1968,7 +1945,7 @@ CdClassCanvas * CdClassCanvas::read(char *& st, UmlCanvas * canvas,
             while (strcmp(k = read_keyword(st), "xyzwh") && strcmp(k, "xyz")) {
                 BrowserNode * b = BrowserOperation::read(st, k, 0, FALSE);
 
-                if ((b != 0) && (l.findRef(b) != -1))
+                if ((b != 0) && (l.contains(b)))
                     result->hidden_visible_operations.append(b);
             }
         }
@@ -2049,7 +2026,7 @@ void CdClassCanvas::history_load(QBuffer & b)
 
         ::load(w, b);
         ::load(h, b);
-        Q3CanvasRectangle::setSize(w, h);
+        QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
     }
     else
         check_size();
@@ -2061,7 +2038,7 @@ void CdClassCanvas::history_load(QBuffer & b)
 
 void CdClassCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
 
     disconnect(DrawingSettings::instance(), SIGNAL(changed()),
                this, SLOT(modified()));

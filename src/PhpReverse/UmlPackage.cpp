@@ -102,7 +102,7 @@ UmlClassView * UmlPackage::get_classview(const WrapperStr & nmsp)
         pack = this;
 
     if (pack->classview == 0) {
-        Q3PtrVector<UmlItem> ch = pack->children();
+        QVector<UmlItem*> ch = pack->children();
 
         for (unsigned index = 0; index != ch.size(); index += 1)
 
@@ -185,7 +185,7 @@ UmlDeploymentView * UmlPackage::get_deploymentview(const WrapperStr & nmsp)
         pack = this;
 
     if (pack->deploymentview == 0) {
-        Q3PtrVector<UmlItem> ch = pack->children();
+        QVector<UmlItem*> ch = pack->children();
 
         for (unsigned index = 0; index != ch.size(); index += 1)
 

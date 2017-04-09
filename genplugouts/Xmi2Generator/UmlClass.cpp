@@ -6,7 +6,7 @@
 #include "UmlCom.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 void UmlClass::write(FileOut & out)
 {
     WrapperStr st = stereotype();
@@ -100,7 +100,7 @@ void UmlClass::write(FileOut & out)
     write_formals(out);
     write_actuals(out);
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
     unsigned i;
 
@@ -114,7 +114,7 @@ void UmlClass::write(FileOut & out)
             out.indent();
             out << "<icon xmi:type=\"uml:Image\"";
             out.id_prefix(this, "Icon_");
-            out << " location=\"" << path << "\"/>\n";
+            out << " location=\"" << path.operator QString() << "\"/>\n";
         }
     }
 
@@ -132,7 +132,7 @@ void UmlClass::write(FileOut & out)
 
 void UmlClass::write_formals(FileOut & out)
 {
-    Q3ValueList<UmlFormalParameter> formal_params = formals();
+    QList<UmlFormalParameter> formal_params = formals();
 
     if (!formal_params.isEmpty()) {
         out.indent();
@@ -147,7 +147,7 @@ void UmlClass::write_formals(FileOut & out)
         out.indent(+1);
 
         int rank;
-        Q3ValueList<UmlFormalParameter>::ConstIterator iter;
+        QList<UmlFormalParameter>::ConstIterator iter;
 
         for (iter = formal_params.begin(), rank = 0;
              iter != formal_params.end();
@@ -162,8 +162,8 @@ void UmlClass::write_formals(FileOut & out)
 
 void UmlClass::write_actuals(FileOut & out)
 {
-    Q3ValueList<UmlActualParameter> actual_params = actuals();
-    Q3ValueList<UmlActualParameter>::ConstIterator iter;
+    QList<UmlActualParameter> actual_params = actuals();
+    QList<UmlActualParameter>::ConstIterator iter;
     int rank;
     UmlClass * super = 0;
 
@@ -209,7 +209,7 @@ void UmlClass::write_actuals(FileOut & out)
 
 void UmlClass::search_class_assoc()
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
 
     for (unsigned i = 0; i != n; i += 1)
@@ -231,11 +231,11 @@ UmlClass * UmlClass::set_assoc(UmlRelation * rel)
     }
 }
 
-void UmlClass::get_extended(Q3ValueList<WrapperStr> & r)
+void UmlClass::get_extended(QList<WrapperStr> & r)
 {
     r.clear();
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
     unsigned i;
 

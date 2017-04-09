@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseUseCase.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 // This class manages 'use case'
 //
@@ -11,7 +11,7 @@
 class UmlUseCase : public UmlBaseUseCase
 {
 public:
-    UmlUseCase(void * id, const Q3CString & n) : UmlBaseUseCase(id, n) {};
+    UmlUseCase(void * id, const QByteArray & n) : UmlBaseUseCase(id, n) {};
 
 };
 

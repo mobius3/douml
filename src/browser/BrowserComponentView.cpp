@@ -29,7 +29,7 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -116,7 +116,7 @@ BrowserComponentView * BrowserComponentView::add_component_view(BrowserNode * fu
 {
     QString name;
 
-    if (future_parent->enter_child_name(name, TR("enter component view's name : "),
+    if (future_parent->enter_child_name(name, QObject::TR("enter component view's name : "),
                                         UmlComponentView, TRUE, FALSE))
         return new BrowserComponentView(name, future_parent);
     else
@@ -139,7 +139,7 @@ void BrowserComponentView::prepare_update_lib() const
 {
     all.memo_id_oid(get_ident(), original_id);
 
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->prepare_update_lib();
@@ -179,60 +179,62 @@ QString BrowserComponentView::full_name(bool rev, bool itself) const
 
 void BrowserComponentView::menu()
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu subm(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu subm(0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!is_read_only && (edition_number == 0)) {
-            m.setWhatsThis(m.insertItem(TR("New component diagram"), 0),
-                           TR("to add a <i>component diagram</i>"));
-            m.setWhatsThis(m.insertItem(TR("New component"), 1),
-                           TR("to add a <i>component</i>"));
-            m.insertSeparator();
+            MenuFactory::addItem(m, QObject::TR("New component diagram"), 0,
+                           QObject::TR("to add a <i>component diagram</i>"));
+            MenuFactory::addItem(m, QObject::TR("New component"), 1,
+                           QObject::TR("to add a <i>component</i>"));
+            m.addSeparator();
         }
 
         if (!is_edited) {
-            m.setWhatsThis(m.insertItem(TR("Edit"), 3),
-                           TR("to edit the <i>component view</i>"));
-            m.insertSeparator();
+            MenuFactory::addItem(m, QObject::TR("Edit"), 3,
+                           QObject::TR("to edit the <i>component view</i>"));
+            m.addSeparator();
 
             if (!is_read_only) {
-                /*m.setWhatsThis(m.insertItem("Edit component settings", 4),
+                /*MenuFactory::addItem(m, "Edit component settings", 4),
                 	       "to set the sub components's settings");*/
-                m.setWhatsThis(m.insertItem(TR("Edit drawing settings"), 5),
-                               TR("to set how the sub <i>component diagrams</i>'s items must be drawn"));
+                MenuFactory::addItem(m, QObject::TR("Edit drawing settings"), 5,
+                               QObject::TR("to set how the sub <i>component diagrams</i>'s items must be drawn"));
 
                 if (edition_number == 0) {
-                    m.insertSeparator();
-                    m.setWhatsThis(m.insertItem(TR("Delete"), 6),
-                                   TR("to delete the <i>component view</i> and its sub items. \
+                    m.addSeparator();
+                    MenuFactory::addItem(m, QObject::TR("Delete"), 6,
+                                   QObject::TR("to delete the <i>component view</i> and its sub items. \
 Note that you can undelete them after"));
                 }
             }
         }
 
-        mark_menu(m, TR("the component view"), 90);
+        mark_menu(m, QObject::tr("the component view").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
             Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+            m.addSeparator();
+            MenuFactory::insertItem(m, QObject::TR("Tool"), &toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 7),
-                       TR("undelete the <i>component view</i>. \
+        MenuFactory::addItem(m, QObject::TR("Undelete"), 7,
+                       QObject::TR("undelete the <i>component view</i>. \
 Do not undelete its sub items"));
-        m.setWhatsThis(m.insertItem(TR("Undelete recursively"), 8),
-                       TR("undelete the <i>component view</i> and its sub items"));
+        MenuFactory::addItem(m, QObject::TR("Undelete recursively"), 8,
+                       QObject::TR("undelete the <i>component view</i> and its sub items"));
     }
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserComponentView::exec_menu_choice(int rank)
@@ -256,7 +258,7 @@ void BrowserComponentView::exec_menu_choice(int rank)
     break;
 
     case 3:
-        edit(TR("Component view"), its_default_stereotypes);
+        edit(QObject::TR("Component view").toLatin1().constData(), its_default_stereotypes);
         return;
 
         /*case 4:
@@ -270,10 +272,10 @@ void BrowserComponentView::exec_menu_choice(int rank)
 
             componentdiagram_settings.complete(st, FALSE);
 
-            co[0].set(TR("component color"), &component_color);
-            co[1].set(TR("note color"), &note_color);
-            co[2].set(TR("package color"), &package_color);
-            co[3].set(TR("fragment color"), &fragment_color);
+            co[0].set(QObject::TR("component color"), &component_color);
+            co[1].set(QObject::TR("note color"), &note_color);
+            co[2].set(QObject::TR("package color"), &package_color);
+            co[3].set(QObject::TR("fragment color"), &fragment_color);
 
             SettingsDialog dialog(&st, &co, FALSE);
 
@@ -335,7 +337,7 @@ void BrowserComponentView::apply_shortcut(QString s)
                 choice = 3;
 
             if (!is_read_only) {
-                /*m.setWhatsThis(m.insertItem("Edit component settings", 4),
+                /*MenuFactory::addItem(m, "Edit component settings", 4),
                 	       "to set the sub components's settings");*/
                 if (s == "Edit drawing settings")
                     choice = 5;
@@ -365,7 +367,7 @@ void BrowserComponentView::apply_shortcut(QString s)
 void BrowserComponentView::open(bool)
 {
     if (!is_edited)
-        edit(TR("Component view"), its_default_stereotypes);
+        edit(QObject::TR("Component view").toLatin1().constData(), its_default_stereotypes);
 }
 
 UmlCode BrowserComponentView::get_type() const
@@ -375,7 +377,7 @@ UmlCode BrowserComponentView::get_type() const
 
 QString BrowserComponentView::get_stype() const
 {
-    return TR("component view");
+    return QObject::TR("component view");
 }
 
 int BrowserComponentView::get_identifier() const
@@ -428,14 +430,13 @@ UmlColor BrowserComponentView::get_color(UmlCode who) const
 BrowserNodeList & BrowserComponentView::instances(BrowserNodeList & result)
 {
     IdIterator<BrowserComponentView> it(all);
+    while(it.hasNext()){
+        it.next();
+    if (it.value() != 0)
+        if (!it.value()->deletedp())
+            result.append(it.value());
 
-    while (it.current() != 0) {
-        if (!it.current()->deletedp())
-            result.append(it.current());
-
-        ++it;
     }
-
     result.sort_it();
 
     return result;
@@ -455,8 +456,9 @@ bool BrowserComponentView::tool_cmd(ToolCom * com, const char * args)
                 if (wrong_child_name(args, UmlComponentDiagram, TRUE, FALSE))
                     ok = FALSE;
                 else
+                {
                     (new BrowserComponentDiagram(args, this))->write_id(com);
-
+                }
                 break;
 
             case UmlComponent:
@@ -510,19 +512,17 @@ void BrowserComponentView::DragMoveInsideEvent(QDragMoveEvent * e)
         e->ignore();
 }
 
-bool BrowserComponentView::may_contains_them(const Q3PtrList<BrowserNode> & l,
+bool BrowserComponentView::may_contains_them(const QList<BrowserNode *> & l,
         BooL & duplicable) const
 {
-    Q3PtrListIterator<BrowserNode> it(l);
-
-    for (; it.current(); ++it) {
-        switch (it.current()->get_type()) {
+    foreach (BrowserNode *node, l) {
+        switch (node->get_type()) {
         case UmlComponent:
             duplicable = FALSE;
 
             // no break
         case UmlComponentDiagram:
-            if (! may_contains(it.current(), FALSE))
+            if (! may_contains(node, FALSE))
                 return FALSE;
 
             break;
@@ -531,7 +531,7 @@ bool BrowserComponentView::may_contains_them(const Q3PtrList<BrowserNode> & l,
             return FALSE;
         }
 
-        duplicable = may_contains_it(it.current());
+        duplicable = may_contains_it(node);
     }
 
     return TRUE;
@@ -545,7 +545,6 @@ void BrowserComponentView::DropEvent(QDropEvent * e)
 void BrowserComponentView::DropAfterEvent(QDropEvent * e, BrowserNode * after)
 {
     BrowserNode * bn;
-
     if ((((bn = UmlDrag::decode(e, UmlComponent)) != 0) ||
          (((bn = UmlDrag::decode(e, UmlComponentDiagram)) != 0))) &&
         (bn != after) && (bn != this)) {
@@ -555,7 +554,7 @@ void BrowserComponentView::DropAfterEvent(QDropEvent * e, BrowserNode * after)
             if (after)
                 bn->moveItem(after);
             else {
-                bn->parent()->takeItem(bn);
+                bn->parent()->removeChild(bn);
                 insertItem(bn);
             }
 
@@ -567,7 +566,7 @@ void BrowserComponentView::DropAfterEvent(QDropEvent * e, BrowserNode * after)
             }
         }
         else {
-            msg_critical(TR("Error"), TR("Forbidden"));
+            msg_critical(QObject::TR("Error"), QObject::TR("Forbidden"));
             e->ignore();
         }
     }
@@ -599,7 +598,7 @@ void BrowserComponentView::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "componentview " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
 
         def->save(st, warning);
@@ -621,7 +620,7 @@ void BrowserComponentView::save(QTextStream & st, bool ref, QString & warning)
 
         // saves the sub elts
 
-        Q3ListViewItem * child = firstChild();
+        BrowserNode * child = firstChild();
 
         if (child != 0) {
             for (;;) {
@@ -711,7 +710,6 @@ BrowserComponentView * BrowserComponentView::read(char *& st, char * k,
             while (BrowserComponentDiagram::read(st, k, r) ||
                    BrowserComponent::read(st, k, r))
                 k = read_keyword(st);
-
             if (strcmp(k, "end"))
                 wrong_keyword(k, "end");
         }
@@ -728,7 +726,6 @@ BrowserNode * BrowserComponentView::get_it(const char * k, int id)
         return all[id];
 
     BrowserNode * r;
-
     if ((r = BrowserComponentDiagram::get_it(k, id)) == 0)
         r = BrowserComponent::get_it(k, id);
 

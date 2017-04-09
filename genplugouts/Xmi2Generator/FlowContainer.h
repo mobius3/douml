@@ -2,7 +2,7 @@
 #define _FLOWCONTAINER_H
 
 
-#include <q3ptrlist.h>
+#include <QList>
 
 class UmlFlow;
 class FileOut;
@@ -22,7 +22,7 @@ public:
 
 protected:
     //he flows, to produce them in the upper level of the source - dest
-    Q3PtrList<UmlFlow> _flows;
+    QList<UmlFlow*> _flows;
 
 };
 

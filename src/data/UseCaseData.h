@@ -27,11 +27,7 @@
 
 #ifndef USECASEDATA_H
 #define USECASEDATA_H
-
-#include <q3ptrdict.h>
-//Added by qt3to4:
 #include <QTextStream>
-
 #include "SimpleData.h"
 
 class BrowserUseCase;
