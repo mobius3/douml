@@ -40,16 +40,14 @@ ifndef DESTDIR
   DESTDIR = ${LOCAL_DESTDIR}
 endif
 
-QMAKE=qmake-qt5
+QMAKE=qmake
 
 MAKE=make
 
 # using CONFIG variable for 'release' or 'debug' and it's case sensitive!
-#ifndef CONFIG
-#  CONFIG=release
-#endif
-
-CONFIG += debug
+ifndef CONFIG
+  CONFIG=release
+endif
 
 SRC_DIRS=\
 	src/CppGenerator  \

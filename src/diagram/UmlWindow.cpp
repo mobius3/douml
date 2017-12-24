@@ -791,7 +791,6 @@ void UmlWindow::projectMenuAboutToShow()
             id = projectMenu->addAction(historic.at(i), this, SLOT(historicActivated()));
             //projectMenu->setItemParameter(id, i);
             id->setWhatsThis(tr("to open this project.<br><br>The historic is saved in <i>settings.ini</i>"));
-            id->setData(QVariant(i));
         }
     }
     else
@@ -802,11 +801,7 @@ void UmlWindow::projectMenuAboutToShow()
 void UmlWindow::historicActivated()
 {
     QAction *action = static_cast<QAction *>( sender());
-//    QString atext = action->text();
-//    bool idExists = historic.contains(action->text());//id <= historic.size() && id >= 0;
-
-    int i = action->data().toInt();
-    bool idExists = (i < historic.count() && i >= 0);
+    bool idExists = historic.contains(action->text());//id <= historic.size() && id >= 0;
 
     if (!idExists)
     {
@@ -822,7 +817,7 @@ void UmlWindow::historicActivated()
         return;
     }
 
-    load(historic[i]);
+    load(action->text());
 }
 
 void UmlWindow::clear()
